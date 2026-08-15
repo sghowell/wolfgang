@@ -16,8 +16,8 @@ import time
 from collections.abc import Callable
 from typing import Any
 
-import wolfgang_quantum as fastpauli
 import numpy as np
+import wolfgang_quantum as wolfgang
 from wolfgang_quantum import PauliSum
 
 try:
@@ -81,8 +81,10 @@ def packed_key(label: str) -> tuple[int, ...]:
 def full_commutes(lhs: str, rhs: str) -> bool:
     parity = 0
     for lhs_pauli, rhs_pauli in zip(lhs, rhs, strict=True):
-        parity ^= int((lhs_pauli in {"X", "Y"} and rhs_pauli in {"Z", "Y"})
-                      != (lhs_pauli in {"Z", "Y"} and rhs_pauli in {"X", "Y"}))
+        parity ^= int(
+            (lhs_pauli in {"X", "Y"} and rhs_pauli in {"Z", "Y"})
+            != (lhs_pauli in {"Z", "Y"} and rhs_pauli in {"X", "Y"})
+        )
     return parity == 0
 
 
@@ -170,7 +172,9 @@ def run_pairwise_case(args: argparse.Namespace) -> dict[str, Any]:
     rhs = PauliSum.from_labels(rhs_labels, rhs_coeffs.tolist())
 
     fast_result, fast_timings = timed_call(
-        lambda: lhs.commutes_with(rhs, max_commutation_matrix_entries=args.max_commutation_matrix_entries),
+        lambda: lhs.commutes_with(
+            rhs, max_commutation_matrix_entries=args.max_commutation_matrix_entries
+        ),
         warmup=args.warmup,
         repeat=args.repeat,
     )
@@ -317,13 +321,13 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         run_guardrail_case(args),
     ]
 
-    build_info = fastpauli._wolfgang_core._build_info()
+    build_info = wolfgang._wolfgang_core._build_info()
     return {
         "benchmark": "grouping",
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "timing_policy": {
             "warmup": args.warmup,
@@ -360,7 +364,9 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use tiny Phase 6 benchmark-smoke dimensions.",
     )
-    parser.add_argument("--json", action="store_true", help="Emit the full benchmark report as JSON.")
+    parser.add_argument(
+        "--json", action="store_true", help="Emit the full benchmark report as JSON."
+    )
     return parser.parse_args()
 
 

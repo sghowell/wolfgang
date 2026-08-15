@@ -15,9 +15,9 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-import wolfgang_quantum as fastpauli
-import wolfgang_quantum._wolfgang_core as core
 import numpy as np
+import wolfgang_quantum as wolfgang
+import wolfgang_quantum._wolfgang_core as core
 
 try:
     from _benchmark_metadata import (
@@ -675,7 +675,9 @@ def list_profiles() -> dict[str, Any]:
     }
 
 
-def timed_call(fn: Callable[[], Any], *, repeat: int, warmup: int = 1) -> tuple[Any, dict[str, float]]:
+def timed_call(
+    fn: Callable[[], Any], *, repeat: int, warmup: int = 1
+) -> tuple[Any, dict[str, float]]:
     result: Any = None
     for _ in range(warmup):
         result = fn()
@@ -747,7 +749,9 @@ def compile_offline_metallib() -> dict[str, Any]:
                 "status": "skipped",
                 "path": None,
                 "command": " ".join(command),
-                "skip_reason": (completed.stderr or completed.stdout or "xcrun metal failed").strip(),
+                "skip_reason": (
+                    completed.stderr or completed.stdout or "xcrun metal failed"
+                ).strip(),
             }
     return {
         "status": "ok",
@@ -800,7 +804,7 @@ def random_pauli_sum(
     num_terms: int,
     term_weight: int,
     seed: int,
-) -> fastpauli.PauliSum:
+) -> wolfgang.PauliSum:
     rng = np.random.default_rng(seed)
     labels: list[str] = []
     coeffs: list[complex] = []
@@ -811,10 +815,10 @@ def random_pauli_sum(
         local = rng.choice(paulis, size=weight, replace=True)
         labels.append(dense_label(num_qubits, dict(zip(qubits.tolist(), local.tolist()))))
         coeffs.append(complex(float(rng.normal()), float(rng.normal())))
-    return fastpauli.PauliSum.from_labels(labels, coeffs)
+    return wolfgang.PauliSum.from_labels(labels, coeffs)
 
 
-def random_simplify_pauli_sum(case: dict[str, Any]) -> fastpauli.PauliSum:
+def random_simplify_pauli_sum(case: dict[str, Any]) -> wolfgang.PauliSum:
     rng = np.random.default_rng(int(case["random_seed"]))
     num_terms = int(case["num_terms"])
     duplicate_rate = float(case["duplicate_rate"])
@@ -848,7 +852,7 @@ def random_simplify_pauli_sum(case: dict[str, Any]) -> fastpauli.PauliSum:
             )
             labels.append(label)
             coeffs.append(base if (index // pool_size) % 2 == 0 else -base)
-        return fastpauli.PauliSum.from_labels(labels, coeffs)
+        return wolfgang.PauliSum.from_labels(labels, coeffs)
 
     if case.get("coefficient_mode") == "fixed_dyadic":
         for index in range(num_terms):
@@ -857,20 +861,20 @@ def random_simplify_pauli_sum(case: dict[str, Any]) -> fastpauli.PauliSum:
             real = float((index % 17) - 8) / 8.0
             imag = float((index % 11) - 5) / 16.0
             coeffs.append(complex(real, imag))
-        return fastpauli.PauliSum.from_labels(labels, coeffs)
+        return wolfgang.PauliSum.from_labels(labels, coeffs)
 
     for index in range(num_terms):
         labels.append(pool[index % pool_size])
         coeffs.append(complex(float(rng.normal()), float(rng.normal())))
-    return fastpauli.PauliSum.from_labels(labels, coeffs)
+    return wolfgang.PauliSum.from_labels(labels, coeffs)
 
 
-def labels_and_coeffs(op: fastpauli.PauliSum) -> tuple[list[str], list[complex]]:
+def labels_and_coeffs(op: wolfgang.PauliSum) -> tuple[list[str], list[complex]]:
     labels, coeffs = op.to_labels()
     return list(labels), [complex(value) for value in coeffs]
 
 
-def assert_same_operator(lhs: fastpauli.PauliSum, rhs: fastpauli.PauliSum) -> None:
+def assert_same_operator(lhs: wolfgang.PauliSum, rhs: wolfgang.PauliSum) -> None:
     lhs_labels, lhs_coeffs = labels_and_coeffs(lhs)
     rhs_labels, rhs_coeffs = labels_and_coeffs(rhs)
     if lhs.num_qubits != rhs.num_qubits or lhs_labels != rhs_labels:
@@ -912,8 +916,8 @@ def cpu_selector_status_for_case(
 def append_cpu_baseline_rows(
     rows: list[dict[str, Any]],
     *,
-    lhs: fastpauli.PauliSum,
-    rhs: fastpauli.PauliSum,
+    lhs: wolfgang.PauliSum,
+    rhs: wolfgang.PauliSum,
     expected: np.ndarray,
     case: dict[str, Any],
     repeat: int,
@@ -1056,7 +1060,7 @@ def append_simplify_device_candidate_row(
     rows: list[dict[str, Any]],
     *,
     device_op: Any,
-    expected: fastpauli.PauliSum,
+    expected: wolfgang.PauliSum,
     case: dict[str, Any],
     repeat: int,
     build_info: dict[str, Any],
@@ -1196,8 +1200,7 @@ def apply_campaign8_simplify_decision(rows: list[dict[str, Any]], case: dict[str
         (
             row
             for row in rows
-            if row.get("variant") == "metal_simplify_device_candidate"
-            and row.get("status") == "ok"
+            if row.get("variant") == "metal_simplify_device_candidate" and row.get("status") == "ok"
         ),
         None,
     )
@@ -1258,8 +1261,8 @@ def apply_campaign8_simplify_decision(rows: list[dict[str, Any]], case: dict[str
 def append_simplify_cpu_rows(
     rows: list[dict[str, Any]],
     *,
-    op: fastpauli.PauliSum,
-    expected: fastpauli.PauliSum,
+    op: wolfgang.PauliSum,
+    expected: wolfgang.PauliSum,
     case: dict[str, Any],
     repeat: int,
     build_info: dict[str, Any],
@@ -1575,7 +1578,7 @@ def run_case(
         }
     )
 
-    reused_output = fastpauli.DeviceCommutationMatrix.empty(expected.shape, backend="metal")
+    reused_output = wolfgang.DeviceCommutationMatrix.empty(expected.shape, backend="metal")
     reused_matrix, reused_timing = timed_call(
         lambda: lhs_device.commutes_with_device(rhs_device, output=reused_output),
         repeat=repeat,
@@ -1813,8 +1816,7 @@ def run_case(
         }
     )
     if case_metadata["profile"] in {"campaign3", "campaign4"} and (
-        "compact_reduction" in case_metadata["name"]
-        or "compact_large" in case_metadata["name"]
+        "compact_reduction" in case_metadata["name"] or "compact_large" in case_metadata["name"]
     ):
         with forced_environment_value(METAL_EXPERIMENTAL_COMPACT_CONSUMER_ENV, "gpu"):
             gpu_count_result, gpu_count_timing = timed_call(

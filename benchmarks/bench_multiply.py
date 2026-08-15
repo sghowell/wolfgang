@@ -15,8 +15,8 @@ import statistics
 import time
 from typing import Any
 
-import wolfgang_quantum as fastpauli
 import numpy as np
+import wolfgang_quantum as wolfgang
 from wolfgang_quantum import PauliSum
 
 try:
@@ -52,6 +52,7 @@ LOCAL_PRODUCTS: dict[tuple[str, str], tuple[str, complex]] = {
     ("Z", "X"): ("Y", 1.0j),
     ("X", "Z"): ("Y", -1.0j),
 }
+
 
 def make_label(rng: np.random.Generator, num_qubits: int, term_weight: int) -> str:
     chars = ["I"] * num_qubits
@@ -207,14 +208,20 @@ def run_case(
             for label, coeff in zip(fast_labels, fast_coeffs, strict=True)
         ]
         if len(fast_pairs) != len(python_result):
-            raise RuntimeError("Wolfgang and Python simplified multiply produced different term counts")
+            raise RuntimeError(
+                "Wolfgang and Python simplified multiply produced different term counts"
+            )
         for (fast_key, fast_coeff), (python_key, python_coeff) in zip(
             fast_pairs,
             python_result,
             strict=True,
         ):
-            if fast_key != python_key or not np.allclose(fast_coeff, python_coeff, rtol=1.0e-12, atol=1.0e-12):
-                raise RuntimeError("Wolfgang and Python simplified multiply produced different outputs")
+            if fast_key != python_key or not np.allclose(
+                fast_coeff, python_coeff, rtol=1.0e-12, atol=1.0e-12
+            ):
+                raise RuntimeError(
+                    "Wolfgang and Python simplified multiply produced different outputs"
+                )
         python_terms = len(python_result)
     else:
         python_result, python_timings = timed_call(
@@ -387,13 +394,13 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             )
         )
 
-    build_info = fastpauli._wolfgang_core._build_info()
+    build_info = wolfgang._wolfgang_core._build_info()
     return {
         "benchmark": "multiply",
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "timing_policy": {
             "warmup": warmup,
@@ -425,7 +432,9 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use tiny Phase 5 benchmark-smoke dimensions.",
     )
-    parser.add_argument("--json", action="store_true", help="Emit the full benchmark report as JSON.")
+    parser.add_argument(
+        "--json", action="store_true", help="Emit the full benchmark report as JSON."
+    )
     return parser.parse_args()
 
 

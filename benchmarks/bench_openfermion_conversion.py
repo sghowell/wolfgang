@@ -10,8 +10,8 @@ import time
 from collections.abc import Callable
 from typing import Any
 
-import wolfgang_quantum as fastpauli
 import numpy as np
+import wolfgang_quantum as wolfgang
 from wolfgang_quantum import PauliSum
 from wolfgang_quantum.openfermion import OPENFERMION_INSTALL_HINT
 
@@ -33,11 +33,11 @@ except ImportError as exc:  # pragma: no cover - exercised by validation skip po
 PAULIS = np.asarray(["X", "Y", "Z"])
 
 
-def make_term(rng: np.random.Generator, *, num_qubits: int, term_weight: int) -> tuple[tuple[int, str], ...]:
+def make_term(
+    rng: np.random.Generator, *, num_qubits: int, term_weight: int
+) -> tuple[tuple[int, str], ...]:
     active_qubits = rng.choice(num_qubits, size=min(term_weight, num_qubits), replace=False)
-    return tuple(
-        sorted((int(qubit), str(rng.choice(PAULIS))) for qubit in active_qubits)
-    )
+    return tuple(sorted((int(qubit), str(rng.choice(PAULIS))) for qubit in active_qubits))
 
 
 def generate_qubit_operator(
@@ -65,7 +65,10 @@ def rebuild_openfermion(source: QubitOperator) -> QubitOperator:
 def qubit_operator_close(lhs: QubitOperator, rhs: QubitOperator) -> bool:
     if set(lhs.terms) != set(rhs.terms):
         return False
-    return all(np.allclose(lhs.terms[term], rhs.terms[term], rtol=1.0e-12, atol=1.0e-12) for term in lhs.terms)
+    return all(
+        np.allclose(lhs.terms[term], rhs.terms[term], rtol=1.0e-12, atol=1.0e-12)
+        for term in lhs.terms
+    )
 
 
 def timed_call(fn: Callable[[], Any], *, warmup: int, repeat: int) -> tuple[Any, dict[str, float]]:
@@ -171,13 +174,13 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         ),
     ]
 
-    build_info = fastpauli._wolfgang_core._build_info()
+    build_info = wolfgang._wolfgang_core._build_info()
     return {
         "benchmark": "openfermion_conversion",
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "openfermion_version": __import__("openfermion").__version__,
         "timing_policy": {
@@ -204,7 +207,9 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use tiny Phase 7 benchmark-smoke dimensions.",
     )
-    parser.add_argument("--json", action="store_true", help="Emit the full benchmark report as JSON.")
+    parser.add_argument(
+        "--json", action="store_true", help="Emit the full benchmark report as JSON."
+    )
     return parser.parse_args()
 
 

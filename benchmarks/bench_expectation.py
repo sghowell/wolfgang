@@ -15,8 +15,8 @@ import statistics
 import time
 from typing import Any
 
-import wolfgang_quantum as fastpauli
 import numpy as np
+import wolfgang_quantum as wolfgang
 from wolfgang_quantum import PauliSum
 
 try:
@@ -357,13 +357,13 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         ),
     ]
 
-    build_info = fastpauli._wolfgang_core._build_info()
+    build_info = wolfgang._wolfgang_core._build_info()
     return {
         "benchmark": "expectation",
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "timing_policy": {
             "warmup": warmup,

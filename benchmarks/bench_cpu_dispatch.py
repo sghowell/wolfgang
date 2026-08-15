@@ -12,9 +12,9 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
-import wolfgang_quantum as fastpauli
-import wolfgang_quantum._wolfgang_core as core
 import numpy as np
+import wolfgang_quantum as wolfgang
+import wolfgang_quantum._wolfgang_core as core
 from wolfgang_quantum import PauliSum
 
 try:
@@ -58,7 +58,9 @@ def timed_call(fn: Any, *, warmup: int, repeat: int) -> tuple[Any, dict[str, flo
     }
 
 
-def make_operator_and_state(num_qubits: int, num_terms: int, seed: int) -> tuple[PauliSum, np.ndarray]:
+def make_operator_and_state(
+    num_qubits: int, num_terms: int, seed: int
+) -> tuple[PauliSum, np.ndarray]:
     rng = np.random.default_rng(seed)
     alphabet = np.asarray(["I", "X", "Y", "Z"])
     labels = ["".join(rng.choice(alphabet, size=num_qubits).tolist()) for _ in range(num_terms)]
@@ -385,7 +387,8 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
 
     if not np.allclose(
         auto_case["results"]["expectation_real"] + 1j * auto_case["results"]["expectation_imag"],
-        scalar_case["results"]["expectation_real"] + 1j * scalar_case["results"]["expectation_imag"],
+        scalar_case["results"]["expectation_real"]
+        + 1j * scalar_case["results"]["expectation_imag"],
         rtol=1.0e-12,
         atol=1.0e-12,
     ):
@@ -465,7 +468,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(default_build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": default_build_info,
         "timing_policy": {
             "warmup": warmup,

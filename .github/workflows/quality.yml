@@ -46,7 +46,7 @@ jobs:
         run: pyright python/wolfgang_quantum
 
       - name: Check spelling
-        run: codespell .
+        run: codespell --skip="./docs/javascripts/vendor/mermaid-11.4.1.min.js" .
 
       - name: Audit tracked public artifacts
         run: python scripts/audit_public_artifacts.py --tracked

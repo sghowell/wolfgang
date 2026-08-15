@@ -11,7 +11,9 @@ CODEQL_WORKFLOW = ROOT / ".github/workflows/codeql.yml"
 RELEASE_README = ROOT / "docs/release/README.md"
 FULL_SHA_ACTION = re.compile(r"^\s*uses:\s+[^\s@]+@[0-9a-f]{40}\s+#\s+\S+\s*$", re.MULTILINE)
 CODEQL_ACTION_REF = "github/codeql-action/init@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3.37.6"
-CODEQL_ANALYZE_REF = "github/codeql-action/analyze@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3.37.6"
+CODEQL_ANALYZE_REF = (
+    "github/codeql-action/analyze@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3.37.6"
+)
 
 
 def workflow_text(path: Path) -> str:
@@ -61,7 +63,10 @@ def test_release_evidence_recipe_requires_pristine_snapshot_packaging() -> None:
     readme = workflow_text(RELEASE_README)
 
     assert "git worktree add --detach <snapshot-dir> HEAD" in readme
-    assert "python <snapshot-dir>/scripts/validate_release_artifacts.py --output-dir <artifact-dir>" in readme
+    assert (
+        "python <snapshot-dir>/scripts/validate_release_artifacts.py --output-dir <artifact-dir>"
+        in readme
+    )
 
 
 def test_release_evidence_recipe_twine_checks_only_distribution_files() -> None:
@@ -92,10 +97,10 @@ def test_quality_job_gates_whole_repository_python_and_public_artifacts() -> Non
     workflow = workflow_text(QUALITY_WORKFLOW)
 
     for required in (
-        'ruff check --config ruff.toml .',
-        'pyright python/wolfgang_quantum',
-        'codespell .',
-        'python scripts/audit_public_artifacts.py --tracked',
+        "ruff check --config ruff.toml .",
+        "pyright python/wolfgang_quantum",
+        'codespell --skip="./docs/javascripts/vendor/mermaid-11.4.1.min.js" .',
+        "python scripts/audit_public_artifacts.py --tracked",
     ):
         assert required in workflow
     for pinned_tool in (
@@ -135,7 +140,9 @@ def test_sanitizer_job_configures_builds_and_runs_native_extension_tests() -> No
     assert "ASAN_OPTIONS:" in workflow
     assert "UBSAN_OPTIONS:" in workflow
     assert "cmake -S . -B build/sanitizers" in workflow
-    assert 'CMAKE_LIBRARY_OUTPUT_DIRECTORY="${GITHUB_WORKSPACE}/python/wolfgang_quantum"' in workflow
+    assert (
+        'CMAKE_LIBRARY_OUTPUT_DIRECTORY="${GITHUB_WORKSPACE}/python/wolfgang_quantum"' in workflow
+    )
     assert "cmake --build build/sanitizers --target _wolfgang_core --parallel 2" in workflow
     assert "cmake --build build/sanitizers --target _fastpauli_core" not in workflow
     assert "PYTHONPATH=python" in workflow
@@ -145,10 +152,24 @@ def test_sanitizer_job_configures_builds_and_runs_native_extension_tests() -> No
 def test_documentation_gate_is_strict_pinned_and_bounded() -> None:
     workflow = workflow_text(DOCS_WORKFLOW)
 
-    assert "mkdocs-material==" in workflow
+    assert 'python -m pip install -e ".[test,docs]"' in workflow
     assert "mkdocs build --strict" in workflow
+    assert "python -m pytest tests/docs_mermaid_integration.py -q" in workflow
     assert workflow.count("timeout-minutes:") >= 2
     assert workflow.count("!github.event.repository.private") == 2
     uses_lines = re.findall(r"^\s*uses:.*$", workflow, re.MULTILINE)
     assert uses_lines
     assert all(FULL_SHA_ACTION.fullmatch(line) for line in uses_lines), uses_lines
+
+
+def test_docs_extra_pins_the_documentation_toolchain() -> None:
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+
+    assert "docs = [" in pyproject
+    assert '"mkdocs-material==9.7.7"' in pyproject
+
+
+def test_codespell_skips_vendored_mermaid_runtime() -> None:
+    workflow = workflow_text(QUALITY_WORKFLOW)
+
+    assert 'codespell --skip="./docs/javascripts/vendor/mermaid-11.4.1.min.js" .' in workflow

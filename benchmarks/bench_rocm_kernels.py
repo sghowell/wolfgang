@@ -16,9 +16,9 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-import wolfgang_quantum as fastpauli
-import wolfgang_quantum._wolfgang_core as core
 import numpy as np
+import wolfgang_quantum as wolfgang
+import wolfgang_quantum._wolfgang_core as core
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -1052,7 +1052,7 @@ def unique_deterministic_labels(
     return labels
 
 
-def make_simplify_operator(case: dict[str, Any]) -> fastpauli.PauliSum:
+def make_simplify_operator(case: dict[str, Any]) -> wolfgang.PauliSum:
     num_qubits = int(case["num_qubits"])
     num_terms = int(case["num_terms"])
     term_weight = int(case["term_weight"])
@@ -1068,7 +1068,7 @@ def make_simplify_operator(case: dict[str, Any]) -> fastpauli.PauliSum:
         )[0]
         labels = [label] * num_terms
         coeffs = [1.0 if index % 2 == 0 else -1.0 for index in range(num_terms)]
-        return fastpauli.PauliSum.from_labels(labels, coeffs)
+        return wolfgang.PauliSum.from_labels(labels, coeffs)
 
     unique_terms = max(1, min(num_terms, int(round(num_terms * (1.0 - duplicate_rate)))))
     pool = unique_deterministic_labels(
@@ -1079,14 +1079,11 @@ def make_simplify_operator(case: dict[str, Any]) -> fastpauli.PauliSum:
     )
     labels = [pool[index % unique_terms] for index in range(num_terms)]
     rng = np.random.default_rng(seed + 17)
-    coeffs = [
-        complex(float(rng.normal()), float(rng.normal()))
-        for _ in range(num_terms)
-    ]
-    return fastpauli.PauliSum.from_labels(labels, coeffs)
+    coeffs = [complex(float(rng.normal()), float(rng.normal())) for _ in range(num_terms)]
+    return wolfgang.PauliSum.from_labels(labels, coeffs)
 
 
-def make_operator(case: dict[str, Any], *, side: str) -> fastpauli.PauliSum:
+def make_operator(case: dict[str, Any], *, side: str) -> wolfgang.PauliSum:
     terms = int(case[f"{side}_terms"])
     seed_offset = 0 if side == "lhs" else 100000
     labels = deterministic_labels(
@@ -1096,10 +1093,10 @@ def make_operator(case: dict[str, Any], *, side: str) -> fastpauli.PauliSum:
         seed=int(case["random_seed"]) + seed_offset,
     )
     coeffs = np.ones(terms, dtype=np.complex128)
-    return fastpauli.PauliSum.from_labels(labels, coeffs.tolist())
+    return wolfgang.PauliSum.from_labels(labels, coeffs.tolist())
 
 
-def labels_and_coefficients(op: fastpauli.PauliSum) -> tuple[list[str], np.ndarray]:
+def labels_and_coefficients(op: wolfgang.PauliSum) -> tuple[list[str], np.ndarray]:
     labels, coeffs = op.to_labels()
     return list(labels), np.asarray(coeffs, dtype=np.complex128)
 
@@ -1107,7 +1104,7 @@ def labels_and_coefficients(op: fastpauli.PauliSum) -> tuple[list[str], np.ndarr
 def simplify_digest(
     *,
     input_terms: int,
-    simplified: fastpauli.PauliSum,
+    simplified: wolfgang.PauliSum,
 ) -> dict[str, Any]:
     labels, coeffs = labels_and_coefficients(simplified)
     digest = hashlib.sha256()
@@ -1125,8 +1122,8 @@ def simplify_digest(
 
 
 def assert_simplify_matches(
-    actual: fastpauli.PauliSum,
-    expected: fastpauli.PauliSum,
+    actual: wolfgang.PauliSum,
+    expected: wolfgang.PauliSum,
     *,
     case_name: str,
 ) -> None:
@@ -1139,8 +1136,8 @@ def assert_simplify_matches(
 
 
 def assert_operator_matches(
-    actual: fastpauli.PauliSum,
-    expected: fastpauli.PauliSum,
+    actual: wolfgang.PauliSum,
+    expected: wolfgang.PauliSum,
     *,
     case_name: str,
 ) -> None:
@@ -1152,7 +1149,7 @@ def assert_operator_matches(
         raise RuntimeError(f"HIP matmul coefficient mismatch for {case_name}")
 
 
-def make_campaign6_expectation_operator(case: dict[str, Any]) -> fastpauli.PauliSum:
+def make_campaign6_expectation_operator(case: dict[str, Any]) -> wolfgang.PauliSum:
     labels = deterministic_labels(
         num_qubits=int(case["num_qubits"]),
         num_terms=int(case["num_terms"]),
@@ -1161,10 +1158,9 @@ def make_campaign6_expectation_operator(case: dict[str, Any]) -> fastpauli.Pauli
     )
     rng = np.random.default_rng(int(case["random_seed"]) + 41)
     coeffs = [
-        complex(float(rng.normal()), float(rng.normal()))
-        for _ in range(int(case["num_terms"]))
+        complex(float(rng.normal()), float(rng.normal())) for _ in range(int(case["num_terms"]))
     ]
-    return fastpauli.PauliSum.from_labels(labels, coeffs)
+    return wolfgang.PauliSum.from_labels(labels, coeffs)
 
 
 def make_campaign6_statevector(case: dict[str, Any]) -> np.ndarray:
@@ -1177,7 +1173,7 @@ def make_campaign6_statevector(case: dict[str, Any]) -> np.ndarray:
     return psi
 
 
-def make_campaign6_matmul_operand(case: dict[str, Any], *, side: str) -> fastpauli.PauliSum:
+def make_campaign6_matmul_operand(case: dict[str, Any], *, side: str) -> wolfgang.PauliSum:
     terms = int(case[f"{side}_terms"])
     duplicate_rate = float(case["duplicate_rate"])
     unique_terms = max(1, min(terms, int(round(terms * (1.0 - duplicate_rate)))))
@@ -1191,10 +1187,10 @@ def make_campaign6_matmul_operand(case: dict[str, Any], *, side: str) -> fastpau
     labels = [pool[index % unique_terms] for index in range(terms)]
     rng = np.random.default_rng(int(case["random_seed"]) + seed_offset + 17)
     coeffs = [complex(float(rng.normal()), float(rng.normal())) for _ in range(terms)]
-    return fastpauli.PauliSum.from_labels(labels, coeffs)
+    return wolfgang.PauliSum.from_labels(labels, coeffs)
 
 
-def operator_digest(op: fastpauli.PauliSum) -> dict[str, Any]:
+def operator_digest(op: wolfgang.PauliSum) -> dict[str, Any]:
     labels, coeffs = labels_and_coefficients(op)
     digest = hashlib.sha256()
     for label, coeff in zip(labels, coeffs, strict=True):
@@ -1210,7 +1206,7 @@ def operator_digest(op: fastpauli.PauliSum) -> dict[str, Any]:
 
 
 def expectation_digest(
-    op: fastpauli.PauliSum,
+    op: wolfgang.PauliSum,
     result: complex,
 ) -> dict[str, Any]:
     digest = operator_digest(op)
@@ -1232,8 +1228,8 @@ def backend_device_name(hip_status: dict[str, Any]) -> str:
 
 
 def selector_timings(
-    lhs: fastpauli.PauliSum,
-    rhs: fastpauli.PauliSum,
+    lhs: wolfgang.PauliSum,
+    rhs: wolfgang.PauliSum,
     *,
     warmup: int,
     repeat: int,
@@ -1263,7 +1259,9 @@ def benchmark_case(
     words = (int(case["num_qubits"]) + 63) // 64
 
     with forced_cpu_backend("scalar"):
-        expected, cpu_scalar = timed_call(lambda: lhs.commutes_with(rhs), warmup=warmup, repeat=repeat)
+        expected, cpu_scalar = timed_call(
+            lambda: lhs.commutes_with(rhs), warmup=warmup, repeat=repeat
+        )
     expected_array = np.asarray(expected, dtype=np.bool_).reshape(lhs.num_terms, rhs.num_terms)
     optimized_cpu = selector_timings(
         lhs,
@@ -1362,7 +1360,9 @@ def benchmark_campaign2_case(
     entries = lhs.num_terms * rhs.num_terms
 
     with forced_cpu_backend("scalar"):
-        expected, cpu_scalar = timed_call(lambda: lhs.commutes_with(rhs), warmup=warmup, repeat=repeat)
+        expected, cpu_scalar = timed_call(
+            lambda: lhs.commutes_with(rhs), warmup=warmup, repeat=repeat
+        )
     expected_array = np.asarray(expected, dtype=np.bool_).reshape(lhs.num_terms, rhs.num_terms)
     optimized_cpu = selector_timings(
         lhs,
@@ -1466,7 +1466,7 @@ def benchmark_campaign2_case(
         raise RuntimeError(f"HIP device-output allocating mismatch for {case['name']}")
     add_timing_fields(row, "hip_device_output_allocate", allocate_timing)
 
-    reused_output = fastpauli.DeviceCommutationMatrix.empty(
+    reused_output = wolfgang.DeviceCommutationMatrix.empty(
         (lhs.num_terms, rhs.num_terms),
         device=lhs_device.device,
     )
@@ -1785,7 +1785,7 @@ def benchmark_simplify_case(
         generic_multiword_parallelism=generic_multiword_parallelism,
     )
 
-    def transfer_inclusive_call() -> fastpauli.PauliSum:
+    def transfer_inclusive_call() -> wolfgang.PauliSum:
         with forced_environment(env_updates):
             return op.to_device(device=0).simplify().to_host()
 
@@ -1974,8 +1974,10 @@ def benchmark_campaign6_matmul_case(
     rhs = make_campaign6_matmul_operand(case, side="rhs")
     simplify_output = bool(case["simplify_output"])
     words = (int(case["num_qubits"]) + 63) // 64
-    mode = "profiler_matmul" if profile == "campaign6-profiler" else (
-        "matmul_simplify_true" if simplify_output else "matmul_simplify_false"
+    mode = (
+        "profiler_matmul"
+        if profile == "campaign6-profiler"
+        else ("matmul_simplify_true" if simplify_output else "matmul_simplify_false")
     )
 
     with forced_cpu_backend("scalar"):
@@ -2029,9 +2031,11 @@ def benchmark_campaign6_matmul_case(
         return campaign6_unavailable_row(row, hip_status)
 
     transfer_host, transfer_timing = timed_call(
-        lambda: lhs.to_device(device=0)
-        .matmul(rhs.to_device(device=0), simplify=simplify_output)
-        .to_host(),
+        lambda: (
+            lhs.to_device(device=0)
+            .matmul(rhs.to_device(device=0), simplify=simplify_output)
+            .to_host()
+        ),
         warmup=warmup,
         repeat=repeat,
     )
@@ -2360,7 +2364,16 @@ def campaign7_decision_rows(
         ),
     ]
     rows: list[dict[str, Any]] = []
-    for operation, mode, backend, host_role, boundary, final_status, reason, validation in decisions:
+    for (
+        operation,
+        mode,
+        backend,
+        host_role,
+        boundary,
+        final_status,
+        reason,
+        validation,
+    ) in decisions:
         row = campaign7_base_fields(
             profile=profile,
             operation=operation,
@@ -2438,8 +2451,10 @@ def benchmark_campaign7_case(
             if operation == "simplify_duplicate_pressure"
             else "retained_simplify"
         )
-        final_status = "rejected_with_evidence" if "duplicate_pressure" in operation else (
-            "passed" if profile == "campaign7-profiler" else "retained"
+        final_status = (
+            "rejected_with_evidence"
+            if "duplicate_pressure" in operation
+            else ("passed" if profile == "campaign7-profiler" else "retained")
         )
         return [
             campaign7_enrich_row(
@@ -2448,7 +2463,11 @@ def benchmark_campaign7_case(
                 operation=(
                     "duplicate_pressure_probe"
                     if "duplicate_pressure" in operation
-                    else ("profiler_smoke" if profile == "campaign7-profiler" else "retained_operation_smoke")
+                    else (
+                        "profiler_smoke"
+                        if profile == "campaign7-profiler"
+                        else "retained_operation_smoke"
+                    )
                 ),
                 mode="rocprof_availability" if profile == "campaign7-profiler" else mode,
                 timing_boundary="profiler_only"
@@ -2485,8 +2504,10 @@ def benchmark_campaign7_case(
                 if operation == "matmul_duplicate_pressure"
                 else "retained_matmul"
             )
-        final_status = "rejected_with_evidence" if "duplicate_pressure" in operation else (
-            "passed" if profile == "campaign7-profiler" else "retained"
+        final_status = (
+            "rejected_with_evidence"
+            if "duplicate_pressure" in operation
+            else ("passed" if profile == "campaign7-profiler" else "retained")
         )
         return [
             campaign7_enrich_row(
@@ -2495,7 +2516,11 @@ def benchmark_campaign7_case(
                 operation=(
                     "duplicate_pressure_probe"
                     if "duplicate_pressure" in operation
-                    else ("profiler_smoke" if profile == "campaign7-profiler" else "retained_operation_smoke")
+                    else (
+                        "profiler_smoke"
+                        if profile == "campaign7-profiler"
+                        else "retained_operation_smoke"
+                    )
                 ),
                 mode="rocprof_availability" if profile == "campaign7-profiler" else mode,
                 timing_boundary="profiler_only"
@@ -2931,7 +2956,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "profile": profile,
         "command": command_string(),
         "git_commit": git_commit(),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "hip_status": hip_status,
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),

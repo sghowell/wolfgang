@@ -36,7 +36,9 @@ def hip_mem_info() -> dict[str, int]:
     return {"free": int(free_mem.value), "total": int(total_mem.value)}
 
 
-def settled_sample(tag: str, *, sample_count: int = 5, sleep_seconds: float = 0.05) -> dict[str, Any]:
+def settled_sample(
+    tag: str, *, sample_count: int = 5, sleep_seconds: float = 0.05
+) -> dict[str, Any]:
     samples: list[dict[str, int]] = []
     for index in range(1, sample_count + 1):
         reading = hip_mem_info()
@@ -100,9 +102,9 @@ def summarize_probe(
 
 
 def child_probe_payload() -> dict[str, Any]:
-    import wolfgang_quantum
-    import wolfgang_quantum._wolfgang_core as core
     import numpy as np
+    import wolfgang_quantum as wolfgang
+    import wolfgang_quantum._wolfgang_core as core
 
     status = core._hip_status()
     if not status.get("runtime_available", False):
@@ -122,7 +124,7 @@ def child_probe_payload() -> dict[str, Any]:
 
     before_process = settled_sample("before_process")
 
-    base = wolfgang_quantum.PauliSum.from_labels(
+    base = wolfgang.PauliSum.from_labels(
         labels_from_rng(193, 4096, 10),
         (rng.normal(size=4096) + 1j * rng.normal(size=4096)).tolist(),
     )
@@ -133,18 +135,18 @@ def child_probe_payload() -> dict[str, Any]:
 
     construct_destroy_samples: list[dict[str, int]] = []
     for cycle in range(20):
-        op = wolfgang_quantum.PauliSum.from_labels(
+        op = wolfgang.PauliSum.from_labels(
             labels_from_rng(193, 8192, 10),
             (rng.normal(size=8192) + 1j * rng.normal(size=8192)).tolist(),
         )
         device = op.to_device()
         simplified_cycle = device.simplify()
         _ = simplified_cycle.to_host().num_terms
-        lhs = fastpauli.PauliSum.from_labels(
+        lhs = wolfgang.PauliSum.from_labels(
             labels_from_rng(193, 128, 6),
             (rng.normal(size=128) + 1j * rng.normal(size=128)).tolist(),
         )
-        rhs = fastpauli.PauliSum.from_labels(
+        rhs = wolfgang.PauliSum.from_labels(
             labels_from_rng(193, 128, 6),
             (rng.normal(size=128) + 1j * rng.normal(size=128)).tolist(),
         )
@@ -184,7 +186,9 @@ def run_child_probe(output_path: Path) -> dict[str, Any]:
         text=True,
     )
     if completed.returncode != 0:
-        raise RuntimeError(completed.stderr or completed.stdout or f"child probe failed: {completed.returncode}")
+        raise RuntimeError(
+            completed.stderr or completed.stdout or f"child probe failed: {completed.returncode}"
+        )
     return json.loads(output_path.read_text(encoding="utf-8"))
 
 
@@ -218,8 +222,12 @@ def run_parent_probe(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, required=True, help="Where to write the JSON summary.")
-    parser.add_argument("--child", action="store_true", help="Run the in-process child probe payload.")
+    parser.add_argument(
+        "--output", type=Path, required=True, help="Where to write the JSON summary."
+    )
+    parser.add_argument(
+        "--child", action="store_true", help="Run the in-process child probe payload."
+    )
     return parser.parse_args()
 
 

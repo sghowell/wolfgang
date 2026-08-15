@@ -13,9 +13,9 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
-import wolfgang_quantum as fastpauli
-import wolfgang_quantum._wolfgang_core as core
 import numpy as np
+import wolfgang_quantum as wolfgang
+import wolfgang_quantum._wolfgang_core as core
 from wolfgang_quantum import PauliSum
 
 try:
@@ -270,7 +270,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "thresholds": {
             "tbb_pairwise_entries": threshold,

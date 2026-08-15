@@ -15,8 +15,8 @@ import statistics
 import time
 from typing import Any
 
-import wolfgang_quantum as fastpauli
 import numpy as np
+import wolfgang_quantum as wolfgang
 from wolfgang_quantum import PauliSum
 
 try:
@@ -132,7 +132,9 @@ def python_simplify(
 
 def fastpauli_pairs(op: PauliSum) -> list[tuple[tuple[int, ...], complex]]:
     labels, coeffs = op.to_labels()
-    return [(packed_key(label), complex(coeff)) for label, coeff in zip(labels, coeffs, strict=True)]
+    return [
+        (packed_key(label), complex(coeff)) for label, coeff in zip(labels, coeffs, strict=True)
+    ]
 
 
 def timed_call(fn: Any, *, warmup: int, repeat: int) -> tuple[Any, dict[str, float]]:
@@ -243,13 +245,13 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             rtol=args.rtol,
         ),
     ]
-    build_info = fastpauli._wolfgang_core._build_info()
+    build_info = wolfgang._wolfgang_core._build_info()
     return {
         "benchmark": "simplify",
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "timing_policy": {
             "warmup": warmup,
@@ -281,7 +283,9 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use tiny Phase 4 benchmark-smoke dimensions.",
     )
-    parser.add_argument("--json", action="store_true", help="Emit the full benchmark report as JSON.")
+    parser.add_argument(
+        "--json", action="store_true", help="Emit the full benchmark report as JSON."
+    )
     return parser.parse_args()
 
 
