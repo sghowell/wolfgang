@@ -1,0 +1,1378 @@
+{
+  "campaign": "h100_campaign7",
+  "count_gate": [
+    {
+      "bitpacked_decision_status": "deferred_no_dense_capacity_or_bandwidth_trigger",
+      "conflict_degrees_seconds": 0.00018101699242834002,
+      "conflict_host_bytes": 32768,
+      "count_specialization_status": "rejected_not_dominant",
+      "csr_host_bytes": 10436616,
+      "csr_seconds": 0.0045907680032541975,
+      "dense_to_host_seconds": 0.0015978779993019998,
+      "device_output_reuse_seconds": 3.2670010114088655e-05,
+      "edge_count": 1302528,
+      "grouping_summary_seconds": 9.814200166147202e-05,
+      "scale": "fused_consumer_terms_2048x2048",
+      "terms": 2048
+    },
+    {
+      "bitpacked_decision_status": "deferred_no_dense_capacity_or_bandwidth_trigger",
+      "conflict_degrees_seconds": 0.0009661590011091903,
+      "conflict_host_bytes": 131072,
+      "count_specialization_status": "rejected_not_dominant",
+      "csr_host_bytes": 166702504,
+      "csr_seconds": 0.12358862299879547,
+      "dense_to_host_seconds": 0.0567635150073329,
+      "device_output_reuse_seconds": 0.0003630209976108745,
+      "edge_count": 20829620,
+      "grouping_summary_seconds": 0.0006281919922912493,
+      "scale": "fused_consumer_terms_8192x8192",
+      "terms": 8192
+    },
+    {
+      "bitpacked_decision_status": "deferred_no_dense_capacity_or_bandwidth_trigger",
+      "conflict_degrees_seconds": 0.0028278500103624538,
+      "conflict_host_bytes": 262144,
+      "count_specialization_status": "rejected_not_dominant",
+      "csr_host_bytes": 666864816,
+      "csr_seconds": 0.4939450179954292,
+      "dense_to_host_seconds": 0.23121073900256306,
+      "device_output_reuse_seconds": 0.0014162070001475513,
+      "edge_count": 83341717,
+      "grouping_summary_seconds": 0.002216826003859751,
+      "scale": "fused_consumer_terms_16384x16384",
+      "terms": 16384
+    }
+  ],
+  "date": "2026-04-29",
+  "decisions": [
+    {
+      "experiment": "fused_commutation_consumers",
+      "reason": "Private CSR, conflict-degree, and grouping-summary helpers provide evidence without public API expansion.",
+      "status": "benchmark_only_retained"
+    },
+    {
+      "experiment": "count_reduction_specialization",
+      "reason": "Profiler and timing evidence show retained grouping summaries are compact and CSR export is dominated by edge-list transfer.",
+      "status": "rejected_not_dominant"
+    },
+    {
+      "experiment": "async_stream_api",
+      "reason": "No complete public lifetime, event, stream capture, error propagation, and Python ownership contract is accepted.",
+      "status": "deferred"
+    },
+    {
+      "experiment": "bitpacked_output",
+      "reason": "Dense fused consumers did not prove a packed-layout capacity or bandwidth trigger.",
+      "status": "deferred_no_dense_capacity_or_bandwidth_trigger"
+    },
+    {
+      "experiment": "non_h100_portability",
+      "reason": "No non-H100 NVIDIA host was available; claims remain H100 source-build evidence only.",
+      "status": "blocked_recorded"
+    }
+  ],
+  "evidence": {
+    "portability_report": "docs/benchmarks/reports/cuda_portability_campaign7_non_h100_nvidia_2026-04-29.md",
+    "profilers": [
+      "nsys",
+      "ncu"
+    ],
+    "raw_json": [
+      "count_specialization_ab.json",
+      "fused_consumers_smoke.json",
+      "fused_graph_stress.json",
+      "fused_grouping_stress.json",
+      "ncu_fused_consumers.json",
+      "nsys_fused_consumers.json"
+    ],
+    "sanitizers": [
+      "memcheck",
+      "racecheck",
+      "initcheck",
+      "synccheck"
+    ],
+    "status": [
+      {
+        "label": "H100 repo validation",
+        "status": "passed"
+      },
+      {
+        "label": "phase 11 CUDA tests",
+        "status": "passed"
+      },
+      {
+        "label": "compute-sanitizer ladder",
+        "status": "passed"
+      },
+      {
+        "label": "Campaign 7 fused benchmark",
+        "status": "passed"
+      },
+      {
+        "label": "Nsight Systems",
+        "status": "passed"
+      },
+      {
+        "label": "Nsight Compute",
+        "status": "passed"
+      },
+      {
+        "label": "non-H100 NVIDIA portability",
+        "status": "blocked_recorded"
+      }
+    ]
+  },
+  "experiment_revision": "453015d29f21331f4d41fe4973c568569f6791f7",
+  "fused_consumers": [
+    {
+      "bitpacked_decision_status": "deferred_no_dense_capacity_or_bandwidth_trigger",
+      "conflict_degrees_seconds": 0.00016349599172826856,
+      "conflict_host_bytes": 32768,
+      "count_specialization_status": "rejected_not_dominant",
+      "csr_host_bytes": 10436616,
+      "csr_seconds": 0.005479602987179533,
+      "dense_to_host_seconds": 0.0019739200070034713,
+      "device_output_reuse_seconds": 3.174299490638077e-05,
+      "edge_count": 1302528,
+      "grouping_summary_seconds": 0.00010019300680141896,
+      "scale": "fused_consumer_terms_2048x2048",
+      "terms": 2048
+    },
+    {
+      "bitpacked_decision_status": "deferred_no_dense_capacity_or_bandwidth_trigger",
+      "conflict_degrees_seconds": 0.0009377149981446564,
+      "conflict_host_bytes": 131072,
+      "count_specialization_status": "rejected_not_dominant",
+      "csr_host_bytes": 166702504,
+      "csr_seconds": 0.12746752800012473,
+      "dense_to_host_seconds": 0.05686629400588572,
+      "device_output_reuse_seconds": 0.00036467799509409815,
+      "edge_count": 20829620,
+      "grouping_summary_seconds": 0.000623387997620739,
+      "scale": "fused_consumer_terms_8192x8192",
+      "terms": 8192
+    },
+    {
+      "bitpacked_decision_status": "deferred_no_dense_capacity_or_bandwidth_trigger",
+      "conflict_degrees_seconds": 0.0028259109967621043,
+      "conflict_host_bytes": 262144,
+      "count_specialization_status": "rejected_not_dominant",
+      "csr_host_bytes": 666864816,
+      "csr_seconds": 0.5050421170017216,
+      "dense_to_host_seconds": 0.23330879899731372,
+      "device_output_reuse_seconds": 0.0014265089994296432,
+      "edge_count": 83341717,
+      "grouping_summary_seconds": 0.002216616994701326,
+      "scale": "fused_consumer_terms_16384x16384",
+      "terms": 16384
+    }
+  ],
+  "hardware": {
+    "available_cpu_backends": [
+      "scalar",
+      "tbb",
+      "avx2",
+      "avx512"
+    ],
+    "compiled_cuda_architectures": "90",
+    "cuda_toolkit": "12.9.86",
+    "gpu": "NVIDIA H100 PCIe, SM 9.0, driver 580.126.09"
+  },
+  "ncu_key_metrics": [
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "23.79"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "9.56"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "21.60"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "194.37"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "78.28"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "63.80"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "3.36"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "61.54"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "68.51"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "83.80"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "23.92"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "9.40"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "21.95"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "191.24"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "78.56"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "70.01"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "3.78"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "54.50"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "77.03"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "92.23"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "23.92"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "9.51"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "21.73"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "193.21"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "77.93"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "68.61"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "3.60"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "57.15"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "73.46"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(2048, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "92.28"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "18.48"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "18.48"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "184.80"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "376.69"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "97.28"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "77.41"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "12.91"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "810.37"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "263.30"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "96.00"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "18.45"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "18.45"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "184.93"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "376.09"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "97.25"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "91.90"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "5.64"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "605.89"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "114.93"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "97.61"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "18.46"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "18.46"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "184.86"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "376.28"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "97.33"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "90.67"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "5.58"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "611.07"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "113.85"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(8192, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "97.54"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "19.38"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "19.38"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "685.95"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "395.07"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "98.31"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "78.92"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "14.15"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Duration",
+      "unit": "ms",
+      "value": "3.17"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "288.61"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::scatter_csr_conflicts_sorted_by_row_kernel(const unsigned char *, unsigned long, unsigned long, const unsigned long *, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "97.97"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "19.36"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "19.36"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "686.50"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "394.78"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "98.32"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "92.99"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "5.67"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "ms",
+      "value": "2.34"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "115.68"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "98.79"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "19.37"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "19.37"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "us",
+      "value": "686.37"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "394.95"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_row_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "98.30"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "%",
+      "value": "95.02"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "DRAM Throughput",
+      "unit": "%",
+      "value": "5.74"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Duration",
+      "unit": "ms",
+      "value": "2.32"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Memory Throughput",
+      "unit": "Gbyte/s",
+      "value": "117.04"
+    },
+    {
+      "block_size": "(256, 1, 1)",
+      "grid_size": "(16384, 1, 1)",
+      "kernel": "unnamed>::count_col_conflicts_kernel(const unsigned char *, unsigned long, unsigned long, unsigned long *)",
+      "metric": "Achieved Occupancy",
+      "unit": "%",
+      "value": "98.79"
+    }
+  ],
+  "readme_performance_landscape": [
+    {
+      "category": "FastPauli default profile",
+      "label": "simplify 50000 terms",
+      "operation": "simplify_duplicate_pressure",
+      "points": [
+        {
+          "seconds": 0.007583475002320483,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.000976714989519678,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 7.764266017919752
+        },
+        {
+          "seconds": 0.0004638109967345372,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 16.350356191879804
+        }
+      ],
+      "scale": "terms_50000"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "statevector 2048 terms",
+      "operation": "statevector_expectation",
+      "points": [
+        {
+          "seconds": 0.03606751099869143,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.00011246599024161696,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 320.69704735809984
+        },
+        {
+          "seconds": 4.954400355927646e-05,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 727.9894317692513
+        }
+      ],
+      "scale": "qubits_12_terms_2048"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "commutation 2048x2048",
+      "operation": "pairwise_commutation",
+      "points": [
+        {
+          "seconds": 0.019767431003856473,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.002088837994961068,
+          "series": "CPU TBB",
+          "speedup_vs_cpu_scalar": 9.463362429992998
+        },
+        {
+          "seconds": 0.004118012002436444,
+          "series": "CPU AVX2",
+          "speedup_vs_cpu_scalar": 4.800236374289576
+        },
+        {
+          "seconds": 0.002663678998942487,
+          "series": "CPU AVX-512",
+          "speedup_vs_cpu_scalar": 7.421101045472966
+        },
+        {
+          "seconds": 0.0005909900064580142,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 33.44799537699257
+        },
+        {
+          "seconds": 0.0005662760086124763,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 34.90776706626125
+        },
+        {
+          "seconds": 0.0001122899993788451,
+          "series": "CUDA device-output allocate",
+          "speedup_vs_cpu_scalar": 176.03910511358114
+        },
+        {
+          "seconds": 3.110399120487273e-05,
+          "series": "CUDA device-output reuse",
+          "speedup_vs_cpu_scalar": 635.527153851552
+        },
+        {
+          "seconds": 0.001511866008513607,
+          "series": "CUDA device-output to_host",
+          "speedup_vs_cpu_scalar": 13.074856430756617
+        }
+      ],
+      "scale": "terms_2048x2048"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "matmul+simplify 256x256",
+      "operation": "matmul_product_generation_simplify",
+      "points": [
+        {
+          "seconds": 0.011616554998909123,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0017398799973307177,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 6.676641502132885
+        },
+        {
+          "seconds": 0.0007146179996198043,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 16.25561489507602
+        }
+      ],
+      "scale": "terms_256x256"
+    },
+    {
+      "category": "Campaign 6 consumer scaling",
+      "label": "commutation consumer 2048x2048",
+      "operation": "pairwise_commutation_consumer",
+      "points": [
+        {
+          "seconds": 0.02084913400176447,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.002024326997343451,
+          "series": "CPU TBB",
+          "speedup_vs_cpu_scalar": 10.299291581412017
+        },
+        {
+          "seconds": 0.004488487000344321,
+          "series": "CPU AVX2",
+          "speedup_vs_cpu_scalar": 4.645024927144735
+        },
+        {
+          "seconds": 0.0031793389935046434,
+          "series": "CPU AVX-512",
+          "speedup_vs_cpu_scalar": 6.557694553603448
+        },
+        {
+          "seconds": 0.0007812399999238551,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 26.68723312144356
+        },
+        {
+          "seconds": 3.223300154786557e-05,
+          "series": "CUDA device-output reuse",
+          "speedup_vs_cpu_scalar": 646.8257065915437
+        },
+        {
+          "seconds": 8.494299254380167e-05,
+          "series": "CUDA compact count",
+          "speedup_vs_cpu_scalar": 245.4485458704956
+        },
+        {
+          "seconds": 6.118699093349278e-05,
+          "series": "CUDA row count",
+          "speedup_vs_cpu_scalar": 340.74455507096997
+        },
+        {
+          "seconds": 3.595299494918436e-05,
+          "series": "CUDA column count",
+          "speedup_vs_cpu_scalar": 579.8997839048583
+        },
+        {
+          "seconds": 0.0012461400037864223,
+          "series": "CUDA dense to_host",
+          "speedup_vs_cpu_scalar": 16.730972393482226
+        },
+        {
+          "seconds": 0.0014841939992038533,
+          "series": "CuPy reduction",
+          "speedup_vs_cpu_scalar": 14.047445288788593
+        }
+      ],
+      "scale": "dense_consumer_terms_2048x2048"
+    },
+    {
+      "category": "Campaign 6 consumer scaling",
+      "label": "commutation consumer 8192x8192",
+      "operation": "pairwise_commutation_consumer",
+      "points": [
+        {
+          "seconds": 0.39595294700120576,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.07645083400711883,
+          "series": "CPU TBB",
+          "speedup_vs_cpu_scalar": 5.17918414028467
+        },
+        {
+          "seconds": 0.13369330600835383,
+          "series": "CPU AVX2",
+          "speedup_vs_cpu_scalar": 2.961651251084064
+        },
+        {
+          "seconds": 0.1063121890038019,
+          "series": "CPU AVX-512",
+          "speedup_vs_cpu_scalar": 3.72443602856344
+        },
+        {
+          "seconds": 0.01652513699082192,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 23.960645362342138
+        },
+        {
+          "seconds": 0.0003651930019259453,
+          "series": "CUDA device-output reuse",
+          "speedup_vs_cpu_scalar": 1084.2292840033613
+        },
+        {
+          "seconds": 0.0010747969936346635,
+          "series": "CUDA compact count",
+          "speedup_vs_cpu_scalar": 368.3978922030693
+        },
+        {
+          "seconds": 0.00045730199781246483,
+          "series": "CUDA row count",
+          "speedup_vs_cpu_scalar": 865.845653190394
+        },
+        {
+          "seconds": 0.0001867340033641085,
+          "series": "CUDA column count",
+          "speedup_vs_cpu_scalar": 2120.411600822084
+        },
+        {
+          "seconds": 0.0628652439918369,
+          "series": "CUDA dense to_host",
+          "speedup_vs_cpu_scalar": 6.298439676025445
+        },
+        {
+          "seconds": 0.051076296003884636,
+          "series": "CuPy reduction",
+          "speedup_vs_cpu_scalar": 7.75218600368146
+        }
+      ],
+      "scale": "dense_consumer_terms_8192x8192"
+    },
+    {
+      "category": "Campaign 6 consumer scaling",
+      "label": "commutation consumer 16384x16384",
+      "operation": "pairwise_commutation_consumer",
+      "points": [
+        {
+          "seconds": 1.6308772769989446,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.2931398979999358,
+          "series": "CPU TBB",
+          "speedup_vs_cpu_scalar": 5.5634776709900535
+        },
+        {
+          "seconds": 0.5008178510033758,
+          "series": "CPU AVX2",
+          "speedup_vs_cpu_scalar": 3.256428008170083
+        },
+        {
+          "seconds": 0.39761341900157277,
+          "series": "CPU AVX-512",
+          "speedup_vs_cpu_scalar": 4.101665585367212
+        },
+        {
+          "seconds": 0.06849110400071368,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 23.81151977024565
+        },
+        {
+          "seconds": 0.0014260000025387853,
+          "series": "CUDA device-output reuse",
+          "speedup_vs_cpu_scalar": 1143.6727027317006
+        },
+        {
+          "seconds": 0.0038917549973120913,
+          "series": "CUDA compact count",
+          "speedup_vs_cpu_scalar": 419.05959602424576
+        },
+        {
+          "seconds": 0.0015723320102551952,
+          "series": "CUDA row count",
+          "speedup_vs_cpu_scalar": 1037.2346720424825
+        },
+        {
+          "seconds": 0.0005950919876340777,
+          "series": "CUDA column count",
+          "speedup_vs_cpu_scalar": 2740.5465220307615
+        },
+        {
+          "seconds": 0.24813919900043402,
+          "series": "CUDA dense to_host",
+          "speedup_vs_cpu_scalar": 6.572429038090399
+        },
+        {
+          "seconds": 0.20325792398944031,
+          "series": "CuPy reduction",
+          "speedup_vs_cpu_scalar": 8.023683628116128
+        }
+      ],
+      "scale": "dense_consumer_terms_16384x16384"
+    },
+    {
+      "category": "External package baseline",
+      "label": "Qiskit simplify 10000 terms 64q",
+      "operation": "simplify",
+      "points": [
+        {
+          "seconds": 0.0006540590111399069,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0008469919994240627,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 0.7722139188854839
+        }
+      ],
+      "scale": "external"
+    },
+    {
+      "category": "External package baseline",
+      "label": "OpenFermion multiply 256x256 64q",
+      "operation": "multiply",
+      "points": [
+        {
+          "seconds": 0.01209202699828893,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.23487728100735694,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 0.05148231853854855
+        }
+      ],
+      "scale": "external"
+    },
+    {
+      "category": "External package baseline",
+      "label": "Qiskit grouping 512 terms 64q",
+      "operation": "qiskit_grouping",
+      "points": [
+        {
+          "seconds": 0.000339745995006524,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.07987479999428615,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 0.0042534816366467
+        }
+      ],
+      "scale": "external"
+    },
+    {
+      "category": "External package baseline",
+      "label": "cuStateVec statevector 4096 terms 14q",
+      "operation": "cuquantum_statevector_expectation",
+      "points": [
+        {
+          "seconds": 0.3550525379978353,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.00944287099991925,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 37.600062311649864
+        },
+        {
+          "seconds": 0.00021685899992007762,
+          "series": "CUDA operator-resident",
+          "speedup_vs_cpu_scalar": 1637.250647327011
+        },
+        {
+          "seconds": 0.00019268000323791057,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 1842.7056883502132
+        }
+      ],
+      "scale": "external"
+    },
+    {
+      "category": "External package baseline",
+      "label": "CuPy consumer 256x256 64q",
+      "operation": "cupy_commutation_consumer",
+      "points": [
+        {
+          "seconds": 4.466000245884061e-05,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 7.138100045267493e-05,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 0.6256567178327777
+        },
+        {
+          "seconds": 2.0216000848449767e-05,
+          "series": "CUDA compact count",
+          "speedup_vs_cpu_scalar": 2.2091413031507314
+        },
+        {
+          "seconds": 2.2365988115780056e-05,
+          "series": "CUDA dense to_host",
+          "speedup_vs_cpu_scalar": 1.9967819989733107
+        }
+      ],
+      "scale": "external"
+    },
+    {
+      "baseline_seconds": 0.23330879899731372,
+      "category": "Campaign 7 fused consumers",
+      "points": [
+        {
+          "label": "2048x2048 grouping summary",
+          "seconds": 0.00010019300680141896,
+          "series": "CUDA fused grouping"
+        },
+        {
+          "label": "2048x2048 conflict degrees",
+          "seconds": 0.00016349599172826856,
+          "series": "CUDA fused degree summary"
+        },
+        {
+          "label": "2048x2048 CSR graph export",
+          "seconds": 0.005479602987179533,
+          "series": "CUDA fused CSR export"
+        },
+        {
+          "label": "8192x8192 grouping summary",
+          "seconds": 0.000623387997620739,
+          "series": "CUDA fused grouping"
+        },
+        {
+          "label": "8192x8192 conflict degrees",
+          "seconds": 0.0009377149981446564,
+          "series": "CUDA fused degree summary"
+        },
+        {
+          "label": "8192x8192 CSR graph export",
+          "seconds": 0.12746752800012473,
+          "series": "CUDA fused CSR export"
+        },
+        {
+          "label": "16384x16384 grouping summary",
+          "seconds": 0.002216616994701326,
+          "series": "CUDA fused grouping"
+        },
+        {
+          "label": "16384x16384 conflict degrees",
+          "seconds": 0.0028259109967621043,
+          "series": "CUDA fused degree summary"
+        },
+        {
+          "label": "16384x16384 CSR graph export",
+          "seconds": 0.5050421170017216,
+          "series": "CUDA fused CSR export"
+        }
+      ]
+    }
+  ]
+}

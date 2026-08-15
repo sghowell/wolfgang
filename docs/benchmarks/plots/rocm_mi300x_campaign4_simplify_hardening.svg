@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1272" viewBox="0 0 1120 1272">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="48" y="52" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#0f172a">MI300X ROCm Campaign 4 Simplify Hardening</text>
+<text x="48" y="78" font-family="Inter, Arial, sans-serif" font-size="14" fill="#475569">Generic reduce-by-key, packed-key probes, and workspace-status evidence</text>
+<line x1="533.0" y1="80" x2="533.0" y2="1224" stroke="#e2e8f0" stroke-width="1"/>
+<text x="533.0" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.0001s</text>
+<line x1="750.3" y1="80" x2="750.3" y2="1224" stroke="#e2e8f0" stroke-width="1"/>
+<text x="750.3" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.001s</text>
+<line x1="967.5" y1="80" x2="967.5" y2="1224" stroke="#e2e8f0" stroke-width="1"/>
+<text x="967.5" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.01s</text>
+<text x="48" y="123" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_duplicate_heavy_default | CPU scalar</text>
+<rect x="390" y="109" width="507.1" height="18" rx="3" fill="#334155"/>
+<text x="907.1" y="123" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00474s CPU scalar</text>
+<text x="48" y="157" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_duplicate_heavy_default | HIP transfer</text>
+<rect x="390" y="143" width="342.6" height="18" rx="3" fill="#0e7490"/>
+<text x="742.6" y="157" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000829s rocthrust_default</text>
+<text x="48" y="191" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_duplicate_heavy_default | HIP resident</text>
+<rect x="390" y="177" width="261.8" height="18" rx="3" fill="#2563eb"/>
+<text x="661.8" y="191" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000352s rocthrust_default</text>
+<text x="48" y="225" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_duplicate_heavy_default | HIP to_host</text>
+<rect x="390" y="211" width="56.4" height="18" rx="3" fill="#be123c"/>
+<text x="456.4" y="225" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4e-05s rocthrust_default</text>
+<text x="48" y="259" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_wide_two_word_default | CPU scalar</text>
+<rect x="390" y="245" width="450.9" height="18" rx="3" fill="#334155"/>
+<text x="850.9" y="259" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00261s CPU scalar</text>
+<text x="48" y="293" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_wide_two_word_default | HIP transfer</text>
+<rect x="390" y="279" width="305.4" height="18" rx="3" fill="#0e7490"/>
+<text x="705.4" y="293" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000559s rocthrust_default</text>
+<text x="48" y="327" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_wide_two_word_default | HIP resident</text>
+<rect x="390" y="313" width="259.8" height="18" rx="3" fill="#2563eb"/>
+<text x="659.8" y="327" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000345s rocthrust_default</text>
+<text x="48" y="361" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_wide_two_word_default | HIP to_host</text>
+<rect x="390" y="347" width="87.6" height="18" rx="3" fill="#be123c"/>
+<text x="487.6" y="361" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">5.56e-05s rocthrust_default</text>
+<text x="48" y="395" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_serial_baseline | CPU scalar</text>
+<rect x="390" y="381" width="340.5" height="18" rx="3" fill="#334155"/>
+<text x="740.5" y="395" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000812s CPU scalar</text>
+<text x="48" y="429" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_serial_baseline | HIP transfer</text>
+<rect x="390" y="415" width="526.4" height="18" rx="3" fill="#0e7490"/>
+<text x="926.4" y="429" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00582s rocthrust_default/serial_kernel</text>
+<text x="48" y="463" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_serial_baseline | HIP resident</text>
+<rect x="390" y="449" width="522.2" height="18" rx="3" fill="#2563eb"/>
+<text x="922.2" y="463" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00557s rocthrust_default/serial_kernel</text>
+<text x="48" y="497" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_serial_baseline | HIP to_host</text>
+<rect x="390" y="483" width="65.7" height="18" rx="3" fill="#be123c"/>
+<text x="465.7" y="497" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4.41e-05s rocthrust_default/serial_kernel</text>
+<text x="48" y="531" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_parallel_baseline | CPU scalar</text>
+<rect x="390" y="517" width="341.7" height="18" rx="3" fill="#334155"/>
+<text x="741.7" y="531" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000822s CPU scalar</text>
+<text x="48" y="565" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_parallel_baseline | HIP transfer</text>
+<rect x="390" y="551" width="301.2" height="18" rx="3" fill="#0e7490"/>
+<text x="701.2" y="565" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000535s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="599" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_parallel_baseline | HIP resident</text>
+<rect x="390" y="585" width="258.4" height="18" rx="3" fill="#2563eb"/>
+<text x="658.4" y="599" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00034s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="633" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_parallel_baseline | HIP to_host</text>
+<rect x="390" y="619" width="66.0" height="18" rx="3" fill="#be123c"/>
+<text x="466.0" y="633" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4.42e-05s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="667" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_130q_4096t_parallel | CPU scalar</text>
+<rect x="390" y="653" width="340.5" height="18" rx="3" fill="#334155"/>
+<text x="740.5" y="667" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000811s CPU scalar</text>
+<text x="48" y="701" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_130q_4096t_parallel | HIP transfer</text>
+<rect x="390" y="687" width="295.7" height="18" rx="3" fill="#0e7490"/>
+<text x="695.7" y="701" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000505s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="735" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_130q_4096t_parallel | HIP resident</text>
+<rect x="390" y="721" width="260.3" height="18" rx="3" fill="#2563eb"/>
+<text x="660.3" y="735" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000347s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="769" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_130q_4096t_parallel | HIP to_host</text>
+<rect x="390" y="755" width="66.3" height="18" rx="3" fill="#be123c"/>
+<text x="466.3" y="769" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4.44e-05s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="803" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_193q_8192t_parallel | CPU scalar</text>
+<rect x="390" y="789" width="420.2" height="18" rx="3" fill="#334155"/>
+<text x="820.2" y="803" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00189s CPU scalar</text>
+<text x="48" y="837" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_193q_8192t_parallel | HIP transfer</text>
+<rect x="390" y="823" width="328.9" height="18" rx="3" fill="#0e7490"/>
+<text x="728.9" y="837" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000717s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="871" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_193q_8192t_parallel | HIP resident</text>
+<rect x="390" y="857" width="270.4" height="18" rx="3" fill="#2563eb"/>
+<text x="670.4" y="871" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000386s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="905" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_193q_8192t_parallel | HIP to_host</text>
+<rect x="390" y="891" width="117.1" height="18" rx="3" fill="#be123c"/>
+<text x="517.1" y="905" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">7.6e-05s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="939" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_193q_32768t_parallel | CPU scalar</text>
+<rect x="390" y="925" width="564.9" height="18" rx="3" fill="#334155"/>
+<text x="964.9" y="939" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00875s CPU scalar</text>
+<text x="48" y="973" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_193q_32768t_parallel | HIP transfer</text>
+<rect x="390" y="959" width="366.9" height="18" rx="3" fill="#0e7490"/>
+<text x="766.9" y="973" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00107s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="1007" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_193q_32768t_parallel | HIP resident</text>
+<rect x="390" y="993" width="288.0" height="18" rx="3" fill="#2563eb"/>
+<text x="688.0" y="1007" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000465s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="1041" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_193q_32768t_parallel | HIP to_host</text>
+<rect x="390" y="1027" width="89.4" height="18" rx="3" fill="#be123c"/>
+<text x="489.4" y="1041" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">5.67e-05s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="1075" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_257q_4096t_parallel | CPU scalar</text>
+<rect x="390" y="1061" width="351.5" height="18" rx="3" fill="#334155"/>
+<text x="751.5" y="1075" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000912s CPU scalar</text>
+<text x="48" y="1109" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_257q_4096t_parallel | HIP transfer</text>
+<rect x="390" y="1095" width="317.8" height="18" rx="3" fill="#0e7490"/>
+<text x="717.8" y="1109" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000637s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="1143" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_257q_4096t_parallel | HIP resident</text>
+<rect x="390" y="1129" width="268.0" height="18" rx="3" fill="#2563eb"/>
+<text x="668.0" y="1143" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000376s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="1177" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign4_generic_257q_4096t_parallel | HIP to_host</text>
+<rect x="390" y="1163" width="94.3" height="18" rx="3" fill="#be123c"/>
+<text x="494.3" y="1177" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">5.97e-05s rocthrust_generic_parallel_reduce_by_key/reduce_by_key</text>
+<text x="48" y="1242" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">Log-scale seconds, lower is better. Generated from checked raw benchmark JSON.</text>
+</svg>

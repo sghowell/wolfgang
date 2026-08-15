@@ -1,0 +1,553 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="3946" viewBox="0 0 1280 3946">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="36" y="44" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Campaign 9 broad performance landscape</text>
+<text x="36" y="70" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#475569">Checked CPU selectors, CUDA transfer/device-resident paths, compact consumers, framework consumers, CSR baselines, and external baselines. Bars use log-scaled seconds.</text>
+<text x="36" y="104" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CuPy DLPack</text>
+<rect x="820" y="92" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="92" width="120.00" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="101" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.231e-06s</text>
+<text x="36" y="132" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CuPy CUDA Array Interface</text>
+<rect x="820" y="120" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="120" width="128.25" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="129" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.232e-06s</text>
+<text x="36" y="160" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / cupy_commutation_consumer: CUDA compact count</text>
+<rect x="820" y="148" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="148" width="180.80" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="157" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.022e-05s</text>
+<text x="36" y="188" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / cupy_commutation_consumer: CUDA dense to_host</text>
+<rect x="820" y="176" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="176" width="184.73" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="185" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.237e-05s</text>
+<text x="36" y="216" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CUDA device-output reuse</text>
+<rect x="820" y="204" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="204" width="197.55" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="213" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.11e-05s</text>
+<text x="36" y="244" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA device-output reuse</text>
+<rect x="820" y="232" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="232" width="198.93" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="241" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.223e-05s</text>
+<text x="36" y="272" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CUDA conflict degrees rows</text>
+<rect x="820" y="260" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="260" width="201.95" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="269" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.483e-05s</text>
+<text x="36" y="300" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA column count</text>
+<rect x="820" y="288" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="288" width="203.18" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="297" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.595e-05s</text>
+<text x="36" y="328" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / cupy_commutation_consumer: CPU scalar</text>
+<rect x="820" y="316" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="316" width="211.61" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="325" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.466e-05s</text>
+<text x="36" y="356" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / statevector_expectation: CUDA device-resident</text>
+<rect x="820" y="344" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="344" width="215.65" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="353" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.954e-05s</text>
+<text x="36" y="384" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA row count</text>
+<rect x="820" y="372" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="372" width="223.85" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="381" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.119e-05s</text>
+<text x="36" y="412" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / cupy_commutation_consumer: External baseline</text>
+<rect x="820" y="400" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="400" width="229.84" height="11" rx="3" fill="#64748b"/>
+<text x="1210" y="409" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.138e-05s</text>
+<text x="36" y="440" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA compact count</text>
+<rect x="820" y="428" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="428" width="236.60" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="437" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.494e-05s</text>
+<text x="36" y="468" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="456" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="456" width="238.42" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="465" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.901e-05s</text>
+<text x="36" y="496" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="484" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="484" width="238.53" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="493" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.926e-05s</text>
+<text x="36" y="524" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA Campaign 8 graph c...</text>
+<rect x="820" y="512" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="512" width="239.91" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="521" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.249e-05s</text>
+<text x="36" y="552" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="540" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="540" width="239.94" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="549" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.255e-05s</text>
+<text x="36" y="580" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="568" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="568" width="240.83" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="577" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.47e-05s</text>
+<text x="36" y="608" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="596" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="596" width="240.88" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="605" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.482e-05s</text>
+<text x="36" y="636" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="624" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="624" width="242.00" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="633" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.759e-05s</text>
+<text x="36" y="664" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA compact count</text>
+<rect x="820" y="652" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="652" width="242.24" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="661" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.819e-05s</text>
+<text x="36" y="692" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="680" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="680" width="242.42" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="689" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.864e-05s</text>
+<text x="36" y="720" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA Campaign 8 groupin...</text>
+<rect x="820" y="708" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="708" width="242.62" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="717" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.916e-05s</text>
+<text x="36" y="748" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="736" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="736" width="242.84" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="745" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.972e-05s</text>
+<text x="36" y="776" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused grouping</text>
+<rect x="820" y="764" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="764" width="243.02" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="773" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001002s</text>
+<text x="36" y="804" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CUDA device-output allocate</text>
+<rect x="820" y="792" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="792" width="247.45" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="801" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001123s</text>
+<text x="36" y="832" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / statevector_expectation: CUDA transfer-inclusive</text>
+<rect x="820" y="820" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="820" width="247.51" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="829" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001125s</text>
+<text x="36" y="860" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CUDA conflict degrees total</text>
+<rect x="820" y="848" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="848" width="252.22" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="857" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000127s</text>
+<text x="36" y="888" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused degree summary</text>
+<rect x="820" y="876" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="876" width="262.06" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="885" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001635s</text>
+<text x="36" y="916" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA column count</text>
+<rect x="820" y="904" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="904" width="267.22" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="913" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001867s</text>
+<text x="36" y="944" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / cuquantum_statevector_expectation: CUDA device-resident</text>
+<rect x="820" y="932" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="932" width="268.44" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="941" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001927s</text>
+<text x="36" y="972" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / cuquantum_statevector_expectation: CUDA operator-resident</text>
+<rect x="820" y="960" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="960" width="273.04" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="969" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002169s</text>
+<text x="36" y="1000" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / qiskit_grouping: CPU scalar</text>
+<rect x="820" y="988" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="988" width="290.49" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="997" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003397s</text>
+<text x="36" y="1028" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA device-output reuse</text>
+<rect x="820" y="1016" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1016" width="293.30" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1025" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003652s</text>
+<text x="36" y="1056" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CUDA device-resident</text>
+<rect x="820" y="1044" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1044" width="300.90" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1053" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004441s</text>
+<text x="36" y="1084" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA row count</text>
+<rect x="820" y="1072" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1072" width="302.04" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1081" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004573s</text>
+<text x="36" y="1112" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / simplify_duplicate_pressure: CUDA device-resident</text>
+<rect x="820" y="1100" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1100" width="302.59" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1109" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004638s</text>
+<text x="36" y="1140" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CUDA device-resident</text>
+<rect x="820" y="1128" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1128" width="308.36" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1137" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000538s</text>
+<text x="36" y="1168" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CUDA device-resident</text>
+<rect x="820" y="1156" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1156" width="310.35" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1165" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005663s</text>
+<text x="36" y="1196" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CUDA transfer-inclusive</text>
+<rect x="820" y="1184" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1184" width="312.01" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1193" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000591s</text>
+<text x="36" y="1224" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA column count</text>
+<rect x="820" y="1212" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1212" width="312.28" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1221" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005951s</text>
+<text x="36" y="1252" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CUDA device-resident</text>
+<rect x="820" y="1240" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1240" width="312.39" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1249" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005967s</text>
+<text x="36" y="1280" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA Campaign 8 graph c...</text>
+<rect x="820" y="1268" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1268" width="313.28" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1277" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006106s</text>
+<text x="36" y="1308" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused grouping</text>
+<rect x="820" y="1296" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1296" width="314.09" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1305" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006234s</text>
+<text x="36" y="1336" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA Campaign 8 groupin...</text>
+<rect x="820" y="1324" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1324" width="314.90" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1333" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006365s</text>
+<text x="36" y="1364" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CUDA transfer-inclusive</text>
+<rect x="820" y="1352" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1352" width="315.72" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1361" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006501s</text>
+<text x="36" y="1392" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / simplify: CPU scalar</text>
+<rect x="820" y="1380" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1380" width="315.95" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1389" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006541s</text>
+<text x="36" y="1420" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CUDA device-resident</text>
+<rect x="820" y="1408" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1408" width="319.13" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1417" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007097s</text>
+<text x="36" y="1448" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / matmul_product_generation_simplify: CUDA device-resident</text>
+<rect x="820" y="1436" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1436" width="319.39" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1445" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007146s</text>
+<text x="36" y="1476" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA transfer-inclusive</text>
+<rect x="820" y="1464" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1464" width="322.86" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1473" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007812s</text>
+<text x="36" y="1504" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CUDA transfer-inclusive</text>
+<rect x="820" y="1492" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1492" width="324.66" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1501" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008184s</text>
+<text x="36" y="1532" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / simplify: External baseline</text>
+<rect x="820" y="1520" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1520" width="326.00" height="11" rx="3" fill="#64748b"/>
+<text x="1210" y="1529" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000847s</text>
+<text x="36" y="1560" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused degree summary</text>
+<rect x="820" y="1548" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1548" width="329.96" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1557" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009377s</text>
+<text x="36" y="1588" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / simplify_duplicate_pressure: CUDA transfer-inclusive</text>
+<rect x="820" y="1576" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1576" width="331.54" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1585" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009767s</text>
+<text x="36" y="1616" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA compact count</text>
+<rect x="820" y="1604" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1604" width="335.26" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1613" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001075s</text>
+<text x="36" y="1644" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CUDA transfer-inclusive</text>
+<rect x="820" y="1632" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1632" width="337.76" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1641" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001146s</text>
+<text x="36" y="1672" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA dense to_host</text>
+<rect x="820" y="1660" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1660" width="341.01" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1669" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001246s</text>
+<text x="36" y="1700" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA device-output reuse</text>
+<rect x="820" y="1688" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1688" width="346.25" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1697" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001426s</text>
+<text x="36" y="1728" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CuPy reduction</text>
+<rect x="820" y="1716" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1716" width="347.81" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="1725" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001484s</text>
+<text x="36" y="1756" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CUDA device-output to_host</text>
+<rect x="820" y="1744" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1744" width="348.52" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1753" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001512s</text>
+<text x="36" y="1784" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA compact count</text>
+<rect x="820" y="1772" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1772" width="349.19" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1781" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001538s</text>
+<text x="36" y="1812" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA row count</text>
+<rect x="820" y="1800" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1800" width="350.05" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1809" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001572s</text>
+<text x="36" y="1840" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CUDA transfer-inclusive</text>
+<rect x="820" y="1828" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1828" width="350.83" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1837" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001604s</text>
+<text x="36" y="1868" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / matmul_product_generation_simplify: CUDA transfer-inclu...</text>
+<rect x="820" y="1856" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1856" width="353.99" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1865" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00174s</text>
+<text x="36" y="1896" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CPU optimized</text>
+<rect x="820" y="1884" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1884" width="354.71" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1893" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001772s</text>
+<text x="36" y="1924" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CPU TBB</text>
+<rect x="820" y="1912" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1912" width="354.71" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1921" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001772s</text>
+<text x="36" y="1952" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CPU optimized</text>
+<rect x="820" y="1940" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1940" width="355.53" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1949" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00181s</text>
+<text x="36" y="1980" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CPU TBB</text>
+<rect x="820" y="1968" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1968" width="355.53" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1977" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00181s</text>
+<text x="36" y="2008" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CPU optimized</text>
+<rect x="820" y="1996" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1996" width="359.55" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2005" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002007s</text>
+<text x="36" y="2036" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CPU TBB</text>
+<rect x="820" y="2024" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2024" width="359.55" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2033" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002007s</text>
+<text x="36" y="2064" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CPU default</text>
+<rect x="820" y="2052" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2052" width="359.59" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2061" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00201s</text>
+<text x="36" y="2092" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU TBB</text>
+<rect x="820" y="2080" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2080" width="359.87" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2089" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002024s</text>
+<text x="36" y="2120" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CPU TBB</text>
+<rect x="820" y="2108" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2108" width="361.09" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2117" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002089s</text>
+<text x="36" y="2148" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CPU default</text>
+<rect x="820" y="2136" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2136" width="361.27" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2145" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002098s</text>
+<text x="36" y="2176" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA Campaign 8 graph c...</text>
+<rect x="820" y="2164" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2164" width="362.18" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2173" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002148s</text>
+<text x="36" y="2204" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA Campaign 8 groupin...</text>
+<rect x="820" y="2192" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2192" width="363.22" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2201" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002206s</text>
+<text x="36" y="2232" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused grouping</text>
+<rect x="820" y="2220" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2220" width="363.40" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2229" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002217s</text>
+<text x="36" y="2260" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CPU default</text>
+<rect x="820" y="2248" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2248" width="364.64" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2257" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002288s</text>
+<text x="36" y="2288" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CPU AVX-512</text>
+<rect x="820" y="2276" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2276" width="364.87" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2285" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002302s</text>
+<text x="36" y="2316" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CPU AVX-512</text>
+<rect x="820" y="2304" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2304" width="366.82" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2313" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00242s</text>
+<text x="36" y="2344" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CPU optimized</text>
+<rect x="820" y="2332" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2332" width="367.19" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2341" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002444s</text>
+<text x="36" y="2372" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CPU TBB</text>
+<rect x="820" y="2360" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2360" width="367.19" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2369" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002444s</text>
+<text x="36" y="2400" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA device-output dens...</text>
+<rect x="820" y="2388" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2388" width="367.48" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2397" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002462s</text>
+<text x="36" y="2428" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CPU AVX-512</text>
+<rect x="820" y="2416" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2416" width="370.54" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2425" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002664s</text>
+<text x="36" y="2456" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CPU AVX-512</text>
+<rect x="820" y="2444" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2444" width="371.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2453" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002757s</text>
+<text x="36" y="2484" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused degree summary</text>
+<rect x="820" y="2472" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2472" width="372.84" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2481" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002826s</text>
+<text x="36" y="2512" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CPU AVX-512</text>
+<rect x="820" y="2500" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2500" width="374.23" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2509" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002929s</text>
+<text x="36" y="2540" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CPU default</text>
+<rect x="820" y="2528" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2528" width="375.87" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2537" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003055s</text>
+<text x="36" y="2568" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU AVX-512</text>
+<rect x="820" y="2556" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2556" width="377.42" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2565" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003179s</text>
+<text x="36" y="2596" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CPU AVX2</text>
+<rect x="820" y="2584" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2584" width="384.82" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2593" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003845s</text>
+<text x="36" y="2624" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA compact count</text>
+<rect x="820" y="2612" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2612" width="385.28" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2621" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003892s</text>
+<text x="36" y="2652" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CPU AVX2</text>
+<rect x="820" y="2640" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2640" width="386.65" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2649" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004032s</text>
+<text x="36" y="2680" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CPU AVX2</text>
+<rect x="820" y="2668" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2668" width="387.48" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2677" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004118s</text>
+<text x="36" y="2708" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CUDA CSR export baseline</text>
+<rect x="820" y="2696" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2696" width="388.40" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2705" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004217s</text>
+<text x="36" y="2736" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA compact count</text>
+<rect x="820" y="2724" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2724" width="388.53" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2733" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004231s</text>
+<text x="36" y="2764" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CPU AVX2</text>
+<rect x="820" y="2752" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2752" width="389.60" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2761" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004349s</text>
+<text x="36" y="2792" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CUDA CSR export baseline</text>
+<rect x="820" y="2780" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2780" width="390.39" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2789" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004438s</text>
+<text x="36" y="2820" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU AVX2</text>
+<rect x="820" y="2808" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2808" width="390.83" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2817" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004488s</text>
+<text x="36" y="2848" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CPU AVX2</text>
+<rect x="820" y="2836" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2836" width="391.19" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2845" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004531s</text>
+<text x="36" y="2876" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CUDA CSR export baseline</text>
+<rect x="820" y="2864" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2864" width="397.86" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2873" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.005379s</text>
+<text x="36" y="2904" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="2892" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2892" width="398.58" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2901" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00548s</text>
+<text x="36" y="2932" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CUDA CSR export baseline</text>
+<rect x="820" y="2920" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2920" width="401.98" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2929" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00598s</text>
+<text x="36" y="2960" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="2948" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2948" width="407.98" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2957" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.006978s</text>
+<text x="36" y="2988" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / simplify_duplicate_pressure: CPU scalar</text>
+<rect x="820" y="2976" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2976" width="411.21" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2985" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.007583s</text>
+<text x="36" y="3016" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / cuquantum_statevector_expectation: External baseline</text>
+<rect x="820" y="3004" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3004" width="419.74" height="11" rx="3" fill="#64748b"/>
+<text x="1210" y="3013" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.009443s</text>
+<text x="36" y="3044" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / matmul_product_generation_simplify: CPU scalar</text>
+<rect x="820" y="3032" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3032" width="427.79" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3041" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01162s</text>
+<text x="36" y="3072" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / multiply: CPU scalar</text>
+<rect x="820" y="3060" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3060" width="429.35" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3069" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01209s</text>
+<text x="36" y="3100" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA transfer-inclusive</text>
+<rect x="820" y="3088" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3088" width="441.49" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3097" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01653s</text>
+<text x="36" y="3128" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / stream_graph: CPU scalar</text>
+<rect x="820" y="3116" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3116" width="445.69" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3125" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01841s</text>
+<text x="36" y="3156" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / pairwise_commutation: CPU scalar</text>
+<rect x="820" y="3144" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3144" width="448.46" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3153" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01977s</text>
+<text x="36" y="3184" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / public_grouping_api: CPU scalar</text>
+<rect x="820" y="3172" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3172" width="449.90" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3181" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.02051s</text>
+<text x="36" y="3212" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU scalar</text>
+<rect x="820" y="3200" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3200" width="450.53" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3209" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.02085s</text>
+<text x="36" y="3240" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / dlpack_interop: CPU scalar</text>
+<rect x="820" y="3228" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3228" width="453.07" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3237" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.02226s</text>
+<text x="36" y="3268" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 9 deferred-headroom closure / csr_scatter_reopen: CPU scalar</text>
+<rect x="820" y="3256" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3256" width="457.98" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3265" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.02526s</text>
+<text x="36" y="3296" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: FastPauli default profile / statevector_expectation: CPU scalar</text>
+<rect x="820" y="3284" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3284" width="471.83" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3293" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03607s</text>
+<text x="36" y="3324" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CuPy reduction</text>
+<rect x="820" y="3312" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3312" width="485.36" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="3321" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.05108s</text>
+<text x="36" y="3352" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA dense to_host</text>
+<rect x="820" y="3340" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3340" width="493.43" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3349" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06287s</text>
+<text x="36" y="3380" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA device-output dens...</text>
+<rect x="820" y="3368" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3368" width="494.87" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3377" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06524s</text>
+<text x="36" y="3408" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA transfer-inclusive</text>
+<rect x="820" y="3396" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3396" width="496.76" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3405" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06849s</text>
+<text x="36" y="3436" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU TBB</text>
+<rect x="820" y="3424" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3424" width="501.04" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3433" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.07645s</text>
+<text x="36" y="3464" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / qiskit_grouping: External baseline</text>
+<rect x="820" y="3452" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3452" width="502.74" height="11" rx="3" fill="#64748b"/>
+<text x="1210" y="3461" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.07987s</text>
+<text x="36" y="3492" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU AVX-512</text>
+<rect x="820" y="3480" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3480" width="513.86" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3489" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1063s</text>
+<text x="36" y="3520" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="3508" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3508" width="520.91" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3517" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1275s</text>
+<text x="36" y="3548" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU AVX2</text>
+<rect x="820" y="3536" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3536" width="522.76" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3545" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1337s</text>
+<text x="36" y="3576" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="3564" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3564" width="524.07" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3573" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1383s</text>
+<text x="36" y="3604" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CuPy reduction</text>
+<rect x="820" y="3592" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3592" width="539.05" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="3601" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2033s</text>
+<text x="36" y="3632" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / multiply: External baseline</text>
+<rect x="820" y="3620" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3620" width="544.67" height="11" rx="3" fill="#64748b"/>
+<text x="1210" y="3629" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2349s</text>
+<text x="36" y="3660" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA device-output dens...</text>
+<rect x="820" y="3648" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3648" width="546.08" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3657" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2435s</text>
+<text x="36" y="3688" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CUDA dense to_host</text>
+<rect x="820" y="3676" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3676" width="546.81" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3685" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2481s</text>
+<text x="36" y="3716" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU TBB</text>
+<rect x="820" y="3704" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3704" width="553.28" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3713" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2931s</text>
+<text x="36" y="3744" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: External package baseline / cuquantum_statevector_expectation: CPU scalar</text>
+<rect x="820" y="3732" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3732" width="560.73" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3741" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.3551s</text>
+<text x="36" y="3772" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU scalar</text>
+<rect x="820" y="3760" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3760" width="564.97" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3769" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.396s</text>
+<text x="36" y="3800" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU AVX-512</text>
+<rect x="820" y="3788" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3788" width="565.13" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3797" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.3976s</text>
+<text x="36" y="3828" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 8 device-resident consumers / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="3816" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3816" width="573.80" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3825" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.497s</text>
+<text x="36" y="3856" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU AVX2</text>
+<rect x="820" y="3844" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3844" width="574.10" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3853" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.5008s</text>
+<text x="36" y="3884" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 7 fused consumers / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="3872" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3872" width="574.43" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3881" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.505s</text>
+<text x="36" y="3912" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">Campaign 8 reference: Campaign 6 consumer scaling / pairwise_commutation_consumer: CPU scalar</text>
+<rect x="820" y="3900" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3900" width="620.00" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3909" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.631s</text>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="608" viewBox="0 0 1180 608" role="img" aria-labelledby="title desc">
+<title>Campaign 7 Fused Consumers</title>
+<desc>Dense host materialization versus benchmark-only fused graph and grouping consumers on H100.</desc>
+<rect x="0" y="0" width="1180" height="608" fill="white"/>
+<text x="32" y="42" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#18212f">Campaign 7 Fused Consumers</text>
+<text x="32" y="68" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#627084">Dense host materialization versus benchmark-only fused graph and grouping consumers on H100.</text>
+<line x1="245.0" y1="90.0" x2="245.0" y2="566.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="245.0" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">100 us</text>
+<line x1="466.8" y1="90.0" x2="466.8" y2="566.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="466.8" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">1.00 ms</text>
+<line x1="688.5" y1="90.0" x2="688.5" y2="566.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="688.5" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">10.00 ms</text>
+<line x1="910.2" y1="90.0" x2="910.2" y2="566.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="910.2" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">100.00 ms</text>
+<line x1="1132.0" y1="90.0" x2="1132.0" y2="566.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="1132.0" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">1.00 s</text>
+<text x="32.0" y="109.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">2048 x 2048 pairwise commutation</text>
+<text x="58.0" y="150.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Dense to_host</text>
+<rect x="245.0" y="138.0" width="287.2" height="16.0" rx="3" fill="#8792a2" opacity="1.000"/>
+<text x="540.2" y="150.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.97 ms</text>
+<text x="58.0" y="180.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CSR graph export</text>
+<rect x="245.0" y="168.0" width="385.6" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="638.6" y="180.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">5.48 ms</text>
+<text x="58.0" y="210.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Conflict degrees</text>
+<rect x="245.0" y="198.0" width="47.3" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="300.3" y="210.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">163 us</text>
+<text x="58.0" y="240.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Grouping summary</text>
+<rect x="245.0" y="228.0" width="0.2" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="253.2" y="240.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">100 us</text>
+<text x="32.0" y="257.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">8192 x 8192 pairwise commutation</text>
+<text x="58.0" y="298.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Dense to_host</text>
+<rect x="245.0" y="286.0" width="610.9" height="16.0" rx="3" fill="#8792a2" opacity="1.000"/>
+<text x="863.9" y="298.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">56.87 ms</text>
+<text x="58.0" y="328.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CSR graph export</text>
+<rect x="245.0" y="316.0" width="688.6" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="941.6" y="328.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">127.47 ms</text>
+<text x="58.0" y="358.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Conflict degrees</text>
+<rect x="245.0" y="346.0" width="215.6" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="468.6" y="358.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">938 us</text>
+<text x="58.0" y="388.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Grouping summary</text>
+<rect x="245.0" y="376.0" width="176.2" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="429.2" y="388.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">623 us</text>
+<text x="32.0" y="405.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">16384 x 16384 pairwise commutation</text>
+<text x="58.0" y="446.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Dense to_host</text>
+<rect x="245.0" y="434.0" width="746.8" height="16.0" rx="3" fill="#8792a2" opacity="1.000"/>
+<text x="999.8" y="446.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">233.31 ms</text>
+<text x="58.0" y="476.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CSR graph export</text>
+<rect x="245.0" y="464.0" width="821.2" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="1056.0" y="476.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">505.04 ms</text>
+<text x="58.0" y="506.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Conflict degrees</text>
+<rect x="245.0" y="494.0" width="321.8" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="574.8" y="506.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.83 ms</text>
+<text x="58.0" y="536.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Grouping summary</text>
+<rect x="245.0" y="524.0" width="298.4" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="551.4" y="536.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.22 ms</text>
+<text x="32.0" y="588.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">Log-scale latency; lower is better. Source: checked Campaign 7 raw JSON.</text>
+</svg>

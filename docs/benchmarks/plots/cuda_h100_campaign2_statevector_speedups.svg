@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="476" viewBox="0 0 1120 476" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 campaign 2 statevector speedups</title>
+<desc id="desc">Baseline to final speedups for the CUDA statevector expectation path.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="40.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">Statevector Expectation Speedups</text>
+<text x="32.0" y="64.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Same-boundary baseline vs final H100 medians; values above 1.0x are faster.</text>
+<text x="300.0" y="100.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">1.0x</text>
+<text x="860.0" y="100.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="end">1.29x</text>
+<text x="32.0" y="142.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">default qubits_10_terms_1024</text>
+<rect x="300.0" y="130.0" width="559.6" height="12.0" rx="2" fill="#2563eb"/>
+<text x="867.6" y="140.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">transfer 1.29x</text>
+<rect x="300.0" y="147.0" width="560.0" height="12.0" rx="2" fill="#059669"/>
+<text x="868.0" y="157.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">resident 1.29x</text>
+<text x="32.0" y="184.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">default qubits_12_terms_2048</text>
+<rect x="300.0" y="172.0" width="459.0" height="12.0" rx="2" fill="#2563eb"/>
+<text x="767.0" y="182.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">transfer 1.06x</text>
+<rect x="300.0" y="189.0" width="492.5" height="12.0" rx="2" fill="#059669"/>
+<text x="800.5" y="199.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">resident 1.13x</text>
+<text x="32.0" y="226.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">default qubits_14_terms_4096</text>
+<rect x="300.0" y="214.0" width="462.6" height="12.0" rx="2" fill="#2563eb"/>
+<text x="770.6" y="224.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">transfer 1.06x</text>
+<rect x="300.0" y="231.0" width="459.5" height="12.0" rx="2" fill="#059669"/>
+<text x="767.5" y="241.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">resident 1.06x</text>
+<text x="32.0" y="268.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">stress qubits_14_terms_4096</text>
+<rect x="300.0" y="256.0" width="554.2" height="12.0" rx="2" fill="#2563eb"/>
+<text x="862.2" y="266.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">transfer 1.27x</text>
+<rect x="300.0" y="273.0" width="510.2" height="12.0" rx="2" fill="#059669"/>
+<text x="818.2" y="283.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">resident 1.17x</text>
+<text x="32.0" y="310.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">stress qubits_15_terms_4096</text>
+<rect x="300.0" y="298.0" width="462.6" height="12.0" rx="2" fill="#2563eb"/>
+<text x="770.6" y="308.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">transfer 1.06x</text>
+<rect x="300.0" y="315.0" width="452.9" height="12.0" rx="2" fill="#059669"/>
+<text x="760.9" y="325.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">resident 1.04x</text>
+<text x="32.0" y="352.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">stress qubits_16_terms_8192</text>
+<rect x="300.0" y="340.0" width="435.3" height="12.0" rx="2" fill="#2563eb"/>
+<text x="743.3" y="350.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">transfer 1.00x</text>
+<rect x="300.0" y="357.0" width="440.4" height="12.0" rx="2" fill="#059669"/>
+<text x="748.4" y="367.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">resident 1.01x</text>
+<text x="32.0" y="394.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">extreme qubits_17_terms_8192</text>
+<rect x="300.0" y="382.0" width="453.7" height="12.0" rx="2" fill="#2563eb"/>
+<text x="761.7" y="392.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">transfer 1.04x</text>
+<rect x="300.0" y="399.0" width="450.4" height="12.0" rx="2" fill="#059669"/>
+<text x="758.4" y="409.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">resident 1.04x</text>
+<text x="32.0" y="436.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">extreme qubits_18_terms_8192</text>
+<rect x="300.0" y="424.0" width="448.4" height="12.0" rx="2" fill="#2563eb"/>
+<text x="756.4" y="434.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">transfer 1.03x</text>
+<rect x="300.0" y="441.0" width="462.5" height="12.0" rx="2" fill="#059669"/>
+<text x="770.5" y="451.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">resident 1.06x</text>
+</svg>

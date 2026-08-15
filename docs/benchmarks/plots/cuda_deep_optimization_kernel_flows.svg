@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli CUDA kernel flows</title>
+<desc id="desc">Dataflow diagrams for simplify, expectation, commutation, and matmul plus simplify kernels.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#111827"/></marker></defs>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">CUDA Kernel And Algorithm Flows</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Dominant device stages, host/device boundaries, and profiler-driven bottleneck interpretation.</text>
+<text x="42.0" y="153.0" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="start">Simplify</text>
+<rect x="205.0" y="118.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="205" y="118" width="150" height="52" rx="6" fill="none" stroke="#059669" stroke-width="1.7"/>
+<text x="280.0" y="149.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">packed terms</text>
+<line x1="355" y1="144" x2="382" y2="144" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="382.0" y="118.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="382" y="118" width="150" height="52" rx="6" fill="none" stroke="#059669" stroke-width="1.7"/>
+<text x="457.0" y="141.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">canonical</text>
+<text x="457.0" y="156.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">key transform</text>
+<line x1="532" y1="144" x2="559" y2="144" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="559.0" y="118.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="559" y="118" width="150" height="52" rx="6" fill="none" stroke="#059669" stroke-width="1.7"/>
+<text x="634.0" y="149.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">CCCL merge sort</text>
+<line x1="709" y1="144" x2="736" y2="144" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="736.0" y="118.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="736" y="118" width="150" height="52" rx="6" fill="none" stroke="#059669" stroke-width="1.7"/>
+<text x="811.0" y="149.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">reduce_by_key coefficients</text>
+<line x1="886" y1="144" x2="913" y2="144" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="913.0" y="118.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="913" y="118" width="150" height="52" rx="6" fill="none" stroke="#059669" stroke-width="1.7"/>
+<text x="988.0" y="149.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">compact survivors</text>
+<text x="205.0" y="196.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">temporary storage and CCCL launch overhead dominate after custom key generation</text>
+<text x="42.0" y="295.0" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="start">Expectation</text>
+<rect x="205.0" y="260.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="205" y="260" width="150" height="52" rx="6" fill="none" stroke="#2563eb" stroke-width="1.7"/>
+<text x="280.0" y="283.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">host/CuPy</text>
+<text x="280.0" y="298.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">psi boundary</text>
+<line x1="355" y1="286" x2="382" y2="286" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="382.0" y="260.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="382" y="260" width="150" height="52" rx="6" fill="none" stroke="#2563eb" stroke-width="1.7"/>
+<text x="457.0" y="283.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">device</text>
+<text x="457.0" y="298.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">complex view</text>
+<line x1="532" y1="286" x2="559" y2="286" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="559.0" y="260.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="559" y="260" width="150" height="52" rx="6" fill="none" stroke="#2563eb" stroke-width="1.7"/>
+<text x="634.0" y="291.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">per-term bit phase</text>
+<line x1="709" y1="286" x2="736" y2="286" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="736.0" y="260.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="736" y="260" width="150" height="52" rx="6" fill="none" stroke="#2563eb" stroke-width="1.7"/>
+<text x="811.0" y="283.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">block</text>
+<text x="811.0" y="298.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">shared reduction</text>
+<line x1="886" y1="286" x2="913" y2="286" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="913.0" y="260.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="913" y="260" width="150" height="52" rx="6" fill="none" stroke="#2563eb" stroke-width="1.7"/>
+<text x="988.0" y="283.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">device</text>
+<text x="988.0" y="298.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">final reduce</text>
+<text x="205.0" y="338.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">byte-copy removes host conversion; true resident path uses CUDA array interface</text>
+<text x="42.0" y="437.0" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="start">Commutation</text>
+<rect x="205.0" y="402.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="205" y="402" width="150" height="52" rx="6" fill="none" stroke="#7c3aed" stroke-width="1.7"/>
+<text x="280.0" y="433.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">lhs/rhs XZ buffers</text>
+<line x1="355" y1="428" x2="382" y2="428" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="382.0" y="402.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="382" y="402" width="150" height="52" rx="6" fill="none" stroke="#7c3aed" stroke-width="1.7"/>
+<text x="457.0" y="433.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">2D entry mapping</text>
+<line x1="532" y1="428" x2="559" y2="428" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="559.0" y="402.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="559" y="402" width="150" height="52" rx="6" fill="none" stroke="#7c3aed" stroke-width="1.7"/>
+<text x="634.0" y="425.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">word parity</text>
+<text x="634.0" y="440.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">+ popcount</text>
+<line x1="709" y1="428" x2="736" y2="428" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="736.0" y="402.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="736" y="402" width="150" height="52" rx="6" fill="none" stroke="#7c3aed" stroke-width="1.7"/>
+<text x="811.0" y="433.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">device bool matrix</text>
+<line x1="886" y1="428" x2="913" y2="428" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="913.0" y="402.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="913" y="402" width="150" height="52" rx="6" fill="none" stroke="#7c3aed" stroke-width="1.7"/>
+<text x="988.0" y="433.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">host/prealloc materialize</text>
+<text x="205.0" y="480.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">large cases are output-materialization sensitive, not only instruction-stream sensitive</text>
+<text x="42.0" y="579.0" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="start">Matmul+simplify</text>
+<rect x="205.0" y="544.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="205" y="544" width="150" height="52" rx="6" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="280.0" y="567.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">lhs x</text>
+<text x="280.0" y="582.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">rhs product grid</text>
+<line x1="355" y1="570" x2="382" y2="570" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="382.0" y="544.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="382" y="544" width="150" height="52" rx="6" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="457.0" y="575.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">XOR X/Z words</text>
+<line x1="532" y1="570" x2="559" y2="570" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="559.0" y="544.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="559" y="544" width="150" height="52" rx="6" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="634.0" y="575.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">phase exponent</text>
+<line x1="709" y1="570" x2="736" y2="570" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="736.0" y="544.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="736" y="544" width="150" height="52" rx="6" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="811.0" y="575.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">intermediate terms</text>
+<line x1="886" y1="570" x2="913" y2="570" stroke="#111827" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="913.0" y="544.0" width="150.0" height="52.0" rx="6.0" fill="#ffffff"/>
+<rect x="913" y="544" width="150" height="52" rx="6" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="988.0" y="575.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="middle">simplify pipeline</text>
+<text x="205.0" y="622.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">product generation feeds the same CCCL sort/reduce pressure as simplify</text>
+<text x="42.0" y="708.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Profiler interpretation: small kernel edits are no longer the first lever; remaining headroom is reusable workspaces, device-resident lifetimes, and explicit stream boundaries.</text>
+</svg>

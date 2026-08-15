@@ -1,0 +1,11 @@
+{
+  "campaign": "cuda_deferred_headroom_campaign9",
+  "campaign8_headroom_item": 1,
+  "deferred_status_allowed": false,
+  "final_status": "blocked_external",
+  "host_label": "not_available",
+  "provider": "not_available_to_agent; no non-H100 NVIDIA instance metadata or provider control-plane access was provided",
+  "instance_type": "not_available_to_agent; no non-H100 NVIDIA instance metadata or provider control-plane access was provided",
+  "reason": "No named non-H100 NVIDIA host from the Campaign 9 target set was available after a concrete access check. The reachable auxiliary host ubuntu@<private-address> reported nvidia-smi but no working NVIDIA driver, and no provider or non-H100 NVIDIA instance metadata/control-plane access was available to the agent.",
+  "report": "docs/benchmarks/reports/cuda_portability_campaign9_non_h100_nvidia_2026-04-29.md"
+}

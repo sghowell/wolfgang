@@ -1,0 +1,175 @@
+name: Release quality gates
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Python quality and public artifact policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned quality tools
+        run: >-
+          python -m pip install
+          "ruff==0.16.2"
+          "pyright==1.1.405"
+          "codespell==2.4.1"
+          "numpy==2.3.3"
+          "openfermion==1.7.1"
+          "qiskit==1.4.5"
+
+      - name: Lint the whole repository
+        run: ruff check --config ruff.toml .
+
+      - name: Type-check the public Python package
+        run: pyright python/fastpauli
+
+      - name: Check spelling
+        run: codespell .
+
+      - name: Audit tracked public artifacts
+        run: python scripts/audit_public_artifacts.py --tracked
+
+  package:
+    name: Build and audit sdist and wheel
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FASTPAULI_ENABLE_CUDA: "OFF"
+      FASTPAULI_ENABLE_HIP: "OFF"
+      FASTPAULI_ENABLE_METAL: "OFF"
+      FASTPAULI_ENABLE_NATIVE: "OFF"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned package tools
+        run: >-
+          python -m pip install
+          "build==1.3.0"
+          "twine==6.1.0"
+
+      - name: Build source and binary distributions
+        run: >-
+          python -m build --sdist --wheel --outdir dist
+          --config-setting cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=OFF
+          --config-setting cmake.define.FASTPAULI_ENABLE_CUDA=OFF
+          --config-setting cmake.define.FASTPAULI_ENABLE_HIP=OFF
+          --config-setting cmake.define.FASTPAULI_ENABLE_METAL=OFF
+          --config-setting cmake.define.FASTPAULI_ENABLE_NATIVE=OFF
+
+      - name: Audit source distribution policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          for artifact in dist/*.tar.gz; do
+            python scripts/audit_public_artifacts.py --sdist "${artifact}"
+          done
+
+      - name: Audit wheel contents
+        shell: bash
+        run: |
+          set -euo pipefail
+          for artifact in dist/*.whl; do
+            audit_dir="${RUNNER_TEMP}/$(basename "${artifact}" .whl)"
+            mkdir -p "${audit_dir}"
+            python -m zipfile -e "${artifact}" "${audit_dir}"
+            python scripts/audit_public_artifacts.py --path "${audit_dir}"
+          done
+
+      - name: Check distribution metadata
+        run: python -m twine check dist/*
+
+  sanitizers:
+    name: CPU native tests with ASAN and UBSAN
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ASAN_OPTIONS: detect_leaks=0:halt_on_error=1:strict_string_checks=1
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned native test toolchain
+        run: >-
+          python -m pip install
+          "cmake==4.1.0"
+          "ninja==1.13.0"
+          "nanobind==2.9.2"
+          "numpy==2.3.3"
+          "pytest==8.4.2"
+          "hypothesis==6.138.15"
+
+      - name: Configure sanitizer build
+        env:
+          CC: clang
+          CXX: clang++
+        run: >-
+          cmake -S . -B build/sanitizers -G Ninja
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${GITHUB_WORKSPACE}/python/fastpauli"
+          -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined"
+          -DFASTPAULI_ENABLE_CUDA=OFF
+          -DFASTPAULI_ENABLE_HIP=OFF
+          -DFASTPAULI_ENABLE_METAL=OFF
+          -DFASTPAULI_ENABLE_NATIVE=OFF
+          -DFASTPAULI_ENABLE_TBB=OFF
+          -DFASTPAULI_ENABLE_AVX2=OFF
+          -DFASTPAULI_ENABLE_AVX512=OFF
+          -DFASTPAULI_ENABLE_ARM_NEON=OFF
+          -DFASTPAULI_ENABLE_ARM_SVE=OFF
+          -DFASTPAULI_ENABLE_INTERNAL_BINDINGS=ON
+
+      - name: Build sanitizer-instrumented native extension
+        run: cmake --build build/sanitizers --target _fastpauli_core --parallel 2
+
+      - name: Run native CPU tests under sanitizers
+        shell: bash
+        run: |
+          set -euo pipefail
+          asan_runtime="$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)"
+          test -f "${asan_runtime}"
+          LD_PRELOAD="${asan_runtime}" PYTHONPATH=python python -m pytest \
+            tests/test_basic.py \
+            tests/test_phase2_io.py \
+            tests/test_phase4_simplify.py \
+            tests/test_phase5_arithmetic.py \
+            tests/test_phase6_commutation_grouping.py \
+            tests/test_phase8_expectation.py

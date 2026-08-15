@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="240" viewBox="0 0 1060 240" role="img" aria-labelledby="title desc">
+<title id="title">Campaign 4 Workspace Boundaries</title>
+<desc id="desc">Same simplify scale: oneword_high_duplicate_terms_200000; lower is better.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111827" text-anchor="start">Campaign 4 Workspace Boundaries</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Same simplify scale: oneword_high_duplicate_terms_200000; lower is better.</text>
+<line x1="310" y1="82" x2="830" y2="82" stroke="#d1d5db"/>
+<text x="32.0" y="114.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">default absent</text>
+<rect x="310.0" y="100.0" width="424.0" height="18.0" rx="2" fill="#4b5563"/>
+<text x="742.0" y="114.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">760 us</text>
+<text x="32.0" y="146.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUB reduce absent</text>
+<rect x="310.0" y="132.0" width="520.0" height="18.0" rx="2" fill="#2563eb"/>
+<text x="838.0" y="146.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">932 us</text>
+<text x="32.0" y="178.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUB reduce pre-reserved</text>
+<rect x="310.0" y="164.0" width="442.9" height="18.0" rx="2" fill="#059669"/>
+<text x="760.9" y="178.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">794 us</text>
+</svg>

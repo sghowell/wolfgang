@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="262" viewBox="0 0 1080 262" role="img" aria-labelledby="title desc">
+<title>Campaign 8 Portability Boundary</title>
+<desc>Non-H100 NVIDIA evidence is blocked until a second architecture host is available.</desc>
+<rect x="0" y="0" width="1080" height="262" fill="white"/>
+<text x="32" y="42" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#172033">Campaign 8 Portability Boundary</text>
+<text x="32" y="68" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#5d6b82">Non-H100 NVIDIA evidence is blocked until a second architecture host is available.</text>
+<rect x="40.0" y="94.0" width="1000.0" height="42.0" rx="3" fill="#f7f9fc" opacity="1.000"/>
+<rect x="52.0" y="104.0" width="10.0" height="22.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="78.0" y="118.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#172033" text-anchor="start">H100 SM90</text>
+<text x="360.0" y="118.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#12805c" text-anchor="start">passed</text>
+<text x="520.0" y="118.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#5d6b82" text-anchor="start">Campaign 8 source build and benchmarks passed</text>
+<rect x="40.0" y="148.0" width="1000.0" height="42.0" rx="3" fill="#f7f9fc" opacity="1.000"/>
+<rect x="52.0" y="158.0" width="10.0" height="22.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="78.0" y="172.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#172033" text-anchor="start">non-H100 NVIDIA</text>
+<text x="360.0" y="172.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#c76a00" text-anchor="start">blocked</text>
+<text x="520.0" y="172.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#5d6b82" text-anchor="start">No A100/RTX/L4/A10 host available during this execution</text>
+</svg>

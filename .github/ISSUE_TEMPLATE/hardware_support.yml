@@ -1,0 +1,27 @@
+name: Hardware or platform support
+description: Request or report evidence for a compiler, CPU, GPU, runtime, or wheel target
+title: "[platform] "
+labels: [platform]
+body:
+  - type: dropdown
+    id: backend
+    attributes: {label: Backend, options: [CPU, CUDA, ROCm-HIP, Apple-Metal, Packaging-wheel, Other]}
+    validations: {required: true}
+  - type: textarea
+    id: target
+    attributes: {label: Exact target, description: "Architecture/model, OS, compiler, toolkit/runtime, driver, Python, and desired artifact."}
+    validations: {required: true}
+  - type: textarea
+    id: evidence
+    attributes: {label: Existing build/runtime evidence, description: "Provide sanitized commands and output; do not attach raw profiler databases or environment dumps."}
+  - type: textarea
+    id: value
+    attributes: {label: Use case and value}
+    validations: {required: true}
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: I removed credentials, addresses, hostnames, usernames, UUIDs, and private paths.
+          required: true

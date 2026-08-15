@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="790" viewBox="0 0 960 790" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 CUDA backend speedups</title>
+<desc id="desc">CPU scalar, optimized CPU, CUDA transfer-inclusive, and CUDA device-resident speedups versus CPU scalar from the checked-in H100 CUDA benchmark default report.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32" y="34" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111827">H100 CUDA default backend speedups</text>
+<text x="32" y="58" font-family="Arial, sans-serif" font-size="13" fill="#4b5563">Compared with CPU scalar on the same deterministic dataset; bar lengths use log scale.</text>
+<text x="32" y="78" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">Source: docs/benchmarks/reports/cuda_phase11_h100_2026-04-27.md</text>
+<line x1="270" y1="94" x2="800" y2="94" stroke="#d1d5db"/>
+<text x="270" y="88" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">1x</text>
+<text x="800" y="88" font-family="Arial, sans-serif" font-size="11" text-anchor="end" fill="#6b7280">339x</text>
+<text x="32" y="120" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">simplify duplicate pressure</text>
+<text x="32" y="138" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">num_qubits=16; num_terms=50000; term_weight=3; duplicate_rate=0.9801; duplicate_pool_size=1024</text>
+<rect x="270" y="150" width="2.00" height="16" rx="2" fill="#6b7280"/>
+<text x="282.00" y="162" font-family="Arial, sans-serif" font-size="12" fill="#111827">CPU scalar 1.00x (0.0070 s)</text>
+<rect x="270" y="174" width="116.63" height="16" rx="2" fill="#2563eb"/>
+<text x="394.63" y="186" font-family="Arial, sans-serif" font-size="12" fill="#111827">CUDA transfer 3.60x (0.0019 s)</text>
+<rect x="270" y="198" width="224.28" height="16" rx="2" fill="#059669"/>
+<text x="502.28" y="210" font-family="Arial, sans-serif" font-size="12" fill="#111827">CUDA resident 11.8x (0.0006 s)</text>
+<text x="32" y="262" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">statevector expectation</text>
+<text x="32" y="280" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">num_qubits=12; num_terms=2048; term_weight=3; duplicate_rate=0.15966796875; statevector_length=4096</text>
+<rect x="270" y="292" width="2.00" height="16" rx="2" fill="#6b7280"/>
+<text x="282.00" y="304" font-family="Arial, sans-serif" font-size="12" fill="#111827">CPU scalar 1.00x (0.0341 s)</text>
+<rect x="270" y="316" width="315.95" height="16" rx="2" fill="#2563eb"/>
+<text x="593.95" y="328" font-family="Arial, sans-serif" font-size="12" fill="#111827">CUDA transfer 32.2x (0.0011 s)</text>
+<rect x="270" y="340" width="530.00" height="16" rx="2" fill="#059669"/>
+<text x="808.00" y="352" font-family="Arial, sans-serif" font-size="12" fill="#111827">CUDA resident 339x (0.0001 s)</text>
+<text x="32" y="404" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">pairwise commutation</text>
+<text x="32" y="422" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">num_qubits=16; lhs_terms=2048; rhs_terms=2048; entries=4194304; term_weight=3</text>
+<rect x="270" y="434" width="2.00" height="16" rx="2" fill="#6b7280"/>
+<text x="282.00" y="446" font-family="Arial, sans-serif" font-size="12" fill="#111827">CPU scalar 1.00x (0.0216 s)</text>
+<rect x="270" y="458" width="123.57" height="16" rx="2" fill="#7c3aed"/>
+<text x="401.57" y="470" font-family="Arial, sans-serif" font-size="12" fill="#111827">CPU avx2 3.89x (0.0056 s)</text>
+<rect x="270" y="482" width="103.76" height="16" rx="2" fill="#7c3aed"/>
+<text x="381.76" y="494" font-family="Arial, sans-serif" font-size="12" fill="#111827">CPU avx512 3.13x (0.0069 s)</text>
+<rect x="270" y="506" width="151.66" height="16" rx="2" fill="#2563eb"/>
+<text x="429.66" y="518" font-family="Arial, sans-serif" font-size="12" fill="#111827">CUDA transfer 5.30x (0.0041 s)</text>
+<rect x="270" y="530" width="248.78" height="16" rx="2" fill="#059669"/>
+<text x="526.78" y="542" font-family="Arial, sans-serif" font-size="12" fill="#111827">CUDA resident 15.4x (0.0014 s)</text>
+<text x="32" y="594" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">matmul product generation simplify</text>
+<text x="32" y="612" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">num_qubits=12; lhs_terms=256; rhs_terms=256; intermediate_terms=65536; term_weight=3</text>
+<rect x="270" y="624" width="2.00" height="16" rx="2" fill="#6b7280"/>
+<text x="282.00" y="636" font-family="Arial, sans-serif" font-size="12" fill="#111827">CPU scalar 1.00x (0.0117 s)</text>
+<rect x="270" y="648" width="116.28" height="16" rx="2" fill="#2563eb"/>
+<text x="394.28" y="660" font-family="Arial, sans-serif" font-size="12" fill="#111827">CUDA transfer 3.59x (0.0033 s)</text>
+<rect x="270" y="672" width="244.97" height="16" rx="2" fill="#059669"/>
+<text x="522.97" y="684" font-family="Arial, sans-serif" font-size="12" fill="#111827">CUDA resident 14.8x (0.0008 s)</text>
+<rect x="32" y="762" width="14" height="14" fill="#6b7280"/>
+<text x="52" y="773" font-family="Arial, sans-serif" font-size="12" fill="#374151">CPU scalar</text>
+<rect x="148" y="762" width="14" height="14" fill="#7c3aed"/>
+<text x="168" y="773" font-family="Arial, sans-serif" font-size="12" fill="#374151">CPU optimized</text>
+<rect x="302" y="762" width="14" height="14" fill="#2563eb"/>
+<text x="322" y="773" font-family="Arial, sans-serif" font-size="12" fill="#374151">CUDA transfer-inclusive</text>
+<rect x="516" y="762" width="14" height="14" fill="#059669"/>
+<text x="536" y="773" font-family="Arial, sans-serif" font-size="12" fill="#374151">CUDA device-resident</text>
+</svg>

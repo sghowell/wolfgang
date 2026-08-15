@@ -1,0 +1,207 @@
+{
+  "allowed_final_statuses": [
+    "blocked_dependency",
+    "blocked_external",
+    "blocked_permissions",
+    "blocked_toolchain",
+    "fixed",
+    "passed",
+    "rejected_with_evidence"
+  ],
+  "campaign": "cuda_residual_risk_campaign11",
+  "date": "2026-04-29",
+  "decisions": [
+    {
+      "evidence": [
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/campaign11_ncu_a100.json",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/campaign11_ncu_rtxpro6000blackwell.json"
+      ],
+      "final_status": "blocked_permissions",
+      "hosts": [
+        "a100",
+        "rtxpro6000blackwell"
+      ],
+      "label": "Non-H100 Nsight Compute counters",
+      "residual_item": "non_h100_ncu_counters"
+    },
+    {
+      "evidence": [
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/campaign11_nanobind_a100.json",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/campaign11_nanobind_rtxpro6000blackwell.json"
+      ],
+      "final_status": "rejected_with_evidence",
+      "hosts": [
+        "a100",
+        "rtxpro6000blackwell"
+      ],
+      "label": "Nanobind reference-leak diagnostics",
+      "residual_item": "nanobind_refleak_investigation"
+    }
+  ],
+  "deferred_status_allowed": false,
+  "hardware": [
+    {
+      "compiled_architectures": "80",
+      "cuda_driver": "13.0",
+      "cuda_runtime": "12.8",
+      "cuda_toolkit": "12.8.93",
+      "gpu_compute_capability": "8.0",
+      "gpu_name": "NVIDIA A100-SXM4-80GB",
+      "host_id": "a100",
+      "statuses": [
+        "blocked_permissions",
+        "rejected_with_evidence"
+      ]
+    },
+    {
+      "compiled_architectures": "120",
+      "cuda_driver": "13.0",
+      "cuda_runtime": "12.8",
+      "cuda_toolkit": "12.8.93",
+      "gpu_compute_capability": "12.0",
+      "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "host_id": "rtxpro6000blackwell",
+      "statuses": [
+        "passed",
+        "rejected_with_evidence"
+      ]
+    }
+  ],
+  "raw_rows": [
+    {
+      "artifact_paths": [
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/compute_sanitizer_memcheck_a100.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/nanobind_lifecycle_subprocess_a100.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/cuda_subset_validate_a100.log"
+      ],
+      "campaign": "cuda_residual_risk_campaign11",
+      "command": "PATH=/usr/local/cuda/bin:$PATH FASTPAULI_CUDA_ARCHITECTURES=80 /usr/local/cuda/bin/compute-sanitizer --tool memcheck .venv/bin/python -m pytest tests/test_phase11_cuda_kernels.py; PATH=/usr/local/cuda/bin:$PATH FASTPAULI_CUDA_ARCHITECTURES=80 .venv/bin/python -m pytest tests/test_phase11_cuda_kernels.py -k lifecycle",
+      "compiled_architectures": "80",
+      "compute_sanitizer_status": "memcheck_passed_error_summary_0_with_nanobind_teardown_diagnostics",
+      "cuda_driver": "13.0",
+      "cuda_runtime": "12.8",
+      "cuda_toolkit": "12.8.93",
+      "decision": "Classified as a Compute Sanitizer/nanobind teardown diagnostic rather than a reachable runtime binding lifecycle leak for Campaign 11; no binding ownership fix is retained.",
+      "deferred_status_allowed": false,
+      "final_status": "rejected_with_evidence",
+      "git_revision": "295d842e75eb6bad2b8d3aba0db7a7370d04fd63",
+      "gpu_compute_capability": "8.0",
+      "gpu_name": "NVIDIA A100-SXM4-80GB",
+      "host_id": "a100",
+      "limitation": "Compute Sanitizer memcheck reports ERROR SUMMARY: 0 errors while nanobind still prints process-teardown leaked instance/type/function diagnostics; the focused lifecycle subprocess exits cleanly with local-only refcounts.",
+      "nanobind_diagnostic_classification": "compute_sanitizer_teardown_diagnostic_no_runtime_leak",
+      "residual_item": "nanobind_refleak_investigation",
+      "source_file": "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/campaign11_nanobind_a100.json"
+    },
+    {
+      "artifact_paths": [
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/compute_sanitizer_memcheck_rtxpro6000blackwell.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/nanobind_lifecycle_subprocess_rtxpro6000blackwell.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/cuda_subset_validate_rtxpro6000blackwell.log"
+      ],
+      "campaign": "cuda_residual_risk_campaign11",
+      "command": "PATH=/usr/local/cuda/bin:$PATH FASTPAULI_CUDA_ARCHITECTURES=120 /usr/local/cuda/bin/compute-sanitizer --tool memcheck .venv/bin/python -m pytest tests/test_phase11_cuda_kernels.py; PATH=/usr/local/cuda/bin:$PATH FASTPAULI_CUDA_ARCHITECTURES=120 .venv/bin/python -m pytest tests/test_phase11_cuda_kernels.py -k lifecycle",
+      "compiled_architectures": "120",
+      "compute_sanitizer_status": "memcheck_passed_error_summary_0_with_nanobind_teardown_diagnostics",
+      "cuda_driver": "13.0",
+      "cuda_runtime": "12.8",
+      "cuda_toolkit": "12.8.93",
+      "decision": "Classified as a Compute Sanitizer/nanobind teardown diagnostic rather than a reachable runtime binding lifecycle leak for Campaign 11; no binding ownership fix is retained.",
+      "deferred_status_allowed": false,
+      "final_status": "rejected_with_evidence",
+      "git_revision": "295d842e75eb6bad2b8d3aba0db7a7370d04fd63",
+      "gpu_compute_capability": "12.0",
+      "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "host_id": "rtxpro6000blackwell",
+      "limitation": "Compute Sanitizer memcheck reports ERROR SUMMARY: 0 errors while nanobind still prints process-teardown leaked instance/type/function diagnostics; the focused lifecycle subprocess exits cleanly with local-only refcounts.",
+      "nanobind_diagnostic_classification": "compute_sanitizer_teardown_diagnostic_no_runtime_leak",
+      "residual_item": "nanobind_refleak_investigation",
+      "source_file": "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/campaign11_nanobind_rtxpro6000blackwell.json"
+    },
+    {
+      "artifact_paths": [
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/host_inventory_a100.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/ncu_permission_probe_a100.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/ncu_compact_consumers_a100.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/cuda_subset_validate_a100.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/ncu_compact_consumers_a100.json"
+      ],
+      "campaign": "cuda_residual_risk_campaign11",
+      "command": "PATH=/usr/local/cuda/bin:$PATH FASTPAULI_CUDA_ARCHITECTURES=80 /usr/local/cuda/bin/ncu --target-processes all --section SpeedOfLight --section MemoryWorkloadAnalysis --section Occupancy --force-overwrite --export docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/profiler/ncu_campaign11_compact_consumers_a100 .venv/bin/python benchmarks/bench_cuda_scaling.py --profile campaign10-public-grouping-api --repeat 1 --warmup 0 --json --output docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/ncu_compact_consumers_a100.json; sudo PATH=/usr/local/cuda/bin:$PATH FASTPAULI_CUDA_ARCHITECTURES=80 /usr/local/cuda/bin/ncu --target-processes all --section SpeedOfLight --section MemoryWorkloadAnalysis --section Occupancy --force-overwrite --export docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/profiler/ncu_campaign11_compact_consumers_a100_sudo .venv/bin/python benchmarks/bench_cuda_scaling.py --profile campaign10-public-grouping-api --repeat 1 --warmup 0 --json --output docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/ncu_compact_consumers_a100.json",
+      "compiled_architectures": "80",
+      "cuda_driver": "13.0",
+      "cuda_runtime": "12.8",
+      "cuda_toolkit": "12.8.93",
+      "decision": "A100 Nsight Compute counter capture is terminally blocked by host counter permissions for Campaign 11; no additional NVIDIA host is substituted.",
+      "deferred_status_allowed": false,
+      "final_status": "blocked_permissions",
+      "git_revision": "295d842e75eb6bad2b8d3aba0db7a7370d04fd63",
+      "gpu_compute_capability": "8.0",
+      "gpu_name": "NVIDIA A100-SXM4-80GB",
+      "host_id": "a100",
+      "limitation": "ncu is present at /usr/local/cuda/bin/ncu but not on the default PATH; non-root counter access returned ERR_NVGPUCTRPERM and the sudo retry failed with InterprocessLockFailed on the Nsight Compute lock.",
+      "ncu_install_status": "enabled_from_cuda_toolkit_path",
+      "ncu_version": "2025.1.1.0",
+      "profiler_permission_status": "blocked_permissions_after_user_and_sudo_retry",
+      "residual_item": "non_h100_ncu_counters",
+      "source_file": "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/campaign11_ncu_a100.json"
+    },
+    {
+      "artifact_paths": [
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/host_inventory_rtxpro6000blackwell.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/ncu_permission_probe_rtxpro6000blackwell.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/ncu_compact_consumers_rtxpro6000blackwell.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/logs/cuda_subset_validate_rtxpro6000blackwell.log",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/profiler/ncu_campaign11_compact_consumers_rtxpro6000blackwell.ncu-rep",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/profiler/ncu_campaign11_compact_consumers_rtxpro6000blackwell.txt",
+        "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/ncu_compact_consumers_rtxpro6000blackwell.json"
+      ],
+      "campaign": "cuda_residual_risk_campaign11",
+      "command": "PATH=/usr/local/cuda/bin:$PATH FASTPAULI_CUDA_ARCHITECTURES=120 /usr/local/cuda/bin/ncu --target-processes all --section SpeedOfLight --section MemoryWorkloadAnalysis --section Occupancy --force-overwrite --export docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/profiler/ncu_campaign11_compact_consumers_rtxpro6000blackwell .venv/bin/python benchmarks/bench_cuda_scaling.py --profile campaign10-public-grouping-api --repeat 1 --warmup 0 --json --output docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/ncu_compact_consumers_rtxpro6000blackwell.json",
+      "compiled_architectures": "120",
+      "cuda_driver": "13.0",
+      "cuda_runtime": "12.8",
+      "cuda_toolkit": "12.8.93",
+      "decision": "RTX PRO 6000 Blackwell Nsight Compute counter capture passed for the retained compact consumer lane and supports the Campaign 9/10 materialization and compact-consumer bottleneck model on sm_120.",
+      "deferred_status_allowed": false,
+      "final_status": "passed",
+      "git_revision": "295d842e75eb6bad2b8d3aba0db7a7370d04fd63",
+      "gpu_compute_capability": "12.0",
+      "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "host_id": "rtxpro6000blackwell",
+      "limitation": "ncu is present at /usr/local/cuda/bin/ncu but not on the default PATH; profiling requires adding the CUDA toolkit bin directory to PATH.",
+      "ncu_install_status": "enabled_from_cuda_toolkit_path",
+      "ncu_version": "2025.1.1.0",
+      "profiler_permission_status": "counters_captured",
+      "residual_item": "non_h100_ncu_counters",
+      "source_file": "docs/benchmarks/data/cuda_residual_risk_campaign11_2026-04-29/raw/campaign11_ncu_rtxpro6000blackwell.json"
+    }
+  ],
+  "required_hosts": [
+    "a100",
+    "rtxpro6000blackwell"
+  ],
+  "required_residual_items": [
+    "nanobind_refleak_investigation",
+    "non_h100_ncu_counters"
+  ],
+  "required_row_fields": [
+    "artifact_paths",
+    "campaign",
+    "command",
+    "compiled_architectures",
+    "cuda_driver",
+    "cuda_runtime",
+    "cuda_toolkit",
+    "decision",
+    "deferred_status_allowed",
+    "final_status",
+    "git_revision",
+    "gpu_compute_capability",
+    "gpu_name",
+    "host_id",
+    "limitation",
+    "residual_item",
+    "ssh_target"
+  ]
+}

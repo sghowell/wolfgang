@@ -1,0 +1,905 @@
+{
+  "baseline_vs_experiment": [
+    {
+      "baseline_seconds": 0.008210615000280086,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.009342165001726244,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "stress",
+      "scale": "terms_1024x1024",
+      "speedup": 0.8788771123998484
+    },
+    {
+      "baseline_seconds": 0.0021939359940006398,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.0017969429973163642,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "stress",
+      "scale": "terms_1024x1024",
+      "speedup": 1.2209268726259892
+    },
+    {
+      "baseline_seconds": 0.015064507999341004,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.015044441999634728,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "stress",
+      "scale": "terms_2048x2048",
+      "speedup": 1.0013337815857022
+    },
+    {
+      "baseline_seconds": 0.00536559900501743,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.003299246003734879,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "stress",
+      "scale": "terms_2048x2048",
+      "speedup": 1.6263106779377337
+    },
+    {
+      "baseline_seconds": 0.003902731004927773,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.004318769002566114,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "stress",
+      "scale": "terms_512x512",
+      "speedup": 0.9036674576965935
+    },
+    {
+      "baseline_seconds": 0.0014210020017344505,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.001361574002658017,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "stress",
+      "scale": "terms_512x512",
+      "speedup": 1.0436465436035207
+    },
+    {
+      "baseline_seconds": 0.030492914003843907,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.02524860799894668,
+      "operation": "pairwise_commutation",
+      "profile": "stress",
+      "scale": "terms_10000x10000",
+      "speedup": 1.2077067379364441
+    },
+    {
+      "baseline_seconds": 0.028596317002666183,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.025067295995540917,
+      "operation": "pairwise_commutation",
+      "profile": "stress",
+      "scale": "terms_10000x10000",
+      "speedup": 1.1407818780195926
+    },
+    {
+      "baseline_seconds": 0.0016222729973378591,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.002376557000388857,
+      "operation": "pairwise_commutation",
+      "profile": "stress",
+      "scale": "terms_4096x4096",
+      "speedup": 0.6826148066603998
+    },
+    {
+      "baseline_seconds": 0.001753598997311201,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.004537690001598094,
+      "operation": "pairwise_commutation",
+      "profile": "stress",
+      "scale": "terms_4096x4096",
+      "speedup": 0.3864519164362516
+    },
+    {
+      "baseline_seconds": 0.018521911995776463,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.017012709999107756,
+      "operation": "pairwise_commutation",
+      "profile": "stress",
+      "scale": "terms_8192x8192",
+      "speedup": 1.0887102640759678
+    },
+    {
+      "baseline_seconds": 0.019311321004352067,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.016980426997179165,
+      "operation": "pairwise_commutation",
+      "profile": "stress",
+      "scale": "terms_8192x8192",
+      "speedup": 1.1372694578033942
+    },
+    {
+      "baseline_seconds": 0.0016384440023102798,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.0015148509992286563,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "stress",
+      "scale": "terms_100000",
+      "speedup": 1.0815875641528807
+    },
+    {
+      "baseline_seconds": 0.0008240089955506846,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.0006013470047037117,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "stress",
+      "scale": "terms_100000",
+      "speedup": 1.370272054413375
+    },
+    {
+      "baseline_seconds": 0.00860253100108821,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.006941067003936041,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "stress",
+      "scale": "terms_1000000",
+      "speedup": 1.2393672321863496
+    },
+    {
+      "baseline_seconds": 0.0015604410000378266,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.0010977879937854595,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "stress",
+      "scale": "terms_1000000",
+      "speedup": 1.4214411242165428
+    },
+    {
+      "baseline_seconds": 0.004012524004792795,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.0035683919995790347,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "stress",
+      "scale": "terms_500000",
+      "speedup": 1.1244627847125972
+    },
+    {
+      "baseline_seconds": 0.001143321002018638,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.0008605190014350228,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "stress",
+      "scale": "terms_500000",
+      "speedup": 1.3286412038688367
+    },
+    {
+      "baseline_seconds": 0.0002850259988917969,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.0002790930011542514,
+      "operation": "statevector_expectation",
+      "profile": "stress",
+      "scale": "qubits_14_terms_4096",
+      "speedup": 1.0212581387315636
+    },
+    {
+      "baseline_seconds": 0.00021328500588424504,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.00021586200455203652,
+      "operation": "statevector_expectation",
+      "profile": "stress",
+      "scale": "qubits_14_terms_4096",
+      "speedup": 0.9880618236954699
+    },
+    {
+      "baseline_seconds": 0.0004483090015128255,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.00047286900371545926,
+      "operation": "statevector_expectation",
+      "profile": "stress",
+      "scale": "qubits_15_terms_4096",
+      "speedup": 0.9480617210904939
+    },
+    {
+      "baseline_seconds": 0.000401592995331157,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.0004062129955855198,
+      "operation": "statevector_expectation",
+      "profile": "stress",
+      "scale": "qubits_15_terms_4096",
+      "speedup": 0.9886266557087778
+    },
+    {
+      "baseline_seconds": 0.0015281480009434745,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.0015412399952765554,
+      "operation": "statevector_expectation",
+      "profile": "stress",
+      "scale": "qubits_16_terms_8192",
+      "speedup": 0.9915055446437907
+    },
+    {
+      "baseline_seconds": 0.001435899997886736,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.0014393509991350584,
+      "operation": "statevector_expectation",
+      "profile": "stress",
+      "scale": "qubits_16_terms_8192",
+      "speedup": 0.9976023907647292
+    },
+    {
+      "baseline_seconds": 0.02007030099775875,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.01814810400537681,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "extreme",
+      "scale": "terms_3072x3072",
+      "speedup": 1.1059172347597548
+    },
+    {
+      "baseline_seconds": 0.010137108998605981,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.0056238339966512285,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "extreme",
+      "scale": "terms_3072x3072",
+      "speedup": 1.8025263556218463
+    },
+    {
+      "baseline_seconds": 0.02623238999512978,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.020072163999429904,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "extreme",
+      "scale": "terms_4096x4096",
+      "speedup": 1.3069039290369908
+    },
+    {
+      "baseline_seconds": 0.01609737699618563,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.008975780998298433,
+      "operation": "matmul_product_generation_simplify",
+      "profile": "extreme",
+      "scale": "terms_4096x4096",
+      "speedup": 1.793423547125009
+    },
+    {
+      "baseline_seconds": 0.04289043499738909,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.041621973003202584,
+      "operation": "pairwise_commutation",
+      "profile": "extreme",
+      "scale": "terms_12000x12000",
+      "speedup": 1.030475777640068
+    },
+    {
+      "baseline_seconds": 0.04009398099879036,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.04426439500093693,
+      "operation": "pairwise_commutation",
+      "profile": "extreme",
+      "scale": "terms_12000x12000",
+      "speedup": 0.9057840053601026
+    },
+    {
+      "baseline_seconds": 0.07753259599849116,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.07653793899953598,
+      "operation": "pairwise_commutation",
+      "profile": "extreme",
+      "scale": "terms_16384x16384",
+      "speedup": 1.0129956073021669
+    },
+    {
+      "baseline_seconds": 0.0759850690010353,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.07382770699769026,
+      "operation": "pairwise_commutation",
+      "profile": "extreme",
+      "scale": "terms_16384x16384",
+      "speedup": 1.029221576709846
+    },
+    {
+      "baseline_seconds": 0.016688329000317026,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.01585227100440534,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "extreme",
+      "scale": "terms_2000000",
+      "speedup": 1.0527405818181728
+    },
+    {
+      "baseline_seconds": 0.0023102450068108737,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.001544070997624658,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "extreme",
+      "scale": "terms_2000000",
+      "speedup": 1.4962038729856786
+    },
+    {
+      "baseline_seconds": 0.06909098700270988,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.06503196399717126,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "extreme",
+      "scale": "terms_5000000",
+      "speedup": 1.062415814563361
+    },
+    {
+      "baseline_seconds": 0.004818233006517403,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.002769360005913768,
+      "operation": "simplify_duplicate_pressure",
+      "profile": "extreme",
+      "scale": "terms_5000000",
+      "speedup": 1.7398362785005976
+    },
+    {
+      "baseline_seconds": 0.003248895998694934,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.0032598940015304834,
+      "operation": "statevector_expectation",
+      "profile": "extreme",
+      "scale": "qubits_17_terms_8192",
+      "speedup": 0.9966262698019058
+    },
+    {
+      "baseline_seconds": 0.0031246139988070354,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.0031374210011563264,
+      "operation": "statevector_expectation",
+      "profile": "extreme",
+      "scale": "qubits_17_terms_8192",
+      "speedup": 0.9959179841198963
+    },
+    {
+      "baseline_seconds": 0.00686189499538159,
+      "boundary": "transfer_inclusive",
+      "experiment_seconds": 0.006805531993450131,
+      "operation": "statevector_expectation",
+      "profile": "extreme",
+      "scale": "qubits_18_terms_8192",
+      "speedup": 1.0082819391615092
+    },
+    {
+      "baseline_seconds": 0.006783429998904467,
+      "boundary": "device_resident",
+      "experiment_seconds": 0.006773380999220535,
+      "operation": "statevector_expectation",
+      "profile": "extreme",
+      "scale": "qubits_18_terms_8192",
+      "speedup": 1.0014836017175304
+    }
+  ],
+  "campaign": "h100_campaign3",
+  "competitors": {
+    "cudaq": {
+      "available": true,
+      "benchmark_status": "installed/importable but no primitive-equivalent sparse-Pauli baseline retained",
+      "import_error": null,
+      "version": "0.12.0.post1"
+    },
+    "cupy": {
+      "available": true,
+      "version": "13.4.1"
+    },
+    "cuquantum": {
+      "available": true,
+      "component": "custatevec",
+      "import_error": null,
+      "version": "24.8.0"
+    },
+    "openfermion": {
+      "available": true,
+      "version": "1.7.1"
+    },
+    "qiskit": {
+      "available": true,
+      "version": "2.4.1"
+    },
+    "qiskit_aer": {
+      "available": false,
+      "benchmark_status": "not importable in this environment",
+      "import_error": "ImportError: cannot import name 'convert_to_target' from 'qiskit.providers' (<private-path>",
+      "version": "0.15.1"
+    }
+  },
+  "cross_comparison": [
+    {
+      "case": "simplify duplicate pressure terms_50000",
+      "paths": [
+        {
+          "kind": "scalar",
+          "name": "FastPauli CPU scalar",
+          "seconds": 0.006938201004231814
+        },
+        {
+          "kind": "auto",
+          "name": "FastPauli CPU auto",
+          "seconds": 0.006843349001428578
+        },
+        {
+          "kind": "transfer",
+          "name": "FastPauli CUDA transfer",
+          "seconds": 0.0009250900038750842
+        },
+        {
+          "kind": "resident",
+          "name": "FastPauli CUDA resident",
+          "seconds": 0.00042565400508465245
+        }
+      ],
+      "source": "cuda_scaling_default"
+    },
+    {
+      "case": "statevector expectation qubits_14_terms_4096",
+      "paths": [
+        {
+          "kind": "scalar",
+          "name": "FastPauli CPU scalar",
+          "seconds": 0.2929021489981096
+        },
+        {
+          "kind": "auto",
+          "name": "FastPauli CPU auto",
+          "seconds": 0.29483556199556915
+        },
+        {
+          "kind": "transfer",
+          "name": "FastPauli CUDA transfer",
+          "seconds": 0.0002643170009832829
+        },
+        {
+          "kind": "resident",
+          "name": "FastPauli CUDA resident",
+          "seconds": 0.0002107760010403581
+        }
+      ],
+      "source": "cuda_scaling_default"
+    },
+    {
+      "case": "pairwise commutation terms_2048x2048",
+      "paths": [
+        {
+          "kind": "scalar",
+          "name": "FastPauli CPU scalar",
+          "seconds": 0.018920784001238644
+        },
+        {
+          "kind": "auto",
+          "name": "FastPauli CPU auto",
+          "seconds": 0.0023346590023720637
+        },
+        {
+          "kind": "transfer",
+          "name": "FastPauli CUDA transfer",
+          "seconds": 0.0011164100069436245
+        },
+        {
+          "kind": "resident",
+          "name": "FastPauli CUDA resident",
+          "seconds": 0.00043037300201831385
+        },
+        {
+          "kind": "prealloc",
+          "name": "FastPauli CUDA preallocated",
+          "seconds": 0.00042982200102414936
+        },
+        {
+          "kind": "auto",
+          "name": "FastPauli CPU avx2",
+          "seconds": 0.004733596993901301
+        },
+        {
+          "kind": "auto",
+          "name": "FastPauli CPU avx512",
+          "seconds": 0.0025462120029260404
+        },
+        {
+          "kind": "auto",
+          "name": "FastPauli CPU tbb",
+          "seconds": 0.0020185290049994364
+        }
+      ],
+      "source": "cuda_scaling_default"
+    },
+    {
+      "case": "matmul product generation simplify terms_512x512",
+      "paths": [
+        {
+          "kind": "scalar",
+          "name": "FastPauli CPU scalar",
+          "seconds": 0.052999266001279466
+        },
+        {
+          "kind": "auto",
+          "name": "FastPauli CPU auto",
+          "seconds": 0.05535314000007929
+        },
+        {
+          "kind": "transfer",
+          "name": "FastPauli CUDA transfer",
+          "seconds": 0.004310990996600594
+        },
+        {
+          "kind": "resident",
+          "name": "FastPauli CUDA resident",
+          "seconds": 0.0012855189997935668
+        }
+      ],
+      "source": "cuda_scaling_default"
+    },
+    {
+      "case": "simplify external CPU baseline",
+      "paths": [
+        {
+          "kind": "scalar",
+          "name": "FastPauli CPU scalar",
+          "seconds": 0.0005362329975469038
+        },
+        {
+          "kind": "external",
+          "name": "External CPU",
+          "seconds": 0.0006780879994039424
+        }
+      ],
+      "source": "competitive_baselines"
+    },
+    {
+      "case": "multiply external CPU baseline",
+      "paths": [
+        {
+          "kind": "scalar",
+          "name": "FastPauli CPU scalar",
+          "seconds": 0.01031506900471868
+        },
+        {
+          "kind": "external",
+          "name": "External CPU",
+          "seconds": 0.19785517700074706
+        }
+      ],
+      "source": "competitive_baselines"
+    },
+    {
+      "case": "qiskit grouping external CPU baseline",
+      "paths": [
+        {
+          "kind": "scalar",
+          "name": "FastPauli CPU scalar",
+          "seconds": 0.0003185559980920516
+        },
+        {
+          "kind": "external",
+          "name": "External CPU",
+          "seconds": 0.06983009300165577
+        }
+      ],
+      "source": "competitive_baselines"
+    },
+    {
+      "case": "cuStateVec mapped statevector expectation",
+      "paths": [
+        {
+          "kind": "scalar",
+          "name": "FastPauli CPU scalar",
+          "seconds": 0.2935215950055863
+        },
+        {
+          "kind": "transfer",
+          "name": "FastPauli CUDA host psi",
+          "seconds": 0.00021346200082916766
+        },
+        {
+          "kind": "resident",
+          "name": "FastPauli CUDA device psi",
+          "seconds": 0.000189207996299956
+        },
+        {
+          "kind": "external",
+          "name": "External resident",
+          "seconds": 0.008170092994987499
+        },
+        {
+          "kind": "external",
+          "name": "External transfer",
+          "seconds": 0.008366453999769874
+        }
+      ],
+      "source": "competitive_baselines"
+    }
+  ],
+  "materialization_boundaries": [
+    {
+      "estimated_bytes": 9962880,
+      "implementation_path": "packed_key32_sort_reduce",
+      "operation": "simplify_duplicate_pressure",
+      "result_materialization": "device-resident sparse Pauli buffers returned as DevicePauliSum",
+      "scale": "terms_200000_low_duplicate"
+    },
+    {
+      "estimated_bytes": 9949968,
+      "implementation_path": "packed_key32_sort_reduce",
+      "operation": "simplify_duplicate_pressure",
+      "result_materialization": "device-resident sparse Pauli buffers returned as DevicePauliSum",
+      "scale": "terms_200000_medium_duplicate"
+    },
+    {
+      "estimated_bytes": 9685728,
+      "implementation_path": "packed_key32_sort_reduce",
+      "operation": "simplify_duplicate_pressure",
+      "result_materialization": "device-resident sparse Pauli buffers returned as DevicePauliSum",
+      "scale": "terms_200000_high_duplicate"
+    },
+    {
+      "estimated_bytes": 9600024,
+      "implementation_path": "packed_key32_sort_reduce",
+      "operation": "simplify_duplicate_pressure",
+      "result_materialization": "device-resident sparse Pauli buffers returned as DevicePauliSum",
+      "scale": "terms_200000_pathological_duplicate"
+    },
+    {
+      "estimated_bytes": 262160,
+      "implementation_path": "host_statevector_copy_or_cuda_array_interface_plus_device_accumulator",
+      "operation": "statevector_expectation",
+      "result_materialization": "host scalar complex result copied from device accumulator",
+      "scale": "resident_qubits_14_terms_4096"
+    },
+    {
+      "estimated_bytes": 1048592,
+      "implementation_path": "host_statevector_copy_or_cuda_array_interface_plus_device_accumulator",
+      "operation": "statevector_expectation",
+      "result_materialization": "host scalar complex result copied from device accumulator",
+      "scale": "resident_qubits_16_terms_8192"
+    },
+    {
+      "estimated_bytes": 67108864,
+      "implementation_path": "device_byte_output_then_host_materialization",
+      "operation": "pairwise_commutation",
+      "result_materialization": "vector-return host bytes plus caller-owned host bool output timing",
+      "scale": "host_output_terms_8192x8192"
+    },
+    {
+      "estimated_bytes": 144000000,
+      "implementation_path": "device_byte_output_then_host_materialization",
+      "operation": "pairwise_commutation",
+      "result_materialization": "vector-return host bytes plus caller-owned host bool output timing",
+      "scale": "host_output_terms_12000x12000"
+    },
+    {
+      "estimated_bytes": 95055368,
+      "implementation_path": "product_generation_then_packed_key32_sort_reduce",
+      "operation": "matmul_product_generation_simplify",
+      "result_materialization": "device-resident product buffers followed by simplified DevicePauliSum",
+      "scale": "duplicate_product_terms_1024x1024"
+    },
+    {
+      "estimated_bytes": 354676808,
+      "implementation_path": "product_generation_then_packed_key32_sort_reduce",
+      "operation": "matmul_product_generation_simplify",
+      "result_materialization": "device-resident product buffers followed by simplified DevicePauliSum",
+      "scale": "duplicate_product_terms_2048x2048"
+    }
+  ],
+  "privileged_ncu": {
+    "available": true,
+    "inventory_path": "docs/benchmarks/data/cuda_deep_optimization_h100_campaign3_2026-04-28/metadata/privileged_ncu_inventory.txt",
+    "report_files": [
+      {
+        "filename": "ncu_matmul_product_generation_simplify_detailed.ncu-rep",
+        "size_bytes": 7901831
+      },
+      {
+        "filename": "ncu_pairwise_commutation_detailed.ncu-rep",
+        "size_bytes": 301941
+      },
+      {
+        "filename": "ncu_simplify_duplicate_pressure_detailed.ncu-rep",
+        "size_bytes": 5588852
+      },
+      {
+        "filename": "ncu_statevector_expectation_detailed.ncu-rep",
+        "size_bytes": 876392
+      }
+    ],
+    "stdout_files": [
+      {
+        "filename": "ncu_matmul_product_generation_simplify_detailed.stdout",
+        "size_bytes": 23954
+      },
+      {
+        "filename": "ncu_pairwise_commutation_detailed.stdout",
+        "size_bytes": 27846
+      },
+      {
+        "filename": "ncu_simplify_duplicate_pressure_detailed.stdout",
+        "size_bytes": 22760
+      },
+      {
+        "filename": "ncu_statevector_expectation_detailed.stdout",
+        "size_bytes": 22305
+      }
+    ]
+  },
+  "profile_status": [
+    {
+      "category": "validation",
+      "command": "CUDACXX=/usr/local/cuda/bin/nvcc CUDAHOSTCXX=/usr/bin/g++ FASTPAULI_CUDA_ARCHITECTURES=90 FASTPAULI_VALIDATE_CUDA=1 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> <private-path> scripts/validate.py",
+      "effective_status": "success",
+      "name": "cuda validation",
+      "output_file": "<private-path>",
+      "required": true,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "benchmark",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> <private-path> benchmarks/bench_cuda_scaling.py --profile stress --operation simplify_duplicate_pressure,statevector_expectation,pairwise_commutation,matmul_product_generation_simplify --repeat 3 --warmup 1 --json",
+      "effective_status": "success",
+      "name": "cuda scaling benchmark",
+      "output_file": "<private-path>",
+      "required": true,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "profile",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> nsys profile --force-overwrite=true --stats=true --trace=cuda,nvtx,osrt --output=<private-path> <private-path> benchmarks/bench_cuda_scaling.py --profile stress --operation simplify_duplicate_pressure,statevector_expectation,pairwise_commutation,matmul_product_generation_simplify --repeat 1 --warmup 0 --json",
+      "effective_status": "success",
+      "name": "nsys cuda api timeline",
+      "output_file": "<private-path>",
+      "required": true,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "profile",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> ncu --target-processes all --set detailed --section SpeedOfLight --section MemoryWorkloadAnalysis --section LaunchStats --section Occupancy --section SchedulerStats --section WarpStateStats --kernel-name-base function --launch-count 16 --force-overwrite --export <private-path> <private-path> benchmarks/bench_cuda_scaling.py --profile stress --operation simplify_duplicate_pressure --repeat 1 --warmup 0 --json",
+      "effective_status": "success",
+      "name": "ncu simplify_duplicate_pressure detailed",
+      "nonprivileged_failure_reason": "ERR_NVGPUCTRPERM",
+      "output_file": "<private-path>",
+      "required": true,
+      "returncode": 1,
+      "status": "expected_permission_denied_superseded",
+      "superseded_by_privileged_ncu_report": "ncu_simplify_duplicate_pressure_detailed.ncu-rep",
+      "superseded_by_privileged_ncu_report_bytes": 5588852
+    },
+    {
+      "category": "profile",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> ncu --target-processes all --set detailed --section SpeedOfLight --section MemoryWorkloadAnalysis --section LaunchStats --section Occupancy --section SchedulerStats --section WarpStateStats --kernel-name-base function --kernel-name 'regex:expectation_statevector_.*kernel' --launch-count 4 --force-overwrite --export <private-path> <private-path> benchmarks/bench_cuda_scaling.py --profile stress --operation statevector_expectation --repeat 1 --warmup 0 --json",
+      "effective_status": "success",
+      "name": "ncu statevector_expectation detailed",
+      "nonprivileged_failure_reason": "ERR_NVGPUCTRPERM",
+      "output_file": "<private-path>",
+      "required": true,
+      "returncode": 1,
+      "status": "expected_permission_denied_superseded",
+      "superseded_by_privileged_ncu_report": "ncu_statevector_expectation_detailed.ncu-rep",
+      "superseded_by_privileged_ncu_report_bytes": 876392
+    },
+    {
+      "category": "profile",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> ncu --target-processes all --set detailed --section SpeedOfLight --section MemoryWorkloadAnalysis --section LaunchStats --section Occupancy --section SchedulerStats --section WarpStateStats --kernel-name-base function --kernel-name regex:commutation_kernel --launch-count 1 --force-overwrite --export <private-path> <private-path> benchmarks/bench_cuda_scaling.py --profile stress --operation pairwise_commutation --repeat 1 --warmup 0 --json",
+      "effective_status": "success",
+      "name": "ncu pairwise_commutation detailed",
+      "nonprivileged_failure_reason": "ERR_NVGPUCTRPERM",
+      "output_file": "<private-path>",
+      "required": true,
+      "returncode": 1,
+      "status": "expected_permission_denied_superseded",
+      "superseded_by_privileged_ncu_report": "ncu_pairwise_commutation_detailed.ncu-rep",
+      "superseded_by_privileged_ncu_report_bytes": 301941
+    },
+    {
+      "category": "profile",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> ncu --target-processes all --set detailed --section SpeedOfLight --section MemoryWorkloadAnalysis --section LaunchStats --section Occupancy --section SchedulerStats --section WarpStateStats --kernel-name-base function --launch-count 24 --force-overwrite --export <private-path> <private-path> benchmarks/bench_cuda_scaling.py --profile stress --operation matmul_product_generation_simplify --repeat 1 --warmup 0 --json",
+      "effective_status": "success",
+      "name": "ncu matmul_product_generation_simplify detailed",
+      "nonprivileged_failure_reason": "ERR_NVGPUCTRPERM",
+      "output_file": "<private-path>",
+      "required": true,
+      "returncode": 1,
+      "status": "expected_permission_denied_superseded",
+      "superseded_by_privileged_ncu_report": "ncu_matmul_product_generation_simplify_detailed.ncu-rep",
+      "superseded_by_privileged_ncu_report_bytes": 7901831
+    },
+    {
+      "category": "sanitizer",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> compute-sanitizer --tool memcheck --error-exitcode 99 <private-path> -m pytest tests/test_phase11_cuda_kernels.py -q",
+      "effective_status": "success",
+      "name": "compute sanitizer memcheck",
+      "output_file": "<private-path>",
+      "required": true,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "sanitizer",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> compute-sanitizer --tool racecheck --error-exitcode 99 <private-path> -m pytest tests/test_phase11_cuda_kernels.py -q",
+      "effective_status": "success",
+      "name": "compute sanitizer racecheck",
+      "output_file": "<private-path>",
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "sanitizer",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> compute-sanitizer --tool initcheck --error-exitcode 99 <private-path> -m pytest tests/test_phase11_cuda_kernels.py -q",
+      "effective_status": "success",
+      "name": "compute sanitizer initcheck",
+      "output_file": "<private-path>",
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "sanitizer",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> compute-sanitizer --tool synccheck --error-exitcode 99 <private-path> -m pytest tests/test_phase11_cuda_kernels.py -q",
+      "effective_status": "success",
+      "name": "compute sanitizer synccheck",
+      "output_file": "<private-path>",
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "binary_inspection",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> cuobjdump --dump-sass <private-path>",
+      "effective_status": "success",
+      "name": "cuobjdump sass inventory",
+      "output_file": "<private-path>",
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "binary_inspection",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> cuobjdump --dump-ptx <private-path>",
+      "effective_status": "success",
+      "name": "cuobjdump ptx inventory",
+      "output_file": "<private-path>",
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    {
+      "category": "binary_inspection",
+      "command": "FASTPAULI_CUDA_ARCHITECTURES=90 PATH=/usr/local/cuda/bin:/usr/local/cuda/bin:<private-path> nvdisasm --print-line-info <private-path>",
+      "effective_status": "failed",
+      "name": "nvdisasm sass listing",
+      "output_file": "<private-path>",
+      "required": false,
+      "returncode": 1,
+      "status": "failed"
+    }
+  ],
+  "profiler_evidence_status": {
+    "nonprivileged_ncu": {
+      "status": "expected_permission_denied",
+      "superseded_steps": [
+        "ncu simplify_duplicate_pressure detailed",
+        "ncu statevector_expectation detailed",
+        "ncu pairwise_commutation detailed",
+        "ncu matmul_product_generation_simplify detailed"
+      ]
+    },
+    "privileged_ncu": {
+      "report_count": 4,
+      "reports": [
+        "ncu_matmul_product_generation_simplify_detailed.ncu-rep",
+        "ncu_pairwise_commutation_detailed.ncu-rep",
+        "ncu_simplify_duplicate_pressure_detailed.ncu-rep",
+        "ncu_statevector_expectation_detailed.ncu-rep"
+      ],
+      "status": "success"
+    },
+    "required_effective_failures": []
+  },
+  "provenance": {
+    "baseline_git_commit": "40dbf13",
+    "experiment_git_commit": "0a16c0a"
+  },
+  "raw_files": [
+    "baseline_cuda_scaling_extreme.json",
+    "baseline_cuda_scaling_stress.json",
+    "baseline_profile_dry_run.json",
+    "competitive_baselines_final.json",
+    "experiment_cuda_scaling_default.json",
+    "experiment_cuda_scaling_extreme.json",
+    "experiment_cuda_scaling_materialization.json",
+    "experiment_cuda_scaling_stress.json",
+    "experiment_profile_report.json"
+  ]
+}

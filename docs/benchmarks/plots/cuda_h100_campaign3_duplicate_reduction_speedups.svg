@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="810" viewBox="0 0 1120 810" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 campaign 3 simplify and matmul speedups</title>
+<desc id="desc">Same-boundary baseline versus experiment speedups for duplicate reduction paths.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="40.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">Duplicate-Reduction A/B</text>
+<text x="32.0" y="64.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Same H100, same benchmark boundary; values above 1.0x favor Campaign 3.</text>
+<text x="32.0" y="110.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress matmul product generation simplify terms_1024x1024 transfer_inclusive</text>
+<rect x="360.0" y="100.0" width="253.5" height="12.0" rx="2" fill="#dc2626"/>
+<text x="621.5" y="110.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">0.88x</text>
+<text x="32.0" y="144.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress matmul product generation simplify terms_1024x1024 device_resident</text>
+<rect x="360.0" y="134.0" width="352.2" height="12.0" rx="2" fill="#059669"/>
+<text x="720.2" y="144.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.22x</text>
+<text x="32.0" y="178.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress matmul product generation simplify terms_2048x2048 transfer_inclusive</text>
+<rect x="360.0" y="168.0" width="288.9" height="12.0" rx="2" fill="#059669"/>
+<text x="656.9" y="178.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.00x</text>
+<text x="32.0" y="212.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress matmul product generation simplify terms_2048x2048 device_resident</text>
+<rect x="360.0" y="202.0" width="469.2" height="12.0" rx="2" fill="#059669"/>
+<text x="837.2" y="212.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.63x</text>
+<text x="32.0" y="246.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress matmul product generation simplify terms_512x512 transfer_inclusive</text>
+<rect x="360.0" y="236.0" width="260.7" height="12.0" rx="2" fill="#dc2626"/>
+<text x="628.7" y="246.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">0.90x</text>
+<text x="32.0" y="280.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress matmul product generation simplify terms_512x512 device_resident</text>
+<rect x="360.0" y="270.0" width="301.1" height="12.0" rx="2" fill="#059669"/>
+<text x="669.1" y="280.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.04x</text>
+<text x="32.0" y="314.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress simplify duplicate pressure terms_100000 transfer_inclusive</text>
+<rect x="360.0" y="304.0" width="312.0" height="12.0" rx="2" fill="#059669"/>
+<text x="680.0" y="314.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.08x</text>
+<text x="32.0" y="348.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress simplify duplicate pressure terms_100000 device_resident</text>
+<rect x="360.0" y="338.0" width="395.3" height="12.0" rx="2" fill="#059669"/>
+<text x="763.3" y="348.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.37x</text>
+<text x="32.0" y="382.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress simplify duplicate pressure terms_1000000 transfer_inclusive</text>
+<rect x="360.0" y="372.0" width="357.5" height="12.0" rx="2" fill="#059669"/>
+<text x="725.5" y="382.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.24x</text>
+<text x="32.0" y="416.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress simplify duplicate pressure terms_1000000 device_resident</text>
+<rect x="360.0" y="406.0" width="410.1" height="12.0" rx="2" fill="#059669"/>
+<text x="778.1" y="416.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.42x</text>
+<text x="32.0" y="450.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress simplify duplicate pressure terms_500000 transfer_inclusive</text>
+<rect x="360.0" y="440.0" width="324.4" height="12.0" rx="2" fill="#059669"/>
+<text x="692.4" y="450.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.12x</text>
+<text x="32.0" y="484.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">stress simplify duplicate pressure terms_500000 device_resident</text>
+<rect x="360.0" y="474.0" width="383.3" height="12.0" rx="2" fill="#059669"/>
+<text x="751.3" y="484.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.33x</text>
+<text x="32.0" y="518.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">extreme matmul product generation simplify terms_3072x3072 transfer_inclusive</text>
+<rect x="360.0" y="508.0" width="319.0" height="12.0" rx="2" fill="#059669"/>
+<text x="687.0" y="518.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.11x</text>
+<text x="32.0" y="552.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">extreme matmul product generation simplify terms_3072x3072 device_resident</text>
+<rect x="360.0" y="542.0" width="520.0" height="12.0" rx="2" fill="#059669"/>
+<text x="888.0" y="552.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.80x</text>
+<text x="32.0" y="586.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">extreme matmul product generation simplify terms_4096x4096 transfer_inclusive</text>
+<rect x="360.0" y="576.0" width="377.0" height="12.0" rx="2" fill="#059669"/>
+<text x="745.0" y="586.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.31x</text>
+<text x="32.0" y="620.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">extreme matmul product generation simplify terms_4096x4096 device_resident</text>
+<rect x="360.0" y="610.0" width="517.4" height="12.0" rx="2" fill="#059669"/>
+<text x="885.4" y="620.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.79x</text>
+<text x="32.0" y="654.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">extreme simplify duplicate pressure terms_2000000 transfer_inclusive</text>
+<rect x="360.0" y="644.0" width="303.7" height="12.0" rx="2" fill="#059669"/>
+<text x="671.7" y="654.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.05x</text>
+<text x="32.0" y="688.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">extreme simplify duplicate pressure terms_2000000 device_resident</text>
+<rect x="360.0" y="678.0" width="431.6" height="12.0" rx="2" fill="#059669"/>
+<text x="799.6" y="688.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.50x</text>
+<text x="32.0" y="722.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">extreme simplify duplicate pressure terms_5000000 transfer_inclusive</text>
+<rect x="360.0" y="712.0" width="306.5" height="12.0" rx="2" fill="#059669"/>
+<text x="674.5" y="722.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.06x</text>
+<text x="32.0" y="756.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">extreme simplify duplicate pressure terms_5000000 device_resident</text>
+<rect x="360.0" y="746.0" width="501.9" height="12.0" rx="2" fill="#059669"/>
+<text x="869.9" y="756.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.74x</text>
+</svg>

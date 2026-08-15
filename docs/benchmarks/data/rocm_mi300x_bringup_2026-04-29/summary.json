@@ -1,0 +1,56 @@
+{
+  "acceptance_criteria": {
+    "accelerator_status_reports_hip": "passed",
+    "benchmarks_capture_cpu_and_hip_timings": "passed",
+    "build_info_reports_hip_metadata": "passed",
+    "cpu_only_local_validation": "passed",
+    "cuda_and_hip_mutual_exclusion": "passed",
+    "hip_commutation_equivalence": "passed",
+    "hip_invalid_device_errors": "passed",
+    "hip_round_trip_transfers": "passed",
+    "hip_source_build_gfx942": "passed",
+    "hip_status_reports_mi300x": "passed",
+    "host_inventory_captured": "passed",
+    "independent_review": "passed_after_fixes",
+    "rocprof_counter_capture": "passed",
+    "rocprof_trace_or_diagnosis": "passed"
+  },
+  "campaign": "mi300x_rocm_bringup_2026-04-29",
+  "git_revision": "fa8970e",
+  "host_inventory_path": "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/host_inventory_mi300x.log",
+  "limitations": [
+    "ROCm/HIP support is source-build evidence only, not a wheel support claim.",
+    "Only one MI300X device was visible, so different-device HIP rejection is test-gated and skipped on this host.",
+    "HIP device-resident timing reuses device operands but materializes the dense uint8 output to host; a retained HIP device-output matrix is out of scope for this campaign.",
+    "The first legacy rocprof run exited nonzero until /opt/rocm/bin was added to PATH for rocminfo postprocessing; the successful path-fixed run is retained alongside the diagnostic log."
+  ],
+  "profiler_artifact_paths": [
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/rocprof_trace_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/rocprof_trace_mi300x_pathfixed.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/rocprof_counters_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/rocprof_list_derived_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/rocprof_list_basic_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/profiler/rocm_commutation_counters.csv",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/profiler/rocprof_commutation_counters.txt",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/profiler/rpl_data_260430_004523_289816/",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/profiler/rpl_data_260430_004539_289985/",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/profiler/rpl_data_260430_004643_290236/"
+  ],
+  "raw_benchmark_paths": [
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/raw/rocm_commutation_smoke_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/raw/rocm_commutation_scaling_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/raw/rocm_commutation_profiler_mi300x.json"
+  ],
+  "validation_log_paths": [
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/pytest_rocm_foundation_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/build_status_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/final_local_validate_macos_m4pro.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/final_remote_hip_source_build_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/final_remote_pytest_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/final_remote_rocm_targeted_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/final_remote_rocm_smoke_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/final_remote_rocm_scaling_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/final_remote_rocm_profiler_mi300x.log",
+    "docs/benchmarks/data/rocm_mi300x_bringup_2026-04-29/logs/final_remote_sdist_mi300x.log"
+  ]
+}

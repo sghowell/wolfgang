@@ -1,0 +1,108 @@
+[build-system]
+requires = [
+  "scikit-build-core>=0.11",
+  "nanobind>=2.9",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "wolfgang-quantum"
+version = "0.2.0"
+description = "C++20 and CUDA-backed accelerators for sparse sums of Pauli strings."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "Wolfgang contributors" },
+]
+keywords = [
+  "pauli",
+  "quantum-computing",
+  "hamiltonian",
+  "cuda",
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: C++",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = [
+  "numpy>=1.23",
+]
+
+[project.urls]
+Homepage = "https://github.com/wolfgang-quantum/wolfgang"
+Documentation = "https://wolfgangquantum.com"
+Repository = "https://github.com/wolfgang-quantum/wolfgang.git"
+Issues = "https://github.com/wolfgang-quantum/wolfgang/issues"
+Changelog = "https://github.com/wolfgang-quantum/wolfgang/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+openfermion = [
+  "openfermion>=1.7.1",
+]
+qiskit = [
+  "qiskit>=1.0",
+]
+test = [
+  "build>=1.2",
+  "cibuildwheel>=2.23,<3; python_version < '3.11'",
+  "cibuildwheel>=3.0,<4; python_version >= '3.11'",
+  "cmake>=3.24",
+  "hypothesis>=6.100",
+  "nanobind>=2.9",
+  "ninja>=1.11",
+  "pytest>=8",
+  "tomli>=2; python_version < '3.11'",
+  "trove-classifiers>=2026.4.28.13",
+  "twine>=5",
+]
+
+[tool.scikit-build]
+minimum-version = "0.11"
+wheel.packages = ["python/wolfgang_quantum", "python/fastpauli"]
+sdist.exclude = [
+  ".github",
+  ".gitattributes",
+  ".gitignore",
+  "AGENTS.md",
+  "CONTRIBUTING.md",
+  "benchmarks",
+  "docs",
+  "ruff.toml",
+  "scripts",
+  "tests",
+  "tools",
+]
+
+[tool.cibuildwheel]
+build = ["cp310-*", "cp311-*", "cp312-*"]
+skip = ["*-win32", "*-win_amd64", "*-win_arm64", "*-musllinux*", "pp*"]
+test-command = "python {project}/scripts/wheel_smoke.py"
+
+[tool.cibuildwheel.config-settings]
+"cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS" = "OFF"
+"cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS" = "OFF"
+"cmake.define.FASTPAULI_ENABLE_CUDA" = "OFF"
+"cmake.define.FASTPAULI_ENABLE_HIP" = "OFF"
+"cmake.define.FASTPAULI_ENABLE_METAL" = "OFF"
+"cmake.define.FASTPAULI_ENABLE_NATIVE" = "OFF"
+
+[tool.cibuildwheel.linux]
+archs = ["x86_64"]
+
+[tool.cibuildwheel.macos]
+archs = ["arm64"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra"]
+
+[tool.codespell]
+ignore-words-list = "aer,hsa,retuned,aligment"
+skip = ".git,.venv,*.svg,uv.lock"

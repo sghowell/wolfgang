@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="876" viewBox="0 0 1120 876" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 backend speedups</title>
+<desc id="desc">Representative default-profile speedups versus scalar CPU for all captured FastPauli paths.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">H100 Backend Speedups</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Representative default-profile cases; bars are log-scaled speedup versus CPU scalar.</text>
+<line x1="315" y1="88" x2="855" y2="88" stroke="#d1d5db"/>
+<text x="315.0" y="82.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">1x</text>
+<text x="855.0" y="82.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="end">546x</text>
+<text x="32.0" y="116.0" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="start">simplify duplicate pressure</text>
+<text x="32.0" y="134.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#6b7280" text-anchor="start">terms_50000</text>
+<rect x="315.0" y="135.0" width="2.0" height="16.0" rx="2.0" fill="#4b5563"/>
+<text x="325.0" y="148.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CPU scalar 1.00x (7.13ms)</text>
+<rect x="315.0" y="159.0" width="167.3" height="16.0" rx="2.0" fill="#2563eb"/>
+<text x="490.3" y="172.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA transfer 7.05x (1.01ms)</text>
+<rect x="315.0" y="183.0" width="214.5" height="16.0" rx="2.0" fill="#059669"/>
+<text x="537.5" y="196.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA resident 12.2x (0.58ms)</text>
+<text x="32.0" y="260.0" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="start">statevector expectation</text>
+<text x="32.0" y="278.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#6b7280" text-anchor="start">qubits_12_terms_2048</text>
+<rect x="315.0" y="279.0" width="2.0" height="16.0" rx="2.0" fill="#4b5563"/>
+<text x="325.0" y="292.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CPU scalar 1.00x (0.039s)</text>
+<rect x="315.0" y="303.0" width="503.0" height="16.0" rx="2.0" fill="#2563eb"/>
+<text x="826.0" y="316.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA transfer 355x (0.11ms)</text>
+<rect x="315.0" y="327.0" width="540.0" height="16.0" rx="2.0" fill="#059669"/>
+<text x="863.0" y="340.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA resident 546x (7.17e-05s)</text>
+<text x="32.0" y="404.0" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="start">pairwise commutation</text>
+<text x="32.0" y="422.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#6b7280" text-anchor="start">terms_2048x2048</text>
+<rect x="315.0" y="423.0" width="2.0" height="16.0" rx="2.0" fill="#4b5563"/>
+<text x="325.0" y="436.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CPU scalar 1.00x (0.021s)</text>
+<rect x="315.0" y="447.0" width="212.7" height="16.0" rx="2.0" fill="#7c3aed"/>
+<text x="535.7" y="460.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CPU tbb 12.0x (1.72ms)</text>
+<rect x="315.0" y="471.0" width="189.8" height="16.0" rx="2.0" fill="#7c3aed"/>
+<text x="512.8" y="484.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CPU avx512 9.16x (2.24ms)</text>
+<rect x="315.0" y="495.0" width="143.3" height="16.0" rx="2.0" fill="#7c3aed"/>
+<text x="466.3" y="508.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CPU avx2 5.33x (3.86ms)</text>
+<rect x="315.0" y="519.0" width="298.1" height="16.0" rx="2.0" fill="#2563eb"/>
+<text x="621.1" y="532.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA transfer 32.4x (0.63ms)</text>
+<rect x="315.0" y="543.0" width="254.6" height="16.0" rx="2.0" fill="#059669"/>
+<text x="577.6" y="556.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA resident 19.5x (1.05ms)</text>
+<rect x="315.0" y="567.0" width="254.4" height="16.0" rx="2.0" fill="#0f766e"/>
+<text x="577.4" y="580.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA preallocated 19.5x (1.06ms)</text>
+<text x="32.0" y="644.0" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="start">matmul product generation simplify</text>
+<text x="32.0" y="662.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#6b7280" text-anchor="start">terms_256x256</text>
+<rect x="315.0" y="663.0" width="2.0" height="16.0" rx="2.0" fill="#4b5563"/>
+<text x="325.0" y="676.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CPU scalar 1.00x (0.012s)</text>
+<rect x="315.0" y="687.0" width="158.3" height="16.0" rx="2.0" fill="#2563eb"/>
+<text x="481.3" y="700.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA transfer 6.34x (1.86ms)</text>
+<rect x="315.0" y="711.0" width="236.2" height="16.0" rx="2.0" fill="#059669"/>
+<text x="559.2" y="724.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">CUDA resident 15.8x (0.75ms)</text>
+</svg>

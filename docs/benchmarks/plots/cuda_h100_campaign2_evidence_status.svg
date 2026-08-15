@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="470" viewBox="0 0 1120 470" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 campaign 2 evidence status</title>
+<desc id="desc">Correctness, profiler, binary, and competitor evidence status.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="40.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">Campaign 2 Evidence Status</text>
+<text x="32.0" y="64.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Checked-in raw JSON records required validation, profiling, and competitor evidence.</text>
+<rect x="32.0" y="102.0" width="500.0" height="64.0" rx="6" fill="#f8fafc"/>
+<rect x="48.0" y="119.0" width="12.0" height="12.0" rx="6" fill="#059669"/>
+<text x="74.0" y="128.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">H100 validation</text>
+<text x="74.0" y="149.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">18 passed, 1 skipped after final build</text>
+<rect x="562.0" y="102.0" width="500.0" height="64.0" rx="6" fill="#f8fafc"/>
+<rect x="578.0" y="119.0" width="12.0" height="12.0" rx="6" fill="#059669"/>
+<text x="604.0" y="128.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">Compute Sanitizer</text>
+<text x="604.0" y="149.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">memcheck/racecheck/initcheck/synccheck clean in experiment profile</text>
+<rect x="32.0" y="188.0" width="500.0" height="64.0" rx="6" fill="#f8fafc"/>
+<rect x="48.0" y="205.0" width="12.0" height="12.0" rx="6" fill="#059669"/>
+<text x="74.0" y="214.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">Nsight Systems</text>
+<text x="74.0" y="235.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA API timeline captured</text>
+<rect x="562.0" y="188.0" width="500.0" height="64.0" rx="6" fill="#f8fafc"/>
+<rect x="578.0" y="205.0" width="12.0" height="12.0" rx="6" fill="#059669"/>
+<text x="604.0" y="214.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">Nsight Compute</text>
+<text x="604.0" y="235.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">4 privileged detailed reports captured</text>
+<rect x="32.0" y="274.0" width="500.0" height="64.0" rx="6" fill="#f8fafc"/>
+<rect x="48.0" y="291.0" width="12.0" height="12.0" rx="6" fill="#059669"/>
+<text x="74.0" y="300.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">cuobjdump</text>
+<text x="74.0" y="321.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">PTX and SASS inventory captured</text>
+<rect x="562.0" y="274.0" width="500.0" height="64.0" rx="6" fill="#f8fafc"/>
+<rect x="578.0" y="291.0" width="12.0" height="12.0" rx="6" fill="#059669"/>
+<text x="604.0" y="300.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">Competitor baselines</text>
+<text x="604.0" y="321.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">Package status and comparable baselines recorded</text>
+<rect x="32.0" y="360.0" width="500.0" height="64.0" rx="6" fill="#f8fafc"/>
+<rect x="48.0" y="377.0" width="12.0" height="12.0" rx="6" fill="#d97706"/>
+<text x="74.0" y="386.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">nvdisasm</text>
+<text x="74.0" y="407.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">Optional listing failed; cuobjdump evidence retained</text>
+</svg>

@@ -1,0 +1,1943 @@
+{
+  "campaign": "rocm_mi300x_campaign7",
+  "data_dir": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30",
+  "date": "2026-04-30",
+  "plots": {
+    "landscape": "docs/benchmarks/plots/accelerator_landscape_with_rocm.svg",
+    "release_support": "docs/benchmarks/plots/rocm_mi300x_campaign7_release_support.svg"
+  },
+  "profiler_artifacts": [
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rocprof_campaign7.log",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rocprof_results.copy_stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rocprof_results.db",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rocprof_results.hip_stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rocprof_results.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rocprof_results.stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rocprof_results.sysinfo.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input.xml",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/337428_begin_ts_file.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/337428_hcc_ops_trace.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/337428_hip_api_trace.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/337428_hsa_handles.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/begin_ts_file.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/exit.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/hcc_ops_trace.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/hip_api_trace.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/hsa_handles.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/profiler/rpl_data_260430_230221_337407/input_results_260430_230221/log.txt"
+  ],
+  "readme_performance_landscape": [
+    {
+      "color": "#64748b",
+      "label": "CPU AVX-512 | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 0.002302181994309649,
+      "series": "CPU AVX-512"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU AVX2 | Campaign 10 cross-architecture",
+      "seconds": 0.00227347700001701,
+      "series": "CPU AVX2"
+    },
+    {
+      "color": "#0f766e",
+      "label": "CPU AVX512 | Campaign 10 cross-architecture",
+      "seconds": 0.0010886590002883167,
+      "series": "CPU AVX512"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU TBB | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 0.0017724520002957433,
+      "series": "CPU TBB"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU default | Campaign 10 cross-architecture",
+      "seconds": 0.0011857079998662812,
+      "series": "CPU default"
+    },
+    {
+      "color": "#0f766e",
+      "label": "CPU optimized | Campaign 10 cross-architecture",
+      "seconds": 0.0010886590002883167,
+      "series": "CPU optimized"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.466000245884061e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA CSR export baseline | Campaign 10 cross-architecture",
+      "seconds": 0.001898081000035745,
+      "series": "CUDA CSR export baseline"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA Campaign 8 graph compact | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 8.901298861019313e-05,
+      "series": "CUDA Campaign 8 graph compact"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA Campaign 8 grouping compact | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 9.482100722379982e-05,
+      "series": "CUDA Campaign 8 grouping compact"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA column count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 3.595299494918436e-05,
+      "series": "CUDA column count"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA compact count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 2.0216000848449767e-05,
+      "series": "CUDA compact count"
+    },
+    {
+      "color": "#9333ea",
+      "label": "CUDA compact graph consumer | Campaign 10 cross-architecture",
+      "seconds": 6.617899998673238e-05,
+      "series": "CUDA compact graph consumer"
+    },
+    {
+      "color": "#a855f7",
+      "label": "CUDA compact grouping consumer | Campaign 10 cross-architecture",
+      "seconds": 7.330900007218588e-05,
+      "series": "CUDA compact grouping consumer"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA conflict degrees rows | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 3.483399632386863e-05,
+      "series": "CUDA conflict degrees rows"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA conflict degrees total | Campaign 10 cross-architecture",
+      "seconds": 4.9529000079928664e-05,
+      "series": "CUDA conflict degrees total"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA dense to_host | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 2.2365988115780056e-05,
+      "series": "CUDA dense to_host"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output allocate | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.0001122899993788451,
+      "series": "CUDA device-output allocate"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output dense host copy | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.002462189004290849,
+      "series": "CUDA device-output dense host copy"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output reuse | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 3.110399120487273e-05,
+      "series": "CUDA device-output reuse"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output to_host | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.001511866008513607,
+      "series": "CUDA device-output to_host"
+    },
+    {
+      "color": "#2563eb",
+      "label": "CUDA device-resident | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.954400355927646e-05,
+      "series": "CUDA device-resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused CSR export | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.005479602987179533,
+      "series": "CUDA fused CSR export"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused degree summary | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00016349599172826856,
+      "series": "CUDA fused degree summary"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused grouping | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00010019300680141896,
+      "series": "CUDA fused grouping"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA operator-resident | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00021685899992007762,
+      "series": "CUDA operator-resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA row count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 6.118699093349278e-05,
+      "series": "CUDA row count"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "CUDA transfer-inclusive | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00011246599024161696,
+      "series": "CUDA transfer-inclusive"
+    },
+    {
+      "color": "#64748b",
+      "label": "CuPy CUDA Array Interface | Campaign 10 cross-architecture",
+      "seconds": 3.0300002435978968e-06,
+      "series": "CuPy CUDA Array Interface"
+    },
+    {
+      "color": "#be123c",
+      "label": "CuPy DLPack | Campaign 10 cross-architecture",
+      "seconds": 2.2399999579647556e-06,
+      "series": "CuPy DLPack"
+    },
+    {
+      "color": "#64748b",
+      "label": "CuPy reduction | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.0014841939992038533,
+      "series": "CuPy reduction"
+    },
+    {
+      "color": "#64748b",
+      "label": "External baseline | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 7.138100045267493e-05,
+      "series": "External baseline"
+    },
+    {
+      "color": "#dc2626",
+      "label": "PyTorch DLPack | Campaign 10 cross-architecture",
+      "seconds": 1.0700000530050602e-06,
+      "series": "PyTorch DLPack"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_small_dense_output",
+      "seconds": 1.3568998838309199e-05,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_small_dense_output",
+      "seconds": 2.2435000573750585e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_mid_dense_output",
+      "seconds": 0.00014232099965738598,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_mid_dense_output",
+      "seconds": 4.392800110508688e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.466000245884061e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_small_dense_output",
+      "seconds": 1.3568998838309199e-05,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_small_dense_output",
+      "seconds": 2.2435000573750585e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_mid_dense_output",
+      "seconds": 0.00014232099965738598,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_mid_dense_output",
+      "seconds": 4.392800110508688e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign3_duplicate_heavy | CPU scalar",
+      "seconds": 0.004234492998875794,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_duplicate_heavy | HIP transfer",
+      "seconds": 0.0007995809992280556,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_duplicate_heavy | HIP resident",
+      "seconds": 0.0003349599992361618,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_duplicate_heavy | HIP to_host",
+      "seconds": 3.5990000469610095e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_duplicate_light | HIP transfer",
+      "seconds": 0.0011059449989261338,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_duplicate_light | HIP resident",
+      "seconds": 0.00034743099968181923,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_duplicate_light | HIP to_host",
+      "seconds": 0.00014597500012314413,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_all_zero | HIP transfer",
+      "seconds": 0.0002852690013241954,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_all_zero | HIP resident",
+      "seconds": 0.00022754000019631349,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_all_zero | HIP to_host",
+      "seconds": 3.8899997889529914e-07,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_smoke_one_word | HIP transfer",
+      "seconds": 0.00034566499925858807,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_smoke_one_word | HIP resident",
+      "seconds": 0.00026265600172337145,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_smoke_one_word | HIP to_host",
+      "seconds": 3.258499964431394e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_wide_two_word | HIP transfer",
+      "seconds": 0.0005077779987914255,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_wide_two_word | HIP resident",
+      "seconds": 0.0003350749993842328,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_wide_two_word | HIP to_host",
+      "seconds": 5.580800097959582e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_generic_multiword | HIP transfer",
+      "seconds": 0.005787071999293403,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_generic_multiword | HIP resident",
+      "seconds": 0.005533970001124544,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_generic_multiword | HIP to_host",
+      "seconds": 4.9525999202160165e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_duplicate_heavy_default",
+      "seconds": 0.004740977001347346,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_duplicate_heavy_default",
+      "seconds": 0.0008294689978356473,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_duplicate_heavy_default",
+      "seconds": 0.0003523859995766543,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_duplicate_heavy_default",
+      "seconds": 3.995799852418713e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_wide_two_word_default",
+      "seconds": 0.0026129059988306835,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_wide_two_word_default",
+      "seconds": 0.0005591289991571102,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_wide_two_word_default",
+      "seconds": 0.00034492499980842695,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_wide_two_word_default",
+      "seconds": 5.560600038734265e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_serial_baseline",
+      "seconds": 0.0008115119999274611,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_serial_baseline",
+      "seconds": 0.005817772998852888,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_serial_baseline",
+      "seconds": 0.005565507999563124,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_serial_baseline",
+      "seconds": 4.4111999159213156e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_parallel_baseline",
+      "seconds": 0.0008215259986172896,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_parallel_baseline",
+      "seconds": 0.000535036000655964,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_parallel_baseline",
+      "seconds": 0.0003399010020075366,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_parallel_baseline",
+      "seconds": 4.4217002141522244e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.0008107110006676521,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.0005047839986218605,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.00034652999966056086,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_130q_4096t_parallel",
+      "seconds": 4.43600001744926e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.001887389000330586,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.0007169109994720202,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.0003858999989461154,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_193q_8192t_parallel",
+      "seconds": 7.598000229336321e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.008750294000492431,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.001072627001121873,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.00046490000022458844,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_193q_32768t_parallel",
+      "seconds": 5.6666001910343766e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.000911647999600973,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.0006374180011334829,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.00037636200067936443,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_257q_4096t_parallel",
+      "seconds": 5.972500002826564e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.008767958999669645,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.14753809000103502,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.0007545610023953486,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 9.579899779055268e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_expectation_two_qubit_complex128 | CPU scalar",
+      "seconds": 1.9059953046962619e-06,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_expectation_two_qubit_complex128 | HIP expectation transfer",
+      "seconds": 7.778900908306241e-05,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_expectation_two_qubit_complex128 | HIP expectation operator-resident",
+      "seconds": 3.7546997191384435e-05,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_expectation_ten_qubit_complex64 | CPU scalar",
+      "seconds": 0.0009631130087655038,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_expectation_ten_qubit_complex64 | HIP expectation transfer",
+      "seconds": 8.581198926549405e-05,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_expectation_ten_qubit_complex64 | HIP expectation operator-resident",
+      "seconds": 4.448801337275654e-05,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_matmul_one_word_simplify_true | CPU scalar",
+      "seconds": 0.0071928719989955425,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul transfer",
+      "seconds": 0.001213662006193772,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul resident",
+      "seconds": 0.0004296020051697269,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul toHost",
+      "seconds": 0.00016933098959270865,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_matmul_two_word_simplify_false | CPU scalar",
+      "seconds": 7.118500070646405e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul transfer",
+      "seconds": 0.0001363379997201264,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul resident",
+      "seconds": 1.6973004676401615e-05,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul toHost",
+      "seconds": 4.050999996252358e-05,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_expectation | CPU scalar",
+      "seconds": 0.057278042993857525,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation transfer",
+      "seconds": 0.0001568040024721995,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation operator-resident",
+      "seconds": 0.0001080390065908432,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_matmul | CPU scalar",
+      "seconds": 0.0020543689897749573,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul transfer",
+      "seconds": 0.0007281040016096085,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul resident",
+      "seconds": 0.00036405799619387835,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul toHost",
+      "seconds": 7.258400728460401e-05,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_expectation | CPU scalar",
+      "seconds": 0.059206184989307076,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation transfer",
+      "seconds": 0.05877023600623943,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation operator-resident",
+      "seconds": 0.0001469510025344789,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_matmul | CPU scalar",
+      "seconds": 0.002325761000975035,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul transfer",
+      "seconds": 0.094577632000437,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul resident",
+      "seconds": 0.0007206619920907542,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul toHost",
+      "seconds": 0.0001184230059152469,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_simplify_duplicate_pressure | CPU scalar",
+      "seconds": 0.007793816999765113,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign7_simplify_duplicate_pressure | HIP simplify",
+      "seconds": 0.00045693501306232065,
+      "series": "ROCm HIP simplify"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_matmul_duplicate_pressure | CPU scalar",
+      "seconds": 0.004457502000150271,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm campaign7_matmul_duplicate_pressure | HIP matmul",
+      "seconds": 0.0008148010092554614,
+      "series": "ROCm HIP matmul"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_simplify | CPU scalar",
+      "seconds": 0.0015202100039459765,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign7_profiler_simplify | HIP simplify",
+      "seconds": 0.00036370901216287166,
+      "series": "ROCm HIP simplify"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_expectation | CPU scalar",
+      "seconds": 0.05730356699496042,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign7_profiler_expectation | HIP expectation",
+      "seconds": 0.0001169239985756576,
+      "series": "ROCm HIP expectation"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_matmul | CPU scalar",
+      "seconds": 0.0020016130001749843,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm campaign7_profiler_matmul | HIP matmul",
+      "seconds": 0.0003627989935921505,
+      "series": "ROCm HIP matmul"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_simplify | CPU scalar",
+      "seconds": 0.0015744509873911738,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign7_profiler_simplify | HIP simplify",
+      "seconds": 0.0006332909979391843,
+      "series": "ROCm HIP simplify"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_expectation | CPU scalar",
+      "seconds": 0.06267177200061269,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign7_profiler_expectation | HIP expectation",
+      "seconds": 0.00015078399155754596,
+      "series": "ROCm HIP expectation"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_matmul | CPU scalar",
+      "seconds": 0.0021797530062031,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm campaign7_profiler_matmul | HIP matmul",
+      "seconds": 0.0007753210084047168,
+      "series": "ROCm HIP matmul"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_transfer_roundtrip | CPU scalar",
+      "seconds": 5.0193004426546395e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign7_transfer_roundtrip | HIP transfer",
+      "seconds": 4.841999907512218e-05,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm campaign7_transfer_roundtrip | HIP to_host",
+      "seconds": 3.31129995174706e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_commutation_consumers_commutation | CPU scalar",
+      "seconds": 0.0007037329924060032,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign7_retained_commutation_consumers_commutation | HIP commutation",
+      "seconds": 1.3438009773381054e-05,
+      "series": "ROCm HIP commutation"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_commutation_consumers_compact_consumers | CPU scalar",
+      "seconds": 0.0007037329924060032,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0284c7",
+      "label": "ROCm campaign7_retained_commutation_consumers_compact_consumers | HIP compact consumer",
+      "seconds": 2.3330008843913674e-05,
+      "series": "ROCm HIP compact consumer"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_simplify | CPU scalar",
+      "seconds": 0.0006811439961893484,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign7_retained_simplify | HIP simplify",
+      "seconds": 0.0003437959967413917,
+      "series": "ROCm HIP simplify"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_expectation | CPU scalar",
+      "seconds": 0.0009739379893289879,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign7_retained_expectation | HIP expectation",
+      "seconds": 4.596900544129312e-05,
+      "series": "ROCm HIP expectation"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_matmul | CPU scalar",
+      "seconds": 0.0019607590074883774,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm campaign7_retained_matmul | HIP matmul",
+      "seconds": 0.0003568009997252375,
+      "series": "ROCm HIP matmul"
+    }
+  ],
+  "reports_loaded": [
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_duplicate_pressure_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_profiler_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_profiler_rocprof_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json"
+  ],
+  "rows": [
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_simplify_duplicate_pressure",
+      "correctness_digest": {
+        "canonical_label_hash": "ab3efa06f9de97751b4c533449deda3f0bbca4ed1ef84c1e4da234727a7b9f46",
+        "coefficient_l1": 14532.719203257699,
+        "input_terms": 32768,
+        "output_terms": 4096
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.007793816999765113,
+      "decision_reason": null,
+      "final_status": "rejected_with_evidence",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": 0.00045693501306232065,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "simplify_duplicate_pressure",
+      "num_qubits": 193,
+      "num_terms": 32768,
+      "operation": "duplicate_pressure_probe",
+      "profile": "campaign7-duplicate-pressure",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_duplicate_pressure_mi300x.json",
+      "status": "rejected_with_evidence",
+      "timing_boundary": "benchmark_only",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 4
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_matmul_duplicate_pressure",
+      "correctness_digest": {
+        "coefficient_l1": 50710.62917574795,
+        "label_hash": "82b94f0e8c7cfd7696ff25c252bfdf7ef193218ba05a348f0e48ec19de375bd7",
+        "output_terms": 16384
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.004457502000150271,
+      "decision_reason": null,
+      "final_status": "rejected_with_evidence",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": 0.0008148010092554614,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": 256,
+      "mode": "matmul_duplicate_pressure",
+      "num_qubits": 70,
+      "num_terms": null,
+      "operation": "duplicate_pressure_probe",
+      "profile": "campaign7-duplicate-pressure",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": 256,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_duplicate_pressure_mi300x.json",
+      "status": "rejected_with_evidence",
+      "timing_boundary": "benchmark_only",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 2
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_profiler_simplify",
+      "correctness_digest": {
+        "canonical_label_hash": "68a1fb35ce3288edda073e466ee6d8908f095c670524d99ae765ad38998927ee",
+        "coefficient_l1": 5172.52270566023,
+        "input_terms": 8192,
+        "output_terms": 2048
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0015202100039459765,
+      "decision_reason": null,
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": 0.00036370901216287166,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "rocprof_availability",
+      "num_qubits": 130,
+      "num_terms": 8192,
+      "operation": "profiler_smoke",
+      "profile": "campaign7-profiler",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_profiler_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "profiler_only",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 3
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_profiler_expectation",
+      "correctness_digest": {
+        "coefficient_l1": 1250.3891630011253,
+        "label_hash": "5c17f847e8ff492f5f9729b7cc411b4599f8646a61b31fa717622caaf006d483",
+        "output_terms": 1024,
+        "result_abs": 0.3849142600861809,
+        "result_imag": 0.16142904531246421,
+        "result_real": -0.3494276047297902
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.05730356699496042,
+      "decision_reason": null,
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": 0.0001169239985756576,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "rocprof_availability",
+      "num_qubits": 14,
+      "num_terms": 1024,
+      "operation": "profiler_smoke",
+      "profile": "campaign7-profiler",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_profiler_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "profiler_only",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 1
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_profiler_matmul",
+      "correctness_digest": {
+        "coefficient_l1": 21581.922505999544,
+        "label_hash": "6cd2c812294fc7c24b9a719a43cf228220e0d8369ca7e63b47b030777c17ead7",
+        "output_terms": 9216
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0020016130001749843,
+      "decision_reason": null,
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": 0.0003627989935921505,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": 128,
+      "mode": "rocprof_availability",
+      "num_qubits": 70,
+      "num_terms": null,
+      "operation": "profiler_smoke",
+      "profile": "campaign7-profiler",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": 128,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_profiler_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "profiler_only",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 2
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_profiler_simplify",
+      "correctness_digest": {
+        "canonical_label_hash": "68a1fb35ce3288edda073e466ee6d8908f095c670524d99ae765ad38998927ee",
+        "coefficient_l1": 5172.52270566023,
+        "input_terms": 8192,
+        "output_terms": 2048
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0015744509873911738,
+      "decision_reason": null,
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": 0.0006332909979391843,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "rocprof_availability",
+      "num_qubits": 130,
+      "num_terms": 8192,
+      "operation": "profiler_smoke",
+      "profile": "campaign7-profiler",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_profiler_rocprof_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "profiler_only",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 3
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_profiler_expectation",
+      "correctness_digest": {
+        "coefficient_l1": 1250.3891630011253,
+        "label_hash": "5c17f847e8ff492f5f9729b7cc411b4599f8646a61b31fa717622caaf006d483",
+        "output_terms": 1024,
+        "result_abs": 0.3849142600861803,
+        "result_imag": 0.16142904531246452,
+        "result_real": -0.3494276047297894
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.06267177200061269,
+      "decision_reason": null,
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": 0.00015078399155754596,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "rocprof_availability",
+      "num_qubits": 14,
+      "num_terms": 1024,
+      "operation": "profiler_smoke",
+      "profile": "campaign7-profiler",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_profiler_rocprof_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "profiler_only",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 1
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_profiler_matmul",
+      "correctness_digest": {
+        "coefficient_l1": 21581.922505999544,
+        "label_hash": "6cd2c812294fc7c24b9a719a43cf228220e0d8369ca7e63b47b030777c17ead7",
+        "output_terms": 9216
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0021797530062031,
+      "decision_reason": null,
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": 0.0007753210084047168,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": 128,
+      "mode": "rocprof_availability",
+      "num_qubits": 70,
+      "num_terms": null,
+      "operation": "profiler_smoke",
+      "profile": "campaign7-profiler",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": 128,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_profiler_rocprof_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "profiler_only",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 2
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_transfer_roundtrip",
+      "correctness_digest": {
+        "coefficient_l1": 256.0,
+        "label_hash": "4dc668b83c9ba988b1355b6b290ec28c1cbf4995d7f22531f89537cae88d9bfc",
+        "output_terms": 256
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 5.0193004426546395e-05,
+      "decision_reason": null,
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": 3.31129995174706e-05,
+      "hip_transfer_seconds": 4.841999907512218e-05,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "retained_transfer",
+      "num_qubits": 24,
+      "num_terms": 256,
+      "operation": "retained_operation_smoke",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "transfer_inclusive",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 1
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_retained_commutation_consumers_commutation",
+      "correctness_digest": {
+        "commuting_count": 186935,
+        "conflict_count": 75209,
+        "entries": 262144,
+        "shape": [
+          512,
+          512
+        ]
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0007037329924060032,
+      "decision_reason": null,
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": 2.3330008843913674e-05,
+      "hip_device_output_reuse_seconds": 1.3438009773381054e-05,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": 512,
+      "mode": "retained_commutation",
+      "num_qubits": 64,
+      "num_terms": null,
+      "operation": "retained_operation_smoke",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": 512,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "device_resident",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 1
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_retained_commutation_consumers_compact_consumers",
+      "correctness_digest": {
+        "commuting_count": 186935,
+        "conflict_count": 75209,
+        "entries": 262144,
+        "shape": [
+          512,
+          512
+        ]
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0007037329924060032,
+      "decision_reason": null,
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": 2.3330008843913674e-05,
+      "hip_device_output_reuse_seconds": 1.3438009773381054e-05,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": 512,
+      "mode": "retained_device_consumers",
+      "num_qubits": 64,
+      "num_terms": null,
+      "operation": "retained_operation_smoke",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": 512,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "compact_consumer",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 1
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_retained_simplify",
+      "correctness_digest": {
+        "canonical_label_hash": "f1eb804835fea17c7229d6d6bfaca67de05714b46b8d7f8fc2fc5dcf7969c660",
+        "coefficient_l1": 2555.5226627934167,
+        "input_terms": 4096,
+        "output_terms": 1024
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0006811439961893484,
+      "decision_reason": null,
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": 0.0003437959967413917,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "retained_simplify",
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "operation": "retained_operation_smoke",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "device_resident",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 3
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_retained_expectation",
+      "correctness_digest": {
+        "coefficient_l1": 327.03345306630877,
+        "label_hash": "c4bd4c9099f28ccbea8d885ad89f4008434311eeebf6c7fbc22cfc9fd418fc1b",
+        "output_terms": 256,
+        "result_abs": 0.7643544781142868,
+        "result_imag": -0.7639431733587376,
+        "result_real": -0.02507181868045346
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0009739379893289879,
+      "decision_reason": null,
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": 4.596900544129312e-05,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "retained_expectation",
+      "num_qubits": 10,
+      "num_terms": 256,
+      "operation": "retained_operation_smoke",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "device_resident",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 1
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_retained_matmul",
+      "correctness_digest": {
+        "coefficient_l1": 17591.187993553725,
+        "label_hash": "3d9238381cae46470652dc418038d5907d9f81e9af3263fc3a695e1886bf5741",
+        "output_terms": 9216
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0019607590074883774,
+      "decision_reason": null,
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": 0.0003568009997252375,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": 128,
+      "mode": "retained_matmul",
+      "num_qubits": 70,
+      "num_terms": null,
+      "operation": "retained_operation_smoke",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": 128,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "device_resident",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": 2
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_mi300x_repeatability",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "MI300X HIP source build and runtime import lane.",
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "primary_mi300x",
+      "lhs_terms": null,
+      "mode": "mi300x_repeatability",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "release_source_build",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "source_build",
+      "unavailable_reason": null,
+      "validation_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pytest tests/test_phase12_rocm_foundation.py -q",
+      "words": null
+    },
+    {
+      "backend": "cpu",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_cpu_only_control",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "CPU-only validation lane keeps FASTPAULI_ENABLE_HIP=OFF independent of ROCm.",
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "local_cpu_control",
+      "lhs_terms": null,
+      "mode": "cpu_only_control",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "runtime_validation",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "validation_only",
+      "unavailable_reason": null,
+      "validation_command": "python scripts/validate.py",
+      "words": null
+    },
+    {
+      "backend": "none",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_cuda_hip_rejection",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON remains a configure-time error.",
+      "final_status": "passed",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "decision_only",
+      "lhs_terms": null,
+      "mode": "cuda_hip_rejection",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "runtime_validation",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "validation_only",
+      "unavailable_reason": null,
+      "validation_command": "cmake configure with FASTPAULI_ENABLE_CUDA=ON and FASTPAULI_ENABLE_HIP=ON",
+      "words": null
+    },
+    {
+      "backend": "none",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_release_runbook",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "Campaign 7 release-support lane records commands, environment, artifacts, and terminal statuses.",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "decision_only",
+      "lhs_terms": null,
+      "mode": "release_runbook",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "ci_runbook",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "ok",
+      "timing_boundary": "decision_only",
+      "unavailable_reason": null,
+      "validation_command": "python scripts/run_rocm_release_support_lane.py --print-commands",
+      "words": null
+    },
+    {
+      "backend": "none",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_rocm_wheel_policy",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "ROCm wheels remain unavailable until a separate packaging channel is designed and tested.",
+      "final_status": "unavailable",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "decision_only",
+      "lhs_terms": null,
+      "mode": "rocm_wheel_policy",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "packaging_decision",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "unavailable",
+      "timing_boundary": "decision_only",
+      "unavailable_reason": null,
+      "validation_command": "git diff --check docs/quality/release_and_packaging.md",
+      "words": null
+    },
+    {
+      "backend": "hip",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_alternate_amd_gpu_probe",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "No non-MI300X AMD GPU host is available in Campaign 7.",
+      "final_status": "blocked_external",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "alternate_amd_gpu",
+      "lhs_terms": null,
+      "mode": "alternate_amd_gpu_probe",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "portability_lane",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "blocked_external",
+      "timing_boundary": "decision_only",
+      "unavailable_reason": null,
+      "validation_command": "ssh to an alternate AMD GPU host, then run the Campaign 7 source-build lane",
+      "words": null
+    },
+    {
+      "backend": "none",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_external_statevector_decision",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "External HIP statevectors require ownership, stream, and consumer contracts.",
+      "final_status": "out_of_scope_with_next_trigger",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "decision_only",
+      "lhs_terms": null,
+      "mode": "external_statevector_decision",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "backend_neutral_decision",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "out_of_scope_with_next_trigger",
+      "timing_boundary": "decision_only",
+      "unavailable_reason": null,
+      "validation_command": "create a backend-neutral statevector interop architecture plan",
+      "words": null
+    },
+    {
+      "backend": "none",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_multi_gpu_decision",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "Multi-GPU ROCm requires a backend-neutral device ownership model.",
+      "final_status": "out_of_scope_with_next_trigger",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "decision_only",
+      "lhs_terms": null,
+      "mode": "multi_gpu_decision",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "backend_neutral_decision",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "out_of_scope_with_next_trigger",
+      "timing_boundary": "decision_only",
+      "unavailable_reason": null,
+      "validation_command": "create a Wave 6 multi-accelerator architecture plan",
+      "words": null
+    },
+    {
+      "backend": "none",
+      "build_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH python -m pip install -e .[test] --config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON --config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942",
+      "case": "campaign7_release_decisions_simultaneous_cuda_hip_decision",
+      "correctness_digest": null,
+      "correctness_passed": null,
+      "cpu_scalar_seconds": null,
+      "decision_reason": "CUDA and HIP source builds remain mutually exclusive.",
+      "final_status": "unavailable",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "f96c653",
+      "gpu_name": "AMD Instinct MI300X VF",
+      "hip_compiler_version": "22.0.0",
+      "hip_count_commuting_axis_none_seconds": null,
+      "hip_device_output_reuse_seconds": null,
+      "hip_expectation_device_resident_seconds": null,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_simplify_device_resident_seconds": null,
+      "hip_to_host_seconds": null,
+      "hip_transfer_seconds": null,
+      "host_role": "decision_only",
+      "lhs_terms": null,
+      "mode": "simultaneous_cuda_hip_decision",
+      "num_qubits": null,
+      "num_terms": null,
+      "operation": "backend_neutral_decision",
+      "profile": "campaign7-release-smoke",
+      "profiler_command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH rocprof --hip-trace --stats python benchmarks/bench_rocm_kernels.py --profile campaign7-profiler --repeat 1 --warmup 0 --json",
+      "rhs_terms": null,
+      "rocm_runtime_version": "7.2.26015",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign7_2026-04-30/raw/rocm_campaign7_release_smoke_mi300x.json",
+      "status": "unavailable",
+      "timing_boundary": "decision_only",
+      "unavailable_reason": null,
+      "validation_command": "cmake configure with FASTPAULI_ENABLE_CUDA=ON and FASTPAULI_ENABLE_HIP=ON",
+      "words": null
+    }
+  ],
+  "status_counts": {
+    "blocked_external": 1,
+    "out_of_scope_with_next_trigger": 2,
+    "passed": 9,
+    "rejected_with_evidence": 2,
+    "retained": 7,
+    "unavailable": 2
+  },
+  "terminal_statuses": {
+    "alternate_amd_gpu_portability": "blocked_external",
+    "backend_neutral_accelerator_design": "out_of_scope_with_next_trigger",
+    "cpu_only_control": "passed",
+    "duplicate_pressure_matmul": "rejected_with_evidence",
+    "duplicate_pressure_simplify": "rejected_with_evidence",
+    "external_statevector_interop": "out_of_scope_with_next_trigger",
+    "hip_cuda_array_interface": "rejected_with_evidence",
+    "hip_dlpack": "rejected_with_evidence",
+    "mi300x_repeatability": "passed",
+    "multi_gpu_rocm": "out_of_scope_with_next_trigger",
+    "profiler_availability": "passed",
+    "public_graphs": "rejected_with_evidence",
+    "public_streams": "rejected_with_evidence",
+    "public_workspaces": "rejected_with_evidence",
+    "rocm_ci_or_release_lane": "retained",
+    "rocm_packaging_policy": "retained",
+    "rocm_source_build_runbook": "retained",
+    "rocm_wheel_support": "unavailable",
+    "simultaneous_cuda_hip": "unavailable"
+  }
+}

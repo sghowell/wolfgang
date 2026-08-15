@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="1224" viewBox="0 0 1260 1224" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 campaign 3 CPU CUDA external comparison</title>
+<desc id="desc">README-facing cross-comparison across CPU, CUDA, and external baselines.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="40.0" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#111827" text-anchor="start">H100 Campaign 3 Cross-Comparison</text>
+<text x="32.0" y="66.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Speedup versus the first FastPauli CPU scalar path in each group; log-scaled bars.</text>
+<text x="360.0" y="96.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">1.0x</text>
+<text x="980.0" y="96.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="end">1551x</text>
+<text x="32.0" y="116.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">simplify duplicate pressure terms_50000</text>
+<text x="32.0" y="133.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">cuda_scaling_default</text>
+<rect x="360.0" y="140.0" width="2.0" height="12.0" rx="2" fill="#4b5563"/>
+<text x="370.0" y="150.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU scalar 1.00x (6.94ms)</text>
+<rect x="360.0" y="160.0" width="2.0" height="12.0" rx="2" fill="#7c3aed"/>
+<text x="370.0" y="170.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU auto 1.01x (6.84ms)</text>
+<rect x="360.0" y="180.0" width="170.0" height="12.0" rx="2" fill="#2563eb"/>
+<text x="538.0" y="190.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA transfer 7.50x (925.1us)</text>
+<rect x="360.0" y="200.0" width="235.5" height="12.0" rx="2" fill="#059669"/>
+<text x="603.5" y="210.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA resident 16.3x (425.7us)</text>
+<text x="32.0" y="254.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">statevector expectation qubits_14_terms_4096</text>
+<text x="32.0" y="271.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">cuda_scaling_default</text>
+<rect x="360.0" y="278.0" width="2.0" height="12.0" rx="2" fill="#4b5563"/>
+<text x="370.0" y="288.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU scalar 1.00x (292.90ms)</text>
+<rect x="360.0" y="298.0" width="2.0" height="12.0" rx="2" fill="#7c3aed"/>
+<text x="370.0" y="308.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU auto 0.99x (294.84ms)</text>
+<rect x="360.0" y="318.0" width="591.6" height="12.0" rx="2" fill="#2563eb"/>
+<text x="959.6" y="328.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA transfer 1108x (264.3us)</text>
+<rect x="360.0" y="338.0" width="610.7" height="12.0" rx="2" fill="#059669"/>
+<text x="978.7" y="348.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA resident 1390x (210.8us)</text>
+<text x="32.0" y="392.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">pairwise commutation terms_2048x2048</text>
+<text x="32.0" y="409.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">cuda_scaling_default</text>
+<rect x="360.0" y="416.0" width="2.0" height="12.0" rx="2" fill="#4b5563"/>
+<text x="370.0" y="426.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU scalar 1.00x (18.92ms)</text>
+<rect x="360.0" y="436.0" width="176.6" height="12.0" rx="2" fill="#7c3aed"/>
+<text x="544.6" y="446.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU auto 8.10x (2.33ms)</text>
+<rect x="360.0" y="456.0" width="238.8" height="12.0" rx="2" fill="#2563eb"/>
+<text x="606.8" y="466.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA transfer 16.9x (1.12ms)</text>
+<rect x="360.0" y="476.0" width="319.3" height="12.0" rx="2" fill="#059669"/>
+<text x="687.3" y="486.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA resident 44.0x (430.4us)</text>
+<rect x="360.0" y="496.0" width="319.4" height="12.0" rx="2" fill="#0f766e"/>
+<text x="687.4" y="506.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA preallocated 44.0x (429.8us)</text>
+<rect x="360.0" y="516.0" width="116.9" height="12.0" rx="2" fill="#7c3aed"/>
+<text x="484.9" y="526.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU avx2 4.00x (4.73ms)</text>
+<rect x="360.0" y="536.0" width="169.3" height="12.0" rx="2" fill="#7c3aed"/>
+<text x="537.3" y="546.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU avx512 7.43x (2.55ms)</text>
+<rect x="360.0" y="556.0" width="188.9" height="12.0" rx="2" fill="#7c3aed"/>
+<text x="556.9" y="566.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU tbb 9.37x (2.02ms)</text>
+<text x="32.0" y="610.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">matmul product generation simplify terms_512x512</text>
+<text x="32.0" y="627.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">cuda_scaling_default</text>
+<rect x="360.0" y="634.0" width="2.0" height="12.0" rx="2" fill="#4b5563"/>
+<text x="370.0" y="644.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU scalar 1.00x (53.00ms)</text>
+<rect x="360.0" y="654.0" width="2.0" height="12.0" rx="2" fill="#7c3aed"/>
+<text x="370.0" y="664.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU auto 0.96x (55.35ms)</text>
+<rect x="360.0" y="674.0" width="211.7" height="12.0" rx="2" fill="#2563eb"/>
+<text x="579.7" y="684.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA transfer 12.3x (4.31ms)</text>
+<rect x="360.0" y="694.0" width="313.9" height="12.0" rx="2" fill="#059669"/>
+<text x="681.9" y="704.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA resident 41.2x (1.29ms)</text>
+<text x="32.0" y="748.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">simplify external CPU baseline</text>
+<text x="32.0" y="765.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">competitive_baselines</text>
+<rect x="360.0" y="772.0" width="2.0" height="12.0" rx="2" fill="#4b5563"/>
+<text x="370.0" y="782.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU scalar 1.00x (536.2us)</text>
+<rect x="360.0" y="792.0" width="2.0" height="12.0" rx="2" fill="#d97706"/>
+<text x="370.0" y="802.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">External CPU 0.79x (678.1us)</text>
+<text x="32.0" y="846.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">multiply external CPU baseline</text>
+<text x="32.0" y="863.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">competitive_baselines</text>
+<rect x="360.0" y="870.0" width="2.0" height="12.0" rx="2" fill="#4b5563"/>
+<text x="370.0" y="880.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU scalar 1.00x (10.32ms)</text>
+<rect x="360.0" y="890.0" width="2.0" height="12.0" rx="2" fill="#d97706"/>
+<text x="370.0" y="900.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">External CPU 0.05x (197.86ms)</text>
+<text x="32.0" y="944.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">qiskit grouping external CPU baseline</text>
+<text x="32.0" y="961.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">competitive_baselines</text>
+<rect x="360.0" y="968.0" width="2.0" height="12.0" rx="2" fill="#4b5563"/>
+<text x="370.0" y="978.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU scalar 1.00x (318.6us)</text>
+<rect x="360.0" y="988.0" width="2.0" height="12.0" rx="2" fill="#d97706"/>
+<text x="370.0" y="998.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">External CPU 0.00x (69.83ms)</text>
+<text x="32.0" y="1042.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">cuStateVec mapped statevector expectation</text>
+<text x="32.0" y="1059.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">competitive_baselines</text>
+<rect x="360.0" y="1066.0" width="2.0" height="12.0" rx="2" fill="#4b5563"/>
+<text x="370.0" y="1076.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CPU scalar 1.00x (293.52ms)</text>
+<rect x="360.0" y="1086.0" width="609.8" height="12.0" rx="2" fill="#2563eb"/>
+<text x="977.8" y="1096.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA host psi 1375x (213.5us)</text>
+<rect x="360.0" y="1106.0" width="620.0" height="12.0" rx="2" fill="#059669"/>
+<text x="988.0" y="1116.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">FastPauli CUDA device psi 1551x (189.2us)</text>
+<rect x="360.0" y="1126.0" width="302.2" height="12.0" rx="2" fill="#d97706"/>
+<text x="670.2" y="1136.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">External resident 35.9x (8.17ms)</text>
+<rect x="360.0" y="1146.0" width="300.2" height="12.0" rx="2" fill="#d97706"/>
+<text x="668.2" y="1156.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">External transfer 35.1x (8.37ms)</text>
+</svg>

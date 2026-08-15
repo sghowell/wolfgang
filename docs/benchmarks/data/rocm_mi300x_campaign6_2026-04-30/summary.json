@@ -1,0 +1,1078 @@
+{
+  "campaign": "rocm_mi300x_campaign6",
+  "data_dir": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30",
+  "date": "2026-04-30",
+  "plots": {
+    "landscape": "docs/benchmarks/plots/accelerator_landscape_with_rocm.svg",
+    "parity": "docs/benchmarks/plots/rocm_mi300x_campaign6_parity.svg"
+  },
+  "profiler_artifacts": [
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/profiler/rocm_campaign6_rocprof.copy_stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/profiler/rocm_campaign6_rocprof.db",
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/profiler/rocm_campaign6_rocprof.hip_stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/profiler/rocm_campaign6_rocprof.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/profiler/rocm_campaign6_rocprof.stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/profiler/rocm_campaign6_rocprof.sysinfo.txt"
+  ],
+  "readme_performance_landscape": [
+    {
+      "color": "#64748b",
+      "label": "CPU AVX-512 | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 0.002302181994309649,
+      "series": "CPU AVX-512"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU AVX2 | Campaign 10 cross-architecture",
+      "seconds": 0.00227347700001701,
+      "series": "CPU AVX2"
+    },
+    {
+      "color": "#0f766e",
+      "label": "CPU AVX512 | Campaign 10 cross-architecture",
+      "seconds": 0.0010886590002883167,
+      "series": "CPU AVX512"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU TBB | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 0.0017724520002957433,
+      "series": "CPU TBB"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU default | Campaign 10 cross-architecture",
+      "seconds": 0.0011857079998662812,
+      "series": "CPU default"
+    },
+    {
+      "color": "#0f766e",
+      "label": "CPU optimized | Campaign 10 cross-architecture",
+      "seconds": 0.0010886590002883167,
+      "series": "CPU optimized"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.466000245884061e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA CSR export baseline | Campaign 10 cross-architecture",
+      "seconds": 0.001898081000035745,
+      "series": "CUDA CSR export baseline"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA Campaign 8 graph compact | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 8.901298861019313e-05,
+      "series": "CUDA Campaign 8 graph compact"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA Campaign 8 grouping compact | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 9.482100722379982e-05,
+      "series": "CUDA Campaign 8 grouping compact"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA column count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 3.595299494918436e-05,
+      "series": "CUDA column count"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA compact count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 2.0216000848449767e-05,
+      "series": "CUDA compact count"
+    },
+    {
+      "color": "#9333ea",
+      "label": "CUDA compact graph consumer | Campaign 10 cross-architecture",
+      "seconds": 6.617899998673238e-05,
+      "series": "CUDA compact graph consumer"
+    },
+    {
+      "color": "#a855f7",
+      "label": "CUDA compact grouping consumer | Campaign 10 cross-architecture",
+      "seconds": 7.330900007218588e-05,
+      "series": "CUDA compact grouping consumer"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA conflict degrees rows | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 3.483399632386863e-05,
+      "series": "CUDA conflict degrees rows"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA conflict degrees total | Campaign 10 cross-architecture",
+      "seconds": 4.9529000079928664e-05,
+      "series": "CUDA conflict degrees total"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA dense to_host | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 2.2365988115780056e-05,
+      "series": "CUDA dense to_host"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output allocate | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.0001122899993788451,
+      "series": "CUDA device-output allocate"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output dense host copy | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.002462189004290849,
+      "series": "CUDA device-output dense host copy"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output reuse | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 3.110399120487273e-05,
+      "series": "CUDA device-output reuse"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output to_host | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.001511866008513607,
+      "series": "CUDA device-output to_host"
+    },
+    {
+      "color": "#2563eb",
+      "label": "CUDA device-resident | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.954400355927646e-05,
+      "series": "CUDA device-resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused CSR export | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.005479602987179533,
+      "series": "CUDA fused CSR export"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused degree summary | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00016349599172826856,
+      "series": "CUDA fused degree summary"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused grouping | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00010019300680141896,
+      "series": "CUDA fused grouping"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA operator-resident | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00021685899992007762,
+      "series": "CUDA operator-resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA row count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 6.118699093349278e-05,
+      "series": "CUDA row count"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "CUDA transfer-inclusive | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00011246599024161696,
+      "series": "CUDA transfer-inclusive"
+    },
+    {
+      "color": "#64748b",
+      "label": "CuPy CUDA Array Interface | Campaign 10 cross-architecture",
+      "seconds": 3.0300002435978968e-06,
+      "series": "CuPy CUDA Array Interface"
+    },
+    {
+      "color": "#be123c",
+      "label": "CuPy DLPack | Campaign 10 cross-architecture",
+      "seconds": 2.2399999579647556e-06,
+      "series": "CuPy DLPack"
+    },
+    {
+      "color": "#64748b",
+      "label": "CuPy reduction | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.0014841939992038533,
+      "series": "CuPy reduction"
+    },
+    {
+      "color": "#64748b",
+      "label": "External baseline | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 7.138100045267493e-05,
+      "series": "External baseline"
+    },
+    {
+      "color": "#dc2626",
+      "label": "PyTorch DLPack | Campaign 10 cross-architecture",
+      "seconds": 1.0700000530050602e-06,
+      "series": "PyTorch DLPack"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_small_dense_output",
+      "seconds": 1.3568998838309199e-05,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_small_dense_output",
+      "seconds": 2.2435000573750585e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_mid_dense_output",
+      "seconds": 0.00014232099965738598,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_mid_dense_output",
+      "seconds": 4.392800110508688e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.466000245884061e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_small_dense_output",
+      "seconds": 1.3568998838309199e-05,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_small_dense_output",
+      "seconds": 2.2435000573750585e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_mid_dense_output",
+      "seconds": 0.00014232099965738598,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_mid_dense_output",
+      "seconds": 4.392800110508688e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign3_duplicate_heavy | CPU scalar",
+      "seconds": 0.004234492998875794,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_duplicate_heavy | HIP transfer",
+      "seconds": 0.0007995809992280556,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_duplicate_heavy | HIP resident",
+      "seconds": 0.0003349599992361618,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_duplicate_heavy | HIP to_host",
+      "seconds": 3.5990000469610095e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_duplicate_light | HIP transfer",
+      "seconds": 0.0011059449989261338,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_duplicate_light | HIP resident",
+      "seconds": 0.00034743099968181923,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_duplicate_light | HIP to_host",
+      "seconds": 0.00014597500012314413,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_all_zero | HIP transfer",
+      "seconds": 0.0002852690013241954,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_all_zero | HIP resident",
+      "seconds": 0.00022754000019631349,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_all_zero | HIP to_host",
+      "seconds": 3.8899997889529914e-07,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_smoke_one_word | HIP transfer",
+      "seconds": 0.00034566499925858807,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_smoke_one_word | HIP resident",
+      "seconds": 0.00026265600172337145,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_smoke_one_word | HIP to_host",
+      "seconds": 3.258499964431394e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_wide_two_word | HIP transfer",
+      "seconds": 0.0005077779987914255,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_wide_two_word | HIP resident",
+      "seconds": 0.0003350749993842328,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_wide_two_word | HIP to_host",
+      "seconds": 5.580800097959582e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_generic_multiword | HIP transfer",
+      "seconds": 0.005787071999293403,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_generic_multiword | HIP resident",
+      "seconds": 0.005533970001124544,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_generic_multiword | HIP to_host",
+      "seconds": 4.9525999202160165e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_duplicate_heavy_default",
+      "seconds": 0.004740977001347346,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_duplicate_heavy_default",
+      "seconds": 0.0008294689978356473,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_duplicate_heavy_default",
+      "seconds": 0.0003523859995766543,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_duplicate_heavy_default",
+      "seconds": 3.995799852418713e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_wide_two_word_default",
+      "seconds": 0.0026129059988306835,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_wide_two_word_default",
+      "seconds": 0.0005591289991571102,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_wide_two_word_default",
+      "seconds": 0.00034492499980842695,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_wide_two_word_default",
+      "seconds": 5.560600038734265e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_serial_baseline",
+      "seconds": 0.0008115119999274611,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_serial_baseline",
+      "seconds": 0.005817772998852888,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_serial_baseline",
+      "seconds": 0.005565507999563124,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_serial_baseline",
+      "seconds": 4.4111999159213156e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_parallel_baseline",
+      "seconds": 0.0008215259986172896,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_parallel_baseline",
+      "seconds": 0.000535036000655964,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_parallel_baseline",
+      "seconds": 0.0003399010020075366,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_parallel_baseline",
+      "seconds": 4.4217002141522244e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.0008107110006676521,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.0005047839986218605,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.00034652999966056086,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_130q_4096t_parallel",
+      "seconds": 4.43600001744926e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.001887389000330586,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.0007169109994720202,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.0003858999989461154,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_193q_8192t_parallel",
+      "seconds": 7.598000229336321e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.008750294000492431,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.001072627001121873,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.00046490000022458844,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_193q_32768t_parallel",
+      "seconds": 5.6666001910343766e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.000911647999600973,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.0006374180011334829,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.00037636200067936443,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_257q_4096t_parallel",
+      "seconds": 5.972500002826564e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.008767958999669645,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.14753809000103502,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.0007545610023953486,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 9.579899779055268e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_expectation_two_qubit_complex128 | CPU scalar",
+      "seconds": 1.9059953046962619e-06,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_expectation_two_qubit_complex128 | HIP expectation transfer",
+      "seconds": 7.778900908306241e-05,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_expectation_two_qubit_complex128 | HIP expectation operator-resident",
+      "seconds": 3.7546997191384435e-05,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_expectation_ten_qubit_complex64 | CPU scalar",
+      "seconds": 0.0009631130087655038,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_expectation_ten_qubit_complex64 | HIP expectation transfer",
+      "seconds": 8.581198926549405e-05,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_expectation_ten_qubit_complex64 | HIP expectation operator-resident",
+      "seconds": 4.448801337275654e-05,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_matmul_one_word_simplify_true | CPU scalar",
+      "seconds": 0.0071928719989955425,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul transfer",
+      "seconds": 0.001213662006193772,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul resident",
+      "seconds": 0.0004296020051697269,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul toHost",
+      "seconds": 0.00016933098959270865,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_matmul_two_word_simplify_false | CPU scalar",
+      "seconds": 7.118500070646405e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul transfer",
+      "seconds": 0.0001363379997201264,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul resident",
+      "seconds": 1.6973004676401615e-05,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul toHost",
+      "seconds": 4.050999996252358e-05,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_expectation | CPU scalar",
+      "seconds": 0.057278042993857525,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation transfer",
+      "seconds": 0.0001568040024721995,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation operator-resident",
+      "seconds": 0.0001080390065908432,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_matmul | CPU scalar",
+      "seconds": 0.0020543689897749573,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul transfer",
+      "seconds": 0.0007281040016096085,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul resident",
+      "seconds": 0.00036405799619387835,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul toHost",
+      "seconds": 7.258400728460401e-05,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_expectation | CPU scalar",
+      "seconds": 0.059206184989307076,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation transfer",
+      "seconds": 0.05877023600623943,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation operator-resident",
+      "seconds": 0.0001469510025344789,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_matmul | CPU scalar",
+      "seconds": 0.002325761000975035,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul transfer",
+      "seconds": 0.094577632000437,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul resident",
+      "seconds": 0.0007206619920907542,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul toHost",
+      "seconds": 0.0001184230059152469,
+      "series": "ROCm HIP matmul toHost"
+    }
+  ],
+  "reports_loaded": [
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_expectation_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_matmul_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_profiler_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_profiler_rocprof_mi300x.json"
+  ],
+  "rows": [
+    {
+      "case": "campaign6_expectation_two_qubit_complex128",
+      "correctness_digest": {
+        "coefficient_l1": 5.675911874956352,
+        "label_hash": "c3bfef51b5d15e2b7a06560e57de0d085b44c6eb978e63c5e59313c358842751",
+        "output_terms": 5,
+        "result_abs": 1.3646411910661544,
+        "result_imag": -0.03138532954341322,
+        "result_real": 1.364280228341635
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 1.9059953046962619e-06,
+      "device_name": "AMD Instinct MI300X VF",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "a728ef4",
+      "hip_expectation_device_resident_seconds": 3.7546997191384435e-05,
+      "hip_expectation_result_copy_seconds": null,
+      "hip_expectation_transfer_seconds": 7.778900908306241e-05,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_matmul_simplify_output": null,
+      "hip_matmul_to_host_seconds": null,
+      "hip_matmul_transfer_seconds": null,
+      "lhs_terms": null,
+      "mode": "host_complex128",
+      "num_qubits": 2,
+      "num_terms": 5,
+      "operation": "expectation_statevector",
+      "profile": "campaign6-expectation-parity",
+      "rhs_terms": null,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_expectation_mi300x.json",
+      "state_size": 4,
+      "status": "ok",
+      "timing_boundary": "device_resident_kernel",
+      "unavailable_reason": null,
+      "words": 1
+    },
+    {
+      "case": "campaign6_expectation_ten_qubit_complex64",
+      "correctness_digest": {
+        "coefficient_l1": 328.4021480184221,
+        "label_hash": "3b2613b6fefd2b20192c68f6313f39f882c1f0b7ef38d75507fb63366f792f7e",
+        "output_terms": 256,
+        "result_abs": 0.8102269308598096,
+        "result_imag": 0.5517453766528477,
+        "result_real": 0.593333564559358
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0009631130087655038,
+      "device_name": "AMD Instinct MI300X VF",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "a728ef4",
+      "hip_expectation_device_resident_seconds": 4.448801337275654e-05,
+      "hip_expectation_result_copy_seconds": null,
+      "hip_expectation_transfer_seconds": 8.581198926549405e-05,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_matmul_simplify_output": null,
+      "hip_matmul_to_host_seconds": null,
+      "hip_matmul_transfer_seconds": null,
+      "lhs_terms": null,
+      "mode": "host_complex64",
+      "num_qubits": 10,
+      "num_terms": 256,
+      "operation": "expectation_statevector",
+      "profile": "campaign6-expectation-parity",
+      "rhs_terms": null,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_expectation_mi300x.json",
+      "state_size": 1024,
+      "status": "ok",
+      "timing_boundary": "device_resident_kernel",
+      "unavailable_reason": null,
+      "words": 1
+    },
+    {
+      "case": "campaign6_matmul_one_word_simplify_true",
+      "correctness_digest": {
+        "coefficient_l1": 79927.45259639854,
+        "label_hash": "7cc7b9856048d79063874914d3d45acbba0f9442eef34835c79cec1dcdeddb07",
+        "output_terms": 36864
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0071928719989955425,
+      "device_name": "AMD Instinct MI300X VF",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "a728ef4",
+      "hip_expectation_device_resident_seconds": null,
+      "hip_expectation_result_copy_seconds": null,
+      "hip_expectation_transfer_seconds": null,
+      "hip_matmul_device_resident_seconds": 0.0004296020051697269,
+      "hip_matmul_simplify_output": true,
+      "hip_matmul_to_host_seconds": 0.00016933098959270865,
+      "hip_matmul_transfer_seconds": 0.001213662006193772,
+      "lhs_terms": 256,
+      "mode": "matmul_simplify_true",
+      "num_qubits": 24,
+      "num_terms": null,
+      "operation": "matmul",
+      "profile": "campaign6-matmul-parity",
+      "rhs_terms": 256,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_matmul_mi300x.json",
+      "state_size": null,
+      "status": "ok",
+      "timing_boundary": "device_resident_kernel",
+      "unavailable_reason": null,
+      "words": 1
+    },
+    {
+      "case": "campaign6_matmul_two_word_simplify_false",
+      "correctness_digest": {
+        "coefficient_l1": 6607.171116432659,
+        "label_hash": "e6b0e6e05163a23364a5cd0551a9708e6de3ca95758c9998c968fb5a63f5b7f4",
+        "output_terms": 4096
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 7.118500070646405e-05,
+      "device_name": "AMD Instinct MI300X VF",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "a728ef4",
+      "hip_expectation_device_resident_seconds": null,
+      "hip_expectation_result_copy_seconds": null,
+      "hip_expectation_transfer_seconds": null,
+      "hip_matmul_device_resident_seconds": 1.6973004676401615e-05,
+      "hip_matmul_simplify_output": false,
+      "hip_matmul_to_host_seconds": 4.050999996252358e-05,
+      "hip_matmul_transfer_seconds": 0.0001363379997201264,
+      "lhs_terms": 64,
+      "mode": "matmul_simplify_false",
+      "num_qubits": 70,
+      "num_terms": null,
+      "operation": "matmul",
+      "profile": "campaign6-matmul-parity",
+      "rhs_terms": 64,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_matmul_mi300x.json",
+      "state_size": null,
+      "status": "ok",
+      "timing_boundary": "device_resident_kernel",
+      "unavailable_reason": null,
+      "words": 2
+    },
+    {
+      "case": "campaign6_profiler_expectation",
+      "correctness_digest": {
+        "coefficient_l1": 1270.3279051576787,
+        "label_hash": "7d9dbf2424f9ab0949285091d24ef57d59a6aae7e6c5d328595d11ff1e1f848d",
+        "output_terms": 1024,
+        "result_abs": 0.3393334334202943,
+        "result_imag": 0.31981069238307414,
+        "result_real": -0.11343852993698415
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.057278042993857525,
+      "device_name": "AMD Instinct MI300X VF",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "a728ef4",
+      "hip_expectation_device_resident_seconds": 0.0001080390065908432,
+      "hip_expectation_result_copy_seconds": null,
+      "hip_expectation_transfer_seconds": 0.0001568040024721995,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_matmul_simplify_output": null,
+      "hip_matmul_to_host_seconds": null,
+      "hip_matmul_transfer_seconds": null,
+      "lhs_terms": null,
+      "mode": "profiler_expectation",
+      "num_qubits": 14,
+      "num_terms": 1024,
+      "operation": "expectation_statevector",
+      "profile": "campaign6-profiler",
+      "rhs_terms": null,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_profiler_mi300x.json",
+      "state_size": 16384,
+      "status": "ok",
+      "timing_boundary": "device_resident_kernel",
+      "unavailable_reason": null,
+      "words": 1
+    },
+    {
+      "case": "campaign6_profiler_matmul",
+      "correctness_digest": {
+        "coefficient_l1": 19066.896537667402,
+        "label_hash": "c9ede39c7d335839fd9ab83b6d22445ac2e0030f4a0a0fe2d9db371ceae68d83",
+        "output_terms": 9216
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0020543689897749573,
+      "device_name": "AMD Instinct MI300X VF",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "a728ef4",
+      "hip_expectation_device_resident_seconds": null,
+      "hip_expectation_result_copy_seconds": null,
+      "hip_expectation_transfer_seconds": null,
+      "hip_matmul_device_resident_seconds": 0.00036405799619387835,
+      "hip_matmul_simplify_output": true,
+      "hip_matmul_to_host_seconds": 7.258400728460401e-05,
+      "hip_matmul_transfer_seconds": 0.0007281040016096085,
+      "lhs_terms": 128,
+      "mode": "profiler_matmul",
+      "num_qubits": 70,
+      "num_terms": null,
+      "operation": "matmul",
+      "profile": "campaign6-profiler",
+      "rhs_terms": 128,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_profiler_mi300x.json",
+      "state_size": null,
+      "status": "ok",
+      "timing_boundary": "device_resident_kernel",
+      "unavailable_reason": null,
+      "words": 2
+    },
+    {
+      "case": "campaign6_profiler_expectation",
+      "correctness_digest": {
+        "coefficient_l1": 1270.3279051576787,
+        "label_hash": "7d9dbf2424f9ab0949285091d24ef57d59a6aae7e6c5d328595d11ff1e1f848d",
+        "output_terms": 1024,
+        "result_abs": 0.3393334334202945,
+        "result_imag": 0.3198106923830743,
+        "result_real": -0.11343852993698417
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.059206184989307076,
+      "device_name": "AMD Instinct MI300X VF",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "a728ef4",
+      "hip_expectation_device_resident_seconds": 0.0001469510025344789,
+      "hip_expectation_result_copy_seconds": null,
+      "hip_expectation_transfer_seconds": 0.05877023600623943,
+      "hip_matmul_device_resident_seconds": null,
+      "hip_matmul_simplify_output": null,
+      "hip_matmul_to_host_seconds": null,
+      "hip_matmul_transfer_seconds": null,
+      "lhs_terms": null,
+      "mode": "profiler_expectation",
+      "num_qubits": 14,
+      "num_terms": 1024,
+      "operation": "expectation_statevector",
+      "profile": "campaign6-profiler",
+      "rhs_terms": null,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_profiler_rocprof_mi300x.json",
+      "state_size": 16384,
+      "status": "ok",
+      "timing_boundary": "device_resident_kernel",
+      "unavailable_reason": null,
+      "words": 1
+    },
+    {
+      "case": "campaign6_profiler_matmul",
+      "correctness_digest": {
+        "coefficient_l1": 19066.896537667402,
+        "label_hash": "c9ede39c7d335839fd9ab83b6d22445ac2e0030f4a0a0fe2d9db371ceae68d83",
+        "output_terms": 9216
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.002325761000975035,
+      "device_name": "AMD Instinct MI300X VF",
+      "final_status": "retained",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "git_commit": "a728ef4",
+      "hip_expectation_device_resident_seconds": null,
+      "hip_expectation_result_copy_seconds": null,
+      "hip_expectation_transfer_seconds": null,
+      "hip_matmul_device_resident_seconds": 0.0007206619920907542,
+      "hip_matmul_simplify_output": true,
+      "hip_matmul_to_host_seconds": 0.0001184230059152469,
+      "hip_matmul_transfer_seconds": 0.094577632000437,
+      "lhs_terms": 128,
+      "mode": "profiler_matmul",
+      "num_qubits": 70,
+      "num_terms": null,
+      "operation": "matmul",
+      "profile": "campaign6-profiler",
+      "rhs_terms": 128,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign6_2026-04-30/raw/rocm_campaign6_profiler_rocprof_mi300x.json",
+      "state_size": null,
+      "status": "ok",
+      "timing_boundary": "device_resident_kernel",
+      "unavailable_reason": null,
+      "words": 2
+    }
+  ],
+  "status_counts": {
+    "retained": 8
+  },
+  "terminal_statuses": {
+    "CUDA Array Interface guard": "rejected_with_evidence",
+    "DLPack": "rejected_with_evidence",
+    "ROCm wheels": "out_of_scope_with_next_trigger",
+    "expectation": "retained",
+    "external device pointers": "unavailable",
+    "graphs": "rejected_with_evidence",
+    "matmul": "retained",
+    "multi-GPU": "out_of_scope_with_next_trigger",
+    "portability": "out_of_scope_with_next_trigger",
+    "simultaneous CUDA+HIP": "unavailable",
+    "streams": "rejected_with_evidence",
+    "workspaces": "rejected_with_evidence"
+  }
+}

@@ -1,0 +1,1470 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="8902" viewBox="0 0 1320 8902" role="img" aria-labelledby="title desc">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text id="title" x="36" y="44" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#0f172a">FastPauli accelerator performance landscape</text>
+<text id="desc" x="36" y="70" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#475569">Broad checked evidence across CPU, CUDA, ROCm/HIP, Apple Metal, and available external baseline rows. Bars use log-scaled seconds; labels keep timing boundaries explicit.</text>
+<text x="36" y="92" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#64748b">Source: checked benchmark JSON summaries under docs/benchmarks/data; latest Apple Metal rows from local Apple M4 Pro source-build evidence.</text>
+<text x="36" y="124" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_all_zero | HIP to_host</text>
+<rect x="850" y="112" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="112" width="24.00" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="121" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.89e-07s</text>
+<text x="36" y="148" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">PyTorch DLPack | Campaign 10 cross-architecture</text>
+<rect x="850" y="136" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="136" width="52.04" height="10" rx="3" fill="#dc2626"/>
+<text x="1244" y="145" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.07e-06s</text>
+<text x="36" y="172" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign6_expectation_two_qubit_complex128 | CPU scalar</text>
+<rect x="850" y="160" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="160" width="68.04" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="169" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.906e-06s</text>
+<text x="36" y="196" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CuPy DLPack | Campaign 10 cross-architecture</text>
+<rect x="850" y="184" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="184" width="72.52" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="193" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.24e-06s</text>
+<text x="36" y="220" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CuPy CUDA Array Interface | Campaign 10 cross-architecture</text>
+<rect x="850" y="208" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="208" width="80.89" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="217" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.03e-06s</text>
+<text x="36" y="244" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal device matrix to_host</text>
+<rect x="850" y="232" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="232" width="85.69" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="241" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.604e-06s</text>
+<text x="36" y="268" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal compact count</text>
+<rect x="850" y="256" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="256" width="93.47" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="265" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.771e-06s</text>
+<text x="36" y="292" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal compact row counts</text>
+<rect x="850" y="280" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="280" width="96.55" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="289" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.333e-06s</text>
+<text x="36" y="316" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal compact column counts</text>
+<rect x="850" y="304" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="304" width="96.99" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="313" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.417e-06s</text>
+<text x="36" y="340" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal device matrix to_host</text>
+<rect x="850" y="328" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="328" width="121.20" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="337" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.298e-05s</text>
+<text x="36" y="364" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal device matrix to_host</text>
+<rect x="850" y="352" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="352" width="121.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="361" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.304e-05s</text>
+<text x="36" y="388" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_retained_commutation_consumers_commutation | HIP commutation</text>
+<rect x="850" y="376" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="376" width="122.17" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="385" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.344e-05s</text>
+<text x="36" y="412" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP commutation allocate | campaign2_small_dense_output</text>
+<rect x="850" y="400" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="400" width="122.44" height="10" rx="3" fill="#0891b2"/>
+<text x="1244" y="409" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.357e-05s</text>
+<text x="36" y="436" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP commutation allocate | campaign2_small_dense_output</text>
+<rect x="850" y="424" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="424" width="122.44" height="10" rx="3" fill="#0891b2"/>
+<text x="1244" y="433" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.357e-05s</text>
+<text x="36" y="460" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal device matrix to_host</text>
+<rect x="850" y="448" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="448" width="123.67" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="457" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.419e-05s</text>
+<text x="36" y="484" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_matmul_two_word_simplify_false | HIP matmul resident</text>
+<rect x="850" y="472" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="472" width="128.64" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="481" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.697e-05s</text>
+<text x="36" y="508" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal device matrix to_host</text>
+<rect x="850" y="496" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="496" width="129.45" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="505" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.748e-05s</text>
+<text x="36" y="532" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal compact count</text>
+<rect x="850" y="520" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="520" width="130.27" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="529" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.8e-05s</text>
+<text x="36" y="556" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal compact count</text>
+<rect x="850" y="544" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="544" width="131.03" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="553" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.85e-05s</text>
+<text x="36" y="580" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal compact column counts</text>
+<rect x="850" y="568" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="568" width="131.70" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="577" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.896e-05s</text>
+<text x="36" y="604" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal compact column counts</text>
+<rect x="850" y="592" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="592" width="132.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="601" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.94e-05s</text>
+<text x="36" y="628" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal compact row counts</text>
+<rect x="850" y="616" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="616" width="132.66" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="625" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.963e-05s</text>
+<text x="36" y="652" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal compact row counts</text>
+<rect x="850" y="640" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="640" width="132.72" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="649" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.967e-05s</text>
+<text x="36" y="676" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA compact count | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="664" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="664" width="133.48" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="673" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.022e-05s</text>
+<text x="36" y="700" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA dense to_host | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="688" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="688" width="136.28" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="697" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.237e-05s</text>
+<text x="36" y="724" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP commutation compact count | campaign2_small_dense_output</text>
+<rect x="850" y="712" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="712" width="136.37" height="10" rx="3" fill="#ca8a04"/>
+<text x="1244" y="721" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.244e-05s</text>
+<text x="36" y="748" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP commutation compact count | campaign2_small_dense_output</text>
+<rect x="850" y="736" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="736" width="136.37" height="10" rx="3" fill="#ca8a04"/>
+<text x="1244" y="745" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.244e-05s</text>
+<text x="36" y="772" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_retained_commutation_consumers_compact_consumers | HIP compact consumer</text>
+<rect x="850" y="760" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="760" width="137.45" height="10" rx="3" fill="#0284c7"/>
+<text x="1244" y="769" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.333e-05s</text>
+<text x="36" y="796" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA device-output reuse | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="784" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="784" width="145.42" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="793" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.11e-05s</text>
+<text x="36" y="820" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_smoke_one_word | HIP to_host</text>
+<rect x="850" y="808" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="808" width="146.71" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="817" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.258e-05s</text>
+<text x="36" y="844" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal compact count</text>
+<rect x="850" y="832" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="832" width="146.85" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="841" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.275e-05s</text>
+<text x="36" y="868" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal compact column counts</text>
+<rect x="850" y="856" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="856" width="147.12" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="865" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.306e-05s</text>
+<text x="36" y="892" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_transfer_roundtrip | HIP to_host</text>
+<rect x="850" y="880" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="880" width="147.16" height="10" rx="3" fill="#0891b2"/>
+<text x="1244" y="889" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.311e-05s</text>
+<text x="36" y="916" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal compact row counts</text>
+<rect x="850" y="904" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="904" width="147.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="913" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.333e-05s</text>
+<text x="36" y="940" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal compact count</text>
+<rect x="850" y="928" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="928" width="147.36" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="937" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.335e-05s</text>
+<text x="36" y="964" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal compact column counts</text>
+<rect x="850" y="952" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="952" width="147.82" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="961" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.392e-05s</text>
+<text x="36" y="988" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal compact row counts</text>
+<rect x="850" y="976" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="976" width="148.15" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="985" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.431e-05s</text>
+<text x="36" y="1012" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal device matrix to_host</text>
+<rect x="850" y="1000" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1000" width="148.40" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1009" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.463e-05s</text>
+<text x="36" y="1036" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA conflict degrees rows | Campaign 9 reference: Campaign 9 deferred-he</text>
+<rect x="850" y="1024" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1024" width="148.56" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="1033" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.483e-05s</text>
+<text x="36" y="1060" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA column count | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="1048" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1048" width="149.44" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="1057" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.595e-05s</text>
+<text x="36" y="1084" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_duplicate_heavy | HIP to_host</text>
+<rect x="850" y="1072" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1072" width="149.47" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1081" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.599e-05s</text>
+<text x="36" y="1108" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_expectation_two_qubit_complex128 | HIP expectation operator-resident</text>
+<rect x="850" y="1096" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1096" width="150.64" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="1105" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.755e-05s</text>
+<text x="36" y="1132" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal device matrix to_host</text>
+<rect x="850" y="1120" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1120" width="151.84" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1129" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.921e-05s</text>
+<text x="36" y="1156" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_duplicate_heavy_default</text>
+<rect x="850" y="1144" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1144" width="152.37" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1153" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.996e-05s</text>
+<text x="36" y="1180" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_matmul_two_word_simplify_false | HIP matmul toHost</text>
+<rect x="850" y="1168" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1168" width="152.75" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="1177" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.051e-05s</text>
+<text x="36" y="1204" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP commutation compact count | campaign2_mid_dense_output</text>
+<rect x="850" y="1192" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1192" width="154.99" height="10" rx="3" fill="#ca8a04"/>
+<text x="1244" y="1201" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.393e-05s</text>
+<text x="36" y="1228" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP commutation compact count | campaign2_mid_dense_output</text>
+<rect x="850" y="1216" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1216" width="154.99" height="10" rx="3" fill="#ca8a04"/>
+<text x="1244" y="1225" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.393e-05s</text>
+<text x="36" y="1252" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_generic_serial_baseline</text>
+<rect x="850" y="1240" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1240" width="155.11" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1249" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.411e-05s</text>
+<text x="36" y="1276" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_generic_parallel_baseline</text>
+<rect x="850" y="1264" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1264" width="155.17" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1273" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.422e-05s</text>
+<text x="36" y="1300" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_generic_130q_4096t_parallel</text>
+<rect x="850" y="1288" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1288" width="155.26" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1297" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.436e-05s</text>
+<text x="36" y="1324" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_expectation_ten_qubit_complex64 | HIP expectation operator-resident</text>
+<rect x="850" y="1312" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1312" width="155.34" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="1321" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.449e-05s</text>
+<text x="36" y="1348" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="1336" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1336" width="155.45" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="1345" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.466e-05s</text>
+<text x="36" y="1372" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="1360" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1360" width="155.45" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="1369" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.466e-05s</text>
+<text x="36" y="1396" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_retained_expectation | HIP expectation</text>
+<rect x="850" y="1384" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1384" width="156.25" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1393" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.597e-05s</text>
+<text x="36" y="1420" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_transfer_roundtrip | HIP transfer</text>
+<rect x="850" y="1408" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1408" width="157.69" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="1417" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.842e-05s</text>
+<text x="36" y="1444" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_generic_multiword | HIP to_host</text>
+<rect x="850" y="1432" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1432" width="158.32" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1441" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.953e-05s</text>
+<text x="36" y="1468" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA conflict degrees total | Campaign 10 cross-architecture</text>
+<rect x="850" y="1456" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1456" width="158.32" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="1465" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.953e-05s</text>
+<text x="36" y="1492" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA device-resident | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="1480" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1480" width="158.33" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="1489" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.954e-05s</text>
+<text x="36" y="1516" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_transfer_roundtrip | CPU scalar</text>
+<rect x="850" y="1504" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1504" width="158.69" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="1513" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.019e-05s</text>
+<text x="36" y="1540" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_generic_multiword_2048_terms: CPU scalar</text>
+<rect x="850" y="1528" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1528" width="158.73" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1537" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.027e-05s</text>
+<text x="36" y="1564" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_generic_multiword_2048_terms: CPU scalar</text>
+<rect x="850" y="1552" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1552" width="161.25" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1561" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.506e-05s</text>
+<text x="36" y="1588" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_wide_two_word_default</text>
+<rect x="850" y="1576" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1576" width="161.52" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1585" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.561e-05s</text>
+<text x="36" y="1612" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_wide_two_word | HIP to_host</text>
+<rect x="850" y="1600" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1600" width="161.62" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1609" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.581e-05s</text>
+<text x="36" y="1636" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_generic_193q_32768t_parallel</text>
+<rect x="850" y="1624" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1624" width="162.05" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1633" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.667e-05s</text>
+<text x="36" y="1660" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_generic_multiword_2048_terms: CPU default</text>
+<rect x="850" y="1648" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1648" width="162.60" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1657" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.781e-05s</text>
+<text x="36" y="1684" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_generic_257q_4096t_parallel</text>
+<rect x="850" y="1672" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1672" width="163.50" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1681" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.973e-05s</text>
+<text x="36" y="1708" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_generic_multiword_2048_terms: CPU default</text>
+<rect x="850" y="1696" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1696" width="163.88" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1705" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.054e-05s</text>
+<text x="36" y="1732" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA row count | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="1720" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1720" width="164.17" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="1729" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.119e-05s</text>
+<text x="36" y="1756" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA compact graph consumer | Campaign 10 cross-architecture</text>
+<rect x="850" y="1744" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1744" width="166.35" height="10" rx="3" fill="#9333ea"/>
+<text x="1244" y="1753" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.618e-05s</text>
+<text x="36" y="1780" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign6_matmul_two_word_simplify_false | CPU scalar</text>
+<rect x="850" y="1768" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1768" width="168.37" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="1777" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.119e-05s</text>
+<text x="36" y="1804" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">External baseline | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="1792" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1792" width="168.45" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="1801" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.138e-05s</text>
+<text x="36" y="1828" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_matmul | HIP matmul toHost</text>
+<rect x="850" y="1816" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1816" width="168.91" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="1825" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.258e-05s</text>
+<text x="36" y="1852" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA compact grouping consumer | Campaign 10 cross-architecture</text>
+<rect x="850" y="1840" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1840" width="169.18" height="10" rx="3" fill="#a855f7"/>
+<text x="1244" y="1849" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.331e-05s</text>
+<text x="36" y="1876" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal compact count</text>
+<rect x="850" y="1864" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1864" width="169.30" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1873" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.36e-05s</text>
+<text x="36" y="1900" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_generic_193q_8192t_parallel</text>
+<rect x="850" y="1888" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1888" width="170.18" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="1897" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.598e-05s</text>
+<text x="36" y="1924" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal compact row counts</text>
+<rect x="850" y="1912" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1912" width="170.24" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1921" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.615e-05s</text>
+<text x="36" y="1948" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_expectation_two_qubit_complex128 | HIP expectation transfer</text>
+<rect x="850" y="1936" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1936" width="170.83" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="1945" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.779e-05s</text>
+<text x="36" y="1972" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal compact column counts</text>
+<rect x="850" y="1960" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1960" width="173.43" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="1969" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.544e-05s</text>
+<text x="36" y="1996" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_expectation_ten_qubit_complex64 | HIP expectation transfer</text>
+<rect x="850" y="1984" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="1984" width="173.55" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="1993" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.581e-05s</text>
+<text x="36" y="2020" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA Campaign 8 graph compact | Campaign 9 reference: Campaign 9 deferred-he</text>
+<rect x="850" y="2008" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2008" width="174.56" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="2017" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.901e-05s</text>
+<text x="36" y="2044" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA Campaign 8 grouping compact | Campaign 9 reference: Campaign 9 deferred-he</text>
+<rect x="850" y="2032" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2032" width="176.31" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="2041" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.482e-05s</text>
+<text x="36" y="2068" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP to_host | campaign4_profiler_generic_193q_32768t_parallel</text>
+<rect x="850" y="2056" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2056" width="176.60" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="2065" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.58e-05s</text>
+<text x="36" y="2092" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA fused grouping | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="2080" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2080" width="177.84" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="2089" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001002s</text>
+<text x="36" y="2116" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal generic 2D baseline</text>
+<rect x="850" y="2104" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2104" width="178.12" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2113" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001012s</text>
+<text x="36" y="2140" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal auto A/B reuse</text>
+<rect x="850" y="2128" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2128" width="178.60" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2137" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000103s</text>
+<text x="36" y="2164" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal `.metallib` reuse</text>
+<rect x="850" y="2152" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2152" width="178.89" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2161" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000104s</text>
+<text x="36" y="2188" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal device matrix reuse</text>
+<rect x="850" y="2176" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2176" width="179.23" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2185" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001053s</text>
+<text x="36" y="2212" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal device matrix reuse</text>
+<rect x="850" y="2200" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2200" width="179.57" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2209" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001066s</text>
+<text x="36" y="2236" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_expectation | HIP expectation operator-resident</text>
+<rect x="850" y="2224" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2224" width="179.93" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="2233" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000108s</text>
+<text x="36" y="2260" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal words=1 specialized candidate</text>
+<rect x="850" y="2248" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2248" width="180.09" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2257" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001087s</text>
+<text x="36" y="2284" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal device matrix reuse</text>
+<rect x="850" y="2272" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2272" width="180.80" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2281" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001115s</text>
+<text x="36" y="2308" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal auto A/B reuse</text>
+<rect x="850" y="2296" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2296" width="180.99" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2305" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001122s</text>
+<text x="36" y="2332" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA device-output allocate | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="2320" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2320" width="181.00" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="2329" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001123s</text>
+<text x="36" y="2356" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal generic 2D baseline</text>
+<rect x="850" y="2344" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2344" width="181.02" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2353" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001124s</text>
+<text x="36" y="2380" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal auto A/B reuse</text>
+<rect x="850" y="2368" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2368" width="181.04" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2377" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001124s</text>
+<text x="36" y="2404" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA transfer-inclusive | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="2392" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2392" width="181.04" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="2401" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001125s</text>
+<text x="36" y="2428" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal flat generic baseline</text>
+<rect x="850" y="2416" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2416" width="182.09" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2425" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001168s</text>
+<text x="36" y="2452" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_profiler_expectation | HIP expectation</text>
+<rect x="850" y="2440" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2440" width="182.12" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="2449" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001169s</text>
+<text x="36" y="2476" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal generic 2D baseline</text>
+<rect x="850" y="2464" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2464" width="182.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2473" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001179s</text>
+<text x="36" y="2500" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_matmul | HIP matmul toHost</text>
+<rect x="850" y="2488" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2488" width="182.47" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="2497" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001184s</text>
+<text x="36" y="2524" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal device-resident host output</text>
+<rect x="850" y="2512" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2512" width="182.69" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2521" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001194s</text>
+<text x="36" y="2548" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal words=1 specialized candidate</text>
+<rect x="850" y="2536" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2536" width="182.78" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2545" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001197s</text>
+<text x="36" y="2572" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal words=2 specialized candidate</text>
+<rect x="850" y="2560" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2560" width="183.21" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2569" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001216s</text>
+<text x="36" y="2596" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal `.metallib` reuse</text>
+<rect x="850" y="2584" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2584" width="183.47" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2593" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001228s</text>
+<text x="36" y="2620" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: CPU NEON</text>
+<rect x="850" y="2608" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2608" width="183.70" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2617" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001238s</text>
+<text x="36" y="2644" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal words=2 specialized candidate</text>
+<rect x="850" y="2632" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2632" width="183.97" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2641" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000125s</text>
+<text x="36" y="2668" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: CPU NEON</text>
+<rect x="850" y="2656" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2656" width="184.55" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2665" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001276s</text>
+<text x="36" y="2692" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal compact count</text>
+<rect x="850" y="2680" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2680" width="184.74" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2689" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001285s</text>
+<text x="36" y="2716" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal generic 2D baseline</text>
+<rect x="850" y="2704" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2704" width="184.80" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2713" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001288s</text>
+<text x="36" y="2740" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal words=2 specialized candidate</text>
+<rect x="850" y="2728" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2728" width="184.81" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2737" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001288s</text>
+<text x="36" y="2764" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal device matrix reuse</text>
+<rect x="850" y="2752" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2752" width="185.15" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2761" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001304s</text>
+<text x="36" y="2788" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal compact column counts</text>
+<rect x="850" y="2776" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2776" width="185.24" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2785" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001309s</text>
+<text x="36" y="2812" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal words=1 specialized candidate</text>
+<rect x="850" y="2800" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2800" width="185.42" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2809" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001317s</text>
+<text x="36" y="2836" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal flat generic baseline</text>
+<rect x="850" y="2824" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2824" width="185.47" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2833" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001319s</text>
+<text x="36" y="2860" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal compact row counts</text>
+<rect x="850" y="2848" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2848" width="185.85" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2857" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001338s</text>
+<text x="36" y="2884" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: CPU default</text>
+<rect x="850" y="2872" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2872" width="185.90" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2881" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000134s</text>
+<text x="36" y="2908" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal device matrix reuse</text>
+<rect x="850" y="2896" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2896" width="185.93" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2905" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001341s</text>
+<text x="36" y="2932" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal auto A/B reuse</text>
+<rect x="850" y="2920" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2920" width="186.10" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2929" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000135s</text>
+<text x="36" y="2956" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal device matrix to_host</text>
+<rect x="850" y="2944" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2944" width="186.14" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2953" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001352s</text>
+<text x="36" y="2980" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: CPU default</text>
+<rect x="850" y="2968" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2968" width="186.15" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="2977" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001352s</text>
+<text x="36" y="3004" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_cancellation_4096_terms: CPU default</text>
+<rect x="850" y="2992" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="2992" width="186.19" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3001" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001354s</text>
+<text x="36" y="3028" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal auto A/B reuse</text>
+<rect x="850" y="3016" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3016" width="186.23" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3025" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001356s</text>
+<text x="36" y="3052" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_matmul_two_word_simplify_false | HIP matmul transfer</text>
+<rect x="850" y="3040" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3040" width="186.38" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="3049" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001363s</text>
+<text x="36" y="3076" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal generic 2D baseline</text>
+<rect x="850" y="3064" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3064" width="186.39" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3073" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001364s</text>
+<text x="36" y="3100" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal `.metallib` reuse</text>
+<rect x="850" y="3088" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3088" width="186.77" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3097" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001383s</text>
+<text x="36" y="3124" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal auto A/B reuse</text>
+<rect x="850" y="3112" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3112" width="186.96" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3121" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001393s</text>
+<text x="36" y="3148" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words2_status_only_4096_terms: CPU scalar</text>
+<rect x="850" y="3136" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3136" width="187.40" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3145" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001415s</text>
+<text x="36" y="3172" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP commutation allocate | campaign2_mid_dense_output</text>
+<rect x="850" y="3160" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3160" width="187.57" height="10" rx="3" fill="#0891b2"/>
+<text x="1244" y="3169" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001423s</text>
+<text x="36" y="3196" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP commutation allocate | campaign2_mid_dense_output</text>
+<rect x="850" y="3184" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3184" width="187.57" height="10" rx="3" fill="#0891b2"/>
+<text x="1244" y="3193" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001423s</text>
+<text x="36" y="3220" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal GPU compact count</text>
+<rect x="850" y="3208" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3208" width="187.80" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3217" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001435s</text>
+<text x="36" y="3244" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal flat generic baseline</text>
+<rect x="850" y="3232" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3232" width="187.84" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3241" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001437s</text>
+<text x="36" y="3268" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal generic 2D baseline</text>
+<rect x="850" y="3256" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3256" width="187.99" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3265" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001445s</text>
+<text x="36" y="3292" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_duplicate_light | HIP to_host</text>
+<rect x="850" y="3280" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3280" width="188.27" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="3289" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000146s</text>
+<text x="36" y="3316" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal flat generic baseline</text>
+<rect x="850" y="3304" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3304" width="188.29" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3313" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001461s</text>
+<text x="36" y="3340" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: CPU NEON</text>
+<rect x="850" y="3328" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3328" width="188.41" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3337" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001467s</text>
+<text x="36" y="3364" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: CPU NEON</text>
+<rect x="850" y="3352" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3352" width="188.42" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3361" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001468s</text>
+<text x="36" y="3388" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words2_duplicate_heavy_4096_terms: CPU scalar</text>
+<rect x="850" y="3376" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3376" width="188.43" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3385" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001468s</text>
+<text x="36" y="3412" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_expectation | HIP expectation operator-resident</text>
+<rect x="850" y="3400" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3400" width="188.46" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="3409" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000147s</text>
+<text x="36" y="3436" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words2_status_only_4096_terms: CPU default</text>
+<rect x="850" y="3424" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3424" width="188.73" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3433" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001484s</text>
+<text x="36" y="3460" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_profiler_expectation | HIP expectation</text>
+<rect x="850" y="3448" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3448" width="189.17" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="3457" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001508s</text>
+<text x="36" y="3484" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words2_unavailable_4096_terms: CPU default</text>
+<rect x="850" y="3472" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3472" width="189.26" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3481" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001513s</text>
+<text x="36" y="3508" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_cancellation_4096_terms: CPU default</text>
+<rect x="850" y="3496" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3496" width="189.67" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3505" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001535s</text>
+<text x="36" y="3532" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_cancellation_4096_terms: CPU scalar</text>
+<rect x="850" y="3520" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3520" width="190.25" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3529" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001568s</text>
+<text x="36" y="3556" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_expectation | HIP expectation transfer</text>
+<rect x="850" y="3544" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3544" width="190.25" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="3553" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001568s</text>
+<text x="36" y="3580" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal generic 2D baseline</text>
+<rect x="850" y="3568" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3568" width="190.57" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3577" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001586s</text>
+<text x="36" y="3604" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_cancellation_4096_terms: CPU scalar</text>
+<rect x="850" y="3592" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3592" width="190.61" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3601" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001588s</text>
+<text x="36" y="3628" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_cancellation_4096_terms: CPU default</text>
+<rect x="850" y="3616" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3616" width="190.90" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3625" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001605s</text>
+<text x="36" y="3652" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_cancellation_4096_terms: CPU scalar</text>
+<rect x="850" y="3640" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3640" width="191.20" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3649" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001622s</text>
+<text x="36" y="3676" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words2_duplicate_heavy_4096_terms: CPU default</text>
+<rect x="850" y="3664" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3664" width="191.22" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3673" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001624s</text>
+<text x="36" y="3700" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: CPU default</text>
+<rect x="850" y="3688" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3688" width="191.37" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3697" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001632s</text>
+<text x="36" y="3724" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal `.metallib` reuse</text>
+<rect x="850" y="3712" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3712" width="191.40" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3721" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001634s</text>
+<text x="36" y="3748" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA fused degree summary | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="3736" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3736" width="191.41" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="3745" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001635s</text>
+<text x="36" y="3772" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: CPU default</text>
+<rect x="850" y="3760" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3760" width="191.56" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3769" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001644s</text>
+<text x="36" y="3796" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_cancellation_4096_terms: CPU default</text>
+<rect x="850" y="3784" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3784" width="191.67" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3793" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000165s</text>
+<text x="36" y="3820" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal auto A/B reuse</text>
+<rect x="850" y="3808" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3808" width="192.04" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3817" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001673s</text>
+<text x="36" y="3844" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_cancellation_4096_terms: CPU scalar</text>
+<rect x="850" y="3832" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3832" width="192.25" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3841" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001685s</text>
+<text x="36" y="3868" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_matmul_one_word_simplify_true | HIP matmul toHost</text>
+<rect x="850" y="3856" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3856" width="192.38" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="3865" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001693s</text>
+<text x="36" y="3892" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal `.metallib` reuse</text>
+<rect x="850" y="3880" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3880" width="192.40" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3889" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001694s</text>
+<text x="36" y="3916" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words2_duplicate_heavy_4096_terms: CPU default</text>
+<rect x="850" y="3904" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3904" width="192.70" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3913" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001713s</text>
+<text x="36" y="3940" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal device matrix reuse</text>
+<rect x="850" y="3928" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3928" width="192.84" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3937" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001722s</text>
+<text x="36" y="3964" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal words=1 specialized candidate</text>
+<rect x="850" y="3952" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3952" width="192.96" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3961" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001729s</text>
+<text x="36" y="3988" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal auto A/B reuse</text>
+<rect x="850" y="3976" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="3976" width="193.91" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="3985" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001789s</text>
+<text x="36" y="4012" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: CPU scalar</text>
+<rect x="850" y="4000" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4000" width="193.92" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4009" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000179s</text>
+<text x="36" y="4036" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal device matrix to_host</text>
+<rect x="850" y="4024" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4024" width="193.98" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4033" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001794s</text>
+<text x="36" y="4060" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal GPU compact row counts</text>
+<rect x="850" y="4048" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4048" width="194.00" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4057" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001795s</text>
+<text x="36" y="4084" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal device-resident host output</text>
+<rect x="850" y="4072" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4072" width="194.03" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4081" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001797s</text>
+<text x="36" y="4108" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words2_unavailable_4096_terms: CPU scalar</text>
+<rect x="850" y="4096" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4096" width="194.47" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4105" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001825s</text>
+<text x="36" y="4132" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal `.metallib` reuse</text>
+<rect x="850" y="4120" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4120" width="194.64" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4129" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001837s</text>
+<text x="36" y="4156" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal auto A/B reuse</text>
+<rect x="850" y="4144" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4144" width="195.00" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4153" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001861s</text>
+<text x="36" y="4180" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: CPU default</text>
+<rect x="850" y="4168" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4168" width="195.10" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4177" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001868s</text>
+<text x="36" y="4204" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal words=1 specialized candidate</text>
+<rect x="850" y="4192" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4192" width="195.15" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4201" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001871s</text>
+<text x="36" y="4228" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words2_duplicate_heavy_4096_terms: CPU scalar</text>
+<rect x="850" y="4216" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4216" width="196.15" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4225" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000194s</text>
+<text x="36" y="4252" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal device matrix reuse</text>
+<rect x="850" y="4240" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4240" width="196.59" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4249" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001971s</text>
+<text x="36" y="4276" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal device-resident host output</text>
+<rect x="850" y="4264" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4264" width="196.76" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4273" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001983s</text>
+<text x="36" y="4300" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal flat generic baseline</text>
+<rect x="850" y="4288" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4288" width="197.88" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4297" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002065s</text>
+<text x="36" y="4324" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal flat generic baseline</text>
+<rect x="850" y="4312" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4312" width="198.02" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4321" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002075s</text>
+<text x="36" y="4348" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal device matrix reuse</text>
+<rect x="850" y="4336" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4336" width="198.77" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4345" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002132s</text>
+<text x="36" y="4372" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal device-resident host output</text>
+<rect x="850" y="4360" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4360" width="198.97" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4369" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002147s</text>
+<text x="36" y="4396" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA operator-resident | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="4384" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4384" width="199.24" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="4393" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002169s</text>
+<text x="36" y="4420" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal device-resident host output</text>
+<rect x="850" y="4408" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4408" width="200.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4417" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002257s</text>
+<text x="36" y="4444" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_all_zero | HIP resident</text>
+<rect x="850" y="4432" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4432" width="200.57" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4441" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002275s</text>
+<text x="36" y="4468" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal generic 2D baseline</text>
+<rect x="850" y="4456" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4456" width="200.90" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4465" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002303s</text>
+<text x="36" y="4492" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal device-resident host output</text>
+<rect x="850" y="4480" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4480" width="201.40" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4489" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002344s</text>
+<text x="36" y="4516" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal device matrix reuse</text>
+<rect x="850" y="4504" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4504" width="201.94" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4513" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000239s</text>
+<text x="36" y="4540" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal generic 2D baseline</text>
+<rect x="850" y="4528" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4528" width="202.82" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4537" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002468s</text>
+<text x="36" y="4564" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_smoke_one_word | HIP resident</text>
+<rect x="850" y="4552" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4552" width="204.55" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4561" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002627s</text>
+<text x="36" y="4588" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_all_zero | HIP transfer</text>
+<rect x="850" y="4576" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4576" width="206.84" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="4585" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002853s</text>
+<text x="36" y="4612" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal device-resident host output</text>
+<rect x="850" y="4600" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4600" width="207.38" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4609" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002909s</text>
+<text x="36" y="4636" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_duplicate_heavy_8192_terms: CPU default</text>
+<rect x="850" y="4624" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4624" width="209.41" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4633" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000313s</text>
+<text x="36" y="4660" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal GPU compact row counts</text>
+<rect x="850" y="4648" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4648" width="210.50" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4657" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003255s</text>
+<text x="36" y="4684" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal GPU compact count</text>
+<rect x="850" y="4672" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4672" width="210.50" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4681" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003255s</text>
+<text x="36" y="4708" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_duplicate_heavy | HIP resident</text>
+<rect x="850" y="4696" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4696" width="211.29" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4705" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000335s</text>
+<text x="36" y="4732" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_wide_two_word | HIP resident</text>
+<rect x="850" y="4720" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4720" width="211.30" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4729" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003351s</text>
+<text x="36" y="4756" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_generic_parallel_baseline</text>
+<rect x="850" y="4744" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4744" width="211.69" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4753" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003399s</text>
+<text x="36" y="4780" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_retained_simplify | HIP simplify</text>
+<rect x="850" y="4768" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4768" width="212.01" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="4777" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003438s</text>
+<text x="36" y="4804" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_wide_two_word_default</text>
+<rect x="850" y="4792" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4792" width="212.10" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4801" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003449s</text>
+<text x="36" y="4828" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_smoke_one_word | HIP transfer</text>
+<rect x="850" y="4816" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4816" width="212.16" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="4825" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003457s</text>
+<text x="36" y="4852" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words1_duplicate_heavy_8192_terms: CPU default</text>
+<rect x="850" y="4840" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4840" width="212.18" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4849" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000346s</text>
+<text x="36" y="4876" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_generic_130q_4096t_parallel</text>
+<rect x="850" y="4864" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4864" width="212.23" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4873" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003465s</text>
+<text x="36" y="4900" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_duplicate_light | HIP resident</text>
+<rect x="850" y="4888" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4888" width="212.30" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4897" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003474s</text>
+<text x="36" y="4924" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_duplicate_heavy_default</text>
+<rect x="850" y="4912" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4912" width="212.69" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="4921" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003524s</text>
+<text x="36" y="4948" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal private blit host output</text>
+<rect x="850" y="4936" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4936" width="212.88" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4945" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003548s</text>
+<text x="36" y="4972" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_retained_matmul | HIP matmul</text>
+<rect x="850" y="4960" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4960" width="213.04" height="10" rx="3" fill="#ca8a04"/>
+<text x="1244" y="4969" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003568s</text>
+<text x="36" y="4996" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal flat generic baseline</text>
+<rect x="850" y="4984" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="4984" width="213.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="4993" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003607s</text>
+<text x="36" y="5020" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_profiler_matmul | HIP matmul</text>
+<rect x="850" y="5008" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5008" width="213.50" height="10" rx="3" fill="#ca8a04"/>
+<text x="1244" y="5017" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003628s</text>
+<text x="36" y="5044" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_profiler_simplify | HIP simplify</text>
+<rect x="850" y="5032" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5032" width="213.57" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="5041" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003637s</text>
+<text x="36" y="5068" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_matmul | HIP matmul resident</text>
+<rect x="850" y="5056" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5056" width="213.60" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="5065" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003641s</text>
+<text x="36" y="5092" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_duplicate_light_8192_terms: CPU scalar</text>
+<rect x="850" y="5080" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5080" width="213.68" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5089" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003651s</text>
+<text x="36" y="5116" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_duplicate_light_8192_terms: CPU default</text>
+<rect x="850" y="5104" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5104" width="213.72" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5113" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003657s</text>
+<text x="36" y="5140" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_generic_multiword_2048_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="5128" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5128" width="213.83" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5137" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003672s</text>
+<text x="36" y="5164" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal GPU compact column counts</text>
+<rect x="850" y="5152" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5152" width="214.18" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5161" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003718s</text>
+<text x="36" y="5188" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words1_duplicate_heavy_8192_terms: CPU scalar</text>
+<rect x="850" y="5176" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5176" width="214.22" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5185" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003724s</text>
+<text x="36" y="5212" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words1_duplicate_light_8192_terms: CPU default</text>
+<rect x="850" y="5200" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5200" width="214.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5209" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003739s</text>
+<text x="36" y="5236" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_generic_257q_4096t_parallel</text>
+<rect x="850" y="5224" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5224" width="214.52" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="5233" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003764s</text>
+<text x="36" y="5260" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words1_duplicate_light_8192_terms: CPU scalar</text>
+<rect x="850" y="5248" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5248" width="214.85" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5257" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003808s</text>
+<text x="36" y="5284" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_generic_193q_8192t_parallel</text>
+<rect x="850" y="5272" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5272" width="215.21" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="5281" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003859s</text>
+<text x="36" y="5308" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_cancellation_4096_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="5296" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5296" width="215.54" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5305" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003904s</text>
+<text x="36" y="5332" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words1_duplicate_heavy_8192_terms: CPU scalar</text>
+<rect x="850" y="5320" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5320" width="215.60" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5329" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003913s</text>
+<text x="36" y="5356" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words2_unavailable_4096_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="5344" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5344" width="215.61" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5353" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003914s</text>
+<text x="36" y="5380" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words1_duplicate_heavy_8192_terms: CPU default</text>
+<rect x="850" y="5368" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5368" width="216.30" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5377" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004014s</text>
+<text x="36" y="5404" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_generic_multiword_2048_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="5392" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5392" width="216.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5401" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000402s</text>
+<text x="36" y="5428" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_duplicate_light_8192_terms: CPU scalar</text>
+<rect x="850" y="5416" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5416" width="216.77" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5425" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004082s</text>
+<text x="36" y="5452" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words1_duplicate_light_8192_terms: CPU scalar</text>
+<rect x="850" y="5440" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5440" width="217.32" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5449" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004164s</text>
+<text x="36" y="5476" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_cancellation_4096_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="5464" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5464" width="217.43" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5473" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000418s</text>
+<text x="36" y="5500" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_duplicate_heavy_8192_terms: CPU default</text>
+<rect x="850" y="5488" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5488" width="217.80" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5497" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004236s</text>
+<text x="36" y="5524" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_cancellation_4096_terms: Apple Metal simplify device candidate</text>
+<rect x="850" y="5512" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5512" width="218.07" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5521" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004279s</text>
+<text x="36" y="5548" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_matmul_one_word_simplify_true | HIP matmul resident</text>
+<rect x="850" y="5536" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5536" width="218.19" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="5545" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004296s</text>
+<text x="36" y="5572" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_duplicate_heavy_8192_terms: CPU scalar</text>
+<rect x="850" y="5560" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5560" width="218.56" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5569" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004354s</text>
+<text x="36" y="5596" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal device matrix allocate</text>
+<rect x="850" y="5584" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5584" width="218.63" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5593" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004366s</text>
+<text x="36" y="5620" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words1_duplicate_light_8192_terms: CPU default</text>
+<rect x="850" y="5608" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5608" width="218.66" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5617" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004371s</text>
+<text x="36" y="5644" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_cancellation_4096_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="5632" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5632" width="219.07" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5641" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004436s</text>
+<text x="36" y="5668" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_duplicate_light_8192_terms: CPU default</text>
+<rect x="850" y="5656" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5656" width="219.38" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5665" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004486s</text>
+<text x="36" y="5692" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal device matrix allocate</text>
+<rect x="850" y="5680" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5680" width="219.44" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5689" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004496s</text>
+<text x="36" y="5716" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_cancellation_4096_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="5704" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5704" width="219.56" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5713" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004515s</text>
+<text x="36" y="5740" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: CPU scalar</text>
+<rect x="850" y="5728" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5728" width="219.61" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5737" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004523s</text>
+<text x="36" y="5764" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_simplify_duplicate_pressure | HIP simplify</text>
+<rect x="850" y="5752" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5752" width="219.89" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="5761" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004569s</text>
+<text x="36" y="5788" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_duplicate_heavy_8192_terms: CPU scalar</text>
+<rect x="850" y="5776" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5776" width="220.06" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5785" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004597s</text>
+<text x="36" y="5812" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: CPU NEON</text>
+<rect x="850" y="5800" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5800" width="220.10" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5809" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004604s</text>
+<text x="36" y="5836" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_generic_193q_32768t_parallel</text>
+<rect x="850" y="5824" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5824" width="220.37" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="5833" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004649s</text>
+<text x="36" y="5860" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: CPU scalar</text>
+<rect x="850" y="5848" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5848" width="220.78" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5857" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004718s</text>
+<text x="36" y="5884" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: CPU default</text>
+<rect x="850" y="5872" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5872" width="221.02" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5881" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004759s</text>
+<text x="36" y="5908" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_duplicate_light_8192_terms: Apple Metal simplify device candidate</text>
+<rect x="850" y="5896" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5896" width="221.72" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5905" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004881s</text>
+<text x="36" y="5932" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words2_duplicate_heavy_4096_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="5920" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5920" width="221.86" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5929" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004906s</text>
+<text x="36" y="5956" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal device-resident host output</text>
+<rect x="850" y="5944" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5944" width="221.91" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5953" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004915s</text>
+<text x="36" y="5980" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_duplicate_heavy_8192_terms: Apple Metal simplify device candidate</text>
+<rect x="850" y="5968" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5968" width="221.97" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="5977" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004924s</text>
+<text x="36" y="6004" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: CPU scalar</text>
+<rect x="850" y="5992" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="5992" width="222.24" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6001" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004972s</text>
+<text x="36" y="6028" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_generic_130q_4096t_parallel</text>
+<rect x="850" y="6016" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6016" width="222.65" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="6025" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005048s</text>
+<text x="36" y="6052" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_wide_two_word | HIP transfer</text>
+<rect x="850" y="6040" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6040" width="222.82" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="6049" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005078s</text>
+<text x="36" y="6076" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal device-resident host output</text>
+<rect x="850" y="6064" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6064" width="223.02" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6073" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005114s</text>
+<text x="36" y="6100" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal compact count</text>
+<rect x="850" y="6088" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6088" width="223.13" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6097" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005135s</text>
+<text x="36" y="6124" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: CPU scalar</text>
+<rect x="850" y="6112" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6112" width="223.31" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6121" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005169s</text>
+<text x="36" y="6148" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal GPU parallel compact count</text>
+<rect x="850" y="6136" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6136" width="223.46" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6145" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005197s</text>
+<text x="36" y="6172" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal device matrix allocate</text>
+<rect x="850" y="6160" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6160" width="223.70" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6169" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005242s</text>
+<text x="36" y="6196" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_cancellation_4096_terms: Apple Metal simplify device candidate</text>
+<rect x="850" y="6184" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6184" width="224.15" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6193" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005327s</text>
+<text x="36" y="6220" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_generic_parallel_baseline</text>
+<rect x="850" y="6208" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6208" width="224.27" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="6217" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000535s</text>
+<text x="36" y="6244" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal compact count</text>
+<rect x="850" y="6232" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6232" width="224.45" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6241" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005385s</text>
+<text x="36" y="6268" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal device matrix allocate</text>
+<rect x="850" y="6256" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6256" width="224.59" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6265" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005413s</text>
+<text x="36" y="6292" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal device matrix allocate</text>
+<rect x="850" y="6280" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6280" width="224.65" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6289" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005424s</text>
+<text x="36" y="6316" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal compact row counts</text>
+<rect x="850" y="6304" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6304" width="224.76" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6313" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005446s</text>
+<text x="36" y="6340" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal compact column counts</text>
+<rect x="850" y="6328" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6328" width="224.84" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6337" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005463s</text>
+<text x="36" y="6364" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal compact row counts</text>
+<rect x="850" y="6352" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6352" width="225.02" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6361" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005497s</text>
+<text x="36" y="6388" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal compact column counts</text>
+<rect x="850" y="6376" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6376" width="225.10" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6385" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005514s</text>
+<text x="36" y="6412" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words2_status_only_4096_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="6400" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6400" width="225.19" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6409" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005531s</text>
+<text x="36" y="6436" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: CPU NEON</text>
+<rect x="850" y="6424" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6424" width="225.23" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6433" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005539s</text>
+<text x="36" y="6460" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal device matrix allocate</text>
+<rect x="850" y="6448" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6448" width="225.44" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6457" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005581s</text>
+<text x="36" y="6484" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_wide_two_word_default</text>
+<rect x="850" y="6472" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6472" width="225.49" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="6481" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005591s</text>
+<text x="36" y="6508" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: CPU default</text>
+<rect x="850" y="6496" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6496" width="226.91" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6505" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005885s</text>
+<text x="36" y="6532" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal device matrix allocate</text>
+<rect x="850" y="6520" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6520" width="227.97" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6529" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006116s</text>
+<text x="36" y="6556" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words2_duplicate_heavy_4096_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="6544" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6544" width="228.39" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6553" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006209s</text>
+<text x="36" y="6580" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_profiler_simplify | HIP simplify</text>
+<rect x="850" y="6568" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6568" width="228.94" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="6577" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006333s</text>
+<text x="36" y="6604" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_generic_257q_4096t_parallel</text>
+<rect x="850" y="6592" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6592" width="229.12" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="6601" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006374s</text>
+<text x="36" y="6628" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal device matrix allocate</text>
+<rect x="850" y="6616" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6616" width="229.88" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6625" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006551s</text>
+<text x="36" y="6652" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_duplicate_light_8192_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="6640" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6640" width="230.20" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6649" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006627s</text>
+<text x="36" y="6676" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_duplicate_heavy_8192_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="6664" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6664" width="230.60" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6673" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006724s</text>
+<text x="36" y="6700" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words1_duplicate_heavy_8192_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="6688" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6688" width="230.68" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6697" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006743s</text>
+<text x="36" y="6724" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_duplicate_light_8192_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="6712" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6712" width="230.85" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6721" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006785s</text>
+<text x="36" y="6748" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_retained_simplify | CPU scalar</text>
+<rect x="850" y="6736" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6736" width="230.96" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="6745" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006811s</text>
+<text x="36" y="6772" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal device matrix allocate</text>
+<rect x="850" y="6760" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6760" width="231.21" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6769" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006873s</text>
+<text x="36" y="6796" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_retained_commutation_consumers_commutation | CPU scalar</text>
+<rect x="850" y="6784" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6784" width="231.86" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="6793" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007037s</text>
+<text x="36" y="6820" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_retained_commutation_consumers_compact_consumers | CPU scalar</text>
+<rect x="850" y="6808" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6808" width="231.86" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="6817" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007037s</text>
+<text x="36" y="6844" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal GPU compact column counts</text>
+<rect x="850" y="6832" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6832" width="232.30" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6841" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007148s</text>
+<text x="36" y="6868" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_generic_193q_8192t_parallel</text>
+<rect x="850" y="6856" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6856" width="232.38" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="6865" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007169s</text>
+<text x="36" y="6892" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal private blit host output</text>
+<rect x="850" y="6880" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6880" width="232.47" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6889" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007194s</text>
+<text x="36" y="6916" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_matmul | HIP matmul resident</text>
+<rect x="850" y="6904" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6904" width="232.52" height="10" rx="3" fill="#be123c"/>
+<text x="1244" y="6913" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007207s</text>
+<text x="36" y="6940" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_matmul | HIP matmul transfer</text>
+<rect x="850" y="6928" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6928" width="232.81" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="6937" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007281s</text>
+<text x="36" y="6964" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal flat generic baseline</text>
+<rect x="850" y="6952" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6952" width="233.15" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6961" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007373s</text>
+<text x="36" y="6988" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_compact_reduction_512x512: Apple Metal transfer-inclusive</text>
+<rect x="850" y="6976" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="6976" width="233.59" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="6985" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000749s</text>
+<text x="36" y="7012" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_profiler_generic_193q_32768t_parallel</text>
+<rect x="850" y="7000" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7000" width="233.80" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="7009" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007546s</text>
+<text x="36" y="7036" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign6_simplify_words1_duplicate_light_8192_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="7024" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7024" width="233.96" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7033" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000759s</text>
+<text x="36" y="7060" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms: CPU scalar</text>
+<rect x="850" y="7048" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7048" width="234.14" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7057" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000764s</text>
+<text x="36" y="7084" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_duplicate_heavy_8192_terms: Apple Metal simplify device candidate</text>
+<rect x="850" y="7072" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7072" width="234.46" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7081" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007728s</text>
+<text x="36" y="7108" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_profiler_matmul | HIP matmul</text>
+<rect x="850" y="7096" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7096" width="234.55" height="10" rx="3" fill="#ca8a04"/>
+<text x="1244" y="7105" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007753s</text>
+<text x="36" y="7132" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_duplicate_heavy | HIP transfer</text>
+<rect x="850" y="7120" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7120" width="235.40" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="7129" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007996s</text>
+<text x="36" y="7156" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_generic_130q_4096t_parallel</text>
+<rect x="850" y="7144" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7144" width="235.78" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7153" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008107s</text>
+<text x="36" y="7180" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_generic_serial_baseline</text>
+<rect x="850" y="7168" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7168" width="235.81" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7177" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008115s</text>
+<text x="36" y="7204" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign7_matmul_duplicate_pressure | HIP matmul</text>
+<rect x="850" y="7192" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7192" width="235.92" height="10" rx="3" fill="#ca8a04"/>
+<text x="1244" y="7201" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008148s</text>
+<text x="36" y="7228" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_generic_parallel_baseline</text>
+<rect x="850" y="7216" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7216" width="236.15" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7225" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008215s</text>
+<text x="36" y="7252" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_generic_words3_192x192: Apple Metal transfer-inclusive</text>
+<rect x="850" y="7240" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7240" width="236.36" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7249" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008277s</text>
+<text x="36" y="7276" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_duplicate_heavy_default</text>
+<rect x="850" y="7264" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7264" width="236.42" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="7273" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008295s</text>
+<text x="36" y="7300" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms: CPU default</text>
+<rect x="850" y="7288" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7288" width="237.15" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7297" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008518s</text>
+<text x="36" y="7324" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words1_512x512: Apple Metal transfer-inclusive</text>
+<rect x="850" y="7312" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7312" width="237.83" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7321" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000873s</text>
+<text x="36" y="7348" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words1_duplicate_heavy_8192_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="7336" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7336" width="238.16" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7345" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008831s</text>
+<text x="36" y="7372" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_duplicate_light_8192_terms: Apple Metal simplify device candidate</text>
+<rect x="850" y="7360" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7360" width="238.93" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7369" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000908s</text>
+<text x="36" y="7396" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_generic_257q_4096t_parallel</text>
+<rect x="850" y="7384" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7384" width="239.04" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7393" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009116s</text>
+<text x="36" y="7420" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal flat generic baseline</text>
+<rect x="850" y="7408" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7408" width="239.16" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7417" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009157s</text>
+<text x="36" y="7444" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: Apple Metal transfer-inclusive</text>
+<rect x="850" y="7432" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7432" width="239.27" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7441" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009193s</text>
+<text x="36" y="7468" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_specialization_words2_384x384: Apple Metal transfer-inclusive</text>
+<rect x="850" y="7456" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7456" width="239.37" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7465" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009227s</text>
+<text x="36" y="7492" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign5_simplify_words1_duplicate_light_8192_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="7480" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7480" width="239.44" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7489" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009249s</text>
+<text x="36" y="7516" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_words2_decision_384x384: Apple Metal transfer-inclusive</text>
+<rect x="850" y="7504" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7504" width="240.52" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7513" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009619s</text>
+<text x="36" y="7540" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign6_expectation_ten_qubit_complex64 | CPU scalar</text>
+<rect x="850" y="7528" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7528" width="240.56" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7537" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009631s</text>
+<text x="36" y="7564" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_retained_expectation | CPU scalar</text>
+<rect x="850" y="7552" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7552" width="240.87" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7561" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009739s</text>
+<text x="36" y="7588" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign7_simplify_words1_duplicate_heavy_8192_terms: Apple Metal simplify transfer reference</text>
+<rect x="850" y="7576" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7576" width="241.50" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7585" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009963s</text>
+<text x="36" y="7612" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_generic_193q_32768t_parallel</text>
+<rect x="850" y="7600" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7600" width="243.54" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="7609" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001073s</text>
+<text x="36" y="7636" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU AVX512 | Campaign 10 cross-architecture</text>
+<rect x="850" y="7624" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7624" width="243.95" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7633" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001089s</text>
+<text x="36" y="7660" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU optimized | Campaign 10 cross-architecture</text>
+<rect x="850" y="7648" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7648" width="243.95" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7657" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001089s</text>
+<text x="36" y="7684" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_duplicate_light | HIP transfer</text>
+<rect x="850" y="7672" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7672" width="244.39" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="7681" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001106s</text>
+<text x="36" y="7708" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms: Apple Metal simplify device candi...</text>
+<rect x="850" y="7696" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7696" width="244.58" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7705" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001113s</text>
+<text x="36" y="7732" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU default | Campaign 10 cross-architecture</text>
+<rect x="850" y="7720" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7720" width="246.32" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="7729" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001186s</text>
+<text x="36" y="7756" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms: Apple Metal simplify transfer ref...</text>
+<rect x="850" y="7744" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7744" width="246.49" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7753" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001193s</text>
+<text x="36" y="7780" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_matmul_one_word_simplify_true | HIP matmul transfer</text>
+<rect x="850" y="7768" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7768" width="246.97" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="7777" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001214s</text>
+<text x="36" y="7804" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CuPy reduction | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="7792" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7792" width="252.54" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="7801" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001484s</text>
+<text x="36" y="7828" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA device-output to_host | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="7816" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7816" width="253.05" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="7825" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001512s</text>
+<text x="36" y="7852" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_profiler_simplify | CPU scalar</text>
+<rect x="850" y="7840" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7840" width="253.21" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7849" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00152s</text>
+<text x="36" y="7876" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: Apple Metal transfer-inclusive</text>
+<rect x="850" y="7864" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7864" width="253.54" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7873" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001539s</text>
+<text x="36" y="7900" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_profiler_simplify | CPU scalar</text>
+<rect x="850" y="7888" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7888" width="254.18" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7897" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001574s</text>
+<text x="36" y="7924" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU TBB | Campaign 9 reference: Campaign 9 deferred-he</text>
+<rect x="850" y="7912" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7912" width="257.46" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="7921" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001772s</text>
+<text x="36" y="7948" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: CPU scalar</text>
+<rect x="850" y="7936" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7936" width="258.70" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7945" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001854s</text>
+<text x="36" y="7972" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: Apple Metal transfer-inclusive</text>
+<rect x="850" y="7960" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7960" width="259.14" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="7969" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001883s</text>
+<text x="36" y="7996" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_generic_193q_8192t_parallel</text>
+<rect x="850" y="7984" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="7984" width="259.20" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="7993" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001887s</text>
+<text x="36" y="8020" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA CSR export baseline | Campaign 10 cross-architecture</text>
+<rect x="850" y="8008" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8008" width="259.36" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="8017" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001898s</text>
+<text x="36" y="8044" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign3_large_private_storage_1024x1024: CPU scalar</text>
+<rect x="850" y="8032" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8032" width="260.02" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="8041" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001944s</text>
+<text x="36" y="8068" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_retained_matmul | CPU scalar</text>
+<rect x="850" y="8056" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8056" width="260.26" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8065" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001961s</text>
+<text x="36" y="8092" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_profiler_matmul | CPU scalar</text>
+<rect x="850" y="8080" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8080" width="260.83" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8089" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002002s</text>
+<text x="36" y="8116" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign6_profiler_matmul | CPU scalar</text>
+<rect x="850" y="8104" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8104" width="261.55" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8113" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002054s</text>
+<text x="36" y="8140" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_profiler_matmul | CPU scalar</text>
+<rect x="850" y="8128" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8128" width="263.19" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8137" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00218s</text>
+<text x="36" y="8164" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: CPU NEON</text>
+<rect x="850" y="8152" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8152" width="264.17" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="8161" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002258s</text>
+<text x="36" y="8188" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: CPU default</text>
+<rect x="850" y="8176" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8176" width="264.34" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="8185" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002272s</text>
+<text x="36" y="8212" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU AVX2 | Campaign 10 cross-architecture</text>
+<rect x="850" y="8200" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8200" width="264.36" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="8209" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002273s</text>
+<text x="36" y="8236" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU AVX-512 | Campaign 9 reference: Campaign 9 deferred-he</text>
+<rect x="850" y="8224" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8224" width="264.71" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="8233" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002302s</text>
+<text x="36" y="8260" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign6_profiler_matmul | CPU scalar</text>
+<rect x="850" y="8248" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8248" width="264.99" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8257" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002326s</text>
+<text x="36" y="8284" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: CPU default</text>
+<rect x="850" y="8272" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8272" width="265.79" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="8281" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002394s</text>
+<text x="36" y="8308" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: CPU NEON</text>
+<rect x="850" y="8296" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8296" width="266.13" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="8305" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002423s</text>
+<text x="36" y="8332" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA device-output dense host copy | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="8320" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8320" width="266.57" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="8329" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002462s</text>
+<text x="36" y="8356" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_wide_two_word_default</text>
+<rect x="850" y="8344" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8344" width="268.22" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8353" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002613s</text>
+<text x="36" y="8380" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign3_duplicate_heavy | CPU scalar</text>
+<rect x="850" y="8368" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8368" width="281.60" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8377" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004234s</text>
+<text x="36" y="8404" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_matmul_duplicate_pressure | CPU scalar</text>
+<rect x="850" y="8392" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8392" width="283.02" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8401" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004458s</text>
+<text x="36" y="8428" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_duplicate_heavy_default</text>
+<rect x="850" y="8416" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8416" width="284.73" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8425" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004741s</text>
+<text x="36" y="8452" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CUDA fused CSR export | Campaign 9 reference: Campaign 8 reference: </text>
+<rect x="850" y="8440" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8440" width="288.74" height="10" rx="3" fill="#64748b"/>
+<text x="1244" y="8449" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00548s</text>
+<text x="36" y="8476" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_generic_multiword | HIP resident</text>
+<rect x="850" y="8464" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8464" width="289.01" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="8473" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.005534s</text>
+<text x="36" y="8500" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP resident | campaign4_generic_serial_baseline</text>
+<rect x="850" y="8488" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8488" width="289.17" height="10" rx="3" fill="#2563eb"/>
+<text x="1244" y="8497" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.005566s</text>
+<text x="36" y="8524" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign3_generic_multiword | HIP transfer</text>
+<rect x="850" y="8512" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8512" width="290.25" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="8521" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.005787s</text>
+<text x="36" y="8548" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_generic_serial_baseline</text>
+<rect x="850" y="8536" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8536" width="290.40" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="8545" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.005818s</text>
+<text x="36" y="8572" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign6_matmul_one_word_simplify_true | CPU scalar</text>
+<rect x="850" y="8560" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8560" width="296.28" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8569" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.007193s</text>
+<text x="36" y="8596" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_simplify_duplicate_pressure | CPU scalar</text>
+<rect x="850" y="8584" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8584" width="298.50" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8593" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.007794s</text>
+<text x="36" y="8620" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_private_device_boundary_2048x2048: CPU scalar</text>
+<rect x="850" y="8608" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8608" width="298.56" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="8617" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.007811s</text>
+<text x="36" y="8644" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_words2_large_768x768: Apple Metal transfer-inclusive</text>
+<rect x="850" y="8632" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8632" width="298.57" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="8641" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.007812s</text>
+<text x="36" y="8668" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">Apple M4 Pro / metal_campaign4_compact_large_2048x2048: CPU scalar</text>
+<rect x="850" y="8656" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8656" width="299.49" height="10" rx="3" fill="#0f766e"/>
+<text x="1244" y="8665" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.008076s</text>
+<text x="36" y="8692" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_generic_193q_32768t_parallel</text>
+<rect x="850" y="8680" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8680" width="301.71" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8689" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00875s</text>
+<text x="36" y="8716" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">CPU scalar | campaign4_profiler_generic_193q_32768t_parallel</text>
+<rect x="850" y="8704" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8704" width="301.77" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8713" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.008768s</text>
+<text x="36" y="8740" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign6_profiler_expectation | CPU scalar</text>
+<rect x="850" y="8728" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8728" width="353.78" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8737" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.05728s</text>
+<text x="36" y="8764" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_profiler_expectation | CPU scalar</text>
+<rect x="850" y="8752" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8752" width="353.79" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8761" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0573s</text>
+<text x="36" y="8788" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_expectation | HIP expectation transfer</text>
+<rect x="850" y="8776" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8776" width="354.49" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="8785" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.05877s</text>
+<text x="36" y="8812" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign6_profiler_expectation | CPU scalar</text>
+<rect x="850" y="8800" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8800" width="354.70" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8809" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.05921s</text>
+<text x="36" y="8836" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">campaign7_profiler_expectation | CPU scalar</text>
+<rect x="850" y="8824" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8824" width="356.27" height="10" rx="3" fill="#334155"/>
+<text x="1244" y="8833" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06267s</text>
+<text x="36" y="8860" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm campaign6_profiler_matmul | HIP matmul transfer</text>
+<rect x="850" y="8848" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8848" width="367.68" height="10" rx="3" fill="#7c3aed"/>
+<text x="1244" y="8857" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.09458s</text>
+<text x="36" y="8884" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#0f172a">ROCm HIP transfer | campaign4_profiler_generic_193q_32768t_parallel</text>
+<rect x="850" y="8872" width="384" height="10" rx="3" fill="#e2e8f0"/>
+<rect x="850" y="8872" width="380.00" height="10" rx="3" fill="#0e7490"/>
+<text x="1244" y="8881" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1475s</text>
+</svg>

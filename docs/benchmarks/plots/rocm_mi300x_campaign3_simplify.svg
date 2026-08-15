@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1000" viewBox="0 0 1120 1000">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="48" y="52" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#0f172a">MI300X ROCm Campaign 3 Simplify</text>
+<text x="48" y="78" font-family="Inter, Arial, sans-serif" font-size="14" fill="#475569">CPU scalar vs HIP transfer, device-resident simplify, and explicit to_host</text>
+<line x1="477.5" y1="80" x2="477.5" y2="952" stroke="#e2e8f0" stroke-width="1"/>
+<text x="477.5" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">1e-06s</text>
+<line x1="608.1" y1="80" x2="608.1" y2="952" stroke="#e2e8f0" stroke-width="1"/>
+<text x="608.1" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">1e-05s</text>
+<line x1="738.7" y1="80" x2="738.7" y2="952" stroke="#e2e8f0" stroke-width="1"/>
+<text x="738.7" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.0001s</text>
+<line x1="869.3" y1="80" x2="869.3" y2="952" stroke="#e2e8f0" stroke-width="1"/>
+<text x="869.3" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.001s</text>
+<text x="48" y="123" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_duplicate_heavy | CPU scalar</text>
+<rect x="390" y="109" width="561.2" height="18" rx="3" fill="#334155"/>
+<text x="961.2" y="123" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00423s CPU scalar</text>
+<text x="48" y="157" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_duplicate_heavy | HIP transfer</text>
+<rect x="390" y="143" width="466.6" height="18" rx="3" fill="#0e7490"/>
+<text x="866.6" y="157" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.0008s HIP transfer</text>
+<text x="48" y="191" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_duplicate_heavy | HIP resident</text>
+<rect x="390" y="177" width="417.3" height="18" rx="3" fill="#2563eb"/>
+<text x="817.3" y="191" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000335s HIP resident</text>
+<text x="48" y="225" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_duplicate_heavy | HIP to_host</text>
+<rect x="390" y="211" width="290.7" height="18" rx="3" fill="#be123c"/>
+<text x="690.7" y="225" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">3.6e-05s HIP to_host</text>
+<text x="48" y="259" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_duplicate_light | CPU scalar</text>
+<rect x="390" y="245" width="568.4" height="18" rx="3" fill="#334155"/>
+<text x="968.4" y="259" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.0048s CPU scalar</text>
+<text x="48" y="293" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_duplicate_light | HIP transfer</text>
+<rect x="390" y="279" width="485.0" height="18" rx="3" fill="#0e7490"/>
+<text x="885.0" y="293" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00111s HIP transfer</text>
+<text x="48" y="327" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_duplicate_light | HIP resident</text>
+<rect x="390" y="313" width="419.4" height="18" rx="3" fill="#2563eb"/>
+<text x="819.4" y="327" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000347s HIP resident</text>
+<text x="48" y="361" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_duplicate_light | HIP to_host</text>
+<rect x="390" y="347" width="370.2" height="18" rx="3" fill="#be123c"/>
+<text x="770.2" y="361" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000146s HIP to_host</text>
+<text x="48" y="395" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_all_zero | CPU scalar</text>
+<rect x="390" y="381" width="296.7" height="18" rx="3" fill="#334155"/>
+<text x="696.7" y="395" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4e-05s CPU scalar</text>
+<text x="48" y="429" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_all_zero | HIP transfer</text>
+<rect x="390" y="415" width="408.2" height="18" rx="3" fill="#0e7490"/>
+<text x="808.2" y="429" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000285s HIP transfer</text>
+<text x="48" y="463" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_all_zero | HIP resident</text>
+<rect x="390" y="449" width="395.4" height="18" rx="3" fill="#2563eb"/>
+<text x="795.4" y="463" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000228s HIP resident</text>
+<text x="48" y="497" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_all_zero | HIP to_host</text>
+<rect x="390" y="483" width="33.9" height="18" rx="3" fill="#be123c"/>
+<text x="433.9" y="497" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">3.89e-07s HIP to_host</text>
+<text x="48" y="531" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_smoke_one_word | CPU scalar</text>
+<rect x="390" y="517" width="220.4" height="18" rx="3" fill="#334155"/>
+<text x="620.4" y="531" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">1.04e-05s CPU scalar</text>
+<text x="48" y="565" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_smoke_one_word | HIP transfer</text>
+<rect x="390" y="551" width="419.1" height="18" rx="3" fill="#0e7490"/>
+<text x="819.1" y="565" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000346s HIP transfer</text>
+<text x="48" y="599" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_smoke_one_word | HIP resident</text>
+<rect x="390" y="585" width="403.5" height="18" rx="3" fill="#2563eb"/>
+<text x="803.5" y="599" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000263s HIP resident</text>
+<text x="48" y="633" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_smoke_one_word | HIP to_host</text>
+<rect x="390" y="619" width="285.1" height="18" rx="3" fill="#be123c"/>
+<text x="685.1" y="633" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">3.26e-05s HIP to_host</text>
+<text x="48" y="667" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_wide_two_word | CPU scalar</text>
+<rect x="390" y="653" width="525.8" height="18" rx="3" fill="#334155"/>
+<text x="925.8" y="667" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00227s CPU scalar</text>
+<text x="48" y="701" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_wide_two_word | HIP transfer</text>
+<rect x="390" y="687" width="440.9" height="18" rx="3" fill="#0e7490"/>
+<text x="840.9" y="701" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000508s HIP transfer</text>
+<text x="48" y="735" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_wide_two_word | HIP resident</text>
+<rect x="390" y="721" width="417.3" height="18" rx="3" fill="#2563eb"/>
+<text x="817.3" y="735" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000335s HIP resident</text>
+<text x="48" y="769" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_wide_two_word | HIP to_host</text>
+<rect x="390" y="755" width="315.6" height="18" rx="3" fill="#be123c"/>
+<text x="715.6" y="769" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">5.58e-05s HIP to_host</text>
+<text x="48" y="803" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_generic_multiword | CPU scalar</text>
+<rect x="390" y="789" width="468.5" height="18" rx="3" fill="#334155"/>
+<text x="868.5" y="803" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000826s CPU scalar</text>
+<text x="48" y="837" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_generic_multiword | HIP transfer</text>
+<rect x="390" y="823" width="578.9" height="18" rx="3" fill="#0e7490"/>
+<text x="978.9" y="837" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00579s HIP transfer</text>
+<text x="48" y="871" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_generic_multiword | HIP resident</text>
+<rect x="390" y="857" width="576.4" height="18" rx="3" fill="#2563eb"/>
+<text x="976.4" y="871" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00553s HIP resident</text>
+<text x="48" y="905" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign3_generic_multiword | HIP to_host</text>
+<rect x="390" y="891" width="308.9" height="18" rx="3" fill="#be123c"/>
+<text x="708.9" y="905" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4.95e-05s HIP to_host</text>
+<text x="48" y="970" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">Log-scale seconds, lower is better. Generated from checked raw benchmark JSON.</text>
+</svg>

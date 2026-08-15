@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="336" viewBox="0 0 1080 336" role="img" aria-labelledby="title desc">
+<title id="title">Campaign 5 Host-Materialization Decomposition</title>
+<desc id="desc">Largest measured Campaign 5 matrix: 16384x16384; lower is better.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111827" text-anchor="start">Campaign 5 Host-Materialization Decomposition</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Largest measured Campaign 5 matrix: 16384x16384; lower is better.</text>
+<text x="32.0" y="132.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">public device reuse</text>
+<rect x="310.0" y="118.0" width="3.4" height="18.0" rx="2.0" fill="#059669"/>
+<text x="323.4" y="132.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">1.42 ms</text>
+<text x="32.0" y="172.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">device-to-host materialization</text>
+<rect x="310.0" y="158.0" width="560.0" height="18.0" rx="2.0" fill="#2563eb"/>
+<text x="880.0" y="172.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">232.19 ms</text>
+<text x="32.0" y="212.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">allocation overhead estimate</text>
+<rect x="310.0" y="198.0" width="0.6" height="18.0" rx="2.0" fill="#b45309"/>
+<text x="320.6" y="212.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">269 us</text>
+<text x="32.0" y="252.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">legacy host-vector boundary</text>
+<rect x="310.0" y="238.0" width="168.3" height="18.0" rx="2.0" fill="#7c3aed"/>
+<text x="488.3" y="252.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">69.77 ms</text>
+</svg>

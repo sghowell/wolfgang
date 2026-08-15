@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="450" viewBox="0 0 1120 450" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 campaign 3 materialization boundaries</title>
+<desc id="desc">Estimated allocation and materialization pressure by benchmark case.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="40.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">Allocation And Materialization Boundaries</text>
+<text x="32.0" y="64.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Static byte estimates from checked benchmark shapes and implementation paths.</text>
+<text x="32.0" y="110.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">simplify duplicate pressure terms_200000_low_duplicate</text>
+<rect x="420.0" y="100.0" width="409.3" height="12.0" rx="2" fill="#0891b2"/>
+<text x="837.3" y="110.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">10.0 MB</text>
+<text x="32.0" y="142.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">simplify duplicate pressure terms_200000_medium_duplicate</text>
+<rect x="420.0" y="132.0" width="409.2" height="12.0" rx="2" fill="#0891b2"/>
+<text x="837.2" y="142.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">9.9 MB</text>
+<text x="32.0" y="174.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">simplify duplicate pressure terms_200000_high_duplicate</text>
+<rect x="420.0" y="164.0" width="408.6" height="12.0" rx="2" fill="#0891b2"/>
+<text x="836.6" y="174.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">9.7 MB</text>
+<text x="32.0" y="206.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">simplify duplicate pressure terms_200000_pathological_duplicate</text>
+<rect x="420.0" y="196.0" width="408.3" height="12.0" rx="2" fill="#0891b2"/>
+<text x="836.3" y="206.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">9.6 MB</text>
+<text x="32.0" y="238.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">statevector expectation resident_qubits_14_terms_4096</text>
+<rect x="420.0" y="228.0" width="316.9" height="12.0" rx="2" fill="#0891b2"/>
+<text x="744.9" y="238.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">0.3 MB</text>
+<text x="32.0" y="270.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">statevector expectation resident_qubits_16_terms_8192</text>
+<rect x="420.0" y="260.0" width="352.1" height="12.0" rx="2" fill="#0891b2"/>
+<text x="780.1" y="270.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.0 MB</text>
+<text x="32.0" y="302.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">pairwise commutation host_output_terms_8192x8192</text>
+<rect x="420.0" y="292.0" width="457.7" height="12.0" rx="2" fill="#0891b2"/>
+<text x="885.7" y="302.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">67.1 MB</text>
+<text x="32.0" y="334.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">pairwise commutation host_output_terms_12000x12000</text>
+<rect x="420.0" y="324.0" width="477.1" height="12.0" rx="2" fill="#0891b2"/>
+<text x="905.1" y="334.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">144.0 MB</text>
+<text x="32.0" y="366.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">matmul product generation simplify duplicate_product_terms_1024x1024</text>
+<rect x="420.0" y="356.0" width="466.6" height="12.0" rx="2" fill="#0891b2"/>
+<text x="894.6" y="366.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">95.1 MB</text>
+<text x="32.0" y="398.0" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#111827" text-anchor="start">matmul product generation simplify duplicate_product_terms_2048x2048</text>
+<rect x="420.0" y="388.0" width="500.0" height="12.0" rx="2" fill="#0891b2"/>
+<text x="928.0" y="398.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">354.7 MB</text>
+</svg>

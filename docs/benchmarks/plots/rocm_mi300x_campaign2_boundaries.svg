@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="520" viewBox="0 0 980 520">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="48" y="52" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#0f172a">MI300X ROCm Campaign 2 Boundary Timings</text>
+<text x="48" y="78" font-family="Inter, Arial, sans-serif" font-size="14" fill="#475569">4096 x 4096 pairwise commutation, log-scale seconds, lower is better</text>
+<line x1="260" y1="78" x2="880" y2="78" stroke="#cbd5e1" stroke-width="1"/>
+<line x1="315.4" y1="70" x2="315.4" y2="432" stroke="#e2e8f0" stroke-width="1"/>
+<text x="315.4" y="62" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.0001s</text>
+<line x1="478.5" y1="70" x2="478.5" y2="432" stroke="#e2e8f0" stroke-width="1"/>
+<text x="478.5" y="62" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.001s</text>
+<line x1="641.6" y1="70" x2="641.6" y2="432" stroke="#e2e8f0" stroke-width="1"/>
+<text x="641.6" y="62" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.01s</text>
+<line x1="804.8" y1="70" x2="804.8" y2="432" stroke="#e2e8f0" stroke-width="1"/>
+<text x="804.8" y="62" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.1s</text>
+<text x="48" y="116" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a">CPU scalar</text>
+<rect x="260" y="100" width="598.7" height="22" rx="4" fill="#334155"/>
+<text x="868.7" y="116" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">0.214s</text>
+<text x="48" y="158" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a">CPU tbb</text>
+<rect x="260" y="142" width="406.8" height="22" rx="4" fill="#0f766e"/>
+<text x="676.8" y="158" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">0.0143s</text>
+<text x="48" y="200" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a">HIP host output</text>
+<rect x="260" y="184" width="217.3" height="22" rx="4" fill="#0e7490"/>
+<text x="487.3" y="200" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">0.000983s</text>
+<text x="48" y="242" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a">HIP allocate</text>
+<rect x="260" y="226" width="96.7" height="22" rx="4" fill="#2563eb"/>
+<text x="366.7" y="242" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">0.000179s</text>
+<text x="48" y="284" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a">HIP reuse</text>
+<rect x="260" y="268" width="30.5" height="22" rx="4" fill="#7c3aed"/>
+<text x="300.5" y="284" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">7.04e-05s</text>
+<text x="48" y="326" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a">HIP to_host</text>
+<rect x="260" y="310" width="277.8" height="22" rx="4" fill="#be123c"/>
+<text x="547.8" y="326" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">0.00231s</text>
+<text x="48" y="368" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a">HIP count total</text>
+<rect x="260" y="352" width="55.2" height="22" rx="4" fill="#ca8a04"/>
+<text x="325.2" y="368" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">9.97e-05s</text>
+<text x="48" y="410" font-family="Inter, Arial, sans-serif" font-size="14" fill="#0f172a">HIP conflict total</text>
+<rect x="260" y="394" width="53.8" height="22" rx="4" fill="#ea580c"/>
+<text x="323.8" y="410" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">9.78e-05s</text>
+<text x="48" y="484" font-family="Inter, Arial, sans-serif" font-size="13" fill="#64748b">entries=16,777,216 | commuting=12,455,392 | device=AMD Instinct MI300X VF | gfx=gfx942:sramecc+:xnack-</text>
+</svg>

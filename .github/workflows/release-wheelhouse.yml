@@ -1,0 +1,371 @@
+name: Release Wheelhouse
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish-target:
+        description: "Optional package-index publication target."
+        required: true
+        default: "none"
+        type: choice
+        options:
+          - none
+          - testpypi
+          - pypi
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-wheelhouse-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-quality:
+    name: Dependency audit and SBOM
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install release integrity tools
+        run: python -m pip install "pip-audit==2.9.0" "cyclonedx-bom==7.1.0"
+
+      - name: Audit tracked public artifacts
+        run: python scripts/audit_public_artifacts.py --tracked
+
+      - name: Audit reachable history before publication
+        if: ${{ github.event.inputs['publish-target'] != 'none' }}
+        run: python scripts/audit_public_artifacts.py --history
+
+      - name: Export declared runtime dependencies
+        run: |
+          python - <<'PY'
+          import pathlib
+          import tomllib
+
+          project = tomllib.loads(pathlib.Path("pyproject.toml").read_text())["project"]
+          pathlib.Path("runtime-requirements.txt").write_text(
+              "\n".join(project["dependencies"]) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Audit runtime dependencies
+        run: python -m pip_audit --requirement runtime-requirements.txt
+
+      - name: Generate CycloneDX software bill of materials
+        run: |
+          mkdir -p sbom
+          cyclonedx-py requirements runtime-requirements.txt \
+            --output-format JSON \
+            --output-file sbom/fastpauli-runtime.cdx.json
+
+      - name: Software bill of materials
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: software-bill-of-materials
+          path: sbom/*.json
+          if-no-files-found: error
+          retention-days: 30
+
+  build-sdist:
+    name: Source distribution
+    needs: release-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install release build tools
+        run: python -m pip install "build==1.3.0" "twine==6.1.0"
+
+      - name: Build CPU-safe source distribution
+        run: |
+          python -m build --sdist --outdir dist \
+            --config-setting cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=OFF \
+            --config-setting cmake.define.FASTPAULI_ENABLE_CUDA=OFF \
+            --config-setting cmake.define.FASTPAULI_ENABLE_HIP=OFF \
+            --config-setting cmake.define.FASTPAULI_ENABLE_METAL=OFF \
+            --config-setting cmake.define.FASTPAULI_ENABLE_NATIVE=OFF
+
+      - name: Check source distribution metadata
+        run: python -m twine check dist/*
+
+      - name: Audit source distribution before upload
+        shell: bash
+        run: |
+          set -euo pipefail
+          for artifact in dist/*.tar.gz; do
+            python scripts/audit_public_artifacts.py --sdist "${artifact}"
+          done
+
+      - name: Upload source distribution
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-sdist
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14
+
+  build-wheels:
+    name: CPU wheels / ${{ matrix.platform }}
+    needs: release-quality
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: manylinux-x86_64
+            os: ubuntu-latest
+          - platform: macos-arm64
+            os: macos-14
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install wheelhouse check tools
+        run: python -m pip install "twine==6.1.0"
+
+      - name: Build CPU wheels with cibuildwheel
+        uses: pypa/cibuildwheel@ee02a1537ce3071a004a6b08c41e72f0fdc42d9a # v3.4.0
+        with:
+          output-dir: wheelhouse
+
+      - name: Check wheel metadata
+        run: python -m twine check wheelhouse/*.whl
+
+      - name: Audit wheels before upload
+        shell: bash
+        run: |
+          set -euo pipefail
+          for artifact in wheelhouse/*.whl; do
+            audit_dir="${RUNNER_TEMP}/$(basename "${artifact}" .whl)"
+            mkdir -p "${audit_dir}"
+            python -m zipfile -e "${artifact}" "${audit_dir}"
+            python scripts/audit_public_artifacts.py --path "${audit_dir}"
+          done
+
+      - name: Upload wheel artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-wheels-${{ matrix.platform }}
+          path: wheelhouse/*.whl
+          if-no-files-found: error
+          retention-days: 14
+
+  collect-wheelhouse:
+    name: Collect wheelhouse
+    needs:
+      - build-sdist
+      - build-wheels
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python for metadata checks
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Download built artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: release-*
+          path: dist
+          merge-multiple: true
+
+      - name: Install metadata check tools
+        run: >-
+          python -m pip install
+          "twine==6.1.0"
+          "trove-classifiers==2026.4.28.13"
+
+      - name: Check package metadata classifiers
+        run: python scripts/check_release_wheelhouse.py --require-trove-classifiers
+
+      - name: Check all release artifacts
+        run: python -m twine check dist/*
+
+      - name: Audit exact release artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          for artifact in dist/*.tar.gz; do
+            python scripts/audit_public_artifacts.py --sdist "${artifact}"
+          done
+          for artifact in dist/*.whl; do
+            audit_dir="${RUNNER_TEMP}/$(basename "${artifact}" .whl)"
+            mkdir -p "${audit_dir}"
+            python -m zipfile -e "${artifact}" "${audit_dir}"
+            python scripts/audit_public_artifacts.py --path "${audit_dir}"
+          done
+
+      - name: Write checksum manifest
+        run: python scripts/write_release_checksums.py --dist-dir dist --require-cpu-wheelhouse
+
+      - name: Upload collected release dist
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-dist
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 30
+
+  attest-release:
+    name: Attest release artifacts
+    needs: collect-wheelhouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write # Required for OIDC attestation or trusted publishing in this job.
+      attestations: write # Required to publish GitHub build-provenance attestations.
+    steps:
+      - name: Download release dist
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-dist
+          path: dist
+
+      - name: Attest package payload
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: |
+            dist/*.whl
+            dist/*.tar.gz
+
+  validate-publish-ref:
+    name: Validate publish ref
+    if: ${{ github.event.inputs['publish-target'] != 'none' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Require exact project-version tag for package-index publication
+        run: python scripts/check_release_tag.py "${GITHUB_REF_TYPE}" "${GITHUB_REF_NAME}"
+
+  publish-testpypi:
+    name: Publish to TestPyPI
+    if: ${{ github.event.inputs['publish-target'] == 'testpypi' }}
+    needs:
+      - attest-release
+      - validate-publish-ref
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: testpypi
+    permissions:
+      contents: read
+      id-token: write # Required for OIDC attestation or trusted publishing in this job.
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Download release dist
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-dist
+          path: dist
+
+      - name: Install publish check tools
+        run: python -m pip install "twine==6.1.0"
+
+      - name: Prepare package-index upload set
+        run: python scripts/prepare_publish_dist.py --dist-dir dist --publish-dir publish-dist
+
+      - name: Check package-index upload set
+        run: python -m twine check publish-dist/*
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: publish-dist
+
+  publish-pypi:
+    name: Publish to PyPI
+    if: ${{ github.event.inputs['publish-target'] == 'pypi' }}
+    needs:
+      - attest-release
+      - validate-publish-ref
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write # Required for OIDC attestation or trusted publishing in this job.
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Download release dist
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-dist
+          path: dist
+
+      - name: Install publish check tools
+        run: python -m pip install "twine==6.1.0"
+
+      - name: Prepare package-index upload set
+        run: python scripts/prepare_publish_dist.py --dist-dir dist --publish-dir publish-dist
+
+      - name: Check package-index upload set
+        run: python -m twine check publish-dist/*
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        with:
+          packages-dir: publish-dist

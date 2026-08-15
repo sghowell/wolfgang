@@ -1,0 +1,1225 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="8040" viewBox="0 0 1280 8040">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="36" y="44" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Campaign 10 performance landscape</text>
+<text x="36" y="70" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#475569">CPU, H100 reference, A100, RTX-class, transfer-inclusive, device-resident, compact consumer, and DLPack paths. Bars use log-scaled seconds.</text>
+<text x="36" y="104" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: PyTorch DLPack</text>
+<rect x="820" y="92" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="92" width="24.00" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="101" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.07e-06s</text>
+<text x="36" y="130" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: PyTorch DLPack</text>
+<rect x="820" y="118" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="118" width="26.91" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="127" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.202e-06s</text>
+<text x="36" y="156" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CuPy DLPack</text>
+<rect x="820" y="144" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="144" width="42.47" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="153" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.24e-06s</text>
+<text x="36" y="182" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CuPy DLPack</text>
+<rect x="820" y="170" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="170" width="49.64" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="179" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.983e-06s</text>
+<text x="36" y="208" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CuPy CUDA Array Interface</text>
+<rect x="820" y="196" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="196" width="50.03" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="205" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.03e-06s</text>
+<text x="36" y="234" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CuPy CUDA Array Interface</text>
+<rect x="820" y="222" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="222" width="57.83" height="11" rx="3" fill="#7c3aed"/>
+<text x="1210" y="231" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.139e-06s</text>
+<text x="36" y="260" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CuPy DLPack</text>
+<rect x="820" y="248" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="248" width="58.38" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="257" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.231e-06s</text>
+<text x="36" y="286" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CuPy CUDA Array Interface</text>
+<rect x="820" y="274" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="274" width="63.69" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="283" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">5.232e-06s</text>
+<text x="36" y="312" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / cupy_commutation_consumer: CUDA compact count</text>
+<rect x="820" y="300" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="300" width="97.49" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="309" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.022e-05s</text>
+<text x="36" y="338" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / cupy_commutation_consumer: CUDA dense to_host</text>
+<rect x="820" y="326" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="326" width="100.01" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="335" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">2.237e-05s</text>
+<text x="36" y="364" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CUDA device-output reuse</text>
+<rect x="820" y="352" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="352" width="108.26" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="361" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.11e-05s</text>
+<text x="36" y="390" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA device-output reuse</text>
+<rect x="820" y="378" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="378" width="109.15" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="387" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.223e-05s</text>
+<text x="36" y="416" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CUDA conflict degrees rows</text>
+<rect x="820" y="404" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="404" width="111.09" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="413" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.483e-05s</text>
+<text x="36" y="442" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA column count</text>
+<rect x="820" y="430" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="430" width="111.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="439" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">3.595e-05s</text>
+<text x="36" y="468" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / cupy_commutation_consumer: CPU scalar</text>
+<rect x="820" y="456" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="456" width="117.31" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="465" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.466e-05s</text>
+<text x="36" y="494" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CUDA conflict degrees total</text>
+<rect x="820" y="482" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="482" width="119.89" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="491" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.953e-05s</text>
+<text x="36" y="520" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / statevector_expectation: CUDA device-resident</text>
+<rect x="820" y="508" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="508" width="119.90" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="517" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">4.954e-05s</text>
+<text x="36" y="546" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA row count</text>
+<rect x="820" y="534" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="534" width="125.18" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="543" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.119e-05s</text>
+<text x="36" y="572" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA compact graph consumer</text>
+<rect x="820" y="560" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="560" width="127.14" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="569" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.618e-05s</text>
+<text x="36" y="598" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA compact graph consumer</text>
+<rect x="820" y="586" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="586" width="128.34" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="595" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.944e-05s</text>
+<text x="36" y="624" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CUDA compact graph consumer</text>
+<rect x="820" y="612" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="612" width="128.35" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="621" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.945e-05s</text>
+<text x="36" y="650" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA compact graph consumer</text>
+<rect x="820" y="638" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="638" width="128.36" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="647" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.948e-05s</text>
+<text x="36" y="676" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CUDA compact graph consumer</text>
+<rect x="820" y="664" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="664" width="128.37" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="673" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">6.951e-05s</text>
+<text x="36" y="702" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / cupy_commutation_consumer: External baseline</text>
+<rect x="820" y="690" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="690" width="129.03" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="699" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.138e-05s</text>
+<text x="36" y="728" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA compact grouping consumer</text>
+<rect x="820" y="716" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="716" width="129.70" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="725" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.331e-05s</text>
+<text x="36" y="754" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CUDA compact grouping consumer</text>
+<rect x="820" y="742" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="742" width="129.80" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="751" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.361e-05s</text>
+<text x="36" y="780" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CUDA compact grouping consumer</text>
+<rect x="820" y="768" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="768" width="129.98" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="777" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.414e-05s</text>
+<text x="36" y="806" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA compact grouping consumer</text>
+<rect x="820" y="794" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="794" width="130.03" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="803" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.429e-05s</text>
+<text x="36" y="832" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA compact grouping consumer</text>
+<rect x="820" y="820" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="820" width="130.40" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="829" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">7.54e-05s</text>
+<text x="36" y="858" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA compact count</text>
+<rect x="820" y="846" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="846" width="133.38" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="855" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.494e-05s</text>
+<text x="36" y="884" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="872" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="872" width="134.55" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="881" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.901e-05s</text>
+<text x="36" y="910" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="898" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="898" width="134.62" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="907" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">8.926e-05s</text>
+<text x="36" y="936" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CUDA conflict degrees total</text>
+<rect x="820" y="924" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="924" width="135.08" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="933" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.092e-05s</text>
+<text x="36" y="962" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="950" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="950" width="135.51" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="959" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.249e-05s</text>
+<text x="36" y="988" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="976" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="976" width="135.53" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="985" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.255e-05s</text>
+<text x="36" y="1014" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="1002" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1002" width="136.10" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1011" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.47e-05s</text>
+<text x="36" y="1040" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="1028" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1028" width="136.13" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1037" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.482e-05s</text>
+<text x="36" y="1066" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="1054" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1054" width="136.85" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1063" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.759e-05s</text>
+<text x="36" y="1092" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA compact count</text>
+<rect x="820" y="1080" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1080" width="137.01" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1089" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.819e-05s</text>
+<text x="36" y="1118" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="1106" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1106" width="137.12" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1115" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.864e-05s</text>
+<text x="36" y="1144" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="1132" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1132" width="137.25" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1141" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.916e-05s</text>
+<text x="36" y="1170" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="1158" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1158" width="137.39" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1167" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">9.972e-05s</text>
+<text x="36" y="1196" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused grouping</text>
+<rect x="820" y="1184" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1184" width="137.51" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1193" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001002s</text>
+<text x="36" y="1222" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CUDA compact graph consumer</text>
+<rect x="820" y="1210" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1210" width="139.77" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1219" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001097s</text>
+<text x="36" y="1248" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CUDA compact graph consumer</text>
+<rect x="820" y="1236" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1236" width="140.11" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1245" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001112s</text>
+<text x="36" y="1274" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA compact graph consumer</text>
+<rect x="820" y="1262" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1262" width="140.13" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1271" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001112s</text>
+<text x="36" y="1300" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA compact graph consumer</text>
+<rect x="820" y="1288" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1288" width="140.16" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1297" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001114s</text>
+<text x="36" y="1326" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA compact graph consumer</text>
+<rect x="820" y="1314" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1314" width="140.33" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1323" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001122s</text>
+<text x="36" y="1352" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CUDA device-output allocate</text>
+<rect x="820" y="1340" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1340" width="140.36" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1349" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001123s</text>
+<text x="36" y="1378" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / statevector_expectation: CUDA transfer-inclusive</text>
+<rect x="820" y="1366" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1366" width="140.40" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1375" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001125s</text>
+<text x="36" y="1404" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA compact grouping consumer</text>
+<rect x="820" y="1392" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1392" width="141.36" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1401" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001169s</text>
+<text x="36" y="1430" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA compact grouping consumer</text>
+<rect x="820" y="1418" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1418" width="141.36" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1427" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001169s</text>
+<text x="36" y="1456" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CUDA compact grouping consumer</text>
+<rect x="820" y="1444" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1444" width="141.47" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1453" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001174s</text>
+<text x="36" y="1482" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CUDA compact grouping consumer</text>
+<rect x="820" y="1470" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1470" width="141.52" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1479" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001176s</text>
+<text x="36" y="1508" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA compact grouping consumer</text>
+<rect x="820" y="1496" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1496" width="141.58" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1505" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001179s</text>
+<text x="36" y="1534" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CUDA conflict degrees total</text>
+<rect x="820" y="1522" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1522" width="143.43" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1531" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000127s</text>
+<text x="36" y="1560" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused degree summary</text>
+<rect x="820" y="1548" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1548" width="149.76" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1557" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001635s</text>
+<text x="36" y="1586" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA column count</text>
+<rect x="820" y="1574" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1574" width="153.08" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1583" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001867s</text>
+<text x="36" y="1612" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / cuquantum_statevector_expectation: CUDA device-resident</text>
+<rect x="820" y="1600" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1600" width="153.86" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1609" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001927s</text>
+<text x="36" y="1638" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CUDA device-resident</text>
+<rect x="820" y="1626" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1626" width="154.65" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1635" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001989s</text>
+<text x="36" y="1664" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA device-resident</text>
+<rect x="820" y="1652" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1652" width="154.74" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1661" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0001996s</text>
+<text x="36" y="1690" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CUDA device-resident</text>
+<rect x="820" y="1678" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1678" width="155.18" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1687" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002031s</text>
+<text x="36" y="1716" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA device-resident</text>
+<rect x="820" y="1704" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1704" width="155.96" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1713" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002096s</text>
+<text x="36" y="1742" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA device-resident</text>
+<rect x="820" y="1730" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1730" width="156.15" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1739" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002112s</text>
+<text x="36" y="1768" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / cuquantum_statevector_expectation: CUDA operator-resident</text>
+<rect x="820" y="1756" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1756" width="156.82" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1765" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002169s</text>
+<text x="36" y="1794" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA transfer-inclusive</text>
+<rect x="820" y="1782" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1782" width="160.30" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1791" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002493s</text>
+<text x="36" y="1820" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CUDA transfer-inclusive</text>
+<rect x="820" y="1808" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1808" width="160.72" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1817" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002534s</text>
+<text x="36" y="1846" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CUDA transfer-inclusive</text>
+<rect x="820" y="1834" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1834" width="161.29" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1843" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002593s</text>
+<text x="36" y="1872" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA transfer-inclusive</text>
+<rect x="820" y="1860" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1860" width="161.60" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1869" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002626s</text>
+<text x="36" y="1898" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA transfer-inclusive</text>
+<rect x="820" y="1886" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1886" width="161.67" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="1895" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0002633s</text>
+<text x="36" y="1924" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / qiskit_grouping: CPU scalar</text>
+<rect x="820" y="1912" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1912" width="168.04" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1921" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003397s</text>
+<text x="36" y="1950" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA device-output reuse</text>
+<rect x="820" y="1938" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1938" width="169.85" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1947" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0003652s</text>
+<text x="36" y="1976" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CUDA device-resident</text>
+<rect x="820" y="1964" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1964" width="174.74" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1973" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004441s</text>
+<text x="36" y="2002" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA row count</text>
+<rect x="820" y="1990" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="1990" width="175.47" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="1999" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004573s</text>
+<text x="36" y="2028" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / simplify_duplicate_pressure: CUDA device-resident</text>
+<rect x="820" y="2016" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2016" width="175.83" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2025" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004638s</text>
+<text x="36" y="2054" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CUDA device-resident</text>
+<rect x="820" y="2042" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2042" width="177.25" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2051" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000491s</text>
+<text x="36" y="2080" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA device-resident</text>
+<rect x="820" y="2068" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2068" width="177.34" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2077" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004928s</text>
+<text x="36" y="2106" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA device-resident</text>
+<rect x="820" y="2094" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2094" width="177.46" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2103" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004951s</text>
+<text x="36" y="2132" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CUDA transfer-inclusive</text>
+<rect x="820" y="2120" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2120" width="177.57" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2129" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0004974s</text>
+<text x="36" y="2158" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CUDA device-resident</text>
+<rect x="820" y="2146" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2146" width="177.79" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2155" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005017s</text>
+<text x="36" y="2184" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA device-resident</text>
+<rect x="820" y="2172" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2172" width="178.02" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2181" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005063s</text>
+<text x="36" y="2210" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA transfer-inclusive</text>
+<rect x="820" y="2198" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2198" width="178.19" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2207" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005097s</text>
+<text x="36" y="2236" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CUDA transfer-inclusive</text>
+<rect x="820" y="2224" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2224" width="178.34" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2233" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005129s</text>
+<text x="36" y="2262" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA transfer-inclusive</text>
+<rect x="820" y="2250" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2250" width="178.35" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2259" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000513s</text>
+<text x="36" y="2288" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA transfer-inclusive</text>
+<rect x="820" y="2276" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2276" width="178.93" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2285" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005251s</text>
+<text x="36" y="2314" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CUDA device-resident</text>
+<rect x="820" y="2302" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2302" width="179.54" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2311" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000538s</text>
+<text x="36" y="2340" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA compact graph consumer</text>
+<rect x="820" y="2328" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2328" width="180.47" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2337" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005585s</text>
+<text x="36" y="2366" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA compact graph consumer</text>
+<rect x="820" y="2354" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2354" width="180.56" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2363" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005604s</text>
+<text x="36" y="2392" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA compact graph consumer</text>
+<rect x="820" y="2380" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2380" width="180.59" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2389" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005612s</text>
+<text x="36" y="2418" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CUDA device-resident</text>
+<rect x="820" y="2406" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2406" width="180.82" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2415" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005663s</text>
+<text x="36" y="2444" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA compact grouping consumer</text>
+<rect x="820" y="2432" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2432" width="181.17" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2441" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005743s</text>
+<text x="36" y="2470" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA compact grouping consumer</text>
+<rect x="820" y="2458" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2458" width="181.22" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2467" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005755s</text>
+<text x="36" y="2496" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA compact grouping consumer</text>
+<rect x="820" y="2484" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2484" width="181.61" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2493" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005844s</text>
+<text x="36" y="2522" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CUDA transfer-inclusive</text>
+<rect x="820" y="2510" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2510" width="181.89" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2519" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000591s</text>
+<text x="36" y="2548" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA column count</text>
+<rect x="820" y="2536" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2536" width="182.06" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2545" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005951s</text>
+<text x="36" y="2574" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CUDA device-resident</text>
+<rect x="820" y="2562" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2562" width="182.13" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2571" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0005967s</text>
+<text x="36" y="2600" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="2588" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2588" width="182.70" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2597" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006106s</text>
+<text x="36" y="2626" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused grouping</text>
+<rect x="820" y="2614" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2614" width="183.22" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2623" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006234s</text>
+<text x="36" y="2652" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="2640" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2640" width="183.74" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2649" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006365s</text>
+<text x="36" y="2678" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CUDA transfer-inclusive</text>
+<rect x="820" y="2666" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2666" width="184.27" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2675" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006501s</text>
+<text x="36" y="2704" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / simplify: CPU scalar</text>
+<rect x="820" y="2692" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2692" width="184.42" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2701" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0006541s</text>
+<text x="36" y="2730" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CUDA device-resident</text>
+<rect x="820" y="2718" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2718" width="186.46" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2727" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007097s</text>
+<text x="36" y="2756" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / matmul_product_generation_simplify: CUDA device-resident</text>
+<rect x="820" y="2744" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2744" width="186.64" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2753" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007146s</text>
+<text x="36" y="2782" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA transfer-inclusive</text>
+<rect x="820" y="2770" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2770" width="188.87" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2779" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0007812s</text>
+<text x="36" y="2808" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CUDA transfer-inclusive</text>
+<rect x="820" y="2796" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2796" width="190.03" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2805" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0008184s</text>
+<text x="36" y="2834" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / simplify: External baseline</text>
+<rect x="820" y="2822" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2822" width="190.89" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2831" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.000847s</text>
+<text x="36" y="2860" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused degree summary</text>
+<rect x="820" y="2848" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2848" width="193.43" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2857" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009377s</text>
+<text x="36" y="2886" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / simplify_duplicate_pressure: CUDA transfer-inclusive</text>
+<rect x="820" y="2874" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2874" width="194.45" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="2883" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0009767s</text>
+<text x="36" y="2912" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA compact graph consumer</text>
+<rect x="820" y="2900" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2900" width="195.81" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2909" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001031s</text>
+<text x="36" y="2938" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA compact graph consumer</text>
+<rect x="820" y="2926" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2926" width="196.07" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2935" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001042s</text>
+<text x="36" y="2964" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA compact graph consumer</text>
+<rect x="820" y="2952" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2952" width="196.08" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2961" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001043s</text>
+<text x="36" y="2990" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA compact grouping consumer</text>
+<rect x="820" y="2978" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="2978" width="196.23" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="2987" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001049s</text>
+<text x="36" y="3016" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA compact grouping consumer</text>
+<rect x="820" y="3004" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3004" width="196.31" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3013" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001052s</text>
+<text x="36" y="3042" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA compact grouping consumer</text>
+<rect x="820" y="3030" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3030" width="196.42" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="3039" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001057s</text>
+<text x="36" y="3068" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA compact count</text>
+<rect x="820" y="3056" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3056" width="196.84" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3065" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001075s</text>
+<text x="36" y="3094" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU optimized</text>
+<rect x="820" y="3082" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3082" width="197.16" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3091" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001089s</text>
+<text x="36" y="3120" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU AVX512</text>
+<rect x="820" y="3108" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3108" width="197.16" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3117" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001089s</text>
+<text x="36" y="3146" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CUDA transfer-inclusive</text>
+<rect x="820" y="3134" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3134" width="198.45" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3143" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001146s</text>
+<text x="36" y="3172" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CPU optimized</text>
+<rect x="820" y="3160" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3160" width="198.63" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3169" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001155s</text>
+<text x="36" y="3198" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CPU AVX512</text>
+<rect x="820" y="3186" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3186" width="198.63" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3195" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001155s</text>
+<text x="36" y="3224" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU optimized</text>
+<rect x="820" y="3212" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3212" width="198.77" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3221" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001161s</text>
+<text x="36" y="3250" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU AVX512</text>
+<rect x="820" y="3238" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3238" width="198.77" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3247" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001161s</text>
+<text x="36" y="3276" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU optimized</text>
+<rect x="820" y="3264" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3264" width="198.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3273" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001166s</text>
+<text x="36" y="3302" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU AVX512</text>
+<rect x="820" y="3290" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3290" width="198.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3299" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001166s</text>
+<text x="36" y="3328" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CPU optimized</text>
+<rect x="820" y="3316" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3316" width="199.11" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3325" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001177s</text>
+<text x="36" y="3354" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CPU AVX512</text>
+<rect x="820" y="3342" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3342" width="199.11" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3351" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001177s</text>
+<text x="36" y="3380" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU default</text>
+<rect x="820" y="3368" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3368" width="199.30" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3377" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001186s</text>
+<text x="36" y="3406" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA dense to_host</text>
+<rect x="820" y="3394" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3394" width="200.54" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3403" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001246s</text>
+<text x="36" y="3432" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU default</text>
+<rect x="820" y="3420" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3420" width="201.00" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3429" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001269s</text>
+<text x="36" y="3458" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CPU default</text>
+<rect x="820" y="3446" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3446" width="201.10" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3455" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001274s</text>
+<text x="36" y="3484" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU default</text>
+<rect x="820" y="3472" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3472" width="201.43" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3481" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001291s</text>
+<text x="36" y="3510" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CPU default</text>
+<rect x="820" y="3498" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3498" width="202.42" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3507" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001344s</text>
+<text x="36" y="3536" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA device-output reuse</text>
+<rect x="820" y="3524" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3524" width="203.91" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3533" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001426s</text>
+<text x="36" y="3562" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CuPy reduction</text>
+<rect x="820" y="3550" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3550" width="204.91" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3559" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001484s</text>
+<text x="36" y="3588" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CUDA device-output to_host</text>
+<rect x="820" y="3576" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3576" width="205.37" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3585" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001512s</text>
+<text x="36" y="3614" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA compact count</text>
+<rect x="820" y="3602" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3602" width="205.80" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3611" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001538s</text>
+<text x="36" y="3640" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA row count</text>
+<rect x="820" y="3628" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3628" width="206.36" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3637" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001572s</text>
+<text x="36" y="3666" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CUDA transfer-inclusive</text>
+<rect x="820" y="3654" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3654" width="206.85" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3663" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001604s</text>
+<text x="36" y="3692" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CPU optimized</text>
+<rect x="820" y="3680" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3680" width="207.33" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3689" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001635s</text>
+<text x="36" y="3718" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CPU AVX512</text>
+<rect x="820" y="3706" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3706" width="207.33" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3715" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001635s</text>
+<text x="36" y="3744" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU optimized</text>
+<rect x="820" y="3732" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3732" width="207.44" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3741" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001642s</text>
+<text x="36" y="3770" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU AVX512</text>
+<rect x="820" y="3758" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3758" width="207.44" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3767" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001642s</text>
+<text x="36" y="3796" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU optimized</text>
+<rect x="820" y="3784" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3784" width="207.90" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3793" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001673s</text>
+<text x="36" y="3822" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU AVX512</text>
+<rect x="820" y="3810" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3810" width="207.90" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3819" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001673s</text>
+<text x="36" y="3848" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / matmul_product_generation_simplify: CUDA transfer-inclusive</text>
+<rect x="820" y="3836" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3836" width="208.89" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3845" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00174s</text>
+<text x="36" y="3874" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CPU optimized</text>
+<rect x="820" y="3862" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3862" width="209.35" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3871" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001772s</text>
+<text x="36" y="3900" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CPU TBB</text>
+<rect x="820" y="3888" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3888" width="209.35" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3897" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001772s</text>
+<text x="36" y="3926" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CPU default</text>
+<rect x="820" y="3914" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3914" width="209.77" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3923" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001802s</text>
+<text x="36" y="3952" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CPU optimized</text>
+<rect x="820" y="3940" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3940" width="209.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3949" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00181s</text>
+<text x="36" y="3978" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CPU TBB</text>
+<rect x="820" y="3966" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3966" width="209.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="3975" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00181s</text>
+<text x="36" y="4004" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU default</text>
+<rect x="820" y="3992" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="3992" width="209.91" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4001" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001813s</text>
+<text x="36" y="4030" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CPU optimized</text>
+<rect x="820" y="4018" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4018" width="210.11" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4027" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001827s</text>
+<text x="36" y="4056" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CPU AVX512</text>
+<rect x="820" y="4044" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4044" width="210.11" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4053" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001827s</text>
+<text x="36" y="4082" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU optimized</text>
+<rect x="820" y="4070" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4070" width="210.40" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4079" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001848s</text>
+<text x="36" y="4108" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU AVX512</text>
+<rect x="820" y="4096" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4096" width="210.40" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4105" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001848s</text>
+<text x="36" y="4134" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU default</text>
+<rect x="820" y="4122" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4122" width="210.64" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4131" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001867s</text>
+<text x="36" y="4160" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CUDA CSR export baseline</text>
+<rect x="820" y="4148" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4148" width="211.06" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="4157" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001898s</text>
+<text x="36" y="4186" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU default</text>
+<rect x="820" y="4174" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4174" width="211.82" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4183" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001957s</text>
+<text x="36" y="4212" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CPU default</text>
+<rect x="820" y="4200" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4200" width="212.15" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4209" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001982s</text>
+<text x="36" y="4238" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA CSR export baseline</text>
+<rect x="820" y="4226" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4226" width="212.24" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="4235" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001989s</text>
+<text x="36" y="4264" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA CSR export baseline</text>
+<rect x="820" y="4252" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4252" width="212.26" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="4261" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.001991s</text>
+<text x="36" y="4290" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA CSR export baseline</text>
+<rect x="820" y="4278" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4278" width="212.40" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="4287" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002003s</text>
+<text x="36" y="4316" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CUDA CSR export baseline</text>
+<rect x="820" y="4304" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4304" width="212.46" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="4313" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002007s</text>
+<text x="36" y="4342" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CPU optimized</text>
+<rect x="820" y="4330" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4330" width="212.46" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4339" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002007s</text>
+<text x="36" y="4368" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CPU TBB</text>
+<rect x="820" y="4356" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4356" width="212.46" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4365" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002007s</text>
+<text x="36" y="4394" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CPU default</text>
+<rect x="820" y="4382" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4382" width="212.49" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4391" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00201s</text>
+<text x="36" y="4420" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU TBB</text>
+<rect x="820" y="4408" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4408" width="212.67" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4417" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002024s</text>
+<text x="36" y="4446" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CPU TBB</text>
+<rect x="820" y="4434" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4434" width="213.46" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4443" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002089s</text>
+<text x="36" y="4472" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CPU default</text>
+<rect x="820" y="4460" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4460" width="213.57" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4469" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002098s</text>
+<text x="36" y="4498" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA Campaign 8 graph compact</text>
+<rect x="820" y="4486" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4486" width="214.16" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4495" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002148s</text>
+<text x="36" y="4524" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA Campaign 8 grouping compact</text>
+<rect x="820" y="4512" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4512" width="214.83" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4521" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002206s</text>
+<text x="36" y="4550" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused grouping</text>
+<rect x="820" y="4538" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4538" width="214.94" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4547" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002217s</text>
+<text x="36" y="4576" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU AVX2</text>
+<rect x="820" y="4564" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4564" width="215.58" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4573" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002273s</text>
+<text x="36" y="4602" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CPU AVX2</text>
+<rect x="820" y="4590" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4590" width="215.59" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4599" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002275s</text>
+<text x="36" y="4628" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU AVX2</text>
+<rect x="820" y="4616" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4616" width="215.66" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4625" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002281s</text>
+<text x="36" y="4654" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU AVX2</text>
+<rect x="820" y="4642" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4642" width="215.70" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4651" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002285s</text>
+<text x="36" y="4680" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CPU default</text>
+<rect x="820" y="4668" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4668" width="215.74" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4677" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002288s</text>
+<text x="36" y="4706" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CPU AVX2</text>
+<rect x="820" y="4694" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4694" width="215.75" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4703" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002289s</text>
+<text x="36" y="4732" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CPU AVX-512</text>
+<rect x="820" y="4720" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4720" width="215.89" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4729" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002302s</text>
+<text x="36" y="4758" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CPU AVX-512</text>
+<rect x="820" y="4746" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4746" width="217.14" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4755" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00242s</text>
+<text x="36" y="4784" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CPU optimized</text>
+<rect x="820" y="4772" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4772" width="217.38" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4781" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002444s</text>
+<text x="36" y="4810" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CPU TBB</text>
+<rect x="820" y="4798" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4798" width="217.38" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4807" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002444s</text>
+<text x="36" y="4836" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA device-output dense host copy</text>
+<rect x="820" y="4824" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4824" width="217.57" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4833" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002462s</text>
+<text x="36" y="4862" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CPU AVX-512</text>
+<rect x="820" y="4850" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4850" width="219.54" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4859" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002664s</text>
+<text x="36" y="4888" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CPU AVX-512</text>
+<rect x="820" y="4876" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4876" width="220.40" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4885" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002757s</text>
+<text x="36" y="4914" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused degree summary</text>
+<rect x="820" y="4902" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4902" width="221.02" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4911" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002826s</text>
+<text x="36" y="4940" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CPU AVX-512</text>
+<rect x="820" y="4928" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4928" width="221.91" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4937" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.002929s</text>
+<text x="36" y="4966" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CPU default</text>
+<rect x="820" y="4954" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4954" width="222.96" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4963" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003055s</text>
+<text x="36" y="4992" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU AVX-512</text>
+<rect x="820" y="4980" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="4980" width="223.96" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="4989" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003179s</text>
+<text x="36" y="5018" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CPU AVX2</text>
+<rect x="820" y="5006" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5006" width="224.99" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5015" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003313s</text>
+<text x="36" y="5044" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CPU AVX2</text>
+<rect x="820" y="5032" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5032" width="225.14" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5041" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003333s</text>
+<text x="36" y="5070" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CUDA CSR export baseline</text>
+<rect x="820" y="5058" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5058" width="225.14" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5067" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003333s</text>
+<text x="36" y="5096" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU AVX2</text>
+<rect x="820" y="5084" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5084" width="225.18" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5093" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003338s</text>
+<text x="36" y="5122" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU AVX2</text>
+<rect x="820" y="5110" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5110" width="225.20" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5119" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00334s</text>
+<text x="36" y="5148" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU AVX2</text>
+<rect x="820" y="5136" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5136" width="225.43" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5145" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003372s</text>
+<text x="36" y="5174" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA CSR export baseline</text>
+<rect x="820" y="5162" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5162" width="225.69" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5171" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003407s</text>
+<text x="36" y="5200" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA CSR export baseline</text>
+<rect x="820" y="5188" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5188" width="226.21" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5197" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003478s</text>
+<text x="36" y="5226" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA CSR export baseline</text>
+<rect x="820" y="5214" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5214" width="228.53" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5223" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003817s</text>
+<text x="36" y="5252" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CPU AVX2</text>
+<rect x="820" y="5240" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5240" width="228.72" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5249" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003845s</text>
+<text x="36" y="5278" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CUDA CSR export baseline</text>
+<rect x="820" y="5266" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5266" width="228.93" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5275" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003878s</text>
+<text x="36" y="5304" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA compact count</text>
+<rect x="820" y="5292" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5292" width="229.02" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5301" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.003892s</text>
+<text x="36" y="5330" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CPU AVX2</text>
+<rect x="820" y="5318" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5318" width="229.90" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5327" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004032s</text>
+<text x="36" y="5356" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CPU AVX2</text>
+<rect x="820" y="5344" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5344" width="230.43" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5353" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004118s</text>
+<text x="36" y="5382" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CUDA CSR export baseline</text>
+<rect x="820" y="5370" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5370" width="231.02" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5379" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004217s</text>
+<text x="36" y="5408" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA compact count</text>
+<rect x="820" y="5396" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5396" width="231.11" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5405" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004231s</text>
+<text x="36" y="5434" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CPU AVX2</text>
+<rect x="820" y="5422" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5422" width="231.80" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5431" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004349s</text>
+<text x="36" y="5460" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CUDA CSR export baseline</text>
+<rect x="820" y="5448" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5448" width="232.30" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5457" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004438s</text>
+<text x="36" y="5486" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU AVX2</text>
+<rect x="820" y="5474" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5474" width="232.58" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5483" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004488s</text>
+<text x="36" y="5512" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CPU AVX2</text>
+<rect x="820" y="5500" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5500" width="232.82" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5509" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.004531s</text>
+<text x="36" y="5538" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CUDA CSR export baseline</text>
+<rect x="820" y="5526" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5526" width="237.11" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5535" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.005379s</text>
+<text x="36" y="5564" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="5552" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5552" width="237.57" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5561" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00548s</text>
+<text x="36" y="5590" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CUDA CSR export baseline</text>
+<rect x="820" y="5578" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5578" width="239.76" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5587" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.00598s</text>
+<text x="36" y="5616" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA device-resident</text>
+<rect x="820" y="5604" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5604" width="241.08" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5613" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.006304s</text>
+<text x="36" y="5642" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA device-resident</text>
+<rect x="820" y="5630" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5630" width="241.19" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5639" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.006332s</text>
+<text x="36" y="5668" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA device-resident</text>
+<rect x="820" y="5656" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5656" width="241.27" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5665" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.006352s</text>
+<text x="36" y="5694" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA transfer-inclusive</text>
+<rect x="820" y="5682" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5682" width="241.45" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5691" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.006399s</text>
+<text x="36" y="5720" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA transfer-inclusive</text>
+<rect x="820" y="5708" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5708" width="241.48" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5717" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.006406s</text>
+<text x="36" y="5746" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA transfer-inclusive</text>
+<rect x="820" y="5734" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5734" width="241.49" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5743" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.006409s</text>
+<text x="36" y="5772" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="5760" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5760" width="243.62" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5769" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.006978s</text>
+<text x="36" y="5798" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / simplify_duplicate_pressure: CPU scalar</text>
+<rect x="820" y="5786" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5786" width="245.70" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5795" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.007583s</text>
+<text x="36" y="5824" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / cuquantum_statevector_expectation: External baseline</text>
+<rect x="820" y="5812" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5812" width="251.18" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5821" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.009443s</text>
+<text x="36" y="5850" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / matmul_product_generation_simplify: CPU scalar</text>
+<rect x="820" y="5838" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5838" width="256.36" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5847" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01162s</text>
+<text x="36" y="5876" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / multiply: CPU scalar</text>
+<rect x="820" y="5864" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5864" width="257.37" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="5873" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01209s</text>
+<text x="36" y="5902" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA device-resident</text>
+<rect x="820" y="5890" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5890" width="261.68" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5899" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01437s</text>
+<text x="36" y="5928" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA device-resident</text>
+<rect x="820" y="5916" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5916" width="261.83" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5925" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01445s</text>
+<text x="36" y="5954" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA device-resident</text>
+<rect x="820" y="5942" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5942" width="261.84" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5951" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01446s</text>
+<text x="36" y="5980" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA transfer-inclusive</text>
+<rect x="820" y="5968" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5968" width="263.38" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="5977" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01538s</text>
+<text x="36" y="6006" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA transfer-inclusive</text>
+<rect x="820" y="5994" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="5994" width="263.42" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="6003" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01541s</text>
+<text x="36" y="6032" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA transfer-inclusive</text>
+<rect x="820" y="6020" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6020" width="263.43" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="6029" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01541s</text>
+<text x="36" y="6058" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA transfer-inclusive</text>
+<rect x="820" y="6046" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6046" width="265.18" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6055" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01653s</text>
+<text x="36" y="6084" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU scalar</text>
+<rect x="820" y="6072" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6072" width="266.18" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6081" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0172s</text>
+<text x="36" y="6110" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / dlpack_pytorch: CPU scalar</text>
+<rect x="820" y="6098" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6098" width="266.22" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6107" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01723s</text>
+<text x="36" y="6136" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU scalar</text>
+<rect x="820" y="6124" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6124" width="266.22" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6133" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01723s</text>
+<text x="36" y="6162" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / public_grouping_api: CPU scalar</text>
+<rect x="820" y="6150" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6150" width="266.26" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6159" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01726s</text>
+<text x="36" y="6188" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU scalar</text>
+<rect x="820" y="6176" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6176" width="266.28" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6185" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01727s</text>
+<text x="36" y="6214" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU scalar</text>
+<rect x="820" y="6202" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6202" width="266.61" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6211" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0175s</text>
+<text x="36" y="6240" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / public_grouping_api: CPU scalar</text>
+<rect x="820" y="6228" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6228" width="267.12" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6237" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01786s</text>
+<text x="36" y="6266" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU scalar</text>
+<rect x="820" y="6254" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6254" width="267.36" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6263" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01803s</text>
+<text x="36" y="6292" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / dlpack_pytorch: CPU scalar</text>
+<rect x="820" y="6280" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6280" width="267.55" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6289" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01817s</text>
+<text x="36" y="6318" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / stream_graph: CPU scalar</text>
+<rect x="820" y="6306" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6306" width="267.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6315" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01841s</text>
+<text x="36" y="6344" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU scalar</text>
+<rect x="820" y="6332" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6332" width="268.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6341" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01916s</text>
+<text x="36" y="6370" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation: CPU scalar</text>
+<rect x="820" y="6358" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6358" width="269.66" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6367" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.01977s</text>
+<text x="36" y="6396" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / public_grouping_api: CPU scalar</text>
+<rect x="820" y="6384" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6384" width="270.58" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6393" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.02051s</text>
+<text x="36" y="6422" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU scalar</text>
+<rect x="820" y="6410" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6410" width="270.99" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6419" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.02085s</text>
+<text x="36" y="6448" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / dlpack_interop: CPU scalar</text>
+<rect x="820" y="6436" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6436" width="272.63" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6445" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.02226s</text>
+<text x="36" y="6474" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / csr_scatter_reopen: CPU scalar</text>
+<rect x="820" y="6462" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6462" width="275.78" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6471" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.02526s</text>
+<text x="36" y="6500" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU optimized</text>
+<rect x="820" y="6488" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6488" width="284.00" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6497" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03508s</text>
+<text x="36" y="6526" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU AVX512</text>
+<rect x="820" y="6514" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6514" width="284.00" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6523" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03508s</text>
+<text x="36" y="6552" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU default</text>
+<rect x="820" y="6540" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6540" width="284.04" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6549" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03514s</text>
+<text x="36" y="6578" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU default</text>
+<rect x="820" y="6566" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6566" width="284.05" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6575" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03516s</text>
+<text x="36" y="6604" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU default</text>
+<rect x="820" y="6592" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6592" width="284.09" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6601" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03521s</text>
+<text x="36" y="6630" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU optimized</text>
+<rect x="820" y="6618" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6618" width="284.09" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6627" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03521s</text>
+<text x="36" y="6656" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU AVX512</text>
+<rect x="820" y="6644" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6644" width="284.09" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6653" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03521s</text>
+<text x="36" y="6682" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU optimized</text>
+<rect x="820" y="6670" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6670" width="284.16" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6679" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03531s</text>
+<text x="36" y="6708" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU AVX512</text>
+<rect x="820" y="6696" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6696" width="284.16" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6705" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03531s</text>
+<text x="36" y="6734" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / statevector_expectation: CPU scalar</text>
+<rect x="820" y="6722" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6722" width="284.69" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6731" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.03607s</text>
+<text x="36" y="6760" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CuPy reduction</text>
+<rect x="820" y="6748" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6748" width="293.39" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6757" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.05108s</text>
+<text x="36" y="6786" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU AVX2</text>
+<rect x="820" y="6774" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6774" width="294.85" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6783" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.05413s</text>
+<text x="36" y="6812" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU AVX2</text>
+<rect x="820" y="6800" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6800" width="294.86" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6809" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.05417s</text>
+<text x="36" y="6838" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU AVX2</text>
+<rect x="820" y="6826" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6826" width="294.92" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6835" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0543s</text>
+<text x="36" y="6864" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CUDA CSR export baseline</text>
+<rect x="820" y="6852" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6852" width="296.01" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="6861" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.05671s</text>
+<text x="36" y="6890" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CUDA CSR export baseline</text>
+<rect x="820" y="6878" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6878" width="296.05" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="6887" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0568s</text>
+<text x="36" y="6916" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CUDA CSR export baseline</text>
+<rect x="820" y="6904" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6904" width="296.31" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="6913" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0574s</text>
+<text x="36" y="6942" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA dense to_host</text>
+<rect x="820" y="6930" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6930" width="298.59" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6939" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06287s</text>
+<text x="36" y="6968" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU default</text>
+<rect x="820" y="6956" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6956" width="299.31" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6965" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06471s</text>
+<text x="36" y="6994" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU optimized</text>
+<rect x="820" y="6982" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="6982" width="299.34" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="6991" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06479s</text>
+<text x="36" y="7020" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU AVX512</text>
+<rect x="820" y="7008" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7008" width="299.34" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7017" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06479s</text>
+<text x="36" y="7046" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU optimized</text>
+<rect x="820" y="7034" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7034" width="299.35" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7043" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06482s</text>
+<text x="36" y="7072" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU AVX512</text>
+<rect x="820" y="7060" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7060" width="299.35" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7069" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06482s</text>
+<text x="36" y="7098" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU default</text>
+<rect x="820" y="7086" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7086" width="299.40" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7095" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06496s</text>
+<text x="36" y="7124" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA device-output dense host copy</text>
+<rect x="820" y="7112" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7112" width="299.51" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7121" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06524s</text>
+<text x="36" y="7150" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU optimized</text>
+<rect x="820" y="7138" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7138" width="300.55" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7147" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06801s</text>
+<text x="36" y="7176" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU AVX512</text>
+<rect x="820" y="7164" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7164" width="300.55" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7173" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06801s</text>
+<text x="36" y="7202" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU default</text>
+<rect x="820" y="7190" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7190" width="300.56" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7199" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06802s</text>
+<text x="36" y="7228" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA transfer-inclusive</text>
+<rect x="820" y="7216" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7216" width="300.73" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7225" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.06849s</text>
+<text x="36" y="7254" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU TBB</text>
+<rect x="820" y="7242" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7242" width="303.48" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7251" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.07645s</text>
+<text x="36" y="7280" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / qiskit_grouping: External baseline</text>
+<rect x="820" y="7268" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7268" width="304.57" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7277" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.07987s</text>
+<text x="36" y="7306" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU AVX2</text>
+<rect x="820" y="7294" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7294" width="307.97" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7303" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.09149s</text>
+<text x="36" y="7332" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU AVX2</text>
+<rect x="820" y="7320" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7320" width="308.01" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7329" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.09164s</text>
+<text x="36" y="7358" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU AVX2</text>
+<rect x="820" y="7346" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7346" width="308.27" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7355" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.0926s</text>
+<text x="36" y="7384" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CUDA CSR export baseline</text>
+<rect x="820" y="7372" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7372" width="310.49" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="7381" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1012s</text>
+<text x="36" y="7410" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CUDA CSR export baseline</text>
+<rect x="820" y="7398" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7398" width="310.55" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="7407" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1014s</text>
+<text x="36" y="7436" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CUDA CSR export baseline</text>
+<rect x="820" y="7424" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7424" width="310.58" height="11" rx="3" fill="#2563eb"/>
+<text x="1210" y="7433" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1016s</text>
+<text x="36" y="7462" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU AVX-512</text>
+<rect x="820" y="7450" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7450" width="311.72" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7459" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1063s</text>
+<text x="36" y="7488" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="7476" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7476" width="316.26" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7485" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1275s</text>
+<text x="36" y="7514" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU AVX2</text>
+<rect x="820" y="7502" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7502" width="317.45" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7511" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1337s</text>
+<text x="36" y="7540" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="7528" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7528" width="318.30" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7537" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.1383s</text>
+<text x="36" y="7566" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CuPy reduction</text>
+<rect x="820" y="7554" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7554" width="327.93" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7563" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2033s</text>
+<text x="36" y="7592" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / multiply: External baseline</text>
+<rect x="820" y="7580" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7580" width="331.54" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7589" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2349s</text>
+<text x="36" y="7618" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA device-output dense host copy</text>
+<rect x="820" y="7606" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7606" width="332.45" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7615" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2435s</text>
+<text x="36" y="7644" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CUDA dense to_host</text>
+<rect x="820" y="7632" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7632" width="332.92" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7641" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2481s</text>
+<text x="36" y="7670" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / csr_scatter_reprobe: CPU scalar</text>
+<rect x="820" y="7658" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7658" width="337.08" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7667" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2931s</text>
+<text x="36" y="7696" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU TBB</text>
+<rect x="820" y="7684" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7684" width="337.09" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7693" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2931s</text>
+<text x="36" y="7722" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / stream_graph_reprobe: CPU scalar</text>
+<rect x="820" y="7710" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7710" width="337.10" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7719" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2933s</text>
+<text x="36" y="7748" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA RTX PRO 6000 Blackwell Server Edition / cross_arch_portability: CPU scalar</text>
+<rect x="820" y="7736" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7736" width="337.12" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7745" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.2936s</text>
+<text x="36" y="7774" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / cross_arch_portability: CPU scalar</text>
+<rect x="820" y="7762" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7762" width="338.63" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7771" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.3118s</text>
+<text x="36" y="7800" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / csr_scatter_reprobe: CPU scalar</text>
+<rect x="820" y="7788" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7788" width="338.93" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7797" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.3156s</text>
+<text x="36" y="7826" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">NVIDIA A100-SXM4-80GB / stream_graph_reprobe: CPU scalar</text>
+<rect x="820" y="7814" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7814" width="339.28" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7823" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.3201s</text>
+<text x="36" y="7852" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / cuquantum_statevector_expectation: CPU scalar</text>
+<rect x="820" y="7840" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7840" width="341.88" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7849" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.3551s</text>
+<text x="36" y="7878" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU scalar</text>
+<rect x="820" y="7866" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7866" width="344.60" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7875" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.396s</text>
+<text x="36" y="7904" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU AVX-512</text>
+<rect x="820" y="7892" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7892" width="344.71" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7901" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.3976s</text>
+<text x="36" y="7930" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="7918" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7918" width="350.29" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7927" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.497s</text>
+<text x="36" y="7956" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU AVX2</text>
+<rect x="820" y="7944" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7944" width="350.48" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7953" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.5008s</text>
+<text x="36" y="7982" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / campaign8_reference: CUDA fused CSR export</text>
+<rect x="820" y="7970" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7970" width="350.69" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="7979" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">0.505s</text>
+<text x="36" y="8008" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#0f172a">H100 reference or CPU reference / pairwise_commutation_consumer: CPU scalar</text>
+<rect x="820" y="7996" width="380" height="11" rx="3" fill="#e2e8f0"/>
+<rect x="820" y="7996" width="380.00" height="11" rx="3" fill="#059669"/>
+<text x="1210" y="8005" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#334155">1.631s</text>
+</svg>

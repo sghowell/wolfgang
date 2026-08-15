@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1170" viewBox="0 0 1120 1170">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="48" y="52" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#0f172a">MI300X ROCm Campaign 7 Release Support</text>
+<text x="48" y="78" font-family="Inter, Arial, sans-serif" font-size="14" fill="#475569">Retained HIP operations, duplicate-pressure probes, and profiler-smoke timings</text>
+<line x1="409.3" y1="80" x2="409.3" y2="1122" stroke="#e2e8f0" stroke-width="1"/>
+<text x="409.3" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">1e-05s</text>
+<line x1="556.0" y1="80" x2="556.0" y2="1122" stroke="#e2e8f0" stroke-width="1"/>
+<text x="556.0" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.0001s</text>
+<line x1="702.7" y1="80" x2="702.7" y2="1122" stroke="#e2e8f0" stroke-width="1"/>
+<text x="702.7" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.001s</text>
+<line x1="849.4" y1="80" x2="849.4" y2="1122" stroke="#e2e8f0" stroke-width="1"/>
+<text x="849.4" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.01s</text>
+<text x="48" y="123" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_simplify_duplicate_pressure | CPU scalar</text>
+<rect x="390" y="109" width="443.5" height="18" rx="3" fill="#334155"/>
+<text x="843.5" y="123" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00779s CPU scalar</text>
+<text x="48" y="157" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_simplify_duplicate_pressure | HIP simplify</text>
+<rect x="390" y="143" width="262.8" height="18" rx="3" fill="#7c3aed"/>
+<text x="662.8" y="157" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000457s HIP simplify</text>
+<text x="48" y="191" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_matmul_duplicate_pressure | CPU scalar</text>
+<rect x="390" y="177" width="407.9" height="18" rx="3" fill="#334155"/>
+<text x="807.9" y="191" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00446s CPU scalar</text>
+<text x="48" y="225" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_matmul_duplicate_pressure | HIP matmul</text>
+<rect x="390" y="211" width="299.6" height="18" rx="3" fill="#ca8a04"/>
+<text x="699.6" y="225" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000815s HIP matmul</text>
+<text x="48" y="259" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_simplify | CPU scalar</text>
+<rect x="390" y="245" width="339.4" height="18" rx="3" fill="#334155"/>
+<text x="739.4" y="259" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00152s CPU scalar</text>
+<text x="48" y="293" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_simplify | HIP simplify</text>
+<rect x="390" y="279" width="248.2" height="18" rx="3" fill="#7c3aed"/>
+<text x="648.2" y="293" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000364s HIP simplify</text>
+<text x="48" y="327" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_expectation | CPU scalar</text>
+<rect x="390" y="313" width="570.6" height="18" rx="3" fill="#334155"/>
+<text x="970.6" y="327" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.0573s CPU scalar</text>
+<text x="48" y="361" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_expectation | HIP expectation</text>
+<rect x="390" y="347" width="175.9" height="18" rx="3" fill="#be123c"/>
+<text x="575.9" y="361" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000117s HIP expectation</text>
+<text x="48" y="395" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_matmul | CPU scalar</text>
+<rect x="390" y="381" width="356.9" height="18" rx="3" fill="#334155"/>
+<text x="756.9" y="395" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.002s CPU scalar</text>
+<text x="48" y="429" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_matmul | HIP matmul</text>
+<rect x="390" y="415" width="248.1" height="18" rx="3" fill="#ca8a04"/>
+<text x="648.1" y="429" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000363s HIP matmul</text>
+<text x="48" y="463" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_simplify | CPU scalar</text>
+<rect x="390" y="449" width="341.6" height="18" rx="3" fill="#334155"/>
+<text x="741.6" y="463" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00157s CPU scalar</text>
+<text x="48" y="497" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_simplify | HIP simplify</text>
+<rect x="390" y="483" width="283.6" height="18" rx="3" fill="#7c3aed"/>
+<text x="683.6" y="497" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000633s HIP simplify</text>
+<text x="48" y="531" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_expectation | CPU scalar</text>
+<rect x="390" y="517" width="576.3" height="18" rx="3" fill="#334155"/>
+<text x="976.3" y="531" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.0627s CPU scalar</text>
+<text x="48" y="565" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_expectation | HIP expectation</text>
+<rect x="390" y="551" width="192.1" height="18" rx="3" fill="#be123c"/>
+<text x="592.1" y="565" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000151s HIP expectation</text>
+<text x="48" y="599" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_matmul | CPU scalar</text>
+<rect x="390" y="585" width="362.3" height="18" rx="3" fill="#334155"/>
+<text x="762.3" y="599" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00218s CPU scalar</text>
+<text x="48" y="633" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_profiler_matmul | HIP matmul</text>
+<rect x="390" y="619" width="296.5" height="18" rx="3" fill="#ca8a04"/>
+<text x="696.5" y="633" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000775s HIP matmul</text>
+<text x="48" y="667" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_transfer_roundtrip | CPU scalar</text>
+<rect x="390" y="653" width="122.1" height="18" rx="3" fill="#334155"/>
+<text x="522.1" y="667" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">5.02e-05s CPU scalar</text>
+<text x="48" y="701" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_transfer_roundtrip | HIP transfer</text>
+<rect x="390" y="687" width="119.8" height="18" rx="3" fill="#0e7490"/>
+<text x="519.8" y="701" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4.84e-05s HIP transfer</text>
+<text x="48" y="735" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_transfer_roundtrip | HIP to_host</text>
+<rect x="390" y="721" width="95.6" height="18" rx="3" fill="#0891b2"/>
+<text x="495.6" y="735" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">3.31e-05s HIP to_host</text>
+<text x="48" y="769" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_commutation_consumers_commutation | CPU scalar</text>
+<rect x="390" y="755" width="290.3" height="18" rx="3" fill="#334155"/>
+<text x="690.3" y="769" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000704s CPU scalar</text>
+<text x="48" y="803" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_commutation_consumers_commutation | HIP commutation</text>
+<rect x="390" y="789" width="38.1" height="18" rx="3" fill="#2563eb"/>
+<text x="438.1" y="803" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">1.34e-05s HIP commutation</text>
+<text x="48" y="837" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_commutation_consumers_compact_consumers | CPU scalar</text>
+<rect x="390" y="823" width="290.3" height="18" rx="3" fill="#334155"/>
+<text x="690.3" y="837" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000704s CPU scalar</text>
+<text x="48" y="871" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_commutation_consumers_compact_consumers | HIP compact consumer</text>
+<rect x="390" y="857" width="73.2" height="18" rx="3" fill="#0284c7"/>
+<text x="473.2" y="871" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">2.33e-05s HIP compact consumer</text>
+<text x="48" y="905" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_simplify | CPU scalar</text>
+<rect x="390" y="891" width="288.2" height="18" rx="3" fill="#334155"/>
+<text x="688.2" y="905" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000681s CPU scalar</text>
+<text x="48" y="939" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_simplify | HIP simplify</text>
+<rect x="390" y="925" width="244.7" height="18" rx="3" fill="#7c3aed"/>
+<text x="644.7" y="939" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000344s HIP simplify</text>
+<text x="48" y="973" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_expectation | CPU scalar</text>
+<rect x="390" y="959" width="311.0" height="18" rx="3" fill="#334155"/>
+<text x="711.0" y="973" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000974s CPU scalar</text>
+<text x="48" y="1007" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_expectation | HIP expectation</text>
+<rect x="390" y="993" width="116.5" height="18" rx="3" fill="#be123c"/>
+<text x="516.5" y="1007" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4.6e-05s HIP expectation</text>
+<text x="48" y="1041" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_matmul | CPU scalar</text>
+<rect x="390" y="1027" width="355.6" height="18" rx="3" fill="#334155"/>
+<text x="755.6" y="1041" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00196s CPU scalar</text>
+<text x="48" y="1075" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign7_retained_matmul | HIP matmul</text>
+<rect x="390" y="1061" width="247.0" height="18" rx="3" fill="#ca8a04"/>
+<text x="647.0" y="1075" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000357s HIP matmul</text>
+<text x="48" y="1140" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">Log-scale seconds, lower is better. Generated from checked raw benchmark JSON.</text>
+</svg>

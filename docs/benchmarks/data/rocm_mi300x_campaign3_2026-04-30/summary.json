@@ -1,0 +1,781 @@
+{
+  "campaign": "rocm_mi300x_campaign3",
+  "data_dir": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30",
+  "date": "2026-04-30",
+  "headroom_statuses": {
+    "DLPack": "out_of_scope_with_next_trigger",
+    "ROCm wheels": "out_of_scope_with_next_trigger",
+    "expectation": "out_of_scope_with_next_trigger",
+    "matmul": "out_of_scope_with_next_trigger",
+    "multi-GPU": "out_of_scope_with_next_trigger",
+    "packed summaries": "out_of_scope_with_next_trigger",
+    "portability": "out_of_scope_with_next_trigger",
+    "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+    "streams": "out_of_scope_with_next_trigger",
+    "workspaces": "out_of_scope_with_next_trigger"
+  },
+  "plots": {
+    "landscape": "docs/benchmarks/plots/accelerator_landscape_with_rocm.svg",
+    "simplify": "docs/benchmarks/plots/rocm_mi300x_campaign3_simplify.svg"
+  },
+  "profiler_artifacts": [
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/results.copy_stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/results.db",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/results.hip_stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/results.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/results.stats.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/results.sysinfo.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rocm_simplify_campaign3_requested_counters.csv",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rocprof_campaign3_requested_counters.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rocprof_requested_counters.stderr",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rocprof_requested_counters.stdout",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input.xml",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/304006_begin_ts_file.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/304006_hcc_ops_trace.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/304006_hip_api_trace.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/304006_hsa_handles.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/begin_ts_file.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/exit.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/hcc_ops_trace.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/hip_api_trace.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/hsa_handles.txt",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/profiler/rpl_data_260430_041100_303984/input_results_260430_041100/log.txt"
+  ],
+  "readme_performance_landscape": [
+    {
+      "color": "#64748b",
+      "label": "CPU AVX-512 | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 0.002302181994309649,
+      "series": "CPU AVX-512"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU AVX2 | Campaign 10 cross-architecture",
+      "seconds": 0.00227347700001701,
+      "series": "CPU AVX2"
+    },
+    {
+      "color": "#0f766e",
+      "label": "CPU AVX512 | Campaign 10 cross-architecture",
+      "seconds": 0.0010886590002883167,
+      "series": "CPU AVX512"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU TBB | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 0.0017724520002957433,
+      "series": "CPU TBB"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU default | Campaign 10 cross-architecture",
+      "seconds": 0.0011857079998662812,
+      "series": "CPU default"
+    },
+    {
+      "color": "#0f766e",
+      "label": "CPU optimized | Campaign 10 cross-architecture",
+      "seconds": 0.0010886590002883167,
+      "series": "CPU optimized"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.466000245884061e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA CSR export baseline | Campaign 10 cross-architecture",
+      "seconds": 0.001898081000035745,
+      "series": "CUDA CSR export baseline"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA Campaign 8 graph compact | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 8.901298861019313e-05,
+      "series": "CUDA Campaign 8 graph compact"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA Campaign 8 grouping compact | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 9.482100722379982e-05,
+      "series": "CUDA Campaign 8 grouping compact"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA column count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 3.595299494918436e-05,
+      "series": "CUDA column count"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA compact count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 2.0216000848449767e-05,
+      "series": "CUDA compact count"
+    },
+    {
+      "color": "#9333ea",
+      "label": "CUDA compact graph consumer | Campaign 10 cross-architecture",
+      "seconds": 6.617899998673238e-05,
+      "series": "CUDA compact graph consumer"
+    },
+    {
+      "color": "#a855f7",
+      "label": "CUDA compact grouping consumer | Campaign 10 cross-architecture",
+      "seconds": 7.330900007218588e-05,
+      "series": "CUDA compact grouping consumer"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA conflict degrees rows | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 3.483399632386863e-05,
+      "series": "CUDA conflict degrees rows"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA conflict degrees total | Campaign 10 cross-architecture",
+      "seconds": 4.9529000079928664e-05,
+      "series": "CUDA conflict degrees total"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA dense to_host | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 2.2365988115780056e-05,
+      "series": "CUDA dense to_host"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output allocate | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.0001122899993788451,
+      "series": "CUDA device-output allocate"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output dense host copy | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.002462189004290849,
+      "series": "CUDA device-output dense host copy"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output reuse | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 3.110399120487273e-05,
+      "series": "CUDA device-output reuse"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output to_host | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.001511866008513607,
+      "series": "CUDA device-output to_host"
+    },
+    {
+      "color": "#2563eb",
+      "label": "CUDA device-resident | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.954400355927646e-05,
+      "series": "CUDA device-resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused CSR export | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.005479602987179533,
+      "series": "CUDA fused CSR export"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused degree summary | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00016349599172826856,
+      "series": "CUDA fused degree summary"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused grouping | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00010019300680141896,
+      "series": "CUDA fused grouping"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA operator-resident | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00021685899992007762,
+      "series": "CUDA operator-resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA row count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 6.118699093349278e-05,
+      "series": "CUDA row count"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "CUDA transfer-inclusive | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00011246599024161696,
+      "series": "CUDA transfer-inclusive"
+    },
+    {
+      "color": "#64748b",
+      "label": "CuPy CUDA Array Interface | Campaign 10 cross-architecture",
+      "seconds": 3.0300002435978968e-06,
+      "series": "CuPy CUDA Array Interface"
+    },
+    {
+      "color": "#be123c",
+      "label": "CuPy DLPack | Campaign 10 cross-architecture",
+      "seconds": 2.2399999579647556e-06,
+      "series": "CuPy DLPack"
+    },
+    {
+      "color": "#64748b",
+      "label": "CuPy reduction | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.0014841939992038533,
+      "series": "CuPy reduction"
+    },
+    {
+      "color": "#64748b",
+      "label": "External baseline | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 7.138100045267493e-05,
+      "series": "External baseline"
+    },
+    {
+      "color": "#dc2626",
+      "label": "PyTorch DLPack | Campaign 10 cross-architecture",
+      "seconds": 1.0700000530050602e-06,
+      "series": "PyTorch DLPack"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_small_dense_output",
+      "seconds": 1.3568998838309199e-05,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_small_dense_output",
+      "seconds": 2.2435000573750585e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_mid_dense_output",
+      "seconds": 0.00014232099965738598,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_mid_dense_output",
+      "seconds": 4.392800110508688e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign3_duplicate_heavy | CPU scalar",
+      "seconds": 0.004234492998875794,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_duplicate_heavy | HIP transfer",
+      "seconds": 0.0007995809992280556,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_duplicate_heavy | HIP resident",
+      "seconds": 0.0003349599992361618,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_duplicate_heavy | HIP to_host",
+      "seconds": 3.5990000469610095e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_duplicate_light | HIP transfer",
+      "seconds": 0.0011059449989261338,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_duplicate_light | HIP resident",
+      "seconds": 0.00034743099968181923,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_duplicate_light | HIP to_host",
+      "seconds": 0.00014597500012314413,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_all_zero | HIP transfer",
+      "seconds": 0.0002852690013241954,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_all_zero | HIP resident",
+      "seconds": 0.00022754000019631349,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_all_zero | HIP to_host",
+      "seconds": 3.8899997889529914e-07,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_smoke_one_word | HIP transfer",
+      "seconds": 0.00034566499925858807,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_smoke_one_word | HIP resident",
+      "seconds": 0.00026265600172337145,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_smoke_one_word | HIP to_host",
+      "seconds": 3.258499964431394e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_wide_two_word | HIP transfer",
+      "seconds": 0.0005077779987914255,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_wide_two_word | HIP resident",
+      "seconds": 0.0003350749993842328,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_wide_two_word | HIP to_host",
+      "seconds": 5.580800097959582e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_generic_multiword | HIP transfer",
+      "seconds": 0.005787071999293403,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_generic_multiword | HIP resident",
+      "seconds": 0.005533970001124544,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_generic_multiword | HIP to_host",
+      "seconds": 4.9525999202160165e-05,
+      "series": "ROCm HIP to_host"
+    }
+  ],
+  "reports_loaded": [
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_duplicate_pressure_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_profiler_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_requested_counters_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_smoke_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_strategy_hipcub_mi300x.json",
+    "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_wide_qubit_mi300x.json"
+  ],
+  "rows": [
+    {
+      "actual_duplicate_rate": 0.875,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_duplicate_heavy",
+      "correctness_digest": {
+        "canonical_label_hash": "c27a0d8df6e02e00eea2d1eacc17ff0b34c460eacec319a59e3509414b8f7d72",
+        "coefficient_l1": 14533.104495237598,
+        "input_terms": 32768,
+        "output_terms": 4096
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.004234492998875794,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 0.875,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": 0.0003349599992361618,
+      "hip_simplify_output_terms": 4096,
+      "hip_simplify_output_words": 1,
+      "hip_simplify_strategy": "rocthrust_default",
+      "hip_simplify_strategy_status": "retained",
+      "hip_simplify_strategy_unavailable_reason": null,
+      "hip_simplify_to_host_seconds": 3.5990000469610095e-05,
+      "hip_simplify_transfer_seconds": 0.0007995809992280556,
+      "num_qubits": 24,
+      "num_terms": 32768,
+      "profile": "simplify-duplicate-pressure",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_duplicate_pressure_mi300x.json",
+      "status": "ok",
+      "words": 1
+    },
+    {
+      "actual_duplicate_rate": 0.0625,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_duplicate_light",
+      "correctness_digest": {
+        "canonical_label_hash": "e3843b036f3536e8bb00764f4682c67130441b784da6e86f4e6d18f070405905",
+        "coefficient_l1": 39475.85087128988,
+        "input_terms": 32768,
+        "output_terms": 30720
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.004804723999768612,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 0.0625,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": 0.00034743099968181923,
+      "hip_simplify_output_terms": 30720,
+      "hip_simplify_output_words": 1,
+      "hip_simplify_strategy": "rocthrust_default",
+      "hip_simplify_strategy_status": "retained",
+      "hip_simplify_strategy_unavailable_reason": null,
+      "hip_simplify_to_host_seconds": 0.00014597500012314413,
+      "hip_simplify_transfer_seconds": 0.0011059449989261338,
+      "num_qubits": 24,
+      "num_terms": 32768,
+      "profile": "simplify-duplicate-pressure",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_duplicate_pressure_mi300x.json",
+      "status": "ok",
+      "words": 1
+    },
+    {
+      "actual_duplicate_rate": 0.999755859375,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_all_zero",
+      "correctness_digest": {
+        "canonical_label_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "coefficient_l1": 0.0,
+        "input_terms": 4096,
+        "output_terms": 0
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 3.9956999899004586e-05,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 1.0,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": 0.00022754000019631349,
+      "hip_simplify_output_terms": 0,
+      "hip_simplify_output_words": 1,
+      "hip_simplify_strategy": "rocthrust_default",
+      "hip_simplify_strategy_status": "retained",
+      "hip_simplify_strategy_unavailable_reason": null,
+      "hip_simplify_to_host_seconds": 3.8899997889529914e-07,
+      "hip_simplify_transfer_seconds": 0.0002852690013241954,
+      "num_qubits": 24,
+      "num_terms": 4096,
+      "profile": "simplify-duplicate-pressure",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_duplicate_pressure_mi300x.json",
+      "status": "ok",
+      "words": 1
+    },
+    {
+      "actual_duplicate_rate": 0.875,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_profiler_duplicate_heavy",
+      "correctness_digest": {
+        "canonical_label_hash": "2ec6169955031bd56125c411430790d3f55ad257cb6872939c31b0e416a081f9",
+        "coefficient_l1": 14382.668376983602,
+        "input_terms": 32768,
+        "output_terms": 4096
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0044578939996426925,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 0.875,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": 0.0007287900007213466,
+      "hip_simplify_output_terms": 4096,
+      "hip_simplify_output_words": 1,
+      "hip_simplify_strategy": "rocthrust_default",
+      "hip_simplify_strategy_status": "retained",
+      "hip_simplify_strategy_unavailable_reason": null,
+      "hip_simplify_to_host_seconds": 6.725500134052709e-05,
+      "hip_simplify_transfer_seconds": 0.1537248090007779,
+      "num_qubits": 24,
+      "num_terms": 32768,
+      "profile": "simplify-campaign3-profiler",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_profiler_mi300x.json",
+      "status": "ok",
+      "words": 1
+    },
+    {
+      "actual_duplicate_rate": 0.875,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_profiler_duplicate_heavy",
+      "correctness_digest": {
+        "canonical_label_hash": "2ec6169955031bd56125c411430790d3f55ad257cb6872939c31b0e416a081f9",
+        "coefficient_l1": 14382.668376983602,
+        "input_terms": 32768,
+        "output_terms": 4096
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0044836899996880675,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 0.875,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": 0.013471737000145367,
+      "hip_simplify_output_terms": 4096,
+      "hip_simplify_output_words": 1,
+      "hip_simplify_strategy": "rocthrust_default",
+      "hip_simplify_strategy_status": "retained",
+      "hip_simplify_strategy_unavailable_reason": null,
+      "hip_simplify_to_host_seconds": 4.6422999730566517e-05,
+      "hip_simplify_transfer_seconds": 0.19847393299824034,
+      "num_qubits": 24,
+      "num_terms": 32768,
+      "profile": "simplify-campaign3-profiler",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_requested_counters_mi300x.json",
+      "status": "ok",
+      "words": 1
+    },
+    {
+      "actual_duplicate_rate": 0.25,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_smoke_one_word",
+      "correctness_digest": {
+        "canonical_label_hash": "162de9a0c1595b1567a2e4513fd62ee025c121cbc5c811e620dd68d88e42a346",
+        "coefficient_l1": 128.5801623891586,
+        "input_terms": 128,
+        "output_terms": 96
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 1.0421001206850633e-05,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 0.25,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": 0.00026265600172337145,
+      "hip_simplify_output_terms": 96,
+      "hip_simplify_output_words": 1,
+      "hip_simplify_strategy": "rocthrust_default",
+      "hip_simplify_strategy_status": "retained",
+      "hip_simplify_strategy_unavailable_reason": null,
+      "hip_simplify_to_host_seconds": 3.258499964431394e-05,
+      "hip_simplify_transfer_seconds": 0.00034566499925858807,
+      "num_qubits": 8,
+      "num_terms": 128,
+      "profile": "simplify-smoke",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_smoke_mi300x.json",
+      "status": "ok",
+      "words": 1
+    },
+    {
+      "actual_duplicate_rate": 0.875,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_strategy_duplicate_heavy",
+      "correctness_digest": {
+        "canonical_label_hash": "eaa2bb5e8275627fa30aad00f326f2ebdfaff5fb6430eb1a9850a5caa48e227b",
+        "coefficient_l1": 14575.47993634922,
+        "input_terms": 32768,
+        "output_terms": 4096
+      },
+      "correctness_passed": false,
+      "cpu_scalar_seconds": 0.004370914000901394,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 0.875,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": null,
+      "hip_simplify_output_terms": 4096,
+      "hip_simplify_output_words": 1,
+      "hip_simplify_strategy": "hipcub_radix_sort_reduce",
+      "hip_simplify_strategy_status": "rejected_with_evidence",
+      "hip_simplify_strategy_unavailable_reason": "Campaign 3 retained rocThrust default only; hipCUB/custom probes need separate implementation evidence before timing",
+      "hip_simplify_to_host_seconds": null,
+      "hip_simplify_transfer_seconds": null,
+      "num_qubits": 24,
+      "num_terms": 32768,
+      "profile": "simplify-strategy-ab",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_strategy_hipcub_mi300x.json",
+      "status": "strategy_rejected",
+      "words": 1
+    },
+    {
+      "actual_duplicate_rate": 0.25,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_wide_two_word",
+      "correctness_digest": {
+        "canonical_label_hash": "cba015f1fb7f521bd67842dfa30f872a9b2052fd83001616af0073b9f71a2aa2",
+        "coefficient_l1": 8722.90066845014,
+        "input_terms": 8192,
+        "output_terms": 6144
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0022675380005239276,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 0.25,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": 0.0003350749993842328,
+      "hip_simplify_output_terms": 6144,
+      "hip_simplify_output_words": 2,
+      "hip_simplify_strategy": "rocthrust_default",
+      "hip_simplify_strategy_status": "retained",
+      "hip_simplify_strategy_unavailable_reason": null,
+      "hip_simplify_to_host_seconds": 5.580800097959582e-05,
+      "hip_simplify_transfer_seconds": 0.0005077779987914255,
+      "num_qubits": 70,
+      "num_terms": 8192,
+      "profile": "simplify-wide-qubit",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_wide_qubit_mi300x.json",
+      "status": "ok",
+      "words": 2
+    },
+    {
+      "actual_duplicate_rate": 0.25,
+      "campaign3_headroom_statuses": {
+        "DLPack": "out_of_scope_with_next_trigger",
+        "ROCm wheels": "out_of_scope_with_next_trigger",
+        "expectation": "out_of_scope_with_next_trigger",
+        "matmul": "out_of_scope_with_next_trigger",
+        "multi-GPU": "out_of_scope_with_next_trigger",
+        "packed summaries": "out_of_scope_with_next_trigger",
+        "portability": "out_of_scope_with_next_trigger",
+        "simultaneous CUDA+HIP": "out_of_scope_with_next_trigger",
+        "streams": "out_of_scope_with_next_trigger",
+        "workspaces": "out_of_scope_with_next_trigger"
+      },
+      "case": "campaign3_generic_multiword",
+      "correctness_digest": {
+        "canonical_label_hash": "8d2268219ef2d64a3aabde5e5a991d8642207371187d9587aa101e8ec5c5e54d",
+        "coefficient_l1": 4365.036342833208,
+        "input_terms": 4096,
+        "output_terms": 3072
+      },
+      "correctness_passed": true,
+      "cpu_scalar_seconds": 0.0008256770015577786,
+      "device_name": "AMD Instinct MI300X VF",
+      "duplicate_rate": 0.25,
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "hip_simplify_device_resident_seconds": 0.005533970001124544,
+      "hip_simplify_output_terms": 3072,
+      "hip_simplify_output_words": 3,
+      "hip_simplify_strategy": "rocthrust_default",
+      "hip_simplify_strategy_status": "retained",
+      "hip_simplify_strategy_unavailable_reason": null,
+      "hip_simplify_to_host_seconds": 4.9525999202160165e-05,
+      "hip_simplify_transfer_seconds": 0.005787071999293403,
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "profile": "simplify-wide-qubit",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_wide_qubit_mi300x.json",
+      "status": "ok",
+      "words": 3
+    }
+  ],
+  "strategy_decisions": [
+    {
+      "reason": "not present in raw Campaign 3 strategy evidence",
+      "source_file": null,
+      "status": "unavailable",
+      "strategy": "custom_packed_key"
+    },
+    {
+      "reason": "Campaign 3 retained rocThrust default only; hipCUB/custom probes need separate implementation evidence before timing",
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_strategy_hipcub_mi300x.json",
+      "status": "rejected_with_evidence",
+      "strategy": "hipcub_radix_sort_reduce"
+    },
+    {
+      "reason": null,
+      "source_file": "docs/benchmarks/data/rocm_mi300x_campaign3_2026-04-30/raw/rocm_simplify_wide_qubit_mi300x.json",
+      "status": "retained",
+      "strategy": "rocthrust_default"
+    }
+  ]
+}

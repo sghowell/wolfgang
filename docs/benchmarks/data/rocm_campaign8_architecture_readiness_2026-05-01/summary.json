@@ -1,0 +1,60 @@
+{
+  "alternate_amd_gpu_availability": {
+    "reason": "No non-MI300X AMD GPU host was provided for Campaign 8 execution.",
+    "status": "blocked_external"
+  },
+  "campaign": "rocm_campaign8_architecture_readiness",
+  "campaign8_terminal_statuses": {
+    "backend_neutral_object_model": "accepted_for_future_implementation",
+    "external_hip_statevector_contract": "accepted_for_future_implementation",
+    "hip_cuda_array_interface_policy": "rejected_with_evidence",
+    "hip_dlpack_reconsideration_contract": "accepted_for_future_implementation",
+    "legacy_rocprof_retention": "retained",
+    "multi_gpu_rocm_execution": "out_of_scope_with_next_trigger",
+    "non_mi300x_amd_portability": "blocked_external",
+    "public_graphs_policy": "rejected_with_evidence",
+    "public_streams_policy": "rejected_with_evidence",
+    "public_workspaces_policy": "rejected_with_evidence",
+    "rocm_ci_hardware_policy": "accepted_for_future_implementation",
+    "rocm_clean_machine_install_tests": "accepted_for_future_implementation",
+    "rocm_wheel_packaging_design": "accepted_for_future_implementation",
+    "rocprofv3_migration": "accepted_for_future_implementation",
+    "simultaneous_cuda_hip_source_builds": "unavailable",
+    "source_build_release_lane_retention": "retained",
+    "targeted_rocm_performance_reopen": "accepted_for_future_implementation"
+  },
+  "command": "<private-path> --write-evidence docs/benchmarks/data/rocm_campaign8_architecture_readiness_2026-05-01",
+  "cuda_hip_configure_rejection": {
+    "command": "uv run python -m cmake -S . -B /tmp/fastpauli-campaign8-cuda-hip-reject -DFASTPAULI_ENABLE_CUDA=ON -DFASTPAULI_ENABLE_HIP=ON",
+    "evidence": "Run separately during Campaign 8 closeout; this readiness lane only records the expected configure failure.",
+    "expected_result": "configure fails with cannot-both-be-ON diagnostic",
+    "status": "external_closeout_required"
+  },
+  "evidence_files": [
+    "raw/readiness_commands.json",
+    "logs/readiness_lane.txt"
+  ],
+  "git_revision": "5bca1095b06f97300b165492b08fed85cd91dd70",
+  "interop_reconsideration_status": {
+    "decision_doc": "docs/plans/rocm_hip_interop_reconsideration_campaign8_decision.md",
+    "status": "accepted_for_future_implementation"
+  },
+  "local_cpu_only_validation": {
+    "command": "uv run python scripts/validate.py",
+    "evidence": "Run separately during Campaign 8 closeout; this readiness lane only records the command contract.",
+    "status": "external_closeout_required"
+  },
+  "packaging_gate": {
+    "decision": "ROCm wheels remain unavailable until package channel, runtime policy, CI hardware, and clean-machine install tests exist.",
+    "status": "accepted_for_future_implementation"
+  },
+  "rocprofv3_status": {
+    "decision_doc": "docs/plans/rocm_profiler_migration_campaign8_decision.md",
+    "status": "accepted_for_future_implementation"
+  },
+  "runtime_changes": "none",
+  "targeted_performance_reopen_status": {
+    "decision": "A future ROCm performance campaign requires a retained operation, profiler artifact, measured bottleneck, proposed implementation, correctness oracle, A/B timing boundary, and rejection criteria.",
+    "status": "accepted_for_future_implementation"
+  }
+}

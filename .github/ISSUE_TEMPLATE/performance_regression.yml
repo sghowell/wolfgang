@@ -1,0 +1,34 @@
+name: Performance regression
+description: Report a repeatable slowdown with a comparable timing boundary
+title: "[performance] "
+labels: [performance]
+body:
+  - type: input
+    id: versions
+    attributes: {label: Compared versions or revisions}
+    validations: {required: true}
+  - type: textarea
+    id: operation
+    attributes: {label: Operation and dataset, description: "Include term count, qubits, sparsity/duplicates, dtype, and seed."}
+    validations: {required: true}
+  - type: textarea
+    id: boundary
+    attributes: {label: Timing boundary, description: "State transfer-inclusive, device-resident, allocation/reuse, synchronization, warmup, and repeats."}
+    validations: {required: true}
+  - type: textarea
+    id: environment
+    attributes: {label: Sanitized environment, description: "CPU/GPU, OS, compiler, runtime/driver, build options; omit hostnames, IPs, tokens, and private paths."}
+    validations: {required: true}
+  - type: textarea
+    id: results
+    attributes: {label: Commands and statistical results}
+    validations: {required: true}
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Comparability
+      options:
+        - label: Correctness matched the same oracle in both runs.
+          required: true
+        - label: Both timings use the same semantic and synchronization boundary.
+          required: true

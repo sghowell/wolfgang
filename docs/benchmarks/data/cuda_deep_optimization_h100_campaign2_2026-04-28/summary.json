@@ -1,0 +1,344 @@
+{
+  "artifact_root": "<private-path>",
+  "baseline_revision": "f42afafdb884353bd977eeeaeaefa04a60366fb7",
+  "block_size_ab": [
+    {
+      "baseline": 0.0002479679969837889,
+      "fused256": 0.00022196600184543058,
+      "hybrid": 0.00021563199697993696,
+      "profile": "stress",
+      "scale": "qubits_14_terms_4096",
+      "threads128": 0.00021161400218261406,
+      "threads512": 0.000223324001126457
+    },
+    {
+      "baseline": 0.00041285499901277944,
+      "fused256": 0.0004173839988652617,
+      "hybrid": 0.00041785599751165137,
+      "profile": "stress",
+      "scale": "qubits_15_terms_4096",
+      "threads128": 0.00044897499901708215,
+      "threads512": 0.0004065219982294366
+    },
+    {
+      "baseline": 0.001463912005419843,
+      "fused256": 0.0014507199957733974,
+      "hybrid": 0.0014657619976787828,
+      "profile": "stress",
+      "scale": "qubits_16_terms_8192",
+      "threads128": 0.0014699250023113564,
+      "threads512": 0.0014924220013199374
+    },
+    {
+      "baseline": 0.00330303000373533,
+      "fused256": 0.0032698499999241903,
+      "hybrid": 0.003185393004969228,
+      "profile": "extreme",
+      "scale": "qubits_17_terms_8192",
+      "threads128": 0.0032267880014842376,
+      "threads512": 0.003362176998052746
+    },
+    {
+      "baseline": 0.007201972999610007,
+      "fused256": 0.007279058998392429,
+      "hybrid": 0.007063995995849837,
+      "profile": "extreme",
+      "scale": "qubits_18_terms_8192",
+      "threads128": 0.0068797889980487525,
+      "threads512": 0.007374077998974826
+    }
+  ],
+  "campaign": "h100_cuda_deep_optimization_campaign2",
+  "competitors": {
+    "cudaq": {
+      "available": true,
+      "benchmark_status": "installed/importable but no primitive-equivalent sparse-Pauli baseline retained",
+      "import_error": null,
+      "version": "0.12.0.post1"
+    },
+    "cupy": {
+      "available": true,
+      "version": "13.4.1"
+    },
+    "cuquantum": {
+      "available": true,
+      "component": "custatevec",
+      "import_error": null,
+      "version": "24.8.0"
+    },
+    "openfermion": {
+      "available": true,
+      "version": "1.7.1"
+    },
+    "qiskit": {
+      "available": true,
+      "version": "2.4.1"
+    },
+    "qiskit_aer": {
+      "available": false,
+      "benchmark_status": "not importable in this environment",
+      "import_error": "ImportError: cannot import name 'convert_to_target' from 'qiskit.providers' (<private-path>",
+      "version": "0.15.1"
+    }
+  },
+  "date": "2026-04-28",
+  "experiment_revision": "084bed2b071cd433ae383f62eb47f79f971908ff",
+  "final_profiles": {
+    "default": "raw/cuda_scaling_default_final.json",
+    "extreme": "raw/cuda_scaling_extreme_final.json",
+    "smoke": "raw/cuda_scaling_smoke_final.json",
+    "stress": "raw/cuda_scaling_stress_final.json"
+  },
+  "hardware": {
+    "compute_capability": "9.0",
+    "cuda_toolkit": "12.9.86",
+    "driver": "580.126.09",
+    "gpu": "NVIDIA H100 PCIe"
+  },
+  "profile_status": {
+    "competitive baseline benchmark": {
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    "compute sanitizer initcheck": {
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    "compute sanitizer memcheck": {
+      "required": true,
+      "returncode": 0,
+      "status": "success"
+    },
+    "compute sanitizer racecheck": {
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    "compute sanitizer synccheck": {
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    "cuda scaling benchmark": {
+      "required": true,
+      "returncode": 0,
+      "status": "success"
+    },
+    "cuda validation": {
+      "required": true,
+      "returncode": 0,
+      "status": "success"
+    },
+    "cuobjdump ptx inventory": {
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    "cuobjdump sass inventory": {
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    "install all competitor packages": {
+      "required": false,
+      "returncode": 0,
+      "status": "success"
+    },
+    "ncu matmul_product_generation_simplify detailed": {
+      "required": false,
+      "returncode": 1,
+      "status": "expected_permission_denied"
+    },
+    "ncu pairwise_commutation detailed": {
+      "required": false,
+      "returncode": 1,
+      "status": "expected_permission_denied"
+    },
+    "ncu simplify_duplicate_pressure detailed": {
+      "required": false,
+      "returncode": 1,
+      "status": "expected_permission_denied"
+    },
+    "ncu statevector_expectation detailed": {
+      "required": false,
+      "returncode": 1,
+      "status": "expected_permission_denied"
+    },
+    "nsys cuda api timeline": {
+      "required": true,
+      "returncode": 0,
+      "status": "success"
+    },
+    "nvdisasm sass listing": {
+      "required": false,
+      "returncode": 1,
+      "status": "failed"
+    }
+  },
+  "profile_status_note": "profile_status records the nonprivileged profile run; detailed Nsight Compute replay required sudo on this host because the nonprivileged path returned ERR_NVGPUCTRPERM.",
+  "profiler_evidence_status": {
+    "nonprivileged_ncu": {
+      "status": "expected_permission_denied",
+      "error": "ERR_NVGPUCTRPERM"
+    },
+    "privileged_ncu": {
+      "status": "success",
+      "required_hot_paths": [
+        "simplify_duplicate_pressure",
+        "statevector_expectation",
+        "pairwise_commutation",
+        "matmul_product_generation_simplify"
+      ]
+    }
+  },
+  "privileged_ncu_retry": {
+    "baseline_directory": "<private-path>",
+    "experiment_directory": "<private-path>",
+    "reports": {
+      "matmul_product_generation_simplify": {
+        "baseline_bytes": 6942766,
+        "experiment_bytes": 6929787,
+        "status": "success"
+      },
+      "pairwise_commutation": {
+        "baseline_bytes": 301942,
+        "experiment_bytes": 301939,
+        "status": "success"
+      },
+      "simplify_duplicate_pressure": {
+        "baseline_bytes": 4964723,
+        "experiment_bytes": 4958403,
+        "status": "success"
+      },
+      "statevector_expectation": {
+        "baseline_bytes": 987377,
+        "experiment_bytes": 878327,
+        "status": "success"
+      }
+    }
+  },
+  "rejected_experiments": [
+    {
+      "name": "global_512_thread_expectation_launch",
+      "reason": "slower than 256-thread fused kernel on stress and extreme statevector cases"
+    },
+    {
+      "name": "global_128_thread_expectation_launch",
+      "reason": "wins the largest statevectors but regresses mid-sized stress cases; retained only behind size gate"
+    },
+    {
+      "name": "public_cuda_workspace_api",
+      "reason": "deferred; current evidence did not implement reusable workspace semantics and docs keep it internal/benchmark-only"
+    },
+    {
+      "name": "device_output_commutation_api",
+      "reason": "deferred; output materialization remains the public bottleneck boundary and no public async/device-output semantics were introduced"
+    }
+  ],
+  "retained_experiments": [
+    {
+      "name": "fused_statevector_accumulator",
+      "reason": "removes per-call num_terms temporary array and Thrust final reduction; preserves public synchronization and tolerance boundaries"
+    },
+    {
+      "name": "size_gated_expectation_launch",
+      "reason": "uses 256 threads by default and 128 threads for statevectors with at least 2^17 amplitudes after block-size A/B testing"
+    },
+    {
+      "name": "cuda_benchmark_output_option",
+      "reason": "lets H100 benchmark runs write raw JSON artifacts directly and keeps stdout available for logs"
+    },
+    {
+      "name": "campaign2_benchmark_fields",
+      "reason": "adds p10/p90/repeat/warmup plus workspace/materialization metadata to benchmark JSON"
+    }
+  ],
+  "statevector_ab": [
+    {
+      "baseline_resident_seconds": 4.324299516156316e-05,
+      "baseline_transfer_seconds": 7.916100003058091e-05,
+      "final_resident_seconds": 3.358899994054809e-05,
+      "final_transfer_seconds": 6.152800051495433e-05,
+      "profile": "default",
+      "resident_speedup": 1.2874153811695037,
+      "scale": "qubits_10_terms_1024",
+      "transfer_speedup": 1.2865849591738463
+    },
+    {
+      "baseline_resident_seconds": 6.921600288478658e-05,
+      "baseline_transfer_seconds": 0.00010967299749609083,
+      "final_resident_seconds": 6.113499694038182e-05,
+      "final_transfer_seconds": 0.00010394400305813178,
+      "profile": "default",
+      "resident_speedup": 1.1321829778168675,
+      "scale": "qubits_12_terms_2048",
+      "transfer_speedup": 1.0551161612926823
+    },
+    {
+      "baseline_resident_seconds": 0.0002223069968749769,
+      "baseline_transfer_seconds": 0.00029893199825892225,
+      "final_resident_seconds": 0.00021042899606982246,
+      "final_transfer_seconds": 0.0002810740043059923,
+      "profile": "default",
+      "resident_speedup": 1.0564465973178583,
+      "scale": "qubits_14_terms_4096",
+      "transfer_speedup": 1.0635348473332624
+    },
+    {
+      "baseline_resident_seconds": 0.0002479679969837889,
+      "baseline_transfer_seconds": 0.00034910700196633115,
+      "final_resident_seconds": 0.00021140399621799588,
+      "final_transfer_seconds": 0.0002740299969445914,
+      "profile": "stress",
+      "resident_speedup": 1.1729579450716197,
+      "scale": "qubits_14_terms_4096",
+      "transfer_speedup": 1.2739736739000886
+    },
+    {
+      "baseline_resident_seconds": 0.00041285499901277944,
+      "baseline_transfer_seconds": 0.0004843050046474673,
+      "final_resident_seconds": 0.0003965089999837801,
+      "final_transfer_seconds": 0.00045536300603998825,
+      "profile": "stress",
+      "resident_speedup": 1.041224786901856,
+      "scale": "qubits_15_terms_4096",
+      "transfer_speedup": 1.0635580805282576
+    },
+    {
+      "baseline_resident_seconds": 0.001463912005419843,
+      "baseline_transfer_seconds": 0.0015386009981739335,
+      "final_resident_seconds": 0.0014458730001933873,
+      "final_transfer_seconds": 0.0015376059964182787,
+      "profile": "stress",
+      "resident_speedup": 1.0124762031133046,
+      "scale": "qubits_16_terms_8192",
+      "transfer_speedup": 1.00064711100111
+    },
+    {
+      "baseline_resident_seconds": 0.00330303000373533,
+      "baseline_transfer_seconds": 0.003354243002831936,
+      "final_resident_seconds": 0.003190147996065207,
+      "final_transfer_seconds": 0.003215680000721477,
+      "profile": "extreme",
+      "resident_speedup": 1.0353845676781623,
+      "scale": "qubits_17_terms_8192",
+      "transfer_speedup": 1.0430897981389227
+    },
+    {
+      "baseline_resident_seconds": 0.007201972999610007,
+      "baseline_transfer_seconds": 0.006995132003794424,
+      "final_resident_seconds": 0.006773152003006544,
+      "final_transfer_seconds": 0.00678543600224657,
+      "profile": "extreme",
+      "resident_speedup": 1.063311881442069,
+      "scale": "qubits_18_terms_8192",
+      "transfer_speedup": 1.0309038360215064
+    }
+  ],
+  "validation": {
+    "compute_sanitizer": "memcheck/racecheck/initcheck/synccheck clean in experiment profile",
+    "h100_targeted_cuda_tests": "18 passed, 1 skipped after final build"
+  }
+}

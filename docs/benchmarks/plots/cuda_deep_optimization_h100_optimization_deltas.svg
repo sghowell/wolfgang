@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="550" viewBox="0 0 1120 550" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli CUDA optimization deltas</title>
+<desc id="desc">A/B ratios for the retained statevector byte-copy optimization and rejected commutation specialization.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">A/B Optimization Deltas</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Ratio is baseline seconds divided by experiment seconds; above 1.0x is faster.</text>
+<line x1="630" y1="90" x2="630" y2="506" stroke="#d1d5db"/>
+<text x="630.0" y="84.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="middle">1.0x</text>
+<text x="32.0" y="122.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">expectation default qubits_10_terms_1024</text>
+<rect x="622.7" y="110.0" width="7.3" height="16.0" rx="2.0" fill="#dc2626"/>
+<text x="614.7" y="122.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="end">0.99x</text>
+<text x="32.0" y="147.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">expectation default qubits_12_terms_2048</text>
+<rect x="630.0" y="135.0" width="188.0" height="16.0" rx="2.0" fill="#059669"/>
+<text x="826.0" y="147.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.12x</text>
+<text x="32.0" y="172.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">expectation default qubits_14_terms_4096</text>
+<rect x="630.0" y="160.0" width="263.4" height="16.0" rx="2.0" fill="#059669"/>
+<text x="901.4" y="172.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.20x</text>
+<text x="32.0" y="197.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">expectation stress qubits_14_terms_4096</text>
+<rect x="630.0" y="185.0" width="233.6" height="16.0" rx="2.0" fill="#059669"/>
+<text x="871.6" y="197.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.16x</text>
+<text x="32.0" y="222.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">expectation stress qubits_15_terms_4096</text>
+<rect x="630.0" y="210.0" width="229.8" height="16.0" rx="2.0" fill="#059669"/>
+<text x="867.8" y="222.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.16x</text>
+<text x="32.0" y="247.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">expectation stress qubits_16_terms_8192</text>
+<rect x="630.0" y="235.0" width="165.6" height="16.0" rx="2.0" fill="#059669"/>
+<text x="803.6" y="247.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.10x</text>
+<text x="32.0" y="272.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">expectation extreme qubits_17_terms_8192</text>
+<rect x="630.0" y="260.0" width="138.4" height="16.0" rx="2.0" fill="#059669"/>
+<text x="776.4" y="272.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.07x</text>
+<text x="32.0" y="297.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">expectation extreme qubits_18_terms_8192</text>
+<rect x="630.0" y="285.0" width="137.2" height="16.0" rx="2.0" fill="#059669"/>
+<text x="775.2" y="297.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.07x</text>
+<text x="32.0" y="322.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">comm specialization default terms_1024x1024</text>
+<rect x="447.8" y="310.0" width="182.2" height="16.0" rx="2.0" fill="#dc2626"/>
+<text x="439.8" y="322.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="end">0.24x</text>
+<text x="32.0" y="347.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">comm specialization default terms_2048x2048</text>
+<rect x="593.3" y="335.0" width="36.7" height="16.0" rx="2.0" fill="#dc2626"/>
+<text x="585.3" y="347.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="end">0.78x</text>
+<text x="32.0" y="372.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">comm specialization default terms_4096x4096</text>
+<rect x="586.8" y="360.0" width="43.2" height="16.0" rx="2.0" fill="#dc2626"/>
+<text x="578.8" y="372.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="end">0.74x</text>
+<text x="32.0" y="397.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">comm specialization stress terms_10000x10000</text>
+<rect x="630.0" y="385.0" width="188.4" height="16.0" rx="2.0" fill="#b45309"/>
+<text x="826.4" y="397.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.12x</text>
+<text x="32.0" y="422.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">comm specialization stress terms_4096x4096</text>
+<rect x="630.0" y="410.0" width="262.6" height="16.0" rx="2.0" fill="#b45309"/>
+<text x="900.6" y="422.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.19x</text>
+<text x="32.0" y="447.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">comm specialization stress terms_8192x8192</text>
+<rect x="630.0" y="435.0" width="102.4" height="16.0" rx="2.0" fill="#b45309"/>
+<text x="740.4" y="447.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.04x</text>
+<text x="32.0" y="472.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">comm specialization extreme terms_12000x12000</text>
+<rect x="630.0" y="460.0" width="80.9" height="16.0" rx="2.0" fill="#b45309"/>
+<text x="718.9" y="472.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.02x</text>
+<text x="32.0" y="497.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">comm specialization extreme terms_16384x16384</text>
+<rect x="630.0" y="485.0" width="76.8" height="16.0" rx="2.0" fill="#b45309"/>
+<text x="714.8" y="497.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">1.02x</text>
+</svg>

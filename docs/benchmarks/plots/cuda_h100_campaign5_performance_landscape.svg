@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1380" height="548" viewBox="0 0 1380 548" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli Performance Landscape</title>
+<desc id="desc">Campaign 5 broad comparison: CPU selectors, CUDA boundaries, device-output commutation, and external baselines.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111827" text-anchor="start">FastPauli Performance Landscape</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Campaign 5 broad comparison: CPU selectors, CUDA boundaries, device-output commutation, and external baselines.</text>
+<line x1="370.0" y1="102" x2="370.0" y2="428.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="370.0" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">0.001x</text>
+<line x1="476.4" y1="102" x2="476.4" y2="428.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="476.4" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">0.01x</text>
+<line x1="582.9" y1="102" x2="582.9" y2="428.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="582.9" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">0.10x</text>
+<line x1="689.3" y1="102" x2="689.3" y2="428.0" stroke="#111827" stroke-width="1.4"/>
+<text x="689.3" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">1.00x</text>
+<line x1="795.7" y1="102" x2="795.7" y2="428.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="795.7" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">10.0x</text>
+<line x1="902.1" y1="102" x2="902.1" y2="428.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="902.1" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">100x</text>
+<line x1="1008.6" y1="102" x2="1008.6" y2="428.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="1008.6" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">1000x</text>
+<line x1="1115.0" y1="102" x2="1115.0" y2="428.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="1115.0" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">10000x</text>
+<rect x="24.0" y="102.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="125.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">simplify 50000 terms</text>
+<text x="1240.0" y="125.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 16.8x</text>
+<circle cx="689.3" cy="110.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="789.1" cy="126.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="819.7" cy="130.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="161.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">statevector 2048 terms</text>
+<text x="1240.0" y="161.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 710x</text>
+<circle cx="689.3" cy="146.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="956.2" cy="162.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="992.7" cy="166.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="24.0" y="174.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="197.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">commutation 2048x2048</text>
+<text x="1240.0" y="197.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 615x</text>
+<circle cx="689.3" cy="182.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="797.7" cy="186.0" r="5.0" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="763.0" cy="190.0" r="5.0" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="786.1" cy="194.0" r="5.0" fill="#0f766e" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="832.9" cy="198.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="841.5" cy="202.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="923.4" cy="206.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="986.1" cy="210.0" r="5.0" fill="#16a34a" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="796.2" cy="214.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="233.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">matmul+simplify 256x256</text>
+<text x="1240.0" y="233.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 16.5x</text>
+<circle cx="689.3" cy="218.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="776.4" cy="234.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="818.9" cy="238.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="24.0" y="246.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="269.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Qiskit simplify 10000 terms 64q</text>
+<text x="1240.0" y="269.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1.00x</text>
+<circle cx="689.3" cy="254.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="678.5" cy="250.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="305.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">OpenFermion multiply 256x256 64q</text>
+<text x="1240.0" y="305.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1.00x</text>
+<circle cx="689.3" cy="290.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="555.6" cy="286.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="24.0" y="318.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="341.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Qiskit grouping 512 terms 64q</text>
+<text x="1240.0" y="341.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1.00x</text>
+<circle cx="689.3" cy="326.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="434.5" cy="322.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="377.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">cuStateVec statevector 4096 terms 14q</text>
+<text x="1240.0" y="377.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1560x</text>
+<circle cx="689.3" cy="362.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="853.0" cy="358.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1023.7" cy="382.0" r="5.0" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1029.1" cy="382.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="32.0" cy="440.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<text x="46.0" y="444.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CPU scalar</text>
+<circle cx="352.0" cy="440.0" r="5.0" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<text x="366.0" y="444.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CPU TBB</text>
+<circle cx="672.0" cy="440.0" r="5.0" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<text x="686.0" y="444.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CPU AVX2</text>
+<circle cx="992.0" cy="440.0" r="5.0" fill="#0f766e" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1006.0" y="444.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CPU AVX-512</text>
+<circle cx="32.0" cy="468.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<text x="46.0" y="472.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA transfer-inclusive</text>
+<circle cx="352.0" cy="468.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="366.0" y="472.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA device-resident</text>
+<circle cx="672.0" cy="468.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<text x="686.0" y="472.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA device-output allocate</text>
+<circle cx="992.0" cy="468.0" r="5.0" fill="#16a34a" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1006.0" y="472.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA device-output reuse</text>
+<circle cx="32.0" cy="496.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<text x="46.0" y="500.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA device-output to_host</text>
+<circle cx="352.0" cy="496.0" r="5.0" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
+<text x="366.0" y="500.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA operator-resident</text>
+<circle cx="672.0" cy="496.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<text x="686.0" y="500.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">External baseline</text>
+<text x="32.0" y="524.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">Source: Campaign 5 checked raw JSON. CUDA device-output points apply to pairwise commutation rows and keep dense uint8 output on GPU.</text>
+</svg>

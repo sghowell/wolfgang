@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="440" viewBox="0 0 1120 440" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 campaign 2 launch-size hillclimb</title>
+<desc id="desc">Launch-size A/B outcomes for statevector expectation.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="40.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">Launch-Size Hillclimb</text>
+<text x="32.0" y="64.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Speedup versus baseline for fused and block-size variants; hybrid is retained.</text>
+<text x="330.0" y="100.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">1.0x</text>
+<text x="850.0" y="100.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="end">1.17x</text>
+<text x="32.0" y="146.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">stress qubits_14_terms_4096</text>
+<rect x="330.0" y="130.0" width="495.7" height="9.0" rx="2" fill="#059669"/>
+<text x="833.7" y="138.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">fused256 1.12x</text>
+<rect x="330.0" y="143.0" width="520.0" height="9.0" rx="2" fill="#d97706"/>
+<text x="858.0" y="151.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads128 1.17x</text>
+<rect x="330.0" y="156.0" width="492.7" height="9.0" rx="2" fill="#2563eb"/>
+<text x="830.7" y="164.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads512 1.11x</text>
+<rect x="330.0" y="169.0" width="510.3" height="9.0" rx="2" fill="#0f766e"/>
+<text x="848.3" y="177.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">hybrid 1.15x</text>
+<text x="32.0" y="204.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">stress qubits_15_terms_4096</text>
+<rect x="330.0" y="188.0" width="438.9" height="9.0" rx="2" fill="#059669"/>
+<text x="776.9" y="196.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">fused256 0.99x</text>
+<rect x="330.0" y="201.0" width="408.1" height="9.0" rx="2" fill="#d97706"/>
+<text x="746.1" y="209.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads128 0.92x</text>
+<rect x="330.0" y="214.0" width="450.7" height="9.0" rx="2" fill="#2563eb"/>
+<text x="788.7" y="222.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads512 1.02x</text>
+<rect x="330.0" y="227.0" width="438.5" height="9.0" rx="2" fill="#0f766e"/>
+<text x="776.5" y="235.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">hybrid 0.99x</text>
+<text x="32.0" y="262.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">stress qubits_16_terms_8192</text>
+<rect x="330.0" y="246.0" width="447.8" height="9.0" rx="2" fill="#059669"/>
+<text x="785.8" y="254.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">fused256 1.01x</text>
+<rect x="330.0" y="259.0" width="441.9" height="9.0" rx="2" fill="#d97706"/>
+<text x="779.9" y="267.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads128 1.00x</text>
+<rect x="330.0" y="272.0" width="435.3" height="9.0" rx="2" fill="#2563eb"/>
+<text x="773.3" y="280.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads512 0.98x</text>
+<rect x="330.0" y="285.0" width="443.2" height="9.0" rx="2" fill="#0f766e"/>
+<text x="781.2" y="293.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">hybrid 1.00x</text>
+<text x="32.0" y="320.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">extreme qubits_17_terms_8192</text>
+<rect x="330.0" y="304.0" width="448.3" height="9.0" rx="2" fill="#059669"/>
+<text x="786.3" y="312.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">fused256 1.01x</text>
+<rect x="330.0" y="317.0" width="454.2" height="9.0" rx="2" fill="#d97706"/>
+<text x="792.2" y="325.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads128 1.02x</text>
+<rect x="330.0" y="330.0" width="436.0" height="9.0" rx="2" fill="#2563eb"/>
+<text x="774.0" y="338.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads512 0.98x</text>
+<rect x="330.0" y="343.0" width="460.2" height="9.0" rx="2" fill="#0f766e"/>
+<text x="798.2" y="351.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">hybrid 1.04x</text>
+<text x="32.0" y="378.0" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="start">extreme qubits_18_terms_8192</text>
+<rect x="330.0" y="362.0" width="439.1" height="9.0" rx="2" fill="#059669"/>
+<text x="777.1" y="370.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">fused256 0.99x</text>
+<rect x="330.0" y="375.0" width="464.5" height="9.0" rx="2" fill="#d97706"/>
+<text x="802.5" y="383.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads128 1.05x</text>
+<rect x="330.0" y="388.0" width="433.4" height="9.0" rx="2" fill="#2563eb"/>
+<text x="771.4" y="396.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">threads512 0.98x</text>
+<rect x="330.0" y="401.0" width="452.4" height="9.0" rx="2" fill="#0f766e"/>
+<text x="790.4" y="409.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#111827" text-anchor="start">hybrid 1.02x</text>
+</svg>

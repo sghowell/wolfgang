@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If Wolfgang contributes to your research, please cite the software and archive the exact version used."
+title: "Wolfgang: accelerator-oriented kernels for sparse Pauli operators"
+type: software
+authors:
+  - family-names: Howell
+    given-names: Sean
+    affiliation: Zetetic Works Research Corporation
+    email: sean.g.howell@gmail.com
+repository-code: "https://github.com/sghowell/Wolfgang"
+url: "https://github.com/sghowell/Wolfgang"
+license: MIT
+version: 0.1.0
+date-released: 2026-05-07
+keywords:
+  - quantum computing
+  - Pauli operators
+  - CUDA
+  - ROCm
+  - Metal
+  - high-performance computing
+  - kernel engineering
+abstract: >-
+  Wolfgang is a C++20 and Python library for compact sparse sums of Pauli
+  strings, with a portable CPU correctness path and evidence-gated CUDA,
+  ROCm/HIP, and Apple Metal source-build backends.

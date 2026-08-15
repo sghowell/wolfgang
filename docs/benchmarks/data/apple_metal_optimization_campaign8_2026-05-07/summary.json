@@ -1,0 +1,3131 @@
+{
+  "benchmark_rows": [
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_duplicate_heavy_8192_terms",
+      "correct": true,
+      "duplicate_rate": 0.85,
+      "median_seconds": 0.0003129584947600961,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 8192,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_default"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_duplicate_heavy_8192_terms",
+      "correct": true,
+      "duplicate_rate": 0.85,
+      "median_seconds": 0.0004596874350681901,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 8192,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_scalar"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_duplicate_heavy_8192_terms",
+      "duplicate_rate": 0.85,
+      "median_seconds": null,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "unavailable",
+      "num_terms": 8192,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "skipped",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_neon"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_duplicate_heavy_8192_terms",
+      "correct": true,
+      "duplicate_rate": 0.85,
+      "median_seconds": 0.0006724164704792202,
+      "metal_execution": {
+        "buffer_allocation_or_reuse_boundary": "shared_buffer_host_materialization_cpu_simplify_shared_buffer_allocation",
+        "command_buffer_synchronization": "not_applicable_no_command_buffer",
+        "dispatch_api": "not_applicable",
+        "grid_shape": "not_applicable",
+        "kernel": "not_applicable_no_metal_kernel_dispatch",
+        "storage_mode": "MTLResourceStorageModeShared",
+        "threadgroup_size": "not_applicable",
+        "transfer_boundary": "device_to_host_cpu_simplify_host_to_device"
+      },
+      "metal_simplify_strategy": "transfer_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 8192,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "device_to_host_cpu_simplify_host_to_device",
+      "variant": "metal_simplify_transfer_reference"
+    },
+    {
+      "atol": 1e-12,
+      "bitonic_passes": 91,
+      "campaign8_timing_schema": "checked_device_resident_simplify_v1",
+      "case": "metal_campaign8_simplify_words1_duplicate_heavy_8192_terms",
+      "correct": true,
+      "dispatch_counts": {
+        "bitonic_sort": 91,
+        "clear_invalid": 1,
+        "clear_survivors": 1,
+        "compact_survivors": 1,
+        "init_keys": 1,
+        "mark_heads": 1,
+        "prefix_sum": 26,
+        "reduce_by_key": 1,
+        "total_kernel_dispatches": 123
+      },
+      "duplicate_rate": 0.85,
+      "median_seconds": 0.0007727500051259995,
+      "metal_execution": {
+        "bitonic_passes": 91,
+        "buffer_allocation_or_reuse_boundary": "benchmark_only_private_simplify_scratch_and_device_output_allocation_per_call",
+        "coefficient_domain": "signed_fixed32_dyadic_coefficients_only",
+        "command_buffer_synchronization": "commit_and_waitUntilCompleted_per_operation",
+        "dispatch_api": "dispatchThreads_1d_multi_kernel_stack",
+        "dispatch_counts": {
+          "bitonic_sort": 91,
+          "clear_invalid": 1,
+          "clear_survivors": 1,
+          "compact_survivors": 1,
+          "init_keys": 1,
+          "mark_heads": 1,
+          "prefix_sum": 26,
+          "reduce_by_key": 1,
+          "total_kernel_dispatches": 123
+        },
+        "kernel": "fp_simplify_words1_checked_primitive_stack",
+        "kernel_stack": [
+          "fp_simplify_words1_init_keys",
+          "fp_simplify_words1_bitonic_sort_step",
+          "fp_simplify_words1_mark_heads",
+          "fp_simplify_prefix_sum_step",
+          "fp_simplify_words1_reduce_by_key",
+          "fp_simplify_words1_compact_survivors"
+        ],
+        "library_source": "runtime_source",
+        "padded_terms": 8192,
+        "pipeline_cache": {
+          "boundary": "prewarmed_static_pipeline_cache",
+          "library_source": "runtime_source",
+          "scope": "process_static_private_benchmark_hook"
+        },
+        "prefix_sum_passes": 26,
+        "storage_mode": "shared_input_shared_scratch_shared_device_output",
+        "threadgroup_size": [
+          256,
+          1,
+          1
+        ],
+        "timing_decomposition_source": "private_hook_internal_steady_clock",
+        "transfer_boundary": "device_resident",
+        "workspace_reserved_bytes": 950272
+      },
+      "metal_simplify_coefficient_domain": "signed_fixed32_dyadic_coefficients_only",
+      "metal_simplify_primitive_stack": {
+        "compaction": "prefix_compacted_survivors_words1",
+        "prefix_sum": "hillis_steele_inclusive_scan_uint32",
+        "reduce_by_key": "head_parallel_duplicate_sum_words1",
+        "sort": "bitonic_sort_words1"
+      },
+      "metal_simplify_strategy": "device_candidate",
+      "metal_simplify_strategy_status": "benchmark_only",
+      "num_terms": 8192,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "padded_terms": 8192,
+      "performance_decision": {
+        "candidate_median_seconds": 0.0007727500051259995,
+        "candidate_status": "experimental",
+        "cpu_default_median_seconds": 0.0003129584947600961,
+        "reason": "Campaign 8 candidate does not beat same-host CPU default and Metal transfer-reference on this checked workload; promotion requires lower-pass sort or reusable output/lifetime work.",
+        "transfer_reference_median_seconds": 0.0006724164704792202
+      },
+      "pipeline_cache": {
+        "boundary": "prewarmed_static_pipeline_cache",
+        "library_source": "runtime_source",
+        "scope": "process_static_private_benchmark_hook"
+      },
+      "prefix_sum_passes": 26,
+      "rtol": 0.0,
+      "status": "ok",
+      "timing_decomposition_seconds": {
+        "command_encoding": 2.3291e-05,
+        "command_execution": 0.000714042,
+        "host_preflight": 1.6417e-05,
+        "output_accounting": 2.583e-06,
+        "scratch_and_output_allocation": 6.5375e-05,
+        "total_observed": 0.00082175
+      },
+      "transfer_boundary": "device_resident",
+      "variant": "metal_simplify_device_candidate",
+      "workspace_reserved_bytes": 950272
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_duplicate_light_8192_terms",
+      "correct": true,
+      "duplicate_rate": 0.05,
+      "median_seconds": 0.00036566605558618903,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 8192,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 7740,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_default"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_duplicate_light_8192_terms",
+      "correct": true,
+      "duplicate_rate": 0.05,
+      "median_seconds": 0.00036512449150905013,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 8192,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 7740,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_scalar"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_duplicate_light_8192_terms",
+      "duplicate_rate": 0.05,
+      "median_seconds": null,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "unavailable",
+      "num_terms": 8192,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 7740,
+      "rtol": 0.0,
+      "status": "skipped",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_neon"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_duplicate_light_8192_terms",
+      "correct": true,
+      "duplicate_rate": 0.05,
+      "median_seconds": 0.0006785409641452134,
+      "metal_execution": {
+        "buffer_allocation_or_reuse_boundary": "shared_buffer_host_materialization_cpu_simplify_shared_buffer_allocation",
+        "command_buffer_synchronization": "not_applicable_no_command_buffer",
+        "dispatch_api": "not_applicable",
+        "grid_shape": "not_applicable",
+        "kernel": "not_applicable_no_metal_kernel_dispatch",
+        "storage_mode": "MTLResourceStorageModeShared",
+        "threadgroup_size": "not_applicable",
+        "transfer_boundary": "device_to_host_cpu_simplify_host_to_device"
+      },
+      "metal_simplify_strategy": "transfer_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 8192,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 7740,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "device_to_host_cpu_simplify_host_to_device",
+      "variant": "metal_simplify_transfer_reference"
+    },
+    {
+      "atol": 1e-12,
+      "bitonic_passes": 91,
+      "campaign8_timing_schema": "checked_device_resident_simplify_v1",
+      "case": "metal_campaign8_simplify_words1_duplicate_light_8192_terms",
+      "correct": true,
+      "dispatch_counts": {
+        "bitonic_sort": 91,
+        "clear_invalid": 1,
+        "clear_survivors": 1,
+        "compact_survivors": 1,
+        "init_keys": 1,
+        "mark_heads": 1,
+        "prefix_sum": 26,
+        "reduce_by_key": 1,
+        "total_kernel_dispatches": 123
+      },
+      "duplicate_rate": 0.05,
+      "median_seconds": 0.0009080204763449728,
+      "metal_execution": {
+        "bitonic_passes": 91,
+        "buffer_allocation_or_reuse_boundary": "benchmark_only_private_simplify_scratch_and_device_output_allocation_per_call",
+        "coefficient_domain": "signed_fixed32_dyadic_coefficients_only",
+        "command_buffer_synchronization": "commit_and_waitUntilCompleted_per_operation",
+        "dispatch_api": "dispatchThreads_1d_multi_kernel_stack",
+        "dispatch_counts": {
+          "bitonic_sort": 91,
+          "clear_invalid": 1,
+          "clear_survivors": 1,
+          "compact_survivors": 1,
+          "init_keys": 1,
+          "mark_heads": 1,
+          "prefix_sum": 26,
+          "reduce_by_key": 1,
+          "total_kernel_dispatches": 123
+        },
+        "kernel": "fp_simplify_words1_checked_primitive_stack",
+        "kernel_stack": [
+          "fp_simplify_words1_init_keys",
+          "fp_simplify_words1_bitonic_sort_step",
+          "fp_simplify_words1_mark_heads",
+          "fp_simplify_prefix_sum_step",
+          "fp_simplify_words1_reduce_by_key",
+          "fp_simplify_words1_compact_survivors"
+        ],
+        "library_source": "runtime_source",
+        "padded_terms": 8192,
+        "pipeline_cache": {
+          "boundary": "prewarmed_static_pipeline_cache",
+          "library_source": "runtime_source",
+          "scope": "process_static_private_benchmark_hook"
+        },
+        "prefix_sum_passes": 26,
+        "storage_mode": "shared_input_shared_scratch_shared_device_output",
+        "threadgroup_size": [
+          256,
+          1,
+          1
+        ],
+        "timing_decomposition_source": "private_hook_internal_steady_clock",
+        "transfer_boundary": "device_resident",
+        "workspace_reserved_bytes": 950272
+      },
+      "metal_simplify_coefficient_domain": "signed_fixed32_dyadic_coefficients_only",
+      "metal_simplify_primitive_stack": {
+        "compaction": "prefix_compacted_survivors_words1",
+        "prefix_sum": "hillis_steele_inclusive_scan_uint32",
+        "reduce_by_key": "head_parallel_duplicate_sum_words1",
+        "sort": "bitonic_sort_words1"
+      },
+      "metal_simplify_strategy": "device_candidate",
+      "metal_simplify_strategy_status": "benchmark_only",
+      "num_terms": 8192,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 7740,
+      "padded_terms": 8192,
+      "performance_decision": {
+        "candidate_median_seconds": 0.0009080204763449728,
+        "candidate_status": "experimental",
+        "cpu_default_median_seconds": 0.00036566605558618903,
+        "reason": "Campaign 8 candidate does not beat same-host CPU default and Metal transfer-reference on this checked workload; promotion requires lower-pass sort or reusable output/lifetime work.",
+        "transfer_reference_median_seconds": 0.0006785409641452134
+      },
+      "pipeline_cache": {
+        "boundary": "prewarmed_static_pipeline_cache",
+        "library_source": "runtime_source",
+        "scope": "process_static_private_benchmark_hook"
+      },
+      "prefix_sum_passes": 26,
+      "rtol": 0.0,
+      "status": "ok",
+      "timing_decomposition_seconds": {
+        "command_encoding": 2.4916e-05,
+        "command_execution": 0.000783542,
+        "host_preflight": 1.45e-05,
+        "output_accounting": 2.375e-06,
+        "scratch_and_output_allocation": 5.6042e-05,
+        "total_observed": 0.0008815
+      },
+      "transfer_boundary": "device_resident",
+      "variant": "metal_simplify_device_candidate",
+      "workspace_reserved_bytes": 950272
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_cancellation_4096_terms",
+      "correct": true,
+      "duplicate_rate": 0.75,
+      "median_seconds": 0.00013539596693590283,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 4096,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 0,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_default"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_cancellation_4096_terms",
+      "correct": true,
+      "duplicate_rate": 0.75,
+      "median_seconds": 0.00015883351443335414,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 4096,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 0,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_scalar"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_cancellation_4096_terms",
+      "duplicate_rate": 0.75,
+      "median_seconds": null,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "unavailable",
+      "num_terms": 4096,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 0,
+      "rtol": 0.0,
+      "status": "skipped",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_neon"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_cancellation_4096_terms",
+      "correct": true,
+      "duplicate_rate": 0.75,
+      "median_seconds": 0.00039043696597218513,
+      "metal_execution": {
+        "buffer_allocation_or_reuse_boundary": "shared_buffer_host_materialization_cpu_simplify_shared_buffer_allocation",
+        "command_buffer_synchronization": "not_applicable_no_command_buffer",
+        "dispatch_api": "not_applicable",
+        "grid_shape": "not_applicable",
+        "kernel": "not_applicable_no_metal_kernel_dispatch",
+        "storage_mode": "MTLResourceStorageModeShared",
+        "threadgroup_size": "not_applicable",
+        "transfer_boundary": "device_to_host_cpu_simplify_host_to_device"
+      },
+      "metal_simplify_strategy": "transfer_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 4096,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 0,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "device_to_host_cpu_simplify_host_to_device",
+      "variant": "metal_simplify_transfer_reference"
+    },
+    {
+      "atol": 1e-12,
+      "bitonic_passes": 78,
+      "campaign8_timing_schema": "checked_device_resident_simplify_v1",
+      "case": "metal_campaign8_simplify_words1_cancellation_4096_terms",
+      "correct": true,
+      "dispatch_counts": {
+        "bitonic_sort": 78,
+        "clear_invalid": 1,
+        "clear_survivors": 1,
+        "compact_survivors": 1,
+        "init_keys": 1,
+        "mark_heads": 1,
+        "prefix_sum": 24,
+        "reduce_by_key": 1,
+        "total_kernel_dispatches": 108
+      },
+      "duplicate_rate": 0.75,
+      "median_seconds": 0.0005327084800228477,
+      "metal_execution": {
+        "bitonic_passes": 78,
+        "buffer_allocation_or_reuse_boundary": "benchmark_only_private_simplify_scratch_and_device_output_allocation_per_call",
+        "coefficient_domain": "signed_fixed32_dyadic_coefficients_only",
+        "command_buffer_synchronization": "commit_and_waitUntilCompleted_per_operation",
+        "dispatch_api": "dispatchThreads_1d_multi_kernel_stack",
+        "dispatch_counts": {
+          "bitonic_sort": 78,
+          "clear_invalid": 1,
+          "clear_survivors": 1,
+          "compact_survivors": 1,
+          "init_keys": 1,
+          "mark_heads": 1,
+          "prefix_sum": 24,
+          "reduce_by_key": 1,
+          "total_kernel_dispatches": 108
+        },
+        "kernel": "fp_simplify_words1_checked_primitive_stack",
+        "kernel_stack": [
+          "fp_simplify_words1_init_keys",
+          "fp_simplify_words1_bitonic_sort_step",
+          "fp_simplify_words1_mark_heads",
+          "fp_simplify_prefix_sum_step",
+          "fp_simplify_words1_reduce_by_key",
+          "fp_simplify_words1_compact_survivors"
+        ],
+        "library_source": "runtime_source",
+        "padded_terms": 4096,
+        "pipeline_cache": {
+          "boundary": "prewarmed_static_pipeline_cache",
+          "library_source": "runtime_source",
+          "scope": "process_static_private_benchmark_hook"
+        },
+        "prefix_sum_passes": 24,
+        "storage_mode": "shared_input_shared_scratch_shared_device_output",
+        "threadgroup_size": [
+          256,
+          1,
+          1
+        ],
+        "timing_decomposition_source": "private_hook_internal_steady_clock",
+        "transfer_boundary": "device_resident",
+        "workspace_reserved_bytes": 475136
+      },
+      "metal_simplify_coefficient_domain": "signed_fixed32_dyadic_coefficients_only",
+      "metal_simplify_primitive_stack": {
+        "compaction": "prefix_compacted_survivors_words1",
+        "prefix_sum": "hillis_steele_inclusive_scan_uint32",
+        "reduce_by_key": "head_parallel_duplicate_sum_words1",
+        "sort": "bitonic_sort_words1"
+      },
+      "metal_simplify_strategy": "device_candidate",
+      "metal_simplify_strategy_status": "benchmark_only",
+      "num_terms": 4096,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 0,
+      "padded_terms": 4096,
+      "performance_decision": {
+        "candidate_median_seconds": 0.0005327084800228477,
+        "candidate_status": "experimental",
+        "cpu_default_median_seconds": 0.00013539596693590283,
+        "reason": "Campaign 8 candidate does not beat same-host CPU default and Metal transfer-reference on this checked workload; promotion requires lower-pass sort or reusable output/lifetime work.",
+        "transfer_reference_median_seconds": 0.00039043696597218513
+      },
+      "pipeline_cache": {
+        "boundary": "prewarmed_static_pipeline_cache",
+        "library_source": "runtime_source",
+        "scope": "process_static_private_benchmark_hook"
+      },
+      "prefix_sum_passes": 24,
+      "rtol": 0.0,
+      "status": "ok",
+      "timing_decomposition_seconds": {
+        "command_encoding": 1.9584e-05,
+        "command_execution": 0.000519458,
+        "host_preflight": 8.166e-06,
+        "output_accounting": 1.75e-06,
+        "scratch_and_output_allocation": 5.6834e-05,
+        "total_observed": 0.000605833
+      },
+      "transfer_boundary": "device_resident",
+      "variant": "metal_simplify_device_candidate",
+      "workspace_reserved_bytes": 475136
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms",
+      "correct": true,
+      "duplicate_rate": 0.9,
+      "median_seconds": 0.0008518124814145267,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 16384,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1629,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_default"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms",
+      "correct": true,
+      "duplicate_rate": 0.9,
+      "median_seconds": 0.0007639584946446121,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 16384,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1629,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_scalar"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms",
+      "duplicate_rate": 0.9,
+      "median_seconds": null,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "unavailable",
+      "num_terms": 16384,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1629,
+      "rtol": 0.0,
+      "status": "skipped",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_neon"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms",
+      "correct": true,
+      "duplicate_rate": 0.9,
+      "median_seconds": 0.0011928960448130965,
+      "metal_execution": {
+        "buffer_allocation_or_reuse_boundary": "shared_buffer_host_materialization_cpu_simplify_shared_buffer_allocation",
+        "command_buffer_synchronization": "not_applicable_no_command_buffer",
+        "dispatch_api": "not_applicable",
+        "grid_shape": "not_applicable",
+        "kernel": "not_applicable_no_metal_kernel_dispatch",
+        "storage_mode": "MTLResourceStorageModeShared",
+        "threadgroup_size": "not_applicable",
+        "transfer_boundary": "device_to_host_cpu_simplify_host_to_device"
+      },
+      "metal_simplify_strategy": "transfer_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 16384,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 1629,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "device_to_host_cpu_simplify_host_to_device",
+      "variant": "metal_simplify_transfer_reference"
+    },
+    {
+      "atol": 1e-12,
+      "bitonic_passes": 105,
+      "campaign8_timing_schema": "checked_device_resident_simplify_v1",
+      "case": "metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms",
+      "correct": true,
+      "dispatch_counts": {
+        "bitonic_sort": 105,
+        "clear_invalid": 1,
+        "clear_survivors": 1,
+        "compact_survivors": 1,
+        "init_keys": 1,
+        "mark_heads": 1,
+        "prefix_sum": 28,
+        "reduce_by_key": 1,
+        "total_kernel_dispatches": 139
+      },
+      "duplicate_rate": 0.9,
+      "median_seconds": 0.0011134790256619453,
+      "metal_execution": {
+        "bitonic_passes": 105,
+        "buffer_allocation_or_reuse_boundary": "benchmark_only_private_simplify_scratch_and_device_output_allocation_per_call",
+        "coefficient_domain": "signed_fixed32_dyadic_coefficients_only",
+        "command_buffer_synchronization": "commit_and_waitUntilCompleted_per_operation",
+        "dispatch_api": "dispatchThreads_1d_multi_kernel_stack",
+        "dispatch_counts": {
+          "bitonic_sort": 105,
+          "clear_invalid": 1,
+          "clear_survivors": 1,
+          "compact_survivors": 1,
+          "init_keys": 1,
+          "mark_heads": 1,
+          "prefix_sum": 28,
+          "reduce_by_key": 1,
+          "total_kernel_dispatches": 139
+        },
+        "kernel": "fp_simplify_words1_checked_primitive_stack",
+        "kernel_stack": [
+          "fp_simplify_words1_init_keys",
+          "fp_simplify_words1_bitonic_sort_step",
+          "fp_simplify_words1_mark_heads",
+          "fp_simplify_prefix_sum_step",
+          "fp_simplify_words1_reduce_by_key",
+          "fp_simplify_words1_compact_survivors"
+        ],
+        "library_source": "runtime_source",
+        "padded_terms": 16384,
+        "pipeline_cache": {
+          "boundary": "prewarmed_static_pipeline_cache",
+          "library_source": "runtime_source",
+          "scope": "process_static_private_benchmark_hook"
+        },
+        "prefix_sum_passes": 28,
+        "storage_mode": "shared_input_shared_scratch_shared_device_output",
+        "threadgroup_size": [
+          256,
+          1,
+          1
+        ],
+        "timing_decomposition_source": "private_hook_internal_steady_clock",
+        "transfer_boundary": "device_resident",
+        "workspace_reserved_bytes": 1900544
+      },
+      "metal_simplify_coefficient_domain": "signed_fixed32_dyadic_coefficients_only",
+      "metal_simplify_primitive_stack": {
+        "compaction": "prefix_compacted_survivors_words1",
+        "prefix_sum": "hillis_steele_inclusive_scan_uint32",
+        "reduce_by_key": "head_parallel_duplicate_sum_words1",
+        "sort": "bitonic_sort_words1"
+      },
+      "metal_simplify_strategy": "device_candidate",
+      "metal_simplify_strategy_status": "benchmark_only",
+      "num_terms": 16384,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 1629,
+      "padded_terms": 16384,
+      "performance_decision": {
+        "candidate_median_seconds": 0.0011134790256619453,
+        "candidate_status": "experimental",
+        "cpu_default_median_seconds": 0.0008518124814145267,
+        "reason": "Campaign 8 candidate does not beat same-host CPU default and Metal transfer-reference on this checked workload; promotion requires lower-pass sort or reusable output/lifetime work.",
+        "transfer_reference_median_seconds": 0.0011928960448130965
+      },
+      "pipeline_cache": {
+        "boundary": "prewarmed_static_pipeline_cache",
+        "library_source": "runtime_source",
+        "scope": "process_static_private_benchmark_hook"
+      },
+      "prefix_sum_passes": 28,
+      "rtol": 0.0,
+      "status": "ok",
+      "timing_decomposition_seconds": {
+        "command_encoding": 2.4167e-05,
+        "command_execution": 0.000794458,
+        "host_preflight": 3.0083e-05,
+        "output_accounting": 1.875e-06,
+        "scratch_and_output_allocation": 6.275e-05,
+        "total_observed": 0.000913333
+      },
+      "transfer_boundary": "device_resident",
+      "variant": "metal_simplify_device_candidate",
+      "workspace_reserved_bytes": 1900544
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words2_status_only_4096_terms",
+      "correct": true,
+      "duplicate_rate": 0.7,
+      "median_seconds": 0.00014839554205536842,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 4096,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_default"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words2_status_only_4096_terms",
+      "correct": true,
+      "duplicate_rate": 0.7,
+      "median_seconds": 0.00014147901674732566,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 4096,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_scalar"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words2_status_only_4096_terms",
+      "duplicate_rate": 0.7,
+      "median_seconds": null,
+      "metal_execution": null,
+      "metal_simplify_strategy": "cpu_reference",
+      "metal_simplify_strategy_status": "unavailable",
+      "num_terms": 4096,
+      "object_backend": "cpu",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "skipped",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_neon"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words2_status_only_4096_terms",
+      "correct": true,
+      "duplicate_rate": 0.7,
+      "median_seconds": 0.0005530834896489978,
+      "metal_execution": {
+        "buffer_allocation_or_reuse_boundary": "shared_buffer_host_materialization_cpu_simplify_shared_buffer_allocation",
+        "command_buffer_synchronization": "not_applicable_no_command_buffer",
+        "dispatch_api": "not_applicable",
+        "grid_shape": "not_applicable",
+        "kernel": "not_applicable_no_metal_kernel_dispatch",
+        "storage_mode": "MTLResourceStorageModeShared",
+        "threadgroup_size": "not_applicable",
+        "transfer_boundary": "device_to_host_cpu_simplify_host_to_device"
+      },
+      "metal_simplify_strategy": "transfer_reference",
+      "metal_simplify_strategy_status": "retained",
+      "num_terms": 4096,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "ok",
+      "transfer_boundary": "device_to_host_cpu_simplify_host_to_device",
+      "variant": "metal_simplify_transfer_reference"
+    },
+    {
+      "atol": 1e-12,
+      "case": "metal_campaign8_simplify_words2_status_only_4096_terms",
+      "duplicate_rate": 0.7,
+      "median_seconds": null,
+      "metal_execution": {
+        "buffer_allocation_or_reuse_boundary": "private_metal_simplify_candidate_status_only",
+        "command_buffer_synchronization": "not_applicable_no_command_buffer",
+        "dispatch_api": "not_applicable",
+        "grid_shape": "not_applicable",
+        "kernel": "not_applicable_simplify_candidate_not_executed",
+        "storage_mode": "not_applicable_candidate_not_executed",
+        "threadgroup_size": "not_applicable",
+        "transfer_boundary": "status_only"
+      },
+      "metal_simplify_strategy": "device_candidate",
+      "metal_simplify_strategy_status": "unavailable",
+      "num_terms": 4096,
+      "object_backend": "metal",
+      "operation": "simplify",
+      "output_terms": 1222,
+      "rtol": 0.0,
+      "status": "unavailable",
+      "transfer_boundary": "status_only",
+      "variant": "metal_simplify_device_candidate"
+    }
+  ],
+  "campaign": "apple_metal_optimization_campaign8",
+  "date": "2026-05-07",
+  "environment": {
+    "CUDA": {
+      "enabled": false
+    },
+    "HIP": {
+      "architectures": "not_available",
+      "driver_version": "",
+      "enabled": false,
+      "rocm_toolkit_version": "not_available",
+      "runtime_available": false,
+      "runtime_version": ""
+    },
+    "Metal": {
+      "capability_summary": "unified_memory=true; low_power=false; headless=false; removable=false; recommended_max_working_set_size_bytes=40200896512",
+      "device_name": "Apple M4 Pro",
+      "enabled": true,
+      "macos_version": "Version 26.2 (Build 25C56)",
+      "runtime_available": true,
+      "storage_mode": "MTLResourceStorageModeShared",
+      "xcode_or_clt_version": "AppleClang 21.0.0.21000099"
+    },
+    "accelerator_build_mode": "metal_only",
+    "active_fastpauli_cpu_backend": "scalar",
+    "apple_hardware": {
+      "chip": "Apple M4 Pro",
+      "core_summary": "12 (8 performance and 4 efficiency)",
+      "model_identifier": "Mac16,11",
+      "model_name": "Mac mini",
+      "total_core_count": 12
+    },
+    "available_fastpauli_cpu_backends": [
+      "scalar",
+      "neon"
+    ],
+    "cmake": "not_available",
+    "compiled_accelerator_backends": [
+      "metal"
+    ],
+    "compiled_backends": [
+      "cpu",
+      "metal"
+    ],
+    "compiled_fastpauli_cpu_backends": [
+      "scalar",
+      "neon"
+    ],
+    "compiler": "Apple clang version 21.0.0 (clang-2100.0.123.102)",
+    "compiler_build_config": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CUDA_COMPILER_ID": "not_available",
+      "CMAKE_CUDA_COMPILER_VERSION": "not_available",
+      "CMAKE_CUDA_HOST_COMPILER": "not_available",
+      "CMAKE_CXX_COMPILER_ID": "AppleClang",
+      "CMAKE_CXX_COMPILER_VERSION": "21.0.0.21000099",
+      "CMAKE_CXX_FLAGS": "",
+      "CMAKE_HIP_COMPILER": "not_available",
+      "CMAKE_HIP_COMPILER_ID": "not_available",
+      "CMAKE_HIP_COMPILER_VERSION": "not_available",
+      "CMAKE_OBJCXX_COMPILER_ID": "AppleClang",
+      "CMAKE_OBJCXX_COMPILER_VERSION": "21.0.0.21000099",
+      "CMAKE_OBJCXX_FLAGS": "",
+      "FASTPAULI_CUDA_HOST_COMPILER": "not_available",
+      "FASTPAULI_CUDA_HOST_COMPILER_SOURCE": "not_available"
+    },
+    "compiler_cpu_flags": {
+      "detected": [],
+      "sources": {
+        "ARCHFLAGS": "unset",
+        "CFLAGS": "unset",
+        "CMAKE_ARGS": "unset",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_FLAGS": "",
+        "CPPFLAGS": "unset",
+        "CXXFLAGS": "unset",
+        "SKBUILD_CMAKE_ARGS": "unset"
+      }
+    },
+    "cpu_architecture": "arm64",
+    "cpu_backend_build_flags": {
+      "avx2": false,
+      "avx512": false,
+      "neon": true,
+      "scalar": true,
+      "sve": false,
+      "tbb": false
+    },
+    "cpu_cmake_options": {
+      "FASTPAULI_BUILD_CPU_BACKEND": "scalar",
+      "FASTPAULI_CUDA_ARCHITECTURES": "70,75,80,86,89,90",
+      "FASTPAULI_CUDA_USE_CUB": "ON",
+      "FASTPAULI_CUDA_USE_THRUST": "ON",
+      "FASTPAULI_ENABLE_ARM_NEON": "auto",
+      "FASTPAULI_ENABLE_ARM_SVE": "auto",
+      "FASTPAULI_ENABLE_AVX2": "auto",
+      "FASTPAULI_ENABLE_AVX512": "auto",
+      "FASTPAULI_ENABLE_CUDA": "OFF",
+      "FASTPAULI_ENABLE_HIP": "OFF",
+      "FASTPAULI_ENABLE_METAL": "ON",
+      "FASTPAULI_ENABLE_NATIVE": "OFF",
+      "FASTPAULI_ENABLE_OPENMP": "OFF",
+      "FASTPAULI_ENABLE_TBB": "auto",
+      "FASTPAULI_HIP_ARCHITECTURES": "gfx942"
+    },
+    "cpu_model": "arm",
+    "cpu_vendor_or_soc": "Apple M4 Pro",
+    "instruction_set_probe": {
+      "features": [
+        "aes",
+        "armv8_1_atomics",
+        "bf16",
+        "crc32",
+        "dotprod",
+        "fcma",
+        "fp16",
+        "i8mm",
+        "jscvt",
+        "lse",
+        "neon",
+        "pmull",
+        "sha1",
+        "sha256"
+      ],
+      "source": [
+        "hw.optional.arm.FEAT_AES",
+        "hw.optional.arm.FEAT_BF16",
+        "hw.optional.arm.FEAT_CRC32",
+        "hw.optional.arm.FEAT_DotProd",
+        "hw.optional.arm.FEAT_FCMA",
+        "hw.optional.arm.FEAT_FP16",
+        "hw.optional.arm.FEAT_I8MM",
+        "hw.optional.arm.FEAT_JSCVT",
+        "hw.optional.arm.FEAT_LSE",
+        "hw.optional.arm.FEAT_PMULL",
+        "hw.optional.arm.FEAT_SHA1",
+        "hw.optional.arm.FEAT_SHA256",
+        "hw.optional.armv8_1_atomics",
+        "hw.optional.neon"
+      ],
+      "status": "available"
+    },
+    "instruction_sets": [
+      "aes",
+      "armv8_1_atomics",
+      "bf16",
+      "crc32",
+      "dotprod",
+      "fcma",
+      "fp16",
+      "i8mm",
+      "jscvt",
+      "lse",
+      "neon",
+      "pmull",
+      "sha1",
+      "sha256"
+    ],
+    "logical_cpu_count": 12,
+    "numpy_version": "2.4.4",
+    "oneTBB": {
+      "enabled": false,
+      "version": "not_available"
+    },
+    "operating_system": "macOS-26.2-arm64-arm-64bit",
+    "physical_core_count": 12,
+    "python_version": "3.12.12",
+    "requested_fastpauli_cpu_backend": "auto",
+    "runtime_visible_accelerator_backends": [
+      "metal"
+    ],
+    "runtime_visible_backends": [
+      "cpu",
+      "metal"
+    ],
+    "thread_settings": {
+      "MKL_NUM_THREADS": "unset",
+      "OMP_NUM_THREADS": "unset",
+      "controlled_thread_count": "not_controlled"
+    },
+    "unavailable_fastpauli_cpu_backends": {
+      "avx2": "not_compiled",
+      "avx512": "not_compiled",
+      "sve": "not_compiled",
+      "tbb": "not_compiled"
+    }
+  },
+  "git_commit": "4c6e991+dirty",
+  "git_provenance": {
+    "commit": "4c6e991",
+    "commit_label": "4c6e991+dirty",
+    "dirty": true,
+    "source": "git",
+    "working_tree_status": [
+      " M AGENTS.md",
+      " M CHANGELOG.md",
+      " M README.md",
+      " M benchmarks/bench_metal_kernels.py",
+      " M bindings/python/module.cpp",
+      " M docs/architecture/apple_accelerator.md",
+      " M docs/benchmarks/plots/accelerator_landscape_with_rocm.svg",
+      " M docs/benchmarks/protocol.md",
+      " M docs/roadmap.md",
+      " M scripts/render_apple_metal_assets.py",
+      " M scripts/validate.py",
+      " M src/metal/simplify_metal.hpp",
+      " M src/metal/simplify_metal.mm",
+      " M tests/test_apple_metal_campaign6_assets.py",
+      "?? docs/benchmarks/data/apple_metal_optimization_campaign8_2026-05-07/",
+      "?? docs/plans/apple_metal_optimization_campaign8_plan.md",
+      "?? tests/test_apple_metal_campaign8.py",
+      "?? tests/test_apple_metal_campaign8_assets.py",
+      "?? tests/test_apple_metal_campaign8_plan.py"
+    ]
+  },
+  "limitations": [
+    "Metal support is source-build-only.",
+    "Default compact consumers are CPU scans over shared Metal storage.",
+    "Timings are local Apple Silicon evidence, not generic wheel claims.",
+    "Campaign 8 keeps the source-build-only Metal API boundary.",
+    "Campaign 8 adds timing decomposition and cache-boundary evidence for the benchmark-only checked one-word Metal simplify primitive stack.",
+    "The public Metal simplify behavior remains the Campaign 5 transfer-reference correctness bridge unless a later design proves a broader retained implementation.",
+    "Campaign 8 does not claim general FP64, multi-word, Metal wheel, MPSGraph, or PyTorch MPS sparse-Pauli simplify support."
+  ],
+  "metal_status": {
+    "built": true,
+    "capability_summary": "unified_memory=true; low_power=false; headless=false; removable=false; recommended_max_working_set_size_bytes=40200896512",
+    "device_count": 1,
+    "devices": [
+      {
+        "capability_summary": "unified_memory=true; low_power=false; headless=false; removable=false; recommended_max_working_set_size_bytes=40200896512",
+        "headless": false,
+        "low_power": false,
+        "name": "Apple M4 Pro",
+        "ordinal": 0,
+        "recommended_max_working_set_size": 40200896512,
+        "registry_id": 4294968829,
+        "removable": false,
+        "unified_memory": true
+      }
+    ],
+    "macos_version": "Version 26.2 (Build 25C56)",
+    "metal_device_name": "Apple M4 Pro",
+    "runtime_available": true,
+    "skip_reason": "",
+    "storage_mode": "MTLResourceStorageModeShared",
+    "xcode_or_clt_version": "AppleClang 21.0.0.21000099"
+  },
+  "plots": {
+    "landscape": "docs/benchmarks/plots/accelerator_landscape_with_rocm.svg"
+  },
+  "profile": "campaign8",
+  "profiler": {
+    "remaining": "Shader-counter capture should follow only after a lower-pass candidate or public lifetime boundary exists.",
+    "source": "private_hook_internal_steady_clock_fields_in_campaign8_rows",
+    "status": "timing_decomposition_recorded"
+  },
+  "readme_performance_landscape": [
+    {
+      "color": "#64748b",
+      "label": "CPU AVX-512 | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 0.002302181994309649,
+      "series": "CPU AVX-512"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU AVX2 | Campaign 10 cross-architecture",
+      "seconds": 0.00227347700001701,
+      "series": "CPU AVX2"
+    },
+    {
+      "color": "#0f766e",
+      "label": "CPU AVX512 | Campaign 10 cross-architecture",
+      "seconds": 0.0010886590002883167,
+      "series": "CPU AVX512"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU TBB | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 0.0017724520002957433,
+      "series": "CPU TBB"
+    },
+    {
+      "color": "#64748b",
+      "label": "CPU default | Campaign 10 cross-architecture",
+      "seconds": 0.0011857079998662812,
+      "series": "CPU default"
+    },
+    {
+      "color": "#0f766e",
+      "label": "CPU optimized | Campaign 10 cross-architecture",
+      "seconds": 0.0010886590002883167,
+      "series": "CPU optimized"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.466000245884061e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA CSR export baseline | Campaign 10 cross-architecture",
+      "seconds": 0.001898081000035745,
+      "series": "CUDA CSR export baseline"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA Campaign 8 graph compact | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 8.901298861019313e-05,
+      "series": "CUDA Campaign 8 graph compact"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA Campaign 8 grouping compact | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 9.482100722379982e-05,
+      "series": "CUDA Campaign 8 grouping compact"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA column count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 3.595299494918436e-05,
+      "series": "CUDA column count"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA compact count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 2.0216000848449767e-05,
+      "series": "CUDA compact count"
+    },
+    {
+      "color": "#9333ea",
+      "label": "CUDA compact graph consumer | Campaign 10 cross-architecture",
+      "seconds": 6.617899998673238e-05,
+      "series": "CUDA compact graph consumer"
+    },
+    {
+      "color": "#a855f7",
+      "label": "CUDA compact grouping consumer | Campaign 10 cross-architecture",
+      "seconds": 7.330900007218588e-05,
+      "series": "CUDA compact grouping consumer"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA conflict degrees rows | Campaign 9 reference: Campaign 9 deferred-he",
+      "seconds": 3.483399632386863e-05,
+      "series": "CUDA conflict degrees rows"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA conflict degrees total | Campaign 10 cross-architecture",
+      "seconds": 4.9529000079928664e-05,
+      "series": "CUDA conflict degrees total"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA dense to_host | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 2.2365988115780056e-05,
+      "series": "CUDA dense to_host"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output allocate | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.0001122899993788451,
+      "series": "CUDA device-output allocate"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output dense host copy | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.002462189004290849,
+      "series": "CUDA device-output dense host copy"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output reuse | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 3.110399120487273e-05,
+      "series": "CUDA device-output reuse"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA device-output to_host | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.001511866008513607,
+      "series": "CUDA device-output to_host"
+    },
+    {
+      "color": "#2563eb",
+      "label": "CUDA device-resident | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.954400355927646e-05,
+      "series": "CUDA device-resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused CSR export | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.005479602987179533,
+      "series": "CUDA fused CSR export"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused degree summary | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00016349599172826856,
+      "series": "CUDA fused degree summary"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA fused grouping | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00010019300680141896,
+      "series": "CUDA fused grouping"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA operator-resident | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00021685899992007762,
+      "series": "CUDA operator-resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "CUDA row count | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 6.118699093349278e-05,
+      "series": "CUDA row count"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "CUDA transfer-inclusive | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.00011246599024161696,
+      "series": "CUDA transfer-inclusive"
+    },
+    {
+      "color": "#64748b",
+      "label": "CuPy CUDA Array Interface | Campaign 10 cross-architecture",
+      "seconds": 3.0300002435978968e-06,
+      "series": "CuPy CUDA Array Interface"
+    },
+    {
+      "color": "#be123c",
+      "label": "CuPy DLPack | Campaign 10 cross-architecture",
+      "seconds": 2.2399999579647556e-06,
+      "series": "CuPy DLPack"
+    },
+    {
+      "color": "#64748b",
+      "label": "CuPy reduction | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 0.0014841939992038533,
+      "series": "CuPy reduction"
+    },
+    {
+      "color": "#64748b",
+      "label": "External baseline | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 7.138100045267493e-05,
+      "series": "External baseline"
+    },
+    {
+      "color": "#dc2626",
+      "label": "PyTorch DLPack | Campaign 10 cross-architecture",
+      "seconds": 1.0700000530050602e-06,
+      "series": "PyTorch DLPack"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_small_dense_output",
+      "seconds": 1.3568998838309199e-05,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_small_dense_output",
+      "seconds": 2.2435000573750585e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_mid_dense_output",
+      "seconds": 0.00014232099965738598,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_mid_dense_output",
+      "seconds": 4.392800110508688e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | Campaign 9 reference: Campaign 8 reference: ",
+      "seconds": 4.466000245884061e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_small_dense_output",
+      "seconds": 1.3568998838309199e-05,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_small_dense_output",
+      "seconds": 2.2435000573750585e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm HIP commutation allocate | campaign2_mid_dense_output",
+      "seconds": 0.00014232099965738598,
+      "series": "ROCm HIP commutation allocate"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm HIP commutation compact count | campaign2_mid_dense_output",
+      "seconds": 4.392800110508688e-05,
+      "series": "ROCm HIP commutation compact count"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign3_duplicate_heavy | CPU scalar",
+      "seconds": 0.004234492998875794,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_duplicate_heavy | HIP transfer",
+      "seconds": 0.0007995809992280556,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_duplicate_heavy | HIP resident",
+      "seconds": 0.0003349599992361618,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_duplicate_heavy | HIP to_host",
+      "seconds": 3.5990000469610095e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_duplicate_light | HIP transfer",
+      "seconds": 0.0011059449989261338,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_duplicate_light | HIP resident",
+      "seconds": 0.00034743099968181923,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_duplicate_light | HIP to_host",
+      "seconds": 0.00014597500012314413,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_all_zero | HIP transfer",
+      "seconds": 0.0002852690013241954,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_all_zero | HIP resident",
+      "seconds": 0.00022754000019631349,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_all_zero | HIP to_host",
+      "seconds": 3.8899997889529914e-07,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_smoke_one_word | HIP transfer",
+      "seconds": 0.00034566499925858807,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_smoke_one_word | HIP resident",
+      "seconds": 0.00026265600172337145,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_smoke_one_word | HIP to_host",
+      "seconds": 3.258499964431394e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_wide_two_word | HIP transfer",
+      "seconds": 0.0005077779987914255,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_wide_two_word | HIP resident",
+      "seconds": 0.0003350749993842328,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_wide_two_word | HIP to_host",
+      "seconds": 5.580800097959582e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign3_generic_multiword | HIP transfer",
+      "seconds": 0.005787071999293403,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign3_generic_multiword | HIP resident",
+      "seconds": 0.005533970001124544,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign3_generic_multiword | HIP to_host",
+      "seconds": 4.9525999202160165e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_duplicate_heavy_default",
+      "seconds": 0.004740977001347346,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_duplicate_heavy_default",
+      "seconds": 0.0008294689978356473,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_duplicate_heavy_default",
+      "seconds": 0.0003523859995766543,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_duplicate_heavy_default",
+      "seconds": 3.995799852418713e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_wide_two_word_default",
+      "seconds": 0.0026129059988306835,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_wide_two_word_default",
+      "seconds": 0.0005591289991571102,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_wide_two_word_default",
+      "seconds": 0.00034492499980842695,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_wide_two_word_default",
+      "seconds": 5.560600038734265e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_serial_baseline",
+      "seconds": 0.0008115119999274611,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_serial_baseline",
+      "seconds": 0.005817772998852888,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_serial_baseline",
+      "seconds": 0.005565507999563124,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_serial_baseline",
+      "seconds": 4.4111999159213156e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_parallel_baseline",
+      "seconds": 0.0008215259986172896,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_parallel_baseline",
+      "seconds": 0.000535036000655964,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_parallel_baseline",
+      "seconds": 0.0003399010020075366,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_parallel_baseline",
+      "seconds": 4.4217002141522244e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.0008107110006676521,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.0005047839986218605,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_130q_4096t_parallel",
+      "seconds": 0.00034652999966056086,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_130q_4096t_parallel",
+      "seconds": 4.43600001744926e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.001887389000330586,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.0007169109994720202,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_193q_8192t_parallel",
+      "seconds": 0.0003858999989461154,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_193q_8192t_parallel",
+      "seconds": 7.598000229336321e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.008750294000492431,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.001072627001121873,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_193q_32768t_parallel",
+      "seconds": 0.00046490000022458844,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_193q_32768t_parallel",
+      "seconds": 5.6666001910343766e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.000911647999600973,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.0006374180011334829,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_generic_257q_4096t_parallel",
+      "seconds": 0.00037636200067936443,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_generic_257q_4096t_parallel",
+      "seconds": 5.972500002826564e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "CPU scalar | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.008767958999669645,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm HIP transfer | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.14753809000103502,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm HIP resident | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 0.0007545610023953486,
+      "series": "ROCm HIP resident"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm HIP to_host | campaign4_profiler_generic_193q_32768t_parallel",
+      "seconds": 9.579899779055268e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_expectation_two_qubit_complex128 | CPU scalar",
+      "seconds": 1.9059953046962619e-06,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_expectation_two_qubit_complex128 | HIP expectation transfer",
+      "seconds": 7.778900908306241e-05,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_expectation_two_qubit_complex128 | HIP expectation operator-resident",
+      "seconds": 3.7546997191384435e-05,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_expectation_ten_qubit_complex64 | CPU scalar",
+      "seconds": 0.0009631130087655038,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_expectation_ten_qubit_complex64 | HIP expectation transfer",
+      "seconds": 8.581198926549405e-05,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_expectation_ten_qubit_complex64 | HIP expectation operator-resident",
+      "seconds": 4.448801337275654e-05,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_matmul_one_word_simplify_true | CPU scalar",
+      "seconds": 0.0071928719989955425,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul transfer",
+      "seconds": 0.001213662006193772,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul resident",
+      "seconds": 0.0004296020051697269,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_matmul_one_word_simplify_true | HIP matmul toHost",
+      "seconds": 0.00016933098959270865,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_matmul_two_word_simplify_false | CPU scalar",
+      "seconds": 7.118500070646405e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul transfer",
+      "seconds": 0.0001363379997201264,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul resident",
+      "seconds": 1.6973004676401615e-05,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_matmul_two_word_simplify_false | HIP matmul toHost",
+      "seconds": 4.050999996252358e-05,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_expectation | CPU scalar",
+      "seconds": 0.057278042993857525,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation transfer",
+      "seconds": 0.0001568040024721995,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation operator-resident",
+      "seconds": 0.0001080390065908432,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_matmul | CPU scalar",
+      "seconds": 0.0020543689897749573,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul transfer",
+      "seconds": 0.0007281040016096085,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul resident",
+      "seconds": 0.00036405799619387835,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul toHost",
+      "seconds": 7.258400728460401e-05,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_expectation | CPU scalar",
+      "seconds": 0.059206184989307076,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation transfer",
+      "seconds": 0.05877023600623943,
+      "series": "ROCm HIP expectation transfer"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign6_profiler_expectation | HIP expectation operator-resident",
+      "seconds": 0.0001469510025344789,
+      "series": "ROCm HIP expectation operator-resident"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign6_profiler_matmul | CPU scalar",
+      "seconds": 0.002325761000975035,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul transfer",
+      "seconds": 0.094577632000437,
+      "series": "ROCm HIP matmul transfer"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul resident",
+      "seconds": 0.0007206619920907542,
+      "series": "ROCm HIP matmul resident"
+    },
+    {
+      "color": "#64748b",
+      "label": "ROCm campaign6_profiler_matmul | HIP matmul toHost",
+      "seconds": 0.0001184230059152469,
+      "series": "ROCm HIP matmul toHost"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_simplify_duplicate_pressure | CPU scalar",
+      "seconds": 0.007793816999765113,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign7_simplify_duplicate_pressure | HIP simplify",
+      "seconds": 0.00045693501306232065,
+      "series": "ROCm HIP simplify"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_matmul_duplicate_pressure | CPU scalar",
+      "seconds": 0.004457502000150271,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm campaign7_matmul_duplicate_pressure | HIP matmul",
+      "seconds": 0.0008148010092554614,
+      "series": "ROCm HIP matmul"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_simplify | CPU scalar",
+      "seconds": 0.0015202100039459765,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign7_profiler_simplify | HIP simplify",
+      "seconds": 0.00036370901216287166,
+      "series": "ROCm HIP simplify"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_expectation | CPU scalar",
+      "seconds": 0.05730356699496042,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign7_profiler_expectation | HIP expectation",
+      "seconds": 0.0001169239985756576,
+      "series": "ROCm HIP expectation"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_matmul | CPU scalar",
+      "seconds": 0.0020016130001749843,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm campaign7_profiler_matmul | HIP matmul",
+      "seconds": 0.0003627989935921505,
+      "series": "ROCm HIP matmul"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_simplify | CPU scalar",
+      "seconds": 0.0015744509873911738,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign7_profiler_simplify | HIP simplify",
+      "seconds": 0.0006332909979391843,
+      "series": "ROCm HIP simplify"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_expectation | CPU scalar",
+      "seconds": 0.06267177200061269,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign7_profiler_expectation | HIP expectation",
+      "seconds": 0.00015078399155754596,
+      "series": "ROCm HIP expectation"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_profiler_matmul | CPU scalar",
+      "seconds": 0.0021797530062031,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm campaign7_profiler_matmul | HIP matmul",
+      "seconds": 0.0007753210084047168,
+      "series": "ROCm HIP matmul"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_transfer_roundtrip | CPU scalar",
+      "seconds": 5.0193004426546395e-05,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0e7490",
+      "label": "ROCm campaign7_transfer_roundtrip | HIP transfer",
+      "seconds": 4.841999907512218e-05,
+      "series": "ROCm HIP transfer"
+    },
+    {
+      "color": "#0891b2",
+      "label": "ROCm campaign7_transfer_roundtrip | HIP to_host",
+      "seconds": 3.31129995174706e-05,
+      "series": "ROCm HIP to_host"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_commutation_consumers_commutation | CPU scalar",
+      "seconds": 0.0007037329924060032,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#2563eb",
+      "label": "ROCm campaign7_retained_commutation_consumers_commutation | HIP commutation",
+      "seconds": 1.3438009773381054e-05,
+      "series": "ROCm HIP commutation"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_commutation_consumers_compact_consumers | CPU scalar",
+      "seconds": 0.0007037329924060032,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#0284c7",
+      "label": "ROCm campaign7_retained_commutation_consumers_compact_consumers | HIP compact consumer",
+      "seconds": 2.3330008843913674e-05,
+      "series": "ROCm HIP compact consumer"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_simplify | CPU scalar",
+      "seconds": 0.0006811439961893484,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#7c3aed",
+      "label": "ROCm campaign7_retained_simplify | HIP simplify",
+      "seconds": 0.0003437959967413917,
+      "series": "ROCm HIP simplify"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_expectation | CPU scalar",
+      "seconds": 0.0009739379893289879,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#be123c",
+      "label": "ROCm campaign7_retained_expectation | HIP expectation",
+      "seconds": 4.596900544129312e-05,
+      "series": "ROCm HIP expectation"
+    },
+    {
+      "color": "#334155",
+      "label": "campaign7_retained_matmul | CPU scalar",
+      "seconds": 0.0019607590074883774,
+      "series": "CPU scalar"
+    },
+    {
+      "color": "#ca8a04",
+      "label": "ROCm campaign7_retained_matmul | HIP matmul",
+      "seconds": 0.0003568009997252375,
+      "series": "ROCm HIP matmul"
+    },
+    {
+      "category": "Apple Metal Campaign 2",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_specialization_words1_512x512",
+      "points": [
+        {
+          "seconds": 0.0001643539872020483,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0005168749485164881,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.00014668749645352364,
+          "series": "CPU NEON"
+        },
+        {
+          "seconds": 0.0008729585097171366,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.00023441651137545705,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.00044958299258723855,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.0001114789629355073,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.00011222896864637733,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.00011785456445068121,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.00014370802091434598,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 0.00010866648517549038,
+          "series": "Apple Metal words=1 specialized candidate"
+        },
+        {
+          "seconds": 1.3041484635323286e-05,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 3.27499583363533e-05,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 3.3917021937668324e-05,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 3.431300865486264e-05,
+          "series": "Apple Metal compact row counts"
+        }
+      ],
+      "scale": "512x512 terms, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 2",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_specialization_words2_384x384",
+      "points": [
+        {
+          "seconds": 0.00013399997260421515,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00047177047235891223,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.00012762495316565037,
+          "series": "CPU NEON"
+        },
+        {
+          "seconds": 0.0009226665133610368,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.00022566592087969184,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.0005412500468082726,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.0001304374891333282,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.00018610450206324458,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.00012881244765594602,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.00014608300989493728,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 0.00012160453479737043,
+          "series": "Apple Metal words=2 specialized candidate"
+        },
+        {
+          "seconds": 1.2979027815163136e-05,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 1.850002445280552e-05,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 1.9395549315959215e-05,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 1.9625003915280104e-05,
+          "series": "Apple Metal compact row counts"
+        }
+      ],
+      "scale": "384x384 terms, 96 qubits, 2 words"
+    },
+    {
+      "category": "Apple Metal Campaign 2",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_specialization_generic_words3_192x192",
+      "points": [
+        {
+          "seconds": 0.00018675002502277493,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00017899996601045132,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0008277080487459898,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.00011935399379581213,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.0005580835277214646,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.00010664551518857479,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.00011243746848776937,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.00011235399870201945,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.00011679151793941855,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 3.603985533118248e-06,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 4.770525265485048e-06,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 5.417037755250931e-06,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 5.332985892891884e-06,
+          "series": "Apple Metal compact row counts"
+        }
+      ],
+      "scale": "192x192 terms, 130 qubits, 3 words"
+    },
+    {
+      "category": "Apple Metal Campaign 3",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign3_words2_decision_384x384",
+      "points": [
+        {
+          "seconds": 0.00013522955123335123,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00045227049849927425,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.00012379203690215945,
+          "series": "CPU NEON"
+        },
+        {
+          "seconds": 0.0009618959738872945,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.0002147295163013041,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.000436562520917505,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.00010533351451158524,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.00010295852553099394,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.00010120851220563054,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.00013193697668612003,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 0.0001249795313924551,
+          "series": "Apple Metal words=2 specialized candidate"
+        },
+        {
+          "seconds": 0.000104041479062289,
+          "series": "Apple Metal `.metallib` reuse"
+        },
+        {
+          "seconds": 1.4186953194439411e-05,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 1.8000020645558834e-05,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 1.895846799015999e-05,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 1.9666971638798714e-05,
+          "series": "Apple Metal compact row counts"
+        }
+      ],
+      "scale": "384x384 terms, 96 qubits, 2 words"
+    },
+    {
+      "category": "Apple Metal Campaign 3",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign3_large_private_storage_1024x1024",
+      "points": [
+        {
+          "seconds": 0.0005884999991394579,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0019442084594629705,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.000553853518795222,
+          "series": "CPU NEON"
+        },
+        {
+          "seconds": 0.0009193130536004901,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.00029089651070535183,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.0003547914675436914,
+          "series": "Apple Metal private blit host output"
+        },
+        {
+          "seconds": 0.0005242080078460276,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.0002132284571416676,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.00013562501408159733,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.00015858345432206988,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.00036072899820283055,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 0.00011972949141636491,
+          "series": "Apple Metal words=1 specialized candidate"
+        },
+        {
+          "seconds": 0.00012277101632207632,
+          "series": "Apple Metal `.metallib` reuse"
+        },
+        {
+          "seconds": 3.9208505768328905e-05,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 0.00012850004713982344,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 0.00013085396494716406,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 0.00013377098366618156,
+          "series": "Apple Metal compact row counts"
+        }
+      ],
+      "scale": "1024x1024 terms, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 3",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign3_compact_reduction_512x512",
+      "points": [
+        {
+          "seconds": 0.00016322953160852194,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0004972079768776894,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.00014677050057798624,
+          "series": "CPU NEON"
+        },
+        {
+          "seconds": 0.0007489999989047647,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.00017970846965909004,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.0006872500525787473,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.00019706250168383121,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.00013497902546077967,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.00014447950525209308,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.00020752049749717116,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 0.0001316870329901576,
+          "series": "Apple Metal words=1 specialized candidate"
+        },
+        {
+          "seconds": 0.00013829197268933058,
+          "series": "Apple Metal `.metallib` reuse"
+        },
+        {
+          "seconds": 1.7478480003774166e-05,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 3.335397923365235e-05,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 3.3062417060136795e-05,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 3.3333024475723505e-05,
+          "series": "Apple Metal compact row counts"
+        },
+        {
+          "seconds": 0.0001435205340385437,
+          "series": "Apple Metal GPU compact count"
+        },
+        {
+          "seconds": 0.0003718124935403466,
+          "series": "Apple Metal GPU compact column counts"
+        },
+        {
+          "seconds": 0.00017947942251339555,
+          "series": "Apple Metal GPU compact row counts"
+        }
+      ],
+      "scale": "512x512 terms, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 4",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign4_words2_large_768x768",
+      "points": [
+        {
+          "seconds": 0.00047589594032615423,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0018535625422373414,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0004603540292009711,
+          "series": "CPU NEON"
+        },
+        {
+          "seconds": 0.00781166652450338,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.00019829149823635817,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.0006116245058365166,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.00013414601562544703,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.00013925001258030534,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.00013641698751598597,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.0002064789878204465,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 0.0001288335188291967,
+          "series": "Apple Metal words=2 specialized candidate"
+        },
+        {
+          "seconds": 0.00016941700596362352,
+          "series": "Apple Metal `.metallib` reuse"
+        },
+        {
+          "seconds": 3.462500171735883e-05,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 7.360399467870593e-05,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 8.543749572709203e-05,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 7.614545756950974e-05,
+          "series": "Apple Metal compact row counts"
+        }
+      ],
+      "scale": "768x768 terms, 96 qubits, 2 words"
+    },
+    {
+      "category": "Apple Metal Campaign 4",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign4_compact_large_2048x2048",
+      "points": [
+        {
+          "seconds": 0.002394062466919422,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.008075687510427088,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.002423208556137979,
+          "series": "CPU NEON"
+        },
+        {
+          "seconds": 0.001883292046841234,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.0005114165251143277,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.0006550835096277297,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.00023904198314994574,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.0001672705402597785,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.0002302710199728608,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.0009156670421361923,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 0.0001729165087454021,
+          "series": "Apple Metal words=1 specialized candidate"
+        },
+        {
+          "seconds": 0.00018368748715147376,
+          "series": "Apple Metal `.metallib` reuse"
+        },
+        {
+          "seconds": 0.00017937453230842948,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 0.0005385209806263447,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 0.0005462505505420268,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 0.0005445830174721777,
+          "series": "Apple Metal compact row counts"
+        },
+        {
+          "seconds": 0.00032552104676142335,
+          "series": "Apple Metal GPU compact count"
+        },
+        {
+          "seconds": 0.0005197494756430387,
+          "series": "Apple Metal GPU parallel compact count"
+        },
+        {
+          "seconds": 0.0007148129516281188,
+          "series": "Apple Metal GPU compact column counts"
+        },
+        {
+          "seconds": 0.0003255209303461015,
+          "series": "Apple Metal GPU compact row counts"
+        }
+      ],
+      "scale": "2048x2048 terms, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 4",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign4_private_device_boundary_2048x2048",
+      "points": [
+        {
+          "seconds": 0.002271604025736451,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00781091651879251,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.00225800002226606,
+          "series": "CPU NEON"
+        },
+        {
+          "seconds": 0.0015386039740405977,
+          "series": "Apple Metal transfer-inclusive"
+        },
+        {
+          "seconds": 0.0004914585151709616,
+          "series": "Apple Metal device-resident host output"
+        },
+        {
+          "seconds": 0.0007194170029833913,
+          "series": "Apple Metal private blit host output"
+        },
+        {
+          "seconds": 0.0005424165283329785,
+          "series": "Apple Metal device matrix allocate"
+        },
+        {
+          "seconds": 0.0001721670851111412,
+          "series": "Apple Metal device matrix reuse"
+        },
+        {
+          "seconds": 0.00017893750919029117,
+          "series": "Apple Metal auto A/B reuse"
+        },
+        {
+          "seconds": 0.0002467709709890187,
+          "series": "Apple Metal generic 2D baseline"
+        },
+        {
+          "seconds": 0.0007372914697043598,
+          "series": "Apple Metal flat generic baseline"
+        },
+        {
+          "seconds": 0.0001870840205810964,
+          "series": "Apple Metal words=1 specialized candidate"
+        },
+        {
+          "seconds": 0.00016339606372639537,
+          "series": "Apple Metal `.metallib` reuse"
+        },
+        {
+          "seconds": 0.0001351875253021717,
+          "series": "Apple Metal device matrix to_host"
+        },
+        {
+          "seconds": 0.0005135000101290643,
+          "series": "Apple Metal compact count"
+        },
+        {
+          "seconds": 0.0005513954674825072,
+          "series": "Apple Metal compact column counts"
+        },
+        {
+          "seconds": 0.0005497295060195029,
+          "series": "Apple Metal compact row counts"
+        }
+      ],
+      "scale": "2048x2048 terms, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 5",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign5_simplify_words1_duplicate_heavy_8192_terms",
+      "points": [
+        {
+          "seconds": 0.0003459584550000727,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00039129197830334306,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0008831460145302117,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "8192 terms before simplify, 1229 survivor terms, duplicate_rate=0.85, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 5",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign5_simplify_words1_duplicate_light_8192_terms",
+      "points": [
+        {
+          "seconds": 0.00043710455065593123,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0003808335750363767,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0009248959831893444,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "8192 terms before simplify, 7782 survivor terms, duplicate_rate=0.05, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 5",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign5_simplify_words2_duplicate_heavy_4096_terms",
+      "points": [
+        {
+          "seconds": 0.00016235449584200978,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.000146791513543576,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0006209370330907404,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "4096 terms before simplify, 1229 survivor terms, duplicate_rate=0.7, 96 qubits, 2 words"
+    },
+    {
+      "category": "Apple Metal Campaign 5",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign5_simplify_generic_multiword_2048_terms",
+      "points": [
+        {
+          "seconds": 5.781248910352588e-05,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 5.0271046347916126e-05,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.00040195847395807505,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "2048 terms before simplify, 1024 survivor terms, duplicate_rate=0.5, 130 qubits, 3 words"
+    },
+    {
+      "category": "Apple Metal Campaign 5",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign5_simplify_cancellation_4096_terms",
+      "points": [
+        {
+          "seconds": 0.00016499997582286596,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00016222952399402857,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.00045152101665735245,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "4096 terms before simplify, 0 survivor terms, duplicate_rate=0.75, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 6",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign6_simplify_words1_duplicate_heavy_8192_terms",
+      "points": [
+        {
+          "seconds": 0.00040137500036507845,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00037235452327877283,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0006742709665559232,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "8192 terms before simplify, 1229 survivor terms, duplicate_rate=0.85, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 6",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign6_simplify_words1_duplicate_light_8192_terms",
+      "points": [
+        {
+          "seconds": 0.0003739374806173146,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0004164374549873173,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0007590414606966078,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "8192 terms before simplify, 7782 survivor terms, duplicate_rate=0.05, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 6",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign6_simplify_words2_duplicate_heavy_4096_terms",
+      "points": [
+        {
+          "seconds": 0.00017129152547568083,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00019395846175029874,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0004905835376121104,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "4096 terms before simplify, 1229 survivor terms, duplicate_rate=0.7, 96 qubits, 2 words"
+    },
+    {
+      "category": "Apple Metal Campaign 6",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign6_simplify_generic_multiword_2048_terms",
+      "points": [
+        {
+          "seconds": 6.054196273908019e-05,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 5.506299203261733e-05,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0003671669983305037,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "2048 terms before simplify, 1024 survivor terms, duplicate_rate=0.5, 130 qubits, 3 words"
+    },
+    {
+      "category": "Apple Metal Campaign 6",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign6_simplify_cancellation_4096_terms",
+      "points": [
+        {
+          "seconds": 0.00016052107093855739,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00015677098417654634,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0004435624578036368,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "4096 terms before simplify, 0 survivor terms, duplicate_rate=0.75, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 7",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign7_simplify_words1_duplicate_heavy_8192_terms",
+      "points": [
+        {
+          "seconds": 0.0004236039239913225,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00043543754145503044,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.000996333488728851,
+          "series": "Apple Metal simplify transfer reference"
+        },
+        {
+          "seconds": 0.0004923954838886857,
+          "series": "Apple Metal simplify device candidate"
+        }
+      ],
+      "scale": "8192 terms before simplify, 1222 survivor terms, duplicate_rate=0.85, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 7",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign7_simplify_words1_duplicate_light_8192_terms",
+      "points": [
+        {
+          "seconds": 0.0004485835088416934,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00040818750858306885,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0006626875256188214,
+          "series": "Apple Metal simplify transfer reference"
+        },
+        {
+          "seconds": 0.0004880625056102872,
+          "series": "Apple Metal simplify device candidate"
+        }
+      ],
+      "scale": "8192 terms before simplify, 7740 survivor terms, duplicate_rate=0.05, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 7",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign7_simplify_words1_cancellation_4096_terms",
+      "points": [
+        {
+          "seconds": 0.0001535210176371038,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0001685205497778952,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0004180409596301615,
+          "series": "Apple Metal simplify transfer reference"
+        },
+        {
+          "seconds": 0.00042789551662281156,
+          "series": "Apple Metal simplify device candidate"
+        }
+      ],
+      "scale": "4096 terms before simplify, 0 survivor terms, duplicate_rate=0.75, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 7",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign7_simplify_words2_unavailable_4096_terms",
+      "points": [
+        {
+          "seconds": 0.00015129201347008348,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00018254149472340941,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0003914170083589852,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "4096 terms before simplify, 1222 survivor terms, duplicate_rate=0.7, 96 qubits, 2 words"
+    },
+    {
+      "category": "Apple Metal Campaign 8",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign8_simplify_words1_duplicate_heavy_8192_terms",
+      "points": [
+        {
+          "seconds": 0.0003129584947600961,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0004596874350681901,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0006724164704792202,
+          "series": "Apple Metal simplify transfer reference"
+        },
+        {
+          "seconds": 0.0007727500051259995,
+          "series": "Apple Metal simplify device candidate"
+        }
+      ],
+      "scale": "8192 terms before simplify, 1222 survivor terms, duplicate_rate=0.85, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 8",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign8_simplify_words1_duplicate_light_8192_terms",
+      "points": [
+        {
+          "seconds": 0.00036566605558618903,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00036512449150905013,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0006785409641452134,
+          "series": "Apple Metal simplify transfer reference"
+        },
+        {
+          "seconds": 0.0009080204763449728,
+          "series": "Apple Metal simplify device candidate"
+        }
+      ],
+      "scale": "8192 terms before simplify, 7740 survivor terms, duplicate_rate=0.05, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 8",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign8_simplify_words1_cancellation_4096_terms",
+      "points": [
+        {
+          "seconds": 0.00013539596693590283,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00015883351443335414,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.00039043696597218513,
+          "series": "Apple Metal simplify transfer reference"
+        },
+        {
+          "seconds": 0.0005327084800228477,
+          "series": "Apple Metal simplify device candidate"
+        }
+      ],
+      "scale": "4096 terms before simplify, 0 survivor terms, duplicate_rate=0.75, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 8",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign8_simplify_words1_large_duplicate_heavy_16384_terms",
+      "points": [
+        {
+          "seconds": 0.0008518124814145267,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.0007639584946446121,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0011928960448130965,
+          "series": "Apple Metal simplify transfer reference"
+        },
+        {
+          "seconds": 0.0011134790256619453,
+          "series": "Apple Metal simplify device candidate"
+        }
+      ],
+      "scale": "16384 terms before simplify, 1629 survivor terms, duplicate_rate=0.9, 64 qubits, 1 words"
+    },
+    {
+      "category": "Apple Metal Campaign 8",
+      "final_status": "ok",
+      "gpu_name": "Apple M4 Pro",
+      "mode": "metal_campaign8_simplify_words2_status_only_4096_terms",
+      "points": [
+        {
+          "seconds": 0.00014839554205536842,
+          "series": "CPU default"
+        },
+        {
+          "seconds": 0.00014147901674732566,
+          "series": "CPU scalar"
+        },
+        {
+          "seconds": 0.0005530834896489978,
+          "series": "Apple Metal simplify transfer reference"
+        }
+      ],
+      "scale": "4096 terms before simplify, 1222 survivor terms, duplicate_rate=0.7, 96 qubits, 2 words"
+    }
+  ],
+  "source_benchmark": "docs/benchmarks/data/apple_metal_optimization_campaign8_2026-05-07/raw/metal_benchmark_campaign8.json",
+  "status": "ok"
+}

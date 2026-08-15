@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="284" viewBox="0 0 1060 284" role="img" aria-labelledby="title desc">
+<title id="title">Campaign 4 Duplicate Reduction A/B</title>
+<desc id="desc">CUB radix-sort prototype speedup versus default CUDA simplify; higher is better.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111827" text-anchor="start">Campaign 4 Duplicate Reduction A/B</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">CUB radix-sort prototype speedup versus default CUDA simplify; higher is better.</text>
+<text x="32.0" y="114.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">oneword low duplicate terms 200000</text>
+<rect x="420.0" y="100.0" width="420.0" height="18.0" rx="2" fill="#2563eb"/>
+<text x="848.0" y="114.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">1.46x</text>
+<text x="32.0" y="148.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">oneword medium duplicate terms 200000</text>
+<rect x="420.0" y="134.0" width="244.4" height="18.0" rx="2" fill="#b45309"/>
+<text x="672.4" y="148.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">0.85x</text>
+<text x="32.0" y="182.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">oneword high duplicate terms 200000</text>
+<rect x="420.0" y="168.0" width="235.3" height="18.0" rx="2" fill="#b45309"/>
+<text x="663.3" y="182.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">0.82x</text>
+<text x="32.0" y="216.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">oneword pathological duplicate terms 200000</text>
+<rect x="420.0" y="202.0" width="131.3" height="18.0" rx="2" fill="#b45309"/>
+<text x="559.3" y="216.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">0.46x</text>
+</svg>

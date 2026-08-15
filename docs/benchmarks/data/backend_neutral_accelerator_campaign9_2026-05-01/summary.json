@@ -1,0 +1,131 @@
+{
+  "campaign": "backend_neutral_accelerator_campaign9",
+  "date": "2026-05-01",
+  "status": "completed_target_specific_closeout_lanes",
+  "validation_git_revision": "ec8fd19",
+  "support_boundary": "CPU-only, CUDA-only source builds, and HIP-only source builds are supported normal build modes; combined CUDA+HIP source builds remain a configure-time policy rejection.",
+  "evidence_logs": {
+    "local_cpu": "docs/benchmarks/data/backend_neutral_accelerator_campaign9_2026-05-01/logs/local_validate_apple_m4pro.log",
+    "cuda_h100": "docs/benchmarks/data/backend_neutral_accelerator_campaign9_2026-05-01/logs/h100_cuda_validate.log",
+    "hip_mi300x": "docs/benchmarks/data/backend_neutral_accelerator_campaign9_2026-05-01/logs/mi300x_hip_validate.log",
+    "dual_request_rejection": "docs/benchmarks/data/backend_neutral_accelerator_campaign9_2026-05-01/logs/local_cuda_hip_rejection.log"
+  },
+  "lanes": {
+    "local_cpu_only": {
+      "status": "passed",
+      "host": "Apple Silicon development host",
+      "cpu_model": "Apple M4 Pro, 12 cores",
+      "python": "3.12.12",
+      "command": "UV_CACHE_DIR=/private/tmp/fastpauli-uv-cache uv run python scripts/validate.py",
+      "build_mode": "cpu_only",
+      "compiled_backends": [
+        "cpu"
+      ],
+      "runtime_visible_backends": [
+        "cpu"
+      ],
+      "compiled_cpu_backends": [
+        "scalar",
+        "neon"
+      ],
+      "pytest": "242 passed, 89 skipped in 18.06s",
+      "sdist": "Successfully built fastpauli-0.1.0.tar.gz"
+    },
+    "cuda_h100": {
+      "status": "passed",
+      "host": "NVIDIA H100 validation host",
+      "cpu_model": "AMD EPYC 9654 96-Core Processor, 32 vCPU",
+      "gpu_model": "NVIDIA H100 80GB HBM3",
+      "compute_capability": "9.0",
+      "python": "3.10.12",
+      "command": "PATH=/usr/local/cuda/bin:/root/FastPauli/.venv/bin:$PATH FASTPAULI_VALIDATE_CUDA=1 FASTPAULI_CUDA_ARCHITECTURES=90 .venv/bin/python scripts/validate.py",
+      "build_mode": "cuda_only",
+      "default_cuda_architectures_built": "70,75,80,86,89,90",
+      "requested_cuda_architectures_built": "90",
+      "cuda_toolkit_version": "12.9.86",
+      "cuda_runtime_version": "12.9",
+      "cuda_driver_version": "13.0",
+      "nvidia_driver": "580.126.09",
+      "compiled_backends": [
+        "cpu",
+        "cuda"
+      ],
+      "runtime_visible_backends": [
+        "cpu",
+        "cuda"
+      ],
+      "compiled_accelerator_backends": [
+        "cuda"
+      ],
+      "runtime_visible_accelerator_backends": [
+        "cuda"
+      ],
+      "semantic_pytest": "264 passed, 67 skipped in 11.64s",
+      "cuda_transfer_pytest": "6 passed in 0.37s",
+      "cuda_kernel_pytest": "30 passed, 8 skipped in 1.50s",
+      "benchmark_smoke": "CUDA kernel benchmark smoke and CUDA scaling benchmark smoke completed under scripts/validate.py",
+      "sdist": "Successfully built fastpauli-0.1.0.tar.gz"
+    },
+    "hip_mi300x": {
+      "status": "passed",
+      "host": "MI300X ROCm validation host",
+      "cpu_model": "Intel Xeon Platinum 8568Y+, 20 vCPU",
+      "gpu_model": "AMD Instinct MI300X VF",
+      "gfx_target": "gfx942:sramecc+:xnack-",
+      "python": "3.12.3",
+      "command": "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:/root/FastPauli/.venv/bin:$PATH FASTPAULI_VALIDATE_HIP=1 FASTPAULI_HIP_ARCHITECTURES=gfx942 .venv/bin/python scripts/validate.py",
+      "build_mode": "hip_only",
+      "hip_architectures": "gfx942",
+      "rocm_toolkit_version": "7.2.26015-fc0010cf6a",
+      "hip_runtime_version": "7.2.26015",
+      "hip_driver_version": "7.2.26015",
+      "hip_compiler": "/opt/rocm/bin/amdclang++, Clang 22.0.0",
+      "compiled_backends": [
+        "cpu",
+        "hip"
+      ],
+      "runtime_visible_backends": [
+        "cpu",
+        "hip"
+      ],
+      "compiled_accelerator_backends": [
+        "hip"
+      ],
+      "runtime_visible_accelerator_backends": [
+        "hip"
+      ],
+      "semantic_pytest": "270 passed, 61 skipped in 13.44s",
+      "hip_foundation_pytest": "37 passed, 2 skipped in 3.78s",
+      "benchmark_smoke": "ROCm kernel benchmark smoke on HIP build completed with correctness_passed true",
+      "sdist": "Successfully built fastpauli-0.1.0.tar.gz"
+    },
+    "dual_request_rejection": {
+      "status": "passed",
+      "host": "Apple Silicon development host",
+      "command": "UV_CACHE_DIR=/private/tmp/fastpauli-uv-cache uv run python -m cmake -S . -B /tmp/fastpauli-campaign9-cuda-hip-reject -DFASTPAULI_ENABLE_CUDA=ON -DFASTPAULI_ENABLE_HIP=ON",
+      "exit_code": 1,
+      "diagnostic": "FASTPAULI_ENABLE_CUDA and FASTPAULI_ENABLE_HIP cannot both be ON under the target-specific accelerator build policy."
+    }
+  },
+  "terminal_statuses": {
+    "backend_neutral_status_schema": "passed",
+    "object_local_backend_identity": "passed",
+    "backend_construction_selector_contract": "passed",
+    "device_commutation_matrix_backend_property": "passed",
+    "ambiguous_dual_runtime_policy": "passed_by_cpu_simulation",
+    "target_specific_accelerator_builds": "passed",
+    "mixed_cuda_hip_build_rejection": "passed",
+    "future_multi_runtime_design_gate": "retained",
+    "same_backend_same_device_validation": "passed",
+    "cpu_only_header_safety": "passed",
+    "cuda_target_regression_lane": "passed",
+    "hip_target_regression_lane": "passed",
+    "benchmark_boundary_reporting": "passed_status_and_smoke_evidence",
+    "no_wheel_or_portability_claim": "retained"
+  },
+  "limitations": [
+    "This campaign does not add ROCm wheels, CUDA wheels, combined accelerator wheels, non-MI300X AMD portability, multi-GPU execution, HIP DLPack, HIP CUDA Array Interface, Metal/MPS support, public streams, public graphs, or public workspaces.",
+    "CUDA and HIP target lanes were validated on separate accelerator hosts under the accepted target-specific build policy.",
+    "Benchmark rows are status-only or smoke rows for support-boundary evidence, not new speedup claims."
+  ]
+}

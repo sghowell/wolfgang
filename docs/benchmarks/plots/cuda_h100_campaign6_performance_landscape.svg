@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1380" height="728" viewBox="0 0 1380 728" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli Performance Landscape</title>
+<desc id="desc">Campaign 6 broad comparison: CPU selectors, CUDA kernels, compact consumers, CuPy, cuQuantum, Qiskit, and OpenFermion.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111827" text-anchor="start">FastPauli Performance Landscape</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Campaign 6 broad comparison: CPU selectors, CUDA kernels, compact consumers, CuPy, cuQuantum, Qiskit, and OpenFermion.</text>
+<line x1="370.0" y1="102" x2="370.0" y2="572.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="370.0" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">0.001x</text>
+<line x1="476.4" y1="102" x2="476.4" y2="572.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="476.4" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">0.01x</text>
+<line x1="582.9" y1="102" x2="582.9" y2="572.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="582.9" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">0.10x</text>
+<line x1="689.3" y1="102" x2="689.3" y2="572.0" stroke="#111827" stroke-width="1.4"/>
+<text x="689.3" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">1.00x</text>
+<line x1="795.7" y1="102" x2="795.7" y2="572.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="795.7" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">10.0x</text>
+<line x1="902.1" y1="102" x2="902.1" y2="572.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="902.1" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">100x</text>
+<line x1="1008.6" y1="102" x2="1008.6" y2="572.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="1008.6" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">1000x</text>
+<line x1="1115.0" y1="102" x2="1115.0" y2="572.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="1115.0" y="112.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">10000x</text>
+<rect x="24.0" y="102.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="125.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">simplify 50000 terms</text>
+<text x="1240.0" y="125.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 16.4x</text>
+<circle cx="689.3" cy="110.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="784.0" cy="126.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="818.4" cy="130.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="161.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">statevector 2048 terms</text>
+<text x="1240.0" y="161.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 728x</text>
+<circle cx="689.3" cy="146.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="956.0" cy="162.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="993.9" cy="166.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="24.0" y="174.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="197.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">commutation 2048x2048</text>
+<text x="1240.0" y="197.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 636x</text>
+<circle cx="689.3" cy="182.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="793.2" cy="186.0" r="5.0" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="761.8" cy="190.0" r="5.0" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="781.9" cy="194.0" r="5.0" fill="#0f766e" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="851.5" cy="198.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="853.5" cy="202.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="928.3" cy="206.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="987.6" cy="210.0" r="5.0" fill="#16a34a" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="808.1" cy="214.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="233.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">matmul+simplify 256x256</text>
+<text x="1240.0" y="233.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 16.3x</text>
+<circle cx="689.3" cy="218.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="777.0" cy="234.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="818.2" cy="238.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="24.0" y="246.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="269.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">commutation consumer 2048x2048</text>
+<text x="1240.0" y="269.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 647x</text>
+<circle cx="689.3" cy="254.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="797.1" cy="258.0" r="5.0" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="760.3" cy="262.0" r="5.0" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="776.2" cy="266.0" r="5.0" fill="#0f766e" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="841.1" cy="270.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="988.4" cy="282.0" r="5.0" fill="#16a34a" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="943.6" cy="278.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="958.8" cy="282.0" r="5.0" fill="#0e7490" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="983.4" cy="286.0" r="5.0" fill="#0369a1" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="819.5" cy="290.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="811.4" cy="246.0" r="5.0" fill="#e11d48" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="305.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">commutation consumer 8192x8192</text>
+<text x="1240.0" y="305.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 2120x</text>
+<circle cx="689.3" cy="290.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="765.3" cy="294.0" r="5.0" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="739.5" cy="298.0" r="5.0" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="750.1" cy="302.0" r="5.0" fill="#0f766e" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="836.1" cy="306.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1012.3" cy="318.0" r="5.0" fill="#16a34a" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="962.4" cy="314.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1001.9" cy="318.0" r="5.0" fill="#0e7490" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1043.3" cy="322.0" r="5.0" fill="#0369a1" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="774.3" cy="326.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="783.9" cy="282.0" r="5.0" fill="#e11d48" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="24.0" y="318.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="341.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">commutation consumer 16384x16384</text>
+<text x="1240.0" y="341.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 2741x</text>
+<circle cx="689.3" cy="326.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="768.6" cy="330.0" r="5.0" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="743.9" cy="334.0" r="5.0" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="754.5" cy="338.0" r="5.0" fill="#0f766e" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="835.8" cy="342.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1014.8" cy="354.0" r="5.0" fill="#16a34a" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="968.4" cy="350.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1010.3" cy="354.0" r="5.0" fill="#0e7490" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1055.2" cy="358.0" r="5.0" fill="#0369a1" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="776.3" cy="362.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="785.5" cy="318.0" r="5.0" fill="#e11d48" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="377.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Qiskit simplify 10000 terms 64q</text>
+<text x="1240.0" y="377.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1.00x</text>
+<circle cx="689.3" cy="362.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="677.3" cy="358.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="24.0" y="390.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="413.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">OpenFermion multiply 256x256 64q</text>
+<text x="1240.0" y="413.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1.00x</text>
+<circle cx="689.3" cy="398.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="552.2" cy="394.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="449.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Qiskit grouping 512 terms 64q</text>
+<text x="1240.0" y="449.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1.00x</text>
+<circle cx="689.3" cy="434.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="436.9" cy="430.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="24.0" y="462.0" width="1332.0" height="36.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="485.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">cuStateVec statevector 4096 terms 14q</text>
+<text x="1240.0" y="485.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1843x</text>
+<circle cx="689.3" cy="470.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="856.9" cy="466.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1031.4" cy="490.0" r="5.0" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="1036.8" cy="490.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="32.0" y="521.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">CuPy consumer 256x256 64q</text>
+<text x="1240.0" y="521.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 2.21x</text>
+<circle cx="689.3" cy="506.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="667.6" cy="502.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="725.9" cy="530.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="721.2" cy="542.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="32.0" cy="584.0" r="5.0" fill="#4b5563" stroke="#ffffff" stroke-width="1.5"/>
+<text x="46.0" y="588.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CPU scalar</text>
+<circle cx="352.0" cy="584.0" r="5.0" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<text x="366.0" y="588.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CPU TBB</text>
+<circle cx="672.0" cy="584.0" r="5.0" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<text x="686.0" y="588.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CPU AVX2</text>
+<circle cx="992.0" cy="584.0" r="5.0" fill="#0f766e" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1006.0" y="588.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CPU AVX-512</text>
+<circle cx="32.0" cy="612.0" r="5.0" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<text x="46.0" y="616.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA transfer-inclusive</text>
+<circle cx="352.0" cy="612.0" r="5.0" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="366.0" y="616.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA device-resident</text>
+<circle cx="672.0" cy="612.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<text x="686.0" y="616.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA device-output allocate</text>
+<circle cx="992.0" cy="612.0" r="5.0" fill="#16a34a" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1006.0" y="616.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA device-output reuse</text>
+<circle cx="32.0" cy="640.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<text x="46.0" y="644.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA device-output to_host</text>
+<circle cx="352.0" cy="640.0" r="5.0" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<text x="366.0" y="644.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA compact count</text>
+<circle cx="672.0" cy="640.0" r="5.0" fill="#e11d48" stroke="#ffffff" stroke-width="1.5"/>
+<text x="686.0" y="644.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CuPy reduction</text>
+<circle cx="992.0" cy="640.0" r="5.0" fill="#65a30d" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1006.0" y="644.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA dense to_host</text>
+<circle cx="32.0" cy="668.0" r="5.0" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
+<text x="46.0" y="672.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">CUDA operator-resident</text>
+<circle cx="352.0" cy="668.0" r="5.0" fill="#dc2626" stroke="#ffffff" stroke-width="1.5"/>
+<text x="366.0" y="672.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">External baseline</text>
+<text x="32.0" y="704.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">Source: Campaign 6 checked raw JSON. Consumer rows include large dense commutation matrices plus compact count reducers.</text>
+</svg>

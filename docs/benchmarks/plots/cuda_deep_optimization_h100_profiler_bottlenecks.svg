@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="430" viewBox="0 0 1120 430" role="img" aria-labelledby="title desc">
+<title id="title">FastPauli H100 Nsight Compute bottlenecks</title>
+<desc id="desc">Selected Nsight Compute throughput and occupancy metrics for custom and CCCL kernels.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">Nsight Compute Bottleneck Signals</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Selected detailed-counter samples. Low DRAM percent with high SM percent points away from raw HBM bandwidth.</text>
+<text x="32.0" y="121.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">commutation default</text>
+<rect x="300.0" y="105.0" width="303.1" height="12.0" rx="2.0" fill="#059669"/>
+<text x="832.0" y="115.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">SM 58.3%</text>
+<rect x="300.0" y="123.0" width="107.3" height="12.0" rx="2.0" fill="#2563eb"/>
+<text x="832.0" y="133.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Memory 20.6%</text>
+<rect x="300.0" y="141.0" width="429.0" height="12.0" rx="2.0" fill="#7c3aed"/>
+<text x="832.0" y="151.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Active warps 82.5%; 12.8us</text>
+<text x="32.0" y="183.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">commutation stress</text>
+<rect x="300.0" y="167.0" width="438.1" height="12.0" rx="2.0" fill="#059669"/>
+<text x="832.0" y="177.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">SM 84.3%</text>
+<rect x="300.0" y="185.0" width="155.4" height="12.0" rx="2.0" fill="#2563eb"/>
+<text x="832.0" y="195.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Memory 29.9%</text>
+<rect x="300.0" y="203.0" width="455.3" height="12.0" rx="2.0" fill="#7c3aed"/>
+<text x="832.0" y="213.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Active warps 87.6%; 143.6us</text>
+<text x="32.0" y="245.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">expectation stress</text>
+<rect x="300.0" y="229.0" width="365.0" height="12.0" rx="2.0" fill="#059669"/>
+<text x="832.0" y="239.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">SM 70.2%</text>
+<rect x="300.0" y="247.0" width="321.6" height="12.0" rx="2.0" fill="#2563eb"/>
+<text x="832.0" y="257.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Memory 61.9%</text>
+<rect x="300.0" y="265.0" width="479.9" height="12.0" rx="2.0" fill="#7c3aed"/>
+<text x="832.0" y="275.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Active warps 92.3%; 233.2us</text>
+<text x="32.0" y="307.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">matmul product stress</text>
+<rect x="300.0" y="291.0" width="178.7" height="12.0" rx="2.0" fill="#059669"/>
+<text x="832.0" y="301.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">SM 34.4%</text>
+<rect x="300.0" y="309.0" width="180.7" height="12.0" rx="2.0" fill="#2563eb"/>
+<text x="832.0" y="319.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Memory 34.7%</text>
+<rect x="300.0" y="327.0" width="265.5" height="12.0" rx="2.0" fill="#7c3aed"/>
+<text x="832.0" y="337.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Active warps 51.1%; 9.7us</text>
+<text x="32.0" y="369.0" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="start">simplify sort stress</text>
+<rect x="300.0" y="353.0" width="50.0" height="12.0" rx="2.0" fill="#059669"/>
+<text x="832.0" y="363.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">SM 9.6%</text>
+<rect x="300.0" y="371.0" width="154.8" height="12.0" rx="2.0" fill="#2563eb"/>
+<text x="832.0" y="381.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Memory 29.8%</text>
+<rect x="300.0" y="389.0" width="64.2" height="12.0" rx="2.0" fill="#7c3aed"/>
+<text x="832.0" y="399.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#111827" text-anchor="start">Active warps 12.3%; 10.4us</text>
+</svg>

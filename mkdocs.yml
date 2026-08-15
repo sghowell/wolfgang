@@ -1,0 +1,76 @@
+site_name: Wolfgang
+site_description: Packed Pauli algebra and evidence-driven accelerator kernels
+site_url: https://wolfgangquantum.com/
+repo_url: https://github.com/wolfgang-quantum/wolfgang
+repo_name: wolfgang-quantum/wolfgang
+edit_uri: edit/main/docs/
+strict: true
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.instant
+    - navigation.top
+    - content.code.copy
+    - content.tabs.link
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: cyan
+      toggle: {icon: material/weather-night, name: Switch to dark mode}
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: cyan
+      toggle: {icon: material/weather-sunny, name: Switch to light mode}
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - footnotes
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - Installation: getting-started/installation.md
+      - Quickstart: getting-started/quickstart.md
+      - Conventions: getting-started/conventions.md
+  - User guide:
+      - Architecture: guide/architecture.md
+      - Agent-driven engineering: guide/agent-driven-engineering.md
+      - Python API: guide/python-api.md
+      - Expectation values: user/expectation_values.md
+      - Performance: user/performance.md
+  - Accelerators:
+      - Overview: accelerators/overview.md
+      - Hardware evidence policy: architecture/hardware_targets_and_testing.md
+      - CUDA architecture: architecture/cuda_backend.md
+      - Apple accelerator: architecture/apple_accelerator.md
+  - API reference:
+      - Overview: api/index.md
+      - Stability policy: architecture/api_stability.md
+  - Engineering:
+      - Benchmark protocol: benchmarks/protocol.md
+      - Research provenance: research/provenance.md
+      - Testing and CI: architecture/testing_and_ci.md
+      - Release support: release/support_matrix.md
+      - History sanitization: release/history_sanitization.md
+      - Roadmap: roadmap.md
+  - Security:
+      - Security and supply chain: quality/security_and_supply_chain.md
+      - Public artifact policy: quality/public_artifact_policy.md

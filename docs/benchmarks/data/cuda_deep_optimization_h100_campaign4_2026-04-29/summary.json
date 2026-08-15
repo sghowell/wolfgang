@@ -1,0 +1,558 @@
+{
+  "baseline_revision": "bc68079f1db97822dd4c8ec35712f77c494ca2ed",
+  "campaign": "h100_campaign4",
+  "competitors": {
+    "cudaq": {
+      "available": true,
+      "benchmark_status": "installed/importable but no primitive-equivalent sparse-Pauli baseline retained",
+      "import_error": null,
+      "version": "0.12.0.post1"
+    },
+    "cupy": {
+      "available": true,
+      "version": "13.4.1"
+    },
+    "cuquantum": {
+      "available": true,
+      "component": "custatevec",
+      "import_error": null,
+      "version": "25.3.0.post0"
+    },
+    "openfermion": {
+      "available": true,
+      "version": "1.7.1"
+    },
+    "qiskit": {
+      "available": true,
+      "version": "2.4.1"
+    },
+    "qiskit_aer": {
+      "available": false,
+      "benchmark_status": "not importable in this environment",
+      "import_error": "ImportError: cannot import name 'convert_to_target' from 'qiskit.providers' (<private-path>",
+      "version": "0.15.1"
+    }
+  },
+  "date": "2026-04-29",
+  "decisions": [
+    {
+      "experiment": "private_cuda_workspace",
+      "reason": "Implemented internally for scratch ownership and timing-boundary experiments; not public API.",
+      "status": "benchmark-only"
+    },
+    {
+      "experiment": "cub_radix_sort_duplicate_reduction",
+      "reason": "Narrow CUB radix-sort prototype did not show broad enough same-boundary wins to replace the production Thrust path.",
+      "same_boundary_speedup_high_duplicate": 0.8154327585114887,
+      "status": "rejected_for_production"
+    },
+    {
+      "experiment": "cub_run_length_duplicate_reduction",
+      "reason": "The run-length selector is recorded as production fallback evidence; no DeviceRunLengthEncode path was retained.",
+      "status": "not_implemented_fallback"
+    },
+    {
+      "experiment": "commutation_device_output",
+      "reason": "Host vector and caller-owned host bytes remain supported; device-byte and bit-packed outputs require public API design.",
+      "status": "deferred_to_api_review"
+    },
+    {
+      "experiment": "statevector_reduction_topology",
+      "reason": "Privileged NCU showed compute-heavy fused kernel behavior; no replacement topology was retained.",
+      "status": "retained_current"
+    }
+  ],
+  "evidence": {
+    "baseline_json": [
+      "baseline_cuda_scaling_extreme.json",
+      "baseline_cuda_scaling_materialization.json",
+      "baseline_cuda_scaling_stress.json"
+    ],
+    "competitive_baselines": "competitive_baselines_final.json",
+    "experiment_json": [
+      "experiment_campaign4_simplify_cub_radix_sort_reduce_absent.json",
+      "experiment_campaign4_simplify_cub_radix_sort_reduce_pre_reserved_outside_timing.json",
+      "experiment_campaign4_simplify_cub_radix_sort_run_length_absent.json",
+      "experiment_campaign4_simplify_cub_radix_sort_run_length_pre_reserved_outside_timing.json",
+      "experiment_campaign4_workspace_default.json",
+      "experiment_commutation_materialization.json",
+      "experiment_cuda_scaling_default.json",
+      "experiment_nsys_workspace_input.json",
+      "experiment_statevector_ncu_input.json",
+      "experiment_statevector_ncu_privileged_input.json"
+    ],
+    "profilers": [
+      "nsys",
+      "ncu_privileged",
+      "ncu_unprivileged_permission_denied"
+    ],
+    "sanitizers": [
+      "memcheck",
+      "racecheck",
+      "initcheck",
+      "synccheck"
+    ],
+    "status": [
+      {
+        "label": "baseline validation",
+        "status": "passed"
+      },
+      {
+        "label": "experiment validation",
+        "status": "passed"
+      },
+      {
+        "label": "phase 11 CUDA tests",
+        "status": "passed"
+      },
+      {
+        "label": "compute-sanitizer ladder",
+        "status": "passed"
+      },
+      {
+        "label": "unprivileged NCU permission note",
+        "status": "expected_permission_denied"
+      },
+      {
+        "label": "privileged Nsight Compute",
+        "status": "passed"
+      },
+      {
+        "label": "Nsight Systems summaries",
+        "status": "passed"
+      },
+      {
+        "label": "competitor package installs",
+        "status": "passed"
+      }
+    ]
+  },
+  "experiment_revision": "3be083e0b9c3b0bc7756e46c26045e064ce62344",
+  "hardware": {
+    "available_cpu_backends": [
+      "scalar",
+      "tbb",
+      "avx2",
+      "avx512"
+    ],
+    "compiled_cuda_architectures": "90",
+    "compiler": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CUDA_COMPILER_ID": "NVIDIA",
+      "CMAKE_CUDA_COMPILER_VERSION": "12.9.86",
+      "CMAKE_CUDA_HOST_COMPILER": "/usr/bin/g++",
+      "CMAKE_CXX_COMPILER_ID": "GNU",
+      "CMAKE_CXX_COMPILER_VERSION": "11.4.0",
+      "CMAKE_CXX_FLAGS": "",
+      "FASTPAULI_CUDA_HOST_COMPILER": "/usr/bin/g++",
+      "FASTPAULI_CUDA_HOST_COMPILER_SOURCE": "CMAKE_CUDA_HOST_COMPILER"
+    },
+    "cuda_toolkit": "12.9.86",
+    "gpu": "NVIDIA H100 PCIe, 9.0"
+  },
+  "readme_performance_landscape": [
+    {
+      "category": "FastPauli default profile",
+      "label": "simplify 10000 terms",
+      "operation": "simplify_duplicate_pressure",
+      "points": [
+        {
+          "seconds": 0.001325168996118009,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.00042884300637524575,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 3.090102849802478
+        },
+        {
+          "seconds": 0.000321960003930144,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 4.115942911982112
+        }
+      ],
+      "scale": "terms_10000"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "simplify 50000 terms",
+      "operation": "simplify_duplicate_pressure",
+      "points": [
+        {
+          "seconds": 0.006935585013707168,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0008717470045667142,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 7.955960820484119
+        },
+        {
+          "seconds": 0.0004289069911465049,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 16.170370632494844
+        }
+      ],
+      "scale": "terms_50000"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "simplify 200000 terms",
+      "operation": "simplify_duplicate_pressure",
+      "points": [
+        {
+          "seconds": 0.030923083002562635,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0020353209984023124,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 15.193221622946286
+        },
+        {
+          "seconds": 0.0007728269993094727,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 40.01294342743287
+        }
+      ],
+      "scale": "terms_200000"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "statevector 10q 1024 terms",
+      "operation": "statevector_expectation",
+      "points": [
+        {
+          "seconds": 0.004732352987048216,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 6.821000715717673e-05,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 69.37915980778929
+        },
+        {
+          "seconds": 3.5446995752863586e-05,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 133.50505131780915
+        }
+      ],
+      "scale": "qubits_10_terms_1024"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "statevector 12q 2048 terms",
+      "operation": "statevector_expectation",
+      "points": [
+        {
+          "seconds": 0.03544630600663368,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.00010407700028736144,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 340.57770601347823
+        },
+        {
+          "seconds": 5.4154996178112924e-05,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 654.5343644758583
+        }
+      ],
+      "scale": "qubits_12_terms_2048"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "statevector 14q 4096 terms",
+      "operation": "statevector_expectation",
+      "points": [
+        {
+          "seconds": 0.2869919119984843,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0002657690056366846,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 1079.8547080798885
+        },
+        {
+          "seconds": 0.00021100600133650005,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 1360.1125568974048
+        }
+      ],
+      "scale": "qubits_14_terms_4096"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "commutation 1024x1024",
+      "operation": "pairwise_commutation",
+      "points": [
+        {
+          "seconds": 0.005104812997160479,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0007085359975462779,
+          "series": "CPU TBB",
+          "speedup_vs_cpu_scalar": 7.204733443098012
+        },
+        {
+          "seconds": 0.0010908069962169975,
+          "series": "CPU AVX2",
+          "speedup_vs_cpu_scalar": 4.679849886244187
+        },
+        {
+          "seconds": 0.0006516370049212128,
+          "series": "CPU AVX-512",
+          "speedup_vs_cpu_scalar": 7.83382920031941
+        },
+        {
+          "seconds": 0.00019946899556089193,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 25.59201234661119
+        },
+        {
+          "seconds": 0.0001559309894219041,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 32.73764256922871
+        }
+      ],
+      "scale": "terms_1024x1024"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "commutation 2048x2048",
+      "operation": "pairwise_commutation",
+      "points": [
+        {
+          "seconds": 0.018440527986967936,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0020896249916404486,
+          "series": "CPU TBB",
+          "speedup_vs_cpu_scalar": 8.824802565407348
+        },
+        {
+          "seconds": 0.003998689993750304,
+          "series": "CPU AVX2",
+          "speedup_vs_cpu_scalar": 4.611642316806079
+        },
+        {
+          "seconds": 0.0024954160035122186,
+          "series": "CPU AVX-512",
+          "speedup_vs_cpu_scalar": 7.389761050267162
+        },
+        {
+          "seconds": 0.0005596949922619388,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 32.94745931608715
+        },
+        {
+          "seconds": 0.0009075120033230633,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 20.319872265538876
+        }
+      ],
+      "scale": "terms_2048x2048"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "commutation 4096x4096",
+      "operation": "pairwise_commutation",
+      "points": [
+        {
+          "seconds": 0.07569346600212157,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.007003029997576959,
+          "series": "CPU TBB",
+          "speedup_vs_cpu_scalar": 10.808673678152374
+        },
+        {
+          "seconds": 0.016405881993705407,
+          "series": "CPU AVX2",
+          "speedup_vs_cpu_scalar": 4.613800466879109
+        },
+        {
+          "seconds": 0.012148084002546966,
+          "series": "CPU AVX-512",
+          "speedup_vs_cpu_scalar": 6.23089748031473
+        },
+        {
+          "seconds": 0.0036177230067551136,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 20.922957855199144
+        },
+        {
+          "seconds": 0.0017450599989388138,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 43.375853006860176
+        }
+      ],
+      "scale": "terms_4096x4096"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "matmul+simplify 128x128",
+      "operation": "matmul_product_generation_simplify",
+      "points": [
+        {
+          "seconds": 0.0027358700026525185,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0007801139872753993,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 3.5070131381796257
+        },
+        {
+          "seconds": 0.00038148800376802683,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 7.1715754509442755
+        }
+      ],
+      "scale": "terms_128x128"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "matmul+simplify 256x256",
+      "operation": "matmul_product_generation_simplify",
+      "points": [
+        {
+          "seconds": 0.011733107006875798,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0017375860043102875,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 6.752533099236779
+        },
+        {
+          "seconds": 0.0006930030067451298,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 16.930816883440965
+        }
+      ],
+      "scale": "terms_256x256"
+    },
+    {
+      "category": "FastPauli default profile",
+      "label": "matmul+simplify 512x512",
+      "operation": "matmul_product_generation_simplify",
+      "points": [
+        {
+          "seconds": 0.05637038800341543,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.004175793001195416,
+          "series": "CUDA transfer-inclusive",
+          "speedup_vs_cpu_scalar": 13.499325274810825
+        },
+        {
+          "seconds": 0.0013186659925850108,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 42.74804106604075
+        }
+      ],
+      "scale": "terms_512x512"
+    },
+    {
+      "category": "External package baseline",
+      "label": "Qiskit simplify 10000 terms 64q",
+      "operation": "simplify",
+      "points": [
+        {
+          "seconds": 0.0005451320030260831,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0006757119990652427,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 0.8067519946074665
+        }
+      ],
+      "scale": "external"
+    },
+    {
+      "category": "External package baseline",
+      "label": "OpenFermion multiply 256x256 64q",
+      "operation": "multiply",
+      "points": [
+        {
+          "seconds": 0.010361913999076933,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.2044495919981273,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 0.050681998911359265
+        }
+      ],
+      "scale": "external"
+    },
+    {
+      "category": "External package baseline",
+      "label": "Qiskit grouping 512 terms 64q",
+      "operation": "qiskit_grouping",
+      "points": [
+        {
+          "seconds": 0.0003193440061295405,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.0934536250133533,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 0.0034171387796236947
+        }
+      ],
+      "scale": "external"
+    },
+    {
+      "category": "External package baseline",
+      "label": "cuStateVec statevector 4096 terms 14q",
+      "operation": "cuquantum_statevector_expectation",
+      "points": [
+        {
+          "seconds": 0.2926624520041514,
+          "series": "CPU scalar",
+          "speedup_vs_cpu_scalar": 1.0
+        },
+        {
+          "seconds": 0.008128133995342068,
+          "series": "External baseline",
+          "speedup_vs_cpu_scalar": 36.006105727571104
+        },
+        {
+          "seconds": 0.00021286999981384724,
+          "series": "CUDA operator-resident",
+          "speedup_vs_cpu_scalar": 1374.8412282617649
+        },
+        {
+          "seconds": 0.00018966700008604676,
+          "series": "CUDA device-resident",
+          "speedup_vs_cpu_scalar": 1543.033062532641
+        }
+      ],
+      "scale": "external"
+    }
+  ]
+}

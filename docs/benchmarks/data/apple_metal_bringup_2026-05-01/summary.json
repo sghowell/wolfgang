@@ -1,0 +1,169 @@
+{
+  "benchmark": "apple_metal_kernels",
+  "benchmark_rows": [
+    {
+      "median_seconds": 1.3959011994302273e-05,
+      "object_backend": "cpu",
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_default"
+    },
+    {
+      "median_seconds": 3.245798870921135e-05,
+      "object_backend": "cpu",
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_scalar"
+    },
+    {
+      "median_seconds": 1.3249984476715326e-05,
+      "object_backend": "cpu",
+      "status": "ok",
+      "transfer_boundary": "host_materialized",
+      "variant": "cpu_neon"
+    },
+    {
+      "median_seconds": 0.0043651669984683394,
+      "object_backend": "metal",
+      "status": "ok",
+      "transfer_boundary": "transfer_inclusive",
+      "variant": "metal_transfer_inclusive"
+    },
+    {
+      "median_seconds": 0.00012520901509560645,
+      "object_backend": "metal",
+      "status": "ok",
+      "transfer_boundary": "device_resident",
+      "variant": "metal_device_resident"
+    },
+    {
+      "median_seconds": 0.0008132910006679595,
+      "object_backend": "metal",
+      "status": "ok",
+      "transfer_boundary": "device_resident",
+      "variant": "metal_device_matrix"
+    },
+    {
+      "median_seconds": 2.4579931050539017e-06,
+      "object_backend": "metal",
+      "status": "ok",
+      "transfer_boundary": "compact_consumer",
+      "variant": "metal_compact_consumer"
+    }
+  ],
+  "git_commit": "8c6741d",
+  "metal_status": {
+    "built": true,
+    "capability_summary": "unified_memory=true; low_power=false; headless=false; removable=false; recommended_max_working_set_size_bytes=40200896512",
+    "device_count": 1,
+    "devices": [
+      {
+        "capability_summary": "unified_memory=true; low_power=false; headless=false; removable=false; recommended_max_working_set_size_bytes=40200896512",
+        "headless": false,
+        "low_power": false,
+        "name": "Apple M4 Pro",
+        "ordinal": 0,
+        "recommended_max_working_set_size": 40200896512,
+        "registry_id": 4294968829,
+        "removable": false,
+        "unified_memory": true
+      }
+    ],
+    "macos_version": "Version 26.2 (Build 25C56)",
+    "metal_device_name": "Apple M4 Pro",
+    "runtime_available": true,
+    "skip_reason": "",
+    "storage_mode": "MTLResourceStorageModeShared",
+    "xcode_or_clt_version": "AppleClang 21.0.0.21000099"
+  },
+  "status": "ok",
+  "tooling": {
+    "metal_toolchain_identifier": "com.apple.dt.toolchain.Metal.32023.883",
+    "metal_toolchain_version": "Apple metal version 32023.883 (metalfe-32023.883)",
+    "plain_xcrun_metal_status": "unavailable without selecting the Metal toolchain in this Xcode install",
+    "sdk_version": "26.4",
+    "sdk_version_command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun --sdk macosx --show-sdk-version",
+    "selected_toolchain_command": "TOOLCHAINS=com.apple.dt.toolchain.Metal.32023.883 xcrun metal -v",
+    "xcode_version": "Xcode 26.4.1 (17E202)",
+    "xcodebuild_show_component_status": "installed"
+  },
+  "trace": {
+    "checked_summary": "docs/benchmarks/data/apple_metal_bringup_2026-05-01/profiler/metal_system_trace_summary.json",
+    "duration_seconds": 8.720477,
+    "end_reason": "Time limit reached",
+    "fastpauli_python_processes": [
+      {
+        "name": "python3.12",
+        "path": ".venv/bin/python",
+        "pid": "redacted"
+      }
+    ],
+    "instruments_version": "16.0 (17E202)",
+    "limitations": [
+      "The binary .trace bundle and raw all-process TOC remain local; only a sanitized derived trace summary is checked in.",
+      "The trace is all-process because xctrace --launch resolves the venv interpreter through a Python app wrapper and loses venv packages in this environment.",
+      "GPU counter profile and shader timeline are disabled by the default Metal System Trace settings for this capture."
+    ],
+    "privacy": {
+      "full_process_inventory": "omitted",
+      "local_absolute_paths": "omitted"
+    },
+    "metal_schema_count": 50,
+    "metal_schemas": [
+      "gpu-aps-stream",
+      "gpu-counter-info",
+      "gpu-counter-value",
+      "gpu-performance-device-state-intervals",
+      "gpu-performance-state-info",
+      "gpu-performance-state-intervals",
+      "gpu-shader-profiler-interval",
+      "gpu-shader-profiler-sample",
+      "graphics-compiler-activity-intervals",
+      "graphics-compiler-spill-events",
+      "metal-application-command-buffer-submissions",
+      "metal-application-encoders-list",
+      "metal-application-event-interval",
+      "metal-application-intervals",
+      "metal-ar-events",
+      "metal-command-buffer-completed",
+      "metal-command-buffer-error",
+      "metal-command-buffer-frame-assignment",
+      "metal-command-buffer-to-accelerator-id",
+      "metal-current-allocated-size",
+      "metal-driver-event-intervals",
+      "metal-driver-event-per-thread-intervals",
+      "metal-driver-intervals",
+      "metal-gpu-counter-intervals",
+      "metal-gpu-counter-profile",
+      "metal-gpu-execution-points",
+      "metal-gpu-info",
+      "metal-gpu-intervals",
+      "metal-gpu-state-intervals",
+      "metal-gpu-submission-to-command-buffer-id",
+      "metal-io-surface-access",
+      "metal-kernel-resource-allocations",
+      "metal-known-compositor-process",
+      "metal-object-dependency-chain-app",
+      "metal-object-dependency-chain-display",
+      "metal-object-dependency-chain-driver",
+      "metal-object-dependency-chain-gpu",
+      "metal-object-label",
+      "metal-residency-set-interval",
+      "metal-residency-set-resource-event",
+      "metal-residency-set-usage-event",
+      "metal-resource-allocations",
+      "metal-shader-profiler-intervals",
+      "metal-shader-profiler-shader-list",
+      "metal-visual-highlight-chain-app",
+      "metal-visual-highlight-chain-display",
+      "metal-visual-highlight-chain-driver",
+      "metal-visual-highlight-chain-gpu",
+      "metal-wired-sysmem-level-interval",
+      "mps-hw-intervals"
+    ],
+    "target": "all-processes",
+    "template_name": "Metal System Trace",
+    "trace_bundle_path": "/tmp/fastpauli-metal-allprocess-20260501-8c6741d.trace",
+    "trace_bundle_size": "159M"
+  }
+}

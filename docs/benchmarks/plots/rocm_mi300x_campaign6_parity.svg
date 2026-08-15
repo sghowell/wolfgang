@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1136" viewBox="0 0 1120 1136">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="48" y="52" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#0f172a">MI300X ROCm Campaign 6 Parity</text>
+<text x="48" y="78" font-family="Inter, Arial, sans-serif" font-size="14" fill="#475569">CPU scalar vs HIP transfer-inclusive, retained-kernel, and explicit output materialization timings</text>
+<line x1="504.9" y1="80" x2="504.9" y2="1088" stroke="#e2e8f0" stroke-width="1"/>
+<text x="504.9" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">1e-05s</text>
+<line x1="622.1" y1="80" x2="622.1" y2="1088" stroke="#e2e8f0" stroke-width="1"/>
+<text x="622.1" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.0001s</text>
+<line x1="739.4" y1="80" x2="739.4" y2="1088" stroke="#e2e8f0" stroke-width="1"/>
+<text x="739.4" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.001s</text>
+<line x1="856.7" y1="80" x2="856.7" y2="1088" stroke="#e2e8f0" stroke-width="1"/>
+<text x="856.7" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.01s</text>
+<line x1="973.9" y1="80" x2="973.9" y2="1088" stroke="#e2e8f0" stroke-width="1"/>
+<text x="973.9" y="70" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">0.1s</text>
+<text x="48" y="123" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_expectation_two_qubit_complex128 | CPU scalar</text>
+<rect x="390" y="109" width="30.4" height="18" rx="3" fill="#334155"/>
+<text x="430.4" y="123" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">1.91e-06s CPU scalar</text>
+<text x="48" y="157" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_expectation_two_qubit_complex128 | HIP expectation transfer</text>
+<rect x="390" y="143" width="219.3" height="18" rx="3" fill="#0e7490"/>
+<text x="619.3" y="157" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">7.78e-05s HIP expectation transfer</text>
+<text x="48" y="191" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_expectation_two_qubit_complex128 | HIP expectation operator-resident</text>
+<rect x="390" y="177" width="182.2" height="18" rx="3" fill="#2563eb"/>
+<text x="582.2" y="191" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">3.75e-05s HIP expectation operator-resident</text>
+<text x="48" y="225" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_expectation_ten_qubit_complex64 | CPU scalar</text>
+<rect x="390" y="211" width="347.5" height="18" rx="3" fill="#334155"/>
+<text x="747.5" y="225" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000963s CPU scalar</text>
+<text x="48" y="259" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_expectation_ten_qubit_complex64 | HIP expectation transfer</text>
+<rect x="390" y="245" width="224.3" height="18" rx="3" fill="#0e7490"/>
+<text x="624.3" y="259" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">8.58e-05s HIP expectation transfer</text>
+<text x="48" y="293" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_expectation_ten_qubit_complex64 | HIP expectation operator-resident</text>
+<rect x="390" y="279" width="190.9" height="18" rx="3" fill="#2563eb"/>
+<text x="590.9" y="293" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4.45e-05s HIP expectation operator-resident</text>
+<text x="48" y="327" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_matmul_one_word_simplify_true | CPU scalar</text>
+<rect x="390" y="313" width="449.9" height="18" rx="3" fill="#334155"/>
+<text x="849.9" y="327" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00719s CPU scalar</text>
+<text x="48" y="361" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_matmul_one_word_simplify_true | HIP matmul transfer</text>
+<rect x="390" y="347" width="359.3" height="18" rx="3" fill="#7c3aed"/>
+<text x="759.3" y="361" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00121s HIP matmul transfer</text>
+<text x="48" y="395" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_matmul_one_word_simplify_true | HIP matmul resident</text>
+<rect x="390" y="381" width="306.4" height="18" rx="3" fill="#be123c"/>
+<text x="706.4" y="395" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00043s HIP matmul resident</text>
+<text x="48" y="429" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_matmul_one_word_simplify_true | HIP matmul toHost</text>
+<rect x="390" y="415" width="258.9" height="18" rx="3" fill="#64748b"/>
+<text x="658.9" y="429" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000169s HIP matmul toHost</text>
+<text x="48" y="463" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_matmul_two_word_simplify_false | CPU scalar</text>
+<rect x="390" y="449" width="214.8" height="18" rx="3" fill="#334155"/>
+<text x="614.8" y="463" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">7.12e-05s CPU scalar</text>
+<text x="48" y="497" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_matmul_two_word_simplify_false | HIP matmul transfer</text>
+<rect x="390" y="483" width="247.9" height="18" rx="3" fill="#7c3aed"/>
+<text x="647.9" y="497" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000136s HIP matmul transfer</text>
+<text x="48" y="531" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_matmul_two_word_simplify_false | HIP matmul resident</text>
+<rect x="390" y="517" width="141.8" height="18" rx="3" fill="#be123c"/>
+<text x="541.8" y="531" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">1.7e-05s HIP matmul resident</text>
+<text x="48" y="565" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_matmul_two_word_simplify_false | HIP matmul toHost</text>
+<rect x="390" y="551" width="186.1" height="18" rx="3" fill="#64748b"/>
+<text x="586.1" y="565" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">4.05e-05s HIP matmul toHost</text>
+<text x="48" y="599" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_expectation | CPU scalar</text>
+<rect x="390" y="585" width="555.5" height="18" rx="3" fill="#334155"/>
+<text x="955.5" y="599" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.0573s CPU scalar</text>
+<text x="48" y="633" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_expectation | HIP expectation transfer</text>
+<rect x="390" y="619" width="255.0" height="18" rx="3" fill="#0e7490"/>
+<text x="655.0" y="633" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000157s HIP expectation transfer</text>
+<text x="48" y="667" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_expectation | HIP expectation operator-resident</text>
+<rect x="390" y="653" width="236.1" height="18" rx="3" fill="#2563eb"/>
+<text x="636.1" y="667" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000108s HIP expectation operator-resident</text>
+<text x="48" y="701" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_matmul | CPU scalar</text>
+<rect x="390" y="687" width="386.1" height="18" rx="3" fill="#334155"/>
+<text x="786.1" y="701" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00205s CPU scalar</text>
+<text x="48" y="735" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_matmul | HIP matmul transfer</text>
+<rect x="390" y="721" width="333.2" height="18" rx="3" fill="#7c3aed"/>
+<text x="733.2" y="735" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000728s HIP matmul transfer</text>
+<text x="48" y="769" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_matmul | HIP matmul resident</text>
+<rect x="390" y="755" width="297.9" height="18" rx="3" fill="#be123c"/>
+<text x="697.9" y="769" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000364s HIP matmul resident</text>
+<text x="48" y="803" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_matmul | HIP matmul toHost</text>
+<rect x="390" y="789" width="215.8" height="18" rx="3" fill="#64748b"/>
+<text x="615.8" y="803" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">7.26e-05s HIP matmul toHost</text>
+<text x="48" y="837" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_expectation | CPU scalar</text>
+<rect x="390" y="823" width="557.2" height="18" rx="3" fill="#334155"/>
+<text x="957.2" y="837" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.0592s CPU scalar</text>
+<text x="48" y="871" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_expectation | HIP expectation transfer</text>
+<rect x="390" y="857" width="556.8" height="18" rx="3" fill="#0e7490"/>
+<text x="956.8" y="871" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.0588s HIP expectation transfer</text>
+<text x="48" y="905" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_expectation | HIP expectation operator-resident</text>
+<rect x="390" y="891" width="251.7" height="18" rx="3" fill="#2563eb"/>
+<text x="651.7" y="905" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000147s HIP expectation operator-resident</text>
+<text x="48" y="939" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_matmul | CPU scalar</text>
+<rect x="390" y="925" width="392.4" height="18" rx="3" fill="#334155"/>
+<text x="792.4" y="939" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.00233s CPU scalar</text>
+<text x="48" y="973" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_matmul | HIP matmul transfer</text>
+<rect x="390" y="959" width="581.1" height="18" rx="3" fill="#7c3aed"/>
+<text x="981.1" y="973" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.0946s HIP matmul transfer</text>
+<text x="48" y="1007" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_matmul | HIP matmul resident</text>
+<rect x="390" y="993" width="332.7" height="18" rx="3" fill="#be123c"/>
+<text x="732.7" y="1007" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000721s HIP matmul resident</text>
+<text x="48" y="1041" font-family="Inter, Arial, sans-serif" font-size="13" fill="#0f172a">campaign6_profiler_matmul | HIP matmul toHost</text>
+<rect x="390" y="1027" width="240.7" height="18" rx="3" fill="#64748b"/>
+<text x="640.7" y="1041" font-family="Inter, Arial, sans-serif" font-size="12" fill="#334155">0.000118s HIP matmul toHost</text>
+<text x="48" y="1106" font-family="Inter, Arial, sans-serif" font-size="12" fill="#64748b">Log-scale seconds, lower is better. Generated from checked raw benchmark JSON.</text>
+</svg>

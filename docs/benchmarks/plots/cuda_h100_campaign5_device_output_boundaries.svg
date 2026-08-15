@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="468" viewBox="0 0 1260 468" role="img" aria-labelledby="title desc">
+<title id="title">Campaign 5 Device-Output Boundaries</title>
+<desc id="desc">Same pairwise commutation datasets; lower latency is farther left on the log axis.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111827" text-anchor="start">Campaign 5 Device-Output Boundaries</text>
+<text x="32.0" y="62.0" font-family="Arial, sans-serif" font-size="13" font-weight="400" fill="#6b7280" text-anchor="start">Same pairwise commutation datasets; lower latency is farther left on the log axis.</text>
+<line x1="330.0" y1="94" x2="330.0" y2="376.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="330.0" y="108.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">100 ns</text>
+<line x1="443.3" y1="94" x2="443.3" y2="376.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="443.3" y="108.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">1 us</text>
+<line x1="556.7" y1="94" x2="556.7" y2="376.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="556.7" y="108.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">10 us</text>
+<line x1="670.0" y1="94" x2="670.0" y2="376.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="670.0" y="108.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">100 us</text>
+<line x1="783.3" y1="94" x2="783.3" y2="376.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="783.3" y="108.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">1.00 ms</text>
+<line x1="896.7" y1="94" x2="896.7" y2="376.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="896.7" y="108.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">10.00 ms</text>
+<line x1="1010.0" y1="94" x2="1010.0" y2="376.0" stroke="#d1d5db" stroke-width="0.8"/>
+<text x="1010.0" y="108.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="middle">100.00 ms</text>
+<rect x="24.0" y="100.0" width="1212.0" height="46.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="123.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">1024x1024</text>
+<text x="178.0" y="123.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">1,048,576 entries</text>
+<circle cx="690.1" cy="111.0" r="5.3" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="689.5" cy="117.0" r="5.3" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="686.7" cy="123.0" r="5.3" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="587.7" cy="129.0" r="5.3" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="577.6" cy="135.0" r="5.3" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1160.0" y="123.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 15 us</text>
+<text x="32.0" y="171.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">2048x2048</text>
+<text x="178.0" y="171.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">4,194,304 entries</text>
+<circle cx="757.0" cy="159.0" r="5.3" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="755.4" cy="165.0" r="5.3" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="743.5" cy="171.0" r="5.3" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="697.0" cy="177.0" r="5.3" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="612.6" cy="183.0" r="5.3" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1160.0" y="171.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 31 us</text>
+<rect x="24.0" y="196.0" width="1212.0" height="46.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="219.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">4096x4096</text>
+<text x="178.0" y="219.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">16,777,216 entries</text>
+<circle cx="811.9" cy="207.0" r="5.3" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="812.7" cy="213.0" r="5.3" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="810.0" cy="219.0" r="5.3" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="702.0" cy="225.0" r="5.3" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="668.9" cy="231.0" r="5.3" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1160.0" y="219.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 98 us</text>
+<text x="32.0" y="267.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">8192x8192</text>
+<text x="178.0" y="267.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">67,108,864 entries</text>
+<circle cx="927.1" cy="255.0" r="5.3" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="862.8" cy="261.0" r="5.3" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="860.5" cy="267.0" r="5.3" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="749.2" cy="273.0" r="5.3" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="733.6" cy="279.0" r="5.3" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1160.0" y="267.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 364 us</text>
+<rect x="24.0" y="292.0" width="1212.0" height="46.0" rx="0.0" fill="#f9fafb"/>
+<text x="32.0" y="315.0" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="#111827" text-anchor="start">16384x16384</text>
+<text x="178.0" y="315.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">268,435,456 entries</text>
+<circle cx="992.3" cy="303.0" r="5.3" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="926.6" cy="309.0" r="5.3" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="929.0" cy="315.0" r="5.3" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="809.2" cy="321.0" r="5.3" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<circle cx="800.7" cy="327.0" r="5.3" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="1160.0" y="315.0" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="end">best 1.42 ms</text>
+<circle cx="32.0" cy="392.0" r="5.3" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/>
+<text x="46.0" y="396.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">host vector</text>
+<circle cx="262.0" cy="392.0" r="5.3" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5"/>
+<text x="276.0" y="396.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">host preallocated</text>
+<circle cx="492.0" cy="392.0" r="5.3" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/>
+<text x="506.0" y="396.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">private device reuse</text>
+<circle cx="722.0" cy="392.0" r="5.3" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/>
+<text x="736.0" y="396.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">public device allocate</text>
+<circle cx="952.0" cy="392.0" r="5.3" fill="#059669" stroke="#ffffff" stroke-width="1.5"/>
+<text x="966.0" y="396.0" font-family="Arial, sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">public device reuse</text>
+</svg>

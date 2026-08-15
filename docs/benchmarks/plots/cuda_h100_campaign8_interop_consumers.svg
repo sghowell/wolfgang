@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="262" viewBox="0 0 1080 262" role="img" aria-labelledby="title desc">
+<title>Campaign 8 Interop Consumers</title>
+<desc>CUDA Array Interface remains retained; DLPack is deferred pending ownership and stream contracts.</desc>
+<rect x="0" y="0" width="1080" height="262" fill="white"/>
+<text x="32" y="42" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#172033">Campaign 8 Interop Consumers</text>
+<text x="32" y="68" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#5d6b82">CUDA Array Interface remains retained; DLPack is deferred pending ownership and stream contracts.</text>
+<rect x="40.0" y="94.0" width="1000.0" height="42.0" rx="3" fill="#f7f9fc" opacity="1.000"/>
+<rect x="52.0" y="104.0" width="10.0" height="22.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="78.0" y="118.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#172033" text-anchor="start">CuPy CUDA Array Interface</text>
+<text x="360.0" y="118.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#c76a00" text-anchor="start">blocked</text>
+<text x="520.0" y="118.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#5d6b82" text-anchor="start">ModuleNotFoundError: No module named &#x27;cupy&#x27;</text>
+<rect x="40.0" y="148.0" width="1000.0" height="42.0" rx="3" fill="#f7f9fc" opacity="1.000"/>
+<rect x="52.0" y="158.0" width="10.0" height="22.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="78.0" y="172.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#172033" text-anchor="start">DLPack / PyTorch</text>
+<text x="360.0" y="172.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#c76a00" text-anchor="start">deferred</text>
+<text x="520.0" y="172.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#5d6b82" text-anchor="start">DLPack export is deferred pending exact PyCapsule ownership, deleter, </text>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="444" viewBox="0 0 980 444">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="36" y="44" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Campaign 9 closes every Campaign 8 deferred item</text>
+<text x="36" y="70" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#475569">Final statuses are evidence-bearing and none may be deferred.</text>
+<rect x="36" y="74" width="908" height="42" rx="6" fill="#ffffff" stroke="#dbe3ef"/>
+<circle cx="58" cy="95" r="7" fill="#64748b"/>
+<text x="78" y="90" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Non-H100 NVIDIA portability</text>
+<text x="78" y="108" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">non_h100_portability · blocked_external</text>
+<rect x="36" y="132" width="908" height="42" rx="6" fill="#ffffff" stroke="#dbe3ef"/>
+<circle cx="58" cy="153" r="7" fill="#15803d"/>
+<text x="78" y="148" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Privileged Nsight Compute counters</text>
+<text x="78" y="166" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">privileged_ncu · passed</text>
+<rect x="36" y="190" width="908" height="42" rx="6" fill="#ffffff" stroke="#dbe3ef"/>
+<circle cx="58" cy="211" r="7" fill="#b45309"/>
+<text x="78" y="206" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Public fused grouping API</text>
+<text x="78" y="224" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">public_grouping_api · rejected_with_evidence</text>
+<rect x="36" y="248" width="908" height="42" rx="6" fill="#ffffff" stroke="#dbe3ef"/>
+<circle cx="58" cy="269" r="7" fill="#15803d"/>
+<text x="78" y="264" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="700" fill="#0f172a">DLPack interop</text>
+<text x="78" y="282" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">dlpack_interop · implemented</text>
+<rect x="36" y="306" width="908" height="42" rx="6" fill="#ffffff" stroke="#dbe3ef"/>
+<circle cx="58" cy="327" r="7" fill="#b45309"/>
+<text x="78" y="322" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Stream / CUDA Graph replay</text>
+<text x="78" y="340" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">stream_graph · rejected_with_evidence</text>
+<rect x="36" y="364" width="908" height="42" rx="6" fill="#ffffff" stroke="#dbe3ef"/>
+<circle cx="58" cy="385" r="7" fill="#b45309"/>
+<text x="78" y="380" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="700" fill="#0f172a">CSR scatter reopen</text>
+<text x="78" y="398" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">csr_scatter_reopen · rejected_with_evidence</text>
+</svg>

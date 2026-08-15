@@ -1,0 +1,257 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="2748" viewBox="0 0 1320 2748" role="img" aria-labelledby="title desc">
+<title>FastPauli Performance Landscape</title>
+<desc>Broad checked comparison including CPU selectors, CUDA paths, external baselines, and Campaign 7 fused consumers.</desc>
+<rect x="0" y="0" width="1320" height="2748" fill="white"/>
+<text x="32" y="42" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#18212f">FastPauli Performance Landscape</text>
+<text x="32" y="68" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#627084">Broad checked comparison including CPU selectors, CUDA paths, external baselines, and Campaign 7 fused consumers.</text>
+<line x1="245.0" y1="90.0" x2="245.0" y2="2706.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="245.0" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">10 us</text>
+<line x1="416.2" y1="90.0" x2="416.2" y2="2706.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="416.2" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">100 us</text>
+<line x1="587.3" y1="90.0" x2="587.3" y2="2706.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="587.3" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">1.00 ms</text>
+<line x1="758.5" y1="90.0" x2="758.5" y2="2706.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="758.5" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">10.00 ms</text>
+<line x1="929.7" y1="90.0" x2="929.7" y2="2706.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="929.7" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">100.00 ms</text>
+<line x1="1100.8" y1="90.0" x2="1100.8" y2="2706.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="1100.8" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">1.00 s</text>
+<line x1="1272.0" y1="90.0" x2="1272.0" y2="2706.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="1272.0" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">10.00 s</text>
+<text x="32.0" y="109.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">FastPauli default profile</text>
+<text x="58.0" y="150.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="138.0" width="492.9" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="745.9" y="150.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">7.58 ms</text>
+<text x="58.0" y="180.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA transfer-inclusive: </text>
+<rect x="245.0" y="168.0" width="340.6" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="593.6" y="180.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">977 us</text>
+<text x="58.0" y="210.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-resident: </text>
+<rect x="245.0" y="198.0" width="285.2" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="538.2" y="210.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">464 us</text>
+<text x="32.0" y="227.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">FastPauli default profile</text>
+<text x="58.0" y="268.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="256.0" width="608.9" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="861.9" y="268.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">36.07 ms</text>
+<text x="58.0" y="298.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA transfer-inclusive: </text>
+<rect x="245.0" y="286.0" width="179.9" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="432.9" y="298.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">112 us</text>
+<text x="58.0" y="328.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-resident: </text>
+<rect x="245.0" y="316.0" width="119.0" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="372.0" y="328.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">50 us</text>
+<text x="32.0" y="345.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">FastPauli default profile</text>
+<text x="58.0" y="386.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="374.0" width="564.2" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="817.2" y="386.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">19.77 ms</text>
+<text x="58.0" y="416.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU TBB: </text>
+<rect x="245.0" y="404.0" width="397.1" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="650.1" y="416.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.09 ms</text>
+<text x="58.0" y="446.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU AVX2: </text>
+<rect x="245.0" y="434.0" width="447.5" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="700.5" y="446.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">4.12 ms</text>
+<text x="58.0" y="476.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU AVX-512: </text>
+<rect x="245.0" y="464.0" width="415.2" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="668.2" y="476.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.66 ms</text>
+<text x="58.0" y="506.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA transfer-inclusive: </text>
+<rect x="245.0" y="494.0" width="303.2" height="16.0" rx="3" fill="#0891b2" opacity="1.000"/>
+<text x="556.2" y="506.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">591 us</text>
+<text x="58.0" y="536.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-resident: </text>
+<rect x="245.0" y="524.0" width="300.1" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="553.1" y="536.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">566 us</text>
+<text x="58.0" y="566.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-output allocate: </text>
+<rect x="245.0" y="554.0" width="179.8" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="432.8" y="566.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">112 us</text>
+<text x="58.0" y="596.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-output reuse: </text>
+<rect x="245.0" y="584.0" width="84.4" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="337.4" y="596.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">31 us</text>
+<text x="58.0" y="626.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-output to_host: </text>
+<rect x="245.0" y="614.0" width="373.1" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="626.1" y="626.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.51 ms</text>
+<text x="32.0" y="643.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">FastPauli default profile</text>
+<text x="58.0" y="684.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="672.0" width="524.6" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="777.6" y="684.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">11.62 ms</text>
+<text x="58.0" y="714.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA transfer-inclusive: </text>
+<rect x="245.0" y="702.0" width="383.5" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="636.5" y="714.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.74 ms</text>
+<text x="58.0" y="744.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-resident: </text>
+<rect x="245.0" y="732.0" width="317.4" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="570.4" y="744.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">715 us</text>
+<text x="32.0" y="761.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">Campaign 6 consumer scaling</text>
+<text x="58.0" y="802.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="790.0" width="568.1" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="821.1" y="802.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">20.85 ms</text>
+<text x="58.0" y="832.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU TBB: </text>
+<rect x="245.0" y="820.0" width="394.8" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="647.8" y="832.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.02 ms</text>
+<text x="58.0" y="862.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU AVX2: </text>
+<rect x="245.0" y="850.0" width="454.0" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="707.0" y="862.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">4.49 ms</text>
+<text x="58.0" y="892.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU AVX-512: </text>
+<rect x="245.0" y="880.0" width="428.3" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="681.3" y="892.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">3.18 ms</text>
+<text x="58.0" y="922.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA transfer-inclusive: </text>
+<rect x="245.0" y="910.0" width="324.0" height="16.0" rx="3" fill="#0891b2" opacity="1.000"/>
+<text x="577.0" y="922.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">781 us</text>
+<text x="58.0" y="952.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-output reuse: </text>
+<rect x="245.0" y="940.0" width="87.0" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="340.0" y="952.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">32 us</text>
+<text x="58.0" y="982.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA compact count: </text>
+<rect x="245.0" y="970.0" width="159.0" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="412.0" y="982.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">85 us</text>
+<text x="58.0" y="1012.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA row count: </text>
+<rect x="245.0" y="1000.0" width="134.6" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="387.6" y="1012.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">61 us</text>
+<text x="58.0" y="1042.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA column count: </text>
+<rect x="245.0" y="1030.0" width="95.1" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="348.1" y="1042.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">36 us</text>
+<text x="58.0" y="1072.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA dense to_host: </text>
+<rect x="245.0" y="1060.0" width="358.7" height="16.0" rx="3" fill="#0891b2" opacity="1.000"/>
+<text x="611.7" y="1072.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.25 ms</text>
+<text x="58.0" y="1102.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CuPy reduction: </text>
+<rect x="245.0" y="1090.0" width="371.7" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="624.7" y="1102.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.48 ms</text>
+<text x="32.0" y="1119.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">Campaign 6 consumer scaling</text>
+<text x="58.0" y="1160.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="1148.0" width="787.0" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="1040.0" y="1160.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">395.95 ms</text>
+<text x="58.0" y="1190.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU TBB: </text>
+<rect x="245.0" y="1178.0" width="664.7" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="917.7" y="1190.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">76.45 ms</text>
+<text x="58.0" y="1220.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU AVX2: </text>
+<rect x="245.0" y="1208.0" width="706.3" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="959.3" y="1220.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">133.69 ms</text>
+<text x="58.0" y="1250.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU AVX-512: </text>
+<rect x="245.0" y="1238.0" width="689.2" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="942.2" y="1250.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">106.31 ms</text>
+<text x="58.0" y="1280.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA transfer-inclusive: </text>
+<rect x="245.0" y="1268.0" width="550.8" height="16.0" rx="3" fill="#0891b2" opacity="1.000"/>
+<text x="803.8" y="1280.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">16.53 ms</text>
+<text x="58.0" y="1310.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-output reuse: </text>
+<rect x="245.0" y="1298.0" width="267.5" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="520.5" y="1310.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">365 us</text>
+<text x="58.0" y="1340.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA compact count: </text>
+<rect x="245.0" y="1328.0" width="347.7" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="600.7" y="1340.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.07 ms</text>
+<text x="58.0" y="1370.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA row count: </text>
+<rect x="245.0" y="1358.0" width="284.2" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="537.2" y="1370.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">457 us</text>
+<text x="58.0" y="1400.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA column count: </text>
+<rect x="245.0" y="1388.0" width="217.6" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="470.6" y="1400.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">187 us</text>
+<text x="58.0" y="1430.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA dense to_host: </text>
+<rect x="245.0" y="1418.0" width="650.2" height="16.0" rx="3" fill="#0891b2" opacity="1.000"/>
+<text x="903.2" y="1430.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">62.87 ms</text>
+<text x="58.0" y="1460.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CuPy reduction: </text>
+<rect x="245.0" y="1448.0" width="634.7" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="887.7" y="1460.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">51.08 ms</text>
+<text x="32.0" y="1477.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">Campaign 6 consumer scaling</text>
+<text x="58.0" y="1518.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="1506.0" width="892.2" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="1145.2" y="1518.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.63 s</text>
+<text x="58.0" y="1548.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU TBB: </text>
+<rect x="245.0" y="1536.0" width="764.6" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="1017.6" y="1548.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">293.14 ms</text>
+<text x="58.0" y="1578.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU AVX2: </text>
+<rect x="245.0" y="1566.0" width="804.4" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="1057.4" y="1578.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">500.82 ms</text>
+<text x="58.0" y="1608.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU AVX-512: </text>
+<rect x="245.0" y="1596.0" width="787.3" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="1040.3" y="1608.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">397.61 ms</text>
+<text x="58.0" y="1638.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA transfer-inclusive: </text>
+<rect x="245.0" y="1626.0" width="656.5" height="16.0" rx="3" fill="#0891b2" opacity="1.000"/>
+<text x="909.5" y="1638.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">68.49 ms</text>
+<text x="58.0" y="1668.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-output reuse: </text>
+<rect x="245.0" y="1656.0" width="368.7" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="621.7" y="1668.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.43 ms</text>
+<text x="58.0" y="1698.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA compact count: </text>
+<rect x="245.0" y="1686.0" width="443.3" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="696.3" y="1698.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">3.89 ms</text>
+<text x="58.0" y="1728.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA row count: </text>
+<rect x="245.0" y="1716.0" width="376.0" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="629.0" y="1728.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">1.57 ms</text>
+<text x="58.0" y="1758.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA column count: </text>
+<rect x="245.0" y="1746.0" width="303.7" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="556.7" y="1758.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">595 us</text>
+<text x="58.0" y="1788.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA dense to_host: </text>
+<rect x="245.0" y="1776.0" width="752.2" height="16.0" rx="3" fill="#0891b2" opacity="1.000"/>
+<text x="1005.2" y="1788.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">248.14 ms</text>
+<text x="58.0" y="1818.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CuPy reduction: </text>
+<rect x="245.0" y="1806.0" width="737.4" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="990.4" y="1818.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">203.26 ms</text>
+<text x="32.0" y="1835.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">External package baseline</text>
+<text x="58.0" y="1876.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="1864.0" width="310.8" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="563.8" y="1876.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">654 us</text>
+<text x="58.0" y="1906.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">External baseline: </text>
+<rect x="245.0" y="1894.0" width="330.0" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="583.0" y="1906.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">847 us</text>
+<text x="32.0" y="1923.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">External package baseline</text>
+<text x="58.0" y="1964.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="1952.0" width="527.6" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="780.6" y="1964.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">12.09 ms</text>
+<text x="58.0" y="1994.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">External baseline: </text>
+<rect x="245.0" y="1982.0" width="748.1" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="1001.1" y="1994.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">234.88 ms</text>
+<text x="32.0" y="2011.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">External package baseline</text>
+<text x="58.0" y="2052.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="2040.0" width="262.1" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="515.1" y="2052.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">340 us</text>
+<text x="58.0" y="2082.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">External baseline: </text>
+<rect x="245.0" y="2070.0" width="668.0" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="921.0" y="2082.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">79.87 ms</text>
+<text x="32.0" y="2099.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">External package baseline</text>
+<text x="58.0" y="2140.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="2128.0" width="778.9" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="1031.9" y="2140.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">355.05 ms</text>
+<text x="58.0" y="2170.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">External baseline: </text>
+<rect x="245.0" y="2158.0" width="509.2" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="762.2" y="2170.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">9.44 ms</text>
+<text x="58.0" y="2200.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA operator-resident: </text>
+<rect x="245.0" y="2188.0" width="228.7" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="481.7" y="2200.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">217 us</text>
+<text x="58.0" y="2230.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA device-resident: </text>
+<rect x="245.0" y="2218.0" width="219.9" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="472.9" y="2230.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">193 us</text>
+<text x="32.0" y="2247.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">External package baseline</text>
+<text x="58.0" y="2288.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CPU scalar: </text>
+<rect x="245.0" y="2276.0" width="111.2" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="364.2" y="2288.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">45 us</text>
+<text x="58.0" y="2318.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">External baseline: </text>
+<rect x="245.0" y="2306.0" width="146.1" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="399.1" y="2318.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">71 us</text>
+<text x="58.0" y="2348.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA compact count: </text>
+<rect x="245.0" y="2336.0" width="52.3" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="305.3" y="2348.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">20 us</text>
+<text x="58.0" y="2378.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA dense to_host: </text>
+<rect x="245.0" y="2366.0" width="59.8" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="312.8" y="2378.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">22 us</text>
+<text x="32.0" y="2395.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">Campaign 7 fused consumers</text>
+<text x="58.0" y="2436.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused grouping: 2048x2048 grouping summary</text>
+<rect x="245.0" y="2424.0" width="171.3" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="424.3" y="2436.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">100 us</text>
+<text x="58.0" y="2466.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused degree summary: 2048x2048 conflict degrees</text>
+<rect x="245.0" y="2454.0" width="207.7" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="460.7" y="2466.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">163 us</text>
+<text x="58.0" y="2496.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused CSR export: 2048x2048 CSR graph export</text>
+<rect x="245.0" y="2484.0" width="468.8" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="721.8" y="2496.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">5.48 ms</text>
+<text x="58.0" y="2526.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused grouping: 8192x8192 grouping summary</text>
+<rect x="245.0" y="2514.0" width="307.2" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="560.2" y="2526.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">623 us</text>
+<text x="58.0" y="2556.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused degree summary: 8192x8192 conflict degrees</text>
+<rect x="245.0" y="2544.0" width="337.6" height="16.0" rx="3" fill="#0891b2" opacity="1.000"/>
+<text x="590.6" y="2556.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">938 us</text>
+<text x="58.0" y="2586.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused CSR export: 8192x8192 CSR graph export</text>
+<rect x="245.0" y="2574.0" width="702.7" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="955.7" y="2586.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">127.47 ms</text>
+<text x="58.0" y="2616.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused grouping: 16384x16384 grouping summary</text>
+<rect x="245.0" y="2604.0" width="401.5" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="654.5" y="2616.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.22 ms</text>
+<text x="58.0" y="2646.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused degree summary: 16384x16384 conflict degrees</text>
+<rect x="245.0" y="2634.0" width="419.6" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="672.6" y="2646.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.83 ms</text>
+<text x="58.0" y="2676.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CUDA fused CSR export: 16384x16384 CSR graph export</text>
+<rect x="245.0" y="2664.0" width="805.1" height="16.0" rx="3" fill="#7c3aed" opacity="1.000"/>
+<text x="1058.1" y="2676.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">505.04 ms</text>
+<text x="32.0" y="2728.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">Log-scale latency; lower is better. Source: checked Campaign 7 raw JSON.</text>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="312" viewBox="0 0 1160 312" role="img" aria-labelledby="title desc">
+<title>Campaign 7 Profiler-Gated Decision</title>
+<desc>End-to-end timing shows count kernels are not the dominant retained fused-consumer bottleneck.</desc>
+<rect x="0" y="0" width="1160" height="312" fill="white"/>
+<text x="32" y="42" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#18212f">Campaign 7 Profiler-Gated Decision</text>
+<text x="32" y="68" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#627084">End-to-end timing shows count kernels are not the dominant retained fused-consumer bottleneck.</text>
+<line x1="245.0" y1="90.0" x2="245.0" y2="270.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="245.0" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">1.00 ms</text>
+<line x1="534.0" y1="90.0" x2="534.0" y2="270.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="534.0" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">10.00 ms</text>
+<line x1="823.0" y1="90.0" x2="823.0" y2="270.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="823.0" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">100.00 ms</text>
+<line x1="1112.0" y1="90.0" x2="1112.0" y2="270.0" stroke="#d8dee9" stroke-width="1.0"/>
+<text x="1112.0" y="82.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="10" font-weight="400" fill="#627084" text-anchor="middle">1.00 s</text>
+<text x="32.0" y="109.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#18212f" text-anchor="start">Largest Campaign 7 H100 row</text>
+<text x="58.0" y="150.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">CSR graph export</text>
+<rect x="245.0" y="138.0" width="781.3" height="16.0" rx="3" fill="#c76a00" opacity="1.000"/>
+<text x="1034.3" y="150.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">505.04 ms</text>
+<text x="58.0" y="180.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Dense to_host</text>
+<rect x="245.0" y="168.0" width="684.3" height="16.0" rx="3" fill="#8792a2" opacity="1.000"/>
+<text x="937.3" y="180.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">233.31 ms</text>
+<text x="58.0" y="210.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Conflict degrees</text>
+<rect x="245.0" y="198.0" width="130.4" height="16.0" rx="3" fill="#276ef1" opacity="1.000"/>
+<text x="383.4" y="210.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.83 ms</text>
+<text x="58.0" y="240.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#18212f" text-anchor="start">Grouping summary</text>
+<rect x="245.0" y="228.0" width="99.9" height="16.0" rx="3" fill="#12805c" opacity="1.000"/>
+<text x="352.9" y="240.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">2.22 ms</text>
+<text x="32.0" y="292.0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="400" fill="#627084" text-anchor="start">Log-scale latency; lower is better. Source: checked Campaign 7 raw JSON.</text>
+</svg>
