@@ -103,7 +103,7 @@ def base_env(args: argparse.Namespace) -> dict[str, str]:
     path_value = os.environ.get("PATH", "")
     return {
         "PATH": f"{args.cuda_bin}:{path_value}",
-        "FASTPAULI_CUDA_ARCHITECTURES": args.cuda_architectures,
+        "WOLFGANG_CUDA_ARCHITECTURES": args.cuda_architectures,
     }
 
 

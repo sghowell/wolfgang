@@ -107,7 +107,7 @@ def test_quality_job_gates_whole_repository_python_and_public_artifacts() -> Non
         "qiskit==",
     ):
         assert pinned_tool in workflow
-    assert "-DFASTPAULI_ENABLE_INTERNAL_BINDINGS=ON" in workflow
+    assert "-DWOLFGANG_ENABLE_INTERNAL_BINDINGS=ON" in workflow
 
 
 def test_ruff_config_has_no_obsolete_rule_exemptions() -> None:
@@ -120,7 +120,7 @@ def test_package_job_builds_and_audits_both_distribution_types() -> None:
     workflow = workflow_text(QUALITY_WORKFLOW)
 
     assert "python -m build --sdist --wheel" in workflow
-    assert "cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=OFF" in workflow
+    assert "cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=OFF" in workflow
     assert "python scripts/audit_public_artifacts.py --sdist" in workflow
     assert "python -m twine check dist/*" in workflow
     assert "build==" in workflow

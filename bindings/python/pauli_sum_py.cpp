@@ -1,7 +1,7 @@
-#include "fastpauli/cpu_backend.hpp"
-#include "fastpauli/device_commutation_matrix.hpp"
-#include "fastpauli/device_pauli_sum.hpp"
-#include "fastpauli/pauli_sum.hpp"
+#include "wolfgang/cpu_backend.hpp"
+#include "wolfgang/device_commutation_matrix.hpp"
+#include "wolfgang/device_pauli_sum.hpp"
+#include "wolfgang/pauli_sum.hpp"
 
 #include "dlpack/dlpack.h"
 #include "dlpack_interop.hpp"
@@ -1305,7 +1305,7 @@ void bind_pauli_sum(nb::module_& module) {
   module.def(
       "cuda_available",
       &DevicePauliSum::cuda_available,
-      "Return True when FastPauli was built with CUDA and a CUDA device is visible.");
+      "Return True when Wolfgang was built with CUDA and a CUDA device is visible.");
 
   module.def(
       "cuda_devices",
@@ -1323,7 +1323,7 @@ void bind_pauli_sum(nb::module_& module) {
   module.def(
       "hip_available",
       &DevicePauliSum::hip_available,
-      "Return True when FastPauli was built with HIP and a HIP device is visible.");
+      "Return True when Wolfgang was built with HIP and a HIP device is visible.");
 
   module.def(
       "hip_devices",
@@ -1341,7 +1341,7 @@ void bind_pauli_sum(nb::module_& module) {
   module.def(
       "metal_available",
       &DevicePauliSum::metal_available,
-      "Return True when FastPauli was built with Metal and a Metal device is visible.");
+      "Return True when Wolfgang was built with Metal and a Metal device is visible.");
 
   module.def(
       "metal_devices",
@@ -1435,9 +1435,9 @@ void bind_pauli_sum(nb::module_& module) {
           nb::arg("device") = 0,
           nb::arg("backend").none() = nb::none(),
           "Copy this host PauliSum to accelerator device memory.\n\n"
-          "backend may be None, 'auto', 'cuda', 'hip', or 'metal'. FastPauli must be "
-          "built from source with FASTPAULI_ENABLE_CUDA=ON or "
-          "FASTPAULI_ENABLE_HIP=ON, or FASTPAULI_ENABLE_METAL=ON and a visible "
+          "backend may be None, 'auto', 'cuda', 'hip', or 'metal'. Wolfgang must be "
+          "built from source with WOLFGANG_ENABLE_CUDA=ON or "
+          "WOLFGANG_ENABLE_HIP=ON, or WOLFGANG_ENABLE_METAL=ON and a visible "
           "matching device must be available. "
           "CPU-only builds raise RuntimeError with rebuild guidance.")
       .def(

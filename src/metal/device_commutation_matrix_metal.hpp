@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fastpauli/device_commutation_matrix.hpp"
+#include "wolfgang/device_commutation_matrix.hpp"
 
 #import <Metal/Metal.h>
 

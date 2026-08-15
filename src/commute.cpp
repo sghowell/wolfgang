@@ -1,5 +1,5 @@
-#include "fastpauli/cpu_backend.hpp"
-#include "fastpauli/pauli_sum.hpp"
+#include "wolfgang/cpu_backend.hpp"
+#include "wolfgang/pauli_sum.hpp"
 
 #include "detail/commute_kernels.hpp"
 #include "detail/checked_arithmetic.hpp"

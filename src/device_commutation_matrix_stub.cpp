@@ -1,4 +1,4 @@
-#include "fastpauli/device_commutation_matrix.hpp"
+#include "wolfgang/device_commutation_matrix.hpp"
 
 #include <cstddef>
 #include <cstdint>

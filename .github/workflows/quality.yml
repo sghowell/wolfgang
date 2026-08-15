@@ -80,7 +80,7 @@ jobs:
       - name: Build source and binary distributions
         run: >-
           python -m build --sdist --wheel --outdir dist
-          --config-setting cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=OFF
+          --config-setting cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=OFF
           --config-setting cmake.define.FASTPAULI_ENABLE_CUDA=OFF
           --config-setting cmake.define.FASTPAULI_ENABLE_HIP=OFF
           --config-setting cmake.define.FASTPAULI_ENABLE_METAL=OFF
@@ -155,7 +155,7 @@ jobs:
           -DFASTPAULI_ENABLE_AVX512=OFF
           -DFASTPAULI_ENABLE_ARM_NEON=OFF
           -DFASTPAULI_ENABLE_ARM_SVE=OFF
-          -DFASTPAULI_ENABLE_INTERNAL_BINDINGS=ON
+          -DWOLFGANG_ENABLE_INTERNAL_BINDINGS=ON
 
       - name: Build sanitizer-instrumented native extension
         run: cmake --build build/sanitizers --target _fastpauli_core --parallel 2

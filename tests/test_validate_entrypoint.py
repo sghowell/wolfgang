@@ -58,7 +58,7 @@ def test_cmake_configure_check_pins_the_active_python(monkeypatch) -> None:
     _, command = calls[0]
     assert command[0] == "/venv/bin/cmake"
     assert "-DPython_EXECUTABLE=/venv/bin/python" in command
-    assert "-DFASTPAULI_ENABLE_METAL=OFF" in command
+    assert "-DWOLFGANG_ENABLE_METAL=OFF" in command
 
 
 def test_native_source_layout_check_rejects_top_level_backend_sources(
@@ -110,7 +110,7 @@ def test_cuda_validation_path_is_explicit(monkeypatch) -> None:
     validate = load_validate_module()
     calls: list[tuple[str, list[str], dict[str, object]]] = []
 
-    monkeypatch.delenv("FASTPAULI_CUDA_ARCHITECTURES", raising=False)
+    monkeypatch.delenv("WOLFGANG_CUDA_ARCHITECTURES", raising=False)
     monkeypatch.delenv("CMAKE_CUDA_HOST_COMPILER", raising=False)
     monkeypatch.delenv("CUDACXX", raising=False)
     monkeypatch.delenv("CUDAHOSTCXX", raising=False)
@@ -139,8 +139,8 @@ def test_cuda_validation_path_is_explicit(monkeypatch) -> None:
     validate.run_cuda_validation_checks()
 
     command_text = "\n".join(" ".join(command) for _, command, _ in calls)
-    assert "FASTPAULI_ENABLE_CUDA=ON" in command_text
-    assert "FASTPAULI_CUDA_ARCHITECTURES" not in command_text
+    assert "WOLFGANG_ENABLE_CUDA=ON" in command_text
+    assert "WOLFGANG_CUDA_ARCHITECTURES" not in command_text
     assert "CMAKE_CUDA_HOST_COMPILER=/usr/bin/g++" in command_text
     assert any("CUDA toolkit version from nvcc" in name for name, _, _ in calls)
     assert any("CUDA host compiler version" in name for name, _, _ in calls)
@@ -176,7 +176,7 @@ def test_cuda_validation_installs_cupy_with_ctk_headers(monkeypatch) -> None:
     validate = load_validate_module()
     calls: list[tuple[str, list[str], dict[str, object]]] = []
 
-    monkeypatch.delenv("FASTPAULI_CUDA_ARCHITECTURES", raising=False)
+    monkeypatch.delenv("WOLFGANG_CUDA_ARCHITECTURES", raising=False)
     monkeypatch.delenv("CMAKE_CUDA_HOST_COMPILER", raising=False)
     monkeypatch.delenv("CUDACXX", raising=False)
     monkeypatch.delenv("CUDAHOSTCXX", raising=False)
@@ -200,7 +200,7 @@ def test_cuda_validation_semantic_pytest_ignores_cpu_only_release_checks(monkeyp
     validate = load_validate_module()
     calls: list[tuple[str, list[str], dict[str, object]]] = []
 
-    monkeypatch.delenv("FASTPAULI_CUDA_ARCHITECTURES", raising=False)
+    monkeypatch.delenv("WOLFGANG_CUDA_ARCHITECTURES", raising=False)
     monkeypatch.delenv("CMAKE_CUDA_HOST_COMPILER", raising=False)
     monkeypatch.delenv("CUDACXX", raising=False)
     monkeypatch.delenv("CUDAHOSTCXX", raising=False)
@@ -228,7 +228,7 @@ def test_cuda_validation_requested_architectures_are_authoritative(monkeypatch) 
     calls: list[tuple[str, list[str], dict[str, object]]] = []
     build_info_architectures: list[str] = []
 
-    monkeypatch.setenv("FASTPAULI_CUDA_ARCHITECTURES", "100-real;120")
+    monkeypatch.setenv("WOLFGANG_CUDA_ARCHITECTURES", "100-real;120")
     monkeypatch.setenv("CUDAHOSTCXX", "/usr/bin/g++")
     monkeypatch.setattr(validate, "find_executable", lambda name: f"/usr/bin/{name}")
     monkeypatch.setattr(validate.sys, "executable", "/venv/bin/python")
@@ -254,7 +254,7 @@ def test_cuda_validation_requested_architectures_are_authoritative(monkeypatch) 
         "CUDA source build with requested architecture override",
     ]
     requested_command = " ".join(build_calls[0][1])
-    assert "FASTPAULI_CUDA_ARCHITECTURES=100-real;120" in requested_command
+    assert "WOLFGANG_CUDA_ARCHITECTURES=100-real;120" in requested_command
     assert "CMAKE_CUDA_HOST_COMPILER=/usr/bin/g++" in requested_command
     assert build_info_architectures == ["100-real,120"]
 
@@ -295,8 +295,8 @@ def test_cuda_source_build_upgrades_python_pip_when_config_settings_are_missing(
         "wheel",
     ]
     source_build_command = " ".join(calls[1][1])
-    assert "--config-settings=cmake.define.FASTPAULI_ENABLE_CUDA=ON" in source_build_command
-    assert "FASTPAULI_CUDA_ARCHITECTURES=80" in source_build_command
+    assert "--config-settings=cmake.define.WOLFGANG_ENABLE_CUDA=ON" in source_build_command
+    assert "WOLFGANG_CUDA_ARCHITECTURES=80" in source_build_command
 
 
 def test_cuda_source_build_pins_cudatoolkit_root_from_nvcc_path(monkeypatch) -> None:
@@ -325,7 +325,7 @@ def test_hip_validation_path_is_explicit(monkeypatch) -> None:
     validate = load_validate_module()
     calls: list[tuple[str, list[str], dict[str, object]]] = []
 
-    monkeypatch.delenv("FASTPAULI_HIP_ARCHITECTURES", raising=False)
+    monkeypatch.delenv("WOLFGANG_HIP_ARCHITECTURES", raising=False)
     monkeypatch.setattr(validate, "find_executable", lambda name: f"/opt/rocm/bin/{name}")
     monkeypatch.setattr(validate.sys, "executable", "/venv/bin/python")
 
@@ -339,8 +339,8 @@ def test_hip_validation_path_is_explicit(monkeypatch) -> None:
     validate.run_hip_validation_checks()
 
     command_text = "\n".join(" ".join(command) for _, command, _ in calls)
-    assert "FASTPAULI_ENABLE_HIP=ON" in command_text
-    assert "FASTPAULI_HIP_ARCHITECTURES=gfx942" in command_text
+    assert "WOLFGANG_ENABLE_HIP=ON" in command_text
+    assert "WOLFGANG_HIP_ARCHITECTURES=gfx942" in command_text
     assert any("HIP compiler version from hipcc" in name for name, _, _ in calls)
     assert any("HIP source build for gfx942" in name for name, _, _ in calls)
     assert any("HIP-enabled semantic pytest" in name for name, _, _ in calls)
@@ -355,7 +355,7 @@ def test_hip_validation_can_add_requested_architecture_lane(monkeypatch) -> None
     validate = load_validate_module()
     calls: list[tuple[str, list[str], dict[str, object]]] = []
 
-    monkeypatch.setenv("FASTPAULI_HIP_ARCHITECTURES", "gfx950")
+    monkeypatch.setenv("WOLFGANG_HIP_ARCHITECTURES", "gfx950")
     monkeypatch.setattr(validate, "find_executable", lambda name: f"/opt/rocm/bin/{name}")
     monkeypatch.setattr(validate.sys, "executable", "/venv/bin/python")
 
@@ -373,8 +373,8 @@ def test_hip_validation_can_add_requested_architecture_lane(monkeypatch) -> None
         "HIP source build for gfx942",
         "HIP source build for requested architecture override",
     ]
-    assert "FASTPAULI_HIP_ARCHITECTURES=gfx942" in " ".join(build_calls[0][1])
-    assert "FASTPAULI_HIP_ARCHITECTURES=gfx950" in " ".join(build_calls[1][1])
+    assert "WOLFGANG_HIP_ARCHITECTURES=gfx942" in " ".join(build_calls[0][1])
+    assert "WOLFGANG_HIP_ARCHITECTURES=gfx950" in " ".join(build_calls[1][1])
 
 
 def test_hip_validation_normalizes_requested_architecture_lists(monkeypatch) -> None:
@@ -382,7 +382,7 @@ def test_hip_validation_normalizes_requested_architecture_lists(monkeypatch) -> 
     calls: list[tuple[str, list[str], dict[str, object]]] = []
     build_info_architectures: list[str] = []
 
-    monkeypatch.setenv("FASTPAULI_HIP_ARCHITECTURES", "gfx942;gfx950")
+    monkeypatch.setenv("WOLFGANG_HIP_ARCHITECTURES", "gfx942;gfx950")
     monkeypatch.setattr(validate, "find_executable", lambda name: f"/opt/rocm/bin/{name}")
     monkeypatch.setattr(validate.sys, "executable", "/venv/bin/python")
 
@@ -400,7 +400,7 @@ def test_hip_validation_normalizes_requested_architecture_lists(monkeypatch) -> 
     validate.run_hip_validation_checks()
 
     build_calls = [(name, command) for name, command, _ in calls if "HIP source build" in name]
-    assert "FASTPAULI_HIP_ARCHITECTURES=gfx942;gfx950" in " ".join(build_calls[1][1])
+    assert "WOLFGANG_HIP_ARCHITECTURES=gfx942;gfx950" in " ".join(build_calls[1][1])
     assert build_info_architectures == ["gfx942", "gfx942,gfx950"]
 
 
@@ -427,9 +427,9 @@ def test_metal_validation_path_is_explicit(monkeypatch) -> None:
     validate.run_metal_validation_checks()
 
     command_text = "\n".join(" ".join(command) for _, command, _ in calls)
-    assert "FASTPAULI_ENABLE_METAL=ON" in command_text
-    assert "FASTPAULI_ENABLE_CUDA=OFF" in command_text
-    assert "FASTPAULI_ENABLE_HIP=OFF" in command_text
+    assert "WOLFGANG_ENABLE_METAL=ON" in command_text
+    assert "WOLFGANG_ENABLE_CUDA=OFF" in command_text
+    assert "WOLFGANG_ENABLE_HIP=OFF" in command_text
     assert any("Apple macOS SDK version" in name for name, _, _ in calls)
     assert any(command[-3:] == ["--sdk", "macosx", "--show-sdk-version"] for _, command, _ in calls)
     assert any("Apple Metal compiler version" in name for name, _, _ in calls)

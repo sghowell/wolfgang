@@ -56,10 +56,10 @@ def test_pyproject_uses_wolfgang_distribution_and_public_urls() -> None:
 
     assert 'name = "wolfgang-quantum"' in pyproject
     assert '{ name = "Wolfgang contributors" }' in pyproject
-    assert 'Homepage = "https://github.com/wolfgang-quantum/wolfgang"' in pyproject
-    assert 'Documentation = "https://wolfgangquantum.com"' in pyproject
-    assert 'Repository = "https://github.com/wolfgang-quantum/wolfgang.git"' in pyproject
-    assert 'Issues = "https://github.com/wolfgang-quantum/wolfgang/issues"' in pyproject
+    assert 'Homepage = "https://github.com/sghowell/wolfgang"' in pyproject
+    assert 'Documentation = "https://sghowell.github.io/wolfgang/"' in pyproject
+    assert 'Repository = "https://github.com/sghowell/wolfgang.git"' in pyproject
+    assert 'Issues = "https://github.com/sghowell/wolfgang/issues"' in pyproject
 
 
 def test_canonical_python_package_root_is_wolfgang_quantum() -> None:
@@ -185,8 +185,8 @@ def test_active_release_tooling_uses_wolfgang_as_canonical_identity() -> None:
         ],
         "tests/test_release_supply_chain.py": [
             'python/wolfgang_quantum/_version.py',
-            'https://github.com/wolfgang-quantum/wolfgang',
-            'https://wolfgangquantum.com',
+            'https://github.com/sghowell/wolfgang',
+            'https://sghowell.github.io/wolfgang/',
         ],
         "tests/test_release_artifact_validation.py": [
             'SDIST_PREFIX = f"wolfgang-quantum-{RELEASE_VERSION}"',
@@ -210,6 +210,26 @@ def test_active_release_tooling_uses_wolfgang_as_canonical_identity() -> None:
             assert fragment in text, f"missing canonical Wolfgang release fragment {fragment!r} in {relative_path}"
         for fragment in forbidden_fragments:
             assert fragment not in text, f"stale canonical FastPauli release fragment {fragment!r} remains in {relative_path}"
+
+
+def test_canonical_public_cmake_and_runtime_identity_prefers_wolfgang_names() -> None:
+    cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
+    cpu_backend = (ROOT / "src/cpu_backend.cpp").read_text(encoding="utf-8")
+    package_init = (ROOT / "python/wolfgang_quantum/__init__.py").read_text(encoding="utf-8")
+    internal_bindings = (ROOT / "bindings/python/internal_bindings.cpp").read_text(encoding="utf-8")
+
+    assert 'WOLFGANG_ENABLE_CUDA' in cmake
+    assert 'WOLFGANG_ENABLE_INTERNAL_BINDINGS' in cmake
+    assert 'WOLFGANG_CUDA_ARCHITECTURES' in cmake
+    assert 'WOLFGANG_ENABLE_CUDA' in cmake
+    assert 'WOLFGANG_ENABLE_INTERNAL_BINDINGS' in cmake
+
+    assert 'constexpr std::string_view kBackendEnvVar = "WOLFGANG_CPU_BACKEND";' in cpu_backend
+    assert 'WOLFGANG_CPU_BACKEND' in cpu_backend
+    assert 'WOLFGANG_CPU_BACKEND' in cpu_backend
+
+    assert 'FastPauliCapabilities' not in package_init
+    assert 'cpu_backend_env_var"] = "WOLFGANG_CPU_BACKEND"' in internal_bindings
 
 
 def test_active_docs_only_keep_allowlisted_fastpauli_tokens() -> None:

@@ -99,7 +99,7 @@ jobs:
       - name: Build CPU-safe source distribution
         run: |
           python -m build --sdist --outdir dist \
-            --config-setting cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=OFF \
+            --config-setting cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=OFF \
             --config-setting cmake.define.FASTPAULI_ENABLE_CUDA=OFF \
             --config-setting cmake.define.FASTPAULI_ENABLE_HIP=OFF \
             --config-setting cmake.define.FASTPAULI_ENABLE_METAL=OFF \

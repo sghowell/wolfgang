@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def run_backend_probe(selector: str) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
-    env["FASTPAULI_CPU_BACKEND"] = selector
+    env["WOLFGANG_CPU_BACKEND"] = selector
     return subprocess.run(
         [
             sys.executable,
@@ -41,7 +41,7 @@ def run_backend_probe(selector: str) -> subprocess.CompletedProcess[str]:
 
 def run_backend_expectation_probe(selector: str) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
-    env["FASTPAULI_CPU_BACKEND"] = selector
+    env["WOLFGANG_CPU_BACKEND"] = selector
     return subprocess.run(
         [
             sys.executable,
@@ -66,7 +66,7 @@ def run_backend_expectation_probe(selector: str) -> subprocess.CompletedProcess[
 
 def run_backend_commutation_probe(selector: str) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
-    env["FASTPAULI_CPU_BACKEND"] = selector
+    env["WOLFGANG_CPU_BACKEND"] = selector
     return subprocess.run(
         [
             sys.executable,
@@ -101,8 +101,8 @@ def run_cmake_configure_with_options(*options: str) -> subprocess.CompletedProce
             str(ROOT),
             "-B",
             str(build_dir),
-            "-DFASTPAULI_ENABLE_CUDA=OFF",
-            "-DFASTPAULI_ENABLE_NATIVE=OFF",
+            "-DWOLFGANG_ENABLE_CUDA=OFF",
+            "-DWOLFGANG_ENABLE_NATIVE=OFF",
             f"-DPython_EXECUTABLE={sys.executable}",
             *options,
         ],
@@ -119,9 +119,9 @@ def test_build_info_reports_cpu_backend_dispatch_surface() -> None:
     assert info["cpu_backend"] == "scalar"
     assert info["active_cpu_backend"] == "scalar"
     assert info["requested_cpu_backend"] == "auto"
-    assert info["cpu_backend_env_var"] == "FASTPAULI_CPU_BACKEND"
-    assert info["cpu_cmake_options"]["FASTPAULI_ENABLE_ARM_NEON"] == "auto"
-    assert info["cpu_cmake_options"]["FASTPAULI_ENABLE_ARM_SVE"] == "auto"
+    assert info["cpu_backend_env_var"] == "WOLFGANG_CPU_BACKEND"
+    assert info["cpu_cmake_options"]["WOLFGANG_ENABLE_ARM_NEON"] == "auto"
+    assert info["cpu_cmake_options"]["WOLFGANG_ENABLE_ARM_SVE"] == "auto"
     assert info["cpu_backend_build_flags"]["scalar"] is True
     assert "optimized_cpu_kernels" in info
     assert set(info["optimized_cpu_kernels"]).issuperset({"tbb", "avx2", "avx512", "neon", "sve"})
@@ -144,8 +144,8 @@ def test_forced_architecture_simd_configure_is_implemented_on_capable_toolchains
     machine = platform.machine().lower()
     if machine in {"arm64", "aarch64"}:
         completed = run_cmake_configure_with_options(
-            "-DFASTPAULI_ENABLE_TBB=OFF",
-            "-DFASTPAULI_ENABLE_ARM_NEON=ON",
+            "-DWOLFGANG_ENABLE_TBB=OFF",
+            "-DWOLFGANG_ENABLE_ARM_NEON=ON",
         )
         assert completed.returncode == 0, completed.stderr
         assert "not implemented" not in completed.stderr
@@ -153,8 +153,8 @@ def test_forced_architecture_simd_configure_is_implemented_on_capable_toolchains
 
     if machine in {"x86_64", "amd64"}:
         completed = run_cmake_configure_with_options(
-            "-DFASTPAULI_ENABLE_TBB=OFF",
-            "-DFASTPAULI_ENABLE_AVX2=ON",
+            "-DWOLFGANG_ENABLE_TBB=OFF",
+            "-DWOLFGANG_ENABLE_AVX2=ON",
         )
         assert completed.returncode == 0, completed.stderr
         assert "not implemented" not in completed.stderr
@@ -177,7 +177,7 @@ def test_fastpauli_cpu_backend_rejects_invalid_selector() -> None:
     completed = run_backend_probe("bogus")
 
     assert completed.returncode != 0
-    assert "FASTPAULI_CPU_BACKEND" in completed.stderr
+    assert "WOLFGANG_CPU_BACKEND" in completed.stderr
 
 
 def test_forced_optimized_backend_availability_matches_reported_status() -> None:
@@ -195,7 +195,7 @@ def test_forced_optimized_backend_availability_matches_reported_status() -> None
             assert json.loads(completed.stdout)["active_cpu_backend"] == selector
         else:
             assert completed.returncode != 0
-            assert f"FASTPAULI_CPU_BACKEND={selector}" in completed.stderr
+            assert f"WOLFGANG_CPU_BACKEND={selector}" in completed.stderr
             assert status in completed.stderr
 
 
@@ -233,8 +233,8 @@ def test_forced_optimized_backend_rejects_scalar_only_operations(monkeypatch: py
 
     op = PauliSum.from_labels(["ZI", "XX"], [1.0, 2.0])
     psi = np.asarray([1.0, 0.0, 0.0, 0.0], dtype=np.complex128)
-    monkeypatch.setenv("FASTPAULI_CPU_BACKEND", backend)
-    expected = f"FASTPAULI_CPU_BACKEND={backend}"
+    monkeypatch.setenv("WOLFGANG_CPU_BACKEND", backend)
+    expected = f"WOLFGANG_CPU_BACKEND={backend}"
 
     with pytest.raises(RuntimeError, match=expected):
         op.simplify()
@@ -260,7 +260,7 @@ def test_forced_simd_backend_rejects_unsupported_commutation_width(
     op = PauliSum.from_labels(["X" + ("I" * 128)], [1.0])
     expected = "supports commutation kernels only for packed widths of 1 or 2"
     for selector in available_simd:
-        monkeypatch.setenv("FASTPAULI_CPU_BACKEND", selector)
+        monkeypatch.setenv("WOLFGANG_CPU_BACKEND", selector)
         with pytest.raises(RuntimeError, match=expected):
             op.commutes_with(op)
         with pytest.raises(RuntimeError, match=expected):
@@ -281,9 +281,9 @@ def test_compute_methods_fail_clearly_when_forced_backend_is_unavailable(monkeyp
 
     op = PauliSum.from_labels(["ZI"], [1.0])
     psi = np.asarray([1.0, 0.0, 0.0, 0.0], dtype=np.complex128)
-    monkeypatch.setenv("FASTPAULI_CPU_BACKEND", backend)
+    monkeypatch.setenv("WOLFGANG_CPU_BACKEND", backend)
 
-    with pytest.raises(RuntimeError, match=f"FASTPAULI_CPU_BACKEND={backend}"):
+    with pytest.raises(RuntimeError, match=f"WOLFGANG_CPU_BACKEND={backend}"):
         op.expectation_statevector(psi)
 
 
@@ -304,10 +304,10 @@ def test_cpu_dispatch_benchmark_smoke_outputs_backend_metadata() -> None:
     assert report["benchmark"] == "cpu_dispatch"
     assert report["fastpauli_build_info"]["active_cpu_backend"] == "scalar"
     assert "scalar" in report["fastpauli_build_info"]["available_cpu_backends"]
-    assert "FASTPAULI_ENABLE_AVX2" in report["environment"]["cpu_cmake_options"]
-    assert "FASTPAULI_ENABLE_AVX512" in report["environment"]["cpu_cmake_options"]
-    assert "FASTPAULI_ENABLE_ARM_NEON" in report["environment"]["cpu_cmake_options"]
-    assert "FASTPAULI_ENABLE_ARM_SVE" in report["environment"]["cpu_cmake_options"]
+    assert "WOLFGANG_ENABLE_AVX2" in report["environment"]["cpu_cmake_options"]
+    assert "WOLFGANG_ENABLE_AVX512" in report["environment"]["cpu_cmake_options"]
+    assert "WOLFGANG_ENABLE_ARM_NEON" in report["environment"]["cpu_cmake_options"]
+    assert "WOLFGANG_ENABLE_ARM_SVE" in report["environment"]["cpu_cmake_options"]
     assert "compiler_cpu_flags" in report["environment"]
     assert "instruction_set_probe" in report["environment"]
     case_names = {case["name"] for case in report["cases"]}

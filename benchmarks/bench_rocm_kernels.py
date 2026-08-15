@@ -711,8 +711,8 @@ CAMPAIGN7_TERMINAL_STATUSES = {
 CAMPAIGN7_HIP_BUILD_COMMAND = (
     "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH "
     "python -m pip install -e .[test] "
-    "--config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON "
-    "--config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942"
+    "--config-settings=cmake.define.WOLFGANG_ENABLE_HIP=ON "
+    "--config-settings=cmake.define.WOLFGANG_HIP_ARCHITECTURES=gfx942"
 )
 CAMPAIGN7_CPU_VALIDATION_COMMAND = "python scripts/validate.py"
 CAMPAIGN7_HIP_VALIDATION_COMMAND = (
@@ -975,15 +975,15 @@ def timed_call(fn: Callable[[], Any], *, warmup: int, repeat: int) -> tuple[Any,
 
 @contextmanager
 def forced_cpu_backend(selector: str):
-    previous = os.environ.get("FASTPAULI_CPU_BACKEND")
-    os.environ["FASTPAULI_CPU_BACKEND"] = selector
+    previous = os.environ.get("WOLFGANG_CPU_BACKEND")
+    os.environ["WOLFGANG_CPU_BACKEND"] = selector
     try:
         yield
     finally:
         if previous is None:
-            os.environ.pop("FASTPAULI_CPU_BACKEND", None)
+            os.environ.pop("WOLFGANG_CPU_BACKEND", None)
         else:
-            os.environ["FASTPAULI_CPU_BACKEND"] = previous
+            os.environ["WOLFGANG_CPU_BACKEND"] = previous
 
 
 @contextmanager
@@ -2285,7 +2285,7 @@ def campaign7_decision_rows(
             "local_cpu_control",
             "validation_only",
             "passed",
-            "CPU-only validation lane keeps FASTPAULI_ENABLE_HIP=OFF independent of ROCm.",
+            "CPU-only validation lane keeps WOLFGANG_ENABLE_HIP=OFF independent of ROCm.",
             CAMPAIGN7_CPU_VALIDATION_COMMAND,
         ),
         (
@@ -2295,8 +2295,8 @@ def campaign7_decision_rows(
             "decision_only",
             "validation_only",
             "passed",
-            "FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON remains a configure-time error.",
-            "cmake configure with FASTPAULI_ENABLE_CUDA=ON and FASTPAULI_ENABLE_HIP=ON",
+            "WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON remains a configure-time error.",
+            "cmake configure with WOLFGANG_ENABLE_CUDA=ON and WOLFGANG_ENABLE_HIP=ON",
         ),
         (
             "ci_runbook",
@@ -2356,7 +2356,7 @@ def campaign7_decision_rows(
             "decision_only",
             "unavailable",
             "CUDA and HIP source builds remain mutually exclusive.",
-            "cmake configure with FASTPAULI_ENABLE_CUDA=ON and FASTPAULI_ENABLE_HIP=ON",
+            "cmake configure with WOLFGANG_ENABLE_CUDA=ON and WOLFGANG_ENABLE_HIP=ON",
         ),
     ]
     rows: list[dict[str, Any]] = []
@@ -2782,7 +2782,7 @@ def campaign5_decision_rows(
             "multi_backend_decision",
             "simultaneous_cuda_hip_decision",
             "unavailable",
-            "FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON remains a configure-time error.",
+            "WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON remains a configure-time error.",
         ),
     ]
     rows: list[dict[str, Any]] = []

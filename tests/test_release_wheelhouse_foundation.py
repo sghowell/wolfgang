@@ -112,10 +112,10 @@ def test_cibuildwheel_cpu_only_configuration_is_present() -> None:
         'skip = ["*-win32", "*-win_amd64", "*-win_arm64", "*-musllinux*", "pp*"]'
         in pyproject
     )
-    assert "cmake.define.FASTPAULI_ENABLE_CUDA" in pyproject
-    assert "cmake.define.FASTPAULI_ENABLE_HIP" in pyproject
-    assert "cmake.define.FASTPAULI_ENABLE_METAL" in pyproject
-    assert "cmake.define.FASTPAULI_ENABLE_NATIVE" in pyproject
+    assert "cmake.define.WOLFGANG_ENABLE_CUDA" in pyproject
+    assert "cmake.define.WOLFGANG_ENABLE_HIP" in pyproject
+    assert "cmake.define.WOLFGANG_ENABLE_METAL" in pyproject
+    assert "cmake.define.WOLFGANG_ENABLE_NATIVE" in pyproject
     assert 'test-command = "python {project}/scripts/wheel_smoke.py"' in pyproject
     assert "[tool.cibuildwheel.linux]" in pyproject
     assert 'archs = ["x86_64"]' in pyproject

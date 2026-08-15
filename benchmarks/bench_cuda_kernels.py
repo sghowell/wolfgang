@@ -119,15 +119,15 @@ def _require_supported_cupy_runtime_for_current_cuda_architecture(cupy: Any) -> 
 
 @contextmanager
 def forced_cpu_backend(selector: str):
-    previous = os.environ.get("FASTPAULI_CPU_BACKEND")
-    os.environ["FASTPAULI_CPU_BACKEND"] = selector
+    previous = os.environ.get("WOLFGANG_CPU_BACKEND")
+    os.environ["WOLFGANG_CPU_BACKEND"] = selector
     try:
         yield
     finally:
         if previous is None:
-            os.environ.pop("FASTPAULI_CPU_BACKEND", None)
+            os.environ.pop("WOLFGANG_CPU_BACKEND", None)
         else:
-            os.environ["FASTPAULI_CPU_BACKEND"] = previous
+            os.environ["WOLFGANG_CPU_BACKEND"] = previous
 
 
 @contextmanager

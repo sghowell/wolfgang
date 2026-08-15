@@ -270,7 +270,7 @@ must return `"cuda"`, `"hip"`, or `"metal"` for valid accelerator allocations.
 Backend identity is a property of the object, not a process-global active
 backend.
 
-The Apple Metal selector is source-build-only behind `FASTPAULI_ENABLE_METAL=ON`;
+The Apple Metal selector is source-build-only behind `WOLFGANG_ENABLE_METAL=ON`;
 see `docs/architecture/apple_accelerator.md`. It initially covers transfers, pairwise commutation, and retained
 `DeviceCommutationMatrix` count consumers. Unsupported accelerator operations
 must raise a clear runtime error without falling back silently to CPU.

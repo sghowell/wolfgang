@@ -1,4 +1,4 @@
-#include "fastpauli/cpu_backend.hpp"
+#include "wolfgang/cpu_backend.hpp"
 
 #include <array>
 #include <cstdlib>
@@ -10,7 +10,8 @@ namespace wolfgang {
 
 namespace {
 
-constexpr std::string_view kBackendEnvVar = "FASTPAULI_CPU_BACKEND";
+constexpr std::string_view kBackendEnvVar = "WOLFGANG_CPU_BACKEND";
+constexpr std::string_view kLegacyBackendEnvVar = "FASTPAULI_CPU_BACKEND";
 constexpr std::array<std::string_view, 7> kSelectors = {
     "auto",
     "scalar",
@@ -114,6 +115,9 @@ std::string backend_status(std::string_view backend) {
 std::string requested_backend_from_environment() {
   const char* value = std::getenv(kBackendEnvVar.data());
   if (value == nullptr || value[0] == '\0') {
+    value = std::getenv(kLegacyBackendEnvVar.data());
+  }
+  if (value == nullptr || value[0] == '\0') {
     return "auto";
   }
   return value;
@@ -124,7 +128,7 @@ std::string requested_backend_from_environment() {
 CpuBackendReport cpu_backend_report_for_selector(std::string_view selector) {
   if (!selector_is_known(selector)) {
     throw std::invalid_argument(
-        "FASTPAULI_CPU_BACKEND must be one of: " + selector_list());
+        "WOLFGANG_CPU_BACKEND (or deprecated FASTPAULI_CPU_BACKEND) must be one of: " + selector_list());
   }
 
   CpuBackendReport report;
@@ -152,7 +156,7 @@ CpuBackendReport cpu_backend_report_for_selector(std::string_view selector) {
   const std::string forced_status = backend_status(selector);
   if (forced_status != "available") {
     throw std::runtime_error(
-        "FASTPAULI_CPU_BACKEND=" + std::string(selector) +
+        "WOLFGANG_CPU_BACKEND=" + std::string(selector) +
         " requested but the " + std::string(selector) +
         " backend is " + forced_status);
   }
@@ -176,10 +180,10 @@ void ensure_cpu_backend_supports_scalar_operation(std::string_view operation) {
   }
 
   throw std::runtime_error(
-      "FASTPAULI_CPU_BACKEND=" + report.active_backend +
+      "WOLFGANG_CPU_BACKEND=" + report.active_backend +
       " requested for " + std::string(operation) +
       ", but that operation currently has only scalar CPU coverage; use "
-      "FASTPAULI_CPU_BACKEND=auto or FASTPAULI_CPU_BACKEND=scalar unless a "
+      "WOLFGANG_CPU_BACKEND=auto or WOLFGANG_CPU_BACKEND=scalar (FASTPAULI_CPU_BACKEND remains a deprecated alias) unless a "
       "named optimized kernel is documented for the operation.");
 }
 

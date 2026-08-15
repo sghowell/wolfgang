@@ -690,15 +690,15 @@ def timed_call(fn: Callable[[], Any], *, repeat: int, warmup: int = 1) -> tuple[
 
 @contextmanager
 def forced_cpu_backend(selector: str):
-    previous = os.environ.get("FASTPAULI_CPU_BACKEND")
-    os.environ["FASTPAULI_CPU_BACKEND"] = selector
+    previous = os.environ.get("WOLFGANG_CPU_BACKEND")
+    os.environ["WOLFGANG_CPU_BACKEND"] = selector
     try:
         yield
     finally:
         if previous is None:
-            os.environ.pop("FASTPAULI_CPU_BACKEND", None)
+            os.environ.pop("WOLFGANG_CPU_BACKEND", None)
         else:
-            os.environ["FASTPAULI_CPU_BACKEND"] = previous
+            os.environ["WOLFGANG_CPU_BACKEND"] = previous
 
 
 @contextmanager
@@ -1269,7 +1269,7 @@ def append_simplify_cpu_rows(
         if available and selector not in {"auto", "scalar"}:
             available = False
             unavailable_reason = (
-                f"FASTPAULI_CPU_BACKEND={selector} does not execute scalar-only simplify"
+                f"WOLFGANG_CPU_BACKEND={selector} does not execute scalar-only simplify"
             )
         if not available:
             rows.append(

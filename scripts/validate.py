@@ -374,21 +374,21 @@ def check_cmake_defaults() -> None:
     print_check("CMake CPU-safe defaults are declared")
     cmake = read_text("CMakeLists.txt")
     required_snippets = (
-        'option(FASTPAULI_ENABLE_CUDA "Build CUDA backend support" OFF)',
-        'option(FASTPAULI_ENABLE_HIP "Build ROCm/HIP backend support" OFF)',
-        'option(FASTPAULI_ENABLE_METAL "Build Apple Metal backend support" OFF)',
-        'option(FASTPAULI_ENABLE_NATIVE "Allow native CPU tuning such as -march=native" OFF)',
-        'option(FASTPAULI_ENABLE_OPENMP "Build OpenMP-enabled CPU paths" OFF)',
-        'set(FASTPAULI_CUDA_ARCHITECTURES "80;86;89;90;100-real;120" CACHE STRING',
-        'set(FASTPAULI_HIP_ARCHITECTURES "gfx942" CACHE STRING',
-        "FASTPAULI_ENABLE_CUDA and FASTPAULI_ENABLE_HIP cannot both be ON",
-        "FASTPAULI_ENABLE_CUDA and FASTPAULI_ENABLE_METAL cannot both be ON",
-        "FASTPAULI_ENABLE_HIP and FASTPAULI_ENABLE_METAL cannot both be ON",
-        'set(FASTPAULI_ENABLE_TBB "auto" CACHE STRING',
-        'set(FASTPAULI_ENABLE_AVX2 "auto" CACHE STRING',
-        'set(FASTPAULI_ENABLE_AVX512 "auto" CACHE STRING',
-        'set(FASTPAULI_ENABLE_ARM_NEON "auto" CACHE STRING',
-        'set(FASTPAULI_ENABLE_ARM_SVE "auto" CACHE STRING',
+        'option(WOLFGANG_ENABLE_CUDA "Build CUDA backend support" OFF)',
+        'option(WOLFGANG_ENABLE_HIP "Build ROCm/HIP backend support" OFF)',
+        'option(WOLFGANG_ENABLE_METAL "Build Apple Metal backend support" OFF)',
+        'option(WOLFGANG_ENABLE_NATIVE "Allow native CPU tuning such as -march=native" OFF)',
+        'option(WOLFGANG_ENABLE_OPENMP "Build OpenMP-enabled CPU paths" OFF)',
+        'set(WOLFGANG_CUDA_ARCHITECTURES "80;86;89;90;100-real;120" CACHE STRING',
+        'set(WOLFGANG_HIP_ARCHITECTURES "gfx942" CACHE STRING',
+        "WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_HIP cannot both be ON",
+        "WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_METAL cannot both be ON",
+        "WOLFGANG_ENABLE_HIP and WOLFGANG_ENABLE_METAL cannot both be ON",
+        'set(WOLFGANG_ENABLE_TBB "auto" CACHE STRING',
+        'set(WOLFGANG_ENABLE_AVX2 "auto" CACHE STRING',
+        'set(WOLFGANG_ENABLE_AVX512 "auto" CACHE STRING',
+        'set(WOLFGANG_ENABLE_ARM_NEON "auto" CACHE STRING',
+        'set(WOLFGANG_ENABLE_ARM_SVE "auto" CACHE STRING',
         'FASTPAULI_BUILD_CPU_BACKEND="scalar"',
         "FASTPAULI_BUILD_CUDA_ENABLED=${FASTPAULI_BUILD_CUDA_ENABLED}",
         'FASTPAULI_BUILD_CUDA_ARCHITECTURES="${FASTPAULI_BUILD_CUDA_ARCHITECTURES}"',
@@ -567,10 +567,10 @@ def run_cmake_configure_check() -> None:
             str(ROOT),
             "-B",
             str(build_dir),
-            "-DFASTPAULI_ENABLE_CUDA=OFF",
-            "-DFASTPAULI_ENABLE_HIP=OFF",
-            "-DFASTPAULI_ENABLE_METAL=OFF",
-            "-DFASTPAULI_ENABLE_NATIVE=OFF",
+            "-DWOLFGANG_ENABLE_CUDA=OFF",
+            "-DWOLFGANG_ENABLE_HIP=OFF",
+            "-DWOLFGANG_ENABLE_METAL=OFF",
+            "-DWOLFGANG_ENABLE_NATIVE=OFF",
             f"-DPython_EXECUTABLE={sys.executable}",
         ],
     )
@@ -585,12 +585,12 @@ def run_cuda_validation_checks() -> None:
     if cmake is None:
         fail("FASTPAULI_VALIDATE_CUDA=1 requested, but cmake is not available")
 
-    requested_architectures = os.environ.get("FASTPAULI_CUDA_ARCHITECTURES")
+    requested_architectures = os.environ.get("WOLFGANG_CUDA_ARCHITECTURES")
     print(f"nvcc: {nvcc}")
     print(f"cmake: {cmake}")
-    print(f"default FASTPAULI_CUDA_ARCHITECTURES={DEFAULT_CUDA_ARCHITECTURES}")
+    print(f"default WOLFGANG_CUDA_ARCHITECTURES={DEFAULT_CUDA_ARCHITECTURES}")
     if requested_architectures is not None:
-        print(f"requested FASTPAULI_CUDA_ARCHITECTURES={requested_architectures}")
+        print(f"requested WOLFGANG_CUDA_ARCHITECTURES={requested_architectures}")
 
     run_check("CUDA toolkit version from nvcc", [nvcc, "--version"])
 
@@ -707,8 +707,8 @@ def run_cuda_source_build(architectures: str, *, nvcc: str, host_compiler: str) 
         [
             "-e",
             ".[test]",
-            "--config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON",
-            "--config-settings=cmake.define.FASTPAULI_ENABLE_CUDA=ON",
+            "--config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON",
+            "--config-settings=cmake.define.WOLFGANG_ENABLE_CUDA=ON",
             f"--config-settings=cmake.define.CMAKE_CUDA_HOST_COMPILER={host_compiler}",
             f"--config-settings=cmake.define.CUDAToolkit_ROOT={Path(nvcc).resolve().parent.parent}",
         ]
@@ -719,7 +719,7 @@ def run_cuda_source_build(architectures: str, *, nvcc: str, host_compiler: str) 
     if normalized_architectures != DEFAULT_CUDA_ARCHITECTURES:
         check_name = "CUDA source build with requested architecture override"
         command.append(
-            f"--config-settings=cmake.define.FASTPAULI_CUDA_ARCHITECTURES={architectures}"
+            f"--config-settings=cmake.define.WOLFGANG_CUDA_ARCHITECTURES={architectures}"
         )
 
     run_check(check_name, command, env=env)
@@ -780,12 +780,12 @@ def run_hip_validation_checks() -> None:
     if cmake is None:
         fail("FASTPAULI_VALIDATE_HIP=1 requested, but cmake is not available")
 
-    requested_architectures = os.environ.get("FASTPAULI_HIP_ARCHITECTURES")
+    requested_architectures = os.environ.get("WOLFGANG_HIP_ARCHITECTURES")
     print(f"HIP compiler: {hip}")
     print(f"cmake: {cmake}")
-    print(f"default FASTPAULI_HIP_ARCHITECTURES={DEFAULT_HIP_ARCHITECTURES}")
+    print(f"default WOLFGANG_HIP_ARCHITECTURES={DEFAULT_HIP_ARCHITECTURES}")
     if requested_architectures is not None:
-        print(f"requested FASTPAULI_HIP_ARCHITECTURES={requested_architectures}")
+        print(f"requested WOLFGANG_HIP_ARCHITECTURES={requested_architectures}")
 
     run_check("HIP compiler version from hipcc", [hip, "--version"], env=hip_validation_env())
 
@@ -831,9 +831,9 @@ def run_hip_source_build(architectures: str, *, requested: bool = False) -> None
         "install",
         "-e",
         ".[test]",
-        "--config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON",
-        "--config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON",
-        f"--config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES={architectures}",
+        "--config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON",
+        "--config-settings=cmake.define.WOLFGANG_ENABLE_HIP=ON",
+        f"--config-settings=cmake.define.WOLFGANG_HIP_ARCHITECTURES={architectures}",
     ]
     check_name = "HIP source build for gfx942"
     if requested:
@@ -1024,10 +1024,10 @@ def run_metal_source_build(env: dict[str, str] | None = None) -> None:
         [
             "-e",
             ".[test]",
-            "--config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON",
-            "--config-settings=cmake.define.FASTPAULI_ENABLE_CUDA=OFF",
-            "--config-settings=cmake.define.FASTPAULI_ENABLE_HIP=OFF",
-            "--config-settings=cmake.define.FASTPAULI_ENABLE_METAL=ON",
+            "--config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON",
+            "--config-settings=cmake.define.WOLFGANG_ENABLE_CUDA=OFF",
+            "--config-settings=cmake.define.WOLFGANG_ENABLE_HIP=OFF",
+            "--config-settings=cmake.define.WOLFGANG_ENABLE_METAL=ON",
         ]
     )
     run_check("Metal source build", command, env=env)
@@ -1078,7 +1078,7 @@ def run_editable_install_check() -> None:
                 "install",
                 "-e",
                 ".[test]",
-                "--config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON",
+                "--config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON",
             ],
             env=env,
         )
@@ -1094,7 +1094,7 @@ def run_editable_install_check() -> None:
                 "install",
                 "-e",
                 ".[test]",
-                "--config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON",
+                "--config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON",
             ],
             env=env,
         )

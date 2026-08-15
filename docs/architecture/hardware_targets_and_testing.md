@@ -70,24 +70,24 @@ If Phase 1 discovers a narrower minimum through actual CI or package-build evide
 CMake options should start with conservative defaults:
 
 ```text
-FASTPAULI_ENABLE_TBB=auto
-FASTPAULI_ENABLE_OPENMP=OFF
-FASTPAULI_ENABLE_AVX2=auto
-FASTPAULI_ENABLE_AVX512=auto
-FASTPAULI_ENABLE_ARM_NEON=auto
-FASTPAULI_ENABLE_ARM_SVE=auto
-FASTPAULI_ENABLE_NATIVE=OFF
-FASTPAULI_ENABLE_CUDA=OFF
+WOLFGANG_ENABLE_TBB=auto
+WOLFGANG_ENABLE_OPENMP=OFF
+WOLFGANG_ENABLE_AVX2=auto
+WOLFGANG_ENABLE_AVX512=auto
+WOLFGANG_ENABLE_ARM_NEON=auto
+WOLFGANG_ENABLE_ARM_SVE=auto
+WOLFGANG_ENABLE_NATIVE=OFF
+WOLFGANG_ENABLE_CUDA=OFF
 ```
 
 Rules:
 
 ```text
-FASTPAULI_ENABLE_NATIVE=ON is forbidden for release wheels
-FASTPAULI_ENABLE_TBB=auto may use oneTBB when found but must keep a scalar fallback
-FASTPAULI_ENABLE_AVX2=auto and FASTPAULI_ENABLE_AVX512=auto may compile dispatched objects only when the compiler supports them
-FASTPAULI_ENABLE_ARM_NEON=auto and FASTPAULI_ENABLE_ARM_SVE=auto may compile dispatched objects only when the compiler and target CPU support them
-FASTPAULI_ENABLE_CUDA=OFF must build without CUDA headers, libraries, or toolkit discovery
+WOLFGANG_ENABLE_NATIVE=ON is forbidden for release wheels
+WOLFGANG_ENABLE_TBB=auto may use oneTBB when found but must keep a scalar fallback
+WOLFGANG_ENABLE_AVX2=auto and WOLFGANG_ENABLE_AVX512=auto may compile dispatched objects only when the compiler supports them
+WOLFGANG_ENABLE_ARM_NEON=auto and WOLFGANG_ENABLE_ARM_SVE=auto may compile dispatched objects only when the compiler and target CPU support them
+WOLFGANG_ENABLE_CUDA=OFF must build without CUDA headers, libraries, or toolkit discovery
 ```
 
 The build must expose enough diagnostics to say which paths were compiled.
@@ -109,17 +109,17 @@ dispatch decisions are observable in benchmark environment capture
 The initial runtime control should be an environment variable or test helper with this shape:
 
 ```text
-FASTPAULI_CPU_BACKEND=auto
-FASTPAULI_CPU_BACKEND=scalar
-FASTPAULI_CPU_BACKEND=avx2
-FASTPAULI_CPU_BACKEND=avx512
-FASTPAULI_CPU_BACKEND=neon
+WOLFGANG_CPU_BACKEND=auto
+WOLFGANG_CPU_BACKEND=scalar
+WOLFGANG_CPU_BACKEND=avx2
+WOLFGANG_CPU_BACKEND=avx512
+WOLFGANG_CPU_BACKEND=neon
 ```
 
 Future SIMD extensions should use the same control surface. Planned selectors include:
 
 ```text
-FASTPAULI_CPU_BACKEND=sve
+WOLFGANG_CPU_BACKEND=sve
 ```
 
 If the final implementation chooses a Python API or C++ test hook instead, it must preserve the same semantics.
@@ -318,18 +318,18 @@ same Campaign 10-style schema before broadening release-support language.
 CUDA source builds should expose:
 
 ```text
-FASTPAULI_ENABLE_CUDA=ON/OFF
-FASTPAULI_CUDA_ARCHITECTURES=<semicolon-separated CMake CUDA architectures>
-FASTPAULI_CUDA_USE_CUB=ON
-FASTPAULI_CUDA_USE_THRUST=ON
+WOLFGANG_ENABLE_CUDA=ON/OFF
+WOLFGANG_CUDA_ARCHITECTURES=<semicolon-separated CMake CUDA architectures>
+WOLFGANG_CUDA_USE_CUB=ON
+WOLFGANG_CUDA_USE_THRUST=ON
 ```
 
 Default behavior:
 
 ```text
-FASTPAULI_ENABLE_CUDA=OFF for all normal CPU wheels
-FASTPAULI_ENABLE_CUDA=ON only when explicitly requested
-FASTPAULI_CUDA_ARCHITECTURES uses the documented source-build target set unless overridden
+WOLFGANG_ENABLE_CUDA=OFF for all normal CPU wheels
+WOLFGANG_ENABLE_CUDA=ON only when explicitly requested
+WOLFGANG_CUDA_ARCHITECTURES uses the documented source-build target set unless overridden
 native CUDA architecture detection is allowed only for local source builds, not release evidence
 ```
 
@@ -341,7 +341,7 @@ CUDA validation grows in this order:
 
 ```text
 L0 CPU-only no-CUDA build: CUDA headers and toolkit are not required
-L1 CUDA configure and compile: FASTPAULI_ENABLE_CUDA=ON builds with no runtime device required
+L1 CUDA configure and compile: WOLFGANG_ENABLE_CUDA=ON builds with no runtime device required
 L2 CUDA runtime smoke: device discovery, to_device, to_host, and skip messages work on any visible supported GPU
 L3 CPU/GPU equivalence: implemented CUDA operations match scalar CPU on representative datasets
 L4 sanitizer pass: compute-sanitizer or equivalent memory checks pass for CUDA kernels
@@ -433,7 +433,7 @@ It uses the existing MI300X lane for HIP-target regression and the existing
 NVIDIA lane for CUDA-target regression. It does not require a mixed NVIDIA+AMD
 host because the normal support boundary is target-specific builds: CPU-only,
 CUDA-target, HIP-target, and Apple Metal-target.
-`FASTPAULI_ENABLE_CUDA=ON` with `FASTPAULI_ENABLE_HIP=ON` remains a documented
+`WOLFGANG_ENABLE_CUDA=ON` with `WOLFGANG_ENABLE_HIP=ON` remains a documented
 configure-time rejection unless a later accepted mixed-runtime plan reopens
 that design.
 
@@ -457,7 +457,7 @@ The accepted Apple accelerator design decision is
 `docs/plans/apple_metal_mps_bringup_plan.md`. The reserved backend identity is
 `metal`; MPS and MPSGraph are optional implementation adjuncts or external
 baselines, not separate Wolfgang object backend identities. Metal remains
-source-build-only and target-specific behind `FASTPAULI_ENABLE_METAL=ON`.
+source-build-only and target-specific behind `WOLFGANG_ENABLE_METAL=ON`.
 The initial source tree provides status metadata, host/device transfers, and
 pairwise commutation with synchronous command-buffer completion. Metal is not
 release-supported until CPU/Metal equivalence tests and benchmark evidence pass

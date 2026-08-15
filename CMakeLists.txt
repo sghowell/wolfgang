@@ -10,24 +10,56 @@ project(
 include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
 
-option(FASTPAULI_ENABLE_CUDA "Build CUDA backend support" OFF)
-option(FASTPAULI_ENABLE_HIP "Build ROCm/HIP backend support" OFF)
-option(FASTPAULI_ENABLE_METAL "Build Apple Metal backend support" OFF)
-option(FASTPAULI_ENABLE_NATIVE "Allow native CPU tuning such as -march=native" OFF)
-option(FASTPAULI_ENABLE_OPENMP "Build OpenMP-enabled CPU paths" OFF)
-option(
+function(_wolfgang_cache_exists out_var cache_name)
+  get_property(_cache_type CACHE "${cache_name}" PROPERTY TYPE SET)
+  if(_cache_type)
+    set(${out_var} TRUE PARENT_SCOPE)
+  else()
+    set(${out_var} FALSE PARENT_SCOPE)
+  endif()
+endfunction()
+
+function(_wolfgang_bool_option canonical legacy doc default)
+  _wolfgang_cache_exists(_have_canonical "${canonical}")
+  _wolfgang_cache_exists(_have_legacy "${legacy}")
+  option(${canonical} "${doc}" ${default})
+  if(_have_legacy AND NOT _have_canonical)
+    set(${canonical} "${${legacy}}" CACHE BOOL "${doc}" FORCE)
+    message(DEPRECATION "${legacy} is deprecated; use ${canonical}.")
+  endif()
+  set(${legacy} "${${canonical}}" CACHE BOOL "Deprecated alias for ${canonical}" FORCE)
+endfunction()
+
+function(_wolfgang_string_option canonical legacy default doc)
+  _wolfgang_cache_exists(_have_canonical "${canonical}")
+  _wolfgang_cache_exists(_have_legacy "${legacy}")
+  set(${canonical} "${default}" CACHE STRING "${doc}")
+  if(_have_legacy AND NOT _have_canonical)
+    set(${canonical} "${${legacy}}" CACHE STRING "${doc}" FORCE)
+    message(DEPRECATION "${legacy} is deprecated; use ${canonical}.")
+  endif()
+  set(${legacy} "${${canonical}}" CACHE STRING "Deprecated alias for ${canonical}" FORCE)
+endfunction()
+
+_wolfgang_bool_option(WOLFGANG_ENABLE_CUDA FASTPAULI_ENABLE_CUDA "Build CUDA backend support" OFF)
+_wolfgang_bool_option(WOLFGANG_ENABLE_HIP FASTPAULI_ENABLE_HIP "Build ROCm/HIP backend support" OFF)
+_wolfgang_bool_option(WOLFGANG_ENABLE_METAL FASTPAULI_ENABLE_METAL "Build Apple Metal backend support" OFF)
+_wolfgang_bool_option(WOLFGANG_ENABLE_NATIVE FASTPAULI_ENABLE_NATIVE "Allow native CPU tuning such as -march=native" OFF)
+_wolfgang_bool_option(WOLFGANG_ENABLE_OPENMP FASTPAULI_ENABLE_OPENMP "Build OpenMP-enabled CPU paths" OFF)
+_wolfgang_bool_option(
+  WOLFGANG_ENABLE_INTERNAL_BINDINGS
   FASTPAULI_ENABLE_INTERNAL_BINDINGS
   "Expose unsupported research, benchmark, and test-only Python hooks"
   OFF)
-option(FASTPAULI_CUDA_USE_CUB "Allow CUDA code to use CUB primitives" ON)
-option(FASTPAULI_CUDA_USE_THRUST "Allow CUDA code to use Thrust primitives" ON)
-set(FASTPAULI_ENABLE_TBB "auto" CACHE STRING "Build oneTBB-enabled CPU paths: auto, ON, or OFF")
-set(FASTPAULI_ENABLE_AVX2 "auto" CACHE STRING "Build AVX2-dispatched CPU paths: auto, ON, or OFF")
-set(FASTPAULI_ENABLE_AVX512 "auto" CACHE STRING "Build AVX-512-dispatched CPU paths: auto, ON, or OFF")
-set(FASTPAULI_ENABLE_ARM_NEON "auto" CACHE STRING "Build ARM NEON-dispatched CPU paths: auto, ON, or OFF")
-set(FASTPAULI_ENABLE_ARM_SVE "auto" CACHE STRING "Build ARM SVE-dispatched CPU paths: auto, ON, or OFF")
-set(FASTPAULI_CUDA_ARCHITECTURES "80;86;89;90;100-real;120" CACHE STRING "CUDA architectures for FASTPAULI_ENABLE_CUDA=ON source builds")
-set(FASTPAULI_HIP_ARCHITECTURES "gfx942" CACHE STRING "HIP architectures for FASTPAULI_ENABLE_HIP=ON source builds")
+_wolfgang_bool_option(WOLFGANG_CUDA_USE_CUB FASTPAULI_CUDA_USE_CUB "Allow CUDA code to use CUB primitives" ON)
+_wolfgang_bool_option(WOLFGANG_CUDA_USE_THRUST FASTPAULI_CUDA_USE_THRUST "Allow CUDA code to use Thrust primitives" ON)
+_wolfgang_string_option(WOLFGANG_ENABLE_TBB FASTPAULI_ENABLE_TBB "auto" "Build oneTBB-enabled CPU paths: auto, ON, or OFF")
+_wolfgang_string_option(WOLFGANG_ENABLE_AVX2 FASTPAULI_ENABLE_AVX2 "auto" "Build AVX2-dispatched CPU paths: auto, ON, or OFF")
+_wolfgang_string_option(WOLFGANG_ENABLE_AVX512 FASTPAULI_ENABLE_AVX512 "auto" "Build AVX-512-dispatched CPU paths: auto, ON, or OFF")
+_wolfgang_string_option(WOLFGANG_ENABLE_ARM_NEON FASTPAULI_ENABLE_ARM_NEON "auto" "Build ARM NEON-dispatched CPU paths: auto, ON, or OFF")
+_wolfgang_string_option(WOLFGANG_ENABLE_ARM_SVE FASTPAULI_ENABLE_ARM_SVE "auto" "Build ARM SVE-dispatched CPU paths: auto, ON, or OFF")
+_wolfgang_string_option(WOLFGANG_CUDA_ARCHITECTURES FASTPAULI_CUDA_ARCHITECTURES "80;86;89;90;100-real;120" "CUDA architectures for WOLFGANG_ENABLE_CUDA=ON source builds")
+_wolfgang_string_option(WOLFGANG_HIP_ARCHITECTURES FASTPAULI_HIP_ARCHITECTURES "gfx942" "HIP architectures for WOLFGANG_ENABLE_HIP=ON source builds")
 
 set_property(CACHE FASTPAULI_ENABLE_TBB PROPERTY STRINGS auto ON OFF)
 set_property(CACHE FASTPAULI_ENABLE_AVX2 PROPERTY STRINGS auto ON OFF)
@@ -441,6 +473,7 @@ endif()
 target_compile_definitions(
   _wolfgang_core
   PRIVATE
+    WOLFGANG_ENABLE_INTERNAL_BINDINGS=$<BOOL:${WOLFGANG_ENABLE_INTERNAL_BINDINGS}>
     FASTPAULI_ENABLE_INTERNAL_BINDINGS=$<BOOL:${FASTPAULI_ENABLE_INTERNAL_BINDINGS}>
     FASTPAULI_BUILD_CUDA_ENABLED=${FASTPAULI_BUILD_CUDA_ENABLED}
     FASTPAULI_BUILD_CUDA_ARCHITECTURES="${FASTPAULI_BUILD_CUDA_ARCHITECTURES}"

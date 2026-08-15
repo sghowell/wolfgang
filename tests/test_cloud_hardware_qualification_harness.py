@@ -141,8 +141,8 @@ def test_blackwell_defaults_exclude_kepler_and_match_lane_targets() -> None:
     cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
 
     assert validate.DEFAULT_CUDA_ARCHITECTURES == "80,86,89,90,100-real,120"
-    assert 'set(FASTPAULI_CUDA_ARCHITECTURES "80;86;89;90;100-real;120" CACHE STRING' in cmake
-    assert 'set(FASTPAULI_CUDA_ARCHITECTURES "70;75;80;86;89;90" CACHE STRING' not in cmake
+    assert 'set(WOLFGANG_CUDA_ARCHITECTURES "80;86;89;90;100-real;120" CACHE STRING' in cmake
+    assert 'set(WOLFGANG_CUDA_ARCHITECTURES "70;75;80;86;89;90" CACHE STRING' not in cmake
 
 
 def test_harness_archive_mode_requires_explicit_source_identity(tmp_path: Path) -> None:

@@ -116,7 +116,7 @@ Backend selector values should be strings unless a stronger typed public enum is
 "auto"
 ```
 
-`"metal"` is source-build-only behind `FASTPAULI_ENABLE_METAL=ON` and follows
+`"metal"` is source-build-only behind `WOLFGANG_ENABLE_METAL=ON` and follows
 `docs/architecture/apple_accelerator.md`. CPU-only, CUDA-only, and HIP-only
 builds must reject explicit `"metal"` requests with rebuild guidance.
 
@@ -159,7 +159,7 @@ state whether source compatibility changed
 CUDA public behavior includes:
 
 ```text
-FASTPAULI_ENABLE_CUDA build option
+WOLFGANG_ENABLE_CUDA build option
 PauliSum.to_device(device=...)
 DevicePauliSum.to_host()
 DevicePauliSum.commutes_with_device(..., output=None)
@@ -247,9 +247,9 @@ full API review checklist before exposure.
 ROCm/HIP public behavior includes:
 
 ```text
-FASTPAULI_ENABLE_HIP build option
-FASTPAULI_HIP_ARCHITECTURES source-build target list
-FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON configure-time rejection
+WOLFGANG_ENABLE_HIP build option
+WOLFGANG_HIP_ARCHITECTURES source-build target list
+WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON configure-time rejection
 PauliSum.to_device(device=...) in HIP-only source builds
 DevicePauliSum.backend == "hip"
 DevicePauliSum.to_host()

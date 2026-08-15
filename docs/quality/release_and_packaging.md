@@ -143,7 +143,7 @@ sanitized derived evidence.
 CUDA release candidates additionally require:
 
 ```text
-FASTPAULI_ENABLE_CUDA=ON source build evidence
+WOLFGANG_ENABLE_CUDA=ON source build evidence
 CUDA runtime tests on at least one supported GPU
 CUDA toolkit, driver, host compiler, and GPU architecture evidence matches claimed support
 CPU-only build evidence without CUDA installed
@@ -168,12 +168,12 @@ can move out of unavailable status.
 ROCm source-build release-support evidence requires:
 
 ```text
-FASTPAULI_ENABLE_HIP=ON source build evidence
-FASTPAULI_HIP_ARCHITECTURES value matching the validated GPU architecture
+WOLFGANG_ENABLE_HIP=ON source build evidence
+WOLFGANG_HIP_ARCHITECTURES value matching the validated GPU architecture
 ROCm runtime, driver, toolkit, HIP compiler, GPU model, and gfx target evidence
 retained HIP operation tests for transfers, commutation, device-output consumers, simplify, expectation, and matmul
-CPU-only validation showing FASTPAULI_ENABLE_HIP=OFF does not require ROCm
-FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON configure-time rejection
+CPU-only validation showing WOLFGANG_ENABLE_HIP=OFF does not require ROCm
+WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON configure-time rejection
 target-specific build evidence rather than a mixed CUDA+HIP binary claim
 benchmark smoke with transfer-inclusive and device-resident or compact-consumer boundaries where applicable
 rocprof trace/stats evidence or a precise provider/tooling blocker
@@ -212,7 +212,7 @@ standard.
 
 The first bring-up report is
 `docs/benchmarks/reports/apple_metal_bringup_2026-05-01.md`. It records a
-successful `FASTPAULI_ENABLE_METAL=ON` source build and a local runtime blocker:
+successful `WOLFGANG_ENABLE_METAL=ON` source build and a local runtime blocker:
 the host reports an Apple M4 Pro GPU with Metal support through
 `system_profiler`, while `MTLCreateSystemDefaultDevice()` and
 `MTLCopyAllDevices()` return no visible Metal device in the Codex execution
@@ -221,12 +221,12 @@ context. That is not sufficient for a Metal source-build support claim.
 Release evidence for a Metal source-build claim must include:
 
 ```text
-FASTPAULI_ENABLE_METAL=ON source build command
+WOLFGANG_ENABLE_METAL=ON source build command
 named Apple Silicon SoC and Metal device
 macOS version
 Xcode or Command Line Tools version
-CPU-only validation with FASTPAULI_ENABLE_METAL=OFF on the same host
-FASTPAULI_ENABLE_METAL=ON with CUDA or HIP configure-time rejection
+CPU-only validation with WOLFGANG_ENABLE_METAL=OFF on the same host
+WOLFGANG_ENABLE_METAL=ON with CUDA or HIP configure-time rejection
 retained Metal operation tests for transfers, commutation, and compact consumers
 benchmark smoke with transfer-inclusive, device-resident, and host-materialized boundaries where applicable
 Instruments, Metal System Trace, xctrace, or a precise profiler tooling blocker

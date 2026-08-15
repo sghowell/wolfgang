@@ -36,11 +36,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/wolfgang-quantum/wolfgang"
-Documentation = "https://wolfgangquantum.com"
-Repository = "https://github.com/wolfgang-quantum/wolfgang.git"
-Issues = "https://github.com/wolfgang-quantum/wolfgang/issues"
-Changelog = "https://github.com/wolfgang-quantum/wolfgang/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/sghowell/wolfgang"
+Documentation = "https://sghowell.github.io/wolfgang/"
+Repository = "https://github.com/sghowell/wolfgang.git"
+Issues = "https://github.com/sghowell/wolfgang/issues"
+Changelog = "https://github.com/sghowell/wolfgang/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 openfermion = [
@@ -88,9 +88,13 @@ test-command = "python {project}/scripts/wheel_smoke.py"
 [tool.cibuildwheel.config-settings]
 "cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS" = "OFF"
 "cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS" = "OFF"
+"cmake.define.WOLFGANG_ENABLE_CUDA" = "OFF"
 "cmake.define.FASTPAULI_ENABLE_CUDA" = "OFF"
+"cmake.define.WOLFGANG_ENABLE_HIP" = "OFF"
 "cmake.define.FASTPAULI_ENABLE_HIP" = "OFF"
+"cmake.define.WOLFGANG_ENABLE_METAL" = "OFF"
 "cmake.define.FASTPAULI_ENABLE_METAL" = "OFF"
+"cmake.define.WOLFGANG_ENABLE_NATIVE" = "OFF"
 "cmake.define.FASTPAULI_ENABLE_NATIVE" = "OFF"
 
 [tool.cibuildwheel.linux]

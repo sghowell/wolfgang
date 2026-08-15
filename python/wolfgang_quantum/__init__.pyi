@@ -19,7 +19,6 @@ __all__ = [
     "DeviceCommutationMatrix",
     "DevicePauliSum",
     "WolfgangCapabilities",
-    "FastPauliCapabilities",
     "PauliSum",
     "__version__",
     "capabilities",
@@ -30,5 +29,3 @@ __all__ = [
     "metal_available",
     "metal_devices",
 ]
-
-FastPauliCapabilities = WolfgangCapabilities

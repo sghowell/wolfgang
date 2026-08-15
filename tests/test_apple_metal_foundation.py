@@ -64,7 +64,7 @@ def _run_cmake_configure_with_options(*options: str) -> subprocess.CompletedProc
             str(ROOT),
             "-B",
             str(build_dir),
-            "-DFASTPAULI_ENABLE_NATIVE=OFF",
+            "-DWOLFGANG_ENABLE_NATIVE=OFF",
             f"-DPython_EXECUTABLE={sys.executable}",
             *options,
         ],
@@ -104,29 +104,29 @@ def _multiword_label(num_qubits: int, positions: dict[int, str]) -> str:
 def test_cmake_declares_metal_flag_and_rejects_mixed_accelerators() -> None:
     cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
 
-    assert 'option(FASTPAULI_ENABLE_METAL "Build Apple Metal backend support" OFF)' in cmake
-    assert "FASTPAULI_ENABLE_CUDA and FASTPAULI_ENABLE_METAL cannot both be ON" in cmake
-    assert "FASTPAULI_ENABLE_HIP and FASTPAULI_ENABLE_METAL cannot both be ON" in cmake
+    assert 'option(WOLFGANG_ENABLE_METAL "Build Apple Metal backend support" OFF)' in cmake
+    assert "WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_METAL cannot both be ON" in cmake
+    assert "WOLFGANG_ENABLE_HIP and WOLFGANG_ENABLE_METAL cannot both be ON" in cmake
 
     cuda_mix = _run_cmake_configure_with_options(
-        "-DFASTPAULI_ENABLE_CUDA=ON",
-        "-DFASTPAULI_ENABLE_METAL=ON",
-        "-DFASTPAULI_ENABLE_TBB=OFF",
+        "-DWOLFGANG_ENABLE_CUDA=ON",
+        "-DWOLFGANG_ENABLE_METAL=ON",
+        "-DWOLFGANG_ENABLE_TBB=OFF",
     )
     assert cuda_mix.returncode != 0
     assert (
-        "FASTPAULI_ENABLE_CUDA and FASTPAULI_ENABLE_METAL cannot both be ON"
+        "WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_METAL cannot both be ON"
         in cuda_mix.stdout + cuda_mix.stderr
     )
 
     hip_mix = _run_cmake_configure_with_options(
-        "-DFASTPAULI_ENABLE_HIP=ON",
-        "-DFASTPAULI_ENABLE_METAL=ON",
-        "-DFASTPAULI_ENABLE_TBB=OFF",
+        "-DWOLFGANG_ENABLE_HIP=ON",
+        "-DWOLFGANG_ENABLE_METAL=ON",
+        "-DWOLFGANG_ENABLE_TBB=OFF",
     )
     assert hip_mix.returncode != 0
     assert (
-        "FASTPAULI_ENABLE_HIP and FASTPAULI_ENABLE_METAL cannot both be ON"
+        "WOLFGANG_ENABLE_HIP and WOLFGANG_ENABLE_METAL cannot both be ON"
         in hip_mix.stdout + hip_mix.stderr
     )
 

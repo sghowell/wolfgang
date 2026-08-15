@@ -134,7 +134,7 @@ Once lower bounds are validated, optional dependency versions should be declared
 CUDA tests are split by availability:
 
 ```text
-CUDA build tests: require FASTPAULI_ENABLE_CUDA=ON
+CUDA build tests: require WOLFGANG_ENABLE_CUDA=ON
 CUDA runtime tests: require a visible CUDA device
 CUDA interop tests: require a supported __cuda_array_interface__ provider
 ```
@@ -190,7 +190,7 @@ Phase 1 should add CPU CI. Required CPU jobs:
 Linux CPU, Python minimum supported version
 Linux CPU, Python latest supported version
 macOS CPU, Python latest supported version
-portable scalar build with FASTPAULI_ENABLE_NATIVE=OFF
+portable scalar build with WOLFGANG_ENABLE_NATIVE=OFF
 source distribution and CPU wheel build/import smoke once release-candidate foundation lands
 ```
 

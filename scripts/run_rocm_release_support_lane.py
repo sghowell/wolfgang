@@ -15,8 +15,8 @@ LOG_ROOT = f"{DATA_ROOT}/logs"
 PROFILER_ROOT = f"{DATA_ROOT}/profiler"
 ROCM_PATH = "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH"
 HIP_BUILD_FLAGS = (
-    "--config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON "
-    "--config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942"
+    "--config-settings=cmake.define.WOLFGANG_ENABLE_HIP=ON "
+    "--config-settings=cmake.define.WOLFGANG_HIP_ARCHITECTURES=gfx942"
 )
 
 
@@ -79,7 +79,7 @@ def lane_commands() -> list[LaneCommand]:
             purpose="Validate the CUDA+HIP configure-time rejection.",
             command=(
                 f"{python} -m cmake -S . -B /tmp/fastpauli-campaign7-cuda-hip-reject "
-                "-DFASTPAULI_ENABLE_CUDA=ON -DFASTPAULI_ENABLE_HIP=ON "
+                "-DWOLFGANG_ENABLE_CUDA=ON -DWOLFGANG_ENABLE_HIP=ON "
                 f"> {LOG_ROOT}/cuda_hip_rejection.log 2>&1; "
                 f"status=$?; echo exit_code=$status >> {LOG_ROOT}/cuda_hip_rejection.log; "
                 f"test $status -ne 0; "
@@ -152,7 +152,7 @@ def render_text(commands: list[LaneCommand]) -> str:
         "# FastPauli ROCm Campaign 7 Release-Support Lane",
         "",
         f"evidence_root: {DATA_ROOT}",
-        "hip_environment: FASTPAULI_ENABLE_HIP=ON FASTPAULI_HIP_ARCHITECTURES=gfx942",
+        "hip_environment: WOLFGANG_ENABLE_HIP=ON WOLFGANG_HIP_ARCHITECTURES=gfx942",
         "",
     ]
     for index, item in enumerate(commands, start=1):

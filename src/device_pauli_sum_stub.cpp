@@ -1,4 +1,4 @@
-#include "fastpauli/device_pauli_sum.hpp"
+#include "wolfgang/device_pauli_sum.hpp"
 
 #include <cstddef>
 #include <memory>

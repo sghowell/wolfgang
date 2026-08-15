@@ -45,12 +45,14 @@ def test_release_builds_explicitly_disable_internal_bindings() -> None:
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     policy = ROOT / "docs/quality/python_binding_policy.md"
 
-    assert "FASTPAULI_ENABLE_INTERNAL_BINDINGS" in cmake
+    assert "WOLFGANG_ENABLE_INTERNAL_BINDINGS" in cmake
+    assert "WOLFGANG_ENABLE_INTERNAL_BINDINGS" in cmake
     assert re.search(
-        r"option\(\s*FASTPAULI_ENABLE_INTERNAL_BINDINGS[\s\S]*?\sOFF\)", cmake
+        r"option\(\s*WOLFGANG_ENABLE_INTERNAL_BINDINGS[\s\S]*?\sOFF\)", cmake
     )
     assert "bindings/python/internal_bindings.cpp" in cmake
-    assert '"cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS" = "OFF"' in pyproject
+    assert '"cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS" = "OFF"' in pyproject
+    assert '"cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS" = "OFF"' in pyproject
     assert policy.is_file()
     policy_text = policy.read_text(encoding="utf-8")
     assert "unsupported" in policy_text.lower()

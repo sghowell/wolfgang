@@ -90,8 +90,8 @@ scripts/validate.py
 .github/workflows/ci.yml
 tests/ for import and minimal PauliSum scaffold
 repo contract checks for docs links and source layout
-CPU-only build validation with FASTPAULI_ENABLE_CUDA=OFF
-portable scalar build validation with FASTPAULI_ENABLE_NATIVE=OFF
+CPU-only build validation with WOLFGANG_ENABLE_CUDA=OFF
+portable scalar build validation with WOLFGANG_ENABLE_NATIVE=OFF
 review-policy existence and closeout checklist validation
 ```
 

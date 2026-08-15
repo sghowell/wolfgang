@@ -59,11 +59,11 @@ def test_project_metadata_exposes_public_project_urls() -> None:
     urls = project_metadata()["urls"]
 
     assert urls == {
-        "Homepage": "https://github.com/wolfgang-quantum/wolfgang",
-        "Documentation": "https://wolfgangquantum.com",
-        "Repository": "https://github.com/wolfgang-quantum/wolfgang.git",
-        "Issues": "https://github.com/wolfgang-quantum/wolfgang/issues",
-        "Changelog": "https://github.com/wolfgang-quantum/wolfgang/blob/main/CHANGELOG.md",
+        "Homepage": "https://github.com/sghowell/wolfgang",
+        "Documentation": "https://sghowell.github.io/wolfgang/",
+        "Repository": "https://github.com/sghowell/wolfgang.git",
+        "Issues": "https://github.com/sghowell/wolfgang/issues",
+        "Changelog": "https://github.com/sghowell/wolfgang/blob/main/CHANGELOG.md",
     }
 
 
@@ -142,7 +142,7 @@ def test_release_workflow_audits_the_exact_artifacts_before_attestation() -> Non
     assert workflow.index("Audit wheels before upload") < workflow.index(
         "Upload wheel artifacts"
     )
-    assert "cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=OFF" in workflow
+    assert "cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=OFF" in workflow
 
 
 def test_ci_and_release_jobs_are_bounded() -> None:

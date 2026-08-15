@@ -1,8 +1,8 @@
 site_name: Wolfgang
 site_description: Packed Pauli algebra and evidence-driven accelerator kernels
-site_url: https://wolfgangquantum.com/
-repo_url: https://github.com/wolfgang-quantum/wolfgang
-repo_name: wolfgang-quantum/wolfgang
+site_url: https://sghowell.github.io/wolfgang/
+repo_url: https://github.com/sghowell/wolfgang
+repo_name: sghowell/wolfgang
 edit_uri: edit/main/docs/
 strict: true
 
