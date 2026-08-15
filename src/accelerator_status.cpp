@@ -1,4 +1,4 @@
-#include "fastpauli/accelerator_status.hpp"
+#include "wolfgang/accelerator_status.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -47,20 +47,20 @@ AcceleratorBackend accelerator_backend_from_name(std::string_view backend) {
 
 std::string accelerator_not_built_message(AcceleratorBackend backend) {
   if (backend == AcceleratorBackend::Cuda) {
-    return "FastPauli was built without CUDA support; rebuild from source with "
-           "FASTPAULI_ENABLE_CUDA=ON to use PauliSum.to_device().";
+    return "Wolfgang was built without CUDA support; rebuild from source with "
+           "WOLFGANG_ENABLE_CUDA=ON to use PauliSum.to_device().";
   }
   if (backend == AcceleratorBackend::Hip) {
-    return "FastPauli was built without HIP support; rebuild from source with "
-           "FASTPAULI_ENABLE_HIP=ON to use PauliSum.to_device().";
+    return "Wolfgang was built without HIP support; rebuild from source with "
+           "WOLFGANG_ENABLE_HIP=ON to use PauliSum.to_device().";
   }
   if (backend == AcceleratorBackend::Metal) {
-    return "FastPauli was built without Metal support; rebuild from source on Apple Silicon with "
-           "FASTPAULI_ENABLE_METAL=ON to use PauliSum.to_device().";
+    return "Wolfgang was built without Metal support; rebuild from source on Apple Silicon with "
+           "WOLFGANG_ENABLE_METAL=ON to use PauliSum.to_device().";
   }
-  return "FastPauli was built without CUDA, HIP, or Metal accelerator support; rebuild from "
-         "source with FASTPAULI_ENABLE_CUDA=ON, FASTPAULI_ENABLE_HIP=ON, or "
-         "FASTPAULI_ENABLE_METAL=ON to use PauliSum.to_device().";
+  return "Wolfgang was built without CUDA, HIP, or Metal accelerator support; rebuild from "
+         "source with WOLFGANG_ENABLE_CUDA=ON, WOLFGANG_ENABLE_HIP=ON, or "
+         "WOLFGANG_ENABLE_METAL=ON to use PauliSum.to_device().";
 }
 
 AcceleratorBackend select_accelerator_backend(

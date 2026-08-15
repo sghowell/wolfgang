@@ -7,7 +7,7 @@ CUDA is a required Wolfgang backend milestone. CPU correctness still comes first
 Wolfgang ships a CPU backend for every supported build. CUDA support is a required product milestone implemented behind an explicit build option:
 
 ```text
-FASTPAULI_ENABLE_CUDA=ON
+WOLFGANG_ENABLE_CUDA=ON
 ```
 
 CPU wheels remain the default distribution. CUDA wheels are a separate release artifact after source-build CUDA support is stable.
@@ -16,8 +16,8 @@ CUDA is the first GPU backend. ROCm/HIP and Metal/MPS are not part of the CUDA m
 
 Backend-neutral accelerator APIs are governed by
 `docs/architecture/backend_neutral_accelerators.md`. Current builds remain
-target-specific: CUDA-only or HIP-only. `FASTPAULI_ENABLE_CUDA=ON` with
-`FASTPAULI_ENABLE_HIP=ON` is deliberately rejected under the target-specific
+target-specific: CUDA-only or HIP-only. `WOLFGANG_ENABLE_CUDA=ON` with
+`WOLFGANG_ENABLE_HIP=ON` is deliberately rejected under the target-specific
 accelerator policy unless a future accepted mixed-runtime plan changes that
 boundary. The implementation handoff is complete in
 `docs/plans/backend_neutral_accelerator_campaign9_plan.md`, with closeout
@@ -40,7 +40,7 @@ Host compilers: platform compilers supported by the selected CUDA toolkit
 GPU architectures: documented compile/runtime targets from the hardware target policy
 ```
 
-The first CUDA implementation must build with `FASTPAULI_ENABLE_CUDA=OFF` and `FASTPAULI_ENABLE_CUDA=ON` from the same source tree. CPU-only builds must not include CUDA headers in public CPU-only headers.
+The first CUDA implementation must build with `WOLFGANG_ENABLE_CUDA=OFF` and `WOLFGANG_ENABLE_CUDA=ON` from the same source tree. CPU-only builds must not include CUDA headers in public CPU-only headers.
 
 CUDA 13.x is a forward-compatibility lane after CUDA 12.x source builds are stable. Do not move the baseline to CUDA 13.x without updating the Volta `sm_70` policy in `docs/architecture/hardware_targets_and_testing.md`.
 

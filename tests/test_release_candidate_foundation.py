@@ -72,9 +72,9 @@ def test_release_candidate_foundation_plan_defines_cpu_artifact_gate() -> None:
         "CPU source distribution",
         "CPU wheel",
         "clean virtual environment",
-        "FASTPAULI_ENABLE_CUDA=OFF",
-        "FASTPAULI_ENABLE_HIP=OFF",
-        "FASTPAULI_ENABLE_NATIVE=OFF",
+        "WOLFGANG_ENABLE_CUDA=OFF",
+        "WOLFGANG_ENABLE_HIP=OFF",
+        "WOLFGANG_ENABLE_NATIVE=OFF",
         "scripts/validate_release_artifacts.py",
         "CHANGELOG.md",
         "docs/release/0.1.0-rc1.md",
@@ -91,9 +91,9 @@ def test_release_artifact_ci_job_is_declared() -> None:
     assert "scripts/validate_release_artifacts.py" in ci
     assert "ubuntu-latest" in ci
     assert "macos-latest" in ci
-    assert "FASTPAULI_ENABLE_CUDA: \"OFF\"" in ci
-    assert "FASTPAULI_ENABLE_HIP: \"OFF\"" in ci
-    assert "FASTPAULI_ENABLE_NATIVE: \"OFF\"" in ci
+    assert "WOLFGANG_ENABLE_CUDA: \"OFF\"" in ci
+    assert "WOLFGANG_ENABLE_HIP: \"OFF\"" in ci
+    assert "WOLFGANG_ENABLE_NATIVE: \"OFF\"" in ci
     assert "python -m pip install --upgrade pip build cmake ninja" in ci
 
 

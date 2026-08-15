@@ -21,7 +21,7 @@ void require_simd_commutation_words(std::string_view backend, std::size_t words)
     return;
   }
   throw std::runtime_error(
-      "FASTPAULI_CPU_BACKEND=" + std::string(backend) +
+      "WOLFGANG_CPU_BACKEND=" + std::string(backend) +
       " supports commutation kernels only for packed widths of 1 or 2 uint64 words; got " +
       std::to_string(words) + " words");
 }

@@ -19,10 +19,10 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
 import numpy as np
-from fastpauli import PauliSum
+import wolfgang_quantum as wolfgang
+import wolfgang_quantum._wolfgang_core as core
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -119,15 +119,15 @@ def _require_supported_cupy_runtime_for_current_cuda_architecture(cupy: Any) -> 
 
 @contextmanager
 def forced_cpu_backend(selector: str):
-    previous = os.environ.get("FASTPAULI_CPU_BACKEND")
-    os.environ["FASTPAULI_CPU_BACKEND"] = selector
+    previous = os.environ.get("WOLFGANG_CPU_BACKEND")
+    os.environ["WOLFGANG_CPU_BACKEND"] = selector
     try:
         yield
     finally:
         if previous is None:
-            os.environ.pop("FASTPAULI_CPU_BACKEND", None)
+            os.environ.pop("WOLFGANG_CPU_BACKEND", None)
         else:
-            os.environ["FASTPAULI_CPU_BACKEND"] = previous
+            os.environ["WOLFGANG_CPU_BACKEND"] = previous
 
 
 @contextmanager
@@ -214,7 +214,9 @@ def campaign4_materialization_target_for_case(name: str) -> str:
     return "none"
 
 
-def campaign4_workspace_fields_for_case(name: str, dataset: dict[str, Any] | None) -> dict[str, Any]:
+def campaign4_workspace_fields_for_case(
+    name: str, dataset: dict[str, Any] | None
+) -> dict[str, Any]:
     temporary_storage = (
         _temporary_storage_estimate(name, dataset)
         if dataset is not None
@@ -230,7 +232,9 @@ def campaign4_workspace_fields_for_case(name: str, dataset: dict[str, Any] | Non
         "simplify_duplicate_pressure",
         "matmul_product_generation_simplify",
     }:
-        unavailable_reason = "CUB run-length duplicate reduction was not implemented; row uses production fallback"
+        unavailable_reason = (
+            "CUB run-length duplicate reduction was not implemented; row uses production fallback"
+        )
     elif (
         strategy != "thrust_default"
         and cub_strategy == "none"
@@ -370,7 +374,9 @@ def add_campaign8_row_schema_fields(
     result["compiled_architectures"] = str(build_info.get("cuda_architectures", ""))
     result["gpu_name"] = gpu_name
     result["gpu_compute_capability"] = gpu_compute_capability
-    for field, value in campaign8_statuses_for_mode(mode, cuda_unavailable=cuda_unavailable).items():
+    for field, value in campaign8_statuses_for_mode(
+        mode, cuda_unavailable=cuda_unavailable
+    ).items():
         result[field] = value
     result.setdefault("correctness_digest", {})
 
@@ -512,7 +518,9 @@ def _temporary_storage_estimate(name: str, dataset: dict[str, Any]) -> dict[str,
     }
 
 
-def campaign2_instrumentation_for_case(name: str, dataset: dict[str, Any] | None = None) -> dict[str, Any]:
+def campaign2_instrumentation_for_case(
+    name: str, dataset: dict[str, Any] | None = None
+) -> dict[str, Any]:
     materialization_by_case = {
         "simplify_duplicate_pressure": "device-resident sparse Pauli buffers returned as DevicePauliSum",
         "statevector_expectation": "host scalar complex result copied from device accumulator",
@@ -560,7 +568,9 @@ def campaign2_instrumentation_for_case(name: str, dataset: dict[str, Any] | None
             }
         ),
         "cuda_stream_mode": "default_stream_synchronize_before_return",
-        "result_materialization": materialization_by_case.get(name, "operation-specific public result"),
+        "result_materialization": materialization_by_case.get(
+            name, "operation-specific public result"
+        ),
         "duplicate_survivor_count": (dataset or {}).get("survivor_count"),
     }
     instrumentation.update(campaign4_fields)
@@ -703,24 +713,16 @@ def case_result(
             "cpu_scalar_p90_seconds": cpu_timing["p90"],
             "cpu_scalar_max_seconds": cpu_timing["max"],
             "cpu_optimized_min_seconds": (
-                best_cpu_optimized_timing["min"]
-                if best_cpu_optimized_timing is not None
-                else None
+                best_cpu_optimized_timing["min"] if best_cpu_optimized_timing is not None else None
             ),
             "cpu_optimized_p10_seconds": (
-                best_cpu_optimized_timing["p10"]
-                if best_cpu_optimized_timing is not None
-                else None
+                best_cpu_optimized_timing["p10"] if best_cpu_optimized_timing is not None else None
             ),
             "cpu_optimized_p90_seconds": (
-                best_cpu_optimized_timing["p90"]
-                if best_cpu_optimized_timing is not None
-                else None
+                best_cpu_optimized_timing["p90"] if best_cpu_optimized_timing is not None else None
             ),
             "cpu_optimized_max_seconds": (
-                best_cpu_optimized_timing["max"]
-                if best_cpu_optimized_timing is not None
-                else None
+                best_cpu_optimized_timing["max"] if best_cpu_optimized_timing is not None else None
             ),
             "cuda_transfer_inclusive_min_seconds": cuda_transfer_timing["min"],
             "cuda_transfer_inclusive_p10_seconds": cuda_transfer_timing["p10"],
@@ -847,7 +849,7 @@ def timed_public_device_output_reuse_cuda_commutation(
     warmup: int,
     repeat: int,
 ) -> dict[str, float]:
-    output = fastpauli.DeviceCommutationMatrix.empty(
+    output = wolfgang.DeviceCommutationMatrix.empty(
         (lhs_device.num_terms, rhs_device.num_terms),
         device=lhs_device.device,
     )
@@ -940,8 +942,12 @@ def timed_public_device_output_consumer_cuda_commutation(
     )
     _assert_device_commutation_counts_match(output, expected)
     _, total_timing = timed_call(output.count_commuting, warmup=warmup, repeat=repeat)
-    _, axis0_timing = timed_call(lambda: output.count_commuting(axis=0), warmup=warmup, repeat=repeat)
-    _, axis1_timing = timed_call(lambda: output.count_commuting(axis=1), warmup=warmup, repeat=repeat)
+    _, axis0_timing = timed_call(
+        lambda: output.count_commuting(axis=0), warmup=warmup, repeat=repeat
+    )
+    _, axis1_timing = timed_call(
+        lambda: output.count_commuting(axis=1), warmup=warmup, repeat=repeat
+    )
     return {
         "total": total_timing,
         "axis0": axis0_timing,
@@ -1007,7 +1013,9 @@ def timed_cupy_device_output_consumer_cuda_commutation(
             warmup=warmup,
             repeat=repeat,
         )
-        dense_host, dense_host_timing = timed_call(lambda: cupy.asnumpy(view), warmup=warmup, repeat=repeat)
+        dense_host, dense_host_timing = timed_call(
+            lambda: cupy.asnumpy(view), warmup=warmup, repeat=repeat
+        )
     except Exception as exc:
         if _cupy_compile_error_indicates_unsupported_cuda_architecture(
             exc,
@@ -1145,7 +1153,9 @@ def timed_cupy_dlpack_consumer_cuda_commutation(
             warmup=warmup,
             repeat=repeat,
         )
-        dense_host, dense_host_timing = timed_call(lambda: cupy.asnumpy(view), warmup=warmup, repeat=repeat)
+        dense_host, dense_host_timing = timed_call(
+            lambda: cupy.asnumpy(view), warmup=warmup, repeat=repeat
+        )
     except Exception as exc:
         if _cupy_compile_error_indicates_unsupported_cuda_architecture(
             exc,
@@ -1164,7 +1174,9 @@ def timed_cupy_dlpack_consumer_cuda_commutation(
     if int(total) != int(expected_uint64.sum()):
         raise RuntimeError("CuPy DLPack DeviceCommutationMatrix total differs from CPU output")
     if not np.array_equal(dense_host.astype(np.bool_), np.asarray(expected, dtype=np.bool_)):
-        raise RuntimeError("CuPy DLPack DeviceCommutationMatrix dense host copy differs from CPU output")
+        raise RuntimeError(
+            "CuPy DLPack DeviceCommutationMatrix dense host copy differs from CPU output"
+        )
 
     return {
         "available": True,
@@ -1249,7 +1261,9 @@ def timed_torch_dlpack_consumer_cuda_commutation(
     if int(total) != int(expected_uint64.sum()):
         raise RuntimeError("PyTorch DLPack DeviceCommutationMatrix total differs from CPU output")
     if not np.array_equal(dense_host.astype(np.bool_), np.asarray(expected, dtype=np.bool_)):
-        raise RuntimeError("PyTorch DLPack DeviceCommutationMatrix dense host copy differs from CPU output")
+        raise RuntimeError(
+            "PyTorch DLPack DeviceCommutationMatrix dense host copy differs from CPU output"
+        )
 
     return {
         "available": True,
@@ -1343,9 +1357,7 @@ def timed_private_fused_consumer_cuda_commutation(
         "grouping_summary_report": grouping_report,
         "bitpacked_report": bitpacked_report,
         "edge_count": expected_edge_count,
-        "conflict_summary_to_host_bytes": int(
-            degree_report["output_sizes"]["host_bytes"]
-        ),
+        "conflict_summary_to_host_bytes": int(degree_report["output_sizes"]["host_bytes"]),
     }
 
 
@@ -1601,9 +1613,7 @@ def add_public_conflict_degrees_timing_fields(
         result["results"][f"{prefix}_min_seconds"] = raw_timing["min"]
         result["results"][f"{prefix}_max_seconds"] = raw_timing["max"]
 
-    result["results"]["conflict_degrees_compact_host_bytes"] = int(
-        timing["compact_host_bytes"]
-    )
+    result["results"]["conflict_degrees_compact_host_bytes"] = int(timing["compact_host_bytes"])
     result["results"]["dense_to_host_plus_numpy_conflicts_host_bytes"] = int(
         timing["dense_host_bytes"]
     )
@@ -1620,13 +1630,11 @@ def add_cupy_dlpack_consumer_timing_fields(
     timing: dict[str, Any],
 ) -> None:
     result["results"]["cupy_dlpack_consumer_available"] = bool(timing["available"])
-    result["results"]["cupy_dlpack_consumer_unavailable_reason"] = timing[
-        "unavailable_reason"
-    ]
+    result["results"]["cupy_dlpack_consumer_unavailable_reason"] = timing["unavailable_reason"]
     result["instrumentation"]["cupy_dlpack_consumer"] = {
         "status": "available" if timing["available"] else "unavailable",
         "timing_boundary": "CuPy consumer through DeviceCommutationMatrix.__dlpack__",
-        "ownership": "DLPack capsule is single-consumer; FastPauli owner is retained by deleter context",
+        "ownership": "DLPack capsule is single-consumer; Wolfgang owner is retained by deleter context",
     }
     if not timing["available"]:
         return
@@ -1649,18 +1657,15 @@ def add_torch_dlpack_consumer_timing_fields(
     timing: dict[str, Any],
 ) -> None:
     result["results"]["torch_dlpack_consumer_available"] = bool(timing["available"])
-    result["results"]["torch_dlpack_consumer_unavailable_reason"] = timing[
-        "unavailable_reason"
-    ]
+    result["results"]["torch_dlpack_consumer_unavailable_reason"] = timing["unavailable_reason"]
     result["results"]["torch_version"] = timing.get("torch_version")
     result["results"]["torch_cuda_version"] = timing.get("torch_cuda_version")
     result["instrumentation"]["torch_dlpack_consumer"] = {
         "status": "available" if timing["available"] else "unavailable",
         "timing_boundary": (
-            "PyTorch CUDA consumer through DeviceCommutationMatrix.__dlpack__"
-            "(max_version=(1, 0))"
+            "PyTorch CUDA consumer through DeviceCommutationMatrix.__dlpack__(max_version=(1, 0))"
         ),
-        "ownership": "DLPack capsule is single-consumer; FastPauli owner is retained by deleter context",
+        "ownership": "DLPack capsule is single-consumer; Wolfgang owner is retained by deleter context",
     }
     if not timing["available"]:
         return
@@ -1713,7 +1718,7 @@ def add_private_fused_consumer_timing_fields(
     result["results"]["bitpacked_decision_status"] = bitpacked_status
     result["instrumentation"]["campaign7_fused_consumer"] = {
         "status": "private_benchmark_only",
-        "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_fused_commutation_consumer",
+        "private_hook": "wolfgang._wolfgang_core._benchmark_cuda_fused_commutation_consumer",
         "modes": [
             "csr_anticommutation_graph",
             "conflict_degrees",
@@ -1802,7 +1807,7 @@ def add_campaign8_device_resident_consumer_timing_fields(
     result["correctness_digest"] = dict(graph_report["correctness_digest"])
     result["instrumentation"]["campaign8_device_resident_consumer"] = {
         "status": "private_benchmark_only",
-        "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+        "private_hook": "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer",
         "mode": mode,
         "device_resident_graph_status": result["device_resident_graph_status"],
         "public_grouping_api_status": result["public_grouping_api_status"],
@@ -2193,7 +2198,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "cuda_status": cuda_status,
         "timing_policy": {
@@ -2210,7 +2215,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         },
         "correctness_checks": {
             "enabled": True,
-            "reference": "FastPauli scalar CPU output on the same deterministic datasets",
+            "reference": "Wolfgang scalar CPU output on the same deterministic datasets",
             "failure_mode": "raises RuntimeError if CPU/GPU outputs differ",
         },
         "cases": [],

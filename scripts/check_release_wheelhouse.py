@@ -102,10 +102,10 @@ def check_pyproject_text(failures: list[str]) -> None:
         'build = ["cp310-*", "cp311-*", "cp312-*"]',
         'skip = ["*-win32", "*-win_amd64", "*-win_arm64", "*-musllinux*", "pp*"]',
         'test-command = "python {project}/scripts/wheel_smoke.py"',
-        '"cmake.define.FASTPAULI_ENABLE_CUDA" = "OFF"',
-        '"cmake.define.FASTPAULI_ENABLE_HIP" = "OFF"',
-        '"cmake.define.FASTPAULI_ENABLE_METAL" = "OFF"',
-        '"cmake.define.FASTPAULI_ENABLE_NATIVE" = "OFF"',
+        '"cmake.define.WOLFGANG_ENABLE_CUDA" = "OFF"',
+        '"cmake.define.WOLFGANG_ENABLE_HIP" = "OFF"',
+        '"cmake.define.WOLFGANG_ENABLE_METAL" = "OFF"',
+        '"cmake.define.WOLFGANG_ENABLE_NATIVE" = "OFF"',
         "[tool.cibuildwheel.linux]",
         'archs = ["x86_64"]',
         "[tool.cibuildwheel.macos]",
@@ -218,10 +218,10 @@ def check_pyproject(
 
     config = cibw.get("config-settings", {})
     for name in (
-        "FASTPAULI_ENABLE_CUDA",
-        "FASTPAULI_ENABLE_HIP",
-        "FASTPAULI_ENABLE_METAL",
-        "FASTPAULI_ENABLE_NATIVE",
+        "WOLFGANG_ENABLE_CUDA",
+        "WOLFGANG_ENABLE_HIP",
+        "WOLFGANG_ENABLE_METAL",
+        "WOLFGANG_ENABLE_NATIVE",
     ):
         key = f"cmake.define.{name}"
         require(config.get(key) == "OFF", f"cibuildwheel config-setting {key}=OFF is required", failures)

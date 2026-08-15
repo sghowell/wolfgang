@@ -58,10 +58,14 @@ def cmake_executable_for_build() -> str | None:
 
 def cpu_safe_build_env() -> dict[str, str]:
     env = os.environ.copy()
-    env["FASTPAULI_ENABLE_CUDA"] = "OFF"
-    env["FASTPAULI_ENABLE_HIP"] = "OFF"
-    env["FASTPAULI_ENABLE_METAL"] = "OFF"
-    env["FASTPAULI_ENABLE_NATIVE"] = "OFF"
+    env["WOLFGANG_ENABLE_CUDA"] = "OFF"
+    env["WOLFGANG_ENABLE_CUDA"] = "OFF"
+    env["WOLFGANG_ENABLE_HIP"] = "OFF"
+    env["WOLFGANG_ENABLE_HIP"] = "OFF"
+    env["WOLFGANG_ENABLE_METAL"] = "OFF"
+    env["WOLFGANG_ENABLE_METAL"] = "OFF"
+    env["WOLFGANG_ENABLE_NATIVE"] = "OFF"
+    env["WOLFGANG_ENABLE_NATIVE"] = "OFF"
 
     cmake_executable = cmake_executable_for_build()
     if cmake_executable is not None:
@@ -87,13 +91,13 @@ def build_artifact_command(output_dir: Path, *, python_executable: str) -> list[
         "--outdir",
         str(output_dir),
         "--config-setting",
-        "cmake.define.FASTPAULI_ENABLE_CUDA=OFF",
+        "cmake.define.WOLFGANG_ENABLE_CUDA=OFF",
         "--config-setting",
-        "cmake.define.FASTPAULI_ENABLE_HIP=OFF",
+        "cmake.define.WOLFGANG_ENABLE_HIP=OFF",
         "--config-setting",
-        "cmake.define.FASTPAULI_ENABLE_METAL=OFF",
+        "cmake.define.WOLFGANG_ENABLE_METAL=OFF",
         "--config-setting",
-        "cmake.define.FASTPAULI_ENABLE_NATIVE=OFF",
+        "cmake.define.WOLFGANG_ENABLE_NATIVE=OFF",
     ]
 
 

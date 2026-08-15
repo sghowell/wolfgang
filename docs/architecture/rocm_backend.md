@@ -38,17 +38,17 @@ public stream, graph, or external workspace APIs
 HIP support is disabled by default:
 
 ```text
-FASTPAULI_ENABLE_HIP=OFF
+WOLFGANG_ENABLE_HIP=OFF
 ```
 
 The first MI300X source-build target is:
 
 ```text
-FASTPAULI_ENABLE_HIP=ON
-FASTPAULI_HIP_ARCHITECTURES=gfx942
+WOLFGANG_ENABLE_HIP=ON
+WOLFGANG_HIP_ARCHITECTURES=gfx942
 ```
 
-`FASTPAULI_ENABLE_HIP=ON` is a source-build path. It must not imply binary wheel
+`WOLFGANG_ENABLE_HIP=ON` is a source-build path. It must not imply binary wheel
 support, portable ROCm runtime availability, or support for every AMD GPU.
 
 ## Public API Compatibility
@@ -67,7 +67,7 @@ when the object is CUDA-backed.
 ROCm/HIP source builds remain target-specific and mutually exclusive with CUDA:
 
 ```text
-FASTPAULI_ENABLE_CUDA=ON and FASTPAULI_ENABLE_HIP=ON is a configure-time error
+WOLFGANG_ENABLE_CUDA=ON and WOLFGANG_ENABLE_HIP=ON is a configure-time error
 ```
 
 This is now a deliberate packaging and validation boundary rather than a
@@ -258,7 +258,7 @@ simplify remains synchronous
 canonical ordering, coefficient summation, and tolerance filtering match PauliSum.simplify()
 public headers include no HIP or ROCm runtime headers
 CPU-only and CUDA-only builds behave unchanged
-FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON remains a configure-time error
+WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON remains a configure-time error
 ```
 
 Public HIP DLPack, public streams, public workspaces, multi-GPU execution,
@@ -314,7 +314,7 @@ Campaign 6 preserves:
 ```text
 public headers include no HIP or ROCm runtime headers
 CPU-only and CUDA-only builds behave unchanged
-FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON remains a configure-time error
+WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON remains a configure-time error
 HIP DLPack remains unavailable after the Campaign 5 read-only consumer rejection
 HIP CUDA Array Interface remains unavailable
 public streams, graphs, and workspaces remain unavailable
@@ -332,7 +332,7 @@ API campaign.
 Campaign 7 retains:
 
 ```text
-repeatable MI300X source-build release lane for FASTPAULI_ENABLE_HIP=ON and FASTPAULI_HIP_ARCHITECTURES=gfx942
+repeatable MI300X source-build release lane for WOLFGANG_ENABLE_HIP=ON and WOLFGANG_HIP_ARCHITECTURES=gfx942
 ROCm release-runbook or release-lane script
 benchmark and profiler schema for retained HIP operations
 ROCm packaging policy that keeps wheels unavailable
@@ -454,9 +454,9 @@ consumer-library versions and benchmark semantics
 HIP implementation proceeds through this ladder:
 
 ```text
-CPU-only import and validation with FASTPAULI_ENABLE_HIP=OFF
-configure-time rejection of FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON
-HIP source build on MI300X with FASTPAULI_HIP_ARCHITECTURES=gfx942
+CPU-only import and validation with WOLFGANG_ENABLE_HIP=OFF
+configure-time rejection of WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON
+HIP source build on MI300X with WOLFGANG_HIP_ARCHITECTURES=gfx942
 _hip_status() and _accelerator_status() checks with and without runtime availability
 non-empty and empty host/device round-trip tests
 deterministic pairwise commutation equivalence tests

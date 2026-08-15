@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/wolfgang-quantum/wolfgang/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/wolfgang-quantum/wolfgang/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/sghowell/wolfgang/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sghowell/wolfgang/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-4c1.svg"></a>
   <a href="https://www.python.org/"><img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-3776ab.svg"></a>
   <a href="https://isocpp.org/"><img alt="C++20" src="https://img.shields.io/badge/C%2B%2B-20-00599c.svg"></a>
@@ -39,7 +39,7 @@ python -m pip install wolfgang-quantum
 Until then, or for a source build:
 
 ```bash
-git clone https://github.com/wolfgang-quantum/wolfgang.git
+git clone https://github.com/sghowell/wolfgang.git
 cd wolfgang
 python -m pip install .
 ```
@@ -192,7 +192,7 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[test]" \
-  --config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON
+  --config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON
 python scripts/validate.py
 python scripts/check_release_readiness.py
 ```

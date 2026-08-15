@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="814" viewBox="0 0 960 814" role="img" aria-labelledby="title desc">
-<title id="title">FastPauli H100 CUDA backend speedups</title>
+<title id="title">Wolfgang H100 CUDA backend speedups</title>
 <desc id="desc">CPU scalar, optimized CPU, CUDA transfer-inclusive, and CUDA device-resident speedups versus CPU scalar from the checked-in H100 CUDA benchmark default report.</desc>
 <rect width="100%" height="100%" fill="#ffffff"/>
 <text x="32" y="34" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#111827">H100 CUDA default backend speedups</text>

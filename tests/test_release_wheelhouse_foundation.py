@@ -36,10 +36,10 @@ def install_fake_wheel_smoke_modules(
             self._coeffs = coeffs
 
         @classmethod
-        def from_labels(cls, labels: list[str], coeffs: list[complex]) -> "FakePauliSum":
+        def from_labels(cls, labels: list[str], coeffs: list[complex]) -> FakePauliSum:
             return cls(labels, coeffs)
 
-        def simplify(self) -> "FakePauliSum":
+        def simplify(self) -> FakePauliSum:
             assert self._labels == ["X", "X", "Z"]
             assert self._coeffs == [1.0, -0.5, 2.0]
             return FakePauliSum(["Z", "X"], [2.0 + 0.0j, 0.5 + 0.0j])
@@ -112,10 +112,10 @@ def test_cibuildwheel_cpu_only_configuration_is_present() -> None:
         'skip = ["*-win32", "*-win_amd64", "*-win_arm64", "*-musllinux*", "pp*"]'
         in pyproject
     )
-    assert "cmake.define.FASTPAULI_ENABLE_CUDA" in pyproject
-    assert "cmake.define.FASTPAULI_ENABLE_HIP" in pyproject
-    assert "cmake.define.FASTPAULI_ENABLE_METAL" in pyproject
-    assert "cmake.define.FASTPAULI_ENABLE_NATIVE" in pyproject
+    assert "cmake.define.WOLFGANG_ENABLE_CUDA" in pyproject
+    assert "cmake.define.WOLFGANG_ENABLE_HIP" in pyproject
+    assert "cmake.define.WOLFGANG_ENABLE_METAL" in pyproject
+    assert "cmake.define.WOLFGANG_ENABLE_NATIVE" in pyproject
     assert 'test-command = "python {project}/scripts/wheel_smoke.py"' in pyproject
     assert "[tool.cibuildwheel.linux]" in pyproject
     assert 'archs = ["x86_64"]' in pyproject

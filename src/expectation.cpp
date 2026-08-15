@@ -1,4 +1,4 @@
-#include "fastpauli/pauli_sum.hpp"
+#include "wolfgang/pauli_sum.hpp"
 
 #include "detail/checked_arithmetic.hpp"
 #include "detail/phase.hpp"

@@ -159,8 +159,8 @@ DevicePauliSum DevicePauliSum::from_host(
 CudaStatus DevicePauliSum::cuda_status() {
   CudaStatus status;
   status.skip_reason =
-      "FastPauli was built without CUDA support; rebuild from source with "
-      "FASTPAULI_ENABLE_CUDA=ON to use PauliSum.to_device().";
+      "Wolfgang was built without CUDA support; rebuild from source with "
+      "WOLFGANG_ENABLE_CUDA=ON to use PauliSum.to_device().";
   return status;
 }
 
@@ -227,8 +227,8 @@ bool DevicePauliSum::hip_available() {
 MetalStatus DevicePauliSum::metal_status() {
   MetalStatus status;
   status.skip_reason =
-      "FastPauli was built without Metal support; rebuild from source on Apple Silicon with "
-      "FASTPAULI_ENABLE_METAL=ON to use PauliSum.to_device().";
+      "Wolfgang was built without Metal support; rebuild from source on Apple Silicon with "
+      "WOLFGANG_ENABLE_METAL=ON to use PauliSum.to_device().";
   return status;
 }
 

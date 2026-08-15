@@ -66,7 +66,7 @@ def test_apple_architecture_defines_target_specific_metal_boundary() -> None:
 
     for required in (
         "backend identity for this target is:",
-        "FASTPAULI_ENABLE_METAL=ON",
+        "WOLFGANG_ENABLE_METAL=ON",
         "Metal-target source build",
         "mutually exclusive with CUDA and HIP",
         "Wolfgang should not expose",
@@ -93,7 +93,7 @@ def test_apple_bringup_plan_is_executable_and_scope_limited() -> None:
         "Task 5: Report, Review, And Closeout",
         "MPSGraph-first sparse kernels",
         "mixed CUDA/HIP/Metal source builds",
-        "FASTPAULI_ENABLE_METAL=ON source build passes on Apple Silicon",
+        "WOLFGANG_ENABLE_METAL=ON source build passes on Apple Silicon",
     ):
         assert required in text
 
@@ -104,7 +104,7 @@ def test_apple_bringup_plan_is_executable_and_scope_limited() -> None:
 def test_apple_planning_has_entered_source_build_implementation() -> None:
     cmake_text = read("CMakeLists.txt")
 
-    assert "FASTPAULI_ENABLE_METAL" in cmake_text
+    assert "WOLFGANG_ENABLE_METAL" in cmake_text
     assert (ROOT / "src" / "metal").exists()
 
 
@@ -125,7 +125,7 @@ def test_benchmark_and_release_docs_capture_apple_evidence_requirements() -> Non
         assert required in benchmark_protocol
 
     for required in (
-        "FASTPAULI_ENABLE_METAL=ON source build command",
+        "WOLFGANG_ENABLE_METAL=ON source build command",
         "named Apple Silicon SoC and Metal device",
         "Metal wheels remain unavailable",
         "framework linkage policy for Metal, Foundation, MetalPerformanceShaders, and MetalPerformanceShadersGraph",
@@ -133,7 +133,7 @@ def test_benchmark_and_release_docs_capture_apple_evidence_requirements() -> Non
         assert required in release_policy
 
     for required in (
-        "FASTPAULI_ENABLE_METAL=ON",
+        "WOLFGANG_ENABLE_METAL=ON",
         "accelerator_build_mode: metal_only",
         "Metal source build: passed",
         "MTLCreateSystemDefaultDevice(): nil",

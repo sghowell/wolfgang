@@ -135,7 +135,9 @@ def test_cupy_invalid_architecture_compile_failure_is_reported_unavailable(monke
         ),
     )
 
-    compile_error = FakeCompileException("nvrtc: error: invalid value for --gpu-architecture (-arch)")
+    compile_error = FakeCompileException(
+        "nvrtc: error: invalid value for --gpu-architecture (-arch)"
+    )
 
     def fake_asarray(_matrix: object) -> object:
         raise compile_error
@@ -143,7 +145,7 @@ def test_cupy_invalid_architecture_compile_failure_is_reported_unavailable(monke
     fake_cupy.asarray = fake_asarray
 
     monkeypatch.setattr(
-        baselines.fastpauli._fastpauli_core,
+        baselines.wolfgang._wolfgang_core,
         "_cuda_status",
         lambda: {
             "built": True,
@@ -160,12 +162,27 @@ def test_cupy_invalid_architecture_compile_failure_is_reported_unavailable(monke
             commutes_with_device=lambda _rhs: SimpleNamespace(count_commuting=lambda: 1),
         ),
     )
-    monkeypatch.setattr(baselines, "generate_labels", lambda **kwargs: (["X"], baselines.np.asarray([1.0 + 0.0j])))
+    monkeypatch.setattr(
+        baselines, "generate_labels", lambda **kwargs: (["X"], baselines.np.asarray([1.0 + 0.0j]))
+    )
     monkeypatch.setattr(baselines.PauliSum, "from_labels", lambda labels, coeffs: lhs)
-    monkeypatch.setattr(baselines, "timed_call", lambda fn, warmup, repeat: (fn(), {"median": 0.0, "min": 0.0, "max": 0.0}))
+    monkeypatch.setattr(
+        baselines,
+        "timed_call",
+        lambda fn, warmup, repeat: (fn(), {"median": 0.0, "min": 0.0, "max": 0.0}),
+    )
 
     report = baselines.run_cupy_commutation_consumer_case(
-        SimpleNamespace(smoke=True, num_qubits=8, lhs_terms=1, rhs_terms=1, term_weight=2, seed=1, warmup=0, repeat=1),
+        SimpleNamespace(
+            smoke=True,
+            num_qubits=8,
+            lhs_terms=1,
+            rhs_terms=1,
+            term_weight=2,
+            seed=1,
+            warmup=0,
+            repeat=1,
+        ),
         fake_cupy,
         None,
     )
@@ -181,7 +198,9 @@ def test_cupy_reduction_compile_failure_is_reported_unavailable(monkeypatch) -> 
     class FakeCompileException(Exception):
         pass
 
-    compile_error = FakeCompileException("nvrtc: error: invalid value for --gpu-architecture (-arch)")
+    compile_error = FakeCompileException(
+        "nvrtc: error: invalid value for --gpu-architecture (-arch)"
+    )
     fake_view = SimpleNamespace(shape=(1, 1), dtype="uint8")
     fake_cupy = SimpleNamespace(
         __name__="cupy",
@@ -199,7 +218,7 @@ def test_cupy_reduction_compile_failure_is_reported_unavailable(monkeypatch) -> 
     fake_cupy.sum = fake_sum
 
     monkeypatch.setattr(
-        baselines.fastpauli._fastpauli_core,
+        baselines.wolfgang._wolfgang_core,
         "_cuda_status",
         lambda: {
             "built": True,
@@ -216,12 +235,27 @@ def test_cupy_reduction_compile_failure_is_reported_unavailable(monkeypatch) -> 
             commutes_with_device=lambda _rhs: SimpleNamespace(count_commuting=lambda: 1),
         ),
     )
-    monkeypatch.setattr(baselines, "generate_labels", lambda **kwargs: (["X"], baselines.np.asarray([1.0 + 0.0j])))
+    monkeypatch.setattr(
+        baselines, "generate_labels", lambda **kwargs: (["X"], baselines.np.asarray([1.0 + 0.0j]))
+    )
     monkeypatch.setattr(baselines.PauliSum, "from_labels", lambda labels, coeffs: lhs)
-    monkeypatch.setattr(baselines, "timed_call", lambda fn, warmup, repeat: (fn(), {"median": 0.0, "min": 0.0, "max": 0.0}))
+    monkeypatch.setattr(
+        baselines,
+        "timed_call",
+        lambda fn, warmup, repeat: (fn(), {"median": 0.0, "min": 0.0, "max": 0.0}),
+    )
 
     report = baselines.run_cupy_commutation_consumer_case(
-        SimpleNamespace(smoke=True, num_qubits=8, lhs_terms=1, rhs_terms=1, term_weight=2, seed=1, warmup=0, repeat=1),
+        SimpleNamespace(
+            smoke=True,
+            num_qubits=8,
+            lhs_terms=1,
+            rhs_terms=1,
+            term_weight=2,
+            seed=1,
+            warmup=0,
+            repeat=1,
+        ),
         fake_cupy,
         None,
     )

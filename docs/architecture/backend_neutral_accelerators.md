@@ -26,10 +26,10 @@ Metal-only source build
 This mode remains deliberately unavailable for normal builds:
 
 ```text
-FASTPAULI_ENABLE_CUDA=ON with FASTPAULI_ENABLE_HIP=ON
+WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON
 ```
 
-`FASTPAULI_ENABLE_CUDA=ON` with `FASTPAULI_ENABLE_HIP=ON` is a
+`WOLFGANG_ENABLE_CUDA=ON` with `WOLFGANG_ENABLE_HIP=ON` is a
 configure-time error by policy. It should not be treated as a blocked release
 gate unless a later accepted plan explicitly reopens mixed-runtime packaging
 and validation.
@@ -56,7 +56,7 @@ metal
 ```
 
 `metal` is the Apple Silicon source-build backend identity. Public constructors
-may accept it only when Wolfgang is built with `FASTPAULI_ENABLE_METAL=ON`;
+may accept it only when Wolfgang is built with `WOLFGANG_ENABLE_METAL=ON`;
 CPU-only, CUDA-only, and HIP-only builds must reject it with rebuild guidance.
 
 Host `PauliSum` remains CPU-resident and does not become a multi-backend owner.
@@ -104,7 +104,7 @@ Apple/Metal target build
 ```
 
 The Metal target build must follow `docs/architecture/apple_accelerator.md`:
-`FASTPAULI_ENABLE_METAL=ON` is source-build-only and initially mutually
+`WOLFGANG_ENABLE_METAL=ON` is source-build-only and initially mutually
 exclusive with CUDA and HIP.
 
 ## Device Object Ownership
@@ -230,7 +230,7 @@ A future simultaneous CUDA+HIP campaign must start from a new accepted plan and
 add tests for:
 
 ```text
-configure succeeds with FASTPAULI_ENABLE_CUDA=ON and FASTPAULI_ENABLE_HIP=ON
+configure succeeds with WOLFGANG_ENABLE_CUDA=ON and WOLFGANG_ENABLE_HIP=ON
 CPU-only import remains independent of accelerator libraries
 _cuda_status(), _hip_status(), and _accelerator_status() all report structured state
 CUDA DevicePauliSum.backend remains "cuda"

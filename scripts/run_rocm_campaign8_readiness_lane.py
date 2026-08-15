@@ -78,7 +78,7 @@ def command_inventory(evidence_dir: Path) -> list[ReadinessCommand]:
             "cuda-hip-rejection",
             (
                 "uv run python -m cmake -S . -B /tmp/fastpauli-campaign8-cuda-hip-reject "
-                "-DFASTPAULI_ENABLE_CUDA=ON -DFASTPAULI_ENABLE_HIP=ON"
+                "-DWOLFGANG_ENABLE_CUDA=ON -DWOLFGANG_ENABLE_HIP=ON"
             ),
             "retained",
             "This command must fail until backend-neutral CUDA/HIP implementation is accepted.",
@@ -87,8 +87,8 @@ def command_inventory(evidence_dir: Path) -> list[ReadinessCommand]:
             "hip-source-build-mi300x",
             (
                 "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH .venv/bin/python -m pip install -e .[test] "
-                "--config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON "
-                "--config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=gfx942"
+                "--config-settings=cmake.define.WOLFGANG_ENABLE_HIP=ON "
+                "--config-settings=cmake.define.WOLFGANG_HIP_ARCHITECTURES=gfx942"
             ),
             "retained",
             "Retains the MI300X source-build lane from Campaign 7.",
@@ -97,8 +97,8 @@ def command_inventory(evidence_dir: Path) -> list[ReadinessCommand]:
             "hip-source-build-alternate-amd",
             (
                 "PATH=/opt/rocm/bin:/opt/rocm/llvm/bin:$PATH .venv/bin/python -m pip install -e .[test] "
-                "--config-settings=cmake.define.FASTPAULI_ENABLE_HIP=ON "
-                "--config-settings=cmake.define.FASTPAULI_HIP_ARCHITECTURES=<gfx-target>"
+                "--config-settings=cmake.define.WOLFGANG_ENABLE_HIP=ON "
+                "--config-settings=cmake.define.WOLFGANG_HIP_ARCHITECTURES=<gfx-target>"
             ),
             "blocked_external",
             "This requires a real non-MI300X AMD GPU host before any support claim is made.",

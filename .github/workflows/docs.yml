@@ -39,7 +39,9 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install documentation toolchain
-        run: python -m pip install "mkdocs-material==9.7.7"
+        run: python -m pip install -e ".[test,docs]"
+      - name: Verify Mermaid integration rendering
+        run: python -m pytest tests/docs_mermaid_integration.py -q
       - name: Build strict documentation
         run: mkdocs build --strict --site-dir site
       - name: Upload Pages artifact

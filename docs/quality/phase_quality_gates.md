@@ -91,11 +91,11 @@ Required evidence:
 
 ```text
 pyproject.toml defines build, test, and optional dependency groups
-CMake config has FASTPAULI_ENABLE_CUDA=OFF by default
-CMake config keeps FASTPAULI_ENABLE_NATIVE=OFF for release-wheel defaults
+CMake config has WOLFGANG_ENABLE_CUDA=OFF by default
+CMake config keeps WOLFGANG_ENABLE_NATIVE=OFF for release-wheel defaults
 portable scalar CPU path is present and can be identified in validation output
 python -m pip install -e ".[test]" with
-`--config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON` succeeds in a clean environment
+`--config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON` succeeds in a clean environment
 python -c "import wolfgang_quantum; print(wolfgang_quantum.__version__)" succeeds
 pytest succeeds
 scripts/validate.py or equivalent repo-local validation command exists
@@ -356,8 +356,8 @@ CUDA support is source-buildable, optional at build time, and impossible to acci
 Required evidence:
 
 ```text
-FASTPAULI_ENABLE_CUDA=OFF builds without CUDA installed
-FASTPAULI_ENABLE_CUDA=ON builds on a CUDA-capable runner or machine
+WOLFGANG_ENABLE_CUDA=OFF builds without CUDA installed
+WOLFGANG_ENABLE_CUDA=ON builds on a CUDA-capable runner or machine
 CUDA validation output records toolkit, host compiler, requested architectures, driver, device, and compute capability where available
 PauliSum.to_device and DevicePauliSum.to_host preserve labels and coefficients
 CUDA absence skip messages distinguish build-time absence from runtime device absence
@@ -431,9 +431,9 @@ Required evidence before a ROCm/HIP support claim:
 ```text
 docs/architecture/rocm_backend.md exists and is linked from hardware-target docs
 MI300X host inventory captures ROCm, HIP compiler, GPU model, gfx target, driver/runtime versions, CPU, memory, power, clocks, and topology where available
-HIP source build succeeds with FASTPAULI_ENABLE_HIP=ON and FASTPAULI_HIP_ARCHITECTURES=gfx942
-FASTPAULI_ENABLE_CUDA=ON together with FASTPAULI_ENABLE_HIP=ON fails at configure time with a clear error
-CPU-only validation still passes with FASTPAULI_ENABLE_HIP=OFF
+HIP source build succeeds with WOLFGANG_ENABLE_HIP=ON and WOLFGANG_HIP_ARCHITECTURES=gfx942
+WOLFGANG_ENABLE_CUDA=ON together with WOLFGANG_ENABLE_HIP=ON fails at configure time with a clear error
+CPU-only validation still passes with WOLFGANG_ENABLE_HIP=OFF
 _hip_status(), _accelerator_status(), and _build_info() report HIP metadata without requiring ROCm at import time
 host/device transfer tests pass for non-empty and empty operators
 CPU/HIP equivalence tests pass for every implemented HIP operation

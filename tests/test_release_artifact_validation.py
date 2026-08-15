@@ -36,26 +36,34 @@ def test_build_artifact_command_pins_cpu_safe_config_settings(tmp_path: Path) ->
         "--outdir",
     ]
     assert str(tmp_path) in command
-    assert "cmake.define.FASTPAULI_ENABLE_CUDA=OFF" in command_text
-    assert "cmake.define.FASTPAULI_ENABLE_HIP=OFF" in command_text
-    assert "cmake.define.FASTPAULI_ENABLE_METAL=OFF" in command_text
-    assert "cmake.define.FASTPAULI_ENABLE_NATIVE=OFF" in command_text
+    assert "cmake.define.WOLFGANG_ENABLE_CUDA=OFF" in command_text
+    assert "cmake.define.WOLFGANG_ENABLE_HIP=OFF" in command_text
+    assert "cmake.define.WOLFGANG_ENABLE_METAL=OFF" in command_text
+    assert "cmake.define.WOLFGANG_ENABLE_NATIVE=OFF" in command_text
 
 
 def test_cpu_safe_build_env_disables_accelerators_and_native(monkeypatch) -> None:
     validator = load_release_validator()
-    monkeypatch.setenv("FASTPAULI_ENABLE_CUDA", "ON")
-    monkeypatch.setenv("FASTPAULI_ENABLE_HIP", "ON")
-    monkeypatch.setenv("FASTPAULI_ENABLE_METAL", "ON")
-    monkeypatch.setenv("FASTPAULI_ENABLE_NATIVE", "ON")
+    monkeypatch.setenv("WOLFGANG_ENABLE_CUDA", "ON")
+    monkeypatch.setenv("WOLFGANG_ENABLE_HIP", "ON")
+    monkeypatch.setenv("WOLFGANG_ENABLE_METAL", "ON")
+    monkeypatch.setenv("WOLFGANG_ENABLE_NATIVE", "ON")
+    monkeypatch.setenv("WOLFGANG_ENABLE_CUDA", "ON")
+    monkeypatch.setenv("WOLFGANG_ENABLE_HIP", "ON")
+    monkeypatch.setenv("WOLFGANG_ENABLE_METAL", "ON")
+    monkeypatch.setenv("WOLFGANG_ENABLE_NATIVE", "ON")
     monkeypatch.setattr(validator, "cmake_executable_for_build", lambda: "/opt/cmake/bin/cmake")
 
     env = validator.cpu_safe_build_env()
 
-    assert env["FASTPAULI_ENABLE_CUDA"] == "OFF"
-    assert env["FASTPAULI_ENABLE_HIP"] == "OFF"
-    assert env["FASTPAULI_ENABLE_METAL"] == "OFF"
-    assert env["FASTPAULI_ENABLE_NATIVE"] == "OFF"
+    assert env["WOLFGANG_ENABLE_CUDA"] == "OFF"
+    assert env["WOLFGANG_ENABLE_HIP"] == "OFF"
+    assert env["WOLFGANG_ENABLE_METAL"] == "OFF"
+    assert env["WOLFGANG_ENABLE_NATIVE"] == "OFF"
+    assert env["WOLFGANG_ENABLE_CUDA"] == "OFF"
+    assert env["WOLFGANG_ENABLE_HIP"] == "OFF"
+    assert env["WOLFGANG_ENABLE_METAL"] == "OFF"
+    assert env["WOLFGANG_ENABLE_NATIVE"] == "OFF"
     assert env["CMAKE_EXECUTABLE"] == "/opt/cmake/bin/cmake"
 
 

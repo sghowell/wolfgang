@@ -75,7 +75,7 @@ def run_cmake_configure_with_options(*options: str) -> subprocess.CompletedProce
             str(ROOT),
             "-B",
             str(build_dir),
-            "-DFASTPAULI_ENABLE_NATIVE=OFF",
+            "-DWOLFGANG_ENABLE_NATIVE=OFF",
             *options,
         ],
         cwd=ROOT,
@@ -133,14 +133,14 @@ def test_cpu_only_build_reports_hip_absence() -> None:
 
 def test_cmake_rejects_cuda_and_hip_together() -> None:
     completed = run_cmake_configure_with_options(
-        "-DFASTPAULI_ENABLE_CUDA=ON",
-        "-DFASTPAULI_ENABLE_HIP=ON",
-        "-DFASTPAULI_ENABLE_TBB=OFF",
+        "-DWOLFGANG_ENABLE_CUDA=ON",
+        "-DWOLFGANG_ENABLE_HIP=ON",
+        "-DWOLFGANG_ENABLE_TBB=OFF",
     )
 
     output = completed.stdout + completed.stderr
     assert completed.returncode != 0
-    assert "FASTPAULI_ENABLE_CUDA and FASTPAULI_ENABLE_HIP cannot both be ON" in output
+    assert "WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_HIP cannot both be ON" in output
     assert "target-specific accelerator build policy" in output
 
 

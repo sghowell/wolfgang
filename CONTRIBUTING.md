@@ -15,7 +15,7 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[test]" \
-  --config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON
+  --config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON
 python scripts/validate.py
 ```
 

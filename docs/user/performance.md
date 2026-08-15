@@ -9,11 +9,11 @@ matrix-product kernels on `DevicePauliSum`.
 
 ## Backend Selection
 
-The runtime backend selector is controlled by `FASTPAULI_CPU_BACKEND`.
+The runtime backend selector is controlled by `WOLFGANG_CPU_BACKEND`.
 
 ```bash
-FASTPAULI_CPU_BACKEND=auto python benchmarks/bench_cpu_dispatch.py --smoke --repeat 1
-FASTPAULI_CPU_BACKEND=scalar python benchmarks/bench_cpu_dispatch.py --smoke --repeat 1
+WOLFGANG_CPU_BACKEND=auto python benchmarks/bench_cpu_dispatch.py --smoke --repeat 1
+WOLFGANG_CPU_BACKEND=scalar python benchmarks/bench_cpu_dispatch.py --smoke --repeat 1
 ```
 
 Supported selectors:
@@ -244,7 +244,7 @@ results are required before making x86-specific optimization claims.
 CUDA remains opt-in at source-build time:
 
 ```bash
-FASTPAULI_VALIDATE_CUDA=1 FASTPAULI_CUDA_ARCHITECTURES=90 python scripts/validate.py
+FASTPAULI_VALIDATE_CUDA=1 WOLFGANG_CUDA_ARCHITECTURES=90 python scripts/validate.py
 python benchmarks/bench_cuda_kernels.py --profile default --repeat 3 --warmup 1 --json
 python benchmarks/bench_cuda_scaling.py --profile default --repeat 3 --warmup 1 --json
 ```

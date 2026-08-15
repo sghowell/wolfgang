@@ -25,14 +25,16 @@ struct CpuBackendReport {
 [[nodiscard]] CpuBackendReport cpu_backend_report_from_environment();
 [[nodiscard]] CpuBackendReport cpu_backend_report_for_selector(std::string_view selector);
 
-// Raises when FASTPAULI_CPU_BACKEND requests a path that cannot execute in the
-// current build/runtime. Call this at Python compute boundaries so forced
-// optimized selectors never silently fall back to scalar execution.
+// Raises when WOLFGANG_CPU_BACKEND (or the deprecated FASTPAULI_CPU_BACKEND
+// alias) requests a path that cannot execute in the current build/runtime.
+// Call this at Python compute boundaries so forced optimized selectors never
+// silently fall back to scalar execution.
 void ensure_cpu_backend_available_from_environment();
 
-// Raises when FASTPAULI_CPU_BACKEND forces an optimized backend for an
-// operation that has no optimized kernel coverage. Auto and scalar selectors are
-// accepted because they truthfully execute the portable scalar implementation.
+// Raises when WOLFGANG_CPU_BACKEND (or the deprecated FASTPAULI_CPU_BACKEND
+// alias) forces an optimized backend for an operation that has no optimized
+// kernel coverage. Auto and scalar selectors are accepted because they
+// truthfully execute the portable scalar implementation.
 void ensure_cpu_backend_supports_scalar_operation(std::string_view operation);
 
 }  // namespace wolfgang

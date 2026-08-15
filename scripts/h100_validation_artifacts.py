@@ -217,9 +217,9 @@ def derive_public_artifacts(evidence_root: Path, *, commit: str) -> dict[str, An
     manifest["build"]["compiler"]["value"] = (logs / "nvcc-version.log").read_text(encoding="utf-8").strip().splitlines()[-1]
     manifest["build"]["artifact_hashes"] = {"sdist_sha256": "not_captured", "wheel_sha256": "not_captured"}
     manifest["build"]["build_flags"] = [
-        "FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON",
-        "FASTPAULI_ENABLE_CUDA=ON",
-        "FASTPAULI_CUDA_ARCHITECTURES=90",
+        "WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON",
+        "WOLFGANG_ENABLE_CUDA=ON",
+        "WOLFGANG_CUDA_ARCHITECTURES=90",
     ]
     manifest["test_counts"] = test_counts
     manifest["diagnostics"]["status"] = "passed" if status == "GO" else "failed"

@@ -67,7 +67,7 @@ jobs:
           mkdir -p sbom
           cyclonedx-py requirements runtime-requirements.txt \
             --output-format JSON \
-            --output-file sbom/fastpauli-runtime.cdx.json
+            --output-file sbom/wolfgang-runtime.cdx.json
 
       - name: Software bill of materials
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -99,11 +99,11 @@ jobs:
       - name: Build CPU-safe source distribution
         run: |
           python -m build --sdist --outdir dist \
-            --config-setting cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=OFF \
-            --config-setting cmake.define.FASTPAULI_ENABLE_CUDA=OFF \
-            --config-setting cmake.define.FASTPAULI_ENABLE_HIP=OFF \
-            --config-setting cmake.define.FASTPAULI_ENABLE_METAL=OFF \
-            --config-setting cmake.define.FASTPAULI_ENABLE_NATIVE=OFF
+            --config-setting cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=OFF \
+            --config-setting cmake.define.WOLFGANG_ENABLE_CUDA=OFF \
+            --config-setting cmake.define.WOLFGANG_ENABLE_HIP=OFF \
+            --config-setting cmake.define.WOLFGANG_ENABLE_METAL=OFF \
+            --config-setting cmake.define.WOLFGANG_ENABLE_NATIVE=OFF
 
       - name: Check source distribution metadata
         run: python -m twine check dist/*

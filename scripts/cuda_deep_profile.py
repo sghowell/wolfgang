@@ -103,7 +103,7 @@ def base_env(args: argparse.Namespace) -> dict[str, str]:
     path_value = os.environ.get("PATH", "")
     return {
         "PATH": f"{args.cuda_bin}:{path_value}",
-        "FASTPAULI_CUDA_ARCHITECTURES": args.cuda_architectures,
+        "WOLFGANG_CUDA_ARCHITECTURES": args.cuda_architectures,
     }
 
 
@@ -342,11 +342,11 @@ def competitor_steps(
 
 def resolve_extension_path() -> str:
     try:
-        spec = importlib.util.find_spec("fastpauli._fastpauli_core")
+        spec = importlib.util.find_spec("wolfgang_quantum._wolfgang_core")
     except ModuleNotFoundError:
-        return "<fastpauli_extension_path>"
+        return "<wolfgang_extension_path>"
     if spec is None or spec.origin is None:
-        return "<fastpauli_extension_path>"
+        return "<wolfgang_extension_path>"
     return spec.origin
 
 

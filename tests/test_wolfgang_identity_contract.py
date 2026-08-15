@@ -50,16 +50,48 @@ ACTIVE_DOC_FASTPAULI_TECHNICAL_TOKEN_RE = re.compile(
     r"|docs/plans/fastpauli_[^\s`|)]+"
 )
 
+ACTIVE_BENCHMARK_FILES = (
+    "benchmarks/bench_competitive_baselines.py",
+    "benchmarks/bench_cpu_dispatch.py",
+    "benchmarks/bench_cpu_thresholds.py",
+    "benchmarks/bench_cuda_kernels.py",
+    "benchmarks/bench_cuda_scaling.py",
+    "benchmarks/bench_expectation.py",
+    "benchmarks/bench_grouping.py",
+    "benchmarks/bench_metal_kernels.py",
+    "benchmarks/bench_multiply.py",
+    "benchmarks/bench_openfermion_conversion.py",
+    "benchmarks/bench_rocm_kernels.py",
+    "benchmarks/bench_simplify.py",
+)
+
+CURRENT_RENDERER_AND_REPORT_FILES = (
+    "scripts/render_apple_metal_assets.py",
+    "scripts/render_benchmark_plots.py",
+    "scripts/render_cuda_deep_report_assets.py",
+    "scripts/run_rocm_release_support_lane.py",
+)
+
+CURRENT_PLOT_FILES = (
+    "docs/benchmarks/plots/accelerator_landscape_with_rocm.svg",
+    "docs/benchmarks/plots/cuda_deep_optimization_architecture.svg",
+    "docs/benchmarks/plots/cuda_deep_optimization_h100_optimization_deltas.svg",
+    "docs/benchmarks/plots/cuda_deep_optimization_h100_path_speedups.svg",
+    "docs/benchmarks/plots/cuda_deep_optimization_h100_profiler_bottlenecks.svg",
+    "docs/benchmarks/plots/cuda_deep_optimization_h100_scaling.svg",
+    "docs/benchmarks/plots/cuda_h100_nsight_hillclimb_default_backend_speedups.svg",
+)
+
 
 def test_pyproject_uses_wolfgang_distribution_and_public_urls() -> None:
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 
     assert 'name = "wolfgang-quantum"' in pyproject
     assert '{ name = "Wolfgang contributors" }' in pyproject
-    assert 'Homepage = "https://github.com/wolfgang-quantum/wolfgang"' in pyproject
-    assert 'Documentation = "https://wolfgangquantum.com"' in pyproject
-    assert 'Repository = "https://github.com/wolfgang-quantum/wolfgang.git"' in pyproject
-    assert 'Issues = "https://github.com/wolfgang-quantum/wolfgang/issues"' in pyproject
+    assert 'Homepage = "https://github.com/sghowell/wolfgang"' in pyproject
+    assert 'Documentation = "https://sghowell.github.io/wolfgang/"' in pyproject
+    assert 'Repository = "https://github.com/sghowell/wolfgang.git"' in pyproject
+    assert 'Issues = "https://github.com/sghowell/wolfgang/issues"' in pyproject
 
 
 def test_canonical_python_package_root_is_wolfgang_quantum() -> None:
@@ -173,6 +205,24 @@ def test_active_release_tooling_uses_wolfgang_as_canonical_identity() -> None:
             '"package_import": "wolfgang_quantum"',
             '"project_distribution": "wolfgang-quantum"',
         ],
+        "scripts/validate.py": [
+            'import wolfgang_quantum and report scalar CPU build info',
+            'import wolfgang_quantum._wolfgang_core as core',
+        ],
+        "scripts/rocm_memory_probe.py": [
+            'import wolfgang_quantum',
+            'import wolfgang_quantum._wolfgang_core as core',
+        ],
+        "scripts/rocm_campaign5_candidate_probe.py": [
+            'import wolfgang_quantum._wolfgang_core as core',
+        ],
+        "scripts/b300_blackwell_resume_runner.py": [
+            'import wolfgang_quantum._wolfgang_core as core',
+        ],
+        "scripts/cuda_deep_profile.py": [
+            'find_spec("wolfgang_quantum._wolfgang_core")',
+            '<wolfgang_extension_path>',
+        ],
         "scripts/validate_release_artifacts.py": [
             'SDIST_ARTIFACT_PREFIX = "wolfgang-quantum-"',
             'WHEEL_ARTIFACT_PREFIX = "wolfgang_quantum-"',
@@ -185,8 +235,8 @@ def test_active_release_tooling_uses_wolfgang_as_canonical_identity() -> None:
         ],
         "tests/test_release_supply_chain.py": [
             'python/wolfgang_quantum/_version.py',
-            'https://github.com/wolfgang-quantum/wolfgang',
-            'https://wolfgangquantum.com',
+            'https://github.com/sghowell/wolfgang',
+            'https://sghowell.github.io/wolfgang/',
         ],
         "tests/test_release_artifact_validation.py": [
             'SDIST_PREFIX = f"wolfgang-quantum-{RELEASE_VERSION}"',
@@ -210,6 +260,122 @@ def test_active_release_tooling_uses_wolfgang_as_canonical_identity() -> None:
             assert fragment in text, f"missing canonical Wolfgang release fragment {fragment!r} in {relative_path}"
         for fragment in forbidden_fragments:
             assert fragment not in text, f"stale canonical FastPauli release fragment {fragment!r} remains in {relative_path}"
+
+
+def test_active_benchmark_entrypoints_use_wolfgang_by_default() -> None:
+    forbidden_fragments = (
+        "import fastpauli",
+        "from fastpauli import",
+        '"""Compare FastPauli',
+        '"""CUDA scaling benchmark for FastPauli hot paths.',
+        'The benchmark compares FastPauli scalar CPU expectation kernels',
+    )
+
+    required_fragments = {
+        "benchmarks/bench_competitive_baselines.py": ("import wolfgang_quantum", "from wolfgang_quantum import PauliSum"),
+        "benchmarks/bench_cpu_dispatch.py": ("import wolfgang_quantum", "from wolfgang_quantum import PauliSum"),
+        "benchmarks/bench_cpu_thresholds.py": ("import wolfgang_quantum", "from wolfgang_quantum import PauliSum"),
+        "benchmarks/bench_cuda_kernels.py": ("import wolfgang_quantum",),
+        "benchmarks/bench_cuda_scaling.py": ("import wolfgang_quantum",),
+        "benchmarks/bench_expectation.py": ("import wolfgang_quantum", "from wolfgang_quantum import PauliSum"),
+        "benchmarks/bench_grouping.py": ("import wolfgang_quantum", "from wolfgang_quantum import PauliSum"),
+        "benchmarks/bench_metal_kernels.py": ("import wolfgang_quantum",),
+        "benchmarks/bench_multiply.py": ("import wolfgang_quantum", "from wolfgang_quantum import PauliSum"),
+        "benchmarks/bench_openfermion_conversion.py": ("import wolfgang_quantum", "from wolfgang_quantum import PauliSum"),
+        "benchmarks/bench_rocm_kernels.py": ("import wolfgang_quantum",),
+        "benchmarks/bench_simplify.py": ("import wolfgang_quantum", "from wolfgang_quantum import PauliSum"),
+    }
+
+    for relative_path in ACTIVE_BENCHMARK_FILES:
+        text = (ROOT / relative_path).read_text(encoding="utf-8")
+        for fragment in required_fragments[relative_path]:
+            assert fragment in text, f"missing canonical Wolfgang benchmark import {fragment!r} in {relative_path}"
+        for fragment in forbidden_fragments:
+            assert fragment not in text, f"stale FastPauli benchmark surface {fragment!r} remains in {relative_path}"
+
+
+def test_current_renderers_and_public_plot_artifacts_brand_wolfgang() -> None:
+    forbidden_fragments = (
+        "FastPauli accelerator performance landscape",
+        "FastPauli H100 backend speedups",
+        "FastPauli H100 CUDA backend speedups",
+        "FastPauli H100 scaling",
+        "FastPauli CUDA optimization deltas",
+        "FastPauli H100 Nsight Compute bottlenecks",
+        "FastPauli Execution And Hardware Architecture",
+        "fastpauli-runtime.cdx.json",
+    )
+    required_fragments = {
+        "scripts/render_apple_metal_assets.py": ("Wolfgang accelerator performance landscape",),
+        "scripts/render_benchmark_plots.py": ("Wolfgang H100 CUDA backend speedups",),
+        "scripts/render_cuda_deep_report_assets.py": ("Wolfgang H100 backend speedups", "Wolfgang Execution And Hardware Architecture"),
+        "scripts/run_rocm_release_support_lane.py": ("# Wolfgang ROCm Campaign 7 Release-Support Lane",),
+        "docs/benchmarks/plots/accelerator_landscape_with_rocm.svg": ("Wolfgang accelerator performance landscape",),
+        "docs/benchmarks/plots/cuda_deep_optimization_architecture.svg": ("Wolfgang Execution And Hardware Architecture",),
+        "docs/benchmarks/plots/cuda_deep_optimization_h100_optimization_deltas.svg": ("Wolfgang CUDA optimization deltas",),
+        "docs/benchmarks/plots/cuda_deep_optimization_h100_path_speedups.svg": ("Wolfgang H100 backend speedups",),
+        "docs/benchmarks/plots/cuda_deep_optimization_h100_profiler_bottlenecks.svg": ("Wolfgang H100 Nsight Compute bottlenecks",),
+        "docs/benchmarks/plots/cuda_deep_optimization_h100_scaling.svg": ("Wolfgang H100 scaling",),
+        "docs/benchmarks/plots/cuda_h100_nsight_hillclimb_default_backend_speedups.svg": ("Wolfgang H100 CUDA backend speedups",),
+    }
+
+    for relative_path in (*CURRENT_RENDERER_AND_REPORT_FILES, *CURRENT_PLOT_FILES):
+        text = (ROOT / relative_path).read_text(encoding="utf-8")
+        for fragment in required_fragments[relative_path]:
+            assert fragment in text, f"missing canonical Wolfgang artifact branding {fragment!r} in {relative_path}"
+        for fragment in forbidden_fragments:
+            assert fragment not in text, f"stale FastPauli artifact branding {fragment!r} remains in {relative_path}"
+
+
+def test_workflows_and_packaging_prefer_wolfgang_canonical_flags() -> None:
+    quality = (ROOT / ".github/workflows/quality.yml").read_text(encoding="utf-8")
+    codeql = (ROOT / ".github/workflows/codeql.yml").read_text(encoding="utf-8")
+    release_wheelhouse = (ROOT / ".github/workflows/release-wheelhouse.yml").read_text(
+        encoding="utf-8"
+    )
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+
+    assert "pyright python/wolfgang_quantum" in quality
+    for workflow_text in (quality, codeql, release_wheelhouse):
+        assert "cmake.define.WOLFGANG_ENABLE_CUDA=OFF" in workflow_text or "-DWOLFGANG_ENABLE_CUDA=OFF" in workflow_text
+        assert "cmake.define.WOLFGANG_ENABLE_HIP=OFF" in workflow_text or "-DWOLFGANG_ENABLE_HIP=OFF" in workflow_text
+        assert "cmake.define.WOLFGANG_ENABLE_METAL=OFF" in workflow_text or "-DWOLFGANG_ENABLE_METAL=OFF" in workflow_text
+        assert "cmake.define.WOLFGANG_ENABLE_NATIVE=OFF" in workflow_text or "-DWOLFGANG_ENABLE_NATIVE=OFF" in workflow_text
+
+    assert "sbom/wolfgang-runtime.cdx.json" in release_wheelhouse
+    assert "fastpauli-runtime.cdx.json" not in release_wheelhouse
+
+    config_settings_section = pyproject.split("[tool.cibuildwheel.config-settings]", maxsplit=1)[1]
+    config_settings_body = config_settings_section.split("[tool.cibuildwheel.linux]", maxsplit=1)[0]
+    assert '"cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS" = "OFF"' in config_settings_body
+    assert '"cmake.define.WOLFGANG_ENABLE_CUDA" = "OFF"' in config_settings_body
+    assert '"cmake.define.WOLFGANG_ENABLE_HIP" = "OFF"' in config_settings_body
+    assert '"cmake.define.WOLFGANG_ENABLE_METAL" = "OFF"' in config_settings_body
+    assert '"cmake.define.WOLFGANG_ENABLE_NATIVE" = "OFF"' in config_settings_body
+    assert '"cmake.define.FASTPAULI_ENABLE_CUDA"' not in config_settings_body
+    assert '"cmake.define.FASTPAULI_ENABLE_HIP"' not in config_settings_body
+    assert '"cmake.define.FASTPAULI_ENABLE_METAL"' not in config_settings_body
+    assert '"cmake.define.FASTPAULI_ENABLE_NATIVE"' not in config_settings_body
+
+
+def test_canonical_public_cmake_and_runtime_identity_prefers_wolfgang_names() -> None:
+    cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
+    cpu_backend = (ROOT / "src/cpu_backend.cpp").read_text(encoding="utf-8")
+    package_init = (ROOT / "python/wolfgang_quantum/__init__.py").read_text(encoding="utf-8")
+    internal_bindings = (ROOT / "bindings/python/internal_bindings.cpp").read_text(encoding="utf-8")
+
+    assert 'WOLFGANG_ENABLE_CUDA' in cmake
+    assert 'WOLFGANG_ENABLE_INTERNAL_BINDINGS' in cmake
+    assert 'WOLFGANG_CUDA_ARCHITECTURES' in cmake
+    assert 'WOLFGANG_ENABLE_CUDA' in cmake
+    assert 'WOLFGANG_ENABLE_INTERNAL_BINDINGS' in cmake
+
+    assert 'constexpr std::string_view kBackendEnvVar = "WOLFGANG_CPU_BACKEND";' in cpu_backend
+    assert 'WOLFGANG_CPU_BACKEND' in cpu_backend
+    assert 'WOLFGANG_CPU_BACKEND' in cpu_backend
+
+    assert 'FastPauliCapabilities' not in package_init
+    assert 'cpu_backend_env_var"] = "WOLFGANG_CPU_BACKEND"' in internal_bindings
 
 
 def test_active_docs_only_keep_allowlisted_fastpauli_tokens() -> None:

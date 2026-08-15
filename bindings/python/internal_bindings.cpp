@@ -1,9 +1,9 @@
 #include "bindings.hpp"
 
-#include "fastpauli/cpu_backend.hpp"
-#include "fastpauli/device_commutation_matrix.hpp"
-#include "fastpauli/device_pauli_sum.hpp"
-#include "fastpauli/pauli_sum.hpp"
+#include "wolfgang/cpu_backend.hpp"
+#include "wolfgang/device_commutation_matrix.hpp"
+#include "wolfgang/device_pauli_sum.hpp"
+#include "wolfgang/pauli_sum.hpp"
 #if FASTPAULI_BUILD_CUDA_ENABLED
 #include "cuda/device_commutation_matrix.cuh"
 #include "cuda/workspace.cuh"
@@ -128,7 +128,7 @@ namespace wolfgang::python {
 void register_pauli_diagnostics(nb::module_& module);
 
 void register_internal_bindings(nb::module_& module) {
-#if FASTPAULI_ENABLE_INTERNAL_BINDINGS
+#if WOLFGANG_ENABLE_INTERNAL_BINDINGS
 #if FASTPAULI_BUILD_CUDA_ENABLED
   module.def(
       "_cuda_workspace_probe_for_testing",
@@ -264,7 +264,7 @@ void register_internal_bindings(nb::module_& module) {
         info["cpu_backend"] = cpu_backend.active_backend;
         info["active_cpu_backend"] = cpu_backend.active_backend;
         info["requested_cpu_backend"] = cpu_backend.requested_backend;
-        info["cpu_backend_env_var"] = "FASTPAULI_CPU_BACKEND";
+        info["cpu_backend_env_var"] = "WOLFGANG_CPU_BACKEND";
         info["cuda_enabled"] = static_cast<bool>(FASTPAULI_BUILD_CUDA_ENABLED);
         info["cuda_architectures"] = FASTPAULI_BUILD_CUDA_ARCHITECTURES;
         info["cuda_toolkit_version"] = FASTPAULI_CUDA_TOOLKIT_VERSION;
@@ -275,26 +275,26 @@ void register_internal_bindings(nb::module_& module) {
         info["native_enabled"] = static_cast<bool>(FASTPAULI_BUILD_NATIVE_ENABLED);
 
         nb::dict cpu_cmake_options;
-        cpu_cmake_options["FASTPAULI_ENABLE_CUDA"] = FASTPAULI_REQUESTED_ENABLE_CUDA;
-        cpu_cmake_options["FASTPAULI_CUDA_ARCHITECTURES"] =
+        cpu_cmake_options["WOLFGANG_ENABLE_CUDA"] = FASTPAULI_REQUESTED_ENABLE_CUDA;
+        cpu_cmake_options["WOLFGANG_CUDA_ARCHITECTURES"] =
             FASTPAULI_REQUESTED_CUDA_ARCHITECTURES;
-        cpu_cmake_options["FASTPAULI_CUDA_USE_CUB"] = FASTPAULI_REQUESTED_CUDA_USE_CUB;
-        cpu_cmake_options["FASTPAULI_CUDA_USE_THRUST"] =
+        cpu_cmake_options["WOLFGANG_CUDA_USE_CUB"] = FASTPAULI_REQUESTED_CUDA_USE_CUB;
+        cpu_cmake_options["WOLFGANG_CUDA_USE_THRUST"] =
             FASTPAULI_REQUESTED_CUDA_USE_THRUST;
-        cpu_cmake_options["FASTPAULI_ENABLE_HIP"] = FASTPAULI_REQUESTED_ENABLE_HIP;
-        cpu_cmake_options["FASTPAULI_HIP_ARCHITECTURES"] =
+        cpu_cmake_options["WOLFGANG_ENABLE_HIP"] = FASTPAULI_REQUESTED_ENABLE_HIP;
+        cpu_cmake_options["WOLFGANG_HIP_ARCHITECTURES"] =
             FASTPAULI_REQUESTED_HIP_ARCHITECTURES;
-        cpu_cmake_options["FASTPAULI_ENABLE_METAL"] = FASTPAULI_REQUESTED_ENABLE_METAL;
-        cpu_cmake_options["FASTPAULI_ENABLE_NATIVE"] = FASTPAULI_REQUESTED_ENABLE_NATIVE;
-        cpu_cmake_options["FASTPAULI_ENABLE_OPENMP"] = FASTPAULI_REQUESTED_ENABLE_OPENMP;
-        cpu_cmake_options["FASTPAULI_ENABLE_TBB"] = FASTPAULI_REQUESTED_ENABLE_TBB;
-        cpu_cmake_options["FASTPAULI_ENABLE_AVX2"] = FASTPAULI_REQUESTED_ENABLE_AVX2;
-        cpu_cmake_options["FASTPAULI_ENABLE_AVX512"] = FASTPAULI_REQUESTED_ENABLE_AVX512;
-        cpu_cmake_options["FASTPAULI_ENABLE_ARM_NEON"] =
+        cpu_cmake_options["WOLFGANG_ENABLE_METAL"] = FASTPAULI_REQUESTED_ENABLE_METAL;
+        cpu_cmake_options["WOLFGANG_ENABLE_NATIVE"] = FASTPAULI_REQUESTED_ENABLE_NATIVE;
+        cpu_cmake_options["WOLFGANG_ENABLE_OPENMP"] = FASTPAULI_REQUESTED_ENABLE_OPENMP;
+        cpu_cmake_options["WOLFGANG_ENABLE_TBB"] = FASTPAULI_REQUESTED_ENABLE_TBB;
+        cpu_cmake_options["WOLFGANG_ENABLE_AVX2"] = FASTPAULI_REQUESTED_ENABLE_AVX2;
+        cpu_cmake_options["WOLFGANG_ENABLE_AVX512"] = FASTPAULI_REQUESTED_ENABLE_AVX512;
+        cpu_cmake_options["WOLFGANG_ENABLE_ARM_NEON"] =
             FASTPAULI_REQUESTED_ENABLE_ARM_NEON;
-        cpu_cmake_options["FASTPAULI_ENABLE_ARM_SVE"] =
+        cpu_cmake_options["WOLFGANG_ENABLE_ARM_SVE"] =
             FASTPAULI_REQUESTED_ENABLE_ARM_SVE;
-        cpu_cmake_options["FASTPAULI_BUILD_CPU_BACKEND"] =
+        cpu_cmake_options["WOLFGANG_BUILD_CPU_BACKEND"] =
             std::string(FASTPAULI_BUILD_CPU_BACKEND);
         info["cpu_cmake_options"] = cpu_cmake_options;
 
@@ -503,7 +503,7 @@ void register_internal_bindings(nb::module_& module) {
       },
       "Return build settings used by the validation harness.");
 
-#if FASTPAULI_ENABLE_INTERNAL_BINDINGS
+#if WOLFGANG_ENABLE_INTERNAL_BINDINGS
   module.def(
       "_cpu_backend_report_for_testing",
       [](std::string selector) {
@@ -528,7 +528,7 @@ void register_internal_bindings(nb::module_& module) {
   register_pauli_diagnostics(module);
 }
 
-#if FASTPAULI_ENABLE_INTERNAL_BINDINGS
+#if WOLFGANG_ENABLE_INTERNAL_BINDINGS
 namespace {
 void append_uint64_vector(nb::dict& item, const char* key, const std::vector<std::uint64_t>& values) {
   nb::list list;
@@ -554,8 +554,8 @@ bool campaign8_validation_csr_allowed(std::size_t rows, std::size_t cols) {
 
 [[noreturn]] void throw_cuda_rebuild_guidance() {
   throw std::runtime_error(
-      "FastPauli was built without CUDA support; rebuild from source with "
-      "FASTPAULI_ENABLE_CUDA=ON to use PauliSum.to_device().");
+      "Wolfgang was built without CUDA support; rebuild from source with "
+      "WOLFGANG_ENABLE_CUDA=ON to use PauliSum.to_device().");
 }
 
 nb::dict unavailable_fused_consumer_report(
@@ -752,7 +752,7 @@ nb::dict benchmark_cuda_fused_commutation_consumer(
   }
   return unavailable_fused_consumer_report(
       mode,
-      "FastPauli was built without CUDA support; rebuild from source with FASTPAULI_ENABLE_CUDA=ON to use PauliSum.to_device().");
+      "Wolfgang was built without CUDA support; rebuild from source with WOLFGANG_ENABLE_CUDA=ON to use PauliSum.to_device().");
 #endif
 }
 
@@ -918,7 +918,7 @@ nb::dict benchmark_cuda_device_resident_consumer(
   }
   return unavailable_campaign8_consumer_report(
       mode,
-      "FastPauli was built without CUDA support; rebuild from source with FASTPAULI_ENABLE_CUDA=ON to use PauliSum.to_device().");
+      "Wolfgang was built without CUDA support; rebuild from source with WOLFGANG_ENABLE_CUDA=ON to use PauliSum.to_device().");
 #endif
 }
 
@@ -1121,8 +1121,8 @@ void register_pauli_diagnostics(nb::module_& module) {
   module.def("_metal_status", []() {
     return metal_status_to_internal_dict(wolfgang::DevicePauliSum::metal_status());
   });
-#if FASTPAULI_ENABLE_INTERNAL_BINDINGS
   module.def("_accelerator_status", []() { return accelerator_status_to_internal_dict(); });
+#if WOLFGANG_ENABLE_INTERNAL_BINDINGS
   nb::object pauli_type = module.attr("PauliSum");
   nb::object checked_matmul = nb::cpp_function(
       [](nb::handle lhs_terms, nb::handle rhs_terms, nb::handle max_terms) {

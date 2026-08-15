@@ -1,4 +1,4 @@
-"""Shared metadata helpers for FastPauli benchmark reports."""
+"""Shared metadata helpers for Wolfgang benchmark reports."""
 
 from __future__ import annotations
 
@@ -357,7 +357,7 @@ def accelerator_build_mode(build_info: dict[str, Any]) -> str:
     enabled_count = sum((cuda_enabled, hip_enabled, metal_enabled))
     if enabled_count > 1:
         raise ValueError(
-            "unsupported mixed accelerator build metadata: FastPauli uses "
+            "unsupported mixed accelerator build metadata: Wolfgang uses "
             "target-specific accelerator builds"
         )
     if cuda_enabled:

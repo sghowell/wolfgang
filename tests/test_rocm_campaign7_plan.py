@@ -126,8 +126,8 @@ def test_rocm_campaign7_release_lane_prints_expected_commands() -> None:
         "report-validation",
     ):
         assert required in output
-    assert "FASTPAULI_ENABLE_HIP=ON" in output
-    assert "FASTPAULI_HIP_ARCHITECTURES=gfx942" in output
+    assert "WOLFGANG_ENABLE_HIP=ON" in output
+    assert "WOLFGANG_HIP_ARCHITECTURES=gfx942" in output
     assert "|| true" not in output
     assert "test $status -ne 0" in output
     assert "grep -q 'cannot both be ON'" in output

@@ -13,10 +13,10 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
 import numpy as np
-from fastpauli import PauliSum
+import wolfgang_quantum as wolfgang
+import wolfgang_quantum._wolfgang_core as core
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -30,15 +30,15 @@ except ModuleNotFoundError:
 
 @contextmanager
 def forced_backend(selector: str) -> Iterator[None]:
-    previous = os.environ.get("FASTPAULI_CPU_BACKEND")
-    os.environ["FASTPAULI_CPU_BACKEND"] = selector
+    previous = os.environ.get("WOLFGANG_CPU_BACKEND")
+    os.environ["WOLFGANG_CPU_BACKEND"] = selector
     try:
         yield
     finally:
         if previous is None:
-            os.environ.pop("FASTPAULI_CPU_BACKEND", None)
+            os.environ.pop("WOLFGANG_CPU_BACKEND", None)
         else:
-            os.environ["FASTPAULI_CPU_BACKEND"] = previous
+            os.environ["WOLFGANG_CPU_BACKEND"] = previous
 
 
 def timed_call(fn: Any, *, warmup: int, repeat: int) -> tuple[Any, dict[str, float]]:
@@ -270,7 +270,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "thresholds": {
             "tbb_pairwise_entries": threshold,

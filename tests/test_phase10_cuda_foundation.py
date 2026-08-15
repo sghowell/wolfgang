@@ -39,7 +39,7 @@ def test_cuda_status_distinguishes_build_time_absence() -> None:
         assert status["runtime_available"] is False
         assert status["device_count"] == 0
         assert "built without CUDA" in status["skip_reason"]
-        assert "FASTPAULI_ENABLE_CUDA=ON" in status["skip_reason"]
+        assert "WOLFGANG_ENABLE_CUDA=ON" in status["skip_reason"]
 
 
 def test_cmake_cuda_build_records_host_compiler_without_forcing_selection() -> None:
@@ -74,7 +74,7 @@ def test_to_device_reports_clear_cpu_only_error_or_round_trips() -> None:
     hip_status = core._hip_status()
     metal_status = core._metal_status()
     if not cuda_status["built"] and not hip_status["built"] and not metal_status["built"]:
-        with pytest.raises(RuntimeError, match="built without CUDA.*FASTPAULI_ENABLE_CUDA=ON"):
+        with pytest.raises(RuntimeError, match="built without CUDA.*WOLFGANG_ENABLE_CUDA=ON"):
             op.to_device()
         return
 
@@ -110,7 +110,7 @@ def test_device_commutation_matrix_reports_clear_cpu_only_error_or_allocates() -
     metal_status = core._metal_status()
 
     if not cuda_status["built"] and not hip_status["built"] and not metal_status["built"]:
-        with pytest.raises(RuntimeError, match="built without CUDA.*FASTPAULI_ENABLE_CUDA=ON"):
+        with pytest.raises(RuntimeError, match="built without CUDA.*WOLFGANG_ENABLE_CUDA=ON"):
             fastpauli.DeviceCommutationMatrix.empty((2, 3), device=0)
         return
 

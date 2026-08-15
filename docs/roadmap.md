@@ -70,13 +70,13 @@ guarded-matrix commutation APIs, deterministic greedy QWC and full commuting gro
 pytest semantic fixtures, simplify, multiply, grouping, and OpenFermion conversion
 benchmark smokes, scalar CPU statevector and diagonal Z-count expectation kernels,
 expectation benchmark smoke, runtime CPU backend dispatch metadata, forced scalar
-execution through `FASTPAULI_CPU_BACKEND`, clear failures for uncompiled optimized
+execution through `WOLFGANG_CPU_BACKEND`, clear failures for uncompiled optimized
 selectors, optional NEON/AVX2/AVX-512 commutation kernels, optional oneTBB
 commutation kernels, operation-level auto dispatch for measured commutation and
 full-grouping graph hot spots, CPU-dispatch benchmark smoke, repo-local validation,
 core CPU CI, Qiskit adapter CI jobs, and OpenFermion adapter CI jobs. The CUDA
-backend adds optional `FASTPAULI_ENABLE_CUDA=ON`
-source builds, configurable `FASTPAULI_CUDA_ARCHITECTURES`, explicit
+backend adds optional `WOLFGANG_ENABLE_CUDA=ON`
+source builds, configurable `WOLFGANG_CUDA_ARCHITECTURES`, explicit
 `PauliSum.to_device()` and `DevicePauliSum.to_host()` transfers, CUDA runtime
 availability metadata, CPU-only stubs with build-time absence errors, CUDA
 `DevicePauliSum.simplify()`, statevector expectation, dense pairwise
@@ -179,7 +179,7 @@ slice.
 The first ROCm/HIP MI300X bring-up plan in
 `docs/plans/mi300x_rocm_bringup_plan.md` is now complete and published at
 `docs/benchmarks/reports/rocm_mi300x_bringup_2026-04-29.md`. It adds
-source-build-only `FASTPAULI_ENABLE_HIP=ON` evidence for MI300X `gfx942`,
+source-build-only `WOLFGANG_ENABLE_HIP=ON` evidence for MI300X `gfx942`,
 keeps CUDA and HIP mutually exclusive in this architecture slice, exposes HIP
 runtime metadata and `DevicePauliSum.backend == "hip"`, validates non-empty
 and empty HIP transfers, retains a HIP pairwise commutation kernel, captures
@@ -325,7 +325,7 @@ claims.
 The Apple Silicon accelerator implementation lane is active in
 `docs/architecture/apple_accelerator.md`, with implementation handoff in
 `docs/plans/apple_metal_mps_bringup_plan.md`. The source tree now includes the
-`backend="metal"` selector, `FASTPAULI_ENABLE_METAL=ON` target-specific source
+`backend="metal"` selector, `WOLFGANG_ENABLE_METAL=ON` target-specific source
 build flag, Metal status metadata, transfer code, and pairwise commutation
 kernel. Metal target builds remain separate from CUDA and HIP target builds,
 and MPS/MPSGraph remain optional implementation adjuncts or baselines rather
@@ -624,10 +624,10 @@ Acceptance:
 
 ```text
 portable scalar backend remains compiled and forceable
-NEON compiles and runs on Apple Silicon when FASTPAULI_ENABLE_ARM_NEON=auto or ON
+NEON compiles and runs on Apple Silicon when WOLFGANG_ENABLE_ARM_NEON=auto or ON
 AVX2 and AVX-512 compile into separate dispatched objects on x86_64 when the compiler supports the required flags
 AVX-512 runtime availability checks require AVX-512F, AVX-512BW, AVX-512VL, and AVX-512 VPOPCNTDQ
-oneTBB compiles only when CMake finds oneTBB, and FASTPAULI_ENABLE_TBB=ON fails clearly when it is missing
+oneTBB compiles only when CMake finds oneTBB, and WOLFGANG_ENABLE_TBB=ON fails clearly when it is missing
 forced tbb, avx2, avx512, and neon selectors match forced scalar for covered commutation/grouping kernels
 forced optimized selectors fail clearly for scalar-only operations
 auto dispatch uses oneTBB only for large pairwise commutation and uses SIMD for covered packed-word full-grouping graph construction
@@ -643,8 +643,8 @@ Goal: add the required CUDA backend without disrupting CPU-only builds.
 Acceptance:
 
 ```text
-FASTPAULI_ENABLE_CUDA=ON builds from source
-FASTPAULI_ENABLE_CUDA=OFF still builds without CUDA installed
+WOLFGANG_ENABLE_CUDA=ON builds from source
+WOLFGANG_ENABLE_CUDA=OFF still builds without CUDA installed
 CUDA toolkit and architecture target handling follows docs/architecture/hardware_targets_and_testing.md
 PauliSum.to_device and DevicePauliSum.to_host work
 device transfer tests pass

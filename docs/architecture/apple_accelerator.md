@@ -21,7 +21,7 @@ metal
 The source-build flag for this target is:
 
 ```text
-FASTPAULI_ENABLE_METAL=ON
+WOLFGANG_ENABLE_METAL=ON
 ```
 
 The normal build matrix remains target-specific:
@@ -33,7 +33,7 @@ HIP-target source build
 Metal-target source build
 ```
 
-`FASTPAULI_ENABLE_METAL=ON` must initially be mutually exclusive with CUDA and
+`WOLFGANG_ENABLE_METAL=ON` must initially be mutually exclusive with CUDA and
 HIP. A mixed CUDA+HIP+Metal runtime is not a goal for the Apple bring-up lane.
 
 ## Backend Naming
@@ -181,7 +181,7 @@ The first implementation report is
 `docs/benchmarks/reports/apple_metal_bringup_2026-05-01.md`. It records:
 
 ```text
-FASTPAULI_ENABLE_METAL=ON source build: passed
+WOLFGANG_ENABLE_METAL=ON source build: passed
 CPU-only source build and import safety: passed
 Metal status/build metadata: implemented
 transfer and pairwise commutation source code: implemented
@@ -296,8 +296,8 @@ that beats same-host CPU simplify and the transfer-reference path.
 Required local Apple Silicon validation before any support claim:
 
 ```text
-CPU-only build and import on the same machine with FASTPAULI_ENABLE_METAL=OFF
-source build with FASTPAULI_ENABLE_METAL=ON
+CPU-only build and import on the same machine with WOLFGANG_ENABLE_METAL=OFF
+source build with WOLFGANG_ENABLE_METAL=ON
 runtime status on a named Apple Silicon SoC
 transfer round trips for empty, one-term, multi-word, and duplicate-heavy operators
 same-operation CPU/Metal equivalence tests

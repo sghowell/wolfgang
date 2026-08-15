@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CUDA scaling benchmark for FastPauli hot paths.
+"""CUDA scaling benchmark for Wolfgang hot paths.
 
 The fixed ``bench_cuda_kernels.py`` profiles are intentionally stable evidence
 targets.  This benchmark fans the same correctness-checked datasets across
@@ -17,9 +17,9 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
 import numpy as np
+import wolfgang_quantum as wolfgang
+import wolfgang_quantum._wolfgang_core as core
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -157,8 +157,7 @@ CAMPAIGN9_MODE_METADATA = {
         "boundary": "private_benchmark_only",
         "campaign8_headroom_item": 1,
         "decision_doc": (
-            "docs/benchmarks/reports/"
-            "cuda_portability_campaign9_non_h100_nvidia_2026-04-29.md"
+            "docs/benchmarks/reports/cuda_portability_campaign9_non_h100_nvidia_2026-04-29.md"
         ),
         "default_final_status": "blocked_external",
         "env_status": "FASTPAULI_CUDA_CAMPAIGN9_NON_H100_STATUS",
@@ -316,14 +315,47 @@ SCALE_PROFILES: dict[str, dict[str, list[dict[str, Any]]]] = {
     },
     "default": {
         "simplify_duplicate_pressure": [
-            {"scale": "terms_10000", "num_qubits": 16, "num_terms": 10000, "term_weight": 3, "pool": 1024},
-            {"scale": "terms_50000", "num_qubits": 16, "num_terms": 50000, "term_weight": 3, "pool": 1024},
-            {"scale": "terms_200000", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 2048},
+            {
+                "scale": "terms_10000",
+                "num_qubits": 16,
+                "num_terms": 10000,
+                "term_weight": 3,
+                "pool": 1024,
+            },
+            {
+                "scale": "terms_50000",
+                "num_qubits": 16,
+                "num_terms": 50000,
+                "term_weight": 3,
+                "pool": 1024,
+            },
+            {
+                "scale": "terms_200000",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 2048,
+            },
         ],
         "statevector_expectation": [
-            {"scale": "qubits_10_terms_1024", "num_qubits": 10, "num_terms": 1024, "term_weight": 3},
-            {"scale": "qubits_12_terms_2048", "num_qubits": 12, "num_terms": 2048, "term_weight": 3},
-            {"scale": "qubits_14_terms_4096", "num_qubits": 14, "num_terms": 4096, "term_weight": 3},
+            {
+                "scale": "qubits_10_terms_1024",
+                "num_qubits": 10,
+                "num_terms": 1024,
+                "term_weight": 3,
+            },
+            {
+                "scale": "qubits_12_terms_2048",
+                "num_qubits": 12,
+                "num_terms": 2048,
+                "term_weight": 3,
+            },
+            {
+                "scale": "qubits_14_terms_4096",
+                "num_qubits": 14,
+                "num_terms": 4096,
+                "term_weight": 3,
+            },
         ],
         "pairwise_commutation": [
             {"scale": "terms_1024x1024", "num_qubits": 16, "terms": 1024, "term_weight": 3},
@@ -338,14 +370,47 @@ SCALE_PROFILES: dict[str, dict[str, list[dict[str, Any]]]] = {
     },
     "stress": {
         "simplify_duplicate_pressure": [
-            {"scale": "terms_100000", "num_qubits": 16, "num_terms": 100000, "term_weight": 3, "pool": 2048},
-            {"scale": "terms_500000", "num_qubits": 16, "num_terms": 500000, "term_weight": 3, "pool": 4096},
-            {"scale": "terms_1000000", "num_qubits": 16, "num_terms": 1000000, "term_weight": 3, "pool": 8192},
+            {
+                "scale": "terms_100000",
+                "num_qubits": 16,
+                "num_terms": 100000,
+                "term_weight": 3,
+                "pool": 2048,
+            },
+            {
+                "scale": "terms_500000",
+                "num_qubits": 16,
+                "num_terms": 500000,
+                "term_weight": 3,
+                "pool": 4096,
+            },
+            {
+                "scale": "terms_1000000",
+                "num_qubits": 16,
+                "num_terms": 1000000,
+                "term_weight": 3,
+                "pool": 8192,
+            },
         ],
         "statevector_expectation": [
-            {"scale": "qubits_14_terms_4096", "num_qubits": 14, "num_terms": 4096, "term_weight": 3},
-            {"scale": "qubits_15_terms_4096", "num_qubits": 15, "num_terms": 4096, "term_weight": 3},
-            {"scale": "qubits_16_terms_8192", "num_qubits": 16, "num_terms": 8192, "term_weight": 3},
+            {
+                "scale": "qubits_14_terms_4096",
+                "num_qubits": 14,
+                "num_terms": 4096,
+                "term_weight": 3,
+            },
+            {
+                "scale": "qubits_15_terms_4096",
+                "num_qubits": 15,
+                "num_terms": 4096,
+                "term_weight": 3,
+            },
+            {
+                "scale": "qubits_16_terms_8192",
+                "num_qubits": 16,
+                "num_terms": 8192,
+                "term_weight": 3,
+            },
         ],
         "pairwise_commutation": [
             {"scale": "terms_4096x4096", "num_qubits": 16, "terms": 4096, "term_weight": 3},
@@ -360,12 +425,34 @@ SCALE_PROFILES: dict[str, dict[str, list[dict[str, Any]]]] = {
     },
     "extreme": {
         "simplify_duplicate_pressure": [
-            {"scale": "terms_2000000", "num_qubits": 16, "num_terms": 2000000, "term_weight": 3, "pool": 16384},
-            {"scale": "terms_5000000", "num_qubits": 16, "num_terms": 5000000, "term_weight": 3, "pool": 32768},
+            {
+                "scale": "terms_2000000",
+                "num_qubits": 16,
+                "num_terms": 2000000,
+                "term_weight": 3,
+                "pool": 16384,
+            },
+            {
+                "scale": "terms_5000000",
+                "num_qubits": 16,
+                "num_terms": 5000000,
+                "term_weight": 3,
+                "pool": 32768,
+            },
         ],
         "statevector_expectation": [
-            {"scale": "qubits_17_terms_8192", "num_qubits": 17, "num_terms": 8192, "term_weight": 3},
-            {"scale": "qubits_18_terms_8192", "num_qubits": 18, "num_terms": 8192, "term_weight": 3},
+            {
+                "scale": "qubits_17_terms_8192",
+                "num_qubits": 17,
+                "num_terms": 8192,
+                "term_weight": 3,
+            },
+            {
+                "scale": "qubits_18_terms_8192",
+                "num_qubits": 18,
+                "num_terms": 8192,
+                "term_weight": 3,
+            },
         ],
         "pairwise_commutation": [
             {"scale": "terms_12000x12000", "num_qubits": 16, "terms": 12000, "term_weight": 3},
@@ -378,44 +465,182 @@ SCALE_PROFILES: dict[str, dict[str, list[dict[str, Any]]]] = {
     },
     "materialization": {
         "simplify_duplicate_pressure": [
-            {"scale": "terms_200000_low_duplicate", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 190000},
-            {"scale": "terms_200000_medium_duplicate", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 50000},
-            {"scale": "terms_200000_high_duplicate", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 4096},
-            {"scale": "terms_200000_pathological_duplicate", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 1},
+            {
+                "scale": "terms_200000_low_duplicate",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 190000,
+            },
+            {
+                "scale": "terms_200000_medium_duplicate",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 50000,
+            },
+            {
+                "scale": "terms_200000_high_duplicate",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 4096,
+            },
+            {
+                "scale": "terms_200000_pathological_duplicate",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 1,
+            },
         ],
         "statevector_expectation": [
-            {"scale": "resident_qubits_14_terms_4096", "num_qubits": 14, "num_terms": 4096, "term_weight": 3},
-            {"scale": "resident_qubits_16_terms_8192", "num_qubits": 16, "num_terms": 8192, "term_weight": 3},
+            {
+                "scale": "resident_qubits_14_terms_4096",
+                "num_qubits": 14,
+                "num_terms": 4096,
+                "term_weight": 3,
+            },
+            {
+                "scale": "resident_qubits_16_terms_8192",
+                "num_qubits": 16,
+                "num_terms": 8192,
+                "term_weight": 3,
+            },
         ],
         "pairwise_commutation": [
-            {"scale": "host_output_terms_8192x8192", "num_qubits": 16, "terms": 8192, "term_weight": 3},
-            {"scale": "host_output_terms_12000x12000", "num_qubits": 16, "terms": 12000, "term_weight": 3},
+            {
+                "scale": "host_output_terms_8192x8192",
+                "num_qubits": 16,
+                "terms": 8192,
+                "term_weight": 3,
+            },
+            {
+                "scale": "host_output_terms_12000x12000",
+                "num_qubits": 16,
+                "terms": 12000,
+                "term_weight": 3,
+            },
         ],
         "matmul_product_generation_simplify": [
-            {"scale": "duplicate_product_terms_1024x1024", "num_qubits": 12, "terms": 1024, "term_weight": 3},
-            {"scale": "duplicate_product_terms_2048x2048", "num_qubits": 12, "terms": 2048, "term_weight": 3},
+            {
+                "scale": "duplicate_product_terms_1024x1024",
+                "num_qubits": 12,
+                "terms": 1024,
+                "term_weight": 3,
+            },
+            {
+                "scale": "duplicate_product_terms_2048x2048",
+                "num_qubits": 12,
+                "terms": 2048,
+                "term_weight": 3,
+            },
         ],
     },
     "campaign4_workspace": {
         "simplify_duplicate_pressure": [
-            {"scale": "oneword_low_duplicate_terms_200000", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 190000},
-            {"scale": "oneword_medium_duplicate_terms_200000", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 50000},
-            {"scale": "oneword_high_duplicate_terms_200000", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 4096},
-            {"scale": "oneword_pathological_duplicate_terms_200000", "num_qubits": 16, "num_terms": 200000, "term_weight": 3, "pool": 1},
-            {"scale": "multiword_medium_duplicate_terms_100000", "num_qubits": 96, "num_terms": 100000, "term_weight": 3, "pool": 25000},
-            {"scale": "multiword_high_duplicate_terms_100000", "num_qubits": 96, "num_terms": 100000, "term_weight": 3, "pool": 4096},
+            {
+                "scale": "oneword_low_duplicate_terms_200000",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 190000,
+            },
+            {
+                "scale": "oneword_medium_duplicate_terms_200000",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 50000,
+            },
+            {
+                "scale": "oneword_high_duplicate_terms_200000",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 4096,
+            },
+            {
+                "scale": "oneword_pathological_duplicate_terms_200000",
+                "num_qubits": 16,
+                "num_terms": 200000,
+                "term_weight": 3,
+                "pool": 1,
+            },
+            {
+                "scale": "multiword_medium_duplicate_terms_100000",
+                "num_qubits": 96,
+                "num_terms": 100000,
+                "term_weight": 3,
+                "pool": 25000,
+            },
+            {
+                "scale": "multiword_high_duplicate_terms_100000",
+                "num_qubits": 96,
+                "num_terms": 100000,
+                "term_weight": 3,
+                "pool": 4096,
+            },
         ],
         "statevector_expectation": [
-            {"scale": "complex64_qubits_14_terms_4096", "num_qubits": 14, "num_terms": 4096, "term_weight": 3, "statevector_dtype": "complex64"},
-            {"scale": "complex128_qubits_14_terms_4096", "num_qubits": 14, "num_terms": 4096, "term_weight": 3, "statevector_dtype": "complex128"},
-            {"scale": "complex64_qubits_16_terms_8192", "num_qubits": 16, "num_terms": 8192, "term_weight": 3, "statevector_dtype": "complex64"},
-            {"scale": "complex128_qubits_16_terms_8192", "num_qubits": 16, "num_terms": 8192, "term_weight": 3, "statevector_dtype": "complex128"},
+            {
+                "scale": "complex64_qubits_14_terms_4096",
+                "num_qubits": 14,
+                "num_terms": 4096,
+                "term_weight": 3,
+                "statevector_dtype": "complex64",
+            },
+            {
+                "scale": "complex128_qubits_14_terms_4096",
+                "num_qubits": 14,
+                "num_terms": 4096,
+                "term_weight": 3,
+                "statevector_dtype": "complex128",
+            },
+            {
+                "scale": "complex64_qubits_16_terms_8192",
+                "num_qubits": 16,
+                "num_terms": 8192,
+                "term_weight": 3,
+                "statevector_dtype": "complex64",
+            },
+            {
+                "scale": "complex128_qubits_16_terms_8192",
+                "num_qubits": 16,
+                "num_terms": 8192,
+                "term_weight": 3,
+                "statevector_dtype": "complex128",
+            },
         ],
         "pairwise_commutation": [
-            {"scale": "host_vector_terms_8192x8192", "num_qubits": 16, "terms": 8192, "term_weight": 3, "output_target": "host_vector"},
-            {"scale": "caller_owned_host_bytes_terms_8192x8192", "num_qubits": 16, "terms": 8192, "term_weight": 3, "output_target": "caller_owned_host_bytes"},
-            {"scale": "caller_owned_device_bytes_terms_8192x8192", "num_qubits": 16, "terms": 8192, "term_weight": 3, "output_target": "caller_owned_device_bytes"},
-            {"scale": "bitpacked_device_words_terms_8192x8192", "num_qubits": 16, "terms": 8192, "term_weight": 3, "output_target": "bitpacked_device_words"},
+            {
+                "scale": "host_vector_terms_8192x8192",
+                "num_qubits": 16,
+                "terms": 8192,
+                "term_weight": 3,
+                "output_target": "host_vector",
+            },
+            {
+                "scale": "caller_owned_host_bytes_terms_8192x8192",
+                "num_qubits": 16,
+                "terms": 8192,
+                "term_weight": 3,
+                "output_target": "caller_owned_host_bytes",
+            },
+            {
+                "scale": "caller_owned_device_bytes_terms_8192x8192",
+                "num_qubits": 16,
+                "terms": 8192,
+                "term_weight": 3,
+                "output_target": "caller_owned_device_bytes",
+            },
+            {
+                "scale": "bitpacked_device_words_terms_8192x8192",
+                "num_qubits": 16,
+                "terms": 8192,
+                "term_weight": 3,
+                "output_target": "bitpacked_device_words",
+            },
         ],
         "matmul_product_generation_simplify": [
             {"scale": "terms_512x512", "num_qubits": 12, "terms": 512, "term_weight": 3},
@@ -822,7 +1047,9 @@ def add_campaign9_row_schema_fields(
     result["mode"] = mode
     result["boundary"] = metadata["boundary"]
     result["campaign8_headroom_item"] = int(metadata["campaign8_headroom_item"])
-    result["final_status"] = "blocked_external" if cuda_unavailable else _campaign9_final_status(mode)
+    result["final_status"] = (
+        "blocked_external" if cuda_unavailable else _campaign9_final_status(mode)
+    )
     result["deferred_status_allowed"] = False
     result["decision_doc"] = metadata["decision_doc"]
     result["correctness_digest"] = _campaign9_digest(result.get("correctness_digest", ""))
@@ -833,7 +1060,9 @@ def add_campaign9_row_schema_fields(
     result["cuda_driver"] = str(cuda_status.get("driver_version", ""))
     result["cuda_runtime"] = str(cuda_status.get("runtime_version", ""))
     result["cuda_toolkit"] = str(build_info.get("cuda_toolkit_version", ""))
-    result["compiled_architectures"] = str(build_info.get("cuda_architectures", "")).replace(",", ";")
+    result["compiled_architectures"] = str(build_info.get("cuda_architectures", "")).replace(
+        ",", ";"
+    )
     result["gpu_name"] = gpu_name
     result["gpu_compute_capability"] = gpu_compute_capability
     missing = [field for field in CAMPAIGN9_REQUIRED_ROW_FIELDS if field not in result]
@@ -857,7 +1086,9 @@ def _campaign10_final_status(
         raise RuntimeError("Campaign 10 rows may not use final_status='deferred'")
     if status not in CAMPAIGN10_FINAL_STATUSES:
         allowed = ", ".join(CAMPAIGN10_FINAL_STATUSES)
-        raise RuntimeError(f"invalid Campaign 10 final_status {status!r}; expected one of {allowed}")
+        raise RuntimeError(
+            f"invalid Campaign 10 final_status {status!r}; expected one of {allowed}"
+        )
     return status
 
 
@@ -894,7 +1125,9 @@ def add_campaign10_row_schema_fields(
     result["cuda_driver"] = str(cuda_status.get("driver_version", ""))
     result["cuda_runtime"] = str(cuda_status.get("runtime_version", ""))
     result["cuda_toolkit"] = str(build_info.get("cuda_toolkit_version", ""))
-    result["compiled_architectures"] = str(build_info.get("cuda_architectures", "")).replace(",", ";")
+    result["compiled_architectures"] = str(build_info.get("cuda_architectures", "")).replace(
+        ",", ";"
+    )
     result["architecture_compile_status"] = os.environ.get(
         "FASTPAULI_CAMPAIGN10_ARCHITECTURE_COMPILE_STATUS",
         "not_checked",
@@ -990,9 +1223,7 @@ def run_expectation_scale(
         build_info=build_info,
         warmup=warmup,
         repeat=repeat,
-        notes=[
-            "device-resident timing keeps the operator resident but copies host psi"
-        ],
+        notes=["device-resident timing keeps the operator resident but copies host psi"],
     )
     result["scale"] = scale["scale"]
     return result
@@ -1238,7 +1469,7 @@ def run_commutation_scale(
             "status": result["final_status"],
             "campaign8_headroom_item": result["campaign8_headroom_item"],
             "decision_doc": result["decision_doc"],
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer",
             "non_deferred_closeout_required": True,
         }
         result["notes"].append(
@@ -1356,7 +1587,7 @@ def run_commutation_scale(
             "status": result["final_status"],
             "campaign9_headroom_item": result["campaign9_headroom_item"],
             "decision_doc": result["decision_doc"],
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer",
             "non_deferred_closeout_required": True,
         }
         result["notes"].append(
@@ -1425,12 +1656,18 @@ def run_matmul_scale(
     result = case_result(
         name="matmul_product_generation_simplify",
         dataset=metadata,
-        cpu_fn=lambda: lhs.matmul(rhs, simplify=True, max_intermediate_terms=max_intermediate_terms),
-        cuda_transfer_fn=lambda: lhs.to_device().matmul(
-            rhs.to_device(),
-            simplify=True,
-            max_intermediate_terms=max_intermediate_terms,
-        ).to_host(),
+        cpu_fn=lambda: lhs.matmul(
+            rhs, simplify=True, max_intermediate_terms=max_intermediate_terms
+        ),
+        cuda_transfer_fn=lambda: (
+            lhs.to_device()
+            .matmul(
+                rhs.to_device(),
+                simplify=True,
+                max_intermediate_terms=max_intermediate_terms,
+            )
+            .to_host()
+        ),
         cuda_resident_fn=lambda: lhs_device.matmul(
             rhs_device,
             simplify=True,
@@ -1476,7 +1713,7 @@ def campaign8_cpu_unavailable_cases(
     git_revision: str,
 ) -> list[dict[str, Any]]:
     unavailable_reason = cuda_status.get("skip_reason") or (
-        "FastPauli CUDA runtime is unavailable for this Campaign 8 benchmark profile."
+        "Wolfgang CUDA runtime is unavailable for this Campaign 8 benchmark profile."
     )
     rows: list[dict[str, Any]] = []
     for operation in operations:
@@ -1494,8 +1731,7 @@ def campaign8_cpu_unavailable_cases(
                     "campaign8_device_resident_consumer": {
                         "status": "unavailable",
                         "private_hook": (
-                            "fastpauli._fastpauli_core."
-                            "_benchmark_cuda_device_resident_consumer"
+                            "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer"
                         ),
                         "mode": mode,
                     },
@@ -1529,7 +1765,7 @@ def campaign9_cpu_unavailable_cases(
     git_revision: str,
 ) -> list[dict[str, Any]]:
     unavailable_reason = cuda_status.get("skip_reason") or (
-        "FastPauli CUDA runtime is unavailable for this Campaign 9 benchmark profile."
+        "Wolfgang CUDA runtime is unavailable for this Campaign 9 benchmark profile."
     )
     rows: list[dict[str, Any]] = []
     for operation in operations:
@@ -1548,8 +1784,7 @@ def campaign9_cpu_unavailable_cases(
                         "status": "blocked_external",
                         "mode": mode,
                         "private_hook": (
-                            "fastpauli._fastpauli_core."
-                            "_benchmark_cuda_device_resident_consumer"
+                            "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer"
                         ),
                         "non_deferred_closeout_required": True,
                     },
@@ -1583,7 +1818,7 @@ def campaign10_cpu_unavailable_cases(
     git_revision: str,
 ) -> list[dict[str, Any]]:
     unavailable_reason = cuda_status.get("skip_reason") or (
-        "FastPauli CUDA runtime is unavailable for this Campaign 10 benchmark profile."
+        "Wolfgang CUDA runtime is unavailable for this Campaign 10 benchmark profile."
     )
     rows: list[dict[str, Any]] = []
     for operation in operations:
@@ -1602,8 +1837,7 @@ def campaign10_cpu_unavailable_cases(
                         "status": "blocked_external",
                         "mode": mode,
                         "private_hook": (
-                            "fastpauli._fastpauli_core."
-                            "_benchmark_cuda_device_resident_consumer"
+                            "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer"
                         ),
                         "non_deferred_closeout_required": True,
                     },
@@ -1672,7 +1906,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "cuda_status": cuda_status,
         "timing_policy": {
@@ -1688,7 +1922,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         },
         "correctness_checks": {
             "enabled": True,
-            "reference": "FastPauli scalar CPU output on the same deterministic datasets",
+            "reference": "Wolfgang scalar CPU output on the same deterministic datasets",
             "failure_mode": "raises RuntimeError if CPU/GPU outputs differ",
         },
         "campaign7": {
@@ -1728,7 +1962,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             ),
             "stream_graph_status": "deferred",
             "scatter_tuning_status": "rejected_no_consumer",
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer",
         },
         "campaign9": {
             "campaign": "cuda_deferred_headroom_campaign9",
@@ -1736,7 +1970,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "required_row_fields": list(CAMPAIGN9_REQUIRED_ROW_FIELDS),
             "deferred_status_allowed": False,
             "mode_metadata": CAMPAIGN9_MODE_METADATA,
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer",
         },
         "campaign10": {
             "campaign": "cuda_cross_architecture_campaign10",
@@ -1744,7 +1978,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "required_row_fields": list(CAMPAIGN10_REQUIRED_ROW_FIELDS),
             "deferred_status_allowed": False,
             "mode_metadata": CAMPAIGN10_MODE_METADATA,
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "wolfgang._wolfgang_core._benchmark_cuda_device_resident_consumer",
         },
         "planned_cases": planned_cases(args.profile, operations),
         "cases": [],

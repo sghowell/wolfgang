@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic Phase 5 multiplication benchmark.
 
-The benchmark compares FastPauli scalar Pauli-sum multiplication with a
+The benchmark compares Wolfgang scalar Pauli-sum multiplication with a
 pure-Python dense-label reference. It exercises both a single-term phase case
 and a small cross-product case, and reports the guardrail that caps
 intermediate terms before allocation.
@@ -15,9 +15,9 @@ import statistics
 import time
 from typing import Any
 
-import fastpauli
 import numpy as np
-from fastpauli import PauliSum
+import wolfgang_quantum as wolfgang
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import (
@@ -52,6 +52,7 @@ LOCAL_PRODUCTS: dict[tuple[str, str], tuple[str, complex]] = {
     ("Z", "X"): ("Y", 1.0j),
     ("X", "Z"): ("Y", -1.0j),
 }
+
 
 def make_label(rng: np.random.Generator, num_qubits: int, term_weight: int) -> str:
     chars = ["I"] * num_qubits
@@ -207,14 +208,20 @@ def run_case(
             for label, coeff in zip(fast_labels, fast_coeffs, strict=True)
         ]
         if len(fast_pairs) != len(python_result):
-            raise RuntimeError("FastPauli and Python simplified multiply produced different term counts")
+            raise RuntimeError(
+                "Wolfgang and Python simplified multiply produced different term counts"
+            )
         for (fast_key, fast_coeff), (python_key, python_coeff) in zip(
             fast_pairs,
             python_result,
             strict=True,
         ):
-            if fast_key != python_key or not np.allclose(fast_coeff, python_coeff, rtol=1.0e-12, atol=1.0e-12):
-                raise RuntimeError("FastPauli and Python simplified multiply produced different outputs")
+            if fast_key != python_key or not np.allclose(
+                fast_coeff, python_coeff, rtol=1.0e-12, atol=1.0e-12
+            ):
+                raise RuntimeError(
+                    "Wolfgang and Python simplified multiply produced different outputs"
+                )
         python_terms = len(python_result)
     else:
         python_result, python_timings = timed_call(
@@ -225,9 +232,9 @@ def run_case(
         fast_labels, fast_coeffs = fast_result.to_labels()
         python_labels, python_coeffs = python_result
         if fast_labels != python_labels:
-            raise RuntimeError("FastPauli and Python multiply produced different labels")
+            raise RuntimeError("Wolfgang and Python multiply produced different labels")
         if not np.allclose(fast_coeffs, python_coeffs, rtol=1.0e-12, atol=1.0e-12):
-            raise RuntimeError("FastPauli and Python multiply produced different coefficients")
+            raise RuntimeError("Wolfgang and Python multiply produced different coefficients")
         python_terms = len(python_labels)
 
     return {
@@ -387,13 +394,13 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             )
         )
 
-    build_info = fastpauli._fastpauli_core._build_info()
+    build_info = wolfgang._wolfgang_core._build_info()
     return {
         "benchmark": "multiply",
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "timing_policy": {
             "warmup": warmup,
@@ -405,7 +412,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "reference": "pure Python dense-label multiplication",
             "failure_mode": "raises RuntimeError if output labels or coefficients differ",
         },
-        "baselines": ["FastPauli scalar CPU", "pure Python dense-label reference"],
+        "baselines": ["Wolfgang scalar CPU", "pure Python dense-label reference"],
         "cases": cases,
     }
 
@@ -425,7 +432,9 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use tiny Phase 5 benchmark-smoke dimensions.",
     )
-    parser.add_argument("--json", action="store_true", help="Emit the full benchmark report as JSON.")
+    parser.add_argument(
+        "--json", action="store_true", help="Emit the full benchmark report as JSON."
+    )
     return parser.parse_args()
 
 
@@ -457,7 +466,7 @@ def main() -> None:
             f"lhs_terms={dataset['lhs_terms']} rhs_terms={dataset['rhs_terms']} "
             f"intermediate_terms={dataset['intermediate_terms']} "
             f"max_intermediate_terms={dataset['max_intermediate_terms']} "
-            f"FastPauli={results['fastpauli_scalar_seconds']:.6g}s "
+            f"Wolfgang={results['fastpauli_scalar_seconds']:.6g}s "
             f"Python={results['python_baseline_seconds']:.6g}s"
         )
 

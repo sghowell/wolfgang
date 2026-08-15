@@ -576,13 +576,13 @@ def test_private_fused_consumer_hook_reports_cpu_only_unavailable() -> None:
     report = core._benchmark_cuda_fused_commutation_consumer("csr_anticommutation_graph")
     assert report["status"] == "unavailable"
     assert report["mode"] == "csr_anticommutation_graph"
-    assert "FASTPAULI_ENABLE_CUDA=ON" in report["unavailable_reason"]
+    assert "WOLFGANG_ENABLE_CUDA=ON" in report["unavailable_reason"]
     assert not hasattr(fastpauli, "_benchmark_cuda_fused_commutation_consumer")
 
     with pytest.raises(ValueError, match="mode must be"):
         core._benchmark_cuda_fused_commutation_consumer("typoed_mode")
 
-    with pytest.raises(RuntimeError, match="FASTPAULI_ENABLE_CUDA=ON"):
+    with pytest.raises(RuntimeError, match="WOLFGANG_ENABLE_CUDA=ON"):
         core._benchmark_cuda_fused_commutation_consumer(
             "csr_anticommutation_graph",
             require_cuda=True,
@@ -601,13 +601,13 @@ def test_private_campaign8_device_resident_consumer_hook_reports_cpu_only_unavai
     assert report["mode"] == "device_resident_graph"
     assert report["campaign"] == "h100_campaign8"
     assert report["device_resident_graph_status"] == "unavailable"
-    assert "FASTPAULI_ENABLE_CUDA=ON" in report["unavailable_reason"]
+    assert "WOLFGANG_ENABLE_CUDA=ON" in report["unavailable_reason"]
     assert not hasattr(fastpauli, "_benchmark_cuda_device_resident_consumer")
 
     with pytest.raises(ValueError, match="mode must be"):
         core._benchmark_cuda_device_resident_consumer("typoed_mode")
 
-    with pytest.raises(RuntimeError, match="FASTPAULI_ENABLE_CUDA=ON"):
+    with pytest.raises(RuntimeError, match="WOLFGANG_ENABLE_CUDA=ON"):
         core._benchmark_cuda_device_resident_consumer(
             "device_resident_graph",
             require_cuda=True,

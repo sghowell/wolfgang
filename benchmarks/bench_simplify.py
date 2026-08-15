@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic Phase 4 simplify benchmark.
 
-The benchmark compares the FastPauli scalar simplify path with a pure-Python
+The benchmark compares the Wolfgang scalar simplify path with a pure-Python
 packed-key baseline on low-duplicate and high-duplicate datasets. It is a
 measurement harness, not a speedup claim; reports must be interpreted with the
 environment metadata emitted by this script.
@@ -15,9 +15,9 @@ import statistics
 import time
 from typing import Any
 
-import fastpauli
 import numpy as np
-from fastpauli import PauliSum
+import wolfgang_quantum as wolfgang
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import (
@@ -132,7 +132,9 @@ def python_simplify(
 
 def fastpauli_pairs(op: PauliSum) -> list[tuple[tuple[int, ...], complex]]:
     labels, coeffs = op.to_labels()
-    return [(packed_key(label), complex(coeff)) for label, coeff in zip(labels, coeffs, strict=True)]
+    return [
+        (packed_key(label), complex(coeff)) for label, coeff in zip(labels, coeffs, strict=True)
+    ]
 
 
 def timed_call(fn: Any, *, warmup: int, repeat: int) -> tuple[Any, dict[str, float]]:
@@ -188,14 +190,14 @@ def run_case(
 
     fast_pairs = fastpauli_pairs(fast_result)
     if len(fast_pairs) != len(python_result):
-        raise RuntimeError("FastPauli and Python simplify produced different term counts")
+        raise RuntimeError("Wolfgang and Python simplify produced different term counts")
     for (fast_key, fast_coeff), (python_key, python_coeff) in zip(
         fast_pairs,
         python_result,
         strict=True,
     ):
         if fast_key != python_key or not np.allclose(fast_coeff, python_coeff, rtol=0.0, atol=0.0):
-            raise RuntimeError("FastPauli and Python simplify produced different canonical results")
+            raise RuntimeError("Wolfgang and Python simplify produced different canonical results")
 
     return {
         "name": name,
@@ -243,13 +245,13 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             rtol=args.rtol,
         ),
     ]
-    build_info = fastpauli._fastpauli_core._build_info()
+    build_info = wolfgang._wolfgang_core._build_info()
     return {
         "benchmark": "simplify",
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "timing_policy": {
             "warmup": warmup,
@@ -261,7 +263,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "reference": "pure Python packed-key simplify",
             "failure_mode": "raises RuntimeError if term counts, canonical keys, or coefficients differ",
         },
-        "baselines": ["FastPauli scalar CPU", "pure Python packed-key reference"],
+        "baselines": ["Wolfgang scalar CPU", "pure Python packed-key reference"],
         "cases": cases,
     }
 
@@ -281,7 +283,9 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use tiny Phase 4 benchmark-smoke dimensions.",
     )
-    parser.add_argument("--json", action="store_true", help="Emit the full benchmark report as JSON.")
+    parser.add_argument(
+        "--json", action="store_true", help="Emit the full benchmark report as JSON."
+    )
     return parser.parse_args()
 
 
@@ -311,7 +315,7 @@ def main() -> None:
         print(
             f"{case['name']}: num_qubits={dataset['num_qubits']} "
             f"num_terms={dataset['num_terms']} duplicate_rate={dataset['duplicate_rate']} "
-            f"FastPauli={results['fastpauli_scalar_seconds']:.6g}s "
+            f"Wolfgang={results['fastpauli_scalar_seconds']:.6g}s "
             f"Python={results['python_baseline_seconds']:.6g}s "
             f"terms={results['fastpauli_terms']}"
         )

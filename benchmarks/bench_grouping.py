@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic Phase 6 commutation and grouping benchmark.
 
-The benchmark measures FastPauli's scalar pairwise commutation path, QWC
+The benchmark measures Wolfgang's scalar pairwise commutation path, QWC
 grouping, full-commutation grouping, and the dense commutation guardrail. It
 also runs compact pure-Python references to verify semantic parity for the
 measured datasets.
@@ -16,9 +16,9 @@ import time
 from collections.abc import Callable
 from typing import Any
 
-import fastpauli
 import numpy as np
-from fastpauli import PauliSum
+import wolfgang_quantum as wolfgang
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -81,8 +81,10 @@ def packed_key(label: str) -> tuple[int, ...]:
 def full_commutes(lhs: str, rhs: str) -> bool:
     parity = 0
     for lhs_pauli, rhs_pauli in zip(lhs, rhs, strict=True):
-        parity ^= int((lhs_pauli in {"X", "Y"} and rhs_pauli in {"Z", "Y"})
-                      != (lhs_pauli in {"Z", "Y"} and rhs_pauli in {"X", "Y"}))
+        parity ^= int(
+            (lhs_pauli in {"X", "Y"} and rhs_pauli in {"Z", "Y"})
+            != (lhs_pauli in {"Z", "Y"} and rhs_pauli in {"X", "Y"})
+        )
     return parity == 0
 
 
@@ -170,7 +172,9 @@ def run_pairwise_case(args: argparse.Namespace) -> dict[str, Any]:
     rhs = PauliSum.from_labels(rhs_labels, rhs_coeffs.tolist())
 
     fast_result, fast_timings = timed_call(
-        lambda: lhs.commutes_with(rhs, max_commutation_matrix_entries=args.max_commutation_matrix_entries),
+        lambda: lhs.commutes_with(
+            rhs, max_commutation_matrix_entries=args.max_commutation_matrix_entries
+        ),
         warmup=args.warmup,
         repeat=args.repeat,
     )
@@ -181,7 +185,7 @@ def run_pairwise_case(args: argparse.Namespace) -> dict[str, Any]:
     )
 
     if not np.array_equal(fast_result, python_result):
-        raise RuntimeError("FastPauli and Python pairwise commutation produced different results")
+        raise RuntimeError("Wolfgang and Python pairwise commutation produced different results")
 
     return {
         "name": "pairwise_commutation",
@@ -233,7 +237,7 @@ def run_grouping_case(args: argparse.Namespace, *, mode: str) -> dict[str, Any]:
 
     fast_labels = exported_group_labels(fast_result)
     if fast_labels != python_result:
-        raise RuntimeError(f"FastPauli and Python {mode} grouping produced different groups")
+        raise RuntimeError(f"Wolfgang and Python {mode} grouping produced different groups")
 
     return {
         "name": f"{mode}_grouping",
@@ -317,13 +321,13 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         run_guardrail_case(args),
     ]
 
-    build_info = fastpauli._fastpauli_core._build_info()
+    build_info = wolfgang._wolfgang_core._build_info()
     return {
         "benchmark": "grouping",
         "git_commit": git_commit(),
         "command": command_string(),
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "fastpauli_version": fastpauli.__version__,
+        "fastpauli_version": wolfgang.__version__,
         "fastpauli_build_info": build_info,
         "timing_policy": {
             "warmup": args.warmup,
@@ -336,7 +340,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "failure_mode": "raises RuntimeError if commutation matrices, groups, or guardrail behavior differ",
         },
         "baselines": [
-            "FastPauli scalar CPU",
+            "Wolfgang scalar CPU",
             "pure Python dense-label reference",
         ],
         "cases": cases,
@@ -360,7 +364,9 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use tiny Phase 6 benchmark-smoke dimensions.",
     )
-    parser.add_argument("--json", action="store_true", help="Emit the full benchmark report as JSON.")
+    parser.add_argument(
+        "--json", action="store_true", help="Emit the full benchmark report as JSON."
+    )
     return parser.parse_args()
 
 
@@ -395,13 +401,13 @@ def main() -> None:
             print(
                 f"{case['name']}: entries={dataset['matrix_entries']} "
                 f"max_entries={dataset['max_commutation_matrix_entries']} "
-                f"FastPauli={results['fastpauli_scalar_seconds']:.6g}s"
+                f"Wolfgang={results['fastpauli_scalar_seconds']:.6g}s"
             )
             continue
         print(
             f"{case['name']}: num_qubits={dataset['num_qubits']} "
             f"terms={dataset.get('num_terms', dataset.get('lhs_terms'))} "
-            f"FastPauli={results['fastpauli_scalar_seconds']:.6g}s "
+            f"Wolfgang={results['fastpauli_scalar_seconds']:.6g}s "
             f"Python={results['python_baseline_seconds']:.6g}s"
         )
 

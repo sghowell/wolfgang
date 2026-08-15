@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fastpauli/device_pauli_sum.hpp"
+#include "wolfgang/device_pauli_sum.hpp"
 
 #include "detail/checked_arithmetic.hpp"
 

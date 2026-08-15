@@ -1,4 +1,4 @@
-#include "fastpauli/pauli_sum.hpp"
+#include "wolfgang/pauli_sum.hpp"
 
 #include "detail/bitops.hpp"
 

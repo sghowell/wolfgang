@@ -48,7 +48,7 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[test]" \
-  --config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON
+  --config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON
 python scripts/validate.py
 ```
 
@@ -56,7 +56,7 @@ python scripts/validate.py
 
 Accelerator builds are opt-in CMake configurations, not automatic runtime downloads. Read the [accelerator overview](../accelerators/overview.md) and the [support matrix](../release/support_matrix.md) before building. Exact toolkit, architecture, compiler, runtime, and hardware evidence determines support.
 
-Never enable `FASTPAULI_ENABLE_NATIVE=ON` for a portable release wheel. Never infer broad architecture support from one successful GPU.
+Never enable `WOLFGANG_ENABLE_NATIVE=ON` for a portable release wheel. Never infer broad architecture support from one successful GPU.
 
 ## Troubleshooting
 

@@ -16,9 +16,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import fastpauli._fastpauli_core as core
 import numpy as np
 import torch
+import wolfgang_quantum._wolfgang_core as core
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -84,10 +84,14 @@ def build_artifact(public_base_git_commit: str) -> dict[str, Any]:
         mutation_result = "raised_exception"
         mutation_error = f"{type(exc).__name__}: {exc}"
 
-    after_host = np.asarray(
-        matrix.to_host(),
-        dtype=np.bool_,
-    ).reshape(expected.shape).astype(np.uint8, copy=False)
+    after_host = (
+        np.asarray(
+            matrix.to_host(),
+            dtype=np.bool_,
+        )
+        .reshape(expected.shape)
+        .astype(np.uint8, copy=False)
+    )
     host_sum_after = int(after_host.sum(dtype=np.uint64))
     first_value_after = int(after_host.reshape(-1)[0])
     mutation_changed_device_buffer = (
@@ -95,7 +99,9 @@ def build_artifact(public_base_git_commit: str) -> dict[str, Any]:
         and first_value_after == first_value_after_target
         and first_value_after != first_value_before
     )
-    read_only_enforced = mutation_result != "accepted_mutation" or not mutation_changed_device_buffer
+    read_only_enforced = (
+        mutation_result != "accepted_mutation" or not mutation_changed_device_buffer
+    )
 
     status = core._hip_status()
     devices = status.get("devices", [])
@@ -124,7 +130,9 @@ def build_artifact(public_base_git_commit: str) -> dict[str, Any]:
         "consumer_version": getattr(torch, "__version__", "unknown"),
         "consumer_backend": "rocm" if getattr(torch.version, "hip", None) else "not_rocm",
         "consumer_hip_version": getattr(torch.version, "hip", None),
-        "consumer_available": bool(getattr(torch.version, "hip", None) and torch.cuda.is_available()),
+        "consumer_available": bool(
+            getattr(torch.version, "hip", None) and torch.cuda.is_available()
+        ),
         "consumer_import_error": "",
         "device_name": first_device.get("name", "unknown"),
         "gfx_target": first_device.get("gfx_target", "unknown"),
