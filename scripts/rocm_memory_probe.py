@@ -100,8 +100,8 @@ def summarize_probe(
 
 
 def child_probe_payload() -> dict[str, Any]:
-    import fastpauli
-    import fastpauli._fastpauli_core as core
+    import wolfgang_quantum
+    import wolfgang_quantum._wolfgang_core as core
     import numpy as np
 
     status = core._hip_status()
@@ -122,7 +122,7 @@ def child_probe_payload() -> dict[str, Any]:
 
     before_process = settled_sample("before_process")
 
-    base = fastpauli.PauliSum.from_labels(
+    base = wolfgang_quantum.PauliSum.from_labels(
         labels_from_rng(193, 4096, 10),
         (rng.normal(size=4096) + 1j * rng.normal(size=4096)).tolist(),
     )
@@ -133,7 +133,7 @@ def child_probe_payload() -> dict[str, Any]:
 
     construct_destroy_samples: list[dict[str, int]] = []
     for cycle in range(20):
-        op = fastpauli.PauliSum.from_labels(
+        op = wolfgang_quantum.PauliSum.from_labels(
             labels_from_rng(193, 8192, 10),
             (rng.normal(size=8192) + 1j * rng.normal(size=8192)).tolist(),
         )

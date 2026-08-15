@@ -37,7 +37,7 @@ export EVIDENCE_ROOT="$evidence"
 run_step install_cuda_python_deps sh -c 'python -m pip install --upgrade pip setuptools wheel build scikit-build-core nanobind > "$evidence/private/logs/pip-bootstrap.log" 2>&1 && python -m pip install "cupy-cuda12x>=13,<14" "torch>=2.4,<2.7" > "$evidence/private/logs/cuda-python-deps.log" 2>&1'
 run_step install_editable sh -c 'python -m pip install -e .[test] --config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON --config-settings=cmake.define.WOLFGANG_ENABLE_CUDA=ON --config-settings=cmake.define.WOLFGANG_ENABLE_HIP=OFF --config-settings=cmake.define.WOLFGANG_ENABLE_METAL=OFF --config-settings=cmake.define.WOLFGANG_CUDA_ARCHITECTURES=100-real\;120 --config-settings=cmake.define.WOLFGANG_ENABLE_NATIVE=OFF > "$evidence/private/logs/cuda-install.log" 2>&1'
 run_step record_build_info sh -c 'python - <<"PY" > "$evidence/private/logs/build-info.txt"
-import fastpauli._fastpauli_core as core
+import wolfgang_quantum._wolfgang_core as core
 print(core._build_info())
 print(core._cuda_status())
 print(core._accelerator_status())

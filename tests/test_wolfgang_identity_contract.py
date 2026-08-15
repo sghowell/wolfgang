@@ -205,6 +205,24 @@ def test_active_release_tooling_uses_wolfgang_as_canonical_identity() -> None:
             '"package_import": "wolfgang_quantum"',
             '"project_distribution": "wolfgang-quantum"',
         ],
+        "scripts/validate.py": [
+            'import wolfgang_quantum and report scalar CPU build info',
+            'import wolfgang_quantum._wolfgang_core as core',
+        ],
+        "scripts/rocm_memory_probe.py": [
+            'import wolfgang_quantum',
+            'import wolfgang_quantum._wolfgang_core as core',
+        ],
+        "scripts/rocm_campaign5_candidate_probe.py": [
+            'import wolfgang_quantum._wolfgang_core as core',
+        ],
+        "scripts/b300_blackwell_resume_runner.py": [
+            'import wolfgang_quantum._wolfgang_core as core',
+        ],
+        "scripts/cuda_deep_profile.py": [
+            'find_spec("wolfgang_quantum._wolfgang_core")',
+            '<wolfgang_extension_path>',
+        ],
         "scripts/validate_release_artifacts.py": [
             'SDIST_ARTIFACT_PREFIX = "wolfgang-quantum-"',
             'WHEEL_ARTIFACT_PREFIX = "wolfgang_quantum-"',

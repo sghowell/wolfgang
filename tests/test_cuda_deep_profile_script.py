@@ -169,9 +169,9 @@ def test_cuda_deep_profile_extension_path_falls_back_without_installed_extension
     module = _load_cuda_deep_profile_module()
 
     def raise_module_not_found(name: str):
-        assert name == "fastpauli._fastpauli_core"
-        raise ModuleNotFoundError("No module named 'fastpauli'")
+        assert name == "wolfgang_quantum._wolfgang_core"
+        raise ModuleNotFoundError("No module named 'wolfgang_quantum'")
 
     monkeypatch.setattr(module.importlib.util, "find_spec", raise_module_not_found)
 
-    assert module.resolve_extension_path() == "<fastpauli_extension_path>"
+    assert module.resolve_extension_path() == "<wolfgang_extension_path>"

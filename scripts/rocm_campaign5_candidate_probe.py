@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import fastpauli._fastpauli_core as core
+import wolfgang_quantum._wolfgang_core as core
 import numpy as np
 import torch
 

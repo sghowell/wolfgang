@@ -342,11 +342,11 @@ def competitor_steps(
 
 def resolve_extension_path() -> str:
     try:
-        spec = importlib.util.find_spec("fastpauli._fastpauli_core")
+        spec = importlib.util.find_spec("wolfgang_quantum._wolfgang_core")
     except ModuleNotFoundError:
-        return "<fastpauli_extension_path>"
+        return "<wolfgang_extension_path>"
     if spec is None or spec.origin is None:
-        return "<fastpauli_extension_path>"
+        return "<wolfgang_extension_path>"
     return spec.origin
 
 

@@ -519,8 +519,8 @@ def check_review_policy() -> None:
 
 def run_build_info_check() -> None:
     script = (
-        "import fastpauli; "
-        "import fastpauli._fastpauli_core as core; "
+        "import wolfgang_quantum; "
+        "import wolfgang_quantum._wolfgang_core as core; "
         "info = core._build_info(); "
         "print(info); "
         "assert info['cpu_backend'] == 'scalar'; "
@@ -538,10 +538,10 @@ def run_build_info_check() -> None:
         "assert 'scalar' in info['compiled_cpu_backends']; "
         "assert 'oneTBB_version' in info; "
         "assert 'optimized_cpu_kernels' in info; "
-        "print(fastpauli.__version__)"
+        "print(wolfgang_quantum.__version__)"
     )
     run_check(
-        "import fastpauli and report scalar CPU build info",
+        "import wolfgang_quantum and report scalar CPU build info",
         [sys.executable, "-c", script],
     )
 
@@ -742,8 +742,8 @@ def run_cuda_source_build(architectures: str, *, nvcc: str, host_compiler: str) 
 
 def run_cuda_build_info_check(expected_architectures: str) -> None:
     script = (
-        "import fastpauli; "
-        "import fastpauli._fastpauli_core as core; "
+        "import wolfgang_quantum; "
+        "import wolfgang_quantum._wolfgang_core as core; "
         "info = core._build_info(); "
         "status = core._cuda_status(); "
         "print(info); "
@@ -858,8 +858,8 @@ def run_hip_source_build(architectures: str, *, requested: bool = False) -> None
 
 def run_hip_build_info_check(expected_architectures: str) -> None:
     script = (
-        "import fastpauli; "
-        "import fastpauli._fastpauli_core as core; "
+        "import wolfgang_quantum; "
+        "import wolfgang_quantum._wolfgang_core as core; "
         "info = core._build_info(); "
         "status = core._hip_status(); "
         "print(info); "
@@ -1050,8 +1050,8 @@ def run_metal_source_build(env: dict[str, str] | None = None) -> None:
 
 def run_metal_build_info_check(env: dict[str, str] | None = None) -> None:
     script = (
-        "import fastpauli; "
-        "import fastpauli._fastpauli_core as core; "
+        "import wolfgang_quantum; "
+        "import wolfgang_quantum._wolfgang_core as core; "
         "info = core._build_info(); "
         "status = core._metal_status(); "
         "print(info); "
