@@ -28,7 +28,7 @@ def install_fake_wheel_smoke_modules(
     monkeypatch: pytest.MonkeyPatch,
     *,
     build_info: dict[str, Any],
-    version: str = "0.2.0",
+    version: str = "0.2.1",
 ) -> None:
     class FakePauliSum:
         def __init__(self, labels: list[str], coeffs: list[complex]) -> None:
@@ -271,7 +271,7 @@ def test_wheel_smoke_script_preserves_cpu_safe_contract_with_controlled_cpu_meta
         "native_enabled": False,
     }
     install_fake_wheel_smoke_modules(monkeypatch, build_info=cpu_build_info)
-    monkeypatch.setattr(wheel_smoke.importlib_metadata, "version", lambda _dist: "0.2.0")
+    monkeypatch.setattr(wheel_smoke.importlib_metadata, "version", lambda _dist: "0.2.1")
 
     summary = wheel_smoke.smoke_wolfgang_wheel()
 
@@ -300,7 +300,7 @@ def test_wheel_smoke_script_rejects_accelerator_builds_when_cpu_safe_required(
             "native_enabled": False,
         },
     )
-    monkeypatch.setattr(wheel_smoke.importlib_metadata, "version", lambda _dist: "0.2.0")
+    monkeypatch.setattr(wheel_smoke.importlib_metadata, "version", lambda _dist: "0.2.1")
 
     with pytest.raises(AssertionError, match="hip_only"):
         wheel_smoke.smoke_wolfgang_wheel()
@@ -329,17 +329,17 @@ def test_release_checksum_writer_accepts_normalized_pep625_sdist_name(tmp_path: 
         "scripts/write_release_checksums.py",
         "fastpauli_release_checksums_normalized_sdist",
     )
-    (tmp_path / "wolfgang_quantum-0.2.0.tar.gz").write_bytes(b"sdist")
-    (tmp_path / "wolfgang_quantum-0.2.0-cp312-cp312-macosx_26_0_arm64.whl").write_bytes(
+    (tmp_path / "wolfgang_quantum-0.2.1.tar.gz").write_bytes(b"sdist")
+    (tmp_path / "wolfgang_quantum-0.2.1-cp312-cp312-macosx_26_0_arm64.whl").write_bytes(
         b"wheel"
     )
 
     manifest = checksum_writer.write_checksum_manifest(tmp_path)
 
-    assert manifest.name == "wolfgang-quantum-0.2.0.checksums.txt"
+    assert manifest.name == "wolfgang-quantum-0.2.1.checksums.txt"
     assert manifest.read_text(encoding="utf-8").splitlines() == [
-        f"{checksum_writer.sha256_file(tmp_path / 'wolfgang_quantum-0.2.0-cp312-cp312-macosx_26_0_arm64.whl')}  wolfgang_quantum-0.2.0-cp312-cp312-macosx_26_0_arm64.whl",
-        f"{checksum_writer.sha256_file(tmp_path / 'wolfgang_quantum-0.2.0.tar.gz')}  wolfgang_quantum-0.2.0.tar.gz",
+        f"{checksum_writer.sha256_file(tmp_path / 'wolfgang_quantum-0.2.1-cp312-cp312-macosx_26_0_arm64.whl')}  wolfgang_quantum-0.2.1-cp312-cp312-macosx_26_0_arm64.whl",
+        f"{checksum_writer.sha256_file(tmp_path / 'wolfgang_quantum-0.2.1.tar.gz')}  wolfgang_quantum-0.2.1.tar.gz",
     ]
 
 

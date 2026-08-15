@@ -46,6 +46,7 @@ API stability:      docs/architecture/api_stability.md
 Security and supply chain: docs/quality/security_and_supply_chain.md
 Release and packaging: docs/quality/release_and_packaging.md
 Release evidence index: docs/release/README.md
+0.2.1 release evidence ledger: docs/release/0.2.1.md
 0.1.0 release evidence ledger: docs/release/0.1.0.md
 0.1.0 wheelhouse dry-run evidence: docs/release/0.1.0-wheelhouse-dry-run.md
 0.1.0-rc2 release evidence ledger: docs/release/0.1.0-rc2.md
@@ -322,6 +323,14 @@ CPython 3.10, 3.11, and 3.12, and a checksum manifest with
 `publish-target=none`; PyPI publication remains unavailable until the PyPI
 trusted-publisher configuration accepts the exact `v0.1.0` tag-ref workflow
 claims.
+The pending `0.2.1` release-preparation slice is tracked in
+`docs/release/0.2.1.md`, `docs/release/support_matrix.md`, and
+`docs/release/README.md`. It bumps the active source version, closes the
+canonical Wolfgang identity migration on active public surfaces, fixes
+`sghowell/wolfgang` links, keeps Mermaid rendering and release-quality CI in the
+checked path, documents deprecated compatibility shims and multi-backend
+qualification scope, preserves the quarantined `v0.2.0` tag/draft release, and
+explicitly defers PyPI publication until a later exact-tag release slice.
 The Apple Silicon accelerator implementation lane is active in
 `docs/architecture/apple_accelerator.md`, with implementation handoff in
 `docs/plans/apple_metal_mps_bringup_plan.md`. The source tree now includes the

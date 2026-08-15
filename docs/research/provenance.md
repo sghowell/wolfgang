@@ -95,6 +95,13 @@ produced the complete CPU wheelhouse and checksum evidence. The corrected
 tag-ref run has passed TestPyPI upload and clean install smoke; PyPI
 publication remains unavailable until PyPI trusted publishing is configured for
 the observed `pypi` environment claims and the PyPI publish job succeeds.
+The pending `0.2.1` release-preparation checkpoint is tracked in
+`docs/release/0.2.1.md`, `docs/release/README.md`, and
+`docs/release/support_matrix.md`: it advances the active source version,
+finalizes canonical Wolfgang identity on active public surfaces, records the
+corrected `sghowell/wolfgang` links and Mermaid/docs/CI hardening, preserves the
+quarantined `v0.2.0` tag/draft release and historical evidence unchanged, and
+keeps PyPI deferred until a later exact-tag publication slice.
 The Apple Silicon accelerator implementation lane is tracked in
 `docs/architecture/apple_accelerator.md` and
 `docs/plans/apple_metal_mps_bringup_plan.md`, with the first measured
@@ -555,6 +562,7 @@ FASTPAULI_VALIDATE_CUDA=1 FASTPAULI_CUDA_ARCHITECTURES=90 python scripts/validat
 - [Implementation plan](../plans/fastpauli_cpp_cuda_implementation_plan.md)
 - [Release candidate foundation plan](../plans/release_candidate_foundation_plan.md)
 - [Release candidate next checkpoint plan](../plans/release_candidate_next_checkpoint_plan.md)
+- [0.2.1 release evidence ledger](../release/0.2.1.md)
 - [Release 0.1.0 wheelhouse foundation plan](../plans/release_0_1_0_wheelhouse_foundation_plan.md)
 - [Apple Metal/MPS bring-up plan](../plans/apple_metal_mps_bringup_plan.md)
 - [Apple Metal optimization Campaign 1 plan](../plans/apple_metal_optimization_campaign1_plan.md)

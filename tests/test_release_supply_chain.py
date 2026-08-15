@@ -13,7 +13,7 @@ except ModuleNotFoundError:  # pragma: no cover - exercised by the Python 3.10 C
     import tomli as tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
-NEXT_VERSION = "0.2.0"
+NEXT_VERSION = "0.2.1"
 WORKFLOWS = tuple(sorted((ROOT / ".github/workflows").glob("*.yml")))
 ACTION_PIN = re.compile(
     r"^\s*uses:\s+[^\s@]+@[0-9a-f]{40}\s+#\s+\S+\s*$",

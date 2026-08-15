@@ -7,19 +7,23 @@ evidence so docs and release notes do not overstate what users can install.
 ## Current Package Version
 
 ```text
-Source version: 0.2.0
-Next intended release: v0.2.0 (not tagged or published)
+Source version: 0.2.1
+Next intended release: v0.2.1 (pending PR, not tagged or published)
 Latest tagged release: v0.1.0
 Latest tagged release PyPI status: publication pending trusted-publisher configuration
+Release under finalization: v0.2.1 pending publication
 Previous checkpoint: v0.1.0rc2 GitHub prerelease
 0.1.0 wheelhouse foundation plan: docs/plans/release_0_1_0_wheelhouse_foundation_plan.md
 0.1.0 wheelhouse dry-run evidence: docs/release/0.1.0-wheelhouse-dry-run.md
 0.1.0 release ledger: docs/release/0.1.0.md
+0.2.1 release-preparation ledger: docs/release/0.2.1.md
 Reusable cloud hardware qualification harness: docs/release/cloud_hardware_qualification_harness.md
 0.1.0 tag-ref wheelhouse run: 25452754832
 Corrected 0.1.0 TestPyPI validation run: 25462760923
 Latest 0.1.0 PyPI publication run: 25462997972
+TestPyPI validation: historical 0.1.0 dry-run evidence only
 TestPyPI validation: final dry run published and smoke-tested
+PyPI publication: deferred for v0.2.1; no TestPyPI or PyPI run has been attempted
 PyPI publication: unavailable pending trusted-publisher configuration
 ```
 
@@ -27,7 +31,7 @@ PyPI publication: unavailable pending trusted-publisher configuration
 
 | Surface | Current support status | Evidence | Artifact status | Boundary |
 | --- | --- | --- | --- | --- |
-| CPU default package | CPU artifact target | `docs/release/0.1.0.md`, `docs/release/0.1.0-rc2.md`, `docs/release/0.1.0-rc1.md`, `docs/release/0.1.0-wheelhouse-dry-run.md`, `docs/plans/release_0_1_0_wheelhouse_foundation_plan.md`, CI CPU wheel smoke, `scripts/validate_release_artifacts.py` | Source distribution and macOS arm64 CPU wheel are published for `v0.1.0rc2`; the corrected final `v0.1.0` tag-ref workflow produced one source distribution, six CPU wheels, checksum evidence, successful TestPyPI upload, and a clean TestPyPI install smoke; PyPI publication is blocked by PyPI trusted-publisher configuration | Portable scalar fallback required; native CPU tuning disabled for release wheels |
+| CPU default package | CPU artifact target | `docs/release/0.2.1.md`, `docs/release/0.1.0.md`, `docs/release/0.1.0-rc2.md`, `docs/release/0.1.0-rc1.md`, `docs/release/0.1.0-wheelhouse-dry-run.md`, `docs/plans/release_0_1_0_wheelhouse_foundation_plan.md`, CI CPU wheel smoke, `scripts/validate_release_artifacts.py` | Source distribution and macOS arm64 CPU wheel are published for `v0.1.0rc2`; the corrected final `v0.1.0` tag-ref workflow produced one source distribution, six CPU wheels, checksum evidence, successful TestPyPI upload, and a clean TestPyPI install smoke; PyPI publication is blocked by PyPI trusted-publisher configuration | Portable scalar fallback required; native CPU tuning disabled for release wheels |
 | CUDA accelerator | Source-build support | H100, A100, and RTX PRO 6000 Blackwell source-build reports plus CUDA validation lanes | CUDA wheels remain unavailable | CUDA support requires an explicit `FASTPAULI_ENABLE_CUDA=ON` source build and visible CUDA runtime |
 | ROCm/HIP accelerator | Source-build support | MI300X `gfx942` bring-up, optimization, release-support, and architecture-readiness reports | ROCm/HIP wheels remain unavailable | Broader AMD GPU support remains unavailable without per-architecture evidence |
 | Apple Metal accelerator | Source-build evidence | Apple M4 Pro source-build reports through Apple Metal Campaign 3 | Metal wheels remain unavailable | Generic Apple GPU support is unavailable; evidence is local Apple M4 Pro source-build evidence |
@@ -58,6 +62,7 @@ support matrix review confirming no CUDA, ROCm/HIP, Metal, combined accelerator,
 benchmark report references for any performance claims
 known limitations and unsupported surfaces
 cloud GPU support claims routed through docs/release/cloud_hardware_qualification_harness.md with sanitized derived evidence only
+release-preparation ledger for the pending version documenting deferrals, routing, and unchanged historical evidence
 ```
 
 ## Claim Rules

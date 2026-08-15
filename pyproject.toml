@@ -7,7 +7,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "wolfgang-quantum"
-version = "0.2.0"
+version = "0.2.1"
 description = "C++20 and CUDA-backed accelerators for sparse sums of Pauli strings."
 readme = "README.md"
 requires-python = ">=3.10"

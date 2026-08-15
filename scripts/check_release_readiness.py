@@ -26,7 +26,8 @@ PYPROJECT = "pyproject.toml"
 VERSION_MODULE = "python/wolfgang_quantum/_version.py"
 CMAKE = "CMakeLists.txt"
 VALIDATE = "scripts/validate.py"
-LATEST_RELEASE_VERSION = "0.1.0"
+LATEST_TAGGED_RELEASE_VERSION = "0.1.0"
+LATEST_RELEASE_VERSION = "0.2.1"
 
 LEGACY_RELEASE_ARTIFACT_PREFIXES = {
     "0.1.0rc1": "fastpauli",
@@ -232,7 +233,6 @@ def check_prepublication_evidence(
 ROUTED_DOCS = (
     PROVENANCE,
     ROADMAP,
-    AGENTS,
     RELEASE_INDEX,
     RELEASE_STANDARDS,
     VALIDATE,
@@ -337,6 +337,7 @@ def check_release_readiness() -> list[str]:
 
     version = project_version()
     release_version = LATEST_RELEASE_VERSION
+    latest_tagged_release_version = LATEST_TAGGED_RELEASE_VERSION
     current_ledger = current_release_ledger_path(release_version)
 
     for path in (
@@ -383,8 +384,8 @@ def check_release_readiness() -> list[str]:
         failures,
     )
     require(
-        f"Latest tagged release: v{release_version}" in support,
-        f"{SUPPORT_MATRIX} does not name latest tagged release v{release_version}",
+        f"Latest tagged release: v{latest_tagged_release_version}" in support,
+        f"{SUPPORT_MATRIX} does not name latest tagged release v{latest_tagged_release_version}",
         failures,
     )
     require(
@@ -428,6 +429,15 @@ def check_release_readiness() -> list[str]:
         "macOS arm64 CPU wheel:",
         f"filename: {release_wheel_prefix(release_version)}-{release_version}-cp312-cp312-macosx_26_0_arm64.whl",
     )
+    unpublished_final_release_terms = (
+        "manylinux x86_64 CPU wheels:",
+        "macOS arm64 CPU wheels:",
+        f"Release tag URL: https://github.com/sghowell/wolfgang/releases/tag/v{release_version}",
+        f"PyPI publication remains deferred for v{release_version}.",
+        "Do not invoke TestPyPI or PyPI for this release-preparation slice.",
+        "No hardware rerun was required",
+        "CPU wheels remain the only release artifact target",
+    )
     final_release_terms = (
         "manylinux x86_64 CPU wheels:",
         "macOS arm64 CPU wheels:",
@@ -439,11 +449,12 @@ def check_release_readiness() -> list[str]:
             for filename in final_wheelhouse_filenames(release_version)
         ),
     )
-    ledger_terms = (
-        common_ledger_terms + release_candidate_terms
-        if version_is_release_candidate(release_version)
-        else common_ledger_terms + final_release_terms
-    )
+    if version_is_release_candidate(release_version):
+        ledger_terms = common_ledger_terms + release_candidate_terms
+    elif release_ledger_is_published(ledger, release_version):
+        ledger_terms = common_ledger_terms + final_release_terms
+    else:
+        ledger_terms = common_ledger_terms + unpublished_final_release_terms
     for term in ledger_terms:
         require(term in ledger, f"{current_ledger} is missing required term: {term}", failures)
     if release_ledger_is_published(ledger, release_version):
