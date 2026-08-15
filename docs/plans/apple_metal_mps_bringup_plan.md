@@ -4,7 +4,7 @@
 
 **Goal:** Implement a source-build-only Apple Silicon Metal accelerator lane that preserves CPU wheel reliability and the backend-neutral object model.
 
-**Architecture:** The backend identity is `"metal"` and the initial build flag is `FASTPAULI_ENABLE_METAL=ON`. The first implementation uses private Metal source files, FastPauli-owned `MTLBuffer` storage, synchronous command-buffer completion, and target-specific Metal-only source builds rather than mixed CUDA/HIP/Metal binaries.
+**Architecture:** The backend identity is `"metal"` and the initial build flag is `WOLFGANG_ENABLE_METAL=ON` with `FASTPAULI_ENABLE_METAL` accepted only as a deprecated fallback alias. The first implementation uses private Metal source files, Wolfgang-owned `MTLBuffer` storage, synchronous command-buffer completion, and target-specific Metal-only source builds rather than mixed CUDA/HIP/Metal binaries.
 
 **Tech Stack:** C++20, nanobind, CMake, Apple Metal, metal-cpp or Objective-C++ private translation units, Metal Shading Language, pytest, benchmark smoke scripts, and Xcode Instruments or `xctrace` profiler evidence.
 
@@ -72,8 +72,8 @@ bindings/python/pauli_sum_py.cpp
 src/accelerator_status.cpp
 src/device_pauli_sum_stub.cpp
 src/device_commutation_matrix_stub.cpp
-include/fastpauli/device_pauli_sum.hpp
-include/fastpauli/device_commutation_matrix.hpp
+include/wolfgang/device_pauli_sum.hpp
+include/wolfgang/device_commutation_matrix.hpp
 benchmarks/_benchmark_metadata.py
 scripts/validate.py
 README.md
@@ -102,8 +102,8 @@ Test: tests/test_apple_metal_foundation.py
 Add tests that assert:
 
 ```text
-FASTPAULI_ENABLE_METAL is declared OFF by default
-FASTPAULI_ENABLE_METAL is rejected when CUDA or HIP is also ON
+WOLFGANG_ENABLE_METAL is declared OFF by default
+WOLFGANG_ENABLE_METAL is rejected when CUDA or HIP is also ON
 src/metal files exist
 CPU-only public headers do not include Metal, Foundation, MPS, or MPSGraph headers
 ```
@@ -121,16 +121,16 @@ Expected: fails before CMake and source layout changes.
 Add:
 
 ```text
-option(FASTPAULI_ENABLE_METAL "Build Apple Metal backend support" OFF)
+_wolfgang_bool_option(WOLFGANG_ENABLE_METAL FASTPAULI_ENABLE_METAL "Build Apple Metal backend support" OFF)
 ```
 
-Add configure-time rejection when `FASTPAULI_ENABLE_METAL=ON` is combined with
-`FASTPAULI_ENABLE_CUDA=ON` or `FASTPAULI_ENABLE_HIP=ON`.
+Add configure-time rejection when `WOLFGANG_ENABLE_METAL=ON` is combined with
+`WOLFGANG_ENABLE_CUDA=ON` or `WOLFGANG_ENABLE_HIP=ON`.
 
 - [ ] **Step 3: Add private empty Metal source files**
 
 Create private `src/metal/` files that compile only when
-`FASTPAULI_ENABLE_METAL=ON`. Public headers must remain framework-free.
+`WOLFGANG_ENABLE_METAL=ON`. Public headers must remain framework-free.
 
 - [ ] **Step 4: Validate CPU-only safety**
 
@@ -194,7 +194,7 @@ metadata when available.
 Run:
 
 ```bash
-FASTPAULI_VALIDATE_METAL=1 FASTPAULI_ENABLE_METAL=ON python scripts/validate.py
+WOLFGANG_VALIDATE_METAL=1 WOLFGANG_ENABLE_METAL=ON python scripts/validate.py
 ```
 
 Expected: status checks pass on a named Apple Silicon machine.
@@ -228,7 +228,7 @@ unsupported backend errors when Metal is not compiled
 
 - [ ] **Step 2: Implement `MTLBuffer` ownership**
 
-Use FastPauli-owned Metal buffers with shared storage for initial bring-up.
+Use Wolfgang-owned Metal buffers with shared storage for initial bring-up.
 Record device ordinal and backend identity on every object.
 
 - [ ] **Step 3: Keep command semantics synchronous**
@@ -326,8 +326,8 @@ The Apple Metal bring-up is complete only when:
 
 ```text
 CPU-only default builds remain clean without Metal
-FASTPAULI_ENABLE_METAL=ON source build passes on Apple Silicon
-FASTPAULI_ENABLE_METAL=ON is target-specific and mutually exclusive with CUDA/HIP
+WOLFGANG_ENABLE_METAL=ON source build passes on Apple Silicon
+WOLFGANG_ENABLE_METAL=ON is target-specific and mutually exclusive with CUDA/HIP
 backend="metal" works for transfers and pairwise commutation
 DevicePauliSum.backend and DeviceCommutationMatrix.backend return "metal"
 Metal compact consumers match CPU results

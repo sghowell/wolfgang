@@ -61,6 +61,12 @@ def test_cmake_configure_check_pins_the_active_python(monkeypatch) -> None:
     assert "-DWOLFGANG_ENABLE_METAL=OFF" in command
 
 
+def test_cmake_defaults_accept_current_canonical_wolfgang_contract() -> None:
+    validate = load_validate_module()
+
+    validate.check_cmake_defaults()
+
+
 def test_native_source_layout_check_rejects_top_level_backend_sources(
     monkeypatch,
     tmp_path: Path,

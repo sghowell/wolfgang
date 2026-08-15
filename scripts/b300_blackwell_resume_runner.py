@@ -7,7 +7,6 @@ import argparse
 import shlex
 from pathlib import Path
 
-
 _TEMPLATE = r'''#!/usr/bin/env bash
 set -euo pipefail
 

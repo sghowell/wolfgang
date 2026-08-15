@@ -143,7 +143,7 @@ jobs:
         run: >-
           cmake -S . -B build/sanitizers -G Ninja
           -DCMAKE_BUILD_TYPE=RelWithDebInfo
-          -DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${GITHUB_WORKSPACE}/python/fastpauli"
+          -DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${GITHUB_WORKSPACE}/python/wolfgang_quantum"
           -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
           -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined"
           -DFASTPAULI_ENABLE_CUDA=OFF
@@ -158,7 +158,7 @@ jobs:
           -DWOLFGANG_ENABLE_INTERNAL_BINDINGS=ON
 
       - name: Build sanitizer-instrumented native extension
-        run: cmake --build build/sanitizers --target _fastpauli_core --parallel 2
+        run: cmake --build build/sanitizers --target _wolfgang_core --parallel 2
 
       - name: Run native CPU tests under sanitizers
         shell: bash

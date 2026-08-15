@@ -135,7 +135,9 @@ def test_sanitizer_job_configures_builds_and_runs_native_extension_tests() -> No
     assert "ASAN_OPTIONS:" in workflow
     assert "UBSAN_OPTIONS:" in workflow
     assert "cmake -S . -B build/sanitizers" in workflow
-    assert "cmake --build build/sanitizers" in workflow
+    assert 'CMAKE_LIBRARY_OUTPUT_DIRECTORY="${GITHUB_WORKSPACE}/python/wolfgang_quantum"' in workflow
+    assert "cmake --build build/sanitizers --target _wolfgang_core --parallel 2" in workflow
+    assert "cmake --build build/sanitizers --target _fastpauli_core" not in workflow
     assert "PYTHONPATH=python" in workflow
     assert "python -m pytest" in workflow
 

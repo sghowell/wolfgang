@@ -104,7 +104,10 @@ def _multiword_label(num_qubits: int, positions: dict[int, str]) -> str:
 def test_cmake_declares_metal_flag_and_rejects_mixed_accelerators() -> None:
     cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
 
-    assert 'option(WOLFGANG_ENABLE_METAL "Build Apple Metal backend support" OFF)' in cmake
+    assert (
+        '_wolfgang_bool_option(WOLFGANG_ENABLE_METAL FASTPAULI_ENABLE_METAL '
+        '"Build Apple Metal backend support" OFF)'
+    ) in cmake
     assert "WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_METAL cannot both be ON" in cmake
     assert "WOLFGANG_ENABLE_HIP and WOLFGANG_ENABLE_METAL cannot both be ON" in cmake
 

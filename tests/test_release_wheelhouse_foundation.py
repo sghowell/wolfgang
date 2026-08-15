@@ -36,10 +36,10 @@ def install_fake_wheel_smoke_modules(
             self._coeffs = coeffs
 
         @classmethod
-        def from_labels(cls, labels: list[str], coeffs: list[complex]) -> "FakePauliSum":
+        def from_labels(cls, labels: list[str], coeffs: list[complex]) -> FakePauliSum:
             return cls(labels, coeffs)
 
-        def simplify(self) -> "FakePauliSum":
+        def simplify(self) -> FakePauliSum:
             assert self._labels == ["X", "X", "Z"]
             assert self._coeffs == [1.0, -0.5, 2.0]
             return FakePauliSum(["Z", "X"], [2.0 + 0.0j, 0.5 + 0.0j])

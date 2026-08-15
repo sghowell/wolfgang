@@ -30,8 +30,9 @@ jobs:
             python-version: "3.12"
 
     env:
-      FASTPAULI_ENABLE_CUDA: "OFF"
-      FASTPAULI_ENABLE_NATIVE: "OFF"
+      WOLFGANG_ENABLE_CUDA: "OFF"
+      WOLFGANG_ENABLE_HIP: "OFF"
+      WOLFGANG_ENABLE_NATIVE: "OFF"
 
     steps:
       - name: Check out repository
@@ -62,9 +63,9 @@ jobs:
           - macos-latest
 
     env:
-      FASTPAULI_ENABLE_CUDA: "OFF"
-      FASTPAULI_ENABLE_HIP: "OFF"
-      FASTPAULI_ENABLE_NATIVE: "OFF"
+      WOLFGANG_ENABLE_CUDA: "OFF"
+      WOLFGANG_ENABLE_HIP: "OFF"
+      WOLFGANG_ENABLE_NATIVE: "OFF"
 
     steps:
       - name: Check out repository
@@ -82,7 +83,7 @@ jobs:
 
       - name: Build and smoke-test CPU release artifacts
         env:
-          RELEASE_ARTIFACT_DIR: ${{ runner.temp }}/fastpauli-release-artifacts
+          RELEASE_ARTIFACT_DIR: ${{ runner.temp }}/wolfgang-release-artifacts
         run: python scripts/validate_release_artifacts.py --output-dir "${RELEASE_ARTIFACT_DIR}"
 
   qiskit-adapter:
@@ -97,8 +98,9 @@ jobs:
           - "qiskit>=1.0"
 
     env:
-      FASTPAULI_ENABLE_CUDA: "OFF"
-      FASTPAULI_ENABLE_NATIVE: "OFF"
+      WOLFGANG_ENABLE_CUDA: "OFF"
+      WOLFGANG_ENABLE_HIP: "OFF"
+      WOLFGANG_ENABLE_NATIVE: "OFF"
       QISKIT_REQUIREMENT: ${{ matrix['qiskit-requirement'] }}
 
     steps:
@@ -133,8 +135,9 @@ jobs:
           - "openfermion>=1.7.1"
 
     env:
-      FASTPAULI_ENABLE_CUDA: "OFF"
-      FASTPAULI_ENABLE_NATIVE: "OFF"
+      WOLFGANG_ENABLE_CUDA: "OFF"
+      WOLFGANG_ENABLE_HIP: "OFF"
+      WOLFGANG_ENABLE_NATIVE: "OFF"
       OPENFERMION_REQUIREMENT: ${{ matrix['openfermion-requirement'] }}
 
     steps:

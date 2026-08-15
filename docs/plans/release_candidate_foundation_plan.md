@@ -1,8 +1,8 @@
-# FastPauli Release Candidate Foundation Plan
+# Wolfgang Release Candidate Foundation Plan
 
 ## Goal
 
-Prepare FastPauli for a first CPU release-candidate lane without changing public
+Prepare Wolfgang for a first CPU release-candidate lane without changing public
 runtime behavior or adding accelerator wheel support claims.
 
 This slice is release infrastructure only. CUDA and ROCm/HIP remain
@@ -44,24 +44,24 @@ The release candidate foundation keeps the packaging model target-specific:
 
 ```text
 CPU wheel: default artifact, accelerator build mode cpu_only
-CUDA source build: explicit FASTPAULI_ENABLE_CUDA=ON path
-ROCm/HIP source build: explicit FASTPAULI_ENABLE_HIP=ON path
+CUDA source build: explicit WOLFGANG_ENABLE_CUDA=ON path
+ROCm/HIP source build: explicit WOLFGANG_ENABLE_HIP=ON path
 combined CUDA+HIP build: configure-time rejection under the current policy
 ```
 
 The CPU artifact validator must build with:
 
 ```text
-FASTPAULI_ENABLE_CUDA=OFF
-FASTPAULI_ENABLE_HIP=OFF
-FASTPAULI_ENABLE_NATIVE=OFF
+WOLFGANG_ENABLE_CUDA=OFF
+WOLFGANG_ENABLE_HIP=OFF
+WOLFGANG_ENABLE_NATIVE=OFF
 ```
 
 The clean-install smoke must assert:
 
 ```text
-import fastpauli succeeds from the produced wheel
-fastpauli._fastpauli_core._build_info() reports accelerator_build_mode == "cpu_only"
+import wolfgang_quantum succeeds from the produced wheel
+wolfgang_quantum._wolfgang_core._build_info() reports accelerator_build_mode == "cpu_only"
 cuda_enabled and hip_enabled are false
 native_enabled is false
 compiled_backends == ["cpu"]
