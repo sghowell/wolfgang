@@ -13,10 +13,10 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
+import wolfgang_quantum as fastpauli
+import wolfgang_quantum._wolfgang_core as core
 import numpy as np
-from fastpauli import PauliSum
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit

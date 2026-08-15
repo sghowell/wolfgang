@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1120" height="780" viewBox="0 0 1120 780" role="img" aria-labelledby="title desc">
-<title id="title">FastPauli H100 scaling</title>
+<title id="title">Wolfgang H100 scaling</title>
 <desc id="desc">CUDA device-resident speedup versus scalar CPU across default, stress, and extreme scale points.</desc>
 <rect width="100%" height="100%" fill="#ffffff"/>
 <text x="32.0" y="38.0" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#111827" text-anchor="start">H100 Scaling Across CUDA Hot Paths</text>

@@ -16,8 +16,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
+import wolfgang_quantum as fastpauli
+import wolfgang_quantum._wolfgang_core as core
 import numpy as np
 
 try:

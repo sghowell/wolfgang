@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CUDA scaling benchmark for FastPauli hot paths.
+"""CUDA scaling benchmark for Wolfgang hot paths.
 
 The fixed ``bench_cuda_kernels.py`` profiles are intentionally stable evidence
 targets.  This benchmark fans the same correctness-checked datasets across
@@ -17,8 +17,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
+import wolfgang_quantum as fastpauli
+import wolfgang_quantum._wolfgang_core as core
 import numpy as np
 
 try:
@@ -1238,7 +1238,7 @@ def run_commutation_scale(
             "status": result["final_status"],
             "campaign8_headroom_item": result["campaign8_headroom_item"],
             "decision_doc": result["decision_doc"],
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "fastpauli._wolfgang_core._benchmark_cuda_device_resident_consumer",
             "non_deferred_closeout_required": True,
         }
         result["notes"].append(
@@ -1356,7 +1356,7 @@ def run_commutation_scale(
             "status": result["final_status"],
             "campaign9_headroom_item": result["campaign9_headroom_item"],
             "decision_doc": result["decision_doc"],
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "fastpauli._wolfgang_core._benchmark_cuda_device_resident_consumer",
             "non_deferred_closeout_required": True,
         }
         result["notes"].append(
@@ -1476,7 +1476,7 @@ def campaign8_cpu_unavailable_cases(
     git_revision: str,
 ) -> list[dict[str, Any]]:
     unavailable_reason = cuda_status.get("skip_reason") or (
-        "FastPauli CUDA runtime is unavailable for this Campaign 8 benchmark profile."
+        "Wolfgang CUDA runtime is unavailable for this Campaign 8 benchmark profile."
     )
     rows: list[dict[str, Any]] = []
     for operation in operations:
@@ -1494,7 +1494,7 @@ def campaign8_cpu_unavailable_cases(
                     "campaign8_device_resident_consumer": {
                         "status": "unavailable",
                         "private_hook": (
-                            "fastpauli._fastpauli_core."
+                            "fastpauli._wolfgang_core."
                             "_benchmark_cuda_device_resident_consumer"
                         ),
                         "mode": mode,
@@ -1529,7 +1529,7 @@ def campaign9_cpu_unavailable_cases(
     git_revision: str,
 ) -> list[dict[str, Any]]:
     unavailable_reason = cuda_status.get("skip_reason") or (
-        "FastPauli CUDA runtime is unavailable for this Campaign 9 benchmark profile."
+        "Wolfgang CUDA runtime is unavailable for this Campaign 9 benchmark profile."
     )
     rows: list[dict[str, Any]] = []
     for operation in operations:
@@ -1548,7 +1548,7 @@ def campaign9_cpu_unavailable_cases(
                         "status": "blocked_external",
                         "mode": mode,
                         "private_hook": (
-                            "fastpauli._fastpauli_core."
+                            "fastpauli._wolfgang_core."
                             "_benchmark_cuda_device_resident_consumer"
                         ),
                         "non_deferred_closeout_required": True,
@@ -1583,7 +1583,7 @@ def campaign10_cpu_unavailable_cases(
     git_revision: str,
 ) -> list[dict[str, Any]]:
     unavailable_reason = cuda_status.get("skip_reason") or (
-        "FastPauli CUDA runtime is unavailable for this Campaign 10 benchmark profile."
+        "Wolfgang CUDA runtime is unavailable for this Campaign 10 benchmark profile."
     )
     rows: list[dict[str, Any]] = []
     for operation in operations:
@@ -1602,7 +1602,7 @@ def campaign10_cpu_unavailable_cases(
                         "status": "blocked_external",
                         "mode": mode,
                         "private_hook": (
-                            "fastpauli._fastpauli_core."
+                            "fastpauli._wolfgang_core."
                             "_benchmark_cuda_device_resident_consumer"
                         ),
                         "non_deferred_closeout_required": True,
@@ -1688,7 +1688,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         },
         "correctness_checks": {
             "enabled": True,
-            "reference": "FastPauli scalar CPU output on the same deterministic datasets",
+            "reference": "Wolfgang scalar CPU output on the same deterministic datasets",
             "failure_mode": "raises RuntimeError if CPU/GPU outputs differ",
         },
         "campaign7": {
@@ -1728,7 +1728,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             ),
             "stream_graph_status": "deferred",
             "scatter_tuning_status": "rejected_no_consumer",
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "fastpauli._wolfgang_core._benchmark_cuda_device_resident_consumer",
         },
         "campaign9": {
             "campaign": "cuda_deferred_headroom_campaign9",
@@ -1736,7 +1736,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "required_row_fields": list(CAMPAIGN9_REQUIRED_ROW_FIELDS),
             "deferred_status_allowed": False,
             "mode_metadata": CAMPAIGN9_MODE_METADATA,
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "fastpauli._wolfgang_core._benchmark_cuda_device_resident_consumer",
         },
         "campaign10": {
             "campaign": "cuda_cross_architecture_campaign10",
@@ -1744,7 +1744,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "required_row_fields": list(CAMPAIGN10_REQUIRED_ROW_FIELDS),
             "deferred_status_allowed": False,
             "mode_metadata": CAMPAIGN10_MODE_METADATA,
-            "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+            "private_hook": "fastpauli._wolfgang_core._benchmark_cuda_device_resident_consumer",
         },
         "planned_cases": planned_cases(args.profile, operations),
         "cases": [],

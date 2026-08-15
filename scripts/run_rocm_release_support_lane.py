@@ -78,7 +78,7 @@ def lane_commands() -> list[LaneCommand]:
             name="cuda-hip-rejection",
             purpose="Validate the CUDA+HIP configure-time rejection.",
             command=(
-                f"{python} -m cmake -S . -B /tmp/fastpauli-campaign7-cuda-hip-reject "
+                f"{python} -m cmake -S . -B /tmp/wolfgang-campaign7-cuda-hip-reject "
                 "-DWOLFGANG_ENABLE_CUDA=ON -DWOLFGANG_ENABLE_HIP=ON "
                 f"> {LOG_ROOT}/cuda_hip_rejection.log 2>&1; "
                 f"status=$?; echo exit_code=$status >> {LOG_ROOT}/cuda_hip_rejection.log; "
@@ -149,7 +149,7 @@ def lane_commands() -> list[LaneCommand]:
 
 def render_text(commands: list[LaneCommand]) -> str:
     lines = [
-        "# FastPauli ROCm Campaign 7 Release-Support Lane",
+        "# Wolfgang ROCm Campaign 7 Release-Support Lane",
         "",
         f"evidence_root: {DATA_ROOT}",
         "hip_environment: WOLFGANG_ENABLE_HIP=ON WOLFGANG_HIP_ARCHITECTURES=gfx942",

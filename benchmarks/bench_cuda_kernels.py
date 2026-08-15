@@ -19,10 +19,10 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
+import wolfgang_quantum as fastpauli
+import wolfgang_quantum._wolfgang_core as core
 import numpy as np
-from fastpauli import PauliSum
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -1626,7 +1626,7 @@ def add_cupy_dlpack_consumer_timing_fields(
     result["instrumentation"]["cupy_dlpack_consumer"] = {
         "status": "available" if timing["available"] else "unavailable",
         "timing_boundary": "CuPy consumer through DeviceCommutationMatrix.__dlpack__",
-        "ownership": "DLPack capsule is single-consumer; FastPauli owner is retained by deleter context",
+        "ownership": "DLPack capsule is single-consumer; Wolfgang owner is retained by deleter context",
     }
     if not timing["available"]:
         return
@@ -1660,7 +1660,7 @@ def add_torch_dlpack_consumer_timing_fields(
             "PyTorch CUDA consumer through DeviceCommutationMatrix.__dlpack__"
             "(max_version=(1, 0))"
         ),
-        "ownership": "DLPack capsule is single-consumer; FastPauli owner is retained by deleter context",
+        "ownership": "DLPack capsule is single-consumer; Wolfgang owner is retained by deleter context",
     }
     if not timing["available"]:
         return
@@ -1713,7 +1713,7 @@ def add_private_fused_consumer_timing_fields(
     result["results"]["bitpacked_decision_status"] = bitpacked_status
     result["instrumentation"]["campaign7_fused_consumer"] = {
         "status": "private_benchmark_only",
-        "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_fused_commutation_consumer",
+        "private_hook": "fastpauli._wolfgang_core._benchmark_cuda_fused_commutation_consumer",
         "modes": [
             "csr_anticommutation_graph",
             "conflict_degrees",
@@ -1802,7 +1802,7 @@ def add_campaign8_device_resident_consumer_timing_fields(
     result["correctness_digest"] = dict(graph_report["correctness_digest"])
     result["instrumentation"]["campaign8_device_resident_consumer"] = {
         "status": "private_benchmark_only",
-        "private_hook": "fastpauli._fastpauli_core._benchmark_cuda_device_resident_consumer",
+        "private_hook": "fastpauli._wolfgang_core._benchmark_cuda_device_resident_consumer",
         "mode": mode,
         "device_resident_graph_status": result["device_resident_graph_status"],
         "public_grouping_api_status": result["public_grouping_api_status"],
@@ -2210,7 +2210,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         },
         "correctness_checks": {
             "enabled": True,
-            "reference": "FastPauli scalar CPU output on the same deterministic datasets",
+            "reference": "Wolfgang scalar CPU output on the same deterministic datasets",
             "failure_mode": "raises RuntimeError if CPU/GPU outputs differ",
         },
         "cases": [],

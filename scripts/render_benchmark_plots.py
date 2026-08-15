@@ -162,7 +162,7 @@ def render_cuda_speedup_svg(cases: list[CudaBenchmarkCase], source_report: Path)
     lines = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
-        "<title id=\"title\">FastPauli H100 CUDA backend speedups</title>",
+        "<title id=\"title\">Wolfgang H100 CUDA backend speedups</title>",
         "<desc id=\"desc\">CPU scalar, optimized CPU, CUDA transfer-inclusive, and "
         "CUDA device-resident speedups versus CPU scalar from the checked-in H100 "
         "CUDA benchmark default report.</desc>",

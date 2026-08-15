@@ -555,7 +555,7 @@ def render_landscape_svg(landscape: list[dict[str, Any]]) -> str:
     body = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
         '<rect width="100%" height="100%" fill="#f8fafc"/>',
-        '<text id="title" x="36" y="44" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#0f172a">FastPauli accelerator performance landscape</text>',
+        '<text id="title" x="36" y="44" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Wolfgang accelerator performance landscape</text>',
         '<text id="desc" x="36" y="70" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" fill="#475569">Broad checked evidence across CPU, CUDA, ROCm/HIP, Apple Metal, and available external baseline rows. Bars use log-scaled seconds; labels keep timing boundaries explicit.</text>',
         '<text x="36" y="92" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#64748b">Source: checked benchmark JSON summaries under docs/benchmarks/data; latest Apple Metal rows from local Apple M4 Pro source-build evidence.</text>',
     ]
@@ -587,6 +587,17 @@ def generated_summary_text(summary: dict[str, Any]) -> str:
     return json.dumps(summary, indent=2, sort_keys=True) + "\n"
 
 
+def load_checked_summary(data_dir: Path) -> dict[str, Any]:
+    summary_path = data_dir / "summary.json"
+    if not summary_path.exists():
+        raise FileNotFoundError(f"missing retained public summary: {summary_path}")
+    summary = read_json(summary_path)
+    landscape = summary.get("readme_performance_landscape")
+    if not isinstance(landscape, list) or not landscape:
+        raise ValueError(f"retained public summary missing landscape rows: {summary_path}")
+    return summary
+
+
 def validate_plot_text(text: str) -> None:
     missing = [token for token in REQUIRED_BROAD_LANDSCAPE_TOKENS if token not in text]
     if missing:
@@ -594,18 +605,24 @@ def validate_plot_text(text: str) -> None:
 
 
 def render_assets(data_dir: Path, plot_dir: Path) -> dict[str, Any]:
-    summary = build_summary(data_dir)
+    try:
+        summary = build_summary(data_dir)
+        write_text(data_dir / "summary.json", generated_summary_text(summary))
+    except FileNotFoundError:
+        summary = load_checked_summary(data_dir)
     plot_text = render_landscape_svg(summary["readme_performance_landscape"])
-    write_text(data_dir / "summary.json", generated_summary_text(summary))
     write_text(plot_dir / LANDSCAPE_PLOT, plot_text)
     validate_plot_text(plot_text)
     return summary
 
 
 def validate_checked_assets(data_dir: Path, plot_dir: Path) -> None:
-    expected_summary = build_summary(data_dir)
     summary_path = data_dir / "summary.json"
     plot_path = plot_dir / LANDSCAPE_PLOT
+    try:
+        expected_summary = build_summary(data_dir)
+    except FileNotFoundError:
+        expected_summary = load_checked_summary(data_dir)
     checked_summary_text = summary_path.read_text(encoding="utf-8")
     expected_summary_text = generated_summary_text(expected_summary)
     if checked_summary_text != expected_summary_text:

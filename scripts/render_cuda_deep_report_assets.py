@@ -206,8 +206,8 @@ def render_path_speedups(default_report: dict[str, Any], output: Path) -> None:
     lines = svg_header(
         width,
         height,
-        "FastPauli H100 backend speedups",
-        "Representative default-profile speedups versus scalar CPU for all captured FastPauli paths.",
+        "Wolfgang H100 backend speedups",
+        "Representative default-profile speedups versus scalar CPU for all captured Wolfgang paths.",
     )
     lines += [
         svg_text(32, 38, "H100 Backend Speedups", size=25, weight=700),
@@ -278,7 +278,7 @@ def render_scaling(final_reports: list[dict[str, Any]], output: Path) -> None:
     lines = svg_header(
         width,
         height,
-        "FastPauli H100 scaling",
+        "Wolfgang H100 scaling",
         "CUDA device-resident speedup versus scalar CPU across default, stress, and extreme scale points.",
     )
     lines += [
@@ -359,6 +359,10 @@ def render_optimization_deltas(raw: dict[str, Any], output: Path) -> None:
             comm_rows.append((f"comm specialization {profile_name} {spec_case['scale']}", ratio, False))
 
     rows = expectation_rows[-8:] + comm_rows[-8:]
+    render_optimization_delta_rows(rows, output)
+
+
+def render_optimization_delta_rows(rows: list[tuple[str, float, bool]], output: Path) -> None:
     width = 1120
     height = 550
     left = 420
@@ -368,7 +372,7 @@ def render_optimization_deltas(raw: dict[str, Any], output: Path) -> None:
     lines = svg_header(
         width,
         height,
-        "FastPauli CUDA optimization deltas",
+        "Wolfgang CUDA optimization deltas",
         "A/B ratios for the retained statevector byte-copy optimization and rejected commutation specialization.",
     )
     lines += [
@@ -403,6 +407,27 @@ def render_optimization_deltas(raw: dict[str, Any], output: Path) -> None:
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def render_optimization_deltas_from_summary(summary: dict[str, Any], output: Path) -> None:
+    rows: list[tuple[str, float, bool]] = []
+    for item in summary.get("retained_experiments", [])[-8:]:
+        rows.append(
+            (
+                f"expectation {item['profile']} {item['scale']}",
+                float(item["device_resident_ratio"]),
+                True,
+            )
+        )
+    for item in summary.get("rejected_experiments", [])[-8:]:
+        rows.append(
+            (
+                f"comm specialization {item['profile']} {item['scale']}",
+                float(item["preallocated_ratio"]),
+                False,
+            )
+        )
+    render_optimization_delta_rows(rows, output)
+
+
 def first_metric_row(ncu: dict[str, Any], key: str, contains: str | None = None) -> dict[str, str]:
     for row in ncu[key]:
         if contains is None or contains in row["Kernel Name"]:
@@ -423,7 +448,7 @@ def render_profiler_bottlenecks(ncu: dict[str, Any], output: Path) -> None:
     lines = svg_header(
         width,
         height,
-        "FastPauli H100 Nsight Compute bottlenecks",
+        "Wolfgang H100 Nsight Compute bottlenecks",
         "Selected Nsight Compute throughput and occupancy metrics for custom and CCCL kernels.",
     )
     lines += [
@@ -462,11 +487,11 @@ def render_architecture(output: Path) -> None:
     lines = svg_header(
         width,
         height,
-        "FastPauli CPU CUDA H100 architecture",
+        "Wolfgang CPU CUDA H100 architecture",
         "Software and hardware boundary diagram for CPU selectors, PCIe movement, H100 memory, and SM90 kernels.",
     )
     lines += [
-        svg_text(32, 38, "FastPauli Execution And Hardware Architecture", size=25, weight=700),
+        svg_text(32, 38, "Wolfgang Execution And Hardware Architecture", size=25, weight=700),
         svg_text(
             32,
             62,
@@ -524,7 +549,7 @@ def render_architecture(output: Path) -> None:
         svg_text(
             44,
             690,
-            "Interpretation: FastPauli keeps portable CPU wheels by default; CUDA source builds move packed operands to HBM3, execute custom/CCCL kernels on SM90, and report transfer, resident, and preallocated boundaries separately.",
+            "Interpretation: Wolfgang keeps portable CPU wheels by default; CUDA source builds move packed operands to HBM3, execute custom/CCCL kernels on SM90, and report transfer, resident, and preallocated boundaries separately.",
             size=13,
             color=COLORS["muted"],
         )
@@ -539,7 +564,7 @@ def render_kernel_flows(output: Path) -> None:
     lines = svg_header(
         width,
         height,
-        "FastPauli CUDA kernel flows",
+        "Wolfgang CUDA kernel flows",
         "Dataflow diagrams for simplify, expectation, commutation, and matmul plus simplify kernels.",
     )
     lines += [
@@ -686,33 +711,51 @@ def main() -> None:
     parser.add_argument("--plot-dir", type=Path, required=True)
     args = parser.parse_args()
 
-    raw = load_raw(args.raw_dir)
     args.plot_dir.mkdir(parents=True, exist_ok=True)
     args.summary_output.parent.mkdir(parents=True, exist_ok=True)
 
+    if args.raw_dir.exists():
+        raw = load_raw(args.raw_dir)
+        default_report = raw["final_default"]
+        scaling_reports = [raw["final_default"], raw["final_stress"], raw["final_extreme"]]
+        render_optimization_deltas(
+            raw,
+            args.plot_dir / "cuda_deep_optimization_h100_optimization_deltas.svg",
+        )
+        ncu_metrics = raw["ncu"]
+        summary = build_summary(raw)
+        args.summary_output.write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+    else:
+        summary = json.loads(args.summary_output.read_text(encoding="utf-8"))
+        default_report = summary["final_scaling"]["default"]
+        scaling_reports = [
+            summary["final_scaling"]["default"],
+            summary["final_scaling"]["stress"],
+            summary["final_scaling"]["extreme"],
+        ]
+        render_optimization_deltas_from_summary(
+            summary,
+            args.plot_dir / "cuda_deep_optimization_h100_optimization_deltas.svg",
+        )
+        ncu_metrics = summary["ncu_selected_metrics"]
+
     render_path_speedups(
-        raw["final_default"],
+        default_report,
         args.plot_dir / "cuda_deep_optimization_h100_path_speedups.svg",
     )
     render_scaling(
-        [raw["final_default"], raw["final_stress"], raw["final_extreme"]],
+        scaling_reports,
         args.plot_dir / "cuda_deep_optimization_h100_scaling.svg",
     )
-    render_optimization_deltas(
-        raw,
-        args.plot_dir / "cuda_deep_optimization_h100_optimization_deltas.svg",
-    )
     render_profiler_bottlenecks(
-        raw["ncu"],
+        ncu_metrics,
         args.plot_dir / "cuda_deep_optimization_h100_profiler_bottlenecks.svg",
     )
     render_architecture(args.plot_dir / "cuda_deep_optimization_architecture.svg")
     render_kernel_flows(args.plot_dir / "cuda_deep_optimization_kernel_flows.svg")
-
-    args.summary_output.write_text(
-        json.dumps(build_summary(raw), indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
 
 
 if __name__ == "__main__":

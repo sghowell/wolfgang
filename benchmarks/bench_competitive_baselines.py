@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Compare FastPauli hot paths with optional quantum-library baselines.
+"""Compare Wolfgang hot paths with optional quantum-library baselines.
 
-This harness is intentionally conservative: it runs FastPauli on every case,
+This harness is intentionally conservative: it runs Wolfgang on every case,
 uses Qiskit or OpenFermion only when installed, and records unavailable
 competitors instead of silently dropping a comparison. Correctness checks run
 against the competitor result whenever a competitor is available.
@@ -21,9 +21,9 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-import fastpauli
+import wolfgang_quantum as fastpauli
 import numpy as np
-from fastpauli import PauliSum
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -445,7 +445,7 @@ def run_qiskit_grouping_case(args: argparse.Namespace, qiskit_quantum_info: Any 
     )
     input_label_counts = Counter(labels)
     if fastpauli_group_label_counts(fast_result) != input_label_counts:
-        raise RuntimeError("FastPauli grouping did not preserve the input label multiset")
+        raise RuntimeError("Wolfgang grouping did not preserve the input label multiset")
 
     competitor_name = "qiskit.SparsePauliOp.group_commuting"
     competitor_available = qiskit_quantum_info is not None
@@ -532,7 +532,7 @@ def run_cuquantum_statevector_case(
         repeat=args.repeat,
     )
 
-    cuda_status = fastpauli._fastpauli_core._cuda_status()
+    cuda_status = fastpauli._wolfgang_core._cuda_status()
     fastpauli_cuda_available = bool(cuda_status.get("built") and cuda_status.get("runtime_available"))
     fastpauli_cuda_host_statevector_timings: dict[str, float] | None = None
     fastpauli_cuda_device_statevector_timings: dict[str, float] | None = None
@@ -544,7 +544,7 @@ def run_cuquantum_statevector_case(
             repeat=args.repeat,
         )
         if not np.allclose(cuda_host_result, fast_result, rtol=1.0e-11, atol=1.0e-11):
-            raise RuntimeError("FastPauli CUDA statevector expectation disagrees with scalar CPU")
+            raise RuntimeError("Wolfgang CUDA statevector expectation disagrees with scalar CPU")
         if cupy is not None:
             fastpauli_device_psi = cupy.asarray(psi, dtype=cupy.complex128)
             cupy.cuda.Stream.null.synchronize()
@@ -555,7 +555,7 @@ def run_cuquantum_statevector_case(
             )
             if not np.allclose(cuda_device_result, fast_result, rtol=1.0e-11, atol=1.0e-11):
                 raise RuntimeError(
-                    "FastPauli CUDA device-statevector expectation disagrees with scalar CPU"
+                    "Wolfgang CUDA device-statevector expectation disagrees with scalar CPU"
                 )
 
     competitor_name = "cuquantum.custatevec.compute_expectations_on_pauli_basis"
@@ -615,7 +615,7 @@ def run_cuquantum_statevector_case(
                 repeat=args.repeat,
             )
             if not np.allclose(competitor_result, fast_result, rtol=1.0e-11, atol=1.0e-11):
-                raise RuntimeError("cuStateVec statevector expectation disagrees with FastPauli")
+                raise RuntimeError("cuStateVec statevector expectation disagrees with Wolfgang")
             competitor_correctness_checked = True
             competitor_unavailable_reason = None
         except Exception as exc:
@@ -643,7 +643,7 @@ def run_cuquantum_statevector_case(
             "competitor_semantic_mapping": (
                 "cuStateVec computes one real Pauli-string expectation per term on the "
                 "same normalized statevector; the benchmark combines those values with "
-                "FastPauli's complex128 coefficients on the host."
+                "Wolfgang's complex128 coefficients on the host."
             ),
             "competitor_timing_boundary": (
                 "device-resident timing reuses the device statevector, cuStateVec handle, "
@@ -651,7 +651,7 @@ def run_cuquantum_statevector_case(
                 "copies the statevector before each call."
             ),
             "fastpauli_cuda_timing_boundary": (
-                "device-resident timing uses FastPauli's CUDA-array-interface path with "
+                "device-resident timing uses Wolfgang's CUDA-array-interface path with "
                 "a reused CuPy statevector when CuPy is importable; operator-resident "
                 "host-statevector timing keeps only the Pauli operator on device and "
                 "copies psi inside each call."
@@ -729,7 +729,7 @@ def run_cupy_commutation_consumer_case(
     )
     expected_uint64 = np.asarray(expected, dtype=np.uint64)
 
-    cuda_status = fastpauli._fastpauli_core._cuda_status()
+    cuda_status = fastpauli._wolfgang_core._cuda_status()
     fastpauli_cuda_available = bool(cuda_status.get("built") and cuda_status.get("runtime_available"))
     fastpauli_count_timings: dict[str, float] | None = None
     competitor_available = fastpauli_cuda_available and cupy is not None
@@ -751,7 +751,7 @@ def run_cupy_commutation_consumer_case(
             repeat=args.repeat,
         )
         if count_result != int(expected_uint64.sum()):
-            raise RuntimeError("FastPauli compact commutation count disagrees with scalar CPU")
+            raise RuntimeError("Wolfgang compact commutation count disagrees with scalar CPU")
 
         if cupy is not None:
             try:
@@ -826,12 +826,12 @@ def run_cupy_commutation_consumer_case(
             "random_seed": args.seed + 40,
             "competitor": "cupy.sum(DeviceCommutationMatrix.__cuda_array_interface__)",
             "competitor_semantic_mapping": (
-                "CuPy consumes FastPauli's dense uint8 DeviceCommutationMatrix through "
+                "CuPy consumes Wolfgang's dense uint8 DeviceCommutationMatrix through "
                 "the CUDA Array Interface and reduces commuting flags on the GPU."
             ),
             "competitor_timing_boundary": (
                 "CuPy timing starts from an already populated DeviceCommutationMatrix; "
-                "it excludes FastPauli commutation fill and includes CuPy reduction work."
+                "it excludes Wolfgang commutation fill and includes CuPy reduction work."
             ),
         },
         "results": {
@@ -875,7 +875,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     cuquantum_case_import_error = cupy_import_error if cupy is None else cuquantum_import_error
     cudaq_status = optional_import_status("cudaq", ["cudaq"])
     qiskit_aer_status = optional_import_status("qiskit_aer", ["qiskit-aer-gpu", "qiskit-aer"])
-    build_info = fastpauli._fastpauli_core._build_info()
+    build_info = fastpauli._wolfgang_core._build_info()
     cases = [
         run_simplify_case(args, qiskit_quantum_info),
         run_multiply_case(args, qubit_operator_type),
@@ -951,9 +951,9 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             ),
         },
         "baselines": [
-            "FastPauli scalar CPU",
-            "FastPauli CUDA device-resident when CUDA and CUDA-array-interface input are available",
-            "FastPauli CUDA operator-resident host-statevector path when built and runtime-available",
+            "Wolfgang scalar CPU",
+            "Wolfgang CUDA device-resident when CUDA and CUDA-array-interface input are available",
+            "Wolfgang CUDA operator-resident host-statevector path when built and runtime-available",
             "Qiskit SparsePauliOp when installed",
             "OpenFermion QubitOperator when installed",
             "NVIDIA cuStateVec Pauli-basis statevector expectation when installed",

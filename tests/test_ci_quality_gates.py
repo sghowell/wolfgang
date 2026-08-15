@@ -93,7 +93,7 @@ def test_quality_job_gates_whole_repository_python_and_public_artifacts() -> Non
 
     for required in (
         'ruff check --config ruff.toml .',
-        'pyright python/fastpauli',
+        'pyright python/wolfgang_quantum',
         'codespell .',
         'python scripts/audit_public_artifacts.py --tracked',
     ):

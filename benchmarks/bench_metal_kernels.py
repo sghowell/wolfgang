@@ -15,8 +15,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
+import wolfgang_quantum as fastpauli
+import wolfgang_quantum._wolfgang_core as core
 import numpy as np
 
 try:
@@ -770,7 +770,7 @@ def external_baseline_statuses() -> dict[str, dict[str, str]]:
             "status": "skipped",
             "semantic_mapping": (
                 "PyTorch MPS does not provide an exact sparse Pauli packed-word commutation path "
-                "or raw Metal-buffer interop boundary matching FastPauli device-resident rows."
+                "or raw Metal-buffer interop boundary matching Wolfgang device-resident rows."
             ),
             "timing_boundary": "not_timed_no_exact_sparse_mapping",
         },
@@ -1034,7 +1034,7 @@ def append_simplify_workspace_probe_row(
             "metal_simplify_strategy": "device_candidate",
             "metal_simplify_strategy_status": "rejected_with_evidence",
             "metal_simplify_strategy_reason": (
-                "Metal sort/prefix/reduce primitives are not retained in FastPauli yet; "
+                "Metal sort/prefix/reduce primitives are not retained in Wolfgang yet; "
                 "Campaign 6 retains only the private workspace model and status row"
             ),
             "metal_simplify_workspace_model": simplify_workspace_model(case),

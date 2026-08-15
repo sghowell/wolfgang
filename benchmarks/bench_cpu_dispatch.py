@@ -12,10 +12,10 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
-import fastpauli
-import fastpauli._fastpauli_core as core
+import wolfgang_quantum as fastpauli
+import wolfgang_quantum._wolfgang_core as core
 import numpy as np
-from fastpauli import PauliSum
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -473,9 +473,9 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "summary": "median seconds",
         },
         "baselines": [
-            "FastPauli auto CPU dispatch",
-            "FastPauli forced scalar CPU",
-            "FastPauli optimized CPU candidates where compiled and available",
+            "Wolfgang auto CPU dispatch",
+            "Wolfgang forced scalar CPU",
+            "Wolfgang optimized CPU candidates where compiled and available",
         ],
         "cases": [
             auto_case,

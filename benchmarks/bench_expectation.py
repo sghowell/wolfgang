@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic Phase 8 expectation-value benchmark.
 
-The benchmark compares FastPauli scalar CPU expectation kernels with direct
+The benchmark compares Wolfgang scalar CPU expectation kernels with direct
 Python reference implementations for statevector and Z-count workloads. Cases
 separate few-terms/large-statevector pressure from many-terms/small-statevector
 pressure so later CPU-dispatch and CUDA work has stable baseline evidence.
@@ -15,9 +15,9 @@ import statistics
 import time
 from typing import Any
 
-import fastpauli
+import wolfgang_quantum as fastpauli
 import numpy as np
-from fastpauli import PauliSum
+from wolfgang_quantum import PauliSum
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -175,7 +175,7 @@ def run_statevector_case(
         repeat=repeat,
     )
     if not np.allclose(fast_result, python_result, rtol=1.0e-11, atol=1.0e-11):
-        raise RuntimeError("FastPauli and Python statevector expectations differ")
+        raise RuntimeError("Wolfgang and Python statevector expectations differ")
 
     return {
         "name": name,
@@ -212,7 +212,7 @@ def run_z_counts_case(
         repeat=repeat,
     )
     if not np.allclose(fast_result, python_result, rtol=1.0e-12, atol=1.0e-12):
-        raise RuntimeError("FastPauli and Python Z-count expectations differ")
+        raise RuntimeError("Wolfgang and Python Z-count expectations differ")
 
     return {
         "name": "z_counts",
@@ -357,7 +357,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         ),
     ]
 
-    build_info = fastpauli._fastpauli_core._build_info()
+    build_info = fastpauli._wolfgang_core._build_info()
     return {
         "benchmark": "expectation",
         "git_commit": git_commit(),
@@ -371,7 +371,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "summary": "median seconds",
         },
         "baselines": [
-            "FastPauli scalar CPU",
+            "Wolfgang scalar CPU",
             "direct Python expectation reference",
         ],
         "correctness_checks": {

@@ -143,7 +143,7 @@ def test_cupy_invalid_architecture_compile_failure_is_reported_unavailable(monke
     fake_cupy.asarray = fake_asarray
 
     monkeypatch.setattr(
-        baselines.fastpauli._fastpauli_core,
+        baselines.fastpauli._wolfgang_core,
         "_cuda_status",
         lambda: {
             "built": True,
@@ -199,7 +199,7 @@ def test_cupy_reduction_compile_failure_is_reported_unavailable(monkeypatch) -> 
     fake_cupy.sum = fake_sum
 
     monkeypatch.setattr(
-        baselines.fastpauli._fastpauli_core,
+        baselines.fastpauli._wolfgang_core,
         "_cuda_status",
         lambda: {
             "built": True,

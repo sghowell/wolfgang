@@ -46,7 +46,7 @@ def test_cuda_plot_renderer_includes_cpu_variants_and_cuda_paths(tmp_path: Path)
 
     assert completed.returncode == 0, completed.stderr
     rendered = output.read_text(encoding="utf-8")
-    assert "FastPauli H100 CUDA backend speedups" in rendered
+    assert "Wolfgang H100 CUDA backend speedups" in rendered
     assert "pairwise commutation" in rendered
     assert "CPU scalar 1.00x" in rendered
     assert "CPU avx512 2.00x" in rendered

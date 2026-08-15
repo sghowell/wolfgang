@@ -10,10 +10,10 @@ import time
 from collections.abc import Callable
 from typing import Any
 
-import fastpauli
+import wolfgang_quantum as fastpauli
 import numpy as np
-from fastpauli import PauliSum
-from fastpauli.openfermion import OPENFERMION_INSTALL_HINT
+from wolfgang_quantum import PauliSum
+from wolfgang_quantum.openfermion import OPENFERMION_INSTALL_HINT
 
 try:
     from _benchmark_metadata import benchmark_environment, command_string, git_commit
@@ -115,7 +115,7 @@ def run_case(
     )
 
     if not qubit_operator_close(fast_result, source):
-        raise RuntimeError("FastPauli OpenFermion round-trip changed operator semantics")
+        raise RuntimeError("Wolfgang OpenFermion round-trip changed operator semantics")
     if not qubit_operator_close(baseline_result, source):
         raise RuntimeError("OpenFermion baseline rebuild changed operator semantics")
 
@@ -171,7 +171,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         ),
     ]
 
-    build_info = fastpauli._fastpauli_core._build_info()
+    build_info = fastpauli._wolfgang_core._build_info()
     return {
         "benchmark": "openfermion_conversion",
         "git_commit": git_commit(),
@@ -185,7 +185,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "repeat": args.repeat,
             "summary": "median seconds",
         },
-        "baselines": ["FastPauli scalar CPU", "OpenFermion QubitOperator rebuild"],
+        "baselines": ["Wolfgang scalar CPU", "OpenFermion QubitOperator rebuild"],
         "cases": cases,
     }
 
@@ -234,7 +234,7 @@ def main() -> None:
         print(
             f"{case['name']}: num_qubits={dataset['num_qubits']} "
             f"num_terms={dataset['num_terms']} "
-            f"FastPauli={results['fastpauli_scalar_seconds']:.6g}s "
+            f"Wolfgang={results['fastpauli_scalar_seconds']:.6g}s "
             f"OpenFermion={results['openfermion_baseline_seconds']:.6g}s"
         )
 

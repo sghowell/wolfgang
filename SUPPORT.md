@@ -4,7 +4,7 @@
 
 1. Read the [installation guide](docs/getting-started/installation.md).
 2. Check the [release support matrix](docs/release/support_matrix.md).
-3. Run `python -c "import fastpauli; print(fastpauli.__version__)"`.
+3. Run `python -c "import wolfgang_quantum; print(wolfgang_quantum.__version__)"`.
 4. For source builds, retain the complete CMake configure output and `_build_info()` report.
 
 ## Asking for help
