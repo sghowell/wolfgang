@@ -17,12 +17,19 @@ import re
 import shutil
 import subprocess
 import sys
+import tarfile
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SDIST_ARTIFACT_PREFIX = "wolfgang-quantum-"
 WHEEL_ARTIFACT_PREFIX = "wolfgang_quantum-"
 PROJECT_DISTRIBUTION = "wolfgang-quantum"
+FORBIDDEN_ARTIFACT_SUBSTRINGS = (
+    "bindings/python/internal_bindings.cpp",
+    "fastpauli",
+    "include/fastpauli/",
+)
 
 
 def print_step(name: str) -> None:
@@ -151,6 +158,29 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def archive_members(path: Path) -> list[str]:
+    if path.name.endswith(".tar.gz"):
+        with tarfile.open(path, "r:gz") as archive:
+            return sorted(member.name for member in archive.getmembers() if member.isfile())
+    if path.suffix == ".whl":
+        with zipfile.ZipFile(path) as archive:
+            return sorted(member.filename for member in archive.infolist() if not member.is_dir())
+    raise SystemExit(f"unsupported artifact type for member inspection: {path}")
+
+
+def ensure_release_artifact_boundary(path: Path) -> None:
+    forbidden_members = [
+        member
+        for member in archive_members(path)
+        if any(fragment in member.lower() for fragment in FORBIDDEN_ARTIFACT_SUBSTRINGS)
+    ]
+    if forbidden_members:
+        raise SystemExit(
+            "release artifact contains forbidden internal payloads: "
+            + ", ".join(forbidden_members)
+        )
+
+
 def build_artifacts(output_dir: Path, *, python_executable: str) -> tuple[Path, Path]:
     clean_prior_release_artifacts(output_dir)
     run_command(
@@ -229,6 +259,8 @@ def validate_release_artifacts(output_dir: Path, *, python_executable: str) -> d
     expected_version = project_version()
     sdist, wheel = build_artifacts(output_dir, python_executable=python_executable)
     validate_artifact_versions(sdist, wheel, expected_version)
+    ensure_release_artifact_boundary(sdist)
+    ensure_release_artifact_boundary(wheel)
     venv_python = install_and_smoke_wheel(
         output_dir,
         wheel,

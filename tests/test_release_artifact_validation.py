@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import tarfile
+import zipfile
 from pathlib import Path
 from types import ModuleType
 
@@ -131,6 +133,46 @@ def test_validate_artifact_versions_requires_current_artifact_names(tmp_path: Pa
         validator.validate_artifact_versions(current_sdist, final_wheel, RELEASE_VERSION)
 
 
+def test_release_artifact_boundary_rejects_internal_binding_sdist_member(tmp_path: Path) -> None:
+    validator = load_release_validator()
+    archive = tmp_path / f"{SDIST_PREFIX}.tar.gz"
+    payload = tmp_path / "internal_bindings.cpp"
+    payload.write_text("// internal only\n", encoding="utf-8")
+
+    with tarfile.open(archive, "w:gz") as package:
+        package.add(
+            payload,
+            arcname=f"{SDIST_PREFIX}/bindings/python/internal_bindings.cpp",
+        )
+
+    with pytest.raises(SystemExit, match="forbidden internal payloads"):
+        validator.ensure_release_artifact_boundary(archive)
+
+
+def test_release_artifact_boundary_rejects_fastpauli_wheel_member(tmp_path: Path) -> None:
+    validator = load_release_validator()
+    wheel = tmp_path / f"{WHEEL_PREFIX}-cp312-cp312-macosx_26_0_arm64.whl"
+
+    with zipfile.ZipFile(wheel, "w") as archive:
+        archive.writestr("fastpauli/__init__.py", "")
+
+    with pytest.raises(SystemExit, match="forbidden internal payloads"):
+        validator.ensure_release_artifact_boundary(wheel)
+
+
+def test_release_artifact_boundary_accepts_wolfgang_only_members(tmp_path: Path) -> None:
+    validator = load_release_validator()
+    archive = tmp_path / f"{SDIST_PREFIX}.tar.gz"
+    pyproject = tmp_path / "pyproject.toml"
+    pyproject.write_text("[build-system]\n", encoding="utf-8")
+
+    with tarfile.open(archive, "w:gz") as package:
+        package.add(pyproject, arcname=f"{SDIST_PREFIX}/pyproject.toml")
+        package.add(pyproject, arcname=f"{SDIST_PREFIX}/bindings/python/module.cpp")
+
+    validator.ensure_release_artifact_boundary(archive)
+
+
 def test_sha256_file_reports_artifact_digest(tmp_path: Path) -> None:
     validator = load_release_validator()
     artifact = tmp_path / f"{SDIST_PREFIX}.tar.gz"
@@ -146,8 +188,12 @@ def test_release_summary_includes_artifact_hashes(monkeypatch, tmp_path: Path) -
     validator = load_release_validator()
     sdist = tmp_path / f"{SDIST_PREFIX}.tar.gz"
     wheel = tmp_path / f"{WHEEL_PREFIX}-cp312-cp312-macosx_26_0_arm64.whl"
-    sdist.write_bytes(b"sdist")
-    wheel.write_bytes(b"wheel")
+    payload = tmp_path / "payload.txt"
+    payload.write_text("release-artifact", encoding="utf-8")
+    with tarfile.open(sdist, "w:gz") as archive:
+        archive.add(payload, arcname=f"{SDIST_PREFIX}/pyproject.toml")
+    with zipfile.ZipFile(wheel, "w") as archive:
+        archive.writestr("wolfgang_quantum/__init__.py", "")
 
     monkeypatch.setattr(validator, "build_artifacts", lambda *_args, **_kwargs: (sdist, wheel))
     monkeypatch.setattr(

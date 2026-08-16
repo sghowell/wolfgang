@@ -76,6 +76,7 @@ sdist.exclude = [
   "AGENTS.md",
   "CONTRIBUTING.md",
   "benchmarks",
+  "bindings/python/internal_bindings.cpp",
   "docs",
   "ruff.toml",
   "scripts",

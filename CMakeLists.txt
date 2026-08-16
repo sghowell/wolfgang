@@ -323,6 +323,7 @@ find_package(nanobind CONFIG REQUIRED)
 set(WOLFGANG_STABLE_BINDING_SOURCES
   bindings/python/module.cpp
   bindings/python/stable_bindings.cpp
+  bindings/python/build_info.cpp
   bindings/python/pauli_sum_py.cpp
 )
 
@@ -332,7 +333,6 @@ set(WOLFGANG_INTERNAL_BINDING_SOURCES
 
 set(WOLFGANG_EXTENSION_SOURCES
   ${WOLFGANG_STABLE_BINDING_SOURCES}
-  ${WOLFGANG_INTERNAL_BINDING_SOURCES}
   src/accelerator_status.cpp
   src/arithmetic.cpp
   src/commute.cpp
@@ -351,6 +351,10 @@ set(WOLFGANG_ACCELERATOR_STUB_SOURCES
   src/device_commutation_matrix_stub.cpp
   src/device_pauli_sum_stub.cpp
 )
+
+if(WOLFGANG_ENABLE_INTERNAL_BINDINGS)
+  list(APPEND WOLFGANG_EXTENSION_SOURCES ${WOLFGANG_INTERNAL_BINDING_SOURCES})
+endif()
 
 set(WOLFGANG_CUDA_EXTENSION_SOURCES
   src/cuda/device_commutation_matrix.cu
@@ -473,7 +477,6 @@ endif()
 target_compile_definitions(
   _wolfgang_core
   PRIVATE
-    WOLFGANG_ENABLE_INTERNAL_BINDINGS=$<BOOL:${WOLFGANG_ENABLE_INTERNAL_BINDINGS}>
     WOLFGANG_ENABLE_INTERNAL_BINDINGS=$<BOOL:${WOLFGANG_ENABLE_INTERNAL_BINDINGS}>
     WOLFGANG_BUILD_CUDA_ENABLED=${WOLFGANG_BUILD_CUDA_ENABLED}
     WOLFGANG_BUILD_CUDA_ARCHITECTURES="${WOLFGANG_BUILD_CUDA_ARCHITECTURES}"
