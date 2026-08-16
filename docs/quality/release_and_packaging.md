@@ -22,7 +22,7 @@ Phase 1 should define:
 
 ```text
 project name: wolfgang-quantum
-current development version: 0.2.0
+current development version: 0.2.1
 latest tagged release: 0.1.0
 requires-python: >=3.10
 license metadata matching LICENSE
@@ -246,8 +246,9 @@ support-matrix wording that distinguishes CPU wheels from Metal source builds
 
 ## Release Evidence Template
 
-Use `docs/release/README.md`, the current release ledger
-`docs/release/0.1.0.md`, the wheelhouse dry-run ledger
+Use `docs/release/README.md`, the pending release ledger
+`docs/release/0.2.1.md`, the current release-preparation ledger,
+`docs/release/0.1.0.md`, the current published final-release ledger,
 `docs/release/0.1.0-wheelhouse-dry-run.md`, and historical ledgers such as
 `docs/release/0.1.0-rc2.md` and `docs/release/0.1.0-rc1.md` for checked-in
 release evidence. Release evidence must include:

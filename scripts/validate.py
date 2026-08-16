@@ -67,6 +67,7 @@ SOURCE_OF_TRUTH_PATHS = (
     "docs/quality/security_and_supply_chain.md",
     "docs/quality/release_and_packaging.md",
     "docs/release/README.md",
+    "docs/release/0.2.1.md",
     "docs/release/0.1.0.md",
     "docs/release/0.1.0-wheelhouse-dry-run.md",
     "docs/release/0.1.0-rc1.md",

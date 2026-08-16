@@ -4,10 +4,18 @@ All user-visible FastPauli changes are recorded here before each release.
 
 ## Unreleased
 
-Next version: 0.2.0
+Next version: 0.2.1
 
 ### Added
 
+- Wolfgang `0.2.1` release-preparation evidence in `docs/release/0.2.1.md`,
+  including release notes for the completed canonical identity migration,
+  corrected `sghowell/wolfgang` links, GitHub Pages Mermaid rendering,
+  release-quality CI repair, deprecated compatibility shims, multi-backend
+  qualification scope, and explicit deferral of PyPI publication.
+- Active release/support surfaces now point at the pending `v0.2.1` release
+  ledger while preserving the quarantined `v0.2.0` tag and draft release plus
+  the published `0.1.0` evidence unchanged.
 - Release supply-chain hardening with exact project-version tag binding,
   immutable GitHub Action pins, least-privilege workflow permissions,
   dependency auditing, SBOM generation, artifact attestations, and automated
