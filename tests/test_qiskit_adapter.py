@@ -37,7 +37,7 @@ def assert_qiskit_matrices_close(lhs: Any, rhs: Any) -> None:
 
 
 def test_importing_fastpauli_does_not_import_qiskit() -> None:
-    code = "import sys; import fastpauli; raise SystemExit('qiskit' in sys.modules)"
+    code = "import sys; import wolfgang_quantum; raise SystemExit('qiskit' in sys.modules)"
 
     completed = subprocess.run(
         [sys.executable, "-c", code],

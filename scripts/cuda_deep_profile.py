@@ -122,7 +122,7 @@ def build_steps(args: argparse.Namespace) -> list[Step]:
     env = base_env(args)
     cuda_build_env = {
         **env,
-        "FASTPAULI_VALIDATE_CUDA": "1",
+        "WOLFGANG_VALIDATE_CUDA": "1",
         "CUDACXX": str(Path(args.cuda_bin) / "nvcc"),
         "CUDAHOSTCXX": args.cuda_host_compiler,
     }

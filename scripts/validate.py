@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repo-local validation entrypoint for FastPauli.
+"""Repo-local validation entrypoint for Wolfgang.
 
 The script intentionally starts with mechanical checks that do not need the
 package installed, then installs the package and runs build/import/test checks.
@@ -25,7 +25,7 @@ SOURCE_OF_TRUTH_PATHS = (
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "docs/roadmap.md",
-    "docs/plans/fastpauli_cpp_cuda_implementation_plan.md",
+    "docs/plans/cpp_cuda_implementation_plan.md",
     "docs/plans/release_candidate_foundation_plan.md",
     "docs/plans/release_candidate_next_checkpoint_plan.md",
     "docs/plans/release_0_1_0_wheelhouse_foundation_plan.md",
@@ -67,7 +67,7 @@ SOURCE_OF_TRUTH_PATHS = (
     "docs/quality/security_and_supply_chain.md",
     "docs/quality/release_and_packaging.md",
     "docs/release/README.md",
-    "docs/release/0.2.1.md",
+    "docs/release/0.2.2.md",
     "docs/release/0.1.0.md",
     "docs/release/0.1.0-wheelhouse-dry-run.md",
     "docs/release/0.1.0-rc1.md",
@@ -112,8 +112,8 @@ BACKEND_SPECIALIZED_SOURCES = (
 )
 
 CUDA_FOUNDATION_SOURCES = (
-    "include/fastpauli/device_commutation_matrix.hpp",
-    "include/fastpauli/device_pauli_sum.hpp",
+    "include/wolfgang/device_commutation_matrix.hpp",
+    "include/wolfgang/device_pauli_sum.hpp",
     "src/device_commutation_matrix_stub.cpp",
     "src/device_pauli_sum_stub.cpp",
     "src/cuda/device_commutation_matrix.cu",
@@ -382,18 +382,18 @@ def check_cmake_defaults() -> None:
         'message(DEPRECATION "${legacy} is deprecated; use ${canonical}.")',
         'set(${legacy} "${${canonical}}" CACHE BOOL "Deprecated alias for ${canonical}" FORCE)',
         'set(${legacy} "${${canonical}}" CACHE STRING "Deprecated alias for ${canonical}" FORCE)',
-        '_wolfgang_bool_option(WOLFGANG_ENABLE_CUDA FASTPAULI_ENABLE_CUDA "Build CUDA backend support" OFF)',
-        '_wolfgang_bool_option(WOLFGANG_ENABLE_HIP FASTPAULI_ENABLE_HIP "Build ROCm/HIP backend support" OFF)',
-        '_wolfgang_bool_option(WOLFGANG_ENABLE_METAL FASTPAULI_ENABLE_METAL "Build Apple Metal backend support" OFF)',
-        '_wolfgang_bool_option(WOLFGANG_ENABLE_NATIVE FASTPAULI_ENABLE_NATIVE "Allow native CPU tuning such as -march=native" OFF)',
-        '_wolfgang_bool_option(WOLFGANG_ENABLE_OPENMP FASTPAULI_ENABLE_OPENMP "Build OpenMP-enabled CPU paths" OFF)',
-        '_wolfgang_string_option(WOLFGANG_ENABLE_TBB FASTPAULI_ENABLE_TBB "auto" "Build oneTBB-enabled CPU paths: auto, ON, or OFF")',
-        '_wolfgang_string_option(WOLFGANG_ENABLE_AVX2 FASTPAULI_ENABLE_AVX2 "auto" "Build AVX2-dispatched CPU paths: auto, ON, or OFF")',
-        '_wolfgang_string_option(WOLFGANG_ENABLE_AVX512 FASTPAULI_ENABLE_AVX512 "auto" "Build AVX-512-dispatched CPU paths: auto, ON, or OFF")',
-        '_wolfgang_string_option(WOLFGANG_ENABLE_ARM_NEON FASTPAULI_ENABLE_ARM_NEON "auto" "Build ARM NEON-dispatched CPU paths: auto, ON, or OFF")',
-        '_wolfgang_string_option(WOLFGANG_ENABLE_ARM_SVE FASTPAULI_ENABLE_ARM_SVE "auto" "Build ARM SVE-dispatched CPU paths: auto, ON, or OFF")',
-        '_wolfgang_string_option(WOLFGANG_CUDA_ARCHITECTURES FASTPAULI_CUDA_ARCHITECTURES "80;86;89;90;100-real;120" "CUDA architectures for WOLFGANG_ENABLE_CUDA=ON source builds")',
-        '_wolfgang_string_option(WOLFGANG_HIP_ARCHITECTURES FASTPAULI_HIP_ARCHITECTURES "gfx942" "HIP architectures for WOLFGANG_ENABLE_HIP=ON source builds")',
+        '_wolfgang_bool_option(WOLFGANG_ENABLE_CUDA WOLFGANG_ENABLE_CUDA "Build CUDA backend support" OFF)',
+        '_wolfgang_bool_option(WOLFGANG_ENABLE_HIP WOLFGANG_ENABLE_HIP "Build ROCm/HIP backend support" OFF)',
+        '_wolfgang_bool_option(WOLFGANG_ENABLE_METAL WOLFGANG_ENABLE_METAL "Build Apple Metal backend support" OFF)',
+        '_wolfgang_bool_option(WOLFGANG_ENABLE_NATIVE WOLFGANG_ENABLE_NATIVE "Allow native CPU tuning such as -march=native" OFF)',
+        '_wolfgang_bool_option(WOLFGANG_ENABLE_OPENMP WOLFGANG_ENABLE_OPENMP "Build OpenMP-enabled CPU paths" OFF)',
+        '_wolfgang_string_option(WOLFGANG_ENABLE_TBB WOLFGANG_ENABLE_TBB "auto" "Build oneTBB-enabled CPU paths: auto, ON, or OFF")',
+        '_wolfgang_string_option(WOLFGANG_ENABLE_AVX2 WOLFGANG_ENABLE_AVX2 "auto" "Build AVX2-dispatched CPU paths: auto, ON, or OFF")',
+        '_wolfgang_string_option(WOLFGANG_ENABLE_AVX512 WOLFGANG_ENABLE_AVX512 "auto" "Build AVX-512-dispatched CPU paths: auto, ON, or OFF")',
+        '_wolfgang_string_option(WOLFGANG_ENABLE_ARM_NEON WOLFGANG_ENABLE_ARM_NEON "auto" "Build ARM NEON-dispatched CPU paths: auto, ON, or OFF")',
+        '_wolfgang_string_option(WOLFGANG_ENABLE_ARM_SVE WOLFGANG_ENABLE_ARM_SVE "auto" "Build ARM SVE-dispatched CPU paths: auto, ON, or OFF")',
+        '_wolfgang_string_option(WOLFGANG_CUDA_ARCHITECTURES WOLFGANG_CUDA_ARCHITECTURES "80;86;89;90;100-real;120" "CUDA architectures for WOLFGANG_ENABLE_CUDA=ON source builds")',
+        '_wolfgang_string_option(WOLFGANG_HIP_ARCHITECTURES WOLFGANG_HIP_ARCHITECTURES "gfx942" "HIP architectures for WOLFGANG_ENABLE_HIP=ON source builds")',
         'WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_HIP cannot both be ON',
         'WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_METAL cannot both be ON',
         'WOLFGANG_ENABLE_HIP and WOLFGANG_ENABLE_METAL cannot both be ON',
@@ -405,17 +405,17 @@ def check_cmake_defaults() -> None:
         'WOLFGANG_ENABLE_AVX512=ON requested, but this compiler/target cannot build the AVX-512 VPOPCNTDQ object.',
         'WOLFGANG_ENABLE_ARM_NEON=ON requested, but this compiler/target cannot build the NEON object.',
         'WOLFGANG_ENABLE_ARM_SVE=ON requested, but ARM SVE kernels are not implemented yet.',
-        'FASTPAULI_BUILD_CPU_BACKEND="scalar"',
-        'FASTPAULI_BUILD_CUDA_ENABLED=${FASTPAULI_BUILD_CUDA_ENABLED}',
-        'FASTPAULI_BUILD_CUDA_ARCHITECTURES="${FASTPAULI_BUILD_CUDA_ARCHITECTURES}"',
-        'FASTPAULI_BUILD_HIP_ENABLED=${FASTPAULI_BUILD_HIP_ENABLED}',
-        'FASTPAULI_BUILD_HIP_ARCHITECTURES="${FASTPAULI_BUILD_HIP_ARCHITECTURES}"',
-        'FASTPAULI_BUILD_METAL_ENABLED=${FASTPAULI_BUILD_METAL_ENABLED}',
-        'FASTPAULI_BUILD_TBB_ENABLED=${FASTPAULI_BUILD_TBB_ENABLED}',
-        'FASTPAULI_BUILD_AVX2_ENABLED=${FASTPAULI_BUILD_AVX2_ENABLED}',
-        'FASTPAULI_BUILD_AVX512_ENABLED=${FASTPAULI_BUILD_AVX512_ENABLED}',
-        'FASTPAULI_BUILD_ARM_NEON_ENABLED=${FASTPAULI_BUILD_ARM_NEON_ENABLED}',
-        'FASTPAULI_BUILD_ARM_SVE_ENABLED=${FASTPAULI_BUILD_ARM_SVE_ENABLED}',
+        'WOLFGANG_BUILD_CPU_BACKEND="scalar"',
+        'WOLFGANG_BUILD_CUDA_ENABLED=${WOLFGANG_BUILD_CUDA_ENABLED}',
+        'WOLFGANG_BUILD_CUDA_ARCHITECTURES="${WOLFGANG_BUILD_CUDA_ARCHITECTURES}"',
+        'WOLFGANG_BUILD_HIP_ENABLED=${WOLFGANG_BUILD_HIP_ENABLED}',
+        'WOLFGANG_BUILD_HIP_ARCHITECTURES="${WOLFGANG_BUILD_HIP_ARCHITECTURES}"',
+        'WOLFGANG_BUILD_METAL_ENABLED=${WOLFGANG_BUILD_METAL_ENABLED}',
+        'WOLFGANG_BUILD_TBB_ENABLED=${WOLFGANG_BUILD_TBB_ENABLED}',
+        'WOLFGANG_BUILD_AVX2_ENABLED=${WOLFGANG_BUILD_AVX2_ENABLED}',
+        'WOLFGANG_BUILD_AVX512_ENABLED=${WOLFGANG_BUILD_AVX512_ENABLED}',
+        'WOLFGANG_BUILD_ARM_NEON_ENABLED=${WOLFGANG_BUILD_ARM_NEON_ENABLED}',
+        'WOLFGANG_BUILD_ARM_SVE_ENABLED=${WOLFGANG_BUILD_ARM_SVE_ENABLED}',
     )
     missing = [snippet for snippet in required_snippets if snippet not in cmake]
     if missing:
@@ -597,9 +597,9 @@ def run_cuda_validation_checks() -> None:
     nvcc = cuda_compiler()
     cmake = find_executable("cmake")
     if nvcc is None:
-        fail("FASTPAULI_VALIDATE_CUDA=1 requested, but nvcc is not available")
+        fail("WOLFGANG_VALIDATE_CUDA=1 requested, but nvcc is not available")
     if cmake is None:
-        fail("FASTPAULI_VALIDATE_CUDA=1 requested, but cmake is not available")
+        fail("WOLFGANG_VALIDATE_CUDA=1 requested, but cmake is not available")
 
     requested_architectures = os.environ.get("WOLFGANG_CUDA_ARCHITECTURES")
     print(f"nvcc: {nvcc}")
@@ -612,7 +612,7 @@ def run_cuda_validation_checks() -> None:
 
     host_compiler = cuda_host_compiler()
     if host_compiler is None:
-        fail("FASTPAULI_VALIDATE_CUDA=1 requested, but no CUDA host C++ compiler is available")
+        fail("WOLFGANG_VALIDATE_CUDA=1 requested, but no CUDA host C++ compiler is available")
     assert host_compiler is not None
     run_check("CUDA host compiler version", [host_compiler, "--version"])
 
@@ -755,10 +755,10 @@ def run_cuda_build_info_check(expected_architectures: str) -> None:
         f"assert info['cuda_architectures'] == {expected_architectures!r}; "
         "assert info['cuda_toolkit_version']; "
         "assert info['cuda_toolkit_version'] != 'not_available'; "
-        "assert compiler['FASTPAULI_CUDA_HOST_COMPILER']; "
-        "assert compiler['FASTPAULI_CUDA_HOST_COMPILER'] != 'not_available'; "
-        "assert compiler['FASTPAULI_CUDA_HOST_COMPILER_SOURCE']; "
-        "assert compiler['FASTPAULI_CUDA_HOST_COMPILER_SOURCE'] != 'not_available'; "
+        "assert compiler['WOLFGANG_CUDA_HOST_COMPILER']; "
+        "assert compiler['WOLFGANG_CUDA_HOST_COMPILER'] != 'not_available'; "
+        "assert compiler['WOLFGANG_CUDA_HOST_COMPILER_SOURCE']; "
+        "assert compiler['WOLFGANG_CUDA_HOST_COMPILER_SOURCE'] != 'not_available'; "
         "assert status['built'] is True; "
         "assert status['runtime_available'] is True; "
         "assert status['device_count'] >= 1; "
@@ -792,9 +792,9 @@ def run_hip_validation_checks() -> None:
     hip = hip_compiler()
     cmake = find_executable("cmake")
     if hip is None:
-        fail("FASTPAULI_VALIDATE_HIP=1 requested, but hipcc/amdclang++ is not available")
+        fail("WOLFGANG_VALIDATE_HIP=1 requested, but hipcc/amdclang++ is not available")
     if cmake is None:
-        fail("FASTPAULI_VALIDATE_HIP=1 requested, but cmake is not available")
+        fail("WOLFGANG_VALIDATE_HIP=1 requested, but cmake is not available")
 
     requested_architectures = os.environ.get("WOLFGANG_HIP_ARCHITECTURES")
     print(f"HIP compiler: {hip}")
@@ -890,10 +890,10 @@ def run_hip_build_info_check(expected_architectures: str) -> None:
 def run_metal_validation_checks() -> None:
     print_check("Metal validation environment")
     if sys.platform != "darwin":
-        fail("FASTPAULI_VALIDATE_METAL=1 requested, but Metal validation requires macOS")
+        fail("WOLFGANG_VALIDATE_METAL=1 requested, but Metal validation requires macOS")
     cmake = find_executable("cmake")
     if cmake is None:
-        fail("FASTPAULI_VALIDATE_METAL=1 requested, but cmake is not available")
+        fail("WOLFGANG_VALIDATE_METAL=1 requested, but cmake is not available")
     print(f"cmake: {cmake}")
 
     validation_env = metal_validation_env()
@@ -1201,11 +1201,11 @@ def main() -> None:
         ],
     )
     run_optional_openfermion_checks()
-    if os.environ.get("FASTPAULI_VALIDATE_CUDA") == "1":
+    if os.environ.get("WOLFGANG_VALIDATE_CUDA") == "1":
         run_cuda_validation_checks()
-    if os.environ.get("FASTPAULI_VALIDATE_HIP") == "1":
+    if os.environ.get("WOLFGANG_VALIDATE_HIP") == "1":
         run_hip_validation_checks()
-    if os.environ.get("FASTPAULI_VALIDATE_METAL") == "1":
+    if os.environ.get("WOLFGANG_VALIDATE_METAL") == "1":
         run_metal_validation_checks()
     run_check(
         "source distribution build smoke",

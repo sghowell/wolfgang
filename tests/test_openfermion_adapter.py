@@ -30,7 +30,7 @@ def assert_qubit_operator_close(lhs: Any, rhs: Any) -> None:
 
 
 def test_importing_fastpauli_does_not_import_openfermion() -> None:
-    code = "import sys; import fastpauli; raise SystemExit('openfermion' in sys.modules)"
+    code = "import sys; import wolfgang_quantum; raise SystemExit('openfermion' in sys.modules)"
 
     completed = subprocess.run(
         [sys.executable, "-c", code],

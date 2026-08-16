@@ -35,8 +35,8 @@ def test_campaign6_plan_is_registered_as_source_of_truth() -> None:
     for required in (
         "private MetalWorkspace",
         "WorkspaceTimingMode",
-        "FASTPAULI_EXPERIMENTAL_METAL_SIMPLIFY_STRATEGY",
-        "FASTPAULI_METAL_BENCH_WORKSPACE_TIMING",
+        "WOLFGANG_EXPERIMENTAL_METAL_SIMPLIFY_STRATEGY",
+        "WOLFGANG_METAL_BENCH_WORKSPACE_TIMING",
         "metal_simplify_workspace_probe",
         "device-resident simplify candidate remains blocked",
         "Metal sort, prefix-sum, and reduce-by-key primitives",

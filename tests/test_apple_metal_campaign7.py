@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import fastpauli
-import fastpauli._fastpauli_core as core
 import numpy as np
 import pytest
+import wolfgang_quantum
+import wolfgang_quantum._wolfgang_core as core
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -22,7 +22,7 @@ def _require_metal_runtime() -> None:
         pytest.skip(status["skip_reason"])
 
 
-def _assert_same_operator(lhs: fastpauli.PauliSum, rhs: fastpauli.PauliSum) -> None:
+def _assert_same_operator(lhs: wolfgang_quantum.PauliSum, rhs: wolfgang_quantum.PauliSum) -> None:
     lhs_labels, lhs_coeffs = lhs.to_labels()
     rhs_labels, rhs_coeffs = rhs.to_labels()
     assert lhs.num_qubits == rhs.num_qubits
@@ -60,7 +60,7 @@ def test_campaign7_private_metal_source_layout_and_build_registration() -> None:
     ):
         assert token in source
 
-    assert "#include <Metal/Metal.h>" not in read("include/fastpauli/device_pauli_sum.hpp")
+    assert "#include <Metal/Metal.h>" not in read("include/wolfgang/device_pauli_sum.hpp")
 
 
 def test_campaign7_private_hook_reports_unavailable_for_multiword_when_available() -> None:
@@ -69,7 +69,7 @@ def test_campaign7_private_hook_reports_unavailable_for_multiword_when_available
     _require_metal_runtime()
 
     labels = ["X" + ("I" * 64), "X" + ("I" * 64)]
-    device_op = fastpauli.PauliSum.from_labels(labels, [1.0, 2.0]).to_device(backend="metal")
+    device_op = wolfgang_quantum.PauliSum.from_labels(labels, [1.0, 2.0]).to_device(backend="metal")
     report = core._metal_simplify_words1_candidate_for_testing(device_op, include_output=False)
 
     assert report["status"] == "unavailable"
@@ -82,7 +82,7 @@ def test_campaign7_words1_candidate_matches_cpu_when_available() -> None:
         pytest.skip("Metal source build is not active")
     _require_metal_runtime()
 
-    host = fastpauli.PauliSum.from_labels(
+    host = wolfgang_quantum.PauliSum.from_labels(
         ["X", "Z", "X", "Y", "Z", "I", "Y", "X"],
         [1.0, 2.0j, -0.25, 3.0, -2.0j, 0.0, -3.0, 0.5],
     )
@@ -117,7 +117,7 @@ def test_campaign7_words1_candidate_uses_complex_magnitude_tolerance_when_availa
         pytest.skip("Metal source build is not active")
     _require_metal_runtime()
 
-    host = fastpauli.PauliSum.from_labels(["X"], [0.5 + 0.5j])
+    host = wolfgang_quantum.PauliSum.from_labels(["X"], [0.5 + 0.5j])
     expected = host.simplify(atol=0.6, rtol=0.0)
     report = core._metal_simplify_words1_candidate_for_testing(
         host.to_device(backend="metal"),
@@ -136,7 +136,7 @@ def test_campaign7_words1_candidate_rejects_non_dyadic_coefficients_when_availab
         pytest.skip("Metal source build is not active")
     _require_metal_runtime()
 
-    host = fastpauli.PauliSum.from_labels(["X", "X"], [0.1, 0.2])
+    host = wolfgang_quantum.PauliSum.from_labels(["X", "X"], [0.1, 0.2])
     report = core._metal_simplify_words1_candidate_for_testing(
         host.to_device(backend="metal"),
         atol=1.0e-12,
@@ -155,7 +155,7 @@ def test_campaign7_words1_candidate_rejects_accumulator_overflow_domain_when_ava
         pytest.skip("Metal source build is not active")
     _require_metal_runtime()
 
-    host = fastpauli.PauliSum.from_labels(["X", "X"], [float(2**30), float(2**30)])
+    host = wolfgang_quantum.PauliSum.from_labels(["X", "X"], [float(2**30), float(2**30)])
     report = core._metal_simplify_words1_candidate_for_testing(
         host.to_device(backend="metal"),
         atol=1.0e-12,
@@ -173,7 +173,7 @@ def test_campaign7_words1_candidate_rejects_unbounded_square_compare_when_availa
         pytest.skip("Metal source build is not active")
     _require_metal_runtime()
 
-    host = fastpauli.PauliSum.from_labels(["X"], [0.75 + 0.75j])
+    host = wolfgang_quantum.PauliSum.from_labels(["X"], [0.75 + 0.75j])
     report = core._metal_simplify_words1_candidate_for_testing(
         host.to_device(backend="metal"),
         atol=1.0,

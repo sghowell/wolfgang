@@ -73,7 +73,7 @@ PUBLIC_COMPILER_BUILD_KEYS = {
 
 
 def git_commit() -> str:
-    override = os.environ.get("FASTPAULI_BENCHMARK_GIT_COMMIT")
+    override = os.environ.get("WOLFGANG_BENCHMARK_GIT_COMMIT")
     if override:
         return override
     provenance = git_provenance()
@@ -94,13 +94,13 @@ def git_status_short() -> list[str]:
 
 
 def git_provenance() -> dict[str, Any]:
-    override = os.environ.get("FASTPAULI_BENCHMARK_GIT_COMMIT")
+    override = os.environ.get("WOLFGANG_BENCHMARK_GIT_COMMIT")
     if override:
         return {
             "commit": override,
             "commit_label": override,
             "dirty": False,
-            "source": "FASTPAULI_BENCHMARK_GIT_COMMIT",
+            "source": "WOLFGANG_BENCHMARK_GIT_COMMIT",
             "working_tree_status": [],
         }
     completed = subprocess.run(

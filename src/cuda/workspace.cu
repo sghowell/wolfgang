@@ -37,7 +37,7 @@ void* aligned_pointer(void* ptr, std::size_t alignment) noexcept {
 
 [[noreturn]] void throw_invalid_workspace_mode(const char* value) {
   throw std::invalid_argument(
-      std::string("FASTPAULI_CUDA_BENCH_WORKSPACE_MODE must be absent, grow_inside_timing, "
+      std::string("WOLFGANG_CUDA_BENCH_WORKSPACE_MODE must be absent, grow_inside_timing, "
                   "or pre_reserved_outside_timing, got: ") +
       value);
 }
@@ -169,7 +169,7 @@ void CudaWorkspace::steal_from(CudaWorkspace&& other) noexcept {
 }
 
 WorkspaceTimingMode workspace_timing_mode_from_env() {
-  const char* value = std::getenv("FASTPAULI_CUDA_BENCH_WORKSPACE_MODE");
+  const char* value = std::getenv("WOLFGANG_CUDA_BENCH_WORKSPACE_MODE");
   if (value == nullptr || std::string(value).empty() || std::string(value) == "absent") {
     return WorkspaceTimingMode::kAbsent;
   }

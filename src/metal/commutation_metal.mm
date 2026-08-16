@@ -26,8 +26,8 @@ enum class CommutationKernelVariant {
   FlatGeneric,
 };
 
-constexpr const char* kMetalLibraryPathEnv = "FASTPAULI_EXPERIMENTAL_METAL_LIBRARY_PATH";
-constexpr const char* kMetalOutputStorageEnv = "FASTPAULI_EXPERIMENTAL_METAL_OUTPUT_STORAGE";
+constexpr const char* kMetalLibraryPathEnv = "WOLFGANG_EXPERIMENTAL_METAL_LIBRARY_PATH";
+constexpr const char* kMetalOutputStorageEnv = "WOLFGANG_EXPERIMENTAL_METAL_OUTPUT_STORAGE";
 
 NSString* commutation_kernel_source() {
   return @"#include <metal_stdlib>\n"
@@ -141,24 +141,24 @@ bool use_private_host_output_storage() {
     return true;
   }
   throw std::invalid_argument(
-      "FASTPAULI_EXPERIMENTAL_METAL_OUTPUT_STORAGE must be shared or private");
+      "WOLFGANG_EXPERIMENTAL_METAL_OUTPUT_STORAGE must be shared or private");
 }
 
 CommutationKernelVariant commutation_kernel_variant(std::size_t words) {
-  const char* forced = std::getenv("FASTPAULI_EXPERIMENTAL_METAL_COMMUTATION_KERNEL");
+  const char* forced = std::getenv("WOLFGANG_EXPERIMENTAL_METAL_COMMUTATION_KERNEL");
   if (forced != nullptr) {
     const std::string forced_value(forced);
     if (forced_value == "words1") {
       if (words != 1) {
         throw std::invalid_argument(
-            "FASTPAULI_EXPERIMENTAL_METAL_COMMUTATION_KERNEL=words1 requires exactly one packed word");
+            "WOLFGANG_EXPERIMENTAL_METAL_COMMUTATION_KERNEL=words1 requires exactly one packed word");
       }
       return CommutationKernelVariant::Words1;
     }
     if (forced_value == "words2") {
       if (words != 2) {
         throw std::invalid_argument(
-            "FASTPAULI_EXPERIMENTAL_METAL_COMMUTATION_KERNEL=words2 requires exactly two packed words");
+            "WOLFGANG_EXPERIMENTAL_METAL_COMMUTATION_KERNEL=words2 requires exactly two packed words");
       }
       return CommutationKernelVariant::Words2;
     }
@@ -169,7 +169,7 @@ CommutationKernelVariant commutation_kernel_variant(std::size_t words) {
       return CommutationKernelVariant::Generic;
     }
     throw std::invalid_argument(
-        "FASTPAULI_EXPERIMENTAL_METAL_COMMUTATION_KERNEL must be one of words1, words2, generic_2d, or flat_generic");
+        "WOLFGANG_EXPERIMENTAL_METAL_COMMUTATION_KERNEL must be one of words1, words2, generic_2d, or flat_generic");
   }
   if (words == 1) {
     return CommutationKernelVariant::Words1;

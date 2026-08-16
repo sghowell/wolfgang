@@ -27,7 +27,7 @@ def test_preferred_cpuinfo_value_reports_model_before_vendor() -> None:
 
 
 def test_git_provenance_honors_benchmark_commit_override(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("FASTPAULI_BENCHMARK_GIT_COMMIT", "abc1234")
+    monkeypatch.setenv("WOLFGANG_BENCHMARK_GIT_COMMIT", "abc1234")
 
     provenance = git_provenance()
 
@@ -36,7 +36,7 @@ def test_git_provenance_honors_benchmark_commit_override(monkeypatch: pytest.Mon
         "commit": "abc1234",
         "commit_label": "abc1234",
         "dirty": False,
-        "source": "FASTPAULI_BENCHMARK_GIT_COMMIT",
+        "source": "WOLFGANG_BENCHMARK_GIT_COMMIT",
         "working_tree_status": [],
     }
 

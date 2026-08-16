@@ -19,7 +19,7 @@ High-performance accelerators for sparse sums of Pauli strings and Hamiltonians 
 ## Current Status
 
 FastPauli has completed the Phase 11 CUDA kernel slice. The package builds and imports
-with a C++20/nanobind extension, `fastpauli.PauliSum` supports dense-label and
+with a C++20/nanobind extension, `wolfgang_quantum.PauliSum` supports dense-label and
 sparse-list construction/export, Qiskit `SparsePauliOp` conversion is available
 through the optional `qiskit` extra, OpenFermion `QubitOperator` conversion is
 available through the optional `openfermion` extra, scalar `simplify()` combines
@@ -28,11 +28,11 @@ covers addition, scalar multiplication, phase-correct matrix-product multiplicat
 guarded pairwise commutation, and deterministic greedy QWC/full commuting groups.
 Scalar CPU expectation kernels cover statevectors and diagonal computational-basis
 counts. CPU backend dispatch is observable through build metadata and can force
-the portable scalar path with `FASTPAULI_CPU_BACKEND=scalar`. Optional oneTBB and
+the portable scalar path with `WOLFGANG_CPU_BACKEND=scalar`. Optional oneTBB and
 SIMD selectors are implemented for covered commutation/grouping kernels when
 compiled and runtime-available; unavailable selectors and unsupported SIMD widths
 fail clearly instead of silently relabeling scalar execution as optimized.
-Source builds with `FASTPAULI_ENABLE_CUDA=ON` expose explicit
+Source builds with `WOLFGANG_ENABLE_CUDA=ON` expose explicit
 `PauliSum.to_device()` and `DevicePauliSum.to_host()` transfers plus CUDA
 `DevicePauliSum.simplify()`, `DevicePauliSum.expectation_statevector()`,
 `DevicePauliSum.commutes_with()`, `DevicePauliSum.commutes_with_device()`,
@@ -42,7 +42,7 @@ Source builds with `FASTPAULI_ENABLE_CUDA=ON` expose explicit
 `DevicePauliSum.matmul()` kernels. CUDA performance claims remain tied to
 benchmark reports and source-build validation; CUDA wheels are still
 deliberately deferred.
-Source builds with `FASTPAULI_ENABLE_HIP=ON` now expose MI300X-evidenced
+Source builds with `WOLFGANG_ENABLE_HIP=ON` now expose MI300X-evidenced
 ROCm/HIP backend slices: explicit transfers, HIP runtime metadata,
 `DevicePauliSum.backend == "hip"`, HIP pairwise commutation, HIP
 `DevicePauliSum.commutes_with_device()`, and HIP
@@ -95,8 +95,8 @@ produced the complete CPU wheelhouse and checksum evidence. The corrected
 tag-ref run has passed TestPyPI upload and clean install smoke; PyPI
 publication remains unavailable until PyPI trusted publishing is configured for
 the observed `pypi` environment claims and the PyPI publish job succeeds.
-The pending `0.2.1` release-preparation checkpoint is tracked in
-`docs/release/0.2.1.md`, `docs/release/README.md`, and
+The pending `0.2.2` release-preparation checkpoint is tracked in
+`docs/release/0.2.2.md`, `docs/release/README.md`, and
 `docs/release/support_matrix.md`: it advances the active source version,
 finalizes canonical Wolfgang identity on active public surfaces, records the
 corrected `sghowell/wolfgang` links and Mermaid/docs/CI hardening, preserves the
@@ -114,7 +114,7 @@ optimization refresh tracked in
 `docs/plans/apple_metal_optimization_campaign6_plan.md` and
 `docs/plans/apple_metal_optimization_campaign7_plan.md` and
 `docs/plans/apple_metal_optimization_campaign8_plan.md`. It adds the
-`backend="metal"` identity, `FASTPAULI_ENABLE_METAL=ON` source-build flag,
+`backend="metal"` identity, `WOLFGANG_ENABLE_METAL=ON` source-build flag,
 Metal status metadata, transfers, and pairwise commutation source code while
 keeping Metal target builds separate from CUDA and HIP builds. Metal wheels,
 MPSGraph-first sparse kernels, raw Metal buffer export, and generic Apple GPU
@@ -191,7 +191,7 @@ candidate as `experimental`. Evidence is recorded in
 ```python
 import numpy as np
 
-from fastpauli import PauliSum
+from wolfgang_quantum import PauliSum
 
 op = PauliSum.from_labels(["XYZ"], [1.0])
 assert op.to_sparse_list() == [("ZYX", [0, 1, 2], 1.0 + 0.0j)]
@@ -527,7 +527,7 @@ semantics are genuinely comparable.
 
 ```bash
 python -m pip install -e ".[test]" \
-  --config-settings=cmake.define.FASTPAULI_ENABLE_INTERNAL_BINDINGS=ON
+  --config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON
 python scripts/check_release_readiness.py
 python scripts/validate.py
 python scripts/validate_release_artifacts.py --output-dir /tmp/fastpauli-release-artifacts
@@ -552,17 +552,17 @@ CUDA validation requires a CUDA toolkit, `nvcc` on `PATH`, and a visible NVIDIA
 device:
 
 ```bash
-FASTPAULI_VALIDATE_CUDA=1 FASTPAULI_CUDA_ARCHITECTURES=90 python scripts/validate.py
+WOLFGANG_VALIDATE_CUDA=1 WOLFGANG_CUDA_ARCHITECTURES=90 python scripts/validate.py
 ```
 
 ## Planning Sources
 
 - [Agent guide](https://github.com/sghowell/wolfgang/blob/main/AGENTS.md)
 - [Changelog](https://github.com/sghowell/wolfgang/blob/main/CHANGELOG.md)
-- [Implementation plan](../plans/fastpauli_cpp_cuda_implementation_plan.md)
+- [Implementation plan](../plans/cpp_cuda_implementation_plan.md)
 - [Release candidate foundation plan](../plans/release_candidate_foundation_plan.md)
 - [Release candidate next checkpoint plan](../plans/release_candidate_next_checkpoint_plan.md)
-- [0.2.1 release evidence ledger](../release/0.2.1.md)
+- [0.2.2 release evidence ledger](../release/0.2.2.md)
 - [Release 0.1.0 wheelhouse foundation plan](../plans/release_0_1_0_wheelhouse_foundation_plan.md)
 - [Apple Metal/MPS bring-up plan](../plans/apple_metal_mps_bringup_plan.md)
 - [Apple Metal optimization Campaign 1 plan](../plans/apple_metal_optimization_campaign1_plan.md)

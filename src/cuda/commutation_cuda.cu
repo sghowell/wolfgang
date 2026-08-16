@@ -107,7 +107,7 @@ private:
 };
 
 bool benchmark_reusable_device_output_enabled() {
-  const char* value = std::getenv("FASTPAULI_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT");
+  const char* value = std::getenv("WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT");
   if (value == nullptr) {
     return false;
   }

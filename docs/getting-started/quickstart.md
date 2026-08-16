@@ -57,7 +57,7 @@ qiskit_op = op.to_qiskit()
 round_trip = PauliSum.from_qiskit(qiskit_op)
 ```
 
-Install the corresponding extra first. Importing `wolfgang_quantum` itself does not eagerly import Qiskit or OpenFermion. The legacy `fastpauli` import remains available as a compatibility shim.
+Install the corresponding extra first. Importing `wolfgang_quantum` itself does not eagerly import Qiskit or OpenFermion.
 
 ## Next
 

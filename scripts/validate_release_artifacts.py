@@ -59,12 +59,8 @@ def cmake_executable_for_build() -> str | None:
 def cpu_safe_build_env() -> dict[str, str]:
     env = os.environ.copy()
     env["WOLFGANG_ENABLE_CUDA"] = "OFF"
-    env["WOLFGANG_ENABLE_CUDA"] = "OFF"
-    env["WOLFGANG_ENABLE_HIP"] = "OFF"
     env["WOLFGANG_ENABLE_HIP"] = "OFF"
     env["WOLFGANG_ENABLE_METAL"] = "OFF"
-    env["WOLFGANG_ENABLE_METAL"] = "OFF"
-    env["WOLFGANG_ENABLE_NATIVE"] = "OFF"
     env["WOLFGANG_ENABLE_NATIVE"] = "OFF"
 
     cmake_executable = cmake_executable_for_build()
@@ -178,12 +174,10 @@ def wheel_smoke_script(expected_version: str | None = None) -> str:
     return "\n".join(
         [
             "import importlib.metadata as importlib_metadata",
-            "import warnings",
             "import wolfgang_quantum",
             "import wolfgang_quantum._wolfgang_core as core",
             "from wolfgang_quantum import PauliSum",
-            "warnings.simplefilter('ignore', DeprecationWarning)",
-            "import fastpauli",
+            "import importlib.util",
             "info = core._build_info()",
             "print(info)",
             "assert info['accelerator_build_mode'] == 'cpu_only', info",
@@ -199,7 +193,7 @@ def wheel_smoke_script(expected_version: str | None = None) -> str:
             "assert coeffs[1] == 0.5 + 0.0j, coeffs",
             f"assert wolfgang_quantum.__version__ == {version!r}, wolfgang_quantum.__version__",
             f"assert importlib_metadata.version('{PROJECT_DISTRIBUTION}') == {version!r}, importlib_metadata.version('{PROJECT_DISTRIBUTION}')",
-            "assert fastpauli.__version__ == wolfgang_quantum.__version__, (fastpauli.__version__, wolfgang_quantum.__version__)",
+            "assert importlib.util.find_spec('fastpauli') is None",
             "print(wolfgang_quantum.__version__)",
         ]
     )

@@ -13,7 +13,7 @@ except ModuleNotFoundError:  # pragma: no cover - exercised by the Python 3.10 C
     import tomli as tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
-NEXT_VERSION = "0.2.1"
+NEXT_VERSION = "0.2.2"
 WORKFLOWS = tuple(sorted((ROOT / ".github/workflows").glob("*.yml")))
 ACTION_PIN = re.compile(
     r"^\s*uses:\s+[^\s@]+@[0-9a-f]{40}\s+#\s+\S+\s*$",
@@ -38,7 +38,6 @@ def test_post_release_source_identity_is_coherently_versioned() -> None:
     metadata = project_metadata()
     cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
     canonical_module = (ROOT / "python/wolfgang_quantum/_version.py").read_text(encoding="utf-8")
-    compatibility_module = (ROOT / "python/fastpauli/_version.py").read_text(encoding="utf-8")
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     standards = (ROOT / "docs/quality/release_and_packaging.md").read_text(encoding="utf-8")
     release_index = (ROOT / "docs/release/README.md").read_text(encoding="utf-8")
@@ -47,12 +46,12 @@ def test_post_release_source_identity_is_coherently_versioned() -> None:
     assert metadata["version"] == NEXT_VERSION
     assert re.search(rf"project\([\s\S]*?VERSION {re.escape(NEXT_VERSION)}\b", cmake)
     assert f'__version__ = "{NEXT_VERSION}"' in canonical_module
-    assert "from wolfgang_quantum._version import __version__" in compatibility_module
+    assert not (ROOT / "python/fastpauli").exists()
     assert f"Next version: {NEXT_VERSION}" in changelog
     assert f"current development version: {NEXT_VERSION}" in standards
     assert f"current source version is `{NEXT_VERSION}`" in release_index
     assert f"Source version: {NEXT_VERSION}" in support
-    assert "Latest tagged release: v0.1.0" in support
+    assert "Latest tagged release: v0.2.1" in support
 
 
 def test_project_metadata_exposes_public_project_urls() -> None:

@@ -6,7 +6,7 @@
 #include "dlpack/dlpack.h"
 #include "dlpack_interop.hpp"
 
-#if FASTPAULI_BUILD_CUDA_ENABLED
+#if WOLFGANG_BUILD_CUDA_ENABLED
 #include "cuda/device_commutation_matrix.cuh"
 #endif
 

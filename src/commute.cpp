@@ -38,23 +38,23 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
 
   const CpuBackendReport backend = cpu_backend_report_from_environment();
   if (backend.requested_backend == "auto") {
-#if FASTPAULI_BUILD_TBB_ENABLED
+#if WOLFGANG_BUILD_TBB_ENABLED
     if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb")) {
       return detail::commutes_with_tbb(*this, rhs, entries);
     }
 #endif
-#if FASTPAULI_BUILD_AVX512_ENABLED
+#if WOLFGANG_BUILD_AVX512_ENABLED
     if (detail::simd_commutation_supports_words(words_) &&
         backend_available(backend, "avx512")) {
       return detail::commutes_with_avx512(*this, rhs, entries);
     }
 #endif
-#if FASTPAULI_BUILD_AVX2_ENABLED
+#if WOLFGANG_BUILD_AVX2_ENABLED
     if (detail::simd_commutation_supports_words(words_) && backend_available(backend, "avx2")) {
       return detail::commutes_with_avx2(*this, rhs, entries);
     }
 #endif
-#if FASTPAULI_BUILD_ARM_NEON_ENABLED
+#if WOLFGANG_BUILD_ARM_NEON_ENABLED
     if (detail::simd_commutation_supports_words(words_) && backend_available(backend, "neon")) {
       return detail::commutes_with_neon(*this, rhs, entries);
     }
@@ -63,27 +63,27 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
   }
 
   if (backend.active_backend == "tbb") {
-#if FASTPAULI_BUILD_TBB_ENABLED
+#if WOLFGANG_BUILD_TBB_ENABLED
     return detail::commutes_with_tbb(*this, rhs, entries);
 #endif
   }
 
   if (backend.active_backend == "avx512") {
-#if FASTPAULI_BUILD_AVX512_ENABLED
+#if WOLFGANG_BUILD_AVX512_ENABLED
     detail::require_simd_commutation_words("avx512", words_);
     return detail::commutes_with_avx512(*this, rhs, entries);
 #endif
   }
 
   if (backend.active_backend == "avx2") {
-#if FASTPAULI_BUILD_AVX2_ENABLED
+#if WOLFGANG_BUILD_AVX2_ENABLED
     detail::require_simd_commutation_words("avx2", words_);
     return detail::commutes_with_avx2(*this, rhs, entries);
 #endif
   }
 
   if (backend.active_backend == "neon") {
-#if FASTPAULI_BUILD_ARM_NEON_ENABLED
+#if WOLFGANG_BUILD_ARM_NEON_ENABLED
     detail::require_simd_commutation_words("neon", words_);
     return detail::commutes_with_neon(*this, rhs, entries);
 #endif

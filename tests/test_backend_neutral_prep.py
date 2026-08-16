@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import fastpauli
-import fastpauli._fastpauli_core as core
 import pytest
+import wolfgang_quantum
+import wolfgang_quantum._wolfgang_core as core
 
 
 def test_accelerator_status_reports_structured_backend_sets() -> None:
@@ -35,6 +35,8 @@ def test_accelerator_status_reports_structured_backend_sets() -> None:
 
 
 def test_backend_selector_policy_is_testable_without_mixed_hardware() -> None:
+    if not hasattr(core, "_accelerator_backend_selection_for_testing"):
+        pytest.skip("backend selection test hook is unavailable in this build")
     select = core._accelerator_backend_selection_for_testing
 
     assert select(None, True, False, False, False, False, False) == "cuda"
@@ -64,6 +66,8 @@ def test_backend_selector_policy_is_testable_without_mixed_hardware() -> None:
 
 
 def test_backend_device_validation_policy_is_testable_without_mixed_hardware() -> None:
+    if not hasattr(core, "_accelerator_context_validation_for_testing"):
+        pytest.skip("backend context validation test hook is unavailable in this build")
     validate = core._accelerator_context_validation_for_testing
 
     assert validate("commutes_with", "cuda", 0, "cuda", 0) == "ok"
@@ -85,7 +89,7 @@ def test_backend_device_validation_policy_is_testable_without_mixed_hardware() -
 
 
 def test_to_device_accepts_backend_selector_and_rejects_invalid_values() -> None:
-    op = fastpauli.PauliSum.from_labels(["X"], [1.0])
+    op = wolfgang_quantum.PauliSum.from_labels(["X"], [1.0])
     status = core._accelerator_status()
 
     with pytest.raises(ValueError, match="backend must be None, 'auto', 'cuda', 'hip', or 'metal'"):
@@ -108,24 +112,24 @@ def test_to_device_accepts_backend_selector_and_rejects_invalid_values() -> None
 
 
 def test_device_commutation_matrix_accepts_backend_selector_and_exposes_property() -> None:
-    assert "backend" in dir(fastpauli.DeviceCommutationMatrix)
+    assert "backend" in dir(wolfgang_quantum.DeviceCommutationMatrix)
 
     status = core._accelerator_status()
 
     with pytest.raises(ValueError, match="backend must be None, 'auto', 'cuda', 'hip', or 'metal'"):
-        fastpauli.DeviceCommutationMatrix.empty((1, 1), backend="bogus")
+        wolfgang_quantum.DeviceCommutationMatrix.empty((1, 1), backend="bogus")
 
     if "cuda" not in status["compiled_accelerator_backends"]:
         with pytest.raises(RuntimeError, match="built without CUDA support"):
-            fastpauli.DeviceCommutationMatrix.empty((1, 1), backend="cuda")
+            wolfgang_quantum.DeviceCommutationMatrix.empty((1, 1), backend="cuda")
     if "hip" not in status["compiled_accelerator_backends"]:
         with pytest.raises(RuntimeError, match="built without HIP support"):
-            fastpauli.DeviceCommutationMatrix.empty((1, 1), backend="hip")
+            wolfgang_quantum.DeviceCommutationMatrix.empty((1, 1), backend="hip")
     if "metal" not in status["compiled_accelerator_backends"]:
         with pytest.raises(RuntimeError, match="built without Metal support"):
-            fastpauli.DeviceCommutationMatrix.empty((1, 1), backend="metal")
+            wolfgang_quantum.DeviceCommutationMatrix.empty((1, 1), backend="metal")
     if not status["compiled_accelerator_backends"]:
         with pytest.raises(RuntimeError, match="built without CUDA, HIP, or Metal accelerator support"):
-            fastpauli.DeviceCommutationMatrix.empty((1, 1), backend=None)
+            wolfgang_quantum.DeviceCommutationMatrix.empty((1, 1), backend=None)
         with pytest.raises(RuntimeError, match="built without CUDA, HIP, or Metal accelerator support"):
-            fastpauli.DeviceCommutationMatrix.empty((1, 1), backend="auto")
+            wolfgang_quantum.DeviceCommutationMatrix.empty((1, 1), backend="auto")

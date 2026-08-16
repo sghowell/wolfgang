@@ -26,7 +26,7 @@ Knowledge layers:
 AGENTS.md: short operating map
 README.md: public project entrypoint
 docs/roadmap.md: phase order and release gates
-docs/plans/fastpauli_cpp_cuda_implementation_plan.md: implementation plan
+docs/plans/cpp_cuda_implementation_plan.md: implementation plan
 docs/architecture/: semantic, CUDA, hardware target, testing, and adapter contracts
 docs/quality/: phase gates, review policy, and harness rules
 docs/benchmarks/: benchmark protocol and future reports

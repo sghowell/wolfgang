@@ -180,7 +180,7 @@ HipStatus DevicePauliSum::hip_status() {
     HipStatus status = unavailable_status(count_result);
     status.runtime_version = hip_version_string(runtime_version);
     status.driver_version = hip_version_string(driver_version);
-    status.toolkit_version = FASTPAULI_ROCM_TOOLKIT_VERSION;
+    status.toolkit_version = WOLFGANG_ROCM_TOOLKIT_VERSION;
     return status;
   }
 
@@ -190,7 +190,7 @@ HipStatus DevicePauliSum::hip_status() {
   status.device_count = device_count;
   status.runtime_version = hip_version_string(runtime_version);
   status.driver_version = hip_version_string(driver_version);
-  status.toolkit_version = FASTPAULI_ROCM_TOOLKIT_VERSION;
+  status.toolkit_version = WOLFGANG_ROCM_TOOLKIT_VERSION;
   if (device_count == 0) {
     status.skip_reason = "no HIP device is available";
     return status;

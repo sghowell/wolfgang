@@ -30,7 +30,7 @@ run_step() {
 }
 
 cd "$source_dir"
-export FASTPAULI_VALIDATE_CUDA=1
+export WOLFGANG_VALIDATE_CUDA=1
 export WOLFGANG_CUDA_ARCHITECTURES='100-real;120'
 export EVIDENCE_ROOT="$evidence"
 

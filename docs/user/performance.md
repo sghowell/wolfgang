@@ -244,7 +244,7 @@ results are required before making x86-specific optimization claims.
 CUDA remains opt-in at source-build time:
 
 ```bash
-FASTPAULI_VALIDATE_CUDA=1 WOLFGANG_CUDA_ARCHITECTURES=90 python scripts/validate.py
+WOLFGANG_VALIDATE_CUDA=1 WOLFGANG_CUDA_ARCHITECTURES=90 python scripts/validate.py
 python benchmarks/bench_cuda_kernels.py --profile default --repeat 3 --warmup 1 --json
 python benchmarks/bench_cuda_scaling.py --profile default --repeat 3 --warmup 1 --json
 ```

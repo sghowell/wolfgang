@@ -8,10 +8,10 @@ import subprocess
 import sys
 from types import SimpleNamespace
 
-import fastpauli
-import fastpauli._fastpauli_core as core
 import numpy as np
 import pytest
+import wolfgang_quantum
+import wolfgang_quantum._wolfgang_core as core
 
 from benchmarks import bench_cuda_kernels
 
@@ -33,12 +33,12 @@ def _require_supported_cupy_runtime() -> None:
     bench_cuda_kernels._require_supported_cupy_runtime_for_current_cuda_architecture(cupy)
 
 
-def _labels_and_coeffs(op: fastpauli.PauliSum) -> tuple[list[str], list[complex]]:
+def _labels_and_coeffs(op: wolfgang_quantum.PauliSum) -> tuple[list[str], list[complex]]:
     labels, coeffs = op.to_labels()
     return list(labels), [complex(value) for value in coeffs]
 
 
-def _assert_same_operator(lhs: fastpauli.PauliSum, rhs: fastpauli.PauliSum) -> None:
+def _assert_same_operator(lhs: wolfgang_quantum.PauliSum, rhs: wolfgang_quantum.PauliSum) -> None:
     lhs_labels, lhs_coeffs = _labels_and_coeffs(lhs)
     rhs_labels, rhs_coeffs = _labels_and_coeffs(rhs)
     assert lhs_labels == rhs_labels
@@ -62,16 +62,16 @@ def _collect_accelerator_python_wrappers() -> object:
 
 
 def test_phase_eleven_public_cuda_kernel_surface_is_exposed() -> None:
-    assert hasattr(fastpauli.DevicePauliSum, "simplify")
-    assert hasattr(fastpauli.DevicePauliSum, "expectation_statevector")
-    assert hasattr(fastpauli.DevicePauliSum, "commutes_with")
-    assert hasattr(fastpauli.DevicePauliSum, "commutes_with_into")
-    assert hasattr(fastpauli.DevicePauliSum, "commutes_with_device")
-    assert hasattr(fastpauli.DevicePauliSum, "matmul")
-    assert hasattr(fastpauli.DeviceCommutationMatrix, "count_commuting")
-    assert hasattr(fastpauli.DeviceCommutationMatrix, "conflict_degrees")
-    assert hasattr(fastpauli.DeviceCommutationMatrix, "__dlpack__")
-    assert hasattr(fastpauli.DeviceCommutationMatrix, "__dlpack_device__")
+    assert hasattr(wolfgang_quantum.DevicePauliSum, "simplify")
+    assert hasattr(wolfgang_quantum.DevicePauliSum, "expectation_statevector")
+    assert hasattr(wolfgang_quantum.DevicePauliSum, "commutes_with")
+    assert hasattr(wolfgang_quantum.DevicePauliSum, "commutes_with_into")
+    assert hasattr(wolfgang_quantum.DevicePauliSum, "commutes_with_device")
+    assert hasattr(wolfgang_quantum.DevicePauliSum, "matmul")
+    assert hasattr(wolfgang_quantum.DeviceCommutationMatrix, "count_commuting")
+    assert hasattr(wolfgang_quantum.DeviceCommutationMatrix, "conflict_degrees")
+    assert hasattr(wolfgang_quantum.DeviceCommutationMatrix, "__dlpack__")
+    assert hasattr(wolfgang_quantum.DeviceCommutationMatrix, "__dlpack_device__")
 
 
 def test_cuda_binding_lifecycle_subprocess_exits_without_nanobind_leaks() -> None:
@@ -81,9 +81,9 @@ def test_cuda_binding_lifecycle_subprocess_exits_without_nanobind_leaks() -> Non
 import gc
 import sys
 
-import fastpauli
+import wolfgang_quantum
 
-op = fastpauli.PauliSum.from_labels(["X", "Z"], [1.0, 2.0])
+op = wolfgang_quantum.PauliSum.from_labels(["X", "Z"], [1.0, 2.0])
 device = op.to_device()
 matrix = device.commutes_with_device(device)
 assert matrix.count_commuting() >= 0
@@ -111,11 +111,11 @@ def test_cuda_cupy_commutation_consumers_subprocess_exit_without_nanobind_leaks(
 
     script = """
 import gc
-import fastpauli
+import wolfgang_quantum
 import cupy
 
-lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
 matrix = lhs.commutes_with_device(rhs)
 
 dlpack_view = cupy.from_dlpack(matrix)
@@ -143,7 +143,7 @@ gc.collect()
 def test_cuda_simplify_matches_cpu_canonical_output() -> None:
     _require_cuda_runtime()
 
-    op = fastpauli.PauliSum.from_labels(
+    op = wolfgang_quantum.PauliSum.from_labels(
         ["XX", "ZI", "XX", "II", "YY", "YY"],
         [1.0 + 2.0j, -0.5, -0.25 + 0.5j, 1.0e-14, 2.0j, -2.0j],
     )
@@ -157,7 +157,7 @@ def test_cuda_simplify_matches_cpu_canonical_output() -> None:
 def test_cuda_simplify_tolerance_errors_match_cpu() -> None:
     _require_cuda_runtime()
 
-    device_op = fastpauli.PauliSum.from_labels(["X"], [1.0]).to_device()
+    device_op = wolfgang_quantum.PauliSum.from_labels(["X"], [1.0]).to_device()
 
     with pytest.raises(ValueError, match="simplify tolerances"):
         device_op.simplify(atol=-1.0)
@@ -210,7 +210,7 @@ def test_private_cuda_workspace_probe_rejects_invalid_device() -> None:
 def test_cuda_statevector_expectation_matches_cpu_for_complex_dtypes() -> None:
     _require_cuda_runtime()
 
-    op = fastpauli.PauliSum.from_labels(
+    op = wolfgang_quantum.PauliSum.from_labels(
         ["ZI", "IZ", "XX", "YY", "XY"],
         [1.0, -0.5, 0.25, 0.75j, -0.125 + 0.5j],
     )
@@ -237,7 +237,7 @@ def test_cuda_statevector_expectation_matches_cpu_for_complex_dtypes() -> None:
 def test_cuda_statevector_expectation_rejects_invalid_host_arrays() -> None:
     _require_cuda_runtime()
 
-    device_op = fastpauli.PauliSum.from_labels(["ZI", "IZ"], [1.0, -0.5]).to_device()
+    device_op = wolfgang_quantum.PauliSum.from_labels(["ZI", "IZ"], [1.0, -0.5]).to_device()
 
     with pytest.raises(TypeError, match="complex64 or complex128"):
         device_op.expectation_statevector(np.ones(4, dtype=np.float64))
@@ -254,7 +254,7 @@ def test_cuda_statevector_expectation_rejects_invalid_cuda_array_interface_metad
         def __init__(self, interface: dict[str, object]) -> None:
             self.__cuda_array_interface__ = interface
 
-    device_op = fastpauli.PauliSum.from_labels(["ZI", "IZ"], [1.0, -0.5]).to_device()
+    device_op = wolfgang_quantum.PauliSum.from_labels(["ZI", "IZ"], [1.0, -0.5]).to_device()
 
     with pytest.raises(TypeError, match="complex64 or complex128"):
         device_op.expectation_statevector(
@@ -277,7 +277,7 @@ def test_cuda_empty_expectation_still_validates_cuda_array_interface_pointer() -
         def __init__(self, interface: dict[str, object]) -> None:
             self.__cuda_array_interface__ = interface
 
-    device_op = fastpauli.PauliSum.empty(2).to_device()
+    device_op = wolfgang_quantum.PauliSum.empty(2).to_device()
 
     with pytest.raises(TypeError, match="non-null"):
         device_op.expectation_statevector(
@@ -289,7 +289,7 @@ def test_cuda_statevector_expectation_accepts_cuda_array_interface_when_availabl
     _require_cuda_runtime()
     cupy = pytest.importorskip("cupy", reason="CuPy is required for CUDA array interface tests")
 
-    op = fastpauli.PauliSum.from_labels(["ZI", "IZ", "XX"], [1.0, -0.5, 0.25])
+    op = wolfgang_quantum.PauliSum.from_labels(["ZI", "IZ", "XX"], [1.0, -0.5, 0.25])
     psi = np.asarray([1.0, 0.0, 0.0, 0.0], dtype=np.complex128)
     device_psi = cupy.asarray(psi)
 
@@ -304,8 +304,8 @@ def test_cuda_statevector_expectation_accepts_cuda_array_interface_when_availabl
 def test_cuda_commutation_matches_cpu_and_keeps_guardrails() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
-    rhs = fastpauli.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
+    rhs = wolfgang_quantum.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
     lhs_device = lhs.to_device()
     rhs_device = rhs.to_device()
 
@@ -318,14 +318,14 @@ def test_cuda_commutation_matches_cpu_and_keeps_guardrails() -> None:
 def test_cuda_device_commutation_matrix_matches_cpu_and_exposes_cuda_array_interface() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
-    rhs = fastpauli.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
+    rhs = wolfgang_quantum.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
     lhs_device = lhs.to_device()
     rhs_device = rhs.to_device()
 
     matrix = lhs_device.commutes_with_device(rhs_device)
 
-    assert isinstance(matrix, fastpauli.DeviceCommutationMatrix)
+    assert isinstance(matrix, wolfgang_quantum.DeviceCommutationMatrix)
     assert matrix.shape == (lhs.num_terms, rhs.num_terms)
     assert matrix.device == lhs_device.device
     assert matrix.dtype == "uint8"
@@ -346,8 +346,8 @@ def test_cuda_device_commutation_matrix_matches_cpu_and_exposes_cuda_array_inter
 def test_cuda_device_commutation_matrix_count_commuting_matches_numpy() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     host = matrix.to_host().astype(np.uint64)
 
@@ -359,7 +359,7 @@ def test_cuda_device_commutation_matrix_count_commuting_matches_numpy() -> None:
 def test_cuda_device_commutation_matrix_count_commuting_rejects_bad_axis() -> None:
     _require_cuda_runtime()
 
-    matrix = fastpauli.DeviceCommutationMatrix.empty((2, 3), device=0)
+    matrix = wolfgang_quantum.DeviceCommutationMatrix.empty((2, 3), device=0)
 
     with pytest.raises(ValueError, match="axis"):
         matrix.count_commuting(axis=2)
@@ -368,8 +368,8 @@ def test_cuda_device_commutation_matrix_count_commuting_rejects_bad_axis() -> No
 def test_cuda_device_commutation_matrix_conflict_degrees_matches_numpy() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     host_conflicts = np.logical_not(matrix.to_host()).astype(np.uint64)
 
@@ -387,7 +387,7 @@ def test_cuda_device_commutation_matrix_conflict_degrees_matches_numpy() -> None
 def test_cuda_device_commutation_matrix_conflict_degrees_rejects_bad_axis() -> None:
     _require_cuda_runtime()
 
-    matrix = fastpauli.DeviceCommutationMatrix.empty((2, 3), device=0)
+    matrix = wolfgang_quantum.DeviceCommutationMatrix.empty((2, 3), device=0)
 
     with pytest.raises(ValueError, match="axis"):
         matrix.conflict_degrees(axis=2)
@@ -400,11 +400,11 @@ def test_cuda_device_commutation_matrix_dlpack_cupy_consumer_matches_numpy() -> 
     script = """
 import gc
 import cupy
-import fastpauli
+import wolfgang_quantum
 import numpy as np
 
-lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
 matrix = lhs.commutes_with_device(rhs)
 cupy_view = cupy.from_dlpack(matrix)
 
@@ -434,8 +434,8 @@ def test_cuda_device_commutation_matrix_dlpack_lifetime_and_capsule_guardrails()
     _require_supported_cupy_runtime()
     cupy = pytest.importorskip("cupy", reason="CuPy is required for DLPack tests")
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     capsule = None
     cupy_view = None
@@ -466,8 +466,8 @@ def test_cuda_device_commutation_matrix_dlpack_lifetime_and_capsule_guardrails()
         )
 
         def make_view() -> object:
-            local_lhs = fastpauli.PauliSum.from_labels(["XX", "ZI"], [1.0, 2.0]).to_device()
-            local_rhs = fastpauli.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j]).to_device()
+            local_lhs = wolfgang_quantum.PauliSum.from_labels(["XX", "ZI"], [1.0, 2.0]).to_device()
+            local_rhs = wolfgang_quantum.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j]).to_device()
             local_matrix = local_lhs.commutes_with_device(local_rhs)
             local_view = cupy.from_dlpack(local_matrix)
             del local_matrix, local_lhs, local_rhs
@@ -547,8 +547,8 @@ def test_cuda_device_commutation_matrix_dlpack_pytorch_consumer_matches_numpy() 
     if not torch.cuda.is_available():
         pytest.skip("torch importable but torch.cuda.is_available() is false")
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     capsule = matrix.__dlpack__(max_version=(1, 0))
     try:
@@ -577,7 +577,7 @@ def test_private_fused_consumer_hook_reports_cpu_only_unavailable() -> None:
     assert report["status"] == "unavailable"
     assert report["mode"] == "csr_anticommutation_graph"
     assert "WOLFGANG_ENABLE_CUDA=ON" in report["unavailable_reason"]
-    assert not hasattr(fastpauli, "_benchmark_cuda_fused_commutation_consumer")
+    assert not hasattr(wolfgang_quantum, "_benchmark_cuda_fused_commutation_consumer")
 
     with pytest.raises(ValueError, match="mode must be"):
         core._benchmark_cuda_fused_commutation_consumer("typoed_mode")
@@ -602,7 +602,7 @@ def test_private_campaign8_device_resident_consumer_hook_reports_cpu_only_unavai
     assert report["campaign"] == "h100_campaign8"
     assert report["device_resident_graph_status"] == "unavailable"
     assert "WOLFGANG_ENABLE_CUDA=ON" in report["unavailable_reason"]
-    assert not hasattr(fastpauli, "_benchmark_cuda_device_resident_consumer")
+    assert not hasattr(wolfgang_quantum, "_benchmark_cuda_device_resident_consumer")
 
     with pytest.raises(ValueError, match="mode must be"):
         core._benchmark_cuda_device_resident_consumer("typoed_mode")
@@ -628,8 +628,8 @@ def _expected_csr_from_commutation_matrix(host: np.ndarray) -> tuple[list[int], 
 def test_private_cuda_fused_csr_consumer_matches_dense_matrix() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     host = matrix.to_host()
     expected_offsets, expected_cols = _expected_csr_from_commutation_matrix(host)
@@ -655,8 +655,8 @@ def test_private_cuda_fused_csr_consumer_matches_dense_matrix() -> None:
 def test_private_cuda_fused_conflict_degrees_match_counts() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     host = matrix.to_host().astype(np.bool_)
     conflicts = np.logical_not(host).astype(np.uint64)
@@ -677,8 +677,8 @@ def test_private_cuda_fused_conflict_degrees_match_counts() -> None:
 def test_private_cuda_fused_grouping_summary_is_deterministic() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     host = matrix.to_host().astype(np.bool_)
     row_conflicts = np.logical_not(host).sum(axis=1, dtype=np.uint64)
@@ -705,8 +705,8 @@ def test_private_cuda_fused_grouping_summary_is_deterministic() -> None:
 def test_private_campaign8_device_resident_graph_returns_compact_digest() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     host = matrix.to_host().astype(np.bool_)
     conflicts = np.logical_not(host).astype(np.uint64)
@@ -743,8 +743,8 @@ def test_private_campaign8_device_resident_graph_returns_compact_digest() -> Non
 def test_private_campaign8_device_grouping_consumer_is_deterministic() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI", "YY"], [1.0, 1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
 
     first = core._benchmark_cuda_device_resident_consumer(
@@ -774,8 +774,8 @@ def test_private_campaign8_device_grouping_consumer_is_deterministic() -> None:
 def test_private_campaign8_deferred_and_implemented_modes_report_explicit_reasons() -> None:
     _require_cuda_runtime()
 
-    matrix = fastpauli.PauliSum.from_labels(["XI"], [1.0]).to_device().commutes_with_device(
-        fastpauli.PauliSum.from_labels(["IX"], [1.0]).to_device()
+    matrix = wolfgang_quantum.PauliSum.from_labels(["XI"], [1.0]).to_device().commutes_with_device(
+        wolfgang_quantum.PauliSum.from_labels(["IX"], [1.0]).to_device()
     )
 
     dlpack = core._benchmark_cuda_device_resident_consumer(
@@ -815,11 +815,11 @@ def test_cuda_device_commutation_matrix_cupy_consumer_matches_numpy() -> None:
     script = """
 import gc
 import cupy
-import fastpauli
+import wolfgang_quantum
 import numpy as np
 
-lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
 matrix = lhs.commutes_with_device(rhs)
 cupy_view = cupy.asarray(matrix)
 
@@ -852,12 +852,12 @@ def test_cuda_device_commutation_matrix_reuse_and_guardrails() -> None:
         pytest.skip("wrong-output-device check requires at least two visible CUDA devices")
 
     def exercise() -> None:
-        lhs = fastpauli.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
-        rhs = fastpauli.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
+        lhs = wolfgang_quantum.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
+        rhs = wolfgang_quantum.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
         lhs_device = lhs.to_device()
         rhs_device = rhs.to_device()
 
-        output = fastpauli.DeviceCommutationMatrix.empty(
+        output = wolfgang_quantum.DeviceCommutationMatrix.empty(
             (lhs.num_terms, rhs.num_terms),
             device=lhs_device.device,
         )
@@ -866,7 +866,7 @@ def test_cuda_device_commutation_matrix_reuse_and_guardrails() -> None:
         assert same is output
         np.testing.assert_array_equal(output.to_host(), lhs.commutes_with(rhs))
 
-        wrong_shape = fastpauli.DeviceCommutationMatrix.empty(
+        wrong_shape = wolfgang_quantum.DeviceCommutationMatrix.empty(
             (lhs.num_terms + 1, rhs.num_terms),
             device=lhs_device.device,
         )
@@ -876,7 +876,7 @@ def test_cuda_device_commutation_matrix_reuse_and_guardrails() -> None:
         with pytest.raises(ValueError, match="commutation matrix entry count exceeds"):
             lhs_device.commutes_with_device(rhs_device, max_commutation_matrix_entries=3)
 
-        wrong_device = fastpauli.DeviceCommutationMatrix.empty(
+        wrong_device = wolfgang_quantum.DeviceCommutationMatrix.empty(
             (lhs.num_terms, rhs.num_terms),
             device=1,
         )
@@ -890,8 +890,8 @@ def test_cuda_device_commutation_matrix_reuse_and_guardrails() -> None:
 def test_cuda_commutation_can_fill_reused_bool_output_buffer() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
-    rhs = fastpauli.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
+    rhs = wolfgang_quantum.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
     lhs_device = lhs.to_device()
     rhs_device = rhs.to_device()
     output = np.empty(lhs.num_terms * rhs.num_terms, dtype=np.bool_)
@@ -910,7 +910,7 @@ def test_cuda_commutation_can_fill_reused_bool_output_buffer() -> None:
 def test_cuda_commutation_matches_cpu_for_two_word_inputs() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_sparse_list(
+    lhs = wolfgang_quantum.PauliSum.from_sparse_list(
         [
             ("X", [0], 1.0),
             ("Z", [64], -0.5),
@@ -918,7 +918,7 @@ def test_cuda_commutation_matches_cpu_for_two_word_inputs() -> None:
         ],
         num_qubits=65,
     )
-    rhs = fastpauli.PauliSum.from_sparse_list(
+    rhs = wolfgang_quantum.PauliSum.from_sparse_list(
         [
             ("Y", [0], -1.0),
             ("X", [64], 2.0),
@@ -936,8 +936,8 @@ def test_cuda_commutation_matches_cpu_for_two_word_inputs() -> None:
 def test_cuda_matmul_matches_cpu_and_keeps_guardrails() -> None:
     _require_cuda_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["X", "Y", "Z"], [2.0, -0.5j, 1.25])
-    rhs = fastpauli.PauliSum.from_labels(["Y", "Z"], [3.0, 0.25j])
+    lhs = wolfgang_quantum.PauliSum.from_labels(["X", "Y", "Z"], [2.0, -0.5j, 1.25])
+    rhs = wolfgang_quantum.PauliSum.from_labels(["Y", "Z"], [3.0, 0.25j])
 
     expected = lhs.matmul(rhs, simplify=True)
     actual = lhs.to_device().matmul(rhs.to_device(), simplify=True).to_host()

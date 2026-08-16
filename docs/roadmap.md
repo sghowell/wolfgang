@@ -7,7 +7,7 @@ This roadmap tracks implementation order and the decisions that must stay stable
 ```text
 Agent guide:        AGENTS.md
 Changelog:          CHANGELOG.md
-Implementation plan: docs/plans/fastpauli_cpp_cuda_implementation_plan.md
+Implementation plan: docs/plans/cpp_cuda_implementation_plan.md
 Release candidate foundation plan: docs/plans/release_candidate_foundation_plan.md
 Release candidate next checkpoint plan: docs/plans/release_candidate_next_checkpoint_plan.md
 Release 0.1.0 wheelhouse foundation plan: docs/plans/release_0_1_0_wheelhouse_foundation_plan.md
@@ -46,7 +46,7 @@ API stability:      docs/architecture/api_stability.md
 Security and supply chain: docs/quality/security_and_supply_chain.md
 Release and packaging: docs/quality/release_and_packaging.md
 Release evidence index: docs/release/README.md
-0.2.1 release evidence ledger: docs/release/0.2.1.md
+0.2.2 release evidence ledger: docs/release/0.2.2.md
 0.1.0 release evidence ledger: docs/release/0.1.0.md
 0.1.0 wheelhouse dry-run evidence: docs/release/0.1.0-wheelhouse-dry-run.md
 0.1.0-rc2 release evidence ledger: docs/release/0.1.0-rc2.md
@@ -323,8 +323,8 @@ CPython 3.10, 3.11, and 3.12, and a checksum manifest with
 `publish-target=none`; PyPI publication remains unavailable until the PyPI
 trusted-publisher configuration accepts the exact `v0.1.0` tag-ref workflow
 claims.
-The pending `0.2.1` release-preparation slice is tracked in
-`docs/release/0.2.1.md`, `docs/release/support_matrix.md`, and
+The pending `0.2.2` release-preparation slice is tracked in
+`docs/release/0.2.2.md`, `docs/release/support_matrix.md`, and
 `docs/release/README.md`. It bumps the active source version, closes the
 canonical Wolfgang identity migration on active public surfaces, fixes
 `sghowell/wolfgang` links, keeps Mermaid rendering and release-quality CI in the

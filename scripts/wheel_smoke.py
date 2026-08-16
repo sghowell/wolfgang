@@ -12,7 +12,6 @@ from __future__ import annotations
 import argparse
 import importlib.metadata as importlib_metadata
 import json
-import warnings
 from typing import Any
 
 
@@ -35,14 +34,12 @@ def smoke_wolfgang_wheel(
             installed_version,
         )
 
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", DeprecationWarning)
-        import fastpauli
-
-    assert fastpauli.__version__ == wolfgang_quantum.__version__, (
-        fastpauli.__version__,
-        wolfgang_quantum.__version__,
-    )
+    try:
+        __import__("fastpauli")
+    except ModuleNotFoundError:
+        pass
+    else:
+        raise AssertionError("fastpauli import should fail after compatibility removal")
 
     info = core._build_info()
     if require_cpu_safe:
@@ -68,7 +65,6 @@ def smoke_wolfgang_wheel(
         "compiled_backends": list(info["compiled_backends"]),
         "compiled_cpu_backends": list(info["compiled_cpu_backends"]),
         "cuda_enabled": info["cuda_enabled"],
-        "fastpauli_compat_version": fastpauli.__version__,
         "hip_enabled": info["hip_enabled"],
         "installed_version": installed_version,
         "metal_enabled": info["metal_enabled"],
@@ -77,13 +73,6 @@ def smoke_wolfgang_wheel(
         "project_distribution": "wolfgang-quantum",
         "wolfgang_version": wolfgang_quantum.__version__,
     }
-
-
-def smoke_fastpauli_wheel(expected_version: str | None = None) -> dict[str, Any]:
-    """Legacy compatibility alias for older tests and tooling."""
-    return smoke_wolfgang_wheel(expected_version)
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(

@@ -1,4 +1,4 @@
-# FastPauli Release Evidence
+# Wolfgang Release Evidence
 
 This directory contains checked release evidence ledgers. A ledger is not a
 published release announcement; it is the source-controlled record of commands,
@@ -17,7 +17,7 @@ The reusable cloud GPU qualification harness is
 `docs/release/cloud_hardware_qualification_harness.md`; it defines the public/
 private evidence split, fail-closed cleanup behavior, and local CPU dry-run for
 future Hopper, Blackwell, and MI300X paid-instance validation.
-The pending `0.2.1` release-preparation ledger is `docs/release/0.2.1.md`; it
+The pending `0.2.2` release-preparation ledger is `docs/release/0.2.2.md`; it
 records the version bump, canonical Wolfgang identity closeout, corrected
 `sghowell/wolfgang` links, Mermaid/docs/CI release hardening, multi-backend
 qualification scope, and explicit PyPI deferral without rewriting historical
@@ -30,10 +30,10 @@ The current hosted wheelhouse dry-run evidence is recorded in
 `docs/release/0.1.0-wheelhouse-dry-run.md`; it validates the complete
 one-sdist-plus-six-wheel CPU artifact shape without claiming package-index
 publication.
-The current source version is `0.2.1`. The latest tagged release remains
-`v0.1.0`; its TestPyPI evidence and unresolved production-PyPI publisher blocker
+The current source version is `0.2.2`. The latest tagged release remains
+`v0.2.1`; its TestPyPI evidence and unresolved production-PyPI publisher blocker
 are historical release state, not the identity of current development sources.
-The pending release under finalization is `v0.2.1`; package-index publication is
+The pending release under finalization is `v0.2.2`; package-index publication is
 deferred for this PR and no TestPyPI or PyPI run is claimed.
 
 Required CPU release evidence:
@@ -75,7 +75,7 @@ Current checked ledgers:
 
 ```text
 docs/release/0.1.0.md
-docs/release/0.2.1.md
+docs/release/0.2.2.md
 docs/release/0.1.0-wheelhouse-dry-run.md
 docs/release/0.1.0-rc2.md
 docs/release/0.1.0-rc1.md

@@ -82,7 +82,7 @@ def test_campaign5_checked_assets_record_transfer_reference_boundary() -> None:
     normalized_readme = " ".join(readme.split())
     protocol = read("docs/benchmarks/protocol.md")
     bindings = read("bindings/python/pauli_sum_py.cpp")
-    package_init = read("python/fastpauli/__init__.py")
+    package_init = read("python/wolfgang_quantum/__init__.py")
 
     assert summary["campaign"] == "apple_metal_optimization_campaign5"
     assert summary["status"] == "ok"

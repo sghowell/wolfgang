@@ -175,7 +175,7 @@ struct CoeffSurvives {
 };
 
 DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
-  const char* value = std::getenv("FASTPAULI_HIP_BENCH_DUPLICATE_REDUCTION");
+  const char* value = std::getenv("WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION");
   if (value == nullptr || std::string(value).empty() ||
       std::string(value) == hip_detail::kHipSimplifyDefaultStrategy) {
     return DuplicateReductionStrategy::kRocThrustDefault;
@@ -184,16 +184,16 @@ DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
   if (setting == hip_detail::kHipSimplifyCustomPackedKeyStrategy ||
       setting == "hipcub_radix_sort_reduce") {
     throw std::invalid_argument(
-        "FASTPAULI_HIP_BENCH_DUPLICATE_REDUCTION selected an unavailable "
+        "WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION selected an unavailable "
         "Campaign 4 candidate; only rocthrust_default is executable");
   }
   throw std::invalid_argument(
-      "FASTPAULI_HIP_BENCH_DUPLICATE_REDUCTION must be rocthrust_default, "
+      "WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION must be rocthrust_default, "
       "hipcub_radix_sort_reduce, or custom_packed_key");
 }
 
 GenericReductionStrategy generic_reduction_strategy_from_env() {
-  const char* value = std::getenv("FASTPAULI_HIP_BENCH_GENERIC_MULTIWORD_REDUCTION");
+  const char* value = std::getenv("WOLFGANG_HIP_BENCH_GENERIC_MULTIWORD_REDUCTION");
   if (value == nullptr || std::string(value).empty() ||
       std::string(value) == hip_detail::kHipSimplifyGenericParallelStrategy ||
       std::string(value) == "reduce_by_key") {
@@ -204,7 +204,7 @@ GenericReductionStrategy generic_reduction_strategy_from_env() {
     return GenericReductionStrategy::kSerialKernel;
   }
   throw std::invalid_argument(
-      "FASTPAULI_HIP_BENCH_GENERIC_MULTIWORD_REDUCTION must be "
+      "WOLFGANG_HIP_BENCH_GENERIC_MULTIWORD_REDUCTION must be "
       "reduce_by_key, rocthrust_generic_parallel_reduce_by_key, or serial_kernel");
 }
 

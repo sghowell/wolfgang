@@ -89,7 +89,7 @@ def test_metal_source_declares_specialized_2d_dispatch_kernels() -> None:
         assert kernel_name in combined
 
     assert "uint2 pair [[thread_position_in_grid]]" in combined
-    assert "FASTPAULI_EXPERIMENTAL_METAL_COMMUTATION_KERNEL" in objective_c_source
+    assert "WOLFGANG_EXPERIMENTAL_METAL_COMMUTATION_KERNEL" in objective_c_source
     assert "requires exactly one packed word" in objective_c_source
     assert "requires exactly two packed words" in objective_c_source
     assert "must be one of words1, words2, generic_2d, or flat_generic" in objective_c_source

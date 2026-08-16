@@ -58,4 +58,4 @@ The base package imports without Qiskit or OpenFermion. Adapter calls provide in
 
 ## Stability
 
-Wolfgang is pre-1.0. Public behavior is documented and changes are recorded, but deliberate migration may occur. The legacy `fastpauli` package remains available only as a one-transition compatibility shim. Private names beginning with `_`, campaign hooks, benchmark schemas, and internal native helpers are not stable unless explicitly promoted. See the [API stability policy](../architecture/api_stability.md).
+Wolfgang is pre-1.0. Public behavior is documented and changes are recorded, but deliberate migration may occur. Private names beginning with `_`, campaign hooks, benchmark schemas, and internal native helpers are not stable unless explicitly promoted. See the [API stability policy](../architecture/api_stability.md).

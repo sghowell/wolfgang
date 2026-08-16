@@ -233,7 +233,7 @@ tests for invalid device, invalid dtype/layout, moved-from objects, and public b
 CUDA Campaign 4 private hooks are intentionally excluded from the public API
 compatibility promise. `_cuda_workspace_probe_for_testing()` is a test and
 benchmark harness hook only; it may change or disappear before `1.0.0` without
-deprecation. Environment variables prefixed `FASTPAULI_CUDA_BENCH_` select
+deprecation. Environment variables prefixed `WOLFGANG_CUDA_BENCH_` select
 benchmark experiments and must not be described as supported user-facing
 configuration.
 
@@ -301,7 +301,7 @@ exception category, and explicit host materialization only through
 
 ROCm Campaign 4 private simplify-hardening hooks are excluded from the public
 API compatibility promise. Private HIP workspace, scratch-buffer, packed-key,
-generic-reduction, and `FASTPAULI_HIP_BENCH_` experiment selectors must remain
+generic-reduction, and `WOLFGANG_HIP_BENCH_` experiment selectors must remain
 benchmark or test harness details unless a separate API review promotes them.
 
 ## Compatibility Matrix

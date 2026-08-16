@@ -5,9 +5,9 @@ from pathlib import Path
 from types import ModuleType
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE_VERSION = "0.2.1"
+RELEASE_VERSION = "0.2.2"
 RELEASE_TAG = f"v{RELEASE_VERSION}"
-RELEASE_LEDGER_PATH = "docs/release/0.2.1.md"
+RELEASE_LEDGER_PATH = "docs/release/0.2.2.md"
 RELEASE_LEDGER_URL = f"https://github.com/sghowell/wolfgang/releases/tag/{RELEASE_TAG}"
 
 
@@ -41,12 +41,12 @@ def test_v021_release_ledger_is_routed_on_active_release_surfaces() -> None:
 def test_v021_support_matrix_tracks_pending_release_without_claiming_publication() -> None:
     support = (ROOT / "docs/release/support_matrix.md").read_text(encoding="utf-8")
 
-    assert "Source version: 0.2.1" in support
-    assert "Next intended release: v0.2.1 (pending PR, not tagged or published)" in support
-    assert "Latest tagged release: v0.1.0" in support
+    assert "Source version: 0.2.2" in support
+    assert "Next intended release: v0.2.2 (pending PR, not tagged or published)" in support
+    assert "Latest tagged release: v0.2.1" in support
     assert f"Release under finalization: {RELEASE_TAG} pending publication" in support
     assert f"`{RELEASE_LEDGER_PATH}`" in support
-    assert "PyPI publication: deferred for v0.2.1; no TestPyPI or PyPI run has been attempted" in support
+    assert "PyPI publication: deferred for v0.2.2; no TestPyPI or PyPI run has been attempted" in support
     assert "TestPyPI validation: historical 0.1.0 dry-run evidence only" in support
 
 
@@ -58,15 +58,15 @@ def test_v021_release_ledger_records_required_release_notes_and_boundaries() -> 
         f"Package version: {RELEASE_VERSION}",
         f"Git tag: {RELEASE_TAG}",
         f"Release tag URL: {RELEASE_LEDGER_URL}",
-        "PyPI publication remains deferred for v0.2.1.",
+        "PyPI publication remains deferred for v0.2.2.",
         "Do not invoke TestPyPI or PyPI for this release-preparation slice.",
         "completed Wolfgang canonical identity migration",
         "corrected `sghowell/wolfgang` repository and documentation links",
         "GitHub Pages Mermaid rendering",
         "release-quality CI repair",
-        "deprecated compatibility shims",
+        "legacy Python/C++ compatibility",
         "multi-backend qualification scope",
-        "No hardware rerun was required for v0.2.1 because no production/kernel/binding semantic change was introduced.",
+        "No hardware rerun was required for v0.2.2 because no kernel or hardware claim changed.",
         "CUDA wheels remain unavailable",
         "ROCm/HIP wheels remain unavailable",
         "Metal wheels remain unavailable",
