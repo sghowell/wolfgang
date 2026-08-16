@@ -38,13 +38,13 @@ def test_v021_release_ledger_is_routed_on_active_release_surfaces() -> None:
         assert RELEASE_LEDGER_PATH in text, path
 
 
-def test_v021_support_matrix_tracks_pending_release_without_claiming_publication() -> None:
+def test_v021_support_matrix_tracks_published_github_release_without_claiming_package_index_publication() -> None:
     support = (ROOT / "docs/release/support_matrix.md").read_text(encoding="utf-8")
 
     assert "Source version: 0.2.3" in support
-    assert "Next intended release: v0.2.3 (pending PR, GitHub-only successor, not tagged or published)" in support
-    assert "Latest tagged release: v0.2.2" in support
-    assert f"Release under finalization: {RELEASE_TAG} pending GitHub publication" in support
+    assert f"Current published GitHub release: {RELEASE_TAG}" in support
+    assert f"Latest tagged release: {RELEASE_TAG}" in support
+    assert "Historical immutable checkpoint: v0.2.2" in support
     assert f"`{RELEASE_LEDGER_PATH}`" in support
     assert "PyPI publication: not part of v0.2.3 GitHub-only successor; no TestPyPI or PyPI run has been attempted" in support
     assert "TestPyPI validation: historical 0.1.0 dry-run evidence only" in support
@@ -54,16 +54,20 @@ def test_v021_release_ledger_records_required_release_notes_and_boundaries() -> 
     ledger = (ROOT / RELEASE_LEDGER_PATH).read_text(encoding="utf-8")
 
     required_terms = (
-        f"Status: prepared for GitHub-only patch successor `{RELEASE_TAG}`; not yet published.",
+        f"Status: published as GitHub release `{RELEASE_TAG}` with one source distribution,",
         f"Package version: {RELEASE_VERSION}",
         f"Git tag: {RELEASE_TAG}",
         f"Release tag URL: {RELEASE_LEDGER_URL}",
-        "GitHub-only successor publication remains deferred for v0.2.3.",
-        "Do not invoke TestPyPI or PyPI for this GitHub-only successor slice.",
+        "GitHub release object: published",
+        "Published release commit: b781cd428d94cd5328105f19837c6e19b3751b74",
+        "Release wheelhouse workflow run: 31924676423",
+        "GitHub publication state: published 2026-08-16T03:52:49Z",
+        "does not invoke TestPyPI or PyPI for this successor slice.",
         "corrected capabilities fix-forward",
         "immutable `v0.2.2` tag",
         "historical provenance",
         "No hardware rerun was required for v0.2.3 because no kernel or hardware claim changed.",
+        "The live GitHub release now serves the exact seven assets listed above.",
         "CUDA wheels remain unavailable",
         "ROCm/HIP wheels remain unavailable",
         "Metal wheels remain unavailable",
@@ -74,7 +78,7 @@ def test_v021_release_ledger_records_required_release_notes_and_boundaries() -> 
         assert term in ledger
 
 
-def test_release_readiness_checker_targets_pending_v021_ledger() -> None:
+def test_release_readiness_checker_targets_published_v021_ledger() -> None:
     checker = load_module("scripts/check_release_readiness.py", "wolfgang_release_readiness")
 
     assert checker.LATEST_RELEASE_VERSION == RELEASE_VERSION

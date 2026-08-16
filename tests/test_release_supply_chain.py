@@ -47,11 +47,11 @@ def test_post_release_source_identity_is_coherently_versioned() -> None:
     assert re.search(rf"project\([\s\S]*?VERSION {re.escape(NEXT_VERSION)}\b", cmake)
     assert f'__version__ = "{NEXT_VERSION}"' in canonical_module
     assert not (ROOT / "python/fastpauli").exists()
-    assert f"Next version: {NEXT_VERSION}" in changelog
+    assert "Next version: TBD" in changelog
     assert f"current development version: {NEXT_VERSION}" in standards
     assert f"current source version is `{NEXT_VERSION}`" in release_index
     assert f"Source version: {NEXT_VERSION}" in support
-    assert "Latest tagged release: v0.2.2" in support
+    assert "Latest tagged release: v0.2.3" in support
 
 
 def test_project_metadata_exposes_public_project_urls() -> None:

@@ -95,12 +95,13 @@ produced the complete CPU wheelhouse and checksum evidence. The corrected
 tag-ref run has passed TestPyPI upload and clean install smoke; PyPI
 publication remains unavailable until PyPI trusted publishing is configured for
 the observed `pypi` environment claims and the PyPI publish job succeeds.
-The pending `0.2.3` GitHub-only successor checkpoint is tracked in
+The published `0.2.3` GitHub-only successor checkpoint is tracked in
 `docs/release/0.2.3.md`, `docs/release/README.md`, and
 `docs/release/support_matrix.md`: it advances the active source version from the
 corrected capabilities fix commit, preserves immutable `v0.2.2` tag provenance
 without rewriting historical evidence, keeps the quarantined `v0.2.0` and
-`v0.2.1` draft releases unchanged, and keeps TestPyPI/PyPI deferred for this
+`v0.2.1` draft releases unchanged, records the published GitHub release and
+exact-tag wheelhouse evidence, and keeps TestPyPI/PyPI out of scope for this
 successor slice.
 The Apple Silicon accelerator implementation lane is tracked in
 `docs/architecture/apple_accelerator.md` and

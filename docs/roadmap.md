@@ -324,14 +324,15 @@ CPython 3.10, 3.11, and 3.12, and a checksum manifest with
 `publish-target=none`; PyPI publication remains unavailable until the PyPI
 trusted-publisher configuration accepts the exact `v0.1.0` tag-ref workflow
 claims.
-The pending `0.2.3` GitHub-only successor slice is tracked in
+The published `0.2.3` GitHub-only successor slice is tracked in
 `docs/release/0.2.3.md`, `docs/release/support_matrix.md`, and
 `docs/release/README.md`. It bumps the active source version from the corrected
 capabilities fix at `bd550f4b91d575277508ca9880ec3695940c8c68`, preserves the
 immutable `v0.2.2` tag as historical provenance instead of rewriting it, keeps
 release-quality CI in the checked path, preserves the quarantined `v0.2.0` and
-`v0.2.1` draft releases, and explicitly forbids TestPyPI/PyPI publication for
-this successor slice.
+`v0.2.1` draft releases, records the published GitHub release and exact-tag
+wheelhouse evidence, and explicitly forbids TestPyPI/PyPI publication for this
+successor slice.
 The Apple Silicon accelerator implementation lane is active in
 `docs/architecture/apple_accelerator.md`, with implementation handoff in
 `docs/plans/apple_metal_mps_bringup_plan.md`. The source tree now includes the

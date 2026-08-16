@@ -60,12 +60,13 @@ def test_final_release_evidence_is_routed_while_source_has_advanced() -> None:
         assert RELEASE_VERSION in text
 
 
-def test_final_support_matrix_is_prepublication_without_expanding_claims() -> None:
+def test_final_support_matrix_tracks_the_published_v023_github_release_without_expanding_claims() -> None:
     matrix = (ROOT / "docs/release/support_matrix.md").read_text(encoding="utf-8")
 
     assert f"Source version: {SOURCE_VERSION}" in matrix
-    assert "Latest tagged release: v0.2.2" in matrix
-    assert "Next intended release: v0.2.3 (pending PR, GitHub-only successor, not tagged or published)" in matrix
+    assert "Current published GitHub release: v0.2.3" in matrix
+    assert "Latest tagged release: v0.2.3" in matrix
+    assert "Historical immutable checkpoint: v0.2.2" in matrix
     assert "Previous checkpoint: v0.1.0rc2 GitHub prerelease" in matrix
     assert f"`{RELEASE_LEDGER_PATH}`" in matrix
     assert f"0.1.0 tag-ref wheelhouse run: {WHEELHOUSE_RUN}" in matrix
