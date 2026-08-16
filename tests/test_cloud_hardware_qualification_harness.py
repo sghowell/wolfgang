@@ -142,7 +142,7 @@ def test_blackwell_defaults_exclude_kepler_and_match_lane_targets() -> None:
 
     assert validate.DEFAULT_CUDA_ARCHITECTURES == "80,86,89,90,100-real,120"
     assert (
-        '_wolfgang_string_option(WOLFGANG_CUDA_ARCHITECTURES FASTPAULI_CUDA_ARCHITECTURES '
+        '_wolfgang_string_option(WOLFGANG_CUDA_ARCHITECTURES WOLFGANG_CUDA_ARCHITECTURES '
         '"80;86;89;90;100-real;120" "CUDA architectures for WOLFGANG_ENABLE_CUDA=ON source builds")'
     ) in cmake
     assert '"70;75;80;86;89;90"' not in cmake

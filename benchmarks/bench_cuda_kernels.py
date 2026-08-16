@@ -144,31 +144,31 @@ def temporary_env_var(name: str, value: str):
 
 
 def campaign4_workspace_mode() -> str:
-    value = os.environ.get("FASTPAULI_CUDA_BENCH_WORKSPACE_MODE", "absent")
+    value = os.environ.get("WOLFGANG_CUDA_BENCH_WORKSPACE_MODE", "absent")
     if value in {"", "absent"}:
         return "absent"
     if value in {"grow_inside_timing", "pre_reserved_outside_timing"}:
         return value
     raise ValueError(
-        "FASTPAULI_CUDA_BENCH_WORKSPACE_MODE must be absent, grow_inside_timing, "
+        "WOLFGANG_CUDA_BENCH_WORKSPACE_MODE must be absent, grow_inside_timing, "
         "or pre_reserved_outside_timing"
     )
 
 
 def campaign4_duplicate_reduction_strategy() -> str:
-    value = os.environ.get("FASTPAULI_CUDA_BENCH_DUPLICATE_REDUCTION", "thrust_default")
+    value = os.environ.get("WOLFGANG_CUDA_BENCH_DUPLICATE_REDUCTION", "thrust_default")
     if value in {"", "thrust_default"}:
         return "thrust_default"
     if value in {"cub_radix_sort_reduce", "cub_radix_sort_run_length"}:
         return value
     raise ValueError(
-        "FASTPAULI_CUDA_BENCH_DUPLICATE_REDUCTION must be thrust_default, "
+        "WOLFGANG_CUDA_BENCH_DUPLICATE_REDUCTION must be thrust_default, "
         "cub_radix_sort_reduce, or cub_radix_sort_run_length"
     )
 
 
 def campaign4_commutation_output_target() -> str:
-    value = os.environ.get("FASTPAULI_CUDA_BENCH_COMMUTATION_OUTPUT", "host_vector")
+    value = os.environ.get("WOLFGANG_CUDA_BENCH_COMMUTATION_OUTPUT", "host_vector")
     if value in {
         "",
         "host_vector",
@@ -178,7 +178,7 @@ def campaign4_commutation_output_target() -> str:
     }:
         return "host_vector" if value == "" else value
     raise ValueError(
-        "FASTPAULI_CUDA_BENCH_COMMUTATION_OUTPUT must be host_vector, "
+        "WOLFGANG_CUDA_BENCH_COMMUTATION_OUTPUT must be host_vector, "
         "caller_owned_host_bytes, caller_owned_device_bytes, or bitpacked_device_words"
     )
 
@@ -787,7 +787,7 @@ def timed_reused_device_output_cuda_commutation(
 ) -> dict[str, float]:
     expected_flat = np.asarray(expected, dtype=np.bool_).reshape(-1)
     output = np.empty(expected_flat.size, dtype=np.bool_)
-    with temporary_env_var("FASTPAULI_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT", "1"):
+    with temporary_env_var("WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT", "1"):
         _, timing = timed_call(
             lambda: lhs_device.commutes_with_into(
                 rhs_device,
@@ -1688,11 +1688,11 @@ def add_private_fused_consumer_timing_fields(
     fused_timing: dict[str, Any],
 ) -> None:
     count_status = os.environ.get(
-        "FASTPAULI_CUDA_CAMPAIGN7_COUNT_SPECIALIZATION_STATUS",
+        "WOLFGANG_CUDA_CAMPAIGN7_COUNT_SPECIALIZATION_STATUS",
         CAMPAIGN7_COUNT_SPECIALIZATION_STATUS,
     )
     bitpacked_status = os.environ.get(
-        "FASTPAULI_CUDA_CAMPAIGN7_BITPACKED_DECISION_STATUS",
+        "WOLFGANG_CUDA_CAMPAIGN7_BITPACKED_DECISION_STATUS",
         CAMPAIGN7_BITPACKED_DECISION_STATUS,
     )
     timings = {
@@ -1752,7 +1752,7 @@ def add_campaign8_device_resident_consumer_timing_fields(
     )
     if mode == "portability_check":
         result["non_h100_portability_status"] = os.environ.get(
-            "FASTPAULI_CUDA_NON_H100_PORTABILITY_STATUS",
+            "WOLFGANG_CUDA_NON_H100_PORTABILITY_STATUS",
             "not_run",
         )
 
@@ -2063,7 +2063,7 @@ def run_commutation_case(
     add_reused_device_output_commutation_timing_fields(result, reused_device_output_timing)
     result["notes"].append(
         "reused-device-output timing is a private benchmark-only path gated by "
-        "FASTPAULI_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT"
+        "WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT"
     )
     device_output_allocate_timing = timed_public_device_output_allocate_cuda_commutation(
         lhs_device=lhs_device,

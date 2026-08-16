@@ -113,8 +113,8 @@ def test_cuda_foundation_sources_live_under_cuda_directory() -> None:
         "src/cuda/device_pauli_sum.cuh",
     }
     expected_public_headers = {
-        "include/fastpauli/device_commutation_matrix.hpp",
-        "include/fastpauli/device_pauli_sum.hpp",
+        "include/wolfgang/device_commutation_matrix.hpp",
+        "include/wolfgang/device_pauli_sum.hpp",
     }
     expected_cpu_only_sources = {
         "src/device_commutation_matrix_stub.cpp",
@@ -143,10 +143,10 @@ def test_backend_neutral_accelerator_sources_are_declared_as_disjoint_sets() -> 
     """Keep CUDA and HIP sources separable for target-specific accelerator builds."""
 
     cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
-    assert "FASTPAULI_CUDA_EXTENSION_SOURCES" in cmake
-    assert "FASTPAULI_HIP_EXTENSION_SOURCES" in cmake
-    assert "FASTPAULI_ACCELERATOR_STUB_SOURCES" in cmake
-    assert "elseif(FASTPAULI_BUILD_HIP_ENABLED)" not in cmake
+    assert "WOLFGANG_CUDA_EXTENSION_SOURCES" in cmake
+    assert "WOLFGANG_HIP_EXTENSION_SOURCES" in cmake
+    assert "WOLFGANG_ACCELERATOR_STUB_SOURCES" in cmake
+    assert "elseif(WOLFGANG_BUILD_HIP_ENABLED)" not in cmake
 
     cuda_sources = {
         "src/cuda/device_commutation_matrix.cu",

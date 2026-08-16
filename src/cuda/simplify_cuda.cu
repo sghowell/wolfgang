@@ -198,7 +198,7 @@ struct CoeffSurvives {
 };
 
 DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
-  const char* value = std::getenv("FASTPAULI_CUDA_BENCH_DUPLICATE_REDUCTION");
+  const char* value = std::getenv("WOLFGANG_CUDA_BENCH_DUPLICATE_REDUCTION");
   if (value == nullptr || std::string(value).empty() || std::string(value) == "thrust_default") {
     return DuplicateReductionStrategy::kThrustDefault;
   }
@@ -210,7 +210,7 @@ DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
     return DuplicateReductionStrategy::kCubRadixSortRunLength;
   }
   throw std::invalid_argument(
-      "FASTPAULI_CUDA_BENCH_DUPLICATE_REDUCTION must be thrust_default, "
+      "WOLFGANG_CUDA_BENCH_DUPLICATE_REDUCTION must be thrust_default, "
       "cub_radix_sort_reduce, or cub_radix_sort_run_length");
 }
 

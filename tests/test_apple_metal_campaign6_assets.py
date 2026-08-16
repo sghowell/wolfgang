@@ -68,11 +68,11 @@ def test_campaign6_workspace_groundwork_is_private_and_registered() -> None:
         "high_watermark_bytes",
         "allocation_count",
         "workspace_timing_mode_from_env",
-        "FASTPAULI_METAL_BENCH_WORKSPACE_TIMING",
+        "WOLFGANG_METAL_BENCH_WORKSPACE_TIMING",
     ):
         assert token in workspace_hpp + workspace_mm
 
-    assert "#include <Metal/Metal.h>" not in read("include/fastpauli/device_pauli_sum.hpp")
+    assert "#include <Metal/Metal.h>" not in read("include/wolfgang/device_pauli_sum.hpp")
     assert "Campaign 6" in protocol
     assert "metal_simplify_workspace_probe" in protocol
     assert "private MetalWorkspace" in protocol

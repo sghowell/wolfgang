@@ -127,7 +127,7 @@ Campaign 4 implements this as a private source-only `CudaWorkspace` under
 `src/cuda/`. The only Python visibility is the underscored
 `_cuda_workspace_probe_for_testing()` hook, which returns lifetime snapshots for
 tests and benchmark validation without exposing raw device pointers. Benchmark
-workspace timing is selected with `FASTPAULI_CUDA_BENCH_WORKSPACE_MODE` values
+workspace timing is selected with `WOLFGANG_CUDA_BENCH_WORKSPACE_MODE` values
 `absent`, `grow_inside_timing`, and `pre_reserved_outside_timing`; these labels
 are evidence boundaries, not public API modes.
 
@@ -205,7 +205,7 @@ header while the public API remains deferred.
 
 Campaign 4 may benchmark private commutation materialization labels
 `host_vector`, `caller_owned_host_bytes`, `caller_owned_device_bytes`, and
-`bitpacked_device_words` through `FASTPAULI_CUDA_BENCH_COMMUTATION_OUTPUT`.
+`bitpacked_device_words` through `WOLFGANG_CUDA_BENCH_COMMUTATION_OUTPUT`.
 Only the first two correspond to supported public host-output paths in this
 campaign. Device-byte and bit-packed rows must remain visibly labeled as
 private prototypes. Campaign 5 supersedes the private dense device-byte
@@ -438,7 +438,7 @@ and does not change public output ordering, tolerance, transfer, stream, or
 ownership semantics.
 
 Campaign 3 also added a private benchmark-only commutation output reuse path
-behind `FASTPAULI_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT=1`. This path is
+behind `WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT=1`. This path is
 not public API, does not expose device pointers, and exists only to quantify
 device-output allocation and host-materialization overhead. Public commutation
 output remains vector return or caller-owned host byte fill.

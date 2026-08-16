@@ -150,7 +150,7 @@ CAMPAIGN9_MODE_METADATA = {
         "campaign8_headroom_item": 2,
         "decision_doc": "docs/plans/cuda_csr_scatter_campaign9_decision.md",
         "default_final_status": "passed",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN9_PRIVILEGED_NCU_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN9_PRIVILEGED_NCU_STATUS",
         "unavailable_reason": "",
     },
     "non_h100_portability": {
@@ -160,7 +160,7 @@ CAMPAIGN9_MODE_METADATA = {
             "docs/benchmarks/reports/cuda_portability_campaign9_non_h100_nvidia_2026-04-29.md"
         ),
         "default_final_status": "blocked_external",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN9_NON_H100_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN9_NON_H100_STATUS",
         "unavailable_reason": (
             "No named non-H100 NVIDIA host has been validated for Campaign 9 yet."
         ),
@@ -170,7 +170,7 @@ CAMPAIGN9_MODE_METADATA = {
         "campaign8_headroom_item": 3,
         "decision_doc": "docs/plans/cuda_fused_grouping_public_api_campaign9_contract.md",
         "default_final_status": "rejected_with_evidence",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN9_GROUPING_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN9_GROUPING_STATUS",
         "unavailable_reason": "",
     },
     "dlpack_interop": {
@@ -178,7 +178,7 @@ CAMPAIGN9_MODE_METADATA = {
         "campaign8_headroom_item": 4,
         "decision_doc": "docs/plans/cuda_dlpack_interop_campaign9_contract.md",
         "default_final_status": "implemented",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN9_DLPACK_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN9_DLPACK_STATUS",
         "unavailable_reason": "",
     },
     "stream_graph": {
@@ -186,7 +186,7 @@ CAMPAIGN9_MODE_METADATA = {
         "campaign8_headroom_item": 5,
         "decision_doc": "docs/plans/cuda_stream_graph_campaign9_contract.md",
         "default_final_status": "rejected_with_evidence",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN9_STREAM_GRAPH_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN9_STREAM_GRAPH_STATUS",
         "unavailable_reason": "",
     },
     "csr_scatter_reopen": {
@@ -194,7 +194,7 @@ CAMPAIGN9_MODE_METADATA = {
         "campaign8_headroom_item": 6,
         "decision_doc": "docs/plans/cuda_csr_scatter_campaign9_decision.md",
         "default_final_status": "rejected_with_evidence",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN9_CSR_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN9_CSR_STATUS",
         "unavailable_reason": "",
     },
 }
@@ -240,7 +240,7 @@ CAMPAIGN10_MODE_METADATA = {
         "campaign9_headroom_item": 1,
         "decision_doc": "docs/plans/cuda_cross_architecture_campaign10_plan.md",
         "default_final_status": "passed",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN10_PORTABILITY_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN10_PORTABILITY_STATUS",
         "unavailable_reason": "",
     },
     "dlpack_pytorch": {
@@ -248,7 +248,7 @@ CAMPAIGN10_MODE_METADATA = {
         "campaign9_headroom_item": 2,
         "decision_doc": "docs/plans/cuda_dlpack_interop_campaign9_contract.md",
         "default_final_status": "passed",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN10_DLPACK_PYTORCH_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN10_DLPACK_PYTORCH_STATUS",
         "unavailable_reason": "",
     },
     "public_grouping_api": {
@@ -256,7 +256,7 @@ CAMPAIGN10_MODE_METADATA = {
         "campaign9_headroom_item": 3,
         "decision_doc": "docs/plans/cuda_grouping_public_api_campaign10_contract.md",
         "default_final_status": "rejected_with_evidence",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN10_GROUPING_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN10_GROUPING_STATUS",
         "unavailable_reason": "",
     },
     "stream_graph_reprobe": {
@@ -264,7 +264,7 @@ CAMPAIGN10_MODE_METADATA = {
         "campaign9_headroom_item": 4,
         "decision_doc": "docs/plans/cuda_stream_graph_campaign10_decision.md",
         "default_final_status": "rejected_with_evidence",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN10_STREAM_GRAPH_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN10_STREAM_GRAPH_STATUS",
         "unavailable_reason": "",
     },
     "csr_scatter_reprobe": {
@@ -272,7 +272,7 @@ CAMPAIGN10_MODE_METADATA = {
         "campaign9_headroom_item": 5,
         "decision_doc": "docs/plans/cuda_csr_scatter_campaign10_decision.md",
         "default_final_status": "rejected_with_evidence",
-        "env_status": "FASTPAULI_CUDA_CAMPAIGN10_CSR_STATUS",
+        "env_status": "WOLFGANG_CUDA_CAMPAIGN10_CSR_STATUS",
         "unavailable_reason": "",
     },
 }
@@ -1117,7 +1117,7 @@ def add_campaign10_row_schema_fields(
     result["deferred_status_allowed"] = False
     result["decision_doc"] = metadata["decision_doc"]
     result["provider_instance_type"] = os.environ.get(
-        "FASTPAULI_CAMPAIGN10_PROVIDER_INSTANCE_TYPE",
+        "WOLFGANG_CAMPAIGN10_PROVIDER_INSTANCE_TYPE",
         "not_available_to_agent",
     )
     result["gpu_name"] = gpu_name
@@ -1129,7 +1129,7 @@ def add_campaign10_row_schema_fields(
         ",", ";"
     )
     result["architecture_compile_status"] = os.environ.get(
-        "FASTPAULI_CAMPAIGN10_ARCHITECTURE_COMPILE_STATUS",
+        "WOLFGANG_CAMPAIGN10_ARCHITECTURE_COMPILE_STATUS",
         "not_checked",
     )
     result["git_revision"] = git_revision
@@ -1318,7 +1318,7 @@ def run_commutation_scale(
     add_reused_device_output_commutation_timing_fields(result, reused_device_output_timing)
     result["notes"].append(
         "reused-device-output timing is a private benchmark-only path gated by "
-        "FASTPAULI_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT"
+        "WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT"
     )
     device_output_allocate_timing = timed_public_device_output_allocate_cuda_commutation(
         lhs_device=lhs_device,
@@ -1365,7 +1365,7 @@ def run_commutation_scale(
     result["instrumentation"]["result_materialization_target"] = metadata["output_target"]
     fused_consumers_enabled = (
         metadata["output_target"] == "device_uint8_matrix_fused_consumer"
-        or os.environ.get("FASTPAULI_CUDA_BENCH_CAMPAIGN7_FUSED_CONSUMERS", "") == "1"
+        or os.environ.get("WOLFGANG_CUDA_BENCH_CAMPAIGN7_FUSED_CONSUMERS", "") == "1"
     )
     if metadata["output_target"] == "device_uint8_matrix_consumer":
         consumer_timing = timed_public_device_output_consumer_cuda_commutation(
@@ -1939,15 +1939,15 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
                 "mode": "grouping_summary",
             },
             "count_specialization_status": os.environ.get(
-                "FASTPAULI_CUDA_CAMPAIGN7_COUNT_SPECIALIZATION_STATUS",
+                "WOLFGANG_CUDA_CAMPAIGN7_COUNT_SPECIALIZATION_STATUS",
                 CAMPAIGN7_COUNT_SPECIALIZATION_STATUS,
             ),
             "bitpacked_decision_status": os.environ.get(
-                "FASTPAULI_CUDA_CAMPAIGN7_BITPACKED_DECISION_STATUS",
+                "WOLFGANG_CUDA_CAMPAIGN7_BITPACKED_DECISION_STATUS",
                 CAMPAIGN7_BITPACKED_DECISION_STATUS,
             ),
             "portability_gpu": os.environ.get(
-                "FASTPAULI_CUDA_PORTABILITY_GPU",
+                "WOLFGANG_CUDA_PORTABILITY_GPU",
                 "h100_sm90_primary_campaign7_host",
             ),
         },
@@ -1957,7 +1957,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "public_grouping_api_status": "deferred",
             "dlpack_interop_status": "deferred",
             "non_h100_portability_status": os.environ.get(
-                "FASTPAULI_CUDA_NON_H100_PORTABILITY_STATUS",
+                "WOLFGANG_CUDA_NON_H100_PORTABILITY_STATUS",
                 "not_run",
             ),
             "stream_graph_status": "deferred",

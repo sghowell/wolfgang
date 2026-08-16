@@ -186,6 +186,8 @@ docs/guide/agent-driven-engineering.md
 docs/guide/architecture.md
 docs/guide/python-api.md
 docs/index.md
+docs/javascripts/mermaid-init.js
+docs/javascripts/vendor/mermaid-11.4.1.min.js
 docs/plans/2026-08-11-wolfgang-rename-and-publication-plan.md
 docs/plans/apple_metal_mps_bringup_plan.md
 docs/plans/apple_metal_optimization_campaign1_plan.md
@@ -216,7 +218,6 @@ docs/plans/cuda_grouping_public_api_campaign10_contract.md
 docs/plans/cuda_residual_risk_campaign11_plan.md
 docs/plans/cuda_stream_graph_campaign10_decision.md
 docs/plans/cuda_stream_graph_campaign9_contract.md
-docs/plans/fastpauli_cpp_cuda_implementation_plan.md
 docs/plans/h100_deep_optimization_campaign2_plan.md
 docs/plans/h100_deep_optimization_campaign3_plan.md
 docs/plans/h100_deep_optimization_campaign4_plan.md
@@ -253,20 +254,16 @@ docs/release/0.1.0-rc1.md
 docs/release/0.1.0-rc2.md
 docs/release/0.1.0-wheelhouse-dry-run.md
 docs/release/0.1.0.md
+docs/release/0.2.1.md
 docs/release/README.md
 docs/release/cloud_hardware_qualification_harness.md
 docs/release/history_sanitization.md
 docs/release/support_matrix.md
 docs/research/provenance.md
 docs/roadmap.md
+docs/stylesheets/mermaid.css
 docs/user/expectation_values.md
 docs/user/performance.md
-include/fastpauli/accelerator_status.hpp
-include/fastpauli/cpu_backend.hpp
-include/fastpauli/device_commutation_matrix.hpp
-include/fastpauli/device_pauli_sum.hpp
-include/fastpauli/errors.hpp
-include/fastpauli/pauli_sum.hpp
 include/wolfgang/accelerator_status.hpp
 include/wolfgang/cpu_backend.hpp
 include/wolfgang/device_commutation_matrix.hpp
@@ -275,15 +272,6 @@ include/wolfgang/errors.hpp
 include/wolfgang/pauli_sum.hpp
 mkdocs.yml
 pyproject.toml
-python/fastpauli/__init__.py
-python/fastpauli/__init__.pyi
-python/fastpauli/_capabilities.py
-python/fastpauli/_fastpauli_core.py
-python/fastpauli/_fastpauli_core.pyi
-python/fastpauli/_version.py
-python/fastpauli/openfermion.py
-python/fastpauli/py.typed
-python/fastpauli/qiskit.py
 python/wolfgang_quantum/__init__.py
 python/wolfgang_quantum/__init__.pyi
 python/wolfgang_quantum/_capabilities.py
@@ -296,6 +284,7 @@ ruff.toml
 scripts/archive_portability.py
 scripts/archive_source_identity.json
 scripts/audit_public_artifacts.py
+scripts/b300_blackwell_resume_runner.py
 scripts/check_release_readiness.py
 scripts/check_release_tag.py
 scripts/check_release_wheelhouse.py
@@ -392,6 +381,7 @@ src/simd/commute_kernels_avx512.cpp
 src/simd/commute_kernels_neon.cpp
 src/simd/commute_kernels_scalar.cpp
 src/simplify.cpp
+tests/docs_mermaid_integration.py
 tests/test_apple_accelerator_planning.py
 tests/test_apple_metal_campaign1.py
 tests/test_apple_metal_campaign2.py
@@ -409,6 +399,7 @@ tests/test_apple_metal_campaign8.py
 tests/test_apple_metal_campaign8_assets.py
 tests/test_apple_metal_campaign8_plan.py
 tests/test_apple_metal_foundation.py
+tests/test_b300_blackwell_resume_runner.py
 tests/test_backend_neutral_campaign9_plan.py
 tests/test_backend_neutral_prep.py
 tests/test_basic.py
@@ -425,6 +416,7 @@ tests/test_cuda_deep_profile_script.py
 tests/test_cuda_deep_report_assets.py
 tests/test_cuda_scaling_benchmark.py
 tests/test_dlpack_and_cuda_interop_contract.py
+tests/test_docs_mermaid_rendering.py
 tests/test_h100_validation_artifacts.py
 tests/test_native_accelerator_host_helpers.py
 tests/test_native_layout.py
@@ -448,6 +440,7 @@ tests/test_release_candidate_rc2.py
 tests/test_release_final_010.py
 tests/test_release_next_checkpoint.py
 tests/test_release_supply_chain.py
+tests/test_release_v021_preparation.py
 tests/test_release_wheelhouse_foundation.py
 tests/test_rocm_campaign3_assets.py
 tests/test_rocm_campaign4_assets.py

@@ -93,9 +93,9 @@ def test_metal_source_declares_campaign3_experimental_paths() -> None:
     combined = "\n".join([accelerator_source, objective_c_source, matrix_source, kernel_source])
 
     for token in (
-        "FASTPAULI_EXPERIMENTAL_METAL_LIBRARY_PATH",
-        "FASTPAULI_EXPERIMENTAL_METAL_OUTPUT_STORAGE",
-        "FASTPAULI_EXPERIMENTAL_METAL_COMPACT_CONSUMER",
+        "WOLFGANG_EXPERIMENTAL_METAL_LIBRARY_PATH",
+        "WOLFGANG_EXPERIMENTAL_METAL_OUTPUT_STORAGE",
+        "WOLFGANG_EXPERIMENTAL_METAL_COMPACT_CONSUMER",
         "newLibraryWithFile",
         "MTLResourceStorageModePrivate",
         "blitCommandEncoder",

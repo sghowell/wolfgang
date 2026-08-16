@@ -8,8 +8,7 @@ semantics, guarded pairwise commutation, and deterministic greedy QWC/full
 commuting groups, plus scalar CPU statevector and diagonal Z-count expectation
 kernels. CPU backend dispatch metadata, forced scalar execution, and optional
 oneTBB/SIMD selectors for covered commutation and grouping kernels are
-available through the `WOLFGANG_CPU_BACKEND` environment variable (with
-`FASTPAULI_CPU_BACKEND` accepted as a deprecated fallback alias) when the
+available through the `WOLFGANG_CPU_BACKEND` environment variable when the
 optimized paths are compiled and runtime-available.
 
 CUDA source builds can additionally expose explicit host/device transfers through

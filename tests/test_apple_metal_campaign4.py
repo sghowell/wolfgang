@@ -92,7 +92,7 @@ def test_metal_source_declares_campaign4_parallel_compact_selector() -> None:
     combined = "\n".join([matrix_source, kernel_source, benchmark_source])
 
     for token in (
-        "FASTPAULI_EXPERIMENTAL_METAL_COMPACT_CONSUMER",
+        "WOLFGANG_EXPERIMENTAL_METAL_COMPACT_CONSUMER",
         "gpu_parallel_total",
         "fp_count_commuting_total_block_sums",
         "metal_compact_consumer_gpu_parallel_total",

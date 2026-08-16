@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import math
 
-import fastpauli
-import fastpauli._fastpauli_core as core
 import numpy as np
 import pytest
+import wolfgang_quantum
+import wolfgang_quantum._wolfgang_core as core
 
 
 def _require_metal_runtime() -> dict:
@@ -24,12 +24,12 @@ def _multiword_label(num_qubits: int, positions: dict[int, str]) -> str:
     return "".join(chars)
 
 
-def _labels_and_coeffs(op: fastpauli.PauliSum) -> tuple[list[str], list[complex]]:
+def _labels_and_coeffs(op: wolfgang_quantum.PauliSum) -> tuple[list[str], list[complex]]:
     labels, coeffs = op.to_labels()
     return list(labels), [complex(value) for value in coeffs]
 
 
-def _assert_same_operator(lhs: fastpauli.PauliSum, rhs: fastpauli.PauliSum) -> None:
+def _assert_same_operator(lhs: wolfgang_quantum.PauliSum, rhs: wolfgang_quantum.PauliSum) -> None:
     lhs_labels, lhs_coeffs = _labels_and_coeffs(lhs)
     rhs_labels, rhs_coeffs = _labels_and_coeffs(rhs)
     assert lhs.num_qubits == rhs.num_qubits
@@ -67,9 +67,9 @@ def test_metal_simplify_matches_cpu_when_available(
     _require_metal_runtime()
 
     host = (
-        fastpauli.PauliSum.from_labels(labels, coeffs)
+        wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
         if labels
-        else fastpauli.PauliSum.empty(num_qubits=num_qubits)
+        else wolfgang_quantum.PauliSum.empty(num_qubits=num_qubits)
     )
     expected = host.simplify(atol=atol, rtol=rtol)
     simplified_device = host.to_device(backend="metal").simplify(atol=atol, rtol=rtol)
@@ -86,7 +86,7 @@ def test_metal_simplify_matches_cpu_when_available(
 def test_metal_simplify_rejects_invalid_tolerances_when_available(bad_value: float) -> None:
     _require_metal_runtime()
 
-    device_op = fastpauli.PauliSum.from_labels(["X"], [1.0]).to_device(backend="metal")
+    device_op = wolfgang_quantum.PauliSum.from_labels(["X"], [1.0]).to_device(backend="metal")
     with pytest.raises(ValueError, match="simplify tolerances must be non-negative finite values"):
         device_op.simplify(atol=bad_value)
     with pytest.raises(ValueError, match="simplify tolerances must be non-negative finite values"):

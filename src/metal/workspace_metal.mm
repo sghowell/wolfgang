@@ -10,7 +10,7 @@ namespace wolfgang::metal_detail {
 
 namespace {
 
-constexpr const char* kWorkspaceTimingEnv = "FASTPAULI_METAL_BENCH_WORKSPACE_TIMING";
+constexpr const char* kWorkspaceTimingEnv = "WOLFGANG_METAL_BENCH_WORKSPACE_TIMING";
 
 std::size_t align_up(std::size_t value, std::size_t alignment) {
   if (alignment == 0) {

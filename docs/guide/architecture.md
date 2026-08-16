@@ -57,11 +57,9 @@ Rejected ideas and unavailable tooling are recorded rather than converted into o
 ## Source map
 
 - `include/wolfgang/`: documented native API declarations.
-- `include/fastpauli/`: one-transition forwarding headers for legacy source compatibility.
 - `src/`: scalar CPU semantics, dispatch, and backend implementations.
 - `bindings/python/`: nanobind ownership and protocol boundary.
 - `python/wolfgang_quantum/`: canonical Python package and optional adapters.
-- `python/fastpauli/`: one-transition Python compatibility shim.
 - `tests/`: behavioral, property, packaging, protocol, and hardware-gated tests.
 - `benchmarks/`: deterministic benchmark producers.
 - `docs/benchmarks/reports/`: reviewed, sanitized conclusions.

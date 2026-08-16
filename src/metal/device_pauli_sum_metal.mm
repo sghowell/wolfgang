@@ -12,8 +12,8 @@ namespace wolfgang {
 namespace {
 
 std::string objcxx_compiler_version() {
-  return std::string(FASTPAULI_CMAKE_OBJCXX_COMPILER_ID) + " " +
-         std::string(FASTPAULI_CMAKE_OBJCXX_COMPILER_VERSION);
+  return std::string(WOLFGANG_CMAKE_OBJCXX_COMPILER_ID) + " " +
+         std::string(WOLFGANG_CMAKE_OBJCXX_COMPILER_VERSION);
 }
 
 std::string bool_text(bool value) {

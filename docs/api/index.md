@@ -1,6 +1,6 @@
 # API reference
 
-Wolfgang's public Python API is intentionally compact. The authoritative behavioral overview is the [Python API guide](../guide/python-api.md); native docstrings are available through `help(wolfgang_quantum.PauliSum)` and related classes. The legacy `fastpauli` import remains as a one-transition compatibility shim.
+Wolfgang's public Python API is intentionally compact. The authoritative behavioral overview is the [Python API guide](../guide/python-api.md); native docstrings are available through `help(wolfgang_quantum.PauliSum)` and related classes.
 
 ```python
 import wolfgang_quantum
@@ -25,7 +25,7 @@ Optional adapter methods are available through the base class with lazy dependen
 
 ## Native API
 
-Headers under `include/wolfgang/` document the current source-level C++ surface. Legacy `include/fastpauli/` headers are a one-transition forwarding layer. Binary ABI stability is not promised before a deliberate native-library release. Consult the [API stability policy](../architecture/api_stability.md) before depending on pre-1.0 behavior.
+Headers under `include/wolfgang/` document the current source-level C++ surface. Binary ABI stability is not promised before a deliberate native-library release. Consult the [API stability policy](../architecture/api_stability.md) before depending on pre-1.0 behavior.
 
 ## Private surfaces
 

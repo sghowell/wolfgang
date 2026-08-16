@@ -9,19 +9,19 @@ import sys
 import types
 from pathlib import Path
 
-import fastpauli
 import numpy as np
 import pytest
+import wolfgang_quantum
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def _labels_and_coeffs(op: fastpauli.PauliSum) -> tuple[list[str], list[complex]]:
+def _labels_and_coeffs(op: wolfgang_quantum.PauliSum) -> tuple[list[str], list[complex]]:
     labels, coeffs = op.to_labels()
     return list(labels), [complex(value) for value in coeffs]
 
 
-def _assert_same_operator(lhs: fastpauli.PauliSum, rhs: fastpauli.PauliSum) -> None:
+def _assert_same_operator(lhs: wolfgang_quantum.PauliSum, rhs: wolfgang_quantum.PauliSum) -> None:
     lhs_labels, lhs_coeffs = _labels_and_coeffs(lhs)
     rhs_labels, rhs_coeffs = _labels_and_coeffs(rhs)
     assert lhs_labels == rhs_labels
@@ -86,7 +86,7 @@ def run_cmake_configure_with_options(*options: str) -> subprocess.CompletedProce
 
 
 def test_cpu_only_build_reports_hip_absence() -> None:
-    import fastpauli._fastpauli_core as core
+    import wolfgang_quantum._wolfgang_core as core
 
     info = core._build_info()
     status = core._hip_status()
@@ -164,13 +164,13 @@ def test_cmake_hip_compiler_discovery_uses_rocm_clang_not_hipcc_wrapper() -> Non
 
 
 def test_hip_round_trip_when_available() -> None:
-    import fastpauli._fastpauli_core as core
+    import wolfgang_quantum._wolfgang_core as core
 
     status = core._hip_status()
     if not status["runtime_available"]:
         pytest.skip(status["skip_reason"])
 
-    op = fastpauli.PauliSum.from_labels(["XIZ", "YYI"], [1.0, -2.0j])
+    op = wolfgang_quantum.PauliSum.from_labels(["XIZ", "YYI"], [1.0, -2.0j])
     device_op = op.to_device(device=0)
 
     assert device_op.backend == "hip"
@@ -179,13 +179,13 @@ def test_hip_round_trip_when_available() -> None:
 
 
 def test_hip_empty_round_trip_when_available() -> None:
-    import fastpauli._fastpauli_core as core
+    import wolfgang_quantum._wolfgang_core as core
 
     status = core._hip_status()
     if not status["runtime_available"]:
         pytest.skip(status["skip_reason"])
 
-    host = fastpauli.PauliSum.empty(num_qubits=5)
+    host = wolfgang_quantum.PauliSum.empty(num_qubits=5)
     actual = host.to_device(device=0).to_host()
 
     assert actual.num_terms == 0
@@ -193,19 +193,19 @@ def test_hip_empty_round_trip_when_available() -> None:
 
 
 def test_hip_invalid_device_error_when_available() -> None:
-    import fastpauli._fastpauli_core as core
+    import wolfgang_quantum._wolfgang_core as core
 
     status = core._hip_status()
     if not status["runtime_available"]:
         pytest.skip(status["skip_reason"])
 
-    op = fastpauli.PauliSum.from_labels(["XI"], [1.0])
+    op = wolfgang_quantum.PauliSum.from_labels(["XI"], [1.0])
     with pytest.raises(ValueError, match="HIP device ordinal is out of range"):
         op.to_device(device=status["device_count"])
 
 
 def _require_hip_runtime() -> dict:
-    import fastpauli._fastpauli_core as core
+    import wolfgang_quantum._wolfgang_core as core
 
     status = core._hip_status()
     if not status["runtime_available"]:
@@ -214,7 +214,7 @@ def _require_hip_runtime() -> dict:
 
 
 def _assert_hip_simplify_matches_cpu(
-    op: fastpauli.PauliSum,
+    op: wolfgang_quantum.PauliSum,
     *,
     atol: float = 1.0e-12,
     rtol: float = 0.0,
@@ -234,8 +234,8 @@ def _assert_hip_simplify_matches_cpu(
 
 
 def _assert_hip_commutation_matches_cpu(
-    lhs: fastpauli.PauliSum,
-    rhs: fastpauli.PauliSum,
+    lhs: wolfgang_quantum.PauliSum,
+    rhs: wolfgang_quantum.PauliSum,
 ) -> None:
     lhs_device = lhs.to_device()
     rhs_device = rhs.to_device()
@@ -251,8 +251,8 @@ def _assert_hip_commutation_matches_cpu(
 
 
 def _assert_hip_device_commutation_matrix_matches_cpu(
-    lhs: fastpauli.PauliSum,
-    rhs: fastpauli.PauliSum,
+    lhs: wolfgang_quantum.PauliSum,
+    rhs: wolfgang_quantum.PauliSum,
 ) -> None:
     lhs_device = lhs.to_device()
     rhs_device = rhs.to_device()
@@ -263,7 +263,7 @@ def _assert_hip_device_commutation_matrix_matches_cpu(
 
     matrix = lhs_device.commutes_with_device(rhs_device)
 
-    assert isinstance(matrix, fastpauli.DeviceCommutationMatrix)
+    assert isinstance(matrix, wolfgang_quantum.DeviceCommutationMatrix)
     assert matrix.shape == (lhs.num_terms, rhs.num_terms)
     assert matrix.device == lhs_device.device
     assert matrix.dtype == "uint8"
@@ -276,19 +276,19 @@ def test_hip_commutation_matches_cpu_for_edge_cases_when_available() -> None:
 
     cases = [
         (
-            fastpauli.PauliSum.empty(num_qubits=3),
-            fastpauli.PauliSum.from_labels(["XII", "IYZ"], [1.0, -1.0]),
+            wolfgang_quantum.PauliSum.empty(num_qubits=3),
+            wolfgang_quantum.PauliSum.from_labels(["XII", "IYZ"], [1.0, -1.0]),
         ),
         (
-            fastpauli.PauliSum.from_labels(["XII", "ZZZ"], [1.0, 2.0]),
-            fastpauli.PauliSum.empty(num_qubits=3),
+            wolfgang_quantum.PauliSum.from_labels(["XII", "ZZZ"], [1.0, 2.0]),
+            wolfgang_quantum.PauliSum.empty(num_qubits=3),
         ),
         (
-            fastpauli.PauliSum.from_labels(["X", "Z"], [1.0, 1.0]),
-            fastpauli.PauliSum.from_labels(["Y", "I"], [1.0, 1.0]),
+            wolfgang_quantum.PauliSum.from_labels(["X", "Z"], [1.0, 1.0]),
+            wolfgang_quantum.PauliSum.from_labels(["Y", "I"], [1.0, 1.0]),
         ),
         (
-            fastpauli.PauliSum.from_sparse_list(
+            wolfgang_quantum.PauliSum.from_sparse_list(
                 [
                     ("X", [0], 1.0),
                     ("Z", [64], -0.5),
@@ -296,7 +296,7 @@ def test_hip_commutation_matches_cpu_for_edge_cases_when_available() -> None:
                 ],
                 num_qubits=65,
             ),
-            fastpauli.PauliSum.from_sparse_list(
+            wolfgang_quantum.PauliSum.from_sparse_list(
                 [
                     ("Y", [0], -1.0),
                     ("X", [64], 2.0),
@@ -325,16 +325,16 @@ def test_hip_commutation_matches_cpu_for_random_inputs_when_available() -> None:
             "".join(rng.choice(alphabet, size=num_qubits).tolist())
             for _ in range(rhs_terms)
         ]
-        lhs = fastpauli.PauliSum.from_labels(lhs_labels, np.ones(lhs_terms).tolist())
-        rhs = fastpauli.PauliSum.from_labels(rhs_labels, np.ones(rhs_terms).tolist())
+        lhs = wolfgang_quantum.PauliSum.from_labels(lhs_labels, np.ones(lhs_terms).tolist())
+        rhs = wolfgang_quantum.PauliSum.from_labels(rhs_labels, np.ones(rhs_terms).tolist())
         _assert_hip_commutation_matches_cpu(lhs, rhs)
 
 
 def test_hip_commutation_guardrails_and_reused_output_when_available() -> None:
     _require_hip_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
-    rhs = fastpauli.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0])
+    rhs = wolfgang_quantum.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j])
     lhs_device = lhs.to_device()
     rhs_device = rhs.to_device()
 
@@ -348,7 +348,7 @@ def test_hip_commutation_guardrails_and_reused_output_when_available() -> None:
     with pytest.raises(ValueError, match="output buffer size"):
         lhs_device.commutes_with_into(rhs_device, output[:-1])
     with pytest.raises(ValueError, match="same num_qubits"):
-        lhs_device.commutes_with(fastpauli.PauliSum.from_labels(["XXX"], [1.0]).to_device())
+        lhs_device.commutes_with(wolfgang_quantum.PauliSum.from_labels(["XXX"], [1.0]).to_device())
     with pytest.raises(ValueError, match="commutation matrix entry count exceeds"):
         lhs_device.commutes_with(rhs_device, max_commutation_matrix_entries=3)
 
@@ -358,8 +358,8 @@ def test_hip_commutation_rejects_different_devices_when_available() -> None:
     if int(status["device_count"]) < 2:
         pytest.skip("different-device HIP check requires at least two visible HIP devices")
 
-    lhs = fastpauli.PauliSum.from_labels(["XX"], [1.0]).to_device(device=0)
-    rhs = fastpauli.PauliSum.from_labels(["YY"], [1.0]).to_device(device=1)
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XX"], [1.0]).to_device(device=0)
+    rhs = wolfgang_quantum.PauliSum.from_labels(["YY"], [1.0]).to_device(device=1)
     with pytest.raises(ValueError, match="same device"):
         lhs.commutes_with(rhs)
 
@@ -380,31 +380,31 @@ def test_hip_device_commutation_matrix_matches_cpu_when_available() -> None:
 
     cases = [
         (
-            fastpauli.PauliSum.empty(num_qubits=3),
-            fastpauli.PauliSum.from_labels(["XII", "IYZ"], [1.0, -1.0]),
+            wolfgang_quantum.PauliSum.empty(num_qubits=3),
+            wolfgang_quantum.PauliSum.from_labels(["XII", "IYZ"], [1.0, -1.0]),
         ),
         (
-            fastpauli.PauliSum.from_labels(["XII", "ZZZ"], [1.0, 2.0]),
-            fastpauli.PauliSum.empty(num_qubits=3),
+            wolfgang_quantum.PauliSum.from_labels(["XII", "ZZZ"], [1.0, 2.0]),
+            wolfgang_quantum.PauliSum.empty(num_qubits=3),
         ),
         (
-            fastpauli.PauliSum.from_labels(["X"], [1.0]),
-            fastpauli.PauliSum.from_labels(["Z"], [1.0j]),
+            wolfgang_quantum.PauliSum.from_labels(["X"], [1.0]),
+            wolfgang_quantum.PauliSum.from_labels(["Z"], [1.0j]),
         ),
         (
-            fastpauli.PauliSum.from_labels(["XX"], [1.0]),
-            fastpauli.PauliSum.from_labels(["YY", "XI", "IZ"], [1.0, 1.0j, -0.5]),
+            wolfgang_quantum.PauliSum.from_labels(["XX"], [1.0]),
+            wolfgang_quantum.PauliSum.from_labels(["YY", "XI", "IZ"], [1.0, 1.0j, -0.5]),
         ),
         (
-            fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 2.0]),
-            fastpauli.PauliSum.from_labels(["ZZ"], [1.0]),
+            wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 2.0]),
+            wolfgang_quantum.PauliSum.from_labels(["ZZ"], [1.0]),
         ),
         (
-            fastpauli.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0]),
-            fastpauli.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j]),
+            wolfgang_quantum.PauliSum.from_labels(["XX", "ZI", "IZ"], [1.0, 2.0, -1.0]),
+            wolfgang_quantum.PauliSum.from_labels(["YY", "XI"], [1.0, 1.0j]),
         ),
         (
-            fastpauli.PauliSum.from_sparse_list(
+            wolfgang_quantum.PauliSum.from_sparse_list(
                 [
                     ("X", [0], 1.0),
                     ("Z", [64], -0.5),
@@ -412,7 +412,7 @@ def test_hip_device_commutation_matrix_matches_cpu_when_available() -> None:
                 ],
                 num_qubits=65,
             ),
-            fastpauli.PauliSum.from_sparse_list(
+            wolfgang_quantum.PauliSum.from_sparse_list(
                 [
                     ("Y", [0], -1.0),
                     ("X", [64], 2.0),
@@ -422,8 +422,8 @@ def test_hip_device_commutation_matrix_matches_cpu_when_available() -> None:
             ),
         ),
         (
-            fastpauli.PauliSum.from_labels(randomized_lhs, np.ones(4).tolist()),
-            fastpauli.PauliSum.from_labels(randomized_rhs, np.ones(5).tolist()),
+            wolfgang_quantum.PauliSum.from_labels(randomized_lhs, np.ones(4).tolist()),
+            wolfgang_quantum.PauliSum.from_labels(randomized_rhs, np.ones(5).tolist()),
         ),
     ]
 
@@ -434,8 +434,8 @@ def test_hip_device_commutation_matrix_matches_cpu_when_available() -> None:
 def test_hip_device_commutation_matrix_counts_match_numpy_when_available() -> None:
     _require_hip_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
     host = matrix.to_host().astype(np.uint64)
 
@@ -464,9 +464,9 @@ def test_hip_device_commutation_matrix_counts_match_numpy_when_available() -> No
 def test_hip_device_commutation_matrix_reuse_and_guardrails_when_available() -> None:
     status = _require_hip_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
-    output = fastpauli.DeviceCommutationMatrix.empty(
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    output = wolfgang_quantum.DeviceCommutationMatrix.empty(
         (lhs.num_terms, rhs.num_terms),
         device=lhs.device,
     )
@@ -476,7 +476,7 @@ def test_hip_device_commutation_matrix_reuse_and_guardrails_when_available() -> 
     assert same is output
     np.testing.assert_array_equal(output.to_host(), lhs.to_host().commutes_with(rhs.to_host()))
 
-    wrong_shape = fastpauli.DeviceCommutationMatrix.empty((1, rhs.num_terms), device=lhs.device)
+    wrong_shape = wolfgang_quantum.DeviceCommutationMatrix.empty((1, rhs.num_terms), device=lhs.device)
     with pytest.raises(ValueError, match="output shape"):
         lhs.commutes_with_device(rhs, output=wrong_shape)
 
@@ -484,7 +484,7 @@ def test_hip_device_commutation_matrix_reuse_and_guardrails_when_available() -> 
         lhs.commutes_with_device(rhs, max_commutation_matrix_entries=3)
 
     if status["device_count"] >= 2:
-        wrong_device = fastpauli.DeviceCommutationMatrix.empty(
+        wrong_device = wolfgang_quantum.DeviceCommutationMatrix.empty(
             (lhs.num_terms, rhs.num_terms),
             device=1 if lhs.device == 0 else 0,
         )
@@ -495,8 +495,8 @@ def test_hip_device_commutation_matrix_reuse_and_guardrails_when_available() -> 
 def test_hip_cuda_array_interface_remains_unavailable_when_available() -> None:
     _require_hip_runtime()
 
-    matrix = fastpauli.PauliSum.from_labels(["XI"], [1.0]).to_device().commutes_with_device(
-        fastpauli.PauliSum.from_labels(["IX"], [1.0]).to_device(),
+    matrix = wolfgang_quantum.PauliSum.from_labels(["XI"], [1.0]).to_device().commutes_with_device(
+        wolfgang_quantum.PauliSum.from_labels(["IX"], [1.0]).to_device(),
     )
 
     with pytest.raises((BufferError, RuntimeError, ValueError), match="HIP|ROCm|CUDA"):
@@ -506,8 +506,8 @@ def test_hip_cuda_array_interface_remains_unavailable_when_available() -> None:
 def test_hip_dlpack_surfaces_remain_unavailable_when_available() -> None:
     _require_hip_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
-    rhs = fastpauli.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
+    lhs = wolfgang_quantum.PauliSum.from_labels(["XI", "ZI"], [1.0, 1.0]).to_device()
+    rhs = wolfgang_quantum.PauliSum.from_labels(["IX", "ZZ", "XX"], [1.0, 1.0, 1.0]).to_device()
     matrix = lhs.commutes_with_device(rhs)
 
     with pytest.raises((BufferError, RuntimeError, ValueError), match="HIP|ROCm|DLPack"):
@@ -520,18 +520,18 @@ def test_hip_simplify_matches_cpu_for_edge_cases_when_available() -> None:
     _require_hip_runtime()
 
     cases = [
-        fastpauli.PauliSum.empty(num_qubits=5),
-        fastpauli.PauliSum.from_labels(["I", "I"], [0.25, -0.25]),
-        fastpauli.PauliSum.from_labels(["X", "X", "Z"], [1.0, -0.5, 2.0]),
-        fastpauli.PauliSum.from_sparse_list(
+        wolfgang_quantum.PauliSum.empty(num_qubits=5),
+        wolfgang_quantum.PauliSum.from_labels(["I", "I"], [0.25, -0.25]),
+        wolfgang_quantum.PauliSum.from_labels(["X", "X", "Z"], [1.0, -0.5, 2.0]),
+        wolfgang_quantum.PauliSum.from_sparse_list(
             [("X", [33], 1.0), ("X", [33], 2.0), ("Z", [0], -1.0)],
             num_qubits=64,
         ),
-        fastpauli.PauliSum.from_sparse_list(
+        wolfgang_quantum.PauliSum.from_sparse_list(
             [("X", [64], 1.0), ("X", [64], -0.25), ("YZ", [1, 64], 0.5j)],
             num_qubits=65,
         ),
-        fastpauli.PauliSum.from_sparse_list(
+        wolfgang_quantum.PauliSum.from_sparse_list(
             [("XZ", [0, 129], 1.0), ("XZ", [0, 129], -2.0), ("Y", [128], 3.0)],
             num_qubits=130,
         ),
@@ -544,7 +544,7 @@ def test_hip_simplify_matches_cpu_for_edge_cases_when_available() -> None:
 def test_hip_simplify_tolerance_matches_cpu_when_available() -> None:
     _require_hip_runtime()
 
-    op = fastpauli.PauliSum.from_labels(
+    op = wolfgang_quantum.PauliSum.from_labels(
         ["X", "X", "Z", "Z"],
         [1.0, -0.95, 2.0, -1.79],
     )
@@ -567,7 +567,7 @@ def test_hip_simplify_randomized_matches_cpu_when_available() -> None:
             for _ in range(len(labels))
         ]
         _assert_hip_simplify_matches_cpu(
-            fastpauli.PauliSum.from_labels(labels, coeffs),
+            wolfgang_quantum.PauliSum.from_labels(labels, coeffs),
             atol=1.0e-11,
             rtol=1.0e-12,
         )
@@ -577,7 +577,7 @@ def test_hip_simplify_randomized_matches_cpu_when_available() -> None:
 def test_hip_simplify_rejects_invalid_tolerances_when_available(bad_value: float) -> None:
     _require_hip_runtime()
 
-    op = fastpauli.PauliSum.from_labels(["X"], [1.0]).to_device()
+    op = wolfgang_quantum.PauliSum.from_labels(["X"], [1.0]).to_device()
     with pytest.raises(ValueError, match="tolerances"):
         op.simplify(atol=bad_value)
     with pytest.raises(ValueError, match="tolerances"):
@@ -587,7 +587,7 @@ def test_hip_simplify_rejects_invalid_tolerances_when_available(bad_value: float
 def test_hip_expectation_statevector_matches_cpu_for_complex_dtypes_when_available() -> None:
     _require_hip_runtime()
 
-    op = fastpauli.PauliSum.from_labels(
+    op = wolfgang_quantum.PauliSum.from_labels(
         ["ZI", "IZ", "XX", "YY", "XY"],
         [1.0, -0.5, 0.25, 0.75j, -0.125 + 0.5j],
     )
@@ -613,12 +613,12 @@ def test_hip_expectation_statevector_matches_cpu_for_complex_dtypes_when_availab
 def test_hip_expectation_statevector_edge_cases_when_available() -> None:
     _require_hip_runtime()
 
-    empty = fastpauli.PauliSum.empty(2)
+    empty = wolfgang_quantum.PauliSum.empty(2)
     assert empty.to_device().expectation_statevector(
         np.asarray([1.0, 0.0, 0.0, 0.0], dtype=np.complex128)
     ) == 0j
 
-    identity = fastpauli.PauliSum.from_sparse_list([("", [], 2.5 - 0.75j)], num_qubits=0)
+    identity = wolfgang_quantum.PauliSum.from_sparse_list([("", [], 2.5 - 0.75j)], num_qubits=0)
     assert identity.to_device().expectation_statevector(
         np.asarray([1.0 + 0.0j], dtype=np.complex128)
     ) == pytest.approx(2.5 - 0.75j, abs=1.0e-12)
@@ -627,7 +627,7 @@ def test_hip_expectation_statevector_edge_cases_when_available() -> None:
 def test_hip_expectation_statevector_rejects_invalid_host_arrays_when_available() -> None:
     _require_hip_runtime()
 
-    device_op = fastpauli.PauliSum.from_labels(["ZI", "IZ"], [1.0, -0.5]).to_device()
+    device_op = wolfgang_quantum.PauliSum.from_labels(["ZI", "IZ"], [1.0, -0.5]).to_device()
     with pytest.raises(TypeError, match="complex64 or complex128"):
         device_op.expectation_statevector(np.ones(4, dtype=np.float64))
     with pytest.raises(TypeError, match="C-contiguous"):
@@ -643,7 +643,7 @@ def test_hip_expectation_external_device_pointer_remains_unavailable_when_availa
         def __init__(self, interface: dict[str, object]) -> None:
             self.__cuda_array_interface__ = interface
 
-    device_op = fastpauli.PauliSum.from_labels(["ZI", "IZ"], [1.0, -0.5]).to_device()
+    device_op = wolfgang_quantum.PauliSum.from_labels(["ZI", "IZ"], [1.0, -0.5]).to_device()
     with pytest.raises((BufferError, RuntimeError, ValueError), match="HIP|ROCm|device pointer"):
         device_op.expectation_statevector(
             FakeCudaArray({"shape": (4,), "typestr": "<c16", "data": (1, False), "version": 3})
@@ -653,7 +653,7 @@ def test_hip_expectation_external_device_pointer_remains_unavailable_when_availa
 def test_hip_expectation_statevector_duplicate_terms_when_available() -> None:
     _require_hip_runtime()
 
-    op = fastpauli.PauliSum.from_labels(
+    op = wolfgang_quantum.PauliSum.from_labels(
         ["ZI", "ZI", "XX", "XX", "YY"],
         [1.0, -0.25, 0.5j, -0.125j, 0.75],
     )
@@ -684,7 +684,7 @@ def test_hip_expectation_statevector_randomized_small_systems_when_available() -
         ]
         psi = rng.normal(size=2**num_qubits) + 1j * rng.normal(size=2**num_qubits)
         psi = np.asarray(psi / np.linalg.norm(psi), dtype=np.complex128)
-        op = fastpauli.PauliSum.from_labels(labels, coeffs)
+        op = wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
 
         np.testing.assert_allclose(
             op.to_device().expectation_statevector(psi),
@@ -697,8 +697,8 @@ def test_hip_expectation_statevector_randomized_small_systems_when_available() -
 def test_hip_matmul_matches_cpu_and_keeps_guardrails_when_available() -> None:
     _require_hip_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["X", "Y", "Z"], [2.0, -0.5j, 1.25])
-    rhs = fastpauli.PauliSum.from_labels(["Y", "Z"], [3.0, 0.25j])
+    lhs = wolfgang_quantum.PauliSum.from_labels(["X", "Y", "Z"], [2.0, -0.5j, 1.25])
+    rhs = wolfgang_quantum.PauliSum.from_labels(["Y", "Z"], [3.0, 0.25j])
 
     expected = lhs.matmul(rhs, simplify=True)
     actual = lhs.to_device().matmul(rhs.to_device(), simplify=True).to_host()
@@ -717,15 +717,15 @@ def test_hip_matmul_multiword_and_empty_cases_when_available() -> None:
 
     cases = [
         (
-            fastpauli.PauliSum.empty(70),
-            fastpauli.PauliSum.from_sparse_list([("X", [64], 1.0)], num_qubits=70),
+            wolfgang_quantum.PauliSum.empty(70),
+            wolfgang_quantum.PauliSum.from_sparse_list([("X", [64], 1.0)], num_qubits=70),
         ),
         (
-            fastpauli.PauliSum.from_sparse_list(
+            wolfgang_quantum.PauliSum.from_sparse_list(
                 [("XY", [0, 70], 1.0j), ("Z", [69], -2.0)],
                 num_qubits=72,
             ),
-            fastpauli.PauliSum.from_sparse_list(
+            wolfgang_quantum.PauliSum.from_sparse_list(
                 [("YZ", [1, 70], -0.5), ("X", [69], 3.0)],
                 num_qubits=72,
             ),
@@ -747,8 +747,8 @@ def test_hip_matmul_rejects_mismatched_devices_when_available() -> None:
     if int(status["device_count"]) < 2:
         pytest.skip("different-device HIP matmul check requires at least two visible HIP devices")
 
-    lhs = fastpauli.PauliSum.from_labels(["X"], [1.0]).to_device(device=0)
-    rhs = fastpauli.PauliSum.from_labels(["Y"], [1.0]).to_device(device=1)
+    lhs = wolfgang_quantum.PauliSum.from_labels(["X"], [1.0]).to_device(device=0)
+    rhs = wolfgang_quantum.PauliSum.from_labels(["Y"], [1.0]).to_device(device=1)
     with pytest.raises(ValueError, match="same device"):
         lhs.matmul(rhs)
 
@@ -775,8 +775,8 @@ def test_hip_matmul_randomized_matches_cpu_when_available() -> None:
             complex(float(rng.normal()), float(rng.normal()))
             for _ in range(rhs_terms)
         ]
-        lhs = fastpauli.PauliSum.from_labels(lhs_labels, lhs_coeffs)
-        rhs = fastpauli.PauliSum.from_labels(rhs_labels, rhs_coeffs)
+        lhs = wolfgang_quantum.PauliSum.from_labels(lhs_labels, lhs_coeffs)
+        rhs = wolfgang_quantum.PauliSum.from_labels(rhs_labels, rhs_coeffs)
 
         _assert_same_operator(
             lhs.to_device().matmul(rhs.to_device(), simplify=True).to_host(),
@@ -803,7 +803,7 @@ def test_hip_simplify_campaign4_generic_multiword_pressure_when_available() -> N
     coeffs.extend([-value for value in coeffs[:16]])
     coeffs.extend(coeffs[16:32])
 
-    op = fastpauli.PauliSum.from_labels(labels, coeffs)
+    op = wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
     _assert_hip_simplify_matches_cpu(op, atol=1.0e-11, rtol=1.0e-12)
 
 
@@ -811,8 +811,8 @@ def test_hip_simplify_campaign4_one_and_two_word_regression_when_available() -> 
     _require_hip_runtime()
 
     cases = [
-        fastpauli.PauliSum.from_labels(["X" * 24, "X" * 24, "Z" * 24], [1.0, 2.0, -3.0]),
-        fastpauli.PauliSum.from_sparse_list(
+        wolfgang_quantum.PauliSum.from_labels(["X" * 24, "X" * 24, "Z" * 24], [1.0, 2.0, -3.0]),
+        wolfgang_quantum.PauliSum.from_sparse_list(
             [("XY", [0, 70], 1.0), ("XY", [0, 70], -0.25), ("Z", [69], 2.0)],
             num_qubits=72,
         ),

@@ -30,8 +30,8 @@ Campaign 6 covers:
 
 ```text
 private MetalWorkspace class with WorkspaceTimingMode and WorkspaceSnapshot
-FASTPAULI_METAL_BENCH_WORKSPACE_TIMING benchmark timing-mode vocabulary
-FASTPAULI_EXPERIMENTAL_METAL_SIMPLIFY_STRATEGY benchmark selector vocabulary
+WOLFGANG_METAL_BENCH_WORKSPACE_TIMING benchmark timing-mode vocabulary
+WOLFGANG_EXPERIMENTAL_METAL_SIMPLIFY_STRATEGY benchmark selector vocabulary
 campaign6 simplify benchmark cases that mirror Campaign 5 duplicate pressure
 status-only metal_simplify_workspace_probe rows with status_only boundary
 retained transfer-reference Metal simplify rows on the Campaign 6 cases
@@ -126,7 +126,7 @@ docs/benchmarks/plots/accelerator_landscape_with_rocm.svg
 - [x] Implement `reserve_bytes`, `reset`, `release`, and snapshot accounting for
       reserved bytes, high-watermark bytes, allocation count, and growth count.
 - [x] Add `workspace_timing_mode_from_env()` for
-      `FASTPAULI_METAL_BENCH_WORKSPACE_TIMING` with accepted values
+      `WOLFGANG_METAL_BENCH_WORKSPACE_TIMING` with accepted values
       `absent`, `grow_inside_timing`, and `pre_reserved_outside_timing`.
 
 ## Task 3: Benchmark Groundwork Rows
@@ -137,7 +137,7 @@ docs/benchmarks/plots/accelerator_landscape_with_rocm.svg
       `metal_simplify_transfer_reference` rows.
 - [x] Add one `metal_simplify_workspace_probe` status row for each Campaign 6
       case, with the `status_only` boundary and a private workspace byte model.
-- [x] Add `FASTPAULI_EXPERIMENTAL_METAL_SIMPLIFY_STRATEGY` as benchmark
+- [x] Add `WOLFGANG_EXPERIMENTAL_METAL_SIMPLIFY_STRATEGY` as benchmark
       vocabulary for future candidate selectors. No selector may retain a
       device-resident implementation in Campaign 6.
 

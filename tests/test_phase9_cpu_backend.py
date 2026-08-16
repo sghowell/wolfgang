@@ -10,10 +10,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-import fastpauli._fastpauli_core as core
 import numpy as np
 import pytest
-from fastpauli import PauliSum
+import wolfgang_quantum._wolfgang_core as core
+from wolfgang_quantum import PauliSum
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -27,7 +27,7 @@ def run_backend_probe(selector: str) -> subprocess.CompletedProcess[str]:
             "-c",
             (
                 "import json; "
-                "import fastpauli._fastpauli_core as core; "
+                "import wolfgang_quantum._wolfgang_core as core; "
                 "print(json.dumps(core._build_info(), sort_keys=True))"
             ),
         ],
@@ -49,7 +49,7 @@ def run_backend_expectation_probe(selector: str) -> subprocess.CompletedProcess[
             (
                 "import json; "
                 "import numpy as np; "
-                "from fastpauli import PauliSum; "
+                "from wolfgang_quantum import PauliSum; "
                 "op = PauliSum.from_labels(['ZI', 'XX'], [1.25, -0.5]); "
                 "psi = np.asarray([1.0, 0.0, 0.0, 0.0], dtype=np.complex128); "
                 "value = op.expectation_statevector(psi); "
@@ -74,7 +74,7 @@ def run_backend_commutation_probe(selector: str) -> subprocess.CompletedProcess[
             (
                 "import json; "
                 "import numpy as np; "
-                "from fastpauli import PauliSum; "
+                "from wolfgang_quantum import PauliSum; "
                 "lhs = PauliSum.from_labels(['XI', 'YZ', 'ZZ', 'IX'], [1, 2, 3, 4]); "
                 "rhs = PauliSum.from_labels(['ZX', 'YY', 'IZ'], [1, 2, 3]); "
                 "value = np.asarray(lhs.commutes_with(rhs), dtype=np.bool_).reshape(4, 3); "

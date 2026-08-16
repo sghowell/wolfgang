@@ -4,7 +4,7 @@ This document defines adapter behavior for optional ecosystem integrations. It a
 
 ## Shared Adapter Policy
 
-Adapters are optional. Importing `wolfgang_quantum` must not import Qiskit or OpenFermion. The legacy `fastpauli` package remains a compatibility shim and must preserve the same lazy optional-dependency behavior.
+Adapters are optional. Importing `wolfgang_quantum` must not import Qiskit or OpenFermion.
 
 Missing optional dependencies raise `ImportError` with an installation hint when an adapter method is called:
 

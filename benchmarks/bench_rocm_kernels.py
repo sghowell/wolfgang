@@ -1557,7 +1557,7 @@ def benchmark_campaign2_case(
 
 
 def requested_hip_simplify_strategy() -> str:
-    value = os.environ.get("FASTPAULI_HIP_BENCH_DUPLICATE_REDUCTION", "rocthrust_default")
+    value = os.environ.get("WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION", "rocthrust_default")
     if value == "":
         value = "rocthrust_default"
     return value
@@ -1638,8 +1638,8 @@ def simplify_runtime_environment(
     elif generic_multiword_parallelism == "reduce_by_key":
         generic_strategy = "reduce_by_key"
     return {
-        "FASTPAULI_HIP_BENCH_DUPLICATE_REDUCTION": duplicate_strategy,
-        "FASTPAULI_HIP_BENCH_GENERIC_MULTIWORD_REDUCTION": generic_strategy,
+        "WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION": duplicate_strategy,
+        "WOLFGANG_HIP_BENCH_GENERIC_MULTIWORD_REDUCTION": generic_strategy,
     }
 
 
@@ -1748,7 +1748,7 @@ def benchmark_simplify_case(
         row["status"] = "strategy_unavailable"
         row["hip_simplify_strategy_status"] = "unavailable"
         row["hip_simplify_strategy_unavailable_reason"] = (
-            "unknown FASTPAULI_HIP_BENCH_DUPLICATE_REDUCTION setting"
+            "unknown WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION setting"
         )
         row["hip_simplify_strategy_reason"] = row["hip_simplify_strategy_unavailable_reason"]
         return row

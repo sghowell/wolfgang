@@ -138,4 +138,4 @@ def capabilities() -> WolfgangCapabilities:
 
 
 # One-transition alias for the legacy exported name.
-FastPauliCapabilities = WolfgangCapabilities
+WolfgangCapabilities = WolfgangCapabilities

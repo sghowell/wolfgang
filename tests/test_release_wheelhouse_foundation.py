@@ -28,7 +28,7 @@ def install_fake_wheel_smoke_modules(
     monkeypatch: pytest.MonkeyPatch,
     *,
     build_info: dict[str, Any],
-    version: str = "0.2.1",
+    version: str = "0.2.2",
 ) -> None:
     class FakePauliSum:
         def __init__(self, labels: list[str], coeffs: list[complex]) -> None:
@@ -54,12 +54,9 @@ def install_fake_wheel_smoke_modules(
     core = ModuleType("wolfgang_quantum._wolfgang_core")
     setattr(core, "_build_info", lambda: build_info)
 
-    fastpauli = ModuleType("fastpauli")
-    setattr(fastpauli, "__version__", version)
-
     monkeypatch.setitem(sys.modules, "wolfgang_quantum", wolfgang_quantum)
     monkeypatch.setitem(sys.modules, "wolfgang_quantum._wolfgang_core", core)
-    monkeypatch.setitem(sys.modules, "fastpauli", fastpauli)
+    monkeypatch.delitem(sys.modules, "fastpauli", raising=False)
 
 
 def test_release_wheelhouse_plan_is_registered_and_routed() -> None:
@@ -254,7 +251,7 @@ def test_wheel_smoke_script_reports_current_install_metadata_without_cpu_only_as
     assert summary["accelerator_build_mode"] in {"cpu_only", "cuda_only", "hip_only", "metal_only"}
     assert summary["project_distribution"] == "wolfgang-quantum"
     assert summary["package_import"] == "wolfgang_quantum"
-    assert summary["fastpauli_compat_version"] == summary["wolfgang_version"]
+    assert summary["wolfgang_version"] == summary["installed_version"]
 
 
 def test_wheel_smoke_script_preserves_cpu_safe_contract_with_controlled_cpu_metadata(
@@ -271,7 +268,7 @@ def test_wheel_smoke_script_preserves_cpu_safe_contract_with_controlled_cpu_meta
         "native_enabled": False,
     }
     install_fake_wheel_smoke_modules(monkeypatch, build_info=cpu_build_info)
-    monkeypatch.setattr(wheel_smoke.importlib_metadata, "version", lambda _dist: "0.2.1")
+    monkeypatch.setattr(wheel_smoke.importlib_metadata, "version", lambda _dist: "0.2.2")
 
     summary = wheel_smoke.smoke_wolfgang_wheel()
 
@@ -300,7 +297,7 @@ def test_wheel_smoke_script_rejects_accelerator_builds_when_cpu_safe_required(
             "native_enabled": False,
         },
     )
-    monkeypatch.setattr(wheel_smoke.importlib_metadata, "version", lambda _dist: "0.2.1")
+    monkeypatch.setattr(wheel_smoke.importlib_metadata, "version", lambda _dist: "0.2.2")
 
     with pytest.raises(AssertionError, match="hip_only"):
         wheel_smoke.smoke_wolfgang_wheel()
@@ -329,17 +326,17 @@ def test_release_checksum_writer_accepts_normalized_pep625_sdist_name(tmp_path: 
         "scripts/write_release_checksums.py",
         "fastpauli_release_checksums_normalized_sdist",
     )
-    (tmp_path / "wolfgang_quantum-0.2.1.tar.gz").write_bytes(b"sdist")
-    (tmp_path / "wolfgang_quantum-0.2.1-cp312-cp312-macosx_26_0_arm64.whl").write_bytes(
+    (tmp_path / "wolfgang_quantum-0.2.2.tar.gz").write_bytes(b"sdist")
+    (tmp_path / "wolfgang_quantum-0.2.2-cp312-cp312-macosx_26_0_arm64.whl").write_bytes(
         b"wheel"
     )
 
     manifest = checksum_writer.write_checksum_manifest(tmp_path)
 
-    assert manifest.name == "wolfgang-quantum-0.2.1.checksums.txt"
+    assert manifest.name == "wolfgang-quantum-0.2.2.checksums.txt"
     assert manifest.read_text(encoding="utf-8").splitlines() == [
-        f"{checksum_writer.sha256_file(tmp_path / 'wolfgang_quantum-0.2.1-cp312-cp312-macosx_26_0_arm64.whl')}  wolfgang_quantum-0.2.1-cp312-cp312-macosx_26_0_arm64.whl",
-        f"{checksum_writer.sha256_file(tmp_path / 'wolfgang_quantum-0.2.1.tar.gz')}  wolfgang_quantum-0.2.1.tar.gz",
+        f"{checksum_writer.sha256_file(tmp_path / 'wolfgang_quantum-0.2.2-cp312-cp312-macosx_26_0_arm64.whl')}  wolfgang_quantum-0.2.2-cp312-cp312-macosx_26_0_arm64.whl",
+        f"{checksum_writer.sha256_file(tmp_path / 'wolfgang_quantum-0.2.2.tar.gz')}  wolfgang_quantum-0.2.2.tar.gz",
     ]
 
 

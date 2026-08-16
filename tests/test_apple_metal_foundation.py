@@ -9,10 +9,10 @@ import sys
 import types
 from pathlib import Path
 
-import fastpauli
-import fastpauli._fastpauli_core as core
 import numpy as np
 import pytest
+import wolfgang_quantum
+import wolfgang_quantum._wolfgang_core as core
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -75,12 +75,12 @@ def _run_cmake_configure_with_options(*options: str) -> subprocess.CompletedProc
     )
 
 
-def _labels_and_coeffs(op: fastpauli.PauliSum) -> tuple[list[str], list[complex]]:
+def _labels_and_coeffs(op: wolfgang_quantum.PauliSum) -> tuple[list[str], list[complex]]:
     labels, coeffs = op.to_labels()
     return list(labels), [complex(value) for value in coeffs]
 
 
-def _assert_same_operator(lhs: fastpauli.PauliSum, rhs: fastpauli.PauliSum) -> None:
+def _assert_same_operator(lhs: wolfgang_quantum.PauliSum, rhs: wolfgang_quantum.PauliSum) -> None:
     lhs_labels, lhs_coeffs = _labels_and_coeffs(lhs)
     rhs_labels, rhs_coeffs = _labels_and_coeffs(rhs)
     assert lhs_labels == rhs_labels
@@ -105,7 +105,7 @@ def test_cmake_declares_metal_flag_and_rejects_mixed_accelerators() -> None:
     cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
 
     assert (
-        '_wolfgang_bool_option(WOLFGANG_ENABLE_METAL FASTPAULI_ENABLE_METAL '
+        '_wolfgang_bool_option(WOLFGANG_ENABLE_METAL WOLFGANG_ENABLE_METAL '
         '"Build Apple Metal backend support" OFF)'
     ) in cmake
     assert "WOLFGANG_ENABLE_CUDA and WOLFGANG_ENABLE_METAL cannot both be ON" in cmake
@@ -239,11 +239,11 @@ def test_to_device_rejects_metal_when_not_compiled() -> None:
     if status["built"]:
         pytest.skip("Metal source build is active")
 
-    op = fastpauli.PauliSum.from_labels(["X"], [1.0])
+    op = wolfgang_quantum.PauliSum.from_labels(["X"], [1.0])
     with pytest.raises(RuntimeError, match="built without Metal support"):
         op.to_device(backend="metal")
     with pytest.raises(RuntimeError, match="built without Metal support"):
-        fastpauli.DeviceCommutationMatrix.empty((1, 1), backend="metal")
+        wolfgang_quantum.DeviceCommutationMatrix.empty((1, 1), backend="metal")
 
 
 def test_metal_benchmark_output_option_writes_report(tmp_path: Path) -> None:
@@ -289,9 +289,9 @@ def test_metal_transfer_round_trip_when_available(labels: list[str], coeffs: lis
     _require_metal_runtime()
 
     if labels:
-        host = fastpauli.PauliSum.from_labels(labels, coeffs)
+        host = wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
     else:
-        host = fastpauli.PauliSum.empty(num_qubits=7)
+        host = wolfgang_quantum.PauliSum.empty(num_qubits=7)
 
     device_op = host.to_device(backend="metal")
 
@@ -305,7 +305,7 @@ def test_metal_transfer_round_trip_when_available(labels: list[str], coeffs: lis
 def test_metal_commutation_and_compact_consumers_match_cpu_when_available() -> None:
     _require_metal_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(
+    lhs = wolfgang_quantum.PauliSum.from_labels(
         [
             _multiword_label(130, {0: "Y", 2: "X"}),
             _multiword_label(130, {1: "Z", 2: "Z"}),
@@ -314,7 +314,7 @@ def test_metal_commutation_and_compact_consumers_match_cpu_when_available() -> N
         ],
         [1.0, -2.0j, 0.5, 1.25],
     )
-    rhs = fastpauli.PauliSum.from_labels(
+    rhs = wolfgang_quantum.PauliSum.from_labels(
         [
             _multiword_label(130, {0: "X", 2: "Y"}),
             _multiword_label(130, {0: "Z", 1: "Z", 2: "Z"}),
@@ -338,7 +338,7 @@ def test_metal_commutation_and_compact_consumers_match_cpu_when_available() -> N
     np.testing.assert_array_equal(matrix.conflict_degrees(axis=0), (~expected).sum(axis=0))
     np.testing.assert_array_equal(matrix.conflict_degrees(axis=1), (~expected).sum(axis=1))
 
-    output = fastpauli.DeviceCommutationMatrix.empty(expected.shape, backend="metal")
+    output = wolfgang_quantum.DeviceCommutationMatrix.empty(expected.shape, backend="metal")
     lhs_device.commutes_with_device(rhs_device, output=output)
     np.testing.assert_array_equal(output.to_host(), expected)
 
@@ -363,14 +363,14 @@ def test_metal_forced_commutation_selectors_match_cpu_when_available(
     _require_metal_runtime()
 
     high_qubit = num_qubits - 1
-    lhs = fastpauli.PauliSum.from_labels(
+    lhs = wolfgang_quantum.PauliSum.from_labels(
         [
             _multiword_label(num_qubits, {0: "X"}),
             _multiword_label(num_qubits, {high_qubit: "Z"}),
         ],
         [1.0, -0.5j],
     )
-    rhs = fastpauli.PauliSum.from_labels(
+    rhs = wolfgang_quantum.PauliSum.from_labels(
         [
             _multiword_label(num_qubits, {0: "Z"}),
             _multiword_label(num_qubits, {high_qubit: "X"}),
@@ -384,10 +384,10 @@ def test_metal_forced_commutation_selectors_match_cpu_when_available(
     lhs_device = lhs.to_device(backend="metal")
     rhs_device = rhs.to_device(backend="metal")
 
-    monkeypatch.setenv("FASTPAULI_EXPERIMENTAL_METAL_COMMUTATION_KERNEL", selector)
+    monkeypatch.setenv("WOLFGANG_EXPERIMENTAL_METAL_COMMUTATION_KERNEL", selector)
     np.testing.assert_array_equal(lhs_device.commutes_with(rhs_device), expected)
 
-    output = fastpauli.DeviceCommutationMatrix.empty(expected.shape, backend="metal")
+    output = wolfgang_quantum.DeviceCommutationMatrix.empty(expected.shape, backend="metal")
     core._copy_device_commutation_matrix_from_host_for_testing(
         output,
         np.ascontiguousarray(~expected, dtype=np.bool_),
@@ -400,8 +400,8 @@ def test_metal_forced_commutation_selectors_match_cpu_when_available(
 def test_metal_device_matrix_interop_exports_remain_unavailable_when_available() -> None:
     _require_metal_runtime()
 
-    lhs = fastpauli.PauliSum.from_labels(["X"], [1.0]).to_device(backend="metal")
-    rhs = fastpauli.PauliSum.from_labels(["Z"], [1.0]).to_device(backend="metal")
+    lhs = wolfgang_quantum.PauliSum.from_labels(["X"], [1.0]).to_device(backend="metal")
+    rhs = wolfgang_quantum.PauliSum.from_labels(["Z"], [1.0]).to_device(backend="metal")
     matrix = lhs.commutes_with_device(rhs)
 
     with pytest.raises(RuntimeError, match="Metal"):

@@ -26,8 +26,8 @@ PYPROJECT = "pyproject.toml"
 VERSION_MODULE = "python/wolfgang_quantum/_version.py"
 CMAKE = "CMakeLists.txt"
 VALIDATE = "scripts/validate.py"
-LATEST_TAGGED_RELEASE_VERSION = "0.1.0"
-LATEST_RELEASE_VERSION = "0.2.1"
+LATEST_TAGGED_RELEASE_VERSION = "0.2.1"
+LATEST_RELEASE_VERSION = "0.2.2"
 
 LEGACY_RELEASE_ARTIFACT_PREFIXES = {
     "0.1.0rc1": "fastpauli",

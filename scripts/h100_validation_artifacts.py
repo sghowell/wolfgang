@@ -131,7 +131,7 @@ def render_markdown(summary: dict[str, Any], *, per_test: dict[str, Any]) -> str
         "## Executed gates",
         "- Exact git-archive source transfer for the candidate commit.",
         "- Clean CUDA editable build with SM90-targeted internal bindings.",
-        "- `FASTPAULI_VALIDATE_CUDA=1 python scripts/validate.py`.",
+        "- `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py`.",
         "- Targeted CUDA functional suite: phase10 + phase11 + DLPack/CUDA interop contracts.",
         "- Compute Sanitizer memcheck and racecheck over the full phase11 CUDA file.",
         "- Per-test memcheck audit for every collected phase11 nodeid.",

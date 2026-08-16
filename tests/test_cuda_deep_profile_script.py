@@ -58,7 +58,7 @@ def test_cuda_deep_profile_dry_run_emits_required_tool_ladder(tmp_path: Path) ->
     assert "nvdisasm sass listing" in step_names
 
     commands = "\n".join(step["command"] for step in report["steps"])
-    assert "FASTPAULI_VALIDATE_CUDA=1" in commands
+    assert "WOLFGANG_VALIDATE_CUDA=1" in commands
     assert "benchmarks/bench_cuda_scaling.py" in commands
     assert "--kernel-name regex:commutation_kernel" in commands
 

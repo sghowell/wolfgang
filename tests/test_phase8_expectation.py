@@ -9,7 +9,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from fastpauli import PauliSum
+from wolfgang_quantum import PauliSum
 
 ROOT = Path(__file__).resolve().parents[1]
 

@@ -4,11 +4,11 @@
 #include "wolfgang/device_commutation_matrix.hpp"
 #include "wolfgang/device_pauli_sum.hpp"
 #include "wolfgang/pauli_sum.hpp"
-#if FASTPAULI_BUILD_CUDA_ENABLED
+#if WOLFGANG_BUILD_CUDA_ENABLED
 #include "cuda/device_commutation_matrix.cuh"
 #include "cuda/workspace.cuh"
 #endif
-#if FASTPAULI_BUILD_METAL_ENABLED
+#if WOLFGANG_BUILD_METAL_ENABLED
 #include "metal/simplify_metal.hpp"
 #endif
 
@@ -27,7 +27,7 @@
 
 namespace nb = nanobind;
 
-#if FASTPAULI_BUILD_CUDA_ENABLED
+#if WOLFGANG_BUILD_CUDA_ENABLED
 namespace {
 
 nb::dict workspace_snapshot_to_dict(
@@ -62,7 +62,7 @@ std::vector<std::size_t> parse_workspace_reserve_bytes(nb::iterable values) {
 }  // namespace
 #endif
 
-#if FASTPAULI_BUILD_METAL_ENABLED
+#if WOLFGANG_BUILD_METAL_ENABLED
 namespace {
 
 nb::dict metal_simplify_primitive_stack_to_dict(
@@ -129,7 +129,7 @@ void register_pauli_diagnostics(nb::module_& module);
 
 void register_internal_bindings(nb::module_& module) {
 #if WOLFGANG_ENABLE_INTERNAL_BINDINGS
-#if FASTPAULI_BUILD_CUDA_ENABLED
+#if WOLFGANG_BUILD_CUDA_ENABLED
   module.def(
       "_cuda_workspace_probe_for_testing",
       [](int device, nb::iterable reserve_bytes, bool reset, bool release) {
@@ -187,7 +187,7 @@ void register_internal_bindings(nb::module_& module) {
       "Private CUDA workspace lifetime probe for tests and benchmark validation.");
 #endif
 
-#if FASTPAULI_BUILD_METAL_ENABLED
+#if WOLFGANG_BUILD_METAL_ENABLED
   module.def(
       "_metal_simplify_words1_candidate_for_testing",
       [](const wolfgang::DevicePauliSum& input,
@@ -265,51 +265,51 @@ void register_internal_bindings(nb::module_& module) {
         info["active_cpu_backend"] = cpu_backend.active_backend;
         info["requested_cpu_backend"] = cpu_backend.requested_backend;
         info["cpu_backend_env_var"] = "WOLFGANG_CPU_BACKEND";
-        info["cuda_enabled"] = static_cast<bool>(FASTPAULI_BUILD_CUDA_ENABLED);
-        info["cuda_architectures"] = FASTPAULI_BUILD_CUDA_ARCHITECTURES;
-        info["cuda_toolkit_version"] = FASTPAULI_CUDA_TOOLKIT_VERSION;
-        info["hip_enabled"] = static_cast<bool>(FASTPAULI_BUILD_HIP_ENABLED);
-        info["hip_architectures"] = FASTPAULI_BUILD_HIP_ARCHITECTURES;
-        info["rocm_toolkit_version"] = FASTPAULI_ROCM_TOOLKIT_VERSION;
-        info["metal_enabled"] = static_cast<bool>(FASTPAULI_BUILD_METAL_ENABLED);
-        info["native_enabled"] = static_cast<bool>(FASTPAULI_BUILD_NATIVE_ENABLED);
+        info["cuda_enabled"] = static_cast<bool>(WOLFGANG_BUILD_CUDA_ENABLED);
+        info["cuda_architectures"] = WOLFGANG_BUILD_CUDA_ARCHITECTURES;
+        info["cuda_toolkit_version"] = WOLFGANG_CUDA_TOOLKIT_VERSION;
+        info["hip_enabled"] = static_cast<bool>(WOLFGANG_BUILD_HIP_ENABLED);
+        info["hip_architectures"] = WOLFGANG_BUILD_HIP_ARCHITECTURES;
+        info["rocm_toolkit_version"] = WOLFGANG_ROCM_TOOLKIT_VERSION;
+        info["metal_enabled"] = static_cast<bool>(WOLFGANG_BUILD_METAL_ENABLED);
+        info["native_enabled"] = static_cast<bool>(WOLFGANG_BUILD_NATIVE_ENABLED);
 
         nb::dict cpu_cmake_options;
-        cpu_cmake_options["WOLFGANG_ENABLE_CUDA"] = FASTPAULI_REQUESTED_ENABLE_CUDA;
+        cpu_cmake_options["WOLFGANG_ENABLE_CUDA"] = WOLFGANG_REQUESTED_ENABLE_CUDA;
         cpu_cmake_options["WOLFGANG_CUDA_ARCHITECTURES"] =
-            FASTPAULI_REQUESTED_CUDA_ARCHITECTURES;
-        cpu_cmake_options["WOLFGANG_CUDA_USE_CUB"] = FASTPAULI_REQUESTED_CUDA_USE_CUB;
+            WOLFGANG_REQUESTED_CUDA_ARCHITECTURES;
+        cpu_cmake_options["WOLFGANG_CUDA_USE_CUB"] = WOLFGANG_REQUESTED_CUDA_USE_CUB;
         cpu_cmake_options["WOLFGANG_CUDA_USE_THRUST"] =
-            FASTPAULI_REQUESTED_CUDA_USE_THRUST;
-        cpu_cmake_options["WOLFGANG_ENABLE_HIP"] = FASTPAULI_REQUESTED_ENABLE_HIP;
+            WOLFGANG_REQUESTED_CUDA_USE_THRUST;
+        cpu_cmake_options["WOLFGANG_ENABLE_HIP"] = WOLFGANG_REQUESTED_ENABLE_HIP;
         cpu_cmake_options["WOLFGANG_HIP_ARCHITECTURES"] =
-            FASTPAULI_REQUESTED_HIP_ARCHITECTURES;
-        cpu_cmake_options["WOLFGANG_ENABLE_METAL"] = FASTPAULI_REQUESTED_ENABLE_METAL;
-        cpu_cmake_options["WOLFGANG_ENABLE_NATIVE"] = FASTPAULI_REQUESTED_ENABLE_NATIVE;
-        cpu_cmake_options["WOLFGANG_ENABLE_OPENMP"] = FASTPAULI_REQUESTED_ENABLE_OPENMP;
-        cpu_cmake_options["WOLFGANG_ENABLE_TBB"] = FASTPAULI_REQUESTED_ENABLE_TBB;
-        cpu_cmake_options["WOLFGANG_ENABLE_AVX2"] = FASTPAULI_REQUESTED_ENABLE_AVX2;
-        cpu_cmake_options["WOLFGANG_ENABLE_AVX512"] = FASTPAULI_REQUESTED_ENABLE_AVX512;
+            WOLFGANG_REQUESTED_HIP_ARCHITECTURES;
+        cpu_cmake_options["WOLFGANG_ENABLE_METAL"] = WOLFGANG_REQUESTED_ENABLE_METAL;
+        cpu_cmake_options["WOLFGANG_ENABLE_NATIVE"] = WOLFGANG_REQUESTED_ENABLE_NATIVE;
+        cpu_cmake_options["WOLFGANG_ENABLE_OPENMP"] = WOLFGANG_REQUESTED_ENABLE_OPENMP;
+        cpu_cmake_options["WOLFGANG_ENABLE_TBB"] = WOLFGANG_REQUESTED_ENABLE_TBB;
+        cpu_cmake_options["WOLFGANG_ENABLE_AVX2"] = WOLFGANG_REQUESTED_ENABLE_AVX2;
+        cpu_cmake_options["WOLFGANG_ENABLE_AVX512"] = WOLFGANG_REQUESTED_ENABLE_AVX512;
         cpu_cmake_options["WOLFGANG_ENABLE_ARM_NEON"] =
-            FASTPAULI_REQUESTED_ENABLE_ARM_NEON;
+            WOLFGANG_REQUESTED_ENABLE_ARM_NEON;
         cpu_cmake_options["WOLFGANG_ENABLE_ARM_SVE"] =
-            FASTPAULI_REQUESTED_ENABLE_ARM_SVE;
+            WOLFGANG_REQUESTED_ENABLE_ARM_SVE;
         cpu_cmake_options["WOLFGANG_BUILD_CPU_BACKEND"] =
-            std::string(FASTPAULI_BUILD_CPU_BACKEND);
+            std::string(WOLFGANG_BUILD_CPU_BACKEND);
         info["cpu_cmake_options"] = cpu_cmake_options;
 
         nb::dict cpu_backend_build_flags;
         cpu_backend_build_flags["scalar"] = true;
-        cpu_backend_build_flags["tbb"] = static_cast<bool>(FASTPAULI_BUILD_TBB_ENABLED);
-        cpu_backend_build_flags["avx2"] = static_cast<bool>(FASTPAULI_BUILD_AVX2_ENABLED);
+        cpu_backend_build_flags["tbb"] = static_cast<bool>(WOLFGANG_BUILD_TBB_ENABLED);
+        cpu_backend_build_flags["avx2"] = static_cast<bool>(WOLFGANG_BUILD_AVX2_ENABLED);
         cpu_backend_build_flags["avx512"] =
-            static_cast<bool>(FASTPAULI_BUILD_AVX512_ENABLED);
+            static_cast<bool>(WOLFGANG_BUILD_AVX512_ENABLED);
         cpu_backend_build_flags["neon"] =
-            static_cast<bool>(FASTPAULI_BUILD_ARM_NEON_ENABLED);
+            static_cast<bool>(WOLFGANG_BUILD_ARM_NEON_ENABLED);
         cpu_backend_build_flags["sve"] =
-            static_cast<bool>(FASTPAULI_BUILD_ARM_SVE_ENABLED);
+            static_cast<bool>(WOLFGANG_BUILD_ARM_SVE_ENABLED);
         info["cpu_backend_build_flags"] = cpu_backend_build_flags;
-        info["oneTBB_version"] = FASTPAULI_BUILD_TBB_VERSION;
+        info["oneTBB_version"] = WOLFGANG_BUILD_TBB_VERSION;
 
         nb::dict cpu_auto_dispatch_thresholds;
         cpu_auto_dispatch_thresholds["tbb_pairwise_entries"] =
@@ -318,28 +318,28 @@ void register_internal_bindings(nb::module_& module) {
 
         nb::dict optimized_cpu_kernels;
         nb::list tbb_kernels;
-        if (FASTPAULI_BUILD_TBB_ENABLED) {
+        if (WOLFGANG_BUILD_TBB_ENABLED) {
           tbb_kernels.append("commutes_with");
           tbb_kernels.append("full_group_commutation_graph");
         }
         optimized_cpu_kernels["tbb"] = tbb_kernels;
 
         nb::list avx2_kernels;
-        if (FASTPAULI_BUILD_AVX2_ENABLED) {
+        if (WOLFGANG_BUILD_AVX2_ENABLED) {
           avx2_kernels.append("commutes_with_words_1_2");
           avx2_kernels.append("full_group_commutation_graph_words_1_2");
         }
         optimized_cpu_kernels["avx2"] = avx2_kernels;
 
         nb::list avx512_kernels;
-        if (FASTPAULI_BUILD_AVX512_ENABLED) {
+        if (WOLFGANG_BUILD_AVX512_ENABLED) {
           avx512_kernels.append("commutes_with_words_1_2");
           avx512_kernels.append("full_group_commutation_graph_words_1_2");
         }
         optimized_cpu_kernels["avx512"] = avx512_kernels;
 
         nb::list neon_kernels;
-        if (FASTPAULI_BUILD_ARM_NEON_ENABLED) {
+        if (WOLFGANG_BUILD_ARM_NEON_ENABLED) {
           neon_kernels.append("commutes_with_words_1_2");
           neon_kernels.append("full_group_commutation_graph_words_1_2");
         }
@@ -348,7 +348,7 @@ void register_internal_bindings(nb::module_& module) {
         info["optimized_cpu_kernels"] = optimized_cpu_kernels;
 
         nb::list cuda_kernels;
-        if (FASTPAULI_BUILD_CUDA_ENABLED) {
+        if (WOLFGANG_BUILD_CUDA_ENABLED) {
           cuda_kernels.append("simplify");
           cuda_kernels.append("expectation_statevector");
           cuda_kernels.append("commutes_with");
@@ -358,7 +358,7 @@ void register_internal_bindings(nb::module_& module) {
         info["cuda_kernels"] = cuda_kernels;
 
         nb::list hip_kernels;
-        if (FASTPAULI_BUILD_HIP_ENABLED) {
+        if (WOLFGANG_BUILD_HIP_ENABLED) {
           hip_kernels.append("simplify");
           hip_kernels.append("expectation_statevector");
           hip_kernels.append("commutes_with");
@@ -369,7 +369,7 @@ void register_internal_bindings(nb::module_& module) {
         info["hip_kernels"] = hip_kernels;
 
         nb::list metal_kernels;
-        if (FASTPAULI_BUILD_METAL_ENABLED) {
+        if (WOLFGANG_BUILD_METAL_ENABLED) {
           metal_kernels.append("commutes_with");
           metal_kernels.append("commutes_with_device");
           metal_kernels.append("commutation_count_consumers");
@@ -379,31 +379,31 @@ void register_internal_bindings(nb::module_& module) {
 
         nb::dict compiler_build_config;
         compiler_build_config["CMAKE_CXX_COMPILER_ID"] =
-            FASTPAULI_CMAKE_CXX_COMPILER_ID;
+            WOLFGANG_CMAKE_CXX_COMPILER_ID;
         compiler_build_config["CMAKE_CXX_COMPILER_VERSION"] =
-            FASTPAULI_CMAKE_CXX_COMPILER_VERSION;
-        compiler_build_config["CMAKE_BUILD_TYPE"] = FASTPAULI_CMAKE_BUILD_TYPE;
-        compiler_build_config["CMAKE_CXX_FLAGS"] = FASTPAULI_CMAKE_CXX_FLAGS;
+            WOLFGANG_CMAKE_CXX_COMPILER_VERSION;
+        compiler_build_config["CMAKE_BUILD_TYPE"] = WOLFGANG_CMAKE_BUILD_TYPE;
+        compiler_build_config["CMAKE_CXX_FLAGS"] = WOLFGANG_CMAKE_CXX_FLAGS;
         compiler_build_config["CMAKE_CUDA_COMPILER_ID"] =
-            FASTPAULI_CMAKE_CUDA_COMPILER_ID;
+            WOLFGANG_CMAKE_CUDA_COMPILER_ID;
         compiler_build_config["CMAKE_CUDA_COMPILER_VERSION"] =
-            FASTPAULI_CMAKE_CUDA_COMPILER_VERSION;
+            WOLFGANG_CMAKE_CUDA_COMPILER_VERSION;
         compiler_build_config["CMAKE_CUDA_HOST_COMPILER"] =
-            FASTPAULI_CMAKE_CUDA_HOST_COMPILER;
-        compiler_build_config["FASTPAULI_CUDA_HOST_COMPILER"] =
-            FASTPAULI_CUDA_HOST_COMPILER_METADATA;
-        compiler_build_config["FASTPAULI_CUDA_HOST_COMPILER_SOURCE"] =
-            FASTPAULI_CUDA_HOST_COMPILER_METADATA_SOURCE;
-        compiler_build_config["CMAKE_HIP_COMPILER"] = FASTPAULI_CMAKE_HIP_COMPILER;
+            WOLFGANG_CMAKE_CUDA_HOST_COMPILER;
+        compiler_build_config["WOLFGANG_CUDA_HOST_COMPILER"] =
+            WOLFGANG_CUDA_HOST_COMPILER_METADATA;
+        compiler_build_config["WOLFGANG_CUDA_HOST_COMPILER_SOURCE"] =
+            WOLFGANG_CUDA_HOST_COMPILER_METADATA_SOURCE;
+        compiler_build_config["CMAKE_HIP_COMPILER"] = WOLFGANG_CMAKE_HIP_COMPILER;
         compiler_build_config["CMAKE_HIP_COMPILER_ID"] =
-            FASTPAULI_CMAKE_HIP_COMPILER_ID;
+            WOLFGANG_CMAKE_HIP_COMPILER_ID;
         compiler_build_config["CMAKE_HIP_COMPILER_VERSION"] =
-            FASTPAULI_CMAKE_HIP_COMPILER_VERSION;
+            WOLFGANG_CMAKE_HIP_COMPILER_VERSION;
         compiler_build_config["CMAKE_OBJCXX_COMPILER_ID"] =
-            FASTPAULI_CMAKE_OBJCXX_COMPILER_ID;
+            WOLFGANG_CMAKE_OBJCXX_COMPILER_ID;
         compiler_build_config["CMAKE_OBJCXX_COMPILER_VERSION"] =
-            FASTPAULI_CMAKE_OBJCXX_COMPILER_VERSION;
-        compiler_build_config["CMAKE_OBJCXX_FLAGS"] = FASTPAULI_CMAKE_OBJCXX_FLAGS;
+            WOLFGANG_CMAKE_OBJCXX_COMPILER_VERSION;
+        compiler_build_config["CMAKE_OBJCXX_FLAGS"] = WOLFGANG_CMAKE_OBJCXX_FLAGS;
         info["compiler_build_config"] = compiler_build_config;
 
         const wolfgang::CudaStatus cuda_status = wolfgang::DevicePauliSum::cuda_status();
@@ -422,9 +422,9 @@ void register_internal_bindings(nb::module_& module) {
         info["metal_storage_mode"] = metal_status.storage_mode;
         info["metal_capability_summary"] = metal_status.capability_summary;
 
-        const bool cuda_enabled = static_cast<bool>(FASTPAULI_BUILD_CUDA_ENABLED);
-        const bool hip_enabled = static_cast<bool>(FASTPAULI_BUILD_HIP_ENABLED);
-        const bool metal_enabled = static_cast<bool>(FASTPAULI_BUILD_METAL_ENABLED);
+        const bool cuda_enabled = static_cast<bool>(WOLFGANG_BUILD_CUDA_ENABLED);
+        const bool hip_enabled = static_cast<bool>(WOLFGANG_BUILD_HIP_ENABLED);
+        const bool metal_enabled = static_cast<bool>(WOLFGANG_BUILD_METAL_ENABLED);
         const int accelerator_enabled_count =
             (cuda_enabled ? 1 : 0) + (hip_enabled ? 1 : 0) + (metal_enabled ? 1 : 0);
         if (accelerator_enabled_count > 1) {
@@ -662,7 +662,7 @@ nb::dict benchmark_cuda_fused_commutation_consumer(
     throw_invalid_fused_consumer_mode();
   }
 
-#if FASTPAULI_BUILD_CUDA_ENABLED
+#if WOLFGANG_BUILD_CUDA_ENABLED
   if (matrix_obj.is_none()) {
     throw nb::value_error("matrix must be a DeviceCommutationMatrix when CUDA is built");
   }
@@ -766,7 +766,7 @@ nb::dict benchmark_cuda_device_resident_consumer(
     throw_invalid_campaign8_consumer_mode();
   }
 
-#if FASTPAULI_BUILD_CUDA_ENABLED
+#if WOLFGANG_BUILD_CUDA_ENABLED
   if ((mode == "device_resident_graph" || mode == "device_grouping_consumer" ||
        mode == "dlpack_consumer" || mode == "portability_check") &&
       matrix_obj.is_none()) {

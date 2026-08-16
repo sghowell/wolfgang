@@ -375,9 +375,9 @@ def test_cuda_scaling_campaign9_cpu_unavailable_rows_include_required_schema() -
 
 
 def test_cuda_scaling_campaign10_cpu_unavailable_rows_include_required_schema(monkeypatch) -> None:
-    monkeypatch.delenv("FASTPAULI_CAMPAIGN10_SSH_TARGET", raising=False)
-    monkeypatch.delenv("FASTPAULI_CAMPAIGN10_PROVIDER_INSTANCE_TYPE", raising=False)
-    monkeypatch.delenv("FASTPAULI_CAMPAIGN10_ARCHITECTURE_COMPILE_STATUS", raising=False)
+    monkeypatch.delenv("WOLFGANG_CAMPAIGN10_SSH_TARGET", raising=False)
+    monkeypatch.delenv("WOLFGANG_CAMPAIGN10_PROVIDER_INSTANCE_TYPE", raising=False)
+    monkeypatch.delenv("WOLFGANG_CAMPAIGN10_ARCHITECTURE_COMPILE_STATUS", raising=False)
 
     script = ROOT / "benchmarks" / "bench_cuda_scaling.py"
     spec = importlib.util.spec_from_file_location("bench_cuda_scaling", script)

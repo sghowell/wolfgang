@@ -1,40 +1,37 @@
-"""Basic package smoke tests for FastPauli."""
-
-import importlib
+"""Basic package smoke tests for Wolfgang."""
 
 import pytest
 
 
-def test_fastpauli_imports() -> None:
-    module = importlib.import_module("fastpauli")
-
-    assert module.__name__ == "fastpauli"
+def test_fastpauli_import_fails() -> None:
+    with pytest.raises(ModuleNotFoundError):
+        __import__("fastpauli")
 
 
 def test_version_is_exposed() -> None:
-    import wolfgang_quantum as fastpauli
+    import wolfgang_quantum
 
-    assert isinstance(fastpauli.__version__, str)
-    assert fastpauli.__version__
+    assert isinstance(wolfgang_quantum.__version__, str)
+    assert wolfgang_quantum.__version__
 
 
 def test_pauli_sum_type_is_exposed() -> None:
-    import wolfgang_quantum as fastpauli
+    import wolfgang_quantum
 
-    assert isinstance(fastpauli.PauliSum, type)
+    assert isinstance(wolfgang_quantum.PauliSum, type)
 
 
 def test_pauli_sum_metadata_constructor_properties() -> None:
-    import wolfgang_quantum as fastpauli
+    import wolfgang_quantum
 
-    op = fastpauli.PauliSum(num_qubits=3, num_terms=0)
+    op = wolfgang_quantum.PauliSum(num_qubits=3, num_terms=0)
 
     assert op.num_qubits == 3
     assert op.num_terms == 0
 
 
 def test_phase_six_public_apis_are_exposed() -> None:
-    import wolfgang_quantum as fastpauli
+    import wolfgang_quantum
 
     expected_apis = {
         "commutes_with",
@@ -53,14 +50,14 @@ def test_phase_six_public_apis_are_exposed() -> None:
     }
 
     for api_name in expected_apis:
-        assert hasattr(fastpauli.PauliSum, api_name)
+        assert hasattr(wolfgang_quantum.PauliSum, api_name)
 
 
 def test_pauli_sum_rejects_negative_metadata() -> None:
-    import wolfgang_quantum as fastpauli
+    import wolfgang_quantum
 
     with pytest.raises(ValueError):
-        fastpauli.PauliSum(num_qubits=-1)
+        wolfgang_quantum.PauliSum(num_qubits=-1)
 
     with pytest.raises(ValueError):
-        fastpauli.PauliSum(num_qubits=1, num_terms=-1)
+        wolfgang_quantum.PauliSum(num_qubits=1, num_terms=-1)

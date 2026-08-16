@@ -6,7 +6,7 @@ from types import ModuleType
 
 import pytest
 
-RELEASE_VERSION = "0.2.1"
+RELEASE_VERSION = "0.2.2"
 SDIST_PREFIX = f"wolfgang-quantum-{RELEASE_VERSION}"
 WHEEL_PREFIX = f"wolfgang_quantum-{RELEASE_VERSION}"
 
@@ -81,7 +81,7 @@ def test_wheel_smoke_script_checks_release_metadata() -> None:
     assert "PauliSum.from_labels" in script
     assert f"__version__ == '{RELEASE_VERSION}'" in script
     assert f"importlib_metadata.version('wolfgang-quantum') == '{RELEASE_VERSION}'" in script
-    assert "fastpauli.__version__ == wolfgang_quantum.__version__" in script
+    assert "find_spec('fastpauli') is None" in script
 
 
 def test_project_version_reads_pyproject_version() -> None:

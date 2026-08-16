@@ -21,8 +21,8 @@ struct CountKernelParams {
   std::uint64_t cols = 0;
 };
 
-constexpr const char* kMetalCompactConsumerEnv = "FASTPAULI_EXPERIMENTAL_METAL_COMPACT_CONSUMER";
-constexpr const char* kMetalLibraryPathEnv = "FASTPAULI_EXPERIMENTAL_METAL_LIBRARY_PATH";
+constexpr const char* kMetalCompactConsumerEnv = "WOLFGANG_EXPERIMENTAL_METAL_COMPACT_CONSUMER";
+constexpr const char* kMetalLibraryPathEnv = "WOLFGANG_EXPERIMENTAL_METAL_LIBRARY_PATH";
 
 enum class CompactConsumerMode {
   Cpu,
@@ -134,7 +134,7 @@ CompactConsumerMode compact_consumer_mode() {
     return CompactConsumerMode::GpuParallelTotal;
   }
   throw std::invalid_argument(
-      "FASTPAULI_EXPERIMENTAL_METAL_COMPACT_CONSUMER must be cpu, gpu, or gpu_parallel_total");
+      "WOLFGANG_EXPERIMENTAL_METAL_COMPACT_CONSUMER must be cpu, gpu, or gpu_parallel_total");
 }
 
 id<MTLComputePipelineState> compact_consumer_pipeline(id<MTLDevice> device, NSString* kernel_name) {

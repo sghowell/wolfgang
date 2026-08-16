@@ -10,9 +10,9 @@ from typing import Any
 
 import numpy as np
 import pytest
-from fastpauli import PauliSum
 from hypothesis import given, settings
 from hypothesis import strategies as st
+from wolfgang_quantum import PauliSum
 
 ROOT = Path(__file__).resolve().parents[1]
 

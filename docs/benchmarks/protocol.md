@@ -438,9 +438,9 @@ kernel timing must synchronize the command buffer before stopping the timer
 commutation rows must record selected kernel name when specialized kernels are available
 commutation rows must record dispatch API, grid shape, threadgroup shape, storage mode, command-buffer synchronization boundary, and allocation or reuse boundary
 Campaign 2 rows use dispatchThreads_2d with grid_shape [rhs_terms, lhs_terms, 1] and threadgroup_size [16, 16, 1]
-Campaign 2 A/B rows may use the internal FASTPAULI_EXPERIMENTAL_METAL_COMMUTATION_KERNEL selector to force generic_2d or flat_generic; reports must label those rows as benchmark-only baselines
+Campaign 2 A/B rows may use the internal WOLFGANG_EXPERIMENTAL_METAL_COMMUTATION_KERNEL selector to force generic_2d or flat_generic; reports must label those rows as benchmark-only baselines
 Campaign 2 A/B correctness checks must poison reused output with the inverse expected matrix before each selector check
-Campaign 3 rows may use benchmark-only FASTPAULI_EXPERIMENTAL_METAL_LIBRARY_PATH, FASTPAULI_EXPERIMENTAL_METAL_OUTPUT_STORAGE, and FASTPAULI_EXPERIMENTAL_METAL_COMPACT_CONSUMER selectors; reports must label offline `.metallib`, private-blit, and GPU compact-reduction rows as experimental evidence, not public API
+Campaign 3 rows may use benchmark-only WOLFGANG_EXPERIMENTAL_METAL_LIBRARY_PATH, WOLFGANG_EXPERIMENTAL_METAL_OUTPUT_STORAGE, and WOLFGANG_EXPERIMENTAL_METAL_COMPACT_CONSUMER selectors; reports must label offline `.metallib`, private-blit, and GPU compact-reduction rows as experimental evidence, not public API
 Campaign 3 private-blit rows must record the device-private output, shared staging, blit synchronization, and device_resident_private_output_blit_to_shared_staging boundary separately from shared host-output rows
 Campaign 3 GPU compact-consumer rows must record compact_consumer_gpu_reduction and compare against CPU scans over shared Metal storage before any default policy changes
 Campaign 4 parallel compact-consumer rows must record compact_consumer_gpu_parallel_block_reduction, partial-output count, input-entry count, and threadgroup width before any default policy changes

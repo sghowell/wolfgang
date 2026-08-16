@@ -38,16 +38,16 @@ ACTIVE_DOC_FILES = (
 )
 
 ACTIVE_DOC_TOKEN_EXCEPTIONS = {
-    "docs/architecture/adapter_contracts.md": ("legacy `fastpauli` package remains a compatibility shim",),
-    "docs/quality/agent_harness.md": ("docs/plans/fastpauli_cpp_cuda_implementation_plan.md",),
-    "docs/roadmap.md": ("docs/plans/fastpauli_cpp_cuda_implementation_plan.md",),
+    "docs/architecture/adapter_contracts.md": (),
+    "docs/quality/agent_harness.md": ("docs/plans/cpp_cuda_implementation_plan.md",),
+    "docs/roadmap.md": ("docs/plans/cpp_cuda_implementation_plan.md",),
 }
 
 ACTIVE_DOC_FASTPAULI_TECHNICAL_TOKEN_RE = re.compile(
-    r"FASTPAULI_[A-Z0-9_]+"
+    r"WOLFGANG_[A-Z0-9_]+"
     r"|fastpauli_[a-z0-9_]+"
     r"|fastpauli-[0-9][^\s`|)]*"
-    r"|docs/plans/fastpauli_[^\s`|)]+"
+    r"|docs/plans/cpp_cuda_implementation_plan.md"
 )
 
 ACTIVE_BENCHMARK_FILES = (
@@ -102,6 +102,18 @@ def test_canonical_python_package_root_is_wolfgang_quantum() -> None:
     assert (canonical / "__init__.pyi").is_file()
     assert (canonical / "_wolfgang_core.pyi").is_file()
     assert (canonical / "py.typed").is_file()
+    assert not (ROOT / "python" / "fastpauli").exists()
+
+
+def test_tracked_paths_do_not_use_fastpauli_names() -> None:
+    tracked_paths = [
+        path.relative_to(ROOT).as_posix().lower()
+        for path in ROOT.rglob("*")
+        if ".git" not in path.parts and path.is_file()
+    ]
+
+    offenders = sorted(path for path in tracked_paths if "fastpauli" in path)
+    assert offenders == []
 
 
 def test_public_readme_and_docs_use_wolfgang_identity() -> None:
@@ -408,12 +420,11 @@ def test_active_docs_only_keep_allowlisted_fastpauli_tokens() -> None:
         )
 
 
-def test_cpp_headers_use_wolfgang_as_canonical_surface_and_fastpauli_as_legacy_alias() -> None:
+def test_cpp_headers_only_ship_wolfgang_surface() -> None:
     canonical_headers = sorted((ROOT / "include" / "wolfgang").glob("*.hpp"))
-    legacy_headers = sorted((ROOT / "include" / "fastpauli").glob("*.hpp"))
 
     assert canonical_headers
-    assert {path.name for path in canonical_headers} == {path.name for path in legacy_headers}
+    assert not (ROOT / "include" / "fastpauli").exists()
 
     for canonical in canonical_headers:
         text = canonical.read_text(encoding="utf-8")
@@ -422,14 +433,6 @@ def test_cpp_headers_use_wolfgang_as_canonical_surface_and_fastpauli_as_legacy_a
         assert "namespace fastpauli {" not in text, f"canonical header still declares legacy namespace in {canonical}"
         assert "namespace fastpauli = wolfgang;" not in text, (
             f"canonical header should not carry legacy alias compatibility in {canonical}"
-        )
-
-    for legacy in legacy_headers:
-        text = legacy.read_text(encoding="utf-8")
-        assert f'#include "wolfgang/{legacy.name}"' in text, f"legacy header does not forward to canonical Wolfgang header: {legacy}"
-        assert "namespace fastpauli {" not in text, f"legacy header should be a forwarder only: {legacy}"
-        assert "namespace fastpauli = ::wolfgang;" in text, (
-            f"legacy fastpauli alias missing from transition header {legacy}"
         )
 
 
