@@ -8,10 +8,10 @@ evidence so docs and release notes do not overstate what users can install.
 
 ```text
 Source version: 0.2.3
-Next intended release: v0.2.3 (pending PR, GitHub-only successor, not tagged or published)
-Latest tagged release: v0.2.2
-Latest tagged release status: immutable historical checkpoint; corrected successor required for publication
-Release under finalization: v0.2.3 pending GitHub publication
+Current published GitHub release: v0.2.3
+Latest tagged release: v0.2.3
+Latest tagged release status: published GitHub-only successor with one source distribution and six CPU wheels; no TestPyPI or PyPI publication claimed
+Historical immutable checkpoint: v0.2.2
 Previous checkpoint: v0.1.0rc2 GitHub prerelease
 0.1.0 wheelhouse foundation plan: docs/plans/release_0_1_0_wheelhouse_foundation_plan.md
 0.1.0 wheelhouse dry-run evidence: docs/release/0.1.0-wheelhouse-dry-run.md
@@ -32,7 +32,7 @@ PyPI publication: unavailable pending trusted-publisher configuration
 
 | Surface | Current support status | Evidence | Artifact status | Boundary |
 | --- | --- | --- | --- | --- |
-| CPU default package | CPU artifact target | `docs/release/0.2.3.md`, `docs/release/0.2.2.md`, `docs/release/0.1.0.md`, `docs/release/0.1.0-rc2.md`, `docs/release/0.1.0-rc1.md`, `docs/release/0.1.0-wheelhouse-dry-run.md`, `docs/plans/release_0_1_0_wheelhouse_foundation_plan.md`, CI CPU wheel smoke, `scripts/validate_release_artifacts.py` | Source distribution and macOS arm64 CPU wheel are published for `v0.1.0rc2`; the corrected final `v0.1.0` tag-ref workflow produced one source distribution, six CPU wheels, checksum evidence, successful TestPyPI upload, and a clean TestPyPI install smoke; `v0.2.3` is the pending GitHub-only corrected successor while immutable `v0.2.2` remains historical provenance; PyPI publication is blocked by PyPI trusted-publisher configuration | Portable scalar fallback required; native CPU tuning disabled for release wheels |
+| CPU default package | CPU artifact target | `docs/release/0.2.3.md`, `docs/release/0.2.2.md`, `docs/release/0.1.0.md`, `docs/release/0.1.0-rc2.md`, `docs/release/0.1.0-rc1.md`, `docs/release/0.1.0-wheelhouse-dry-run.md`, `docs/plans/release_0_1_0_wheelhouse_foundation_plan.md`, CI CPU wheel smoke, `scripts/validate_release_artifacts.py` | Source distribution and macOS arm64 CPU wheel are published for `v0.1.0rc2`; the corrected final `v0.1.0` tag-ref workflow produced one source distribution, six CPU wheels, checksum evidence, successful TestPyPI upload, and a clean TestPyPI install smoke; `v0.2.3` is the published GitHub-only corrected successor while immutable `v0.2.2` remains historical provenance; PyPI publication is blocked by PyPI trusted-publisher configuration | Portable scalar fallback required; native CPU tuning disabled for release wheels |
 | CUDA accelerator | Source-build support | H100, A100, and RTX PRO 6000 Blackwell source-build reports plus CUDA validation lanes | CUDA wheels remain unavailable | CUDA support requires an explicit `WOLFGANG_ENABLE_CUDA=ON` source build and visible CUDA runtime |
 | ROCm/HIP accelerator | Source-build support | MI300X `gfx942` bring-up, optimization, release-support, and architecture-readiness reports | ROCm/HIP wheels remain unavailable | Broader AMD GPU support remains unavailable without per-architecture evidence |
 | Apple Metal accelerator | Source-build evidence | Apple M4 Pro source-build reports through Apple Metal Campaign 3 | Metal wheels remain unavailable | Generic Apple GPU support is unavailable; evidence is local Apple M4 Pro source-build evidence |
@@ -63,7 +63,7 @@ support matrix review confirming no CUDA, ROCm/HIP, Metal, combined accelerator,
 benchmark report references for any performance claims
 known limitations and unsupported surfaces
 cloud GPU support claims routed through docs/release/cloud_hardware_qualification_harness.md with sanitized derived evidence only
-release ledger for the pending version documenting successor routing, publication deferrals, and unchanged historical evidence
+release ledger for the current version documenting publication state, successor routing, and unchanged historical evidence
 ```
 
 ## Claim Rules

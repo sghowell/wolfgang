@@ -17,8 +17,8 @@ The reusable cloud GPU qualification harness is
 `docs/release/cloud_hardware_qualification_harness.md`; it defines the public/
 private evidence split, fail-closed cleanup behavior, and local CPU dry-run for
 future Hopper, Blackwell, and MI300X paid-instance validation.
-The pending `0.2.3` GitHub-only successor ledger is `docs/release/0.2.3.md`; it
-records the corrected capabilities fix-forward from
+The published `0.2.3` GitHub-only successor ledger is `docs/release/0.2.3.md`; it
+records the corrected capabilities fix-forward lineage from
 `bd550f4b91d575277508ca9880ec3695940c8c68`, promotes the active source version
 to `0.2.3`, and preserves the immutable `v0.2.2` tag and its historical
 provenance as read-only evidence rather than rewriting it.
@@ -30,11 +30,11 @@ The current hosted wheelhouse dry-run evidence is recorded in
 `docs/release/0.1.0-wheelhouse-dry-run.md`; it validates the complete
 one-sdist-plus-six-wheel CPU artifact shape without claiming package-index
 publication.
-The current source version is `0.2.3`. The latest tagged release remains
-`v0.2.2`; that immutable tag still points at the pre-fix candidate and is
-preserved as historical provenance, not the publication target for corrected
-assets. The pending release under finalization is `v0.2.3`; GitHub-only
-publication is deferred for this PR and no TestPyPI or PyPI run is claimed.
+The current source version is `0.2.3`. The latest tagged release is
+`v0.2.3`; the immutable `v0.2.2` tag still points at the pre-fix candidate and
+is preserved as historical provenance, not the publication target for corrected
+assets. `v0.2.3` is published as the GitHub-only successor release; no
+TestPyPI or PyPI run is claimed.
 
 Required CPU release evidence:
 

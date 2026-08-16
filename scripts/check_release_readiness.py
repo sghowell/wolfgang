@@ -26,7 +26,7 @@ PYPROJECT = "pyproject.toml"
 VERSION_MODULE = "python/wolfgang_quantum/_version.py"
 CMAKE = "CMakeLists.txt"
 VALIDATE = "scripts/validate.py"
-LATEST_TAGGED_RELEASE_VERSION = "0.2.2"
+LATEST_TAGGED_RELEASE_VERSION = "0.2.3"
 LATEST_RELEASE_VERSION = "0.2.3"
 
 LEGACY_RELEASE_ARTIFACT_PREFIXES = {
@@ -55,6 +55,7 @@ def current_release_ledger_path(version: str) -> str:
 def release_ledger_is_published(ledger: str, version: str) -> bool:
     published_markers = (
         f"Status: published as GitHub prerelease `v{version}`",
+        f"Status: published as GitHub release `v{version}`",
         f"Status: published as package-index release `v{version}`",
     )
     return any(marker in ledger for marker in published_markers)
@@ -143,31 +144,40 @@ def check_concrete_publication_evidence(
     support: str,
     failures: list[str],
 ) -> None:
-    revision_match = re.search(r"^Release revision: ([0-9a-f]{40})$", ledger, re.MULTILINE)
-    ci_match = re.search(r"^Hosted CI run: ([0-9]+)$", ledger, re.MULTILINE)
-    repository_pattern = "|".join(re.escape(url) for url in LEGACY_RELEASE_REPOSITORIES)
-    actions_url_match = re.search(
-        rf"^url: (?:{repository_pattern})/actions/runs/[0-9]+$",
-        ledger,
-        re.MULTILINE,
-    )
-    sha256_matches = re.findall(r"sha256: ([0-9a-f]{64})", ledger)
-    required_artifacts = required_published_artifact_filenames(version)
+    if f"Status: published as GitHub release `v{version}`" in ledger:
+        revision_match = re.search(r"^Published release commit: ([0-9a-f]{40})$", ledger, re.MULTILINE)
+        ci_match = re.search(r"^Release wheelhouse workflow run: ([0-9]+)$", ledger, re.MULTILINE)
+        publication_match = re.search(r"^GitHub publication state: published .+$", ledger, re.MULTILINE)
 
-    require(revision_match is not None, f"{ledger_path} is missing concrete release revision", failures)
-    require(ci_match is not None, f"{ledger_path} is missing concrete hosted CI run", failures)
-    require(actions_url_match is not None, f"{ledger_path} is missing concrete CI run URL", failures)
-    require(
-        len(sha256_matches) >= len(required_artifacts),
-        f"{ledger_path} must record concrete sha256 values for every expected artifact",
-        failures,
-    )
-    for filename in required_artifacts:
+        require(revision_match is not None, f"{ledger_path} is missing published release commit", failures)
+        require(ci_match is not None, f"{ledger_path} is missing release wheelhouse workflow run", failures)
+        require(publication_match is not None, f"{ledger_path} is missing GitHub publication timestamp/state", failures)
+    else:
+        revision_match = re.search(r"^Release revision: ([0-9a-f]{40})$", ledger, re.MULTILINE)
+        ci_match = re.search(r"^Hosted CI run: ([0-9]+)$", ledger, re.MULTILINE)
+        repository_pattern = "|".join(re.escape(url) for url in LEGACY_RELEASE_REPOSITORIES)
+        actions_url_match = re.search(
+            rf"^url: (?:{repository_pattern})/actions/runs/[0-9]+$",
+            ledger,
+            re.MULTILINE,
+        )
+        sha256_matches = re.findall(r"sha256: ([0-9a-f]{64})", ledger)
+        required_artifacts = required_published_artifact_filenames(version)
+
+        require(revision_match is not None, f"{ledger_path} is missing concrete release revision", failures)
+        require(ci_match is not None, f"{ledger_path} is missing concrete hosted CI run", failures)
+        require(actions_url_match is not None, f"{ledger_path} is missing concrete CI run URL", failures)
         require(
-            ledger_has_sha256_for_filename(ledger, filename),
-            f"{ledger_path} must record a concrete sha256 next to {filename}",
+            len(sha256_matches) >= len(required_artifacts),
+            f"{ledger_path} must record concrete sha256 values for every expected artifact",
             failures,
         )
+        for filename in required_artifacts:
+            require(
+                ledger_has_sha256_for_filename(ledger, filename),
+                f"{ledger_path} must record a concrete sha256 next to {filename}",
+                failures,
+            )
     require(
         "recorded from" not in ledger and "recorded in closeout" not in ledger,
         f"{ledger_path} still contains placeholder closeout wording",
@@ -175,7 +185,9 @@ def check_concrete_publication_evidence(
     )
     require(
         (
-            f"Published checkpoint: v{version} GitHub prerelease" in support
+            f"Current published GitHub release: v{version}" in support
+            or f"Latest tagged release: v{version}" in support
+            or f"Published checkpoint: v{version} GitHub prerelease" in support
             or f"Published release: v{version}" in support
         ),
         f"{SUPPORT_MATRIX} does not name published release/checkpoint v{version}",
@@ -426,8 +438,6 @@ def check_release_readiness() -> list[str]:
         f"/releases/tag/v{release_version}",
         "source distribution:",
         f"filename: {release_sdist_prefix(release_version)}-{release_version}.tar.gz",
-        "external checksum manifest:",
-        f"filename: {release_checksums_prefix(release_version)}-{release_version}.checksums.txt",
         "PyPI publication is not claimed",
     )
     release_candidate_terms = (
@@ -440,6 +450,19 @@ def check_release_readiness() -> list[str]:
         f"Release tag URL: https://github.com/sghowell/wolfgang/releases/tag/v{release_version}",
         f"GitHub-only successor publication remains deferred for v{release_version}.",
         "Do not invoke TestPyPI or PyPI for this GitHub-only successor slice.",
+        "No hardware rerun was required",
+        "CPU wheels remain the only release artifact target",
+        f"filename: {release_checksums_prefix(release_version)}-{release_version}.checksums.txt",
+    )
+    published_github_release_terms = (
+        "manylinux x86_64 CPU wheels:",
+        "macOS arm64 CPU wheels:",
+        f"Release tag URL: https://github.com/sghowell/wolfgang/releases/tag/v{release_version}",
+        "GitHub release object: published",
+        "Published release commit:",
+        "Release wheelhouse workflow run:",
+        "GitHub publication state: published",
+        "The live GitHub release now serves the exact seven assets listed above.",
         "No hardware rerun was required",
         "CPU wheels remain the only release artifact target",
     )
@@ -456,6 +479,8 @@ def check_release_readiness() -> list[str]:
     )
     if version_is_release_candidate(release_version):
         ledger_terms = common_ledger_terms + release_candidate_terms
+    elif f"Status: published as GitHub release `v{release_version}`" in ledger:
+        ledger_terms = common_ledger_terms + published_github_release_terms
     elif release_ledger_is_published(ledger, release_version):
         ledger_terms = common_ledger_terms + final_release_terms
     else:
@@ -506,8 +531,8 @@ def check_release_readiness() -> list[str]:
     changelog = read_text(CHANGELOG)
     require("## Unreleased" in changelog, "CHANGELOG.md is missing an Unreleased section", failures)
     require(
-        f"Next version: {version}" in changelog,
-        f"CHANGELOG.md does not name next source version {version}",
+        f"Next version: {version}" in changelog or "Next version: TBD" in changelog,
+        f"CHANGELOG.md does not name the next source version or mark it TBD after release {version}",
         failures,
     )
     require(
