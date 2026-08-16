@@ -374,7 +374,7 @@ def test_canonical_public_cmake_and_runtime_identity_prefers_wolfgang_names() ->
     cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
     cpu_backend = (ROOT / "src/cpu_backend.cpp").read_text(encoding="utf-8")
     package_init = (ROOT / "python/wolfgang_quantum/__init__.py").read_text(encoding="utf-8")
-    internal_bindings = (ROOT / "bindings/python/internal_bindings.cpp").read_text(encoding="utf-8")
+    build_info = (ROOT / "bindings/python/build_info.cpp").read_text(encoding="utf-8")
 
     assert 'WOLFGANG_ENABLE_CUDA' in cmake
     assert 'WOLFGANG_ENABLE_INTERNAL_BINDINGS' in cmake
@@ -387,7 +387,7 @@ def test_canonical_public_cmake_and_runtime_identity_prefers_wolfgang_names() ->
     assert 'WOLFGANG_CPU_BACKEND' in cpu_backend
 
     assert 'FastPauliCapabilities' not in package_init
-    assert 'cpu_backend_env_var"] = "WOLFGANG_CPU_BACKEND"' in internal_bindings
+    assert 'cpu_backend_env_var"] = "WOLFGANG_CPU_BACKEND"' in build_info
 
 
 def test_active_docs_only_keep_allowlisted_fastpauli_tokens() -> None:
