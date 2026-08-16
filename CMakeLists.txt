@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 
 project(
   Wolfgang
-  VERSION 0.2.2
+  VERSION 0.2.3
   DESCRIPTION "C++20 and CUDA-backed accelerators for sparse sums of Pauli strings"
   LANGUAGES CXX
 )

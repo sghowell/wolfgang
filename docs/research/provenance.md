@@ -95,13 +95,13 @@ produced the complete CPU wheelhouse and checksum evidence. The corrected
 tag-ref run has passed TestPyPI upload and clean install smoke; PyPI
 publication remains unavailable until PyPI trusted publishing is configured for
 the observed `pypi` environment claims and the PyPI publish job succeeds.
-The pending `0.2.2` release-preparation checkpoint is tracked in
-`docs/release/0.2.2.md`, `docs/release/README.md`, and
-`docs/release/support_matrix.md`: it advances the active source version,
-finalizes canonical Wolfgang identity on active public surfaces, records the
-corrected `sghowell/wolfgang` links and Mermaid/docs/CI hardening, preserves the
-quarantined `v0.2.0` tag/draft release and historical evidence unchanged, and
-keeps PyPI deferred until a later exact-tag publication slice.
+The pending `0.2.3` GitHub-only successor checkpoint is tracked in
+`docs/release/0.2.3.md`, `docs/release/README.md`, and
+`docs/release/support_matrix.md`: it advances the active source version from the
+corrected capabilities fix commit, preserves immutable `v0.2.2` tag provenance
+without rewriting historical evidence, keeps the quarantined `v0.2.0` and
+`v0.2.1` draft releases unchanged, and keeps TestPyPI/PyPI deferred for this
+successor slice.
 The Apple Silicon accelerator implementation lane is tracked in
 `docs/architecture/apple_accelerator.md` and
 `docs/plans/apple_metal_mps_bringup_plan.md`, with the first measured
@@ -562,7 +562,8 @@ WOLFGANG_VALIDATE_CUDA=1 WOLFGANG_CUDA_ARCHITECTURES=90 python scripts/validate.
 - [Implementation plan](../plans/cpp_cuda_implementation_plan.md)
 - [Release candidate foundation plan](../plans/release_candidate_foundation_plan.md)
 - [Release candidate next checkpoint plan](../plans/release_candidate_next_checkpoint_plan.md)
-- [0.2.2 release evidence ledger](../release/0.2.2.md)
+- [0.2.3 successor release evidence ledger](../release/0.2.3.md)
+- [0.2.2 historical provenance ledger](../release/0.2.2.md)
 - [Release 0.1.0 wheelhouse foundation plan](../plans/release_0_1_0_wheelhouse_foundation_plan.md)
 - [Apple Metal/MPS bring-up plan](../plans/apple_metal_mps_bringup_plan.md)
 - [Apple Metal optimization Campaign 1 plan](../plans/apple_metal_optimization_campaign1_plan.md)

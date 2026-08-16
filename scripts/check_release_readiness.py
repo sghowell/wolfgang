@@ -26,8 +26,8 @@ PYPROJECT = "pyproject.toml"
 VERSION_MODULE = "python/wolfgang_quantum/_version.py"
 CMAKE = "CMakeLists.txt"
 VALIDATE = "scripts/validate.py"
-LATEST_TAGGED_RELEASE_VERSION = "0.2.1"
-LATEST_RELEASE_VERSION = "0.2.2"
+LATEST_TAGGED_RELEASE_VERSION = "0.2.2"
+LATEST_RELEASE_VERSION = "0.2.3"
 
 LEGACY_RELEASE_ARTIFACT_PREFIXES = {
     "0.1.0rc1": "fastpauli",
@@ -194,13 +194,18 @@ def check_prepublication_evidence(
     expected_status = (
         f"Status: prepared for GitHub prerelease `v{version}`; not yet published."
         if version_is_release_candidate(version)
-        else f"Status: prepared for PyPI package-index release `v{version}`; not yet published."
+        else (
+            f"Status: prepared for GitHub-only patch successor `v{version}`; not yet published."
+            if version == LATEST_RELEASE_VERSION
+            else f"Status: prepared for PyPI package-index release `v{version}`; not yet published."
+        )
     )
     require(expected_status in ledger, f"{ledger_path} must use pre-publication status", failures)
     require(
         (
             f"Release candidate under finalization: v{version} pending publication" in support
             or f"Release under finalization: v{version} pending publication" in support
+            or f"Release under finalization: v{version} pending GitHub publication" in support
             or (
                 f"Latest tagged release: v{version}" in support
                 and "PyPI status: publication pending" in support
@@ -433,8 +438,8 @@ def check_release_readiness() -> list[str]:
         "manylinux x86_64 CPU wheels:",
         "macOS arm64 CPU wheels:",
         f"Release tag URL: https://github.com/sghowell/wolfgang/releases/tag/v{release_version}",
-        f"PyPI publication remains deferred for v{release_version}.",
-        "Do not invoke TestPyPI or PyPI for this release-preparation slice.",
+        f"GitHub-only successor publication remains deferred for v{release_version}.",
+        "Do not invoke TestPyPI or PyPI for this GitHub-only successor slice.",
         "No hardware rerun was required",
         "CPU wheels remain the only release artifact target",
     )

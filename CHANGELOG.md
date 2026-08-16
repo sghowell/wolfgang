@@ -4,12 +4,12 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 ## Unreleased
 
-Next version: 0.2.2
+Next version: 0.2.3
 
 ### Added
 
-- Wolfgang `0.2.2` release-preparation evidence in `docs/release/0.2.2.md`, including release notes for removing the legacy FastPauli Python/C++ compatibility surfaces before any first PyPI publication, updated version metadata, artifact expectations, and explicit deferral of PyPI publication.
-- Active release/support surfaces now point at the pending `v0.2.2` release ledger while preserving the quarantined `v0.2.0` and `v0.2.1` tags/draft releases plus the published `0.1.0` evidence unchanged.
+- Wolfgang `0.2.3` successor release evidence in `docs/release/0.2.3.md`, documenting the corrected GitHub-only patch path from the repaired `wolfgang_quantum.capabilities()` commit while preserving the immutable `v0.2.2` tag as historical provenance.
+- Active release/support surfaces now point at the pending `v0.2.3` GitHub-only successor ledger while preserving the quarantined `v0.2.0` and `v0.2.1` tags/draft releases, the immutable `v0.2.2` checkpoint, and the published `0.1.0` evidence unchanged.
 - Release supply-chain hardening with exact project-version tag binding,
   immutable GitHub Action pins, least-privilege workflow permissions,
   dependency auditing, SBOM generation, artifact attestations, and automated

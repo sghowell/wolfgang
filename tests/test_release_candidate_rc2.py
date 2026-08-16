@@ -68,9 +68,9 @@ def test_rc2_release_ledger_and_routing_remain_historical() -> None:
 def test_rc2_support_matrix_history_remains_without_expanding_claims() -> None:
     matrix = (ROOT / "docs/release/support_matrix.md").read_text(encoding="utf-8")
 
-    assert "Source version: 0.2.2" in matrix
-    assert "Next intended release: v0.2.2 (pending PR, not tagged or published)" in matrix
-    assert "Latest tagged release: v0.2.1" in matrix
+    assert "Source version: 0.2.3" in matrix
+    assert "Next intended release: v0.2.3 (pending PR, GitHub-only successor, not tagged or published)" in matrix
+    assert "Latest tagged release: v0.2.2" in matrix
     assert f"Previous checkpoint: {RELEASE_TAG} GitHub prerelease" in matrix
     assert f"`{RELEASE_LEDGER_PATH}`" in matrix
 
