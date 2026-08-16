@@ -42,6 +42,7 @@ def smoke_wolfgang_wheel(
         raise AssertionError("fastpauli import should fail after compatibility removal")
 
     info = core._build_info()
+    capability_report = wolfgang_quantum.capabilities()
     if require_cpu_safe:
         assert info["accelerator_build_mode"] == "cpu_only", info
         assert info["cuda_enabled"] is False, info
@@ -50,6 +51,13 @@ def smoke_wolfgang_wheel(
         assert info["native_enabled"] is False, info
         assert info["compiled_backends"] == ["cpu"], info
         assert "scalar" in info["compiled_cpu_backends"], info
+        assert capability_report.build_mode == "cpu_only", capability_report
+        assert tuple(backend.name for backend in capability_report.accelerators) == (
+            "cuda",
+            "hip",
+            "metal",
+        )
+        assert all(not backend.compiled for backend in capability_report.accelerators), capability_report
 
     labels, coeffs = (
         PauliSum.from_labels(["X", "X", "Z"], [1.0, -0.5, 2.0])
@@ -62,6 +70,8 @@ def smoke_wolfgang_wheel(
 
     return {
         "accelerator_build_mode": info["accelerator_build_mode"],
+        "capabilities_build_mode": capability_report.build_mode,
+        "capabilities_backends": [backend.name for backend in capability_report.accelerators],
         "compiled_backends": list(info["compiled_backends"]),
         "compiled_cpu_backends": list(info["compiled_cpu_backends"]),
         "cuda_enabled": info["cuda_enabled"],
