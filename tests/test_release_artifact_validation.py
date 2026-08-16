@@ -8,7 +8,7 @@ from types import ModuleType
 
 import pytest
 
-RELEASE_VERSION = "0.2.2"
+RELEASE_VERSION = "0.2.3"
 SDIST_PREFIX = f"wolfgang-quantum-{RELEASE_VERSION}"
 WHEEL_PREFIX = f"wolfgang_quantum-{RELEASE_VERSION}"
 

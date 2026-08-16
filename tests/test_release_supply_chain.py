@@ -13,7 +13,7 @@ except ModuleNotFoundError:  # pragma: no cover - exercised by the Python 3.10 C
     import tomli as tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
-NEXT_VERSION = "0.2.2"
+NEXT_VERSION = "0.2.3"
 WORKFLOWS = tuple(sorted((ROOT / ".github/workflows").glob("*.yml")))
 ACTION_PIN = re.compile(
     r"^\s*uses:\s+[^\s@]+@[0-9a-f]{40}\s+#\s+\S+\s*$",
@@ -51,7 +51,7 @@ def test_post_release_source_identity_is_coherently_versioned() -> None:
     assert f"current development version: {NEXT_VERSION}" in standards
     assert f"current source version is `{NEXT_VERSION}`" in release_index
     assert f"Source version: {NEXT_VERSION}" in support
-    assert "Latest tagged release: v0.2.1" in support
+    assert "Latest tagged release: v0.2.2" in support
 
 
 def test_project_metadata_exposes_public_project_urls() -> None:

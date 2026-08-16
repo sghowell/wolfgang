@@ -99,6 +99,45 @@ def _accelerator_record(name: BackendName, status: dict[str, object]) -> Backend
     )
 
 
+def _fallback_accelerator_status(name: BackendName, build: dict[str, object]) -> dict[str, object]:
+    compiled = bool(build.get(f"{name}_enabled", False))
+    runtime_available = bool(build.get(f"{name}_runtime_available", False))
+
+    status: dict[str, object] = {
+        "built": compiled,
+        "runtime_available": runtime_available,
+        "device_count": 0,
+        "devices": [],
+    }
+    if name == "cuda":
+        status["runtime_version"] = str(build.get("cuda_runtime_version", ""))
+        status["driver_version"] = str(build.get("cuda_driver_version", ""))
+    elif name == "hip":
+        status["runtime_version"] = str(build.get("hip_runtime_version", ""))
+        status["driver_version"] = str(build.get("hip_driver_version", ""))
+    else:
+        device_name = str(build.get("metal_device_name", ""))
+        if runtime_available and device_name:
+            status["device_count"] = 1
+            status["devices"] = [{"name": device_name}]
+        status["macos_version"] = str(build.get("metal_macos_version", ""))
+
+    if not compiled:
+        status["skip_reason"] = f"{name} backend was not compiled into this build"
+    elif not runtime_available:
+        status["skip_reason"] = f"{name} runtime is not available in this build environment"
+    return status
+
+
+def _accelerator_status(name: BackendName, build: dict[str, object]) -> dict[str, object]:
+    status_fn = getattr(_core, f"_{name}_status", None)
+    if callable(status_fn):
+        status = status_fn()
+        if isinstance(status, dict):
+            return status
+    return _fallback_accelerator_status(name, build)
+
+
 def capabilities() -> WolfgangCapabilities:
     """Describe compiled and runtime-visible capabilities without trial calls.
 
@@ -125,9 +164,9 @@ def capabilities() -> WolfgangCapabilities:
     )
 
     accelerators = (
-        _accelerator_record("cuda", _core._cuda_status()),
-        _accelerator_record("hip", _core._hip_status()),
-        _accelerator_record("metal", _core._metal_status()),
+        _accelerator_record("cuda", _accelerator_status("cuda", build)),
+        _accelerator_record("hip", _accelerator_status("hip", build)),
+        _accelerator_record("metal", _accelerator_status("metal", build)),
     )
     return WolfgangCapabilities(
         version=__version__,

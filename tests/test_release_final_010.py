@@ -7,7 +7,7 @@ from types import ModuleType
 
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE_VERSION = "0.1.0"
-SOURCE_VERSION = "0.2.2"
+SOURCE_VERSION = "0.2.3"
 RELEASE_LABEL = "0.1.0"
 RELEASE_TAG = "v0.1.0"
 RELEASE_LEDGER_PATH = "docs/release/0.1.0.md"
@@ -64,8 +64,8 @@ def test_final_support_matrix_is_prepublication_without_expanding_claims() -> No
     matrix = (ROOT / "docs/release/support_matrix.md").read_text(encoding="utf-8")
 
     assert f"Source version: {SOURCE_VERSION}" in matrix
-    assert "Latest tagged release: v0.2.1" in matrix
-    assert "Next intended release: v0.2.2 (pending PR, not tagged or published)" in matrix
+    assert "Latest tagged release: v0.2.2" in matrix
+    assert "Next intended release: v0.2.3 (pending PR, GitHub-only successor, not tagged or published)" in matrix
     assert "Previous checkpoint: v0.1.0rc2 GitHub prerelease" in matrix
     assert f"`{RELEASE_LEDGER_PATH}`" in matrix
     assert f"0.1.0 tag-ref wheelhouse run: {WHEELHOUSE_RUN}" in matrix
