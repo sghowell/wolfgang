@@ -28,6 +28,7 @@ Latest ROCm/HIP campaign plan: docs/plans/mi300x_rocm_optimization_campaign8_pla
 First ROCm/HIP bring-up plan: docs/plans/mi300x_rocm_bringup_plan.md
 Latest ROCm/HIP report: docs/benchmarks/reports/rocm_campaign8_architecture_readiness_2026-05-01.md
 Backend-neutral accelerator plan: docs/plans/backend_neutral_accelerator_campaign9_plan.md
+Cross-backend kernel performance campaign: docs/plans/wolfgang-kernel-performance-campaign.md
 Semantic contracts: docs/architecture/semantic_contracts.md
 CUDA architecture:  docs/architecture/cuda_backend.md
 ROCm/HIP architecture: docs/architecture/rocm_backend.md
@@ -113,6 +114,10 @@ scratch-boundary probes, rejected the narrow CUB radix-sort duplicate-reduction
 prototype for production, deferred device-output commutation to API review,
 refreshed CPU/CUDA/external H100 comparisons, and published the checked report
 at `docs/benchmarks/reports/cuda_deep_optimization_h100_campaign4_2026-04-29.md`.
+The cross-backend kernel performance campaign in
+`docs/plans/wolfgang-kernel-performance-campaign.md` is the current ranking
+handoff for the next user-visible CPU, CUDA, ROCm/HIP, and Apple Metal
+optimization wave at baseline commit `d14b4960a5197485e41d81a5dc426af5fce7cbae`.
 The H100-first Campaign 5 plan in
 `docs/plans/h100_deep_optimization_campaign5_plan.md` is now complete. It
 retained the experimental dense `DeviceCommutationMatrix` device-resident

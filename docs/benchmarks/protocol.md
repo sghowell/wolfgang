@@ -14,6 +14,9 @@ benchmark datasets are generated from documented parameters and deterministic se
 
 Benchmarks do not replace correctness tests. A benchmark result is valid only when the corresponding correctness validation passes on the same code revision.
 
+The current source-of-truth ranking handoff for shared follow-up CPU, CUDA,
+ROCm/HIP, and Apple Metal optimization work is the Cross-backend kernel performance campaign in `docs/plans/wolfgang-kernel-performance-campaign.md`.
+
 ## Benchmark Entrypoints
 
 Python benchmarks live under:

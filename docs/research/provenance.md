@@ -329,6 +329,8 @@ completed architecture-readiness plan in
 The accepted implementation plan for backend-neutral target-specific accelerator
 builds is
 [Backend-neutral accelerator Campaign 9](../plans/backend_neutral_accelerator_campaign9_plan.md).
+The current cross-backend ranking handoff for the next kernel-performance wave
+is [Wolfgang cross-backend kernel performance campaign](../plans/wolfgang-kernel-performance-campaign.md).
 The checked closeout report is
 [Backend-neutral accelerator Campaign 9 closeout](../benchmarks/reports/backend_neutral_accelerator_campaign9_2026-05-01.md).
 Campaign 9 is not a wheel-support, broader AMD portability, HIP DLPack,
@@ -595,6 +597,7 @@ WOLFGANG_VALIDATE_CUDA=1 WOLFGANG_CUDA_ARCHITECTURES=90 python scripts/validate.
 - [MI300X ROCm optimization Campaign 6 plan](../plans/mi300x_rocm_optimization_campaign6_plan.md)
 - [MI300X ROCm optimization Campaign 7 plan](../plans/mi300x_rocm_optimization_campaign7_plan.md)
 - [Backend-neutral accelerator Campaign 9 plan](../plans/backend_neutral_accelerator_campaign9_plan.md)
+- [Wolfgang cross-backend kernel performance campaign](../plans/wolfgang-kernel-performance-campaign.md)
 - [Backend-neutral accelerator Campaign 9 closeout report](../benchmarks/reports/backend_neutral_accelerator_campaign9_2026-05-01.md)
 - [Apple Metal bring-up report](../benchmarks/reports/apple_metal_bringup_2026-05-01.md)
 - [Apple Metal optimization Campaign 1 report](../benchmarks/reports/apple_metal_optimization_campaign1_2026-05-05.md)
