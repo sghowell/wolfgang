@@ -140,6 +140,18 @@ buffer allocation and reuse boundary
 command-buffer synchronization boundary
 ```
 
+Wave 1D adds a retained commutation reuse evidence gate for local Apple-host
+Metal prestaging. The benchmark and report must name the same-boundary
+comparison explicitly rather than implying a single speedup number:
+
+```text
+retained reused-output boundary: device_output_reused
+allocating boundary: device_output_allocating
+transfer-inclusive boundary: transfer_inclusive
+promotion metric: mean-of-medians across 3 independent reruns
+small-row guard: reject and investigate any undocumented >5% reused-output regression versus the allocating boundary
+```
+
 The initial public API must not export raw Metal buffers, DLPack capsules,
 PyTorch `mps` tensors, or any pretend CUDA Array Interface object. Interop is
 future work until a real consumer contract prevents mutation hazards and
@@ -302,6 +314,15 @@ allocation, command encoding, command execution, and output accounting. The
 public `DevicePauliSum.simplify(atol, rtol)` remains the transfer-reference bridge
 unless a later design proves a broader, correct, device-resident implementation
 that beats same-host CPU simplify and the transfer-reference path.
+
+The Wave 1D cross-backend prestage report is
+`docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md`. It records the
+required reused-output evidence gate for pairwise commutation on the local Apple
+host: three independent reruns per case, mean-of-medians promotion metric, and
+same-boundary comparisons between `device_output_reused`,
+`device_output_allocating`, and `transfer_inclusive`. The checked Wave 1D rows
+stay private to benchmark/report evidence and do not expand the public Metal
+surface.
 
 ## Testing Ladder
 

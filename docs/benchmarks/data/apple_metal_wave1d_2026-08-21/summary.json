@@ -1,0 +1,56 @@
+{
+  "campaign": "apple_metal_wave1d",
+  "status": "go",
+  "profile": "wave1d",
+  "source_benchmark": "docs/benchmarks/data/apple_metal_wave1d_2026-08-21/raw/metal_benchmark_wave1d.json",
+  "report": "docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md",
+  "methodology": {
+    "independent_reruns": 3,
+    "timed_repetitions_per_rerun": 3,
+    "promotion_metric": "mean_of_medians_seconds",
+    "boundary_labels": [
+      "device_output_reused",
+      "device_output_allocating",
+      "transfer_inclusive"
+    ]
+  },
+  "small_row_regressions": [],
+  "cases": [
+    {
+      "case": "metal_wave1d_small_rows_128x128",
+      "gate": "small_regression_guard",
+      "cpu_default_seconds": 0.0000321109999579979,
+      "cpu_neon_seconds": 0.000024902666609705193,
+      "metal_transfer_inclusive_seconds": 0.0035290556667556907,
+      "metal_device_output_allocating_seconds": 0.0005910696666736234,
+      "metal_device_output_reused_seconds": 0.00026141666664140456,
+      "reused_vs_allocating_ratio": 0.4422772498419438,
+      "reused_vs_transfer_inclusive_ratio": 0.0740755293559108,
+      "gate_decision": "go"
+    },
+    {
+      "case": "metal_wave1d_medium_rows_512x512",
+      "gate": "retained_reuse_gate",
+      "cpu_default_seconds": 0.0002491666667386501,
+      "cpu_neon_seconds": 0.00020768066663852855,
+      "metal_transfer_inclusive_seconds": 0.0010073196666174529,
+      "metal_device_output_allocating_seconds": 0.000584889000037947,
+      "metal_device_output_reused_seconds": 0.00017187500012975457,
+      "reused_vs_allocating_ratio": 0.2938591769012642,
+      "reused_vs_transfer_inclusive_ratio": 0.17062607415072645,
+      "gate_decision": "go"
+    },
+    {
+      "case": "metal_wave1d_large_rows_2048x2048",
+      "gate": "retained_reuse_gate",
+      "cpu_default_seconds": 0.002487277333481567,
+      "cpu_neon_seconds": 0.0021971806668261706,
+      "metal_transfer_inclusive_seconds": 0.0013492496665700553,
+      "metal_device_output_allocating_seconds": 0.0008060000001629911,
+      "metal_device_output_reused_seconds": 0.00040127800002665026,
+      "reused_vs_allocating_ratio": 0.49786352350558677,
+      "reused_vs_transfer_inclusive_ratio": 0.2974082632510439,
+      "gate_decision": "go"
+    }
+  ]
+}

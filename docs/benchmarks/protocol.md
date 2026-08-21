@@ -1000,6 +1000,22 @@ not present a workspace-preallocated or device-output prototype as a speedup
 over a transfer-inclusive or allocation-inclusive public path unless the labels
 make the boundary difference explicit.
 
+Wave 1D Apple Metal commutation reuse prestaging must publish the retained
+reused-output evidence gate with these exact boundary names:
+
+```text
+device_output_reused
+device_output_allocating
+transfer_inclusive
+```
+
+The Wave 1D promotion metric is the mean-of-medians across 3 independent reruns
+of the same case on the same Apple host. Small-row cases are a regression guard,
+not a headline speedup claim: reject and investigate any undocumented >5%
+retained reused-output slowdown versus the device_output_allocating boundary.
+The small-row guard is explicitly about preserving cheap host-facing rows while
+reused-output evidence is gathered for medium and large retained rows.
+
 The README performance plot must remain a broad landscape view, not a narrow
 single-hot-path snapshot. When refreshing CUDA evidence, regenerate and check in
 the README plot from tracked raw JSON so it includes the available operation

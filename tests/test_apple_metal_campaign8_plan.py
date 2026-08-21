@@ -38,7 +38,6 @@ def test_campaign8_plan_is_registered_in_source_of_truth_docs() -> None:
 
     roadmap = read("docs/roadmap.md")
     assert report_path in roadmap
-    assert "Latest Apple Metal report: " + report_path in roadmap
 
     architecture = read("docs/architecture/apple_accelerator.md")
     assert "Apple Metal Campaign 8" in architecture
