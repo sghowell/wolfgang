@@ -110,6 +110,18 @@ Initial implementation should use synchronous command-buffer completion for
 public methods. Public async, user-provided command queue, command-buffer,
 event, heap, or workspace APIs require a separate API plan.
 
+Even before a public workspace API exists, private reusable accelerator scratch
+and output buffers follow the cross-backend ownership/lifetime contract:
+
+```text
+private reusable accelerator scratch and output buffers remain move-only
+workspace storage is tied to the same backend-local device ordinal as every operand it serves
+reset retains the allocation for reuse
+release returns the allocation to the runtime
+capacity growth is monotonic until reset or release
+must not expose raw device pointers or framework objects through the public API
+```
+
 ## Memory Policy
 
 The first Metal bring-up should use `MTLResourceStorageModeShared` on Apple

@@ -164,16 +164,4 @@ WorkspaceTimingMode workspace_timing_mode_from_env() noexcept {
   return WorkspaceTimingMode::kAbsent;
 }
 
-const char* workspace_timing_mode_name(WorkspaceTimingMode mode) noexcept {
-  switch (mode) {
-    case WorkspaceTimingMode::kAbsent:
-      return "absent";
-    case WorkspaceTimingMode::kGrowInsideTiming:
-      return "grow_inside_timing";
-    case WorkspaceTimingMode::kPreReservedOutsideTiming:
-      return "pre_reserved_outside_timing";
-  }
-  return "absent";
-}
-
 }  // namespace wolfgang::metal_detail
