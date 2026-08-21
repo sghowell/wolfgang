@@ -41,6 +41,5 @@ private:
 };
 
 [[nodiscard]] WorkspaceTimingMode workspace_timing_mode_from_env();
-[[nodiscard]] const char* workspace_timing_mode_name(WorkspaceTimingMode mode) noexcept;
 
 }  // namespace wolfgang::cuda::detail

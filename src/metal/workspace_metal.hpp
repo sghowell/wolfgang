@@ -49,6 +49,5 @@ class MetalWorkspace {
 };
 
 [[nodiscard]] WorkspaceTimingMode workspace_timing_mode_from_env() noexcept;
-[[nodiscard]] const char* workspace_timing_mode_name(WorkspaceTimingMode mode) noexcept;
 
 }  // namespace wolfgang::metal_detail

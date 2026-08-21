@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -49,6 +50,8 @@ def test_backend_workspace_headers_share_private_contract_helpers() -> None:
     assert "enum class WorkspaceTimingMode" not in cuda_header
     assert "enum class WorkspaceTimingMode" not in hip_header
     assert "enum class WorkspaceTimingMode" not in metal_header
+    assert "[[nodiscard]] const char* workspace_timing_mode_name(WorkspaceTimingMode mode) noexcept;" not in cuda_header
+    assert "[[nodiscard]] const char* workspace_timing_mode_name(WorkspaceTimingMode mode) noexcept;" not in metal_header
 
     for token in (
         "int device_ordinal() const noexcept",
@@ -57,6 +60,47 @@ def test_backend_workspace_headers_share_private_contract_helpers() -> None:
         "WorkspaceSnapshot snapshot(WorkspaceTimingMode mode) const noexcept",
     ):
         assert token in hip_header
+
+
+def test_metal_workspace_header_compiles_with_shared_helper_import(tmp_path: Path) -> None:
+    if sys.platform != "darwin":
+        pytest.skip("Metal header smoke coverage requires macOS")
+
+    compiler = shutil.which("clang++") or shutil.which("c++")
+    if compiler is None:
+        pytest.skip("clang++ is required for Metal header smoke coverage")
+    assert compiler is not None
+
+    source = tmp_path / "metal_header_smoke.mm"
+    source.write_text(
+        r'''
+#include "metal/workspace_metal.hpp"
+
+int main() {
+  using wolfgang::metal_detail::WorkspaceTimingMode;
+  using wolfgang::metal_detail::workspace_timing_mode_name;
+
+  return workspace_timing_mode_name(WorkspaceTimingMode::kAbsent) == nullptr;
+}
+''',
+        encoding="utf-8",
+    )
+
+    compile_result = subprocess.run(
+        [
+            compiler,
+            "-std=c++20",
+            "-fobjc-arc",
+            "-fsyntax-only",
+            f"-I{ROOT / 'src'}",
+            f"-I{ROOT}",
+            str(source),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert compile_result.returncode == 0, compile_result.stderr
 
 
 def test_accelerator_host_helpers_compile_shared_workspace_contracts(tmp_path: Path) -> None:
