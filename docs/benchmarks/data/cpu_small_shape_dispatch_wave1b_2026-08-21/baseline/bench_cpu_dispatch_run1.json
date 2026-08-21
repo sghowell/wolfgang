@@ -22,9 +22,9 @@
       "results": {
         "expectation_imag": 0.22341872028645615,
         "expectation_real": -0.26231414680452564,
-        "fastpauli_max_seconds": 0.00012579200006257452,
-        "fastpauli_min_seconds": 0.00012449999985619797,
-        "fastpauli_seconds": 0.00012487499998314888
+        "fastpauli_max_seconds": 0.0012943339997946168,
+        "fastpauli_min_seconds": 0.0004938750003020687,
+        "fastpauli_seconds": 0.0005217500001890585
       }
     },
     {
@@ -43,9 +43,9 @@
       "results": {
         "expectation_imag": 0.22341872028645615,
         "expectation_real": -0.26231414680452564,
-        "fastpauli_max_seconds": 0.00013691699996343232,
-        "fastpauli_min_seconds": 0.00012395899989314785,
-        "fastpauli_seconds": 0.00012670800015257555
+        "fastpauli_max_seconds": 0.0007242500000756991,
+        "fastpauli_min_seconds": 0.0005444170001283055,
+        "fastpauli_seconds": 0.0006493749997389386
       }
     },
     {
@@ -64,9 +64,9 @@
       },
       "name": "forced_scalar_pairwise_commutation",
       "results": {
-        "fastpauli_max_seconds": 4.7250000079657184e-05,
-        "fastpauli_min_seconds": 4.6249999968495104e-05,
-        "fastpauli_seconds": 4.6416000031968e-05,
+        "fastpauli_max_seconds": 0.0001326669998888974,
+        "fastpauli_min_seconds": 0.00011858299967570929,
+        "fastpauli_seconds": 0.0001239999996869301,
         "matches_forced_scalar": true,
         "matrix_entries": 16384
       }
@@ -87,9 +87,9 @@
       },
       "name": "auto_pairwise_commutation",
       "results": {
-        "fastpauli_max_seconds": 1.7249999928026227e-05,
-        "fastpauli_min_seconds": 1.3459000001603272e-05,
-        "fastpauli_seconds": 1.3542000033339718e-05,
+        "fastpauli_max_seconds": 0.00012512499961303547,
+        "fastpauli_min_seconds": 5.854200026078615e-05,
+        "fastpauli_seconds": 6.745800010321545e-05,
         "matches_forced_scalar": true,
         "matrix_entries": 16384
       }
@@ -110,9 +110,9 @@
       },
       "name": "forced_neon_pairwise_commutation",
       "results": {
-        "fastpauli_max_seconds": 1.3791000128549058e-05,
-        "fastpauli_min_seconds": 1.3541999805966043e-05,
-        "fastpauli_seconds": 1.3625000065076165e-05,
+        "fastpauli_max_seconds": 4.345800016380963e-05,
+        "fastpauli_min_seconds": 4.2208000195387285e-05,
+        "fastpauli_seconds": 4.2499999835854396e-05,
         "matches_forced_scalar": true,
         "matrix_entries": 16384
       }
@@ -133,9 +133,9 @@
       },
       "name": "forced_scalar_full_grouping",
       "results": {
-        "fastpauli_max_seconds": 3.1042000045999885e-05,
-        "fastpauli_min_seconds": 1.8458999875292648e-05,
-        "fastpauli_seconds": 1.9791999875451438e-05,
+        "fastpauli_max_seconds": 0.0002499580000403512,
+        "fastpauli_min_seconds": 5.9500000133994035e-05,
+        "fastpauli_seconds": 0.00011829100003524218,
         "groups": 27,
         "matches_forced_scalar": true
       }
@@ -156,9 +156,9 @@
       },
       "name": "auto_full_grouping",
       "results": {
-        "fastpauli_max_seconds": 3.2124999961524736e-05,
-        "fastpauli_min_seconds": 2.4375000066356733e-05,
-        "fastpauli_seconds": 2.6624999918567482e-05,
+        "fastpauli_max_seconds": 0.00011150000000270666,
+        "fastpauli_min_seconds": 6.862500003990135e-05,
+        "fastpauli_seconds": 7.370799994532717e-05,
         "groups": 27,
         "matches_forced_scalar": true
       }
@@ -179,9 +179,9 @@
       },
       "name": "forced_neon_full_grouping",
       "results": {
-        "fastpauli_max_seconds": 2.6959000024362467e-05,
-        "fastpauli_min_seconds": 2.6083999955517356e-05,
-        "fastpauli_seconds": 2.6624999918567482e-05,
+        "fastpauli_max_seconds": 6.866600006105728e-05,
+        "fastpauli_min_seconds": 6.81659998917894e-05,
+        "fastpauli_seconds": 6.824999991295044e-05,
         "groups": 27,
         "matches_forced_scalar": true
       }
@@ -219,7 +219,7 @@
       }
     }
   ],
-  "command": "/Users/seanhowell/dev/wolfgang/.worktrees/t_93efb9e2/.venv/bin/python3 benchmarks/bench_cpu_dispatch.py --repeat 5 --warmup 1 --json",
+  "command": "python benchmarks/bench_cpu_dispatch.py --repeat 5 --warmup 1 --json",
   "environment": {
     "CUDA": {
       "enabled": false
@@ -528,7 +528,7 @@
     }
   },
   "fastpauli_version": "0.2.3",
-  "git_commit": "ce6938f",
+  "git_commit": "ce6938f00c9a237cf83a2c291ce04dbf3e41e6b4",
   "timing_policy": {
     "repeat": 5,
     "summary": "median seconds",

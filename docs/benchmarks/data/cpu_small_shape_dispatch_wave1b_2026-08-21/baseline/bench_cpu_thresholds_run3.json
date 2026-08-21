@@ -16,22 +16,22 @@
       },
       "name": "below_threshold",
       "results": {
-        "auto_max_seconds": 7.945799984554469e-05,
-        "auto_min_seconds": 6.925000002411252e-05,
-        "auto_seconds": 7.170899993980129e-05,
+        "auto_max_seconds": 7.908399993539206e-05,
+        "auto_min_seconds": 6.566699994436931e-05,
+        "auto_seconds": 7.041699973342475e-05,
         "matches_forced_scalar": true,
         "optimized_backends": {
           "neon": {
             "active_backend": "neon",
             "matches_forced_scalar": true,
-            "max_seconds": 9.770800011210667e-05,
-            "min_seconds": 6.979199997658725e-05,
-            "seconds": 7.02079998973204e-05
+            "max_seconds": 7.962500012581586e-05,
+            "min_seconds": 6.962499992368976e-05,
+            "seconds": 7.029200014585513e-05
           }
         },
-        "scalar_max_seconds": 0.00025770900015231746,
-        "scalar_min_seconds": 0.00023250000003827154,
-        "scalar_seconds": 0.00024583300000813324
+        "scalar_max_seconds": 0.0002681659998415853,
+        "scalar_min_seconds": 0.00022862500009068754,
+        "scalar_seconds": 0.00024333300007128855
       }
     },
     {
@@ -49,22 +49,22 @@
       },
       "name": "at_threshold",
       "results": {
-        "auto_max_seconds": 0.00027524999995875987,
-        "auto_min_seconds": 0.0002573749998191488,
-        "auto_seconds": 0.0002634580000631104,
+        "auto_max_seconds": 0.00028333399995972286,
+        "auto_min_seconds": 0.00026458399997864035,
+        "auto_seconds": 0.0002679589997569565,
         "matches_forced_scalar": true,
         "optimized_backends": {
           "neon": {
             "active_backend": "neon",
             "matches_forced_scalar": true,
-            "max_seconds": 0.000302666999914436,
-            "min_seconds": 0.0002518329999929847,
-            "seconds": 0.0002648750000844302
+            "max_seconds": 0.00028929200016136747,
+            "min_seconds": 0.00026866700000027777,
+            "seconds": 0.0002779589999590826
           }
         },
-        "scalar_max_seconds": 0.0009405829998740955,
-        "scalar_min_seconds": 0.0009042500000759901,
-        "scalar_seconds": 0.0009232919999249134
+        "scalar_max_seconds": 0.0010460839998813753,
+        "scalar_min_seconds": 0.000992084000245086,
+        "scalar_seconds": 0.000998417000118934
       }
     },
     {
@@ -82,26 +82,26 @@
       },
       "name": "above_threshold",
       "results": {
-        "auto_max_seconds": 0.0010862920000818121,
-        "auto_min_seconds": 0.0010018749999289867,
-        "auto_seconds": 0.0010095830000409478,
+        "auto_max_seconds": 0.0011217080000278656,
+        "auto_min_seconds": 0.000997750000351516,
+        "auto_seconds": 0.001027166000312718,
         "matches_forced_scalar": true,
         "optimized_backends": {
           "neon": {
             "active_backend": "neon",
             "matches_forced_scalar": true,
-            "max_seconds": 0.0010464160000083211,
-            "min_seconds": 0.0009520419998807483,
-            "seconds": 0.0010050410000985721
+            "max_seconds": 0.0010890410003412399,
+            "min_seconds": 0.0010003750003306777,
+            "seconds": 0.0010485420002623869
           }
         },
-        "scalar_max_seconds": 0.004037917000005109,
-        "scalar_min_seconds": 0.003585582999903636,
-        "scalar_seconds": 0.0037281249999523425
+        "scalar_max_seconds": 0.004162875000019994,
+        "scalar_min_seconds": 0.0038165000000844884,
+        "scalar_seconds": 0.004035625000142318
       }
     }
   ],
-  "command": "/Users/seanhowell/dev/wolfgang/.worktrees/t_93efb9e2/.venv/bin/python3 benchmarks/bench_cpu_thresholds.py --repeat 5 --warmup 1 --json",
+  "command": "python benchmarks/bench_cpu_thresholds.py --repeat 5 --warmup 1 --json",
   "correctness_checks": {
     "enabled": true,
     "failure_mode": "raises RuntimeError if auto or an available optimized selector differs from scalar",
@@ -415,7 +415,7 @@
     }
   },
   "fastpauli_version": "0.2.3",
-  "git_commit": "ce6938f",
+  "git_commit": "ce6938f00c9a237cf83a2c291ce04dbf3e41e6b4",
   "thresholds": {
     "tbb_pairwise_entries": 331776
   },

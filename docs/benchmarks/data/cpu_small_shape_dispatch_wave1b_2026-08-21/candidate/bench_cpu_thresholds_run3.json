@@ -16,22 +16,22 @@
       },
       "name": "below_threshold",
       "results": {
-        "auto_max_seconds": 8.287499986181501e-05,
-        "auto_min_seconds": 6.441699997594696e-05,
-        "auto_seconds": 6.87090000610624e-05,
+        "auto_max_seconds": 7.41250000828586e-05,
+        "auto_min_seconds": 6.337500008157804e-05,
+        "auto_seconds": 7.108399995559012e-05,
         "matches_forced_scalar": true,
         "optimized_backends": {
           "neon": {
             "active_backend": "neon",
             "matches_forced_scalar": true,
-            "max_seconds": 7.525000000896398e-05,
-            "min_seconds": 6.424999992304947e-05,
-            "seconds": 6.891699990774214e-05
+            "max_seconds": 7.562500013591489e-05,
+            "min_seconds": 6.891600014569121e-05,
+            "seconds": 7.24169999557489e-05
           }
         },
-        "scalar_max_seconds": 0.000243416000103025,
-        "scalar_min_seconds": 0.00022716600005878718,
-        "scalar_seconds": 0.00023441700000148558
+        "scalar_max_seconds": 0.00028112500012866803,
+        "scalar_min_seconds": 0.00023716699979559053,
+        "scalar_seconds": 0.00023991699981706915
       }
     },
     {
@@ -49,22 +49,22 @@
       },
       "name": "at_threshold",
       "results": {
-        "auto_max_seconds": 0.0002947499999663705,
-        "auto_min_seconds": 0.0002754580000328133,
-        "auto_seconds": 0.0002773329999854468,
+        "auto_max_seconds": 0.0002860420004253683,
+        "auto_min_seconds": 0.00026420899985168944,
+        "auto_seconds": 0.000270749999799591,
         "matches_forced_scalar": true,
         "optimized_backends": {
           "neon": {
             "active_backend": "neon",
             "matches_forced_scalar": true,
-            "max_seconds": 0.00029329099993447016,
-            "min_seconds": 0.00025954200009437045,
-            "seconds": 0.00026270799980920856
+            "max_seconds": 0.0002949170002466417,
+            "min_seconds": 0.000266999999894324,
+            "seconds": 0.00027987499970549834
           }
         },
-        "scalar_max_seconds": 0.0009251249998669664,
-        "scalar_min_seconds": 0.0008943750001435546,
-        "scalar_seconds": 0.0009206250001625449
+        "scalar_max_seconds": 0.0010249580000163405,
+        "scalar_min_seconds": 0.0009902500000862346,
+        "scalar_seconds": 0.0010036250000666769
       }
     },
     {
@@ -82,26 +82,26 @@
       },
       "name": "above_threshold",
       "results": {
-        "auto_max_seconds": 0.001059666999935871,
-        "auto_min_seconds": 0.001004250000050888,
-        "auto_seconds": 0.001014041999951587,
+        "auto_max_seconds": 0.0010673749998204585,
+        "auto_min_seconds": 0.0010187500001848093,
+        "auto_seconds": 0.0010211659996457456,
         "matches_forced_scalar": true,
         "optimized_backends": {
           "neon": {
             "active_backend": "neon",
             "matches_forced_scalar": true,
-            "max_seconds": 0.0010437500000080036,
-            "min_seconds": 0.0009850419999111182,
-            "seconds": 0.00098775000014939
+            "max_seconds": 0.001040333000219107,
+            "min_seconds": 0.0010093329997289402,
+            "seconds": 0.0010345420000703598
           }
         },
-        "scalar_max_seconds": 0.003876458000149796,
-        "scalar_min_seconds": 0.003590583000004699,
-        "scalar_seconds": 0.003703542000039306
+        "scalar_max_seconds": 0.004138582999985374,
+        "scalar_min_seconds": 0.003861958000015875,
+        "scalar_seconds": 0.003994249999777821
       }
     }
   ],
-  "command": "/Users/seanhowell/dev/wolfgang/.worktrees/t_93efb9e2/.venv/bin/python3 benchmarks/bench_cpu_thresholds.py --repeat 5 --warmup 1 --json",
+  "command": "python benchmarks/bench_cpu_thresholds.py --repeat 5 --warmup 1 --json",
   "correctness_checks": {
     "enabled": true,
     "failure_mode": "raises RuntimeError if auto or an available optimized selector differs from scalar",
@@ -141,7 +141,7 @@
       "scalar",
       "neon"
     ],
-    "cmake": "cmake version 4.4.2",
+    "cmake": "not_available",
     "compiled_accelerator_backends": [],
     "compiled_backends": [
       "cpu"
@@ -416,7 +416,7 @@
     }
   },
   "fastpauli_version": "0.2.3",
-  "git_commit": "ce6938f+dirty",
+  "git_commit": "f38d8992cac8bd4c47780a0243daf084e876b756",
   "thresholds": {
     "neon_full_grouping_scalar_min_entries": 1024,
     "tbb_pairwise_entries": 331776

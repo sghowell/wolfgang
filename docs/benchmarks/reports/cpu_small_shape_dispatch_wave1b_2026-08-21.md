@@ -18,14 +18,14 @@ Each benchmark command was rerun three independent times. Promotion uses mean-of
 ## Environment
 
 ```text
-Host: Apple M4 Pro, macOS 26.2, arm64
+Host: Apple M4 Pro, macOS-26.2-arm64-arm-64bit-Mach-O, arm64
 Compiled CPU backends: scalar, neon
 Available CPU backends: scalar, neon
 Accepted baseline commit: ce6938f00c9a237cf83a2c291ce04dbf3e41e6b4
-Benchmarked candidate revision: ce6938f+dirty
+Benchmarked candidate revision: f38d8992cac8bd4c47780a0243daf084e876b756
 ```
 
-The candidate benchmark JSON is dirty because the timings were captured from the in-progress Wave 1B branch before the closeout commit.
+The candidate benchmark JSON was regenerated after the artifact-hygiene fix so the tracked evidence is stamped to the exact benchmarked commit instead of a dirty pre-closeout label.
 
 ## What Changed
 
@@ -37,6 +37,8 @@ benchmarks/bench_cpu_dispatch.py
 benchmarks/bench_cpu_thresholds.py
 tests/test_phase9_cpu_backend.py
 tests/test_cpu_thresholds_benchmark.py
+benchmarks/_benchmark_metadata.py
+tests/test_benchmark_metadata.py
 ```
 
 Behavioral change:
@@ -57,13 +59,13 @@ Mean-of-medians across three reruns, lower is better:
 
 | Case | Baseline mean | Candidate mean | Delta |
 | --- | ---: | ---: | ---: |
-| auto full grouping | 0.000025208 s | 0.000018903 s | -25.01% |
-| forced scalar full grouping | 0.000020500 s | 0.000020361 s | -0.68% |
-| forced neon full grouping | 0.000025875 s | 0.000026042 s | 0.64% |
-| auto pairwise commutation | 0.000014167 s | 0.000013514 s | -4.61% |
-| below-threshold pairwise sweep | 0.000070181 s | 0.000070139 s | -0.06% |
-| at-threshold pairwise sweep | 0.000262306 s | 0.000268569 s | 2.39% |
-| above-threshold pairwise sweep | 0.001003028 s | 0.001015625 s | 1.26% |
+| auto full grouping | 0.000041666 s | 0.000032528 s | -21.93% |
+| forced scalar full grouping | 0.000054361 s | 0.000035166 s | -35.31% |
+| forced neon full grouping | 0.000039722 s | 0.000042958 s | 8.15% |
+| auto pairwise commutation | 0.000032625 s | 0.000025514 s | -21.80% |
+| below-threshold pairwise sweep | 0.000072750 s | 0.000070806 s | -2.67% |
+| at-threshold pairwise sweep | 0.000270347 s | 0.000271222 s | 0.32% |
+| above-threshold pairwise sweep | 0.001043194 s | 0.001036097 s | -0.68% |
 
 Selector outcome change recorded by the dispatch benchmark:
 
@@ -75,7 +77,7 @@ auto_full_grouping effective_backend_hint: neon -> scalar
 ## Correctness And Schema Checks
 
 ```text
-Focused pytest: 14 passed
+Focused pytest: 14 passed in 2.43s
 scripts/validate.py: passed
 Dispatch correctness: every auto/forced grouping and pairwise row matched forced scalar
 Threshold correctness: every threshold row matched forced scalar
@@ -84,7 +86,7 @@ Threshold benchmark top-level JSON keys: unchanged
 Threshold metadata addition: cpu_auto_dispatch_thresholds.neon_full_grouping_scalar_min_entries = 1024
 ```
 
-The small-workload regression budget was preserved on the documented pairwise threshold benchmark: the candidate changed below-threshold by -0.06%, at-threshold by 2.39%, and above-threshold by 1.26%.
+The small-workload regression budget was preserved on the documented pairwise threshold benchmark: the candidate changed below-threshold by -2.67%, at-threshold by 0.32%, and above-threshold by -0.68%.
 
 ## Decision
 
@@ -93,7 +95,7 @@ Accept the change.
 Reason:
 
 ```text
-auto full grouping improved by 25.01% on the checked 128-term NEON dispatch case
+auto full grouping improved by 21.93% on the checked 128-term NEON dispatch case
 pairwise commutation auto-dispatch stayed on neon and did not regress beyond the 5% rejection budget on the documented threshold sweep
 forced neon and forced scalar behavior stayed correct and unchanged in semantics
 ```

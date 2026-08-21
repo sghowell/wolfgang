@@ -3,9 +3,11 @@ from __future__ import annotations
 import pytest
 
 from benchmarks._benchmark_metadata import (
+    ROOT,
     accelerator_build_mode,
     benchmark_environment,
     benchmark_row_boundary,
+    command_string,
     compiler_cpu_flags,
     git_commit,
     git_provenance,
@@ -39,6 +41,20 @@ def test_git_provenance_honors_benchmark_commit_override(monkeypatch: pytest.Mon
         "source": "WOLFGANG_BENCHMARK_GIT_COMMIT",
         "working_tree_status": [],
     }
+
+
+def test_command_string_redacts_private_python_and_repo_paths(monkeypatch: pytest.MonkeyPatch) -> None:
+    benchmark_script = ROOT / "benchmarks" / "bench_cpu_dispatch.py"
+    monkeypatch.setattr(
+        "sys.executable",
+        str(ROOT / ".venv" / "bin" / "python3"),
+    )
+    monkeypatch.setattr(
+        "sys.argv",
+        [str(benchmark_script), "--repeat", "5", "--json"],
+    )
+
+    assert command_string() == "python benchmarks/bench_cpu_dispatch.py --repeat 5 --json"
 
 
 def test_compiler_flags_record_only_allowlisted_cpu_options(
