@@ -127,6 +127,7 @@ def test_build_info_reports_cpu_backend_dispatch_surface() -> None:
     assert set(info["optimized_cpu_kernels"]).issuperset({"tbb", "avx2", "avx512", "neon", "sve"})
     assert info["compiler_build_config"]["CMAKE_CXX_COMPILER_ID"]
     assert info["cpu_auto_dispatch_thresholds"]["tbb_pairwise_entries"] == 331776
+    assert info["cpu_auto_dispatch_thresholds"]["neon_full_grouping_scalar_min_entries"] == 1024
     assert "scalar" in info["compiled_cpu_backends"]
     assert "scalar" in info["available_cpu_backends"]
     candidate_statuses = {

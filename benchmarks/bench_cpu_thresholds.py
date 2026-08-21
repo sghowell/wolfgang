@@ -274,6 +274,9 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "fastpauli_build_info": build_info,
         "thresholds": {
             "tbb_pairwise_entries": threshold,
+            "neon_full_grouping_scalar_min_entries": build_info["cpu_auto_dispatch_thresholds"][
+                "neon_full_grouping_scalar_min_entries"
+            ],
         },
         "correctness_checks": {
             "enabled": True,

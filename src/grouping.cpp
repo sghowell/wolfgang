@@ -136,23 +136,27 @@ bool backend_available(const CpuBackendReport& report, std::string_view selector
 
 std::vector<std::uint8_t> build_full_commutation_graph(const PauliSum& op) {
   const CpuBackendReport backend = cpu_backend_report_from_environment();
+  const std::size_t entries = op.num_terms() * op.num_terms();
   if (backend.requested_backend == "auto") {
 #if WOLFGANG_BUILD_AVX512_ENABLED
     if (detail::simd_commutation_supports_words(op.words()) &&
         backend_available(backend, "avx512")) {
-      return detail::commutes_with_avx512(op, op, op.num_terms() * op.num_terms());
+      return detail::commutes_with_avx512(op, op, entries);
     }
 #endif
 #if WOLFGANG_BUILD_AVX2_ENABLED
     if (detail::simd_commutation_supports_words(op.words()) &&
         backend_available(backend, "avx2")) {
-      return detail::commutes_with_avx2(op, op, op.num_terms() * op.num_terms());
+      return detail::commutes_with_avx2(op, op, entries);
     }
 #endif
 #if WOLFGANG_BUILD_ARM_NEON_ENABLED
     if (detail::simd_commutation_supports_words(op.words()) &&
         backend_available(backend, "neon")) {
-      return detail::commutes_with_neon(op, op, op.num_terms() * op.num_terms());
+      if (entries < kAutoNeonFullGroupingScalarMinEntries) {
+        return detail::commutes_with_neon(op, op, entries);
+      }
+      return detail::build_full_commutation_graph_scalar(op);
     }
 #endif
     return detail::build_full_commutation_graph_scalar(op);
@@ -167,21 +171,21 @@ std::vector<std::uint8_t> build_full_commutation_graph(const PauliSum& op) {
   if (backend.active_backend == "avx512") {
 #if WOLFGANG_BUILD_AVX512_ENABLED
     detail::require_simd_commutation_words("avx512", op.words());
-    return detail::commutes_with_avx512(op, op, op.num_terms() * op.num_terms());
+    return detail::commutes_with_avx512(op, op, entries);
 #endif
   }
 
   if (backend.active_backend == "avx2") {
 #if WOLFGANG_BUILD_AVX2_ENABLED
     detail::require_simd_commutation_words("avx2", op.words());
-    return detail::commutes_with_avx2(op, op, op.num_terms() * op.num_terms());
+    return detail::commutes_with_avx2(op, op, entries);
 #endif
   }
 
   if (backend.active_backend == "neon") {
 #if WOLFGANG_BUILD_ARM_NEON_ENABLED
     detail::require_simd_commutation_words("neon", op.words());
-    return detail::commutes_with_neon(op, op, op.num_terms() * op.num_terms());
+    return detail::commutes_with_neon(op, op, entries);
 #endif
   }
 

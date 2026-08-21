@@ -1,0 +1,537 @@
+{
+  "baselines": [
+    "Wolfgang auto CPU dispatch",
+    "Wolfgang forced scalar CPU",
+    "Wolfgang optimized CPU candidates where compiled and available"
+  ],
+  "benchmark": "cpu_dispatch",
+  "cases": [
+    {
+      "dataset": {
+        "active_cpu_backend": "scalar",
+        "coefficient_dtype": "complex128",
+        "num_qubits": 10,
+        "num_terms": 128,
+        "operator_construction_method": "deterministic dense labels",
+        "random_seed": 6211,
+        "requested_cpu_backend": "auto",
+        "statevector_dtype": "complex128",
+        "statevector_length": 1024
+      },
+      "name": "auto_statevector_expectation",
+      "results": {
+        "expectation_imag": 0.22341872028645615,
+        "expectation_real": -0.26231414680452564,
+        "fastpauli_max_seconds": 0.0001488749999225547,
+        "fastpauli_min_seconds": 0.00013291699997353135,
+        "fastpauli_seconds": 0.0001414169998952275
+      }
+    },
+    {
+      "dataset": {
+        "active_cpu_backend": "scalar",
+        "coefficient_dtype": "complex128",
+        "num_qubits": 10,
+        "num_terms": 128,
+        "operator_construction_method": "deterministic dense labels",
+        "random_seed": 6211,
+        "requested_cpu_backend": "scalar",
+        "statevector_dtype": "complex128",
+        "statevector_length": 1024
+      },
+      "name": "forced_scalar_statevector_expectation",
+      "results": {
+        "expectation_imag": 0.22341872028645615,
+        "expectation_real": -0.26231414680452564,
+        "fastpauli_max_seconds": 0.0001405839998369629,
+        "fastpauli_min_seconds": 0.00013470799990500382,
+        "fastpauli_seconds": 0.00014025000018591527
+      }
+    },
+    {
+      "dataset": {
+        "active_cpu_backend": "scalar",
+        "coefficient_dtype": "complex128",
+        "effective_backend_hint": "scalar",
+        "lhs_terms": 128,
+        "matrix_entries": 16384,
+        "num_qubits": 65,
+        "operator_construction_method": "deterministic dense labels",
+        "optimized_kernel": "pairwise_commutation",
+        "random_seed": 7211,
+        "requested_cpu_backend": "scalar",
+        "rhs_terms": 128
+      },
+      "name": "forced_scalar_pairwise_commutation",
+      "results": {
+        "fastpauli_max_seconds": 5.879200011804642e-05,
+        "fastpauli_min_seconds": 4.7542000174871646e-05,
+        "fastpauli_seconds": 4.7708000010970864e-05,
+        "matches_forced_scalar": true,
+        "matrix_entries": 16384
+      }
+    },
+    {
+      "dataset": {
+        "active_cpu_backend": "scalar",
+        "coefficient_dtype": "complex128",
+        "effective_backend_hint": "neon",
+        "lhs_terms": 128,
+        "matrix_entries": 16384,
+        "num_qubits": 65,
+        "operator_construction_method": "deterministic dense labels",
+        "optimized_kernel": "pairwise_commutation",
+        "random_seed": 7211,
+        "requested_cpu_backend": "auto",
+        "rhs_terms": 128
+      },
+      "name": "auto_pairwise_commutation",
+      "results": {
+        "fastpauli_max_seconds": 1.7625000054977136e-05,
+        "fastpauli_min_seconds": 1.4208000038706814e-05,
+        "fastpauli_seconds": 1.5458000007129158e-05,
+        "matches_forced_scalar": true,
+        "matrix_entries": 16384
+      }
+    },
+    {
+      "dataset": {
+        "active_cpu_backend": "neon",
+        "coefficient_dtype": "complex128",
+        "effective_backend_hint": "neon",
+        "lhs_terms": 128,
+        "matrix_entries": 16384,
+        "num_qubits": 65,
+        "operator_construction_method": "deterministic dense labels",
+        "optimized_kernel": "pairwise_commutation",
+        "random_seed": 7211,
+        "requested_cpu_backend": "neon",
+        "rhs_terms": 128
+      },
+      "name": "forced_neon_pairwise_commutation",
+      "results": {
+        "fastpauli_max_seconds": 1.562500006002665e-05,
+        "fastpauli_min_seconds": 1.537499997539271e-05,
+        "fastpauli_seconds": 1.554199980091653e-05,
+        "matches_forced_scalar": true,
+        "matrix_entries": 16384
+      }
+    },
+    {
+      "dataset": {
+        "active_cpu_backend": "scalar",
+        "coefficient_dtype": "complex128",
+        "effective_backend_hint": "scalar",
+        "grouping_mode": "full",
+        "num_qubits": 65,
+        "num_terms": 128,
+        "operator_construction_method": "deterministic dense labels",
+        "optimized_kernel": "full_group_commutation_graph",
+        "random_seed": 8211,
+        "requested_cpu_backend": "scalar",
+        "strategy": "largest_first"
+      },
+      "name": "forced_scalar_full_grouping",
+      "results": {
+        "fastpauli_max_seconds": 3.3833000088634435e-05,
+        "fastpauli_min_seconds": 2.1000000060666935e-05,
+        "fastpauli_seconds": 2.199999994445534e-05,
+        "groups": 27,
+        "matches_forced_scalar": true
+      }
+    },
+    {
+      "dataset": {
+        "active_cpu_backend": "scalar",
+        "coefficient_dtype": "complex128",
+        "effective_backend_hint": "neon",
+        "grouping_mode": "full",
+        "num_qubits": 65,
+        "num_terms": 128,
+        "operator_construction_method": "deterministic dense labels",
+        "optimized_kernel": "full_group_commutation_graph",
+        "random_seed": 8211,
+        "requested_cpu_backend": "auto",
+        "strategy": "largest_first"
+      },
+      "name": "auto_full_grouping",
+      "results": {
+        "fastpauli_max_seconds": 2.6584000124785234e-05,
+        "fastpauli_min_seconds": 2.420800001345924e-05,
+        "fastpauli_seconds": 2.491600002940686e-05,
+        "groups": 27,
+        "matches_forced_scalar": true
+      }
+    },
+    {
+      "dataset": {
+        "active_cpu_backend": "neon",
+        "coefficient_dtype": "complex128",
+        "effective_backend_hint": "neon",
+        "grouping_mode": "full",
+        "num_qubits": 65,
+        "num_terms": 128,
+        "operator_construction_method": "deterministic dense labels",
+        "optimized_kernel": "full_group_commutation_graph",
+        "random_seed": 8211,
+        "requested_cpu_backend": "neon",
+        "strategy": "largest_first"
+      },
+      "name": "forced_neon_full_grouping",
+      "results": {
+        "fastpauli_max_seconds": 2.824999978656706e-05,
+        "fastpauli_min_seconds": 2.612499997667328e-05,
+        "fastpauli_seconds": 2.6749999960884452e-05,
+        "groups": 27,
+        "matches_forced_scalar": true
+      }
+    },
+    {
+      "dataset": {
+        "active_cpu_backend": "scalar",
+        "availability_scope": "compiled and runtime CPU backend candidates",
+        "requested_cpu_backend": "auto"
+      },
+      "name": "optimized_backend_availability",
+      "results": {
+        "optimized_backends": [
+          {
+            "backend": "tbb",
+            "status": "not_compiled"
+          },
+          {
+            "backend": "avx2",
+            "status": "not_compiled"
+          },
+          {
+            "backend": "avx512",
+            "status": "not_compiled"
+          },
+          {
+            "backend": "neon",
+            "status": "available"
+          },
+          {
+            "backend": "sve",
+            "status": "not_compiled"
+          }
+        ]
+      }
+    }
+  ],
+  "command": "/Users/seanhowell/dev/wolfgang/.worktrees/t_93efb9e2/.venv/bin/python3 benchmarks/bench_cpu_dispatch.py --repeat 5 --warmup 1 --json",
+  "environment": {
+    "CUDA": {
+      "enabled": false
+    },
+    "HIP": {
+      "architectures": "not_available",
+      "driver_version": "",
+      "enabled": false,
+      "rocm_toolkit_version": "not_available",
+      "runtime_available": false,
+      "runtime_version": ""
+    },
+    "Metal": {
+      "capability_summary": "",
+      "device_name": "",
+      "enabled": false,
+      "macos_version": "",
+      "runtime_available": false,
+      "storage_mode": "",
+      "xcode_or_clt_version": ""
+    },
+    "accelerator_build_mode": "cpu_only",
+    "active_fastpauli_cpu_backend": "scalar",
+    "apple_hardware": {
+      "chip": "Apple M4 Pro",
+      "core_summary": "12 (8 performance and 4 efficiency)",
+      "model_identifier": "Mac16,11",
+      "model_name": "Mac mini",
+      "total_core_count": 12
+    },
+    "available_fastpauli_cpu_backends": [
+      "scalar",
+      "neon"
+    ],
+    "cmake": "not_available",
+    "compiled_accelerator_backends": [],
+    "compiled_backends": [
+      "cpu"
+    ],
+    "compiled_fastpauli_cpu_backends": [
+      "scalar",
+      "neon"
+    ],
+    "compiler": "Apple clang version 21.0.0 (clang-2100.0.123.102)",
+    "compiler_build_config": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CUDA_COMPILER_ID": "not_available",
+      "CMAKE_CUDA_COMPILER_VERSION": "not_available",
+      "CMAKE_CXX_COMPILER_ID": "AppleClang",
+      "CMAKE_CXX_COMPILER_VERSION": "21.0.0.21000099",
+      "CMAKE_HIP_COMPILER_ID": "not_available",
+      "CMAKE_HIP_COMPILER_VERSION": "not_available",
+      "CMAKE_OBJCXX_COMPILER_ID": "not_available",
+      "CMAKE_OBJCXX_COMPILER_VERSION": "not_available"
+    },
+    "compiler_cpu_flags": {
+      "detected": [],
+      "sources_checked": [
+        "ARCHFLAGS",
+        "CFLAGS",
+        "CMAKE_ARGS",
+        "CMAKE_BUILD_TYPE",
+        "CMAKE_CXX_FLAGS",
+        "CPPFLAGS",
+        "CXXFLAGS",
+        "SKBUILD_CMAKE_ARGS"
+      ]
+    },
+    "cpu_architecture": "arm64",
+    "cpu_backend_build_flags": {
+      "avx2": false,
+      "avx512": false,
+      "neon": true,
+      "scalar": true,
+      "sve": false,
+      "tbb": false
+    },
+    "cpu_cmake_options": {
+      "WOLFGANG_BUILD_CPU_BACKEND": "scalar",
+      "WOLFGANG_CUDA_ARCHITECTURES": "80,86,89,90,100-real,120",
+      "WOLFGANG_CUDA_USE_CUB": "ON",
+      "WOLFGANG_CUDA_USE_THRUST": "ON",
+      "WOLFGANG_ENABLE_ARM_NEON": "auto",
+      "WOLFGANG_ENABLE_ARM_SVE": "auto",
+      "WOLFGANG_ENABLE_AVX2": "auto",
+      "WOLFGANG_ENABLE_AVX512": "auto",
+      "WOLFGANG_ENABLE_CUDA": "OFF",
+      "WOLFGANG_ENABLE_HIP": "OFF",
+      "WOLFGANG_ENABLE_METAL": "OFF",
+      "WOLFGANG_ENABLE_NATIVE": "OFF",
+      "WOLFGANG_ENABLE_OPENMP": "OFF",
+      "WOLFGANG_ENABLE_TBB": "auto",
+      "WOLFGANG_HIP_ARCHITECTURES": "gfx942"
+    },
+    "cpu_model": "arm",
+    "cpu_vendor_or_soc": "Apple M4 Pro",
+    "instruction_set_probe": {
+      "features": [
+        "aes",
+        "armv8_1_atomics",
+        "bf16",
+        "crc32",
+        "dotprod",
+        "fcma",
+        "fp16",
+        "i8mm",
+        "jscvt",
+        "lse",
+        "neon",
+        "pmull",
+        "sha1",
+        "sha256"
+      ],
+      "source": [
+        "hw.optional.arm.FEAT_AES",
+        "hw.optional.arm.FEAT_BF16",
+        "hw.optional.arm.FEAT_CRC32",
+        "hw.optional.arm.FEAT_DotProd",
+        "hw.optional.arm.FEAT_FCMA",
+        "hw.optional.arm.FEAT_FP16",
+        "hw.optional.arm.FEAT_I8MM",
+        "hw.optional.arm.FEAT_JSCVT",
+        "hw.optional.arm.FEAT_LSE",
+        "hw.optional.arm.FEAT_PMULL",
+        "hw.optional.arm.FEAT_SHA1",
+        "hw.optional.arm.FEAT_SHA256",
+        "hw.optional.armv8_1_atomics",
+        "hw.optional.neon"
+      ],
+      "status": "available"
+    },
+    "instruction_sets": [
+      "aes",
+      "armv8_1_atomics",
+      "bf16",
+      "crc32",
+      "dotprod",
+      "fcma",
+      "fp16",
+      "i8mm",
+      "jscvt",
+      "lse",
+      "neon",
+      "pmull",
+      "sha1",
+      "sha256"
+    ],
+    "logical_cpu_count": 12,
+    "numpy_version": "2.5.2",
+    "oneTBB": {
+      "enabled": false,
+      "version": "not_available"
+    },
+    "operating_system": "macOS-26.2-arm64-arm-64bit-Mach-O",
+    "physical_core_count": 12,
+    "python_version": "3.13.11",
+    "requested_fastpauli_cpu_backend": "auto",
+    "runtime_visible_accelerator_backends": [],
+    "runtime_visible_backends": [
+      "cpu"
+    ],
+    "thread_settings": {
+      "MKL_NUM_THREADS": "unset",
+      "OMP_NUM_THREADS": "unset",
+      "controlled_thread_count": "not_controlled"
+    },
+    "unavailable_fastpauli_cpu_backends": {
+      "avx2": "not_compiled",
+      "avx512": "not_compiled",
+      "sve": "not_compiled",
+      "tbb": "not_compiled"
+    }
+  },
+  "fastpauli_build_info": {
+    "accelerator_build_mode": "cpu_only",
+    "active_cpu_backend": "scalar",
+    "available_cpu_backends": [
+      "scalar",
+      "neon"
+    ],
+    "compiled_accelerator_backends": [],
+    "compiled_backends": [
+      "cpu"
+    ],
+    "compiled_cpu_backends": [
+      "scalar",
+      "neon"
+    ],
+    "compiler_build_config": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CUDA_COMPILER_ID": "not_available",
+      "CMAKE_CUDA_COMPILER_VERSION": "not_available",
+      "CMAKE_CUDA_HOST_COMPILER": "not_available",
+      "CMAKE_CXX_COMPILER_ID": "AppleClang",
+      "CMAKE_CXX_COMPILER_VERSION": "21.0.0.21000099",
+      "CMAKE_CXX_FLAGS": "",
+      "CMAKE_HIP_COMPILER": "not_available",
+      "CMAKE_HIP_COMPILER_ID": "not_available",
+      "CMAKE_HIP_COMPILER_VERSION": "not_available",
+      "CMAKE_OBJCXX_COMPILER_ID": "not_available",
+      "CMAKE_OBJCXX_COMPILER_VERSION": "not_available",
+      "CMAKE_OBJCXX_FLAGS": "not_available",
+      "WOLFGANG_CUDA_HOST_COMPILER": "not_available",
+      "WOLFGANG_CUDA_HOST_COMPILER_SOURCE": "not_available"
+    },
+    "cpu_auto_dispatch_thresholds": {
+      "tbb_pairwise_entries": 331776
+    },
+    "cpu_backend": "scalar",
+    "cpu_backend_build_flags": {
+      "avx2": false,
+      "avx512": false,
+      "neon": true,
+      "scalar": true,
+      "sve": false,
+      "tbb": false
+    },
+    "cpu_backend_candidates": [
+      {
+        "name": "scalar",
+        "status": "available"
+      },
+      {
+        "name": "tbb",
+        "status": "not_compiled"
+      },
+      {
+        "name": "avx2",
+        "status": "not_compiled"
+      },
+      {
+        "name": "avx512",
+        "status": "not_compiled"
+      },
+      {
+        "name": "neon",
+        "status": "available"
+      },
+      {
+        "name": "sve",
+        "status": "not_compiled"
+      }
+    ],
+    "cpu_backend_env_var": "WOLFGANG_CPU_BACKEND",
+    "cpu_cmake_options": {
+      "WOLFGANG_BUILD_CPU_BACKEND": "scalar",
+      "WOLFGANG_CUDA_ARCHITECTURES": "80,86,89,90,100-real,120",
+      "WOLFGANG_CUDA_USE_CUB": "ON",
+      "WOLFGANG_CUDA_USE_THRUST": "ON",
+      "WOLFGANG_ENABLE_ARM_NEON": "auto",
+      "WOLFGANG_ENABLE_ARM_SVE": "auto",
+      "WOLFGANG_ENABLE_AVX2": "auto",
+      "WOLFGANG_ENABLE_AVX512": "auto",
+      "WOLFGANG_ENABLE_CUDA": "OFF",
+      "WOLFGANG_ENABLE_HIP": "OFF",
+      "WOLFGANG_ENABLE_METAL": "OFF",
+      "WOLFGANG_ENABLE_NATIVE": "OFF",
+      "WOLFGANG_ENABLE_OPENMP": "OFF",
+      "WOLFGANG_ENABLE_TBB": "auto",
+      "WOLFGANG_HIP_ARCHITECTURES": "gfx942"
+    },
+    "cuda_architectures": "80,86,89,90,100-real,120",
+    "cuda_driver_version": "",
+    "cuda_enabled": false,
+    "cuda_kernels": [],
+    "cuda_runtime_available": false,
+    "cuda_runtime_version": "",
+    "cuda_toolkit_version": "not_available",
+    "hip_architectures": "not_available",
+    "hip_driver_version": "",
+    "hip_enabled": false,
+    "hip_kernels": [],
+    "hip_runtime_available": false,
+    "hip_runtime_version": "",
+    "metal_capability_summary": "",
+    "metal_device_name": "",
+    "metal_enabled": false,
+    "metal_kernels": [],
+    "metal_macos_version": "",
+    "metal_runtime_available": false,
+    "metal_storage_mode": "",
+    "metal_xcode_or_clt_version": "",
+    "native_enabled": false,
+    "oneTBB_version": "not_available",
+    "optimized_cpu_kernels": {
+      "avx2": [],
+      "avx512": [],
+      "neon": [
+        "commutes_with_words_1_2",
+        "full_group_commutation_graph_words_1_2"
+      ],
+      "sve": [],
+      "tbb": []
+    },
+    "requested_cpu_backend": "auto",
+    "rocm_toolkit_version": "not_available",
+    "runtime_visible_accelerator_backends": [],
+    "runtime_visible_backends": [
+      "cpu"
+    ],
+    "unavailable_cpu_backends": {
+      "avx2": "not_compiled",
+      "avx512": "not_compiled",
+      "sve": "not_compiled",
+      "tbb": "not_compiled"
+    }
+  },
+  "fastpauli_version": "0.2.3",
+  "git_commit": "ce6938f",
+  "timing_policy": {
+    "repeat": 5,
+    "summary": "median seconds",
+    "warmup": 1
+  }
+}
