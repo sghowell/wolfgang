@@ -49,6 +49,7 @@ SOURCE_OF_TRUTH_PATHS = (
     "docs/plans/mi300x_rocm_optimization_campaign7_plan.md",
     "docs/plans/mi300x_rocm_optimization_campaign8_plan.md",
     "docs/plans/backend_neutral_accelerator_campaign9_plan.md",
+    "docs/plans/wolfgang-kernel-performance-campaign.md",
     "docs/architecture/semantic_contracts.md",
     "docs/architecture/cuda_backend.md",
     "docs/architecture/rocm_backend.md",
