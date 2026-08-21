@@ -56,10 +56,12 @@ def test_metal_benchmark_declares_campaign6_profile() -> None:
 
 
 def test_campaign6_workspace_groundwork_is_private_and_registered() -> None:
+    helper_hpp = read("src/detail/accelerator_host_helpers.hpp")
     workspace_hpp = read("src/metal/workspace_metal.hpp")
     workspace_mm = read("src/metal/workspace_metal.mm")
     protocol = read("docs/benchmarks/protocol.md")
 
+    assert '#include "detail/accelerator_host_helpers.hpp"' in workspace_hpp
     for token in (
         "class MetalWorkspace",
         "struct WorkspaceSnapshot",
@@ -70,7 +72,7 @@ def test_campaign6_workspace_groundwork_is_private_and_registered() -> None:
         "workspace_timing_mode_from_env",
         "WOLFGANG_METAL_BENCH_WORKSPACE_TIMING",
     ):
-        assert token in workspace_hpp + workspace_mm
+        assert token in helper_hpp + workspace_hpp + workspace_mm
 
     assert "#include <Metal/Metal.h>" not in read("include/wolfgang/device_pauli_sum.hpp")
     assert "Campaign 6" in protocol

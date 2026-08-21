@@ -10,7 +10,9 @@
 namespace wolfgang::hip_detail {
 
 HipTemporaryWorkspace::HipTemporaryWorkspace(int device_ordinal)
-    : device_ordinal_(device_ordinal) {}
+    : device_ordinal_(device_ordinal) {
+  wolfgang::detail::validate_workspace_device_ordinal("HIP", device_ordinal_);
+}
 
 HipTemporaryWorkspace::~HipTemporaryWorkspace() {
   release();
@@ -34,8 +36,15 @@ HipTemporaryWorkspace& HipTemporaryWorkspace::operator=(HipTemporaryWorkspace&& 
   high_watermark_bytes_ = std::exchange(other.high_watermark_bytes_, 0);
   allocation_count_ = std::exchange(other.allocation_count_, 0);
   growth_count_ = std::exchange(other.growth_count_, 0);
-  device_ordinal_ = std::exchange(other.device_ordinal_, 0);
+  device_ordinal_ = std::exchange(other.device_ordinal_, -1);
   return *this;
+}
+
+void HipTemporaryWorkspace::ensure_device(int operand_device_ordinal) const {
+  wolfgang::detail::ensure_workspace_device_match(
+      "HIP",
+      device_ordinal_,
+      operand_device_ordinal);
 }
 
 void* HipTemporaryWorkspace::reserve(std::size_t bytes, const char* label) {
@@ -58,6 +67,12 @@ void* HipTemporaryWorkspace::reserve(std::size_t bytes, const char* label) {
   capacity_bytes_ = bytes;
   ++allocation_count_;
   return pointer_;
+}
+
+void HipTemporaryWorkspace::reset() noexcept {
+  // A reset intentionally keeps the allocation. It marks the scratch region as
+  // reusable for the next operation without changing capacity or lifetime
+  // counters; callers still need release() when they want to return memory.
 }
 
 void HipTemporaryWorkspace::release() noexcept {
@@ -92,6 +107,17 @@ std::size_t HipTemporaryWorkspace::allocation_count() const noexcept {
 
 std::size_t HipTemporaryWorkspace::growth_count() const noexcept {
   return growth_count_;
+}
+
+WorkspaceSnapshot HipTemporaryWorkspace::snapshot(WorkspaceTimingMode mode) const noexcept {
+  return {
+      device_ordinal_,
+      capacity_bytes_,
+      high_watermark_bytes_,
+      allocation_count_,
+      growth_count_,
+      workspace_timing_mode_name(mode),
+  };
 }
 
 }  // namespace wolfgang::hip_detail

@@ -45,9 +45,7 @@ void* aligned_pointer(void* ptr, std::size_t alignment) noexcept {
 }  // namespace
 
 CudaWorkspace::CudaWorkspace(int device_ordinal) : device_ordinal_(device_ordinal) {
-  if (device_ordinal < 0) {
-    throw std::invalid_argument("CUDA workspace device ordinal must be non-negative");
-  }
+  wolfgang::detail::validate_workspace_device_ordinal("CUDA", device_ordinal_);
 }
 
 CudaWorkspace::CudaWorkspace(CudaWorkspace&& other) noexcept {
@@ -67,12 +65,10 @@ CudaWorkspace::~CudaWorkspace() {
 }
 
 void CudaWorkspace::ensure_device(int operand_device_ordinal) const {
-  if (operand_device_ordinal != device_ordinal_) {
-    throw std::invalid_argument(
-        "CUDA workspace device mismatch during workspace use: workspace device ordinal " +
-        std::to_string(device_ordinal_) + ", operand device ordinal " +
-        std::to_string(operand_device_ordinal));
-  }
+  wolfgang::detail::ensure_workspace_device_match(
+      "CUDA",
+      device_ordinal_,
+      operand_device_ordinal);
 }
 
 void* CudaWorkspace::reserve_bytes(std::size_t bytes, std::size_t alignment) {
@@ -181,18 +177,6 @@ WorkspaceTimingMode workspace_timing_mode_from_env() {
     return WorkspaceTimingMode::kPreReservedOutsideTiming;
   }
   throw_invalid_workspace_mode(value);
-}
-
-const char* workspace_timing_mode_name(WorkspaceTimingMode mode) noexcept {
-  switch (mode) {
-    case WorkspaceTimingMode::kAbsent:
-      return "absent";
-    case WorkspaceTimingMode::kGrowInsideTiming:
-      return "grow_inside_timing";
-    case WorkspaceTimingMode::kPreReservedOutsideTiming:
-      return "pre_reserved_outside_timing";
-  }
-  return "unknown";
 }
 
 }  // namespace wolfgang::cuda::detail

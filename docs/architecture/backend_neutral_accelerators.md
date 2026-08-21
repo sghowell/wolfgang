@@ -120,6 +120,27 @@ backend and one device ordinal. Host materialization and compact consumers must
 use the owning backend's copy and reduction path. External users may view
 accepted interop exports, but they must not free Wolfgang-owned memory.
 
+## Private Reusable Accelerator Scratch And Output Buffers
+
+Reusable accelerator scratch and output storage stays a private implementation
+contract. It does not add a public workspace, stream, or raw-buffer API.
+Across CUDA, HIP, and Metal, private reusable accelerator scratch and output
+buffers are:
+
+```text
+move-only
+bound to the same backend-local device ordinal as every operand they serve
+reset retains the allocation for reuse
+release returns the allocation to the runtime
+capacity growth is monotonic until reset or release
+must not expose raw device pointers or framework objects through the public API
+```
+
+A reusable buffer owner may publish lifetime counters for tests and benchmark
+validation, but only through private hooks that avoid exporting allocator
+handles. Future reusable output buffers must follow the same contract as
+scratch buffers before any backend starts timing or retaining them.
+
 ## Read-Only Export Policy
 
 CUDA read-only DLPack export exists only for accepted CUDA

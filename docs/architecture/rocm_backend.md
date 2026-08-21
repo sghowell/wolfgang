@@ -138,6 +138,19 @@ complex coefficients
 Moved-from objects are invalid. Methods on moved-from HIP objects must raise a
 deterministic exception rather than dereferencing null device state.
 
+Private reusable accelerator scratch and output buffers remain unavailable as
+public API, but the internal ownership/lifetime contract is fixed for future
+HIP prestaging:
+
+```text
+private reusable accelerator scratch and output buffers remain move-only
+workspace storage is tied to the same backend-local device ordinal as every operand it serves
+reset retains the allocation for reuse
+release returns the allocation to the runtime
+capacity growth is monotonic until reset or release
+must not expose raw device pointers or framework objects through the public API
+```
+
 ## Transfer Semantics
 
 `PauliSum.to_device(device=0)` copies host packed storage to the selected HIP

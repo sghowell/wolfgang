@@ -1,25 +1,16 @@
 #pragma once
 
+#include "detail/accelerator_host_helpers.hpp"
+
 #include <Metal/Metal.h>
 
 #include <cstddef>
 
 namespace wolfgang::metal_detail {
 
-enum class WorkspaceTimingMode {
-  kAbsent,
-  kGrowInsideTiming,
-  kPreReservedOutsideTiming,
-};
-
-struct WorkspaceSnapshot {
-  int device_ordinal = -1;
-  std::size_t reserved_bytes = 0;
-  std::size_t high_watermark_bytes = 0;
-  std::size_t allocation_count = 0;
-  std::size_t growth_count = 0;
-  const char* timing_mode = "absent";
-};
+using detail::WorkspaceSnapshot;
+using detail::WorkspaceTimingMode;
+using detail::workspace_timing_mode_name;
 
 // Private scratch buffer owner for future device-resident Metal algorithms.
 //

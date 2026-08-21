@@ -1,22 +1,14 @@
 #pragma once
 
+#include "detail/accelerator_host_helpers.hpp"
+
 #include <cstddef>
 
 namespace wolfgang::cuda::detail {
 
-enum class WorkspaceTimingMode {
-  kAbsent,
-  kGrowInsideTiming,
-  kPreReservedOutsideTiming,
-};
-
-struct WorkspaceSnapshot {
-  int device_ordinal = -1;
-  std::size_t reserved_bytes = 0;
-  std::size_t high_watermark_bytes = 0;
-  std::size_t allocation_count = 0;
-  std::size_t growth_count = 0;
-};
+using detail::WorkspaceSnapshot;
+using detail::WorkspaceTimingMode;
+using detail::workspace_timing_mode_name;
 
 class CudaWorkspace {
 public:

@@ -113,14 +113,19 @@ Device operations return new device objects unless the method name ends in `_inp
 Post-Phase 11 optimization may introduce an internal CUDA workspace object for
 H100 benchmark experiments. That object is not public Python API and is not an
 installed C++ API until a later API review promotes it. Internal workspace
-experiments must preserve the existing `DevicePauliSum` ownership model:
+experiments must preserve the existing `DevicePauliSum` ownership model and the
+cross-backend private reusable accelerator scratch and output buffers contract:
 
 ```text
-workspace storage is tied to one CUDA device ordinal
+private reusable accelerator scratch and output buffers remain move-only
+workspace storage is tied to the same backend-local device ordinal as every operand it serves
 workspace reuse is allowed only when every operand lives on that same device
+reset retains the allocation for reuse
+release returns the allocation to the runtime
 capacity growth is monotonic for a run unless an explicit reset or release path is used
 temporary-storage reuse must not change canonical ordering, zero-tolerance filtering, or coefficient tolerance semantics
 benchmark labels must say whether workspace allocation and growth are inside or outside the timed boundary
+must not expose raw device pointers or framework objects through the public API
 ```
 
 Campaign 4 implements this as a private source-only `CudaWorkspace` under
