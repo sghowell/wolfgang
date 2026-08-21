@@ -420,6 +420,41 @@ CAMPAIGN8_CASES = [
         "rtol": 0.0,
     },
 ]
+WAVE1D_CASES = [
+    {
+        "name": "metal_wave1d_small_rows_128x128",
+        "profile": "wave1d",
+        "operation": "commutes_with_device",
+        "num_qubits": 32,
+        "lhs_terms": 128,
+        "rhs_terms": 128,
+        "term_weight": 6,
+        "random_seed": 19801,
+        "wave1d_gate": "small_regression_guard",
+    },
+    {
+        "name": "metal_wave1d_medium_rows_512x512",
+        "profile": "wave1d",
+        "operation": "commutes_with_device",
+        "num_qubits": 64,
+        "lhs_terms": 512,
+        "rhs_terms": 512,
+        "term_weight": 8,
+        "random_seed": 19811,
+        "wave1d_gate": "retained_reuse_gate",
+    },
+    {
+        "name": "metal_wave1d_large_rows_2048x2048",
+        "profile": "wave1d",
+        "operation": "commutes_with_device",
+        "num_qubits": 64,
+        "lhs_terms": 2048,
+        "rhs_terms": 2048,
+        "term_weight": 8,
+        "random_seed": 19821,
+        "wave1d_gate": "retained_reuse_gate",
+    },
+]
 PROFILE_CASES = {
     "smoke": SMOKE_CASES,
     "scaling": SCALING_CASES,
@@ -430,6 +465,7 @@ PROFILE_CASES = {
     "campaign6": CAMPAIGN6_CASES,
     "campaign7": CAMPAIGN7_CASES,
     "campaign8": CAMPAIGN8_CASES,
+    "wave1d": WAVE1D_CASES,
 }
 CPU_BASELINE_SELECTORS = (
     ("cpu_default", "auto"),
@@ -672,6 +708,130 @@ def list_profiles() -> dict[str, Any]:
             profile: [case_with_metadata(case, repeat=0) for case in cases]
             for profile, cases in PROFILE_CASES.items()
         },
+    }
+
+
+def mean_of_medians(values: list[float]) -> float:
+    if not values:
+        raise ValueError("at least one rerun median is required")
+    return statistics.fmean(values)
+
+
+def summarize_wave1d_evidence(reports: list[dict[str, Any]], *, repeat: int) -> dict[str, Any]:
+    grouped: dict[str, dict[str, Any]] = {}
+    for rerun_index, report in enumerate(reports, start=1):
+        for row in report.get("cases", []):
+            if row.get("status") != "ok":
+                continue
+            case = row.get("case", {})
+            if case.get("profile") != "wave1d":
+                continue
+            timing = row.get("timing")
+            if not isinstance(timing, dict) or "median" not in timing:
+                continue
+            case_name = str(case["name"])
+            bucket = grouped.setdefault(
+                case_name,
+                {
+                    "case_name": case_name,
+                    "gate": case.get("wave1d_gate", "retained_reuse_gate"),
+                    "lhs_terms": case.get("lhs_terms"),
+                    "rhs_terms": case.get("rhs_terms"),
+                    "matrix_entries": int(case.get("lhs_terms", 0)) * int(case.get("rhs_terms", 0)),
+                    "variant_rerun_medians": {},
+                    "transfer_boundaries": {},
+                },
+            )
+            bucket["variant_rerun_medians"].setdefault(str(row["variant"]), []).append(float(timing["median"]))
+            bucket["transfer_boundaries"][str(row["variant"])] = row.get("transfer_boundary")
+
+    aggregated_cases: list[dict[str, Any]] = []
+    small_row_regressions: list[dict[str, Any]] = []
+    overall_status = "go"
+    for case_name in sorted(grouped):
+        entry = grouped[case_name]
+        medians_by_variant = entry["variant_rerun_medians"]
+        boundary_map = entry["transfer_boundaries"]
+        variant_summary = {
+            variant: {
+                "transfer_boundary": boundary_map.get(variant),
+                "rerun_medians_seconds": values,
+                "mean_of_medians_seconds": mean_of_medians(values),
+            }
+            for variant, values in medians_by_variant.items()
+        }
+
+        reused = variant_summary["metal_device_matrix_reuse"]["mean_of_medians_seconds"]
+        allocating = variant_summary["metal_device_matrix"]["mean_of_medians_seconds"]
+        transfer = variant_summary["metal_transfer_inclusive"]["mean_of_medians_seconds"]
+        reused_vs_allocating = reused / allocating
+        reused_vs_transfer = reused / transfer
+
+        if entry["gate"] == "small_regression_guard":
+            gate_decision = "go"
+            if reused_vs_allocating > 1.05:
+                gate_decision = "reject_investigate"
+                overall_status = "reject_investigate"
+                small_row_regressions.append(
+                    {
+                        "case_name": case_name,
+                        "ratio_vs_allocating": reused_vs_allocating,
+                        "threshold_ratio": 1.05,
+                        "message": (
+                            "retained reused-output regressed by more than 5% against "
+                            "the allocating boundary on a small-row case"
+                        ),
+                    }
+                )
+        else:
+            gate_decision = "go" if reused_vs_allocating <= 0.90 else "hold"
+            if gate_decision == "hold" and overall_status == "go":
+                overall_status = "hold"
+
+        aggregated_cases.append(
+            {
+                "case_name": case_name,
+                "gate": entry["gate"],
+                "lhs_terms": entry["lhs_terms"],
+                "rhs_terms": entry["rhs_terms"],
+                "matrix_entries": entry["matrix_entries"],
+                "gate_decision": gate_decision,
+                "variants": variant_summary,
+                "comparisons": {
+                    "reused_vs_allocating": {
+                        "baseline_variant": "metal_device_matrix",
+                        "candidate_variant": "metal_device_matrix_reuse",
+                        "baseline_transfer_boundary": boundary_map.get("metal_device_matrix"),
+                        "candidate_transfer_boundary": boundary_map.get("metal_device_matrix_reuse"),
+                        "mean_of_medians_ratio": reused_vs_allocating,
+                        "mean_of_medians_delta_seconds": reused - allocating,
+                    },
+                    "reused_vs_transfer_inclusive": {
+                        "baseline_variant": "metal_transfer_inclusive",
+                        "candidate_variant": "metal_device_matrix_reuse",
+                        "baseline_transfer_boundary": boundary_map.get("metal_transfer_inclusive"),
+                        "candidate_transfer_boundary": boundary_map.get("metal_device_matrix_reuse"),
+                        "mean_of_medians_ratio": reused_vs_transfer,
+                        "mean_of_medians_delta_seconds": reused - transfer,
+                    },
+                },
+            }
+        )
+
+    return {
+        "status": overall_status,
+        "measurement_methodology": {
+            "independent_reruns": len(reports),
+            "timed_repetitions_per_rerun": repeat,
+            "promotion_metric": "mean_of_medians_seconds",
+            "boundary_labels": [
+                "device_output_reused",
+                "device_output_allocating",
+                "transfer_inclusive",
+            ],
+        },
+        "aggregated_cases": aggregated_cases,
+        "small_row_regressions": small_row_regressions,
     }
 
 
@@ -1933,7 +2093,7 @@ def run_case(
     return rows
 
 
-def build_report(*, repeat: int, profile: str) -> dict[str, Any]:
+def build_single_report(*, repeat: int, profile: str) -> dict[str, Any]:
     build_info = core._build_info()
     metal_status = core._metal_status()
     provenance = git_provenance()
@@ -1983,6 +2143,30 @@ def build_report(*, repeat: int, profile: str) -> dict[str, Any]:
     return report
 
 
+def build_report(*, repeat: int, profile: str, reruns: int = 1) -> dict[str, Any]:
+    if reruns < 1:
+        raise ValueError("reruns must be at least 1")
+
+    reports = [build_single_report(repeat=repeat, profile=profile) for _ in range(reruns)]
+    report = reports[-1]
+    if profile != "wave1d":
+        if reruns > 1:
+            report["measurement_methodology"] = {
+                "independent_reruns": reruns,
+                "timed_repetitions_per_rerun": repeat,
+                "promotion_metric": "per_rerun_median_seconds",
+            }
+        return report
+
+    report["measurement_methodology"] = {
+        "independent_reruns": reruns,
+        "timed_repetitions_per_rerun": repeat,
+        "promotion_metric": "mean_of_medians_seconds",
+    }
+    report["wave1d_evidence"] = summarize_wave1d_evidence(reports, repeat=repeat)
+    return report
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repeat", type=int, default=3, help="Timed repetitions per case.")
@@ -2002,6 +2186,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Emit deterministic case metadata without running benchmarks.",
     )
+    parser.add_argument(
+        "--reruns",
+        type=int,
+        default=1,
+        help="Independent reruns of the selected profile; Wave 1D uses mean-of-medians.",
+    )
     parser.add_argument("--json", action="store_true", help="Emit a JSON report.")
     parser.add_argument("--output", type=Path, help="Optional path for the emitted JSON report.")
     return parser.parse_args()
@@ -2013,7 +2203,7 @@ def main() -> None:
         report = list_profiles()
     else:
         profile = "smoke" if args.smoke else args.profile
-        report = build_report(repeat=args.repeat, profile=profile)
+        report = build_report(repeat=args.repeat, profile=profile, reruns=args.reruns)
     payload = json.dumps(report, indent=2, sort_keys=True, default=str)
     if args.output is not None:
         args.output.parent.mkdir(parents=True, exist_ok=True)

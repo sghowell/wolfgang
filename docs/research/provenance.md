@@ -182,12 +182,21 @@ Evidence is recorded in
 `docs/benchmarks/reports/apple_metal_optimization_campaign7_2026-05-07.md`.
 Apple Metal Campaign 8 makes the Campaign 7 candidate measurable enough to
 decide whether it is performance-relevant or still experimental. It adds
-private timing decomposition evidence through `timing_decomposition_seconds`,
-`pipeline_cache`, dispatch counts, and `performance_decision` metadata for the
-checked one-word simplify candidate while keeping the public Metal simplify API
+timing decomposition and pipeline-cache metadata so command execution can be
+separated from host preflight, scratch/output allocation, command encoding, and
+output accounting. The candidate remains experimental and public simplify stays
 on the transfer-reference bridge. The checked rows currently classify the
 candidate as `experimental`. Evidence is recorded in
 `docs/benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md`.
+
+Wave 1D re-opens the Apple Metal commutation side of the cross-backend kernel
+performance campaign without broadening public semantics. It adds a local Apple
+host evidence gate for `DevicePauliSum.commutes_with_device(..., output=matrix)`
+that compares `device_output_reused` against both `device_output_allocating`
+and `transfer_inclusive` using 3 independent reruns and mean-of-medians. The
+checked Wave 1D report records GO on the local Apple M4 Pro host with no
+small-row regression trigger. Evidence is recorded in
+`docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md`.
 
 ```python
 import numpy as np
@@ -266,6 +275,7 @@ generic Apple GPU or wheel support claims.
 ![FastPauli accelerator performance landscape](../benchmarks/plots/accelerator_landscape_with_rocm.svg)
 
 Latest source reports:
+[Apple Metal Wave 1D](../benchmarks/reports/apple_metal_wave1d_2026-08-21.md),
 [Apple Metal Campaign 8](../benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md),
 [Apple Metal Campaign 7](../benchmarks/reports/apple_metal_optimization_campaign7_2026-05-07.md),
 [Apple Metal Campaign 6](../benchmarks/reports/apple_metal_optimization_campaign6_2026-05-07.md),
@@ -608,6 +618,7 @@ WOLFGANG_VALIDATE_CUDA=1 WOLFGANG_CUDA_ARCHITECTURES=90 python scripts/validate.
 - [Apple Metal optimization Campaign 6 report](../benchmarks/reports/apple_metal_optimization_campaign6_2026-05-07.md)
 - [Apple Metal optimization Campaign 7 report](../benchmarks/reports/apple_metal_optimization_campaign7_2026-05-07.md)
 - [Apple Metal optimization Campaign 8 report](../benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md)
+- [Apple Metal Wave 1D report](../benchmarks/reports/apple_metal_wave1d_2026-08-21.md)
 - [CUDA cross-architecture Campaign 10 report](../benchmarks/reports/cuda_cross_architecture_campaign10_2026-04-29.md)
 - [CUDA residual-risk Campaign 11 report](../benchmarks/reports/cuda_residual_risk_campaign11_2026-04-29.md)
 - [ROCm MI300X Campaign 7 report](../benchmarks/reports/rocm_mi300x_campaign7_2026-04-30.md)

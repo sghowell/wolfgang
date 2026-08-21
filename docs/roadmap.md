@@ -33,7 +33,7 @@ Semantic contracts: docs/architecture/semantic_contracts.md
 CUDA architecture:  docs/architecture/cuda_backend.md
 ROCm/HIP architecture: docs/architecture/rocm_backend.md
 Apple Metal architecture: docs/architecture/apple_accelerator.md
-Latest Apple Metal report: docs/benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md
+Latest Apple Metal report: docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md
 Hardware targets:   docs/architecture/hardware_targets_and_testing.md
 Testing and CI:     docs/architecture/testing_and_ci.md
 Adapter contracts: docs/architecture/adapter_contracts.md
@@ -413,7 +413,8 @@ Evidence is recorded in
 `docs/benchmarks/reports/apple_metal_optimization_campaign5_2026-05-06.md` and
 `docs/benchmarks/reports/apple_metal_optimization_campaign6_2026-05-07.md` and
 `docs/benchmarks/reports/apple_metal_optimization_campaign7_2026-05-07.md` and
-`docs/benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md`.
+`docs/benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md` and
+`docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md`.
 
 ## Release Candidate Foundation Checkpoint
 
