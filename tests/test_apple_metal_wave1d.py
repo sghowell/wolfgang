@@ -334,3 +334,16 @@ def test_wave1d_docs_require_same_boundary_comparisons() -> None:
     ):
         assert token in architecture
         assert token in protocol
+
+
+def test_wave1d_report_is_registered_as_latest_apple_metal_evidence() -> None:
+    report_path = "docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md"
+
+    roadmap = read(ROOT / "docs/roadmap.md")
+    provenance = read(ROOT / "docs/research/provenance.md")
+    campaign_plan = read(ROOT / "docs/plans/wolfgang-kernel-performance-campaign.md")
+
+    assert "Latest Apple Metal report: " + report_path in roadmap
+    assert report_path in provenance
+    assert "Apple Metal Wave 1D" in provenance
+    assert "latest Apple Metal report: " + report_path in campaign_plan

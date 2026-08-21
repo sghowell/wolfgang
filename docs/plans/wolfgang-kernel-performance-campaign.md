@@ -33,7 +33,7 @@ benchmark protocol: docs/benchmarks/protocol.md
 backend contracts: docs/architecture/backend_neutral_accelerators.md
 latest CUDA report: docs/benchmarks/reports/cuda_cross_architecture_campaign10_2026-04-29.md
 latest ROCm report: docs/benchmarks/reports/rocm_campaign8_architecture_readiness_2026-05-01.md
-latest Apple Metal report: docs/benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md
+latest Apple Metal report: docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md
 CPU Apple Silicon evidence: docs/benchmarks/reports/cpu_phase9_apple_silicon_m4_pro_2026-04-25.md
 ```
 
