@@ -70,6 +70,8 @@ void bind_build_info(nb::module_& module) {
         nb::dict cpu_auto_dispatch_thresholds;
         cpu_auto_dispatch_thresholds["tbb_pairwise_entries"] =
             wolfgang::kAutoTbbPairwiseEntryThreshold;
+        cpu_auto_dispatch_thresholds["neon_full_grouping_scalar_min_entries"] =
+            wolfgang::kAutoNeonFullGroupingScalarMinEntries;
         info["cpu_auto_dispatch_thresholds"] = cpu_auto_dispatch_thresholds;
 
         nb::dict optimized_cpu_kernels;

@@ -8,6 +8,7 @@
 namespace wolfgang {
 
 inline constexpr std::size_t kAutoTbbPairwiseEntryThreshold = 331776;
+inline constexpr std::size_t kAutoNeonFullGroupingScalarMinEntries = 1024;
 
 struct CpuBackendCandidate {
   std::string name;

@@ -132,8 +132,18 @@ def infer_auto_pairwise_backend(
     return "scalar"
 
 
-def infer_auto_full_grouping_backend(build_info: dict[str, Any], num_qubits: int) -> str:
+def infer_auto_full_grouping_backend(
+    build_info: dict[str, Any], num_qubits: int, num_terms: int
+) -> str:
     if not simd_commutation_supports_num_qubits(num_qubits):
+        return "scalar"
+    if (
+        backend_is_available(build_info, "neon")
+        and not backend_is_available(build_info, "avx512")
+        and not backend_is_available(build_info, "avx2")
+        and (num_terms * num_terms)
+        >= build_info["cpu_auto_dispatch_thresholds"]["neon_full_grouping_scalar_min_entries"]
+    ):
         return "scalar"
     for backend in ("avx512", "avx2", "neon"):
         if backend_is_available(build_info, backend):
@@ -267,7 +277,7 @@ def run_full_grouping_case(
                 "requested_cpu_backend": selector,
                 "active_cpu_backend": build_info["active_cpu_backend"],
                 "effective_backend_hint": (
-                    infer_auto_full_grouping_backend(build_info, op.num_qubits)
+                    infer_auto_full_grouping_backend(build_info, op.num_qubits, op.num_terms)
                     if selector == "auto"
                     else build_info["active_cpu_backend"]
                 ),

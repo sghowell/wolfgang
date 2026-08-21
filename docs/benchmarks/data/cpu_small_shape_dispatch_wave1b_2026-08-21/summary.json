@@ -1,0 +1,891 @@
+{
+  "artifacts": {
+    "baseline_dir": "docs/benchmarks/data/cpu_small_shape_dispatch_wave1b_2026-08-21/baseline",
+    "candidate_dir": "docs/benchmarks/data/cpu_small_shape_dispatch_wave1b_2026-08-21/candidate",
+    "report": "docs/benchmarks/reports/cpu_small_shape_dispatch_wave1b_2026-08-21.md"
+  },
+  "baseline_git_revision": "ce6938f00c9a237cf83a2c291ce04dbf3e41e6b4",
+  "benchmark_summaries": {
+    "bench_cpu_dispatch": {
+      "auto_full_grouping": {
+        "baseline_mean_of_medians": 4.1666333345347084e-05,
+        "baseline_medians": [
+          7.370799994532717e-05,
+          2.7083000077254837e-05,
+          2.420800001345924e-05
+        ],
+        "candidate_mean_of_medians": 3.2527666614138674e-05,
+        "candidate_medians": [
+          5.570799976339913e-05,
+          2.0667000171670225e-05,
+          2.1207999907346675e-05
+        ],
+        "dataset": {
+          "active_cpu_backend": "scalar",
+          "coefficient_dtype": "complex128",
+          "effective_backend_hint": "scalar",
+          "grouping_mode": "full",
+          "num_qubits": 65,
+          "num_terms": 128,
+          "operator_construction_method": "deterministic dense labels",
+          "optimized_kernel": "full_group_commutation_graph",
+          "random_seed": 8211,
+          "requested_cpu_backend": "auto",
+          "strategy": "largest_first"
+        },
+        "delta_percent": -21.93297561238115,
+        "delta_seconds": -9.13866673120841e-06
+      },
+      "auto_pairwise_commutation": {
+        "baseline_mean_of_medians": 3.262499982762771e-05,
+        "baseline_medians": [
+          6.745800010321545e-05,
+          1.5249999705702066e-05,
+          1.516699967396562e-05
+        ],
+        "candidate_mean_of_medians": 2.551366666618075e-05,
+        "candidate_medians": [
+          4.6041000132390764e-05,
+          1.5374999748019036e-05,
+          1.5125000118132448e-05
+        ],
+        "dataset": {
+          "active_cpu_backend": "scalar",
+          "coefficient_dtype": "complex128",
+          "effective_backend_hint": "neon",
+          "lhs_terms": 128,
+          "matrix_entries": 16384,
+          "num_qubits": 65,
+          "operator_construction_method": "deterministic dense labels",
+          "optimized_kernel": "pairwise_commutation",
+          "random_seed": 7211,
+          "requested_cpu_backend": "auto",
+          "rhs_terms": 128
+        },
+        "delta_percent": -21.79718988205142,
+        "delta_seconds": -7.111333161446961e-06
+      },
+      "auto_statevector_expectation": {
+        "baseline_mean_of_medians": 0.00026750000006359187,
+        "baseline_medians": [
+          0.0005217500001890585,
+          0.00014158300018607406,
+          0.00013916699981564307
+        ],
+        "candidate_mean_of_medians": 0.00025812466659165995,
+        "candidate_medians": [
+          0.0004959160000908014,
+          0.00013866600011169794,
+          0.00013979199957248056
+        ],
+        "dataset": {
+          "active_cpu_backend": "scalar",
+          "coefficient_dtype": "complex128",
+          "num_qubits": 10,
+          "num_terms": 128,
+          "operator_construction_method": "deterministic dense labels",
+          "random_seed": 6211,
+          "requested_cpu_backend": "auto",
+          "statevector_dtype": "complex128",
+          "statevector_length": 1024
+        },
+        "delta_percent": -3.5047975587675353,
+        "delta_seconds": -9.375333471931923e-06
+      },
+      "forced_neon_full_grouping": {
+        "baseline_mean_of_medians": 3.972233344029519e-05,
+        "baseline_medians": [
+          6.824999991295044e-05,
+          2.6500000330997864e-05,
+          2.4417000076937256e-05
+        ],
+        "candidate_mean_of_medians": 4.29583331727675e-05,
+        "candidate_medians": [
+          7.566699969174806e-05,
+          2.633299982335302e-05,
+          2.687500000320142e-05
+        ],
+        "dataset": {
+          "active_cpu_backend": "neon",
+          "coefficient_dtype": "complex128",
+          "effective_backend_hint": "neon",
+          "grouping_mode": "full",
+          "num_qubits": 65,
+          "num_terms": 128,
+          "operator_construction_method": "deterministic dense labels",
+          "optimized_kernel": "full_group_commutation_graph",
+          "random_seed": 8211,
+          "requested_cpu_backend": "neon",
+          "strategy": "largest_first"
+        },
+        "delta_percent": 8.146549943588276,
+        "delta_seconds": 3.235999732472315e-06
+      },
+      "forced_neon_pairwise_commutation": {
+        "baseline_mean_of_medians": 2.3958666740024153e-05,
+        "baseline_medians": [
+          4.2499999835854396e-05,
+          1.5584000266244402e-05,
+          1.3792000117973657e-05
+        ],
+        "candidate_mean_of_medians": 2.487500008404216e-05,
+        "candidate_medians": [
+          4.437500001586159e-05,
+          1.5250000160449417e-05,
+          1.5000000075815478e-05
+        ],
+        "dataset": {
+          "active_cpu_backend": "neon",
+          "coefficient_dtype": "complex128",
+          "effective_backend_hint": "neon",
+          "lhs_terms": 128,
+          "matrix_entries": 16384,
+          "num_qubits": 65,
+          "operator_construction_method": "deterministic dense labels",
+          "optimized_kernel": "pairwise_commutation",
+          "random_seed": 7211,
+          "requested_cpu_backend": "neon",
+          "rhs_terms": 128
+        },
+        "delta_percent": 3.824642472643213,
+        "delta_seconds": 9.163333440180069e-07
+      },
+      "forced_scalar_full_grouping": {
+        "baseline_mean_of_medians": 5.43606667330702e-05,
+        "baseline_medians": [
+          0.00011829100003524218,
+          2.420800001345924e-05,
+          2.058300015050918e-05
+        ],
+        "candidate_mean_of_medians": 3.516633311543652e-05,
+        "candidate_medians": [
+          6.0040999869670486e-05,
+          2.1832999664184172e-05,
+          2.3624999812454917e-05
+        ],
+        "dataset": {
+          "active_cpu_backend": "scalar",
+          "coefficient_dtype": "complex128",
+          "effective_backend_hint": "scalar",
+          "grouping_mode": "full",
+          "num_qubits": 65,
+          "num_terms": 128,
+          "operator_construction_method": "deterministic dense labels",
+          "optimized_kernel": "full_group_commutation_graph",
+          "random_seed": 8211,
+          "requested_cpu_backend": "scalar",
+          "strategy": "largest_first"
+        },
+        "delta_percent": -35.309231418894356,
+        "delta_seconds": -1.9194333617633674e-05
+      },
+      "forced_scalar_pairwise_commutation": {
+        "baseline_mean_of_medians": 7.36803332680817e-05,
+        "baseline_medians": [
+          0.0001239999996869301,
+          4.679099993154523e-05,
+          5.025000018576975e-05
+        ],
+        "candidate_mean_of_medians": 7.543033355735436e-05,
+        "candidate_medians": [
+          0.00012279200018383563,
+          5.195800031287945e-05,
+          5.154100017534802e-05
+        ],
+        "dataset": {
+          "active_cpu_backend": "scalar",
+          "coefficient_dtype": "complex128",
+          "effective_backend_hint": "scalar",
+          "lhs_terms": 128,
+          "matrix_entries": 16384,
+          "num_qubits": 65,
+          "operator_construction_method": "deterministic dense labels",
+          "optimized_kernel": "pairwise_commutation",
+          "random_seed": 7211,
+          "requested_cpu_backend": "scalar",
+          "rhs_terms": 128
+        },
+        "delta_percent": 2.375125371522665,
+        "delta_seconds": 1.7500002892726632e-06
+      },
+      "forced_scalar_statevector_expectation": {
+        "baseline_mean_of_medians": 0.0003078329999273895,
+        "baseline_medians": [
+          0.0006493749997389386,
+          0.0001335410001956916,
+          0.0001405829998475383
+        ],
+        "candidate_mean_of_medians": 0.000304763666766424,
+        "candidate_medians": [
+          0.00063795799997024,
+          0.00013783300028080703,
+          0.00013850000004822505
+        ],
+        "dataset": {
+          "active_cpu_backend": "scalar",
+          "coefficient_dtype": "complex128",
+          "num_qubits": 10,
+          "num_terms": 128,
+          "operator_construction_method": "deterministic dense labels",
+          "random_seed": 6211,
+          "requested_cpu_backend": "scalar",
+          "statevector_dtype": "complex128",
+          "statevector_length": 1024
+        },
+        "delta_percent": -0.9970773639244179,
+        "delta_seconds": -3.0693331609654706e-06
+      },
+      "optimized_backend_availability": {
+        "dataset": {
+          "active_cpu_backend": "scalar",
+          "availability_scope": "compiled and runtime CPU backend candidates",
+          "requested_cpu_backend": "auto"
+        }
+      }
+    },
+    "bench_cpu_thresholds": {
+      "above_threshold": {
+        "baseline_mean_of_medians": 0.0010431940001277933,
+        "baseline_medians": [
+          0.0010319160001017735,
+          0.001070499999968888,
+          0.001027166000312718
+        ],
+        "candidate_mean_of_medians": 0.0010360969999965164,
+        "candidate_medians": [
+          0.001029125000059139,
+          0.0010580000002846646,
+          0.0010211659996457456
+        ],
+        "dataset": {
+          "auto_active_backend_report": "scalar",
+          "auto_effective_backend_hint": "neon",
+          "coefficient_dtype": "complex128",
+          "lhs_terms": 1152,
+          "matrix_entries": 1327104,
+          "num_qubits": 65,
+          "operator_construction_method": "deterministic dense labels",
+          "random_seed": 1334345,
+          "rhs_terms": 1152,
+          "threshold_region": "at_or_above"
+        },
+        "delta_percent": -0.680314508174654,
+        "delta_seconds": -7.0970001312768965e-06
+      },
+      "at_threshold": {
+        "baseline_mean_of_medians": 0.00027034733329855953,
+        "baseline_medians": [
+          0.0002751669999270234,
+          0.0002679160002116987,
+          0.0002679589997569565
+        ],
+        "candidate_mean_of_medians": 0.00027122233329161344,
+        "candidate_medians": [
+          0.00026995799998985603,
+          0.0002729590000853932,
+          0.000270749999799591
+        ],
+        "dataset": {
+          "auto_active_backend_report": "scalar",
+          "auto_effective_backend_hint": "neon",
+          "coefficient_dtype": "complex128",
+          "lhs_terms": 576,
+          "matrix_entries": 331776,
+          "num_qubits": 65,
+          "operator_construction_method": "deterministic dense labels",
+          "random_seed": 339017,
+          "rhs_terms": 576,
+          "threshold_region": "at_or_above"
+        },
+        "delta_percent": 0.3236577118693429,
+        "delta_seconds": 8.749999930539039e-07
+      },
+      "below_threshold": {
+        "baseline_mean_of_medians": 7.274999992053684e-05,
+        "baseline_medians": [
+          7.70000001466542e-05,
+          7.083299988153158e-05,
+          7.041699973342475e-05
+        ],
+        "candidate_mean_of_medians": 7.08056668372592e-05,
+        "candidate_medians": [
+          7.062500026222551e-05,
+          7.070800029396196e-05,
+          7.108399995559012e-05
+        ],
+        "dataset": {
+          "auto_active_backend_report": "scalar",
+          "auto_effective_backend_hint": "neon",
+          "coefficient_dtype": "complex128",
+          "lhs_terms": 288,
+          "matrix_entries": 82944,
+          "num_qubits": 65,
+          "operator_construction_method": "deterministic dense labels",
+          "random_seed": 90185,
+          "rhs_terms": 288,
+          "threshold_region": "below"
+        },
+        "delta_percent": -2.6726227978026005,
+        "delta_seconds": -1.9443330832776413e-06
+      }
+    }
+  },
+  "campaign": "wave1b_cpu_small_shape_dispatch",
+  "candidate_git_revision": "f38d8992cac8bd4c47780a0243daf084e876b756",
+  "correctness_checks": {
+    "dispatch_all_matches_forced_scalar": true,
+    "threshold_all_matches_forced_scalar": true
+  },
+  "date": "2026-08-21",
+  "decision": "accepted",
+  "hardware_host_label": "Apple M4 Pro / macOS-26.2-arm64-arm-64bit-Mach-O / arm64",
+  "hypothesis": "On NEON-only hosts, auto full-grouping should fall back to scalar once the dense self-graph reaches 1024 entries, while pairwise commutation dispatch remains unchanged.",
+  "schema_checks": {
+    "bench_cpu_dispatch": {
+      "case_names_match": true,
+      "case_schemas": {
+        "auto_full_grouping": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "grouping_mode",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "strategy"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "grouping_mode",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "strategy"
+          ],
+          "result_keys_baseline": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "groups",
+            "matches_forced_scalar"
+          ],
+          "result_keys_candidate": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "groups",
+            "matches_forced_scalar"
+          ]
+        },
+        "auto_pairwise_commutation": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "rhs_terms"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "rhs_terms"
+          ],
+          "result_keys_baseline": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "matches_forced_scalar",
+            "matrix_entries"
+          ],
+          "result_keys_candidate": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "matches_forced_scalar",
+            "matrix_entries"
+          ]
+        },
+        "auto_statevector_expectation": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "random_seed",
+            "requested_cpu_backend",
+            "statevector_dtype",
+            "statevector_length"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "random_seed",
+            "requested_cpu_backend",
+            "statevector_dtype",
+            "statevector_length"
+          ],
+          "result_keys_baseline": [
+            "expectation_imag",
+            "expectation_real",
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds"
+          ],
+          "result_keys_candidate": [
+            "expectation_imag",
+            "expectation_real",
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds"
+          ]
+        },
+        "forced_neon_full_grouping": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "grouping_mode",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "strategy"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "grouping_mode",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "strategy"
+          ],
+          "result_keys_baseline": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "groups",
+            "matches_forced_scalar"
+          ],
+          "result_keys_candidate": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "groups",
+            "matches_forced_scalar"
+          ]
+        },
+        "forced_neon_pairwise_commutation": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "rhs_terms"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "rhs_terms"
+          ],
+          "result_keys_baseline": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "matches_forced_scalar",
+            "matrix_entries"
+          ],
+          "result_keys_candidate": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "matches_forced_scalar",
+            "matrix_entries"
+          ]
+        },
+        "forced_scalar_full_grouping": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "grouping_mode",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "strategy"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "grouping_mode",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "strategy"
+          ],
+          "result_keys_baseline": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "groups",
+            "matches_forced_scalar"
+          ],
+          "result_keys_candidate": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "groups",
+            "matches_forced_scalar"
+          ]
+        },
+        "forced_scalar_pairwise_commutation": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "rhs_terms"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "effective_backend_hint",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "optimized_kernel",
+            "random_seed",
+            "requested_cpu_backend",
+            "rhs_terms"
+          ],
+          "result_keys_baseline": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "matches_forced_scalar",
+            "matrix_entries"
+          ],
+          "result_keys_candidate": [
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds",
+            "matches_forced_scalar",
+            "matrix_entries"
+          ]
+        },
+        "forced_scalar_statevector_expectation": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "random_seed",
+            "requested_cpu_backend",
+            "statevector_dtype",
+            "statevector_length"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "coefficient_dtype",
+            "num_qubits",
+            "num_terms",
+            "operator_construction_method",
+            "random_seed",
+            "requested_cpu_backend",
+            "statevector_dtype",
+            "statevector_length"
+          ],
+          "result_keys_baseline": [
+            "expectation_imag",
+            "expectation_real",
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds"
+          ],
+          "result_keys_candidate": [
+            "expectation_imag",
+            "expectation_real",
+            "fastpauli_max_seconds",
+            "fastpauli_min_seconds",
+            "fastpauli_seconds"
+          ]
+        },
+        "optimized_backend_availability": {
+          "dataset_keys_baseline": [
+            "active_cpu_backend",
+            "availability_scope",
+            "requested_cpu_backend"
+          ],
+          "dataset_keys_candidate": [
+            "active_cpu_backend",
+            "availability_scope",
+            "requested_cpu_backend"
+          ],
+          "result_keys_baseline": [
+            "optimized_backends"
+          ],
+          "result_keys_candidate": [
+            "optimized_backends"
+          ]
+        }
+      },
+      "top_keys_baseline": [
+        "baselines",
+        "benchmark",
+        "cases",
+        "command",
+        "environment",
+        "fastpauli_build_info",
+        "fastpauli_version",
+        "git_commit",
+        "timing_policy"
+      ],
+      "top_keys_candidate": [
+        "baselines",
+        "benchmark",
+        "cases",
+        "command",
+        "environment",
+        "fastpauli_build_info",
+        "fastpauli_version",
+        "git_commit",
+        "timing_policy"
+      ]
+    },
+    "bench_cpu_thresholds": {
+      "case_names_match": true,
+      "case_schemas": {
+        "above_threshold": {
+          "dataset_keys_baseline": [
+            "auto_active_backend_report",
+            "auto_effective_backend_hint",
+            "coefficient_dtype",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "random_seed",
+            "rhs_terms",
+            "threshold_region"
+          ],
+          "dataset_keys_candidate": [
+            "auto_active_backend_report",
+            "auto_effective_backend_hint",
+            "coefficient_dtype",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "random_seed",
+            "rhs_terms",
+            "threshold_region"
+          ],
+          "result_keys_baseline": [
+            "auto_max_seconds",
+            "auto_min_seconds",
+            "auto_seconds",
+            "matches_forced_scalar",
+            "optimized_backends",
+            "scalar_max_seconds",
+            "scalar_min_seconds",
+            "scalar_seconds"
+          ],
+          "result_keys_candidate": [
+            "auto_max_seconds",
+            "auto_min_seconds",
+            "auto_seconds",
+            "matches_forced_scalar",
+            "optimized_backends",
+            "scalar_max_seconds",
+            "scalar_min_seconds",
+            "scalar_seconds"
+          ]
+        },
+        "at_threshold": {
+          "dataset_keys_baseline": [
+            "auto_active_backend_report",
+            "auto_effective_backend_hint",
+            "coefficient_dtype",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "random_seed",
+            "rhs_terms",
+            "threshold_region"
+          ],
+          "dataset_keys_candidate": [
+            "auto_active_backend_report",
+            "auto_effective_backend_hint",
+            "coefficient_dtype",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "random_seed",
+            "rhs_terms",
+            "threshold_region"
+          ],
+          "result_keys_baseline": [
+            "auto_max_seconds",
+            "auto_min_seconds",
+            "auto_seconds",
+            "matches_forced_scalar",
+            "optimized_backends",
+            "scalar_max_seconds",
+            "scalar_min_seconds",
+            "scalar_seconds"
+          ],
+          "result_keys_candidate": [
+            "auto_max_seconds",
+            "auto_min_seconds",
+            "auto_seconds",
+            "matches_forced_scalar",
+            "optimized_backends",
+            "scalar_max_seconds",
+            "scalar_min_seconds",
+            "scalar_seconds"
+          ]
+        },
+        "below_threshold": {
+          "dataset_keys_baseline": [
+            "auto_active_backend_report",
+            "auto_effective_backend_hint",
+            "coefficient_dtype",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "random_seed",
+            "rhs_terms",
+            "threshold_region"
+          ],
+          "dataset_keys_candidate": [
+            "auto_active_backend_report",
+            "auto_effective_backend_hint",
+            "coefficient_dtype",
+            "lhs_terms",
+            "matrix_entries",
+            "num_qubits",
+            "operator_construction_method",
+            "random_seed",
+            "rhs_terms",
+            "threshold_region"
+          ],
+          "result_keys_baseline": [
+            "auto_max_seconds",
+            "auto_min_seconds",
+            "auto_seconds",
+            "matches_forced_scalar",
+            "optimized_backends",
+            "scalar_max_seconds",
+            "scalar_min_seconds",
+            "scalar_seconds"
+          ],
+          "result_keys_candidate": [
+            "auto_max_seconds",
+            "auto_min_seconds",
+            "auto_seconds",
+            "matches_forced_scalar",
+            "optimized_backends",
+            "scalar_max_seconds",
+            "scalar_min_seconds",
+            "scalar_seconds"
+          ]
+        }
+      },
+      "top_keys_baseline": [
+        "benchmark",
+        "cases",
+        "command",
+        "correctness_checks",
+        "environment",
+        "fastpauli_build_info",
+        "fastpauli_version",
+        "git_commit",
+        "thresholds",
+        "timing_policy"
+      ],
+      "top_keys_candidate": [
+        "benchmark",
+        "cases",
+        "command",
+        "correctness_checks",
+        "environment",
+        "fastpauli_build_info",
+        "fastpauli_version",
+        "git_commit",
+        "thresholds",
+        "timing_policy"
+      ]
+    }
+  },
+  "selector_outcomes": {
+    "auto_full_grouping_effective_backend_hint_baseline": "neon",
+    "auto_full_grouping_effective_backend_hint_candidate": "scalar",
+    "auto_pairwise_commutation_effective_backend_hint_baseline": "neon",
+    "auto_pairwise_commutation_effective_backend_hint_candidate": "neon"
+  }
+}

@@ -511,4 +511,17 @@ def benchmark_environment(build_info: dict[str, Any], *, numpy_version: str) -> 
 
 
 def command_string() -> str:
-    return " ".join([sys.executable, *sys.argv])
+    def redact(arg: str, *, executable: bool = False) -> str:
+        path = Path(arg)
+        if executable:
+            return "python"
+        if path.is_absolute():
+            try:
+                return str(path.relative_to(ROOT))
+            except ValueError:
+                return path.name
+        return arg
+
+    argv = [redact(sys.executable, executable=True)]
+    argv.extend(redact(arg) for arg in sys.argv)
+    return shlex.join(argv)
