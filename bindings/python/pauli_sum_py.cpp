@@ -1117,17 +1117,19 @@ void bind_pauli_sum(nb::module_& module) {
           "shared memory on the CPU by default. "
           "axis=None returns a Python int total. axis=0 returns NumPy uint64 "
           "column counts. axis=1 returns NumPy uint64 row counts. The method "
-          "synchronizes before returning, matching FastPauli's public accelerator "
+          "synchronizes before returning, matching Wolfgang's public accelerator "
           "method semantics.")
       .def(
           "conflict_degrees",
           &conflict_degrees_device_matrix,
           nb::arg("axis") = nb::none(),
-          "Count anti-commuting entries with compact accelerator reductions.\n\n"
+          "Count anti-commuting entries using the backend consumer.\n\n"
+          "CUDA/HIP reduce on device and may finish partial sums on the host. Metal scans "
+          "shared memory on the CPU by default. "
           "axis=None returns a Python int total. axis=0 returns NumPy uint64 "
           "column conflict counts. axis=1 returns NumPy uint64 row conflict "
-          "counts. The method is synchronous and copies only compact uint64 "
-          "counts to the host; it does not materialize the dense matrix.")
+          "counts. The method is synchronous and returns only compact counts; "
+          "it does not materialize a dense host matrix.")
       .def(
           "__dlpack__",
           &device_commutation_matrix_dlpack,

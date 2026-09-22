@@ -41,4 +41,8 @@ repeated same-boundary measurements.
 
 Performance follow-ups and qualification inputs: [experiment queue](review_performance_experiments.md).
 
-Status: implementation in progress; CPU/Metal hardening and boundary validation underway.
+Status: local correctness, contract, native-boundary and validation work implemented
+and independently reviewed. The measured Python-boundary experiment is complete;
+hardware-dependent and larger algorithm experiments remain queued. See the
+[review closeout](../reviews/repository_hardening_2026-09-21.md) and
+[paired performance evidence](../benchmarks/reports/python_boundary_hardening_2026-09-21.md).

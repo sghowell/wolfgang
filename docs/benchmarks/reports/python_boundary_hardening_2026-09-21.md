@@ -25,7 +25,7 @@ include the Python method, allocation and result destruction, with prebuilt inpu
 | Simplify three terms (small-workload guard) | 0.601 µs | 0.483 µs | -19.7% |
 
 Baseline: fresh CPU build at `d0fde93`, copied into an isolated runtime before
-binding/build changes. Candidate: review-hardening native source fingerprint
+binding/build changes. Candidate: `491d13e` native source fingerprint
 recorded in the sample file; the measured loaded extension has its own SHA-256.
 Both use Python 3.13.11, NumPy 2.5.3, AppleClang 21.0.0.21000099 and macOS 26.6.2
 on Apple M4 Pro. oneTBB is absent, scalar is forced, native CPU tuning is off.
