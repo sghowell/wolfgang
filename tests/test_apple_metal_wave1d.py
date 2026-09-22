@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import copy
 import importlib.util
 import json
 import subprocess
 import sys
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCHMARK = ROOT / "benchmarks" / "bench_metal_kernels.py"
@@ -50,274 +53,102 @@ def test_wave1d_profile_lists_small_and_large_reuse_cases() -> None:
 
 
 
-def test_wave1d_evidence_summary_computes_mean_of_medians_and_regressions() -> None:
-    module = load_benchmark_module()
-    reports = [
+def wave1d_reports(module):
+    variants = (
+        ("metal_transfer_inclusive", "transfer_inclusive", 0.004),
+        ("metal_device_matrix", "device_output_allocating", 0.002),
+        ("metal_device_matrix_reuse", "device_output_reused", 0.0015),
+    )
+    return [
         {
+            "status": "ok",
+            "metal_status": {"runtime_available": True},
             "cases": [
                 {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_transfer_inclusive",
-                    "timing": {"median": 0.0040},
-                    "transfer_boundary": "transfer_inclusive",
+                    "case": module.case_with_metadata(case, repeat=7),
+                    "variant": variant,
+                    "timing": {"median": duration * factor},
+                    "transfer_boundary": boundary,
                     "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_device_matrix",
-                    "timing": {"median": 0.0020},
-                    "transfer_boundary": "device_output_allocating",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_device_matrix_reuse",
-                    "timing": {"median": 0.00212},
-                    "transfer_boundary": "device_output_reused",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_transfer_inclusive",
-                    "timing": {"median": 0.120},
-                    "transfer_boundary": "transfer_inclusive",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_device_matrix",
-                    "timing": {"median": 0.080},
-                    "transfer_boundary": "device_output_allocating",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_device_matrix_reuse",
-                    "timing": {"median": 0.060},
-                    "transfer_boundary": "device_output_reused",
-                    "status": "ok",
-                },
-            ]
-        },
-        {
-            "cases": [
-                {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_transfer_inclusive",
-                    "timing": {"median": 0.0038},
-                    "transfer_boundary": "transfer_inclusive",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_device_matrix",
-                    "timing": {"median": 0.0020},
-                    "transfer_boundary": "device_output_allocating",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_device_matrix_reuse",
-                    "timing": {"median": 0.00210},
-                    "transfer_boundary": "device_output_reused",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_transfer_inclusive",
-                    "timing": {"median": 0.118},
-                    "transfer_boundary": "transfer_inclusive",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_device_matrix",
-                    "timing": {"median": 0.079},
-                    "transfer_boundary": "device_output_allocating",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_device_matrix_reuse",
-                    "timing": {"median": 0.061},
-                    "transfer_boundary": "device_output_reused",
-                    "status": "ok",
-                },
-            ]
-        },
-        {
-            "cases": [
-                {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_transfer_inclusive",
-                    "timing": {"median": 0.0039},
-                    "transfer_boundary": "transfer_inclusive",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_device_matrix",
-                    "timing": {"median": 0.0020},
-                    "transfer_boundary": "device_output_allocating",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_small_rows_128x128",
-                        "profile": "wave1d",
-                        "wave1d_gate": "small_regression_guard",
-                        "lhs_terms": 128,
-                        "rhs_terms": 128,
-                    },
-                    "variant": "metal_device_matrix_reuse",
-                    "timing": {"median": 0.00211},
-                    "transfer_boundary": "device_output_reused",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_transfer_inclusive",
-                    "timing": {"median": 0.121},
-                    "transfer_boundary": "transfer_inclusive",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_device_matrix",
-                    "timing": {"median": 0.081},
-                    "transfer_boundary": "device_output_allocating",
-                    "status": "ok",
-                },
-                {
-                    "case": {
-                        "name": "metal_wave1d_large_rows_2048x2048",
-                        "profile": "wave1d",
-                        "wave1d_gate": "retained_reuse_gate",
-                        "lhs_terms": 2048,
-                        "rhs_terms": 2048,
-                    },
-                    "variant": "metal_device_matrix_reuse",
-                    "timing": {"median": 0.059},
-                    "transfer_boundary": "device_output_reused",
-                    "status": "ok",
-                },
-            ]
-        },
+                    "correct": True,
+                }
+                for case in module.WAVE1D_CASES
+                for variant, boundary, duration in variants
+            ],
+        }
+        for factor in (0.9, 1.0, 1.1)
     ]
 
+
+def test_wave1d_complete_evidence_and_small_regression_guard() -> None:
+    module = load_benchmark_module()
+    reports = wave1d_reports(module)
     summary = module.summarize_wave1d_evidence(reports, repeat=7)
-
+    assert summary["status"] == "go"
+    assert len(summary["aggregated_cases"]) == 3
     assert summary["measurement_methodology"]["independent_reruns"] == 3
-    assert summary["measurement_methodology"]["timed_repetitions_per_rerun"] == 7
     assert summary["measurement_methodology"]["promotion_metric"] == "mean_of_medians_seconds"
+    small_name = module.WAVE1D_CASES[0]["name"]
+    for report in reports:
+        for row in report["cases"]:
+            if row["case"]["name"] == small_name and row["variant"] == "metal_device_matrix_reuse":
+                row["timing"]["median"] = 0.0022
+    summary = module.summarize_wave1d_evidence(reports, repeat=7)
     assert summary["status"] == "reject_investigate"
-    assert summary["small_row_regressions"]
+    assert summary["small_row_regressions"][0]["case_name"] == small_name
 
-    aggregated = {row["case_name"]: row for row in summary["aggregated_cases"]}
-    small = aggregated["metal_wave1d_small_rows_128x128"]
-    large = aggregated["metal_wave1d_large_rows_2048x2048"]
 
-    assert small["comparisons"]["reused_vs_allocating"]["mean_of_medians_ratio"] > 1.05
-    assert small["gate_decision"] == "reject_investigate"
-    assert large["comparisons"]["reused_vs_allocating"]["mean_of_medians_ratio"] < 0.90
-    assert large["gate_decision"] == "go"
+@pytest.mark.parametrize("problem", [
+    "empty", "one_rerun", "missing_case", "missing_variant", "duplicate", "incorrect",
+    "nan", "infinite", "zero", "negative", "wrong_boundary", "wrong_shape", "wrong_repeat",
+    "failed_row", "failed_report", "missing_runtime",
+])
+def test_wave1d_invalid_evidence_cannot_promote(problem: str) -> None:
+    module = load_benchmark_module()
+    reports = wave1d_reports(module)
+    first = reports[0]["cases"][0]
+    if problem == "empty":
+        reports = []
+    elif problem == "one_rerun":
+        reports = reports[:1]
+    elif problem == "missing_case":
+        for report in reports:
+            report["cases"] = report["cases"][3:]
+    elif problem == "missing_variant":
+        reports[0]["cases"].pop()
+    elif problem == "duplicate":
+        reports[0]["cases"].append(copy.deepcopy(first))
+    elif problem == "incorrect":
+        first["correct"] = False
+    elif problem in {"nan", "infinite", "zero", "negative"}:
+        first["timing"]["median"] = {"nan": float("nan"), "infinite": float("inf"), "zero": 0, "negative": -1}[problem]
+    elif problem == "wrong_boundary":
+        first["transfer_boundary"] = "device_output_reused"
+    elif problem == "wrong_shape":
+        first["case"]["lhs_terms"] = 1
+    elif problem == "wrong_repeat":
+        first["case"]["repeat"] = 1
+    elif problem == "failed_row":
+        first["status"] = "failed"
+    elif problem == "failed_report":
+        reports[0]["status"] = "failed"
+    elif problem == "missing_runtime":
+        reports[0].pop("metal_status")
+    summary = module.summarize_wave1d_evidence(reports, repeat=7)
+    assert summary["status"] in {"invalid_evidence", "insufficient_evidence"}
+    assert summary["evidence_errors"]
+    assert summary["aggregated_cases"] == []
 
+
+def test_wave1d_cpu_only_report_is_a_skip(monkeypatch) -> None:
+    module = load_benchmark_module()
+    monkeypatch.setattr(module, "build_single_report", lambda **kwargs: {
+        "status": "skipped", "skip_reason": "Metal unavailable",
+        "metal_status": {"runtime_available": False}, "cases": [],
+    })
+    report = module.build_report(repeat=7, profile="wave1d", reruns=3)
+    assert report["status"] == "skipped"
+    assert report["wave1d_evidence"]["status"] == "skipped"
 
 
 def test_wave1d_docs_require_same_boundary_comparisons() -> None:

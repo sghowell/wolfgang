@@ -3,6 +3,7 @@
 #include "detail/checked_arithmetic.hpp"
 #include "detail/phase.hpp"
 
+#include <algorithm>
 #include <bit>
 #include <cmath>
 #include <complex>
@@ -187,8 +188,13 @@ std::vector<std::uint64_t> pack_count_bitstrings(
   return packed;
 }
 
-double validate_counts_and_total(const std::vector<double>& counts) {
+struct NormalizedCounts {
+  std::vector<double> values;
   double total = 0.0;
+};
+
+NormalizedCounts normalize_counts(const std::vector<double>& counts) {
+  double maximum = 0.0;
   for (double count : counts) {
     if (count < 0.0) {
       throw std::invalid_argument("Z-count values must be non-negative");
@@ -196,12 +202,21 @@ double validate_counts_and_total(const std::vector<double>& counts) {
     if (!std::isfinite(count)) {
       throw std::invalid_argument("Z-count values must be finite");
     }
-    total += count;
+    maximum = std::max(maximum, count);
   }
-  if (total <= 0.0) {
+  if (maximum == 0.0) {
     throw std::invalid_argument("Z-count total count must be positive");
   }
-  return total;
+  // A common positive rescaling preserves expectations while bounding both
+  // the total and the signed per-term numerator by the number of entries.
+  NormalizedCounts normalized;
+  normalized.values.reserve(counts.size());
+  for (double count : counts) {
+    const double weight = count / maximum;
+    normalized.values.push_back(weight);
+    normalized.total += weight;
+  }
+  return normalized;
 }
 
 }  // namespace
@@ -224,7 +239,7 @@ std::complex<double> PauliSum::expectation_z_counts(
   }
 
   validate_diagonal_terms(*this);
-  const double total_count = validate_counts_and_total(counts);
+  const NormalizedCounts normalized = normalize_counts(counts);
   const std::vector<std::uint64_t> packed_bitstrings =
       pack_count_bitstrings(bitstrings, num_qubits_, words_);
 
@@ -239,9 +254,9 @@ std::complex<double> PauliSum::expectation_z_counts(
         const std::uint64_t active_z = z_[term_offset + word] & packed_bitstrings[row_offset + word];
         odd_parity ^= (std::popcount(active_z) & 1U) != 0;
       }
-      weighted_sum += counts[row] * (odd_parity ? -1.0 : 1.0);
+      weighted_sum += normalized.values[row] * (odd_parity ? -1.0 : 1.0);
     }
-    result += coeffs_[term] * (weighted_sum / total_count);
+    result += coeffs_[term] * (weighted_sum / normalized.total);
   }
   return result;
 }

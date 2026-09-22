@@ -17,6 +17,21 @@ OPENFERMION_INSTALL_HINT = "Install Wolfgang with the openfermion extra to use t
 ROOT = Path(__file__).resolve().parents[1]
 
 
+@pytest.mark.parametrize("coefficient", [1e-9, 1e-12j, 1e-10 + 2e-10j])
+@pytest.mark.parametrize("repeats", [1, 100])
+def test_export_preserves_small_coefficients_without_intermediate_pruning(coefficient, repeats):
+    pytest.importorskip("openfermion.ops")
+    exported = PauliSum.from_labels(["X"] * repeats, [coefficient] * repeats).to_openfermion()
+    assert set(exported.terms) == {((0, "X"),)}
+    assert exported.terms[((0, "X"),)] == sum([complex(coefficient)] * repeats)
+
+
+def test_export_cancellation_does_not_drop_small_nonzero_remainder():
+    pytest.importorskip("openfermion.ops")
+    exported = PauliSum.from_labels(["X", "X", "Z", "Z"], [1, -1 + 1e-10, 1, -1]).to_openfermion()
+    assert exported.terms == {((0, "X"),): 1 + (-1 + 1e-10)}
+
+
 @pytest.fixture
 def qubit_operator_type() -> Any:
     openfermion_ops = pytest.importorskip("openfermion.ops")

@@ -102,3 +102,25 @@ def test_native_stub_matches_polymorphic_commutation_and_sparse_sequences() -> N
     assert stub.count("-> bool | npt.NDArray[np.bool_]") == 2
     assert "tuple[str, Sequence[int], complex]" in stub
     assert "output: npt.NDArray[np.bool_]" in stub
+
+
+def test_public_device_discovery_populates_shipped_gpu_capabilities(monkeypatch) -> None:
+    for name in ("cuda", "hip"):
+        build = {f"{name}_enabled": True, f"{name}_runtime_available": True}
+        fake = SimpleNamespace(**{f"{name}_devices": lambda: [{"name": "GPU A"}, {"name": "GPU B"}]})
+        monkeypatch.setattr(_capabilities, "_core", fake)
+        record = _capabilities._accelerator_record(name, _capabilities._fallback_accelerator_status(name, build))
+        assert record.runtime_available
+        assert record.device_count == 2
+        assert record.devices == ("GPU A", "GPU B")
+
+
+def test_operation_capabilities_distinguish_metal_bridges_and_unsupported_calls() -> None:
+    report = wolfgang.capabilities()
+    metal = report.accelerator("metal")
+    assert metal.execution_for("simplify") == "host_bridge"
+    assert metal.execution_for("count_commuting") == "host_shared_memory"
+    assert metal.execution_for("commutes_with") == "device"
+    assert metal.execution_for("matmul") == "unsupported"
+    for name in ("cuda", "hip"):
+        assert report.accelerator(name).execution_for("simplify") == "device"

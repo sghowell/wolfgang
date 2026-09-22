@@ -110,6 +110,7 @@ call PauliSum.from_sparse_list for non-empty terms
 export sparse terms
 build QubitOperator terms with coefficients
 identity terms export as the OpenFermion identity term
+duplicates are accumulated without tolerance pruning; only exact zeros are omitted
 zero-term PauliSum exports as an additive zero QubitOperator
 ```
 

@@ -361,6 +361,7 @@ void blit_to_shared_staging(
 std::vector<std::uint8_t> DevicePauliSum::commutes_with(
     const DevicePauliSum& rhs,
     std::size_t max_commutation_matrix_entries) const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_ || !rhs.impl_) {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }
@@ -377,6 +378,7 @@ void DevicePauliSum::commutes_with_into(
     const DevicePauliSum& rhs,
     std::span<std::uint8_t> output,
     std::size_t max_commutation_matrix_entries) const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_ || !rhs.impl_) {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }
@@ -439,6 +441,7 @@ void DevicePauliSum::commutes_with_into(
 DeviceCommutationMatrix DevicePauliSum::commutes_with_device(
     const DevicePauliSum& rhs,
     std::size_t max_commutation_matrix_entries) const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_ || !rhs.impl_) {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }
@@ -461,6 +464,7 @@ void DevicePauliSum::commutes_with_device_into(
     const DevicePauliSum& rhs,
     DeviceCommutationMatrix& output,
     std::size_t max_commutation_matrix_entries) const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_ || !rhs.impl_) {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }

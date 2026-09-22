@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import statistics
 import subprocess
@@ -718,13 +719,80 @@ def mean_of_medians(values: list[float]) -> float:
 
 
 def summarize_wave1d_evidence(reports: list[dict[str, Any]], *, repeat: int) -> dict[str, Any]:
+    methodology = {
+        "independent_reruns": len(reports),
+        "timed_repetitions_per_rerun": repeat,
+        "promotion_metric": "mean_of_medians_seconds",
+        "boundary_labels": ["device_output_reused", "device_output_allocating", "transfer_inclusive"],
+    }
+    errors: list[str] = []
+
+    def incomplete(status: str) -> dict[str, Any]:
+        return {
+            "status": status,
+            "measurement_methodology": methodology,
+            "evidence_errors": errors,
+            "aggregated_cases": [],
+            "small_row_regressions": [],
+        }
+
+    if reports and all(
+        report.get("status") == "skipped"
+        and report.get("metal_status", {}).get("runtime_available") is False
+        for report in reports
+    ):
+        errors.append("Metal runtime unavailable; no promotion evidence")
+        return incomplete("skipped")
+    if len(reports) < 3 or repeat < 1:
+        errors.append("Wave 1D requires at least 3 reruns and positive timed repetitions")
+        return incomplete("insufficient_evidence")
+
+    expected_cases = {case["name"]: case_with_metadata(case, repeat=repeat) for case in WAVE1D_CASES}
+    boundaries = {
+        "metal_transfer_inclusive": "transfer_inclusive",
+        "metal_device_matrix": "device_output_allocating",
+        "metal_device_matrix_reuse": "device_output_reused",
+    }
+    expected_keys = {(name, variant) for name in expected_cases for variant in boundaries}
+    # Fail closed before aggregating: every rerun must contain the full dataset,
+    # successful correctness checks, and exactly one sample per required boundary.
+    for index, report in enumerate(reports, start=1):
+        if report.get("status") != "ok" or report.get("metal_status", {}).get("runtime_available") is not True:
+            errors.append(f"rerun {index}: successful Metal runtime evidence is required")
+        seen: set[tuple[str, str]] = set()
+        for row in report.get("cases", []):
+            case = row.get("case", {})
+            if case.get("profile") != "wave1d" or row.get("variant") not in boundaries:
+                continue
+            name, variant = case.get("name"), row["variant"]
+            key = (name, variant)
+            expected = expected_cases.get(name)
+            if key in seen or expected is None:
+                errors.append(f"rerun {index}: duplicate or unknown case/variant {key}")
+                continue
+            seen.add(key)
+            if any(case.get(field) != value for field, value in expected.items()):
+                errors.append(f"rerun {index}: dataset or repeat mismatch for {key}")
+            timing = row.get("timing")
+            median = timing.get("median") if isinstance(timing, dict) else None
+            if isinstance(median, bool) or not isinstance(median, (int, float)) or not math.isfinite(median) or median <= 0:
+                errors.append(f"rerun {index}: finite positive timing required for {key}")
+            if row.get("status") != "ok" or row.get("correct") is not True:
+                errors.append(f"rerun {index}: successful correctness check required for {key}")
+            if row.get("transfer_boundary") != boundaries[variant]:
+                errors.append(f"rerun {index}: timing boundary mismatch for {key}")
+        if seen != expected_keys:
+            errors.append(f"rerun {index}: incomplete required case/variant coverage")
+    if errors:
+        return incomplete("invalid_evidence")
+
     grouped: dict[str, dict[str, Any]] = {}
-    for rerun_index, report in enumerate(reports, start=1):
+    for report in reports:
         for row in report.get("cases", []):
             if row.get("status") != "ok":
                 continue
             case = row.get("case", {})
-            if case.get("profile") != "wave1d":
+            if case.get("name") not in expected_cases or row.get("variant") not in boundaries:
                 continue
             timing = row.get("timing")
             if not isinstance(timing, dict) or "median" not in timing:
@@ -820,16 +888,8 @@ def summarize_wave1d_evidence(reports: list[dict[str, Any]], *, repeat: int) -> 
 
     return {
         "status": overall_status,
-        "measurement_methodology": {
-            "independent_reruns": len(reports),
-            "timed_repetitions_per_rerun": repeat,
-            "promotion_metric": "mean_of_medians_seconds",
-            "boundary_labels": [
-                "device_output_reused",
-                "device_output_allocating",
-                "transfer_inclusive",
-            ],
-        },
+        "measurement_methodology": methodology,
+        "evidence_errors": [],
         "aggregated_cases": aggregated_cases,
         "small_row_regressions": small_row_regressions,
     }

@@ -155,9 +155,33 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
 
   double max_abs_input = 0.0;
   for (const std::complex<double>& coeff : coeffs_) {
+    if (!std::isfinite(coeff.real()) || !std::isfinite(coeff.imag())) {
+      throw std::invalid_argument("simplify requires finite coefficients");
+    }
     max_abs_input = std::max(max_abs_input, std::abs(coeff));
   }
-  const double drop_threshold = atol + rtol * max_abs_input;
+  // Finite complex128 components can have a magnitude above DBL_MAX. Avoid
+  // 0 * infinity at absolute tolerance; use half units only when the ordinary
+  // threshold overflows. Halving before hypot needs no extended precision.
+  double drop_threshold = rtol == 0.0 ? atol : atol + rtol * max_abs_input;
+  double half_threshold = 0.0;
+  if (!std::isfinite(drop_threshold)) {
+    double max_half_magnitude = 0.0;
+    for (const auto& coeff : coeffs_) {
+      max_half_magnitude = std::max(
+          max_half_magnitude, std::hypot(coeff.real() * 0.5, coeff.imag() * 0.5));
+    }
+    half_threshold = atol * 0.5 + rtol * max_half_magnitude;
+    drop_threshold = half_threshold * 2.0;
+  }
+  const auto survives = [drop_threshold, half_threshold](const std::complex<double>& coeff) {
+    if (!std::isfinite(coeff.real()) || !std::isfinite(coeff.imag())) {
+      throw std::overflow_error("simplify coefficient accumulation overflowed complex128");
+    }
+    return std::isfinite(drop_threshold)
+        ? std::abs(coeff) > drop_threshold
+        : std::hypot(coeff.real() * 0.5, coeff.imag() * 0.5) > half_threshold;
+  };
 
   if (words_ == 1) {
     if (should_hash_accumulate_words1(x_, z_, num_terms_)) {
@@ -176,7 +200,7 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
       std::vector<std::pair<PackedKey1, std::complex<double>>> survivors;
       survivors.reserve(accumulators.size());
       for (const auto& [key, coeff] : accumulators) {
-        if (std::abs(coeff) > drop_threshold) {
+        if (survives(coeff)) {
           survivors.push_back({key, coeff});
         }
       }
@@ -240,7 +264,7 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
         ++next_position;
       }
 
-      if (std::abs(accumulated) > drop_threshold) {
+      if (survives(accumulated)) {
         out_x.push_back(key_x);
         out_z.push_back(key_z);
         out_coeffs.push_back(accumulated);
@@ -280,7 +304,7 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
       std::vector<std::pair<PackedKey2, std::complex<double>>> survivors;
       survivors.reserve(accumulators.size());
       for (const auto& [key, coeff] : accumulators) {
-        if (std::abs(coeff) > drop_threshold) {
+        if (survives(coeff)) {
           survivors.push_back({key, coeff});
         }
       }
@@ -348,7 +372,7 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
         ++next_position;
       }
 
-      if (std::abs(accumulated) > drop_threshold) {
+      if (survives(accumulated)) {
         out_x.push_back(key.x0);
         out_x.push_back(key.x1);
         out_z.push_back(key.z0);
@@ -403,7 +427,7 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
       ++next_position;
     }
 
-    if (std::abs(accumulated) > drop_threshold) {
+    if (survives(accumulated)) {
       const std::size_t first_offset = first_term * words_;
       for (std::size_t word = 0; word < words_; ++word) {
         out_x.push_back(x_[first_offset + word]);

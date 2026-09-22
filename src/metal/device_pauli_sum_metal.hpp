@@ -32,6 +32,20 @@ struct DevicePauliSum::Impl {
 
 namespace metal_detail {
 
+// Python and native worker threads need not provide an Objective-C pool. Keep
+// temporary command buffers, encoders, and errors within each synchronous call,
+// including exception unwinding; retained device objects outlive this scope.
+class ScopedAutoreleasePool {
+ public:
+  ScopedAutoreleasePool();
+  ~ScopedAutoreleasePool();
+  ScopedAutoreleasePool(const ScopedAutoreleasePool&) = delete;
+  ScopedAutoreleasePool& operator=(const ScopedAutoreleasePool&) = delete;
+
+ private:
+  void* pool_;
+};
+
 constexpr NSUInteger kThreadsPerThreadgroup = 256;
 constexpr NSUInteger kCommutationThreadgroupX = 16;
 constexpr NSUInteger kCommutationThreadgroupY = 16;

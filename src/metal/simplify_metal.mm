@@ -360,6 +360,7 @@ MetalSimplifyCandidateResult simplify_words1_device_candidate_for_testing(
     const DevicePauliSum& input,
     double atol,
     double rtol) {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!input.impl_) {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }

@@ -12,6 +12,7 @@ _PACKAGE_NAME = __package__ or "wolfgang_quantum"
 _core = importlib.import_module(f"{_PACKAGE_NAME}._wolfgang_core")
 
 BackendName = Literal["cuda", "hip", "metal"]
+ExecutionLocation = Literal["device", "host_bridge", "host_shared_memory", "unsupported"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -37,6 +38,18 @@ class BackendCapabilities:
     runtime_version: str
     driver_or_platform_version: str
     reason: str
+    operations: tuple[tuple[str, ExecutionLocation], ...] = ()
+
+    def execution_for(self, operation: str) -> ExecutionLocation:
+        """Return the public execution path, independent of runtime availability.
+
+        The backend's ``runtime_available`` must also be true to invoke a
+        supported operation. Experimental environment selectors are excluded.
+        """
+        for name, execution in self.operations:
+            if name == operation:
+                return execution
+        raise ValueError(f"unknown accelerator operation: {operation}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -87,6 +100,15 @@ def _accelerator_record(name: BackendName, status: dict[str, object]) -> Backend
 
     raw_device_count = status.get("device_count", 0)
     device_count = raw_device_count if isinstance(raw_device_count, int) else 0
+    metal_operations: tuple[tuple[str, ExecutionLocation], ...] = (
+        ("commutes_with", "device"),
+        ("commutes_with_device", "device"),
+        ("simplify", "host_bridge"),
+        ("count_commuting", "host_shared_memory"),
+        ("conflict_degrees", "host_shared_memory"),
+        ("expectation_statevector", "unsupported"),
+        ("matmul", "unsupported"),
+    )
     return BackendCapabilities(
         name=name,
         compiled=compiled,
@@ -96,6 +118,10 @@ def _accelerator_record(name: BackendName, status: dict[str, object]) -> Backend
         runtime_version=runtime_version,
         driver_or_platform_version=platform_version,
         reason=reason,
+        operations=tuple(
+            (operation, execution if name == "metal" else "device")
+            for operation, execution in metal_operations
+        ),
     )
 
 
@@ -121,6 +147,16 @@ def _fallback_accelerator_status(name: BackendName, build: dict[str, object]) ->
             status["device_count"] = 1
             status["devices"] = [{"name": device_name}]
         status["macos_version"] = str(build.get("metal_macos_version", ""))
+
+    if name in ("cuda", "hip") and runtime_available:
+        # These public functions exist in shipped builds even when private
+        # validation/status hooks are disabled.
+        devices_fn = getattr(_core, f"{name}_devices", None)
+        if callable(devices_fn):
+            devices = devices_fn()
+            if isinstance(devices, list):
+                status["devices"] = devices
+                status["device_count"] = len(devices)
 
     if not compiled:
         status["skip_reason"] = f"{name} backend was not compiled into this build"
@@ -174,7 +210,3 @@ def capabilities() -> WolfgangCapabilities:
         cpu=cpu,
         accelerators=accelerators,
     )
-
-
-# One-transition alias for the legacy exported name.
-WolfgangCapabilities = WolfgangCapabilities

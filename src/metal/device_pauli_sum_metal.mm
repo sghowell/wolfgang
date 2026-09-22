@@ -46,6 +46,7 @@ MetalDeviceInfo metal_device_info(id<MTLDevice> device) {
 }  // namespace
 
 DevicePauliSum::Impl::~Impl() {
+  metal_detail::ScopedAutoreleasePool pool;
   [x release];
   [z release];
   [coeffs release];
@@ -178,6 +179,7 @@ bool DevicePauliSum::metal_available() {
 }
 
 PauliSum DevicePauliSum::to_host() const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_) {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }
@@ -210,6 +212,7 @@ PauliSum DevicePauliSum::to_host() const {
 }
 
 DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_) {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }

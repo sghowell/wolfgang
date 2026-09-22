@@ -345,6 +345,7 @@ std::vector<std::uint64_t> count_commuting_axis_on_gpu(
 }  // namespace
 
 DeviceCommutationMatrix::Impl::~Impl() {
+  metal_detail::ScopedAutoreleasePool pool;
   [data release];
   [command_queue release];
   [device release];
@@ -412,6 +413,7 @@ DeviceCommutationMatrix DeviceCommutationMatrix::empty(
 }
 
 std::vector<std::uint8_t> DeviceCommutationMatrix::to_host() const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_) {
     throw std::runtime_error("DeviceCommutationMatrix is empty or moved-from");
   }
@@ -425,6 +427,7 @@ std::vector<std::uint8_t> DeviceCommutationMatrix::to_host() const {
 }
 
 std::uint64_t DeviceCommutationMatrix::count_commuting() const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_) {
     throw std::runtime_error("DeviceCommutationMatrix is empty or moved-from");
   }
@@ -445,6 +448,7 @@ std::uint64_t DeviceCommutationMatrix::count_commuting() const {
 }
 
 std::vector<std::uint64_t> DeviceCommutationMatrix::count_commuting_rows() const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_) {
     throw std::runtime_error("DeviceCommutationMatrix is empty or moved-from");
   }
@@ -470,6 +474,7 @@ std::vector<std::uint64_t> DeviceCommutationMatrix::count_commuting_rows() const
 }
 
 std::vector<std::uint64_t> DeviceCommutationMatrix::count_commuting_cols() const {
+  metal_detail::ScopedAutoreleasePool pool;
   if (!impl_) {
     throw std::runtime_error("DeviceCommutationMatrix is empty or moved-from");
   }

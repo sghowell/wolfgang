@@ -6,6 +6,13 @@
 
 namespace wolfgang::metal_detail {
 
+ScopedAutoreleasePool::ScopedAutoreleasePool()
+    : pool_([[NSAutoreleasePool alloc] init]) {}
+
+ScopedAutoreleasePool::~ScopedAutoreleasePool() {
+  [static_cast<NSAutoreleasePool*>(pool_) drain];
+}
+
 std::string nsstring_to_string(NSString* value) {
   if (value == nil) {
     return {};

@@ -182,7 +182,7 @@ any optimized x/z extraction path must keep the label path as a tested semantic 
 Quality bar:
 
 ```text
-simplify is correct, deterministic, idempotent, and benchmarked before optimization claims
+simplify is correct, deterministic, idempotent with rtol=0, and benchmarked before optimization claims
 ```
 
 Required evidence:
@@ -193,7 +193,7 @@ tests cover tolerance formula exactly
 tests cover negative tolerance errors
 tests cover all-zero output returning PauliSum.empty(self.num_qubits)
 tests cover canonical order for one-word and multi-word operators
-property tests cover simplify idempotence
+property tests cover simplify idempotence with rtol=0 and input-relative behavior with rtol>0
 Qiskit comparison tests pass for small random operators when Qiskit is installed
 bench_simplify.py or equivalent benchmark exists
 ```

@@ -108,4 +108,4 @@ addopts = ["-ra"]
 
 [tool.codespell]
 ignore-words-list = "aer,hsa,retuned,aligment"
-skip = ".git,.venv,*.svg,uv.lock,docs/javascripts/vendor/mermaid-11.4.1.min.js"
+skip = ".git,.venv,.worktrees,.release-candidates,*.svg,uv.lock,./docs/javascripts/vendor/mermaid-11.4.1.min.js"

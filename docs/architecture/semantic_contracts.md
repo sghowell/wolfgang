@@ -48,7 +48,7 @@ Y on qubit 1
 Z on qubit 0
 ```
 
-`to_labels()` must export labels in the same convention. Before `simplify()` or `sort()`, `to_labels()` preserves construction order.
+`to_labels()` must export labels in the same convention. Before `simplify()`, `to_labels()` preserves construction order.
 
 ## Sparse List Convention
 
@@ -83,19 +83,12 @@ from_qiskit -> term order follows the source SparsePauliOp
 from_openfermion -> term order follows the source QubitOperator iteration order only before simplify
 ```
 
-Canonical order is produced by `simplify()` and `sort()`.
+Canonical order is produced by `simplify()`. There is currently no public `sort()` API.
 
 Default canonical order is lexicographic over packed words:
 
 ```text
 x word 0, z word 0, x word 1, z word 1, ... x word n, z word n
-```
-
-`sort(by_weight=True)` orders by:
-
-```text
-1. ascending Pauli weight
-2. default canonical order
 ```
 
 `simplify()` must return terms in default canonical order after duplicate reduction and zero dropping.
@@ -146,7 +139,19 @@ abs(c) <= atol + rtol * max_abs_input_coefficient
 
 `max_abs_input_coefficient` is computed over the input coefficients before duplicate reduction. For empty inputs it is `0`.
 
-Negative tolerances are invalid and raise `ValueError`.
+Negative or nonfinite tolerances are invalid and raise `ValueError`.
+
+With `rtol=0`, simplify is idempotent. With `rtol>0`, a second call recomputes
+its input scale and can drop additional terms after duplicates have combined.
+For example, `X + X + 0.15 Y` with `atol=0, rtol=0.1` first becomes
+`2 X + 0.15 Y`, then `2 X`. This input-relative formula is intentional.
+
+CPU simplify (also used by the public Metal bridge) rejects nonfinite coefficient
+components with `ValueError` and raises `OverflowError` if duplicate accumulation
+produces nonfinite components. Finite components are compared safely even when
+their complex magnitude exceeds the maximum double. CUDA/HIP numerical-limit
+parity remains a hardware qualification task; these new guards are CPU/Metal
+behavior only.
 
 ## Addition And Scalar Multiplication
 
@@ -237,6 +242,11 @@ num_qubits <= 63 for the initial CPU implementation
 The return type is Python `complex`.
 
 `expectation_z_counts(counts)` initially accepts Python dictionaries mapping dense bitstrings to counts. Dense bitstrings use the same display convention as dense labels: the right-most bit is qubit 0.
+
+Count weights may be finite nonnegative real numbers and must have positive total
+weight. They are normalized after division by their largest value, so large
+finite counts do not overflow the total. Rescaling all weights by the same
+positive factor preserves the result within floating-point rounding.
 
 Only diagonal terms are accepted by `expectation_z_counts()` in the initial implementation. If any term has nonzero `x` mask, raise `ValueError`.
 

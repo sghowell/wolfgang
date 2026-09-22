@@ -20,10 +20,10 @@ Verify the installation:
 
 ```bash
 python - <<'PY'
-import wolfgang-quantum
-from wolfgang-quantum import PauliSum
+import wolfgang_quantum
+from wolfgang_quantum import PauliSum
 
-print("Wolfgang", wolfgang-quantum.__version__)
+print("Wolfgang", wolfgang_quantum.__version__)
 print(PauliSum.from_labels(["X"]).to_labels())
 PY
 ```

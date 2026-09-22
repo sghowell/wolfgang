@@ -342,6 +342,13 @@ def check_markdown_links() -> None:
                 fail(f"{source} links to missing path: {target}")
             checked.append(f"{source}: {target}")
 
+    # The entrypoint map lists source docs in fenced blocks, not Markdown links.
+    # Validate those actual references so a renamed path cannot silently drift.
+    for target in re.findall(r"(?m)^((?:docs/[^\s`]+|[A-Z_]+)\.md)$", read_text("AGENTS.md")):
+        if not (ROOT / target).is_file():
+            fail(f"AGENTS.md references missing source document: {target}")
+        checked.append(f"AGENTS.md source map: {target}")
+
     for path in SOURCE_OF_TRUTH_PATHS:
         if not (ROOT / path).exists():
             fail(f"AGENTS.md source-of-truth path is missing: {path}")

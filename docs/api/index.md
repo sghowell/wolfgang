@@ -23,6 +23,26 @@ help(wolfgang_quantum.PauliSum)
 
 Optional adapter methods are available through the base class with lazy dependency checks.
 
+## Operation capabilities
+
+`capabilities().accelerator("metal").execution_for("simplify")` returns
+`"host_bridge"`. The immutable `operations` pairs describe the public path;
+check `runtime_available` separately before executing an operation.
+
+| Operation | CUDA / HIP | Metal |
+| --- | --- | --- |
+| `commutes_with`, `commutes_with_device` | device | device |
+| `simplify` | device | host_bridge |
+| `count_commuting`, `conflict_degrees` | device | host_shared_memory |
+| `expectation_statevector`, `matmul` | device | unsupported |
+
+`device` identifies where the principal kernel executes, not an absence of host
+work or synchronization. CUDA/HIP total counts currently finish a partial-sum
+reduction on the host. Metal count consumers scan shared memory on the CPU;
+Metal simplify downloads, simplifies on the CPU, and uploads. Private benchmark
+selectors do not change these public capability records. Unknown operation names
+raise `ValueError`.
+
 ## Native API
 
 Headers under `include/wolfgang/` document the current source-level C++ surface. Binary ABI stability is not promised before a deliberate native-library release. Consult the [API stability policy](../architecture/api_stability.md) before depending on pre-1.0 behavior.

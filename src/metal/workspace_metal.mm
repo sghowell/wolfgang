@@ -29,7 +29,9 @@ std::size_t align_up(std::size_t value, std::size_t alignment) {
 
 void release_buffer(id<MTLBuffer> buffer) noexcept {
 #if !__has_feature(objc_arc)
-  [buffer release];
+  @autoreleasepool {
+    [buffer release];
+  }
 #else
   (void)buffer;
 #endif

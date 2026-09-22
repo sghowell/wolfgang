@@ -1,4 +1,4 @@
-# FastPauli Agent Guide
+# Wolfgang Agent Guide
 
 This repository is intended to be implemented by Codex agents. Keep this file short: it is the entrypoint map, not the full manual.
 
@@ -10,7 +10,7 @@ Before implementation work, read the relevant source-of-truth docs:
 README.md
 docs/roadmap.md
 CHANGELOG.md
-docs/plans/fastpauli_cpp_cuda_implementation_plan.md
+docs/plans/cpp_cuda_implementation_plan.md
 docs/plans/release_candidate_foundation_plan.md
 docs/plans/release_candidate_next_checkpoint_plan.md
 docs/plans/release_0_1_0_wheelhouse_foundation_plan.md
@@ -87,7 +87,8 @@ CONTRIBUTING.md
 ```
 
 Use progressive disclosure. Start with `README.md` and `docs/roadmap.md`, then load only the phase-specific docs needed for the task.
-Apple Metal Campaign 8 is the latest Apple Metal simplify performance-relevance evidence slice.
+Apple Metal Wave 1D is the latest Apple Metal commutation evidence slice; Apple Metal Campaign 8 remains the latest simplify slice.
+Active repository hardening: `docs/plans/review_hardening_plan.md`.
 
 ## Operating Rules
 

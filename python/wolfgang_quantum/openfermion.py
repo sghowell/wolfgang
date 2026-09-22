@@ -77,7 +77,8 @@ def to_openfermion(self: PauliSum) -> Any:
     """Export a :class:`PauliSum` as an OpenFermion ``QubitOperator``.
 
     Identity terms export as the OpenFermion identity term. Zero-term operators
-    export as an additive zero ``QubitOperator``.
+    export as an additive zero ``QubitOperator``. Duplicate terms are summed
+    without tolerance filtering; only exact zero sums are omitted.
     """
 
     if not isinstance(self, PauliSum):
@@ -93,7 +94,11 @@ def to_openfermion(self: PauliSum) -> Any:
             )
         else:
             term = ()
-        output += qubit_operator_type(term, complex(coeff))
+        # __iadd__ prunes each intermediate sum at OpenFermion's tolerance.
+        # Populate its public dictionary to preserve small coefficients and
+        # duplicates that accumulate above that cutoff.
+        output.terms[term] = output.terms.get(term, 0j) + complex(coeff)
+    output.terms = {term: coeff for term, coeff in output.terms.items() if coeff != 0}
     return output
 
 

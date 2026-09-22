@@ -158,7 +158,9 @@ def test_private_metal_source_layout_exists_and_public_headers_stay_framework_fr
         "MPSGraph",
     )
     offenders: list[str] = []
-    for header in sorted((ROOT / "include" / "fastpauli").glob("*.hpp")):
+    headers = sorted((ROOT / "include" / "wolfgang").rglob("*.hpp"))
+    assert headers, "public header scan must not be empty"
+    for header in headers:
         source = header.read_text(encoding="utf-8")
         if any(token in source for token in forbidden_tokens):
             offenders.append(str(header.relative_to(ROOT)))

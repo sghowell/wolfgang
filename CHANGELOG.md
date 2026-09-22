@@ -6,6 +6,17 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- Preserve arbitrarily small nonzero coefficients when exporting to OpenFermion;
+  duplicate export terms are combined before exact-zero removal.
+- Harden CPU simplify at finite complex128 limits and normalize count weights
+  without overflowing their total. Document the input-relative tolerance rule.
+- Bound Metal temporary-object lifetimes on Python and worker threads.
+- Make the Wave 1D promotion gate reject incomplete or invalid evidence and
+  preserve CPU-only skips.
+- Repair shipped-build GPU device discovery and expose immutable per-operation
+  execution locations. Correct constructor/count typing and installation docs.
+- Validate the agent source map and require a nonempty public-header scan.
+
 ## 0.2.3
 
 Status: published as GitHub release `v0.2.3` with one source distribution, six

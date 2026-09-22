@@ -1,5 +1,7 @@
 # Wolfgang Roadmap
 
+Active maintenance: [repository review hardening](plans/review_hardening_plan.md).
+
 This roadmap tracks implementation order and the decisions that must stay stable across phases.
 
 ## Source Documents
