@@ -153,7 +153,7 @@ jobs:
         run: python -m pip install "twine==6.1.0"
 
       - name: Build CPU wheels with cibuildwheel
-        uses: pypa/cibuildwheel@ee02a1537ce3071a004a6b08c41e72f0fdc42d9a # v3.4.0
+        uses: pypa/cibuildwheel@1828c10ab37f080699c7b81cea34097c684a7074 # v4.2.0
         with:
           output-dir: wheelhouse
 
