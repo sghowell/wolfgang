@@ -39,4 +39,6 @@ Closeout records exact commands, outcomes, review resolutions and remaining
 hardware qualification boundaries. No timing improvement is claimed without
 repeated same-boundary measurements.
 
-Status: implementation in progress.
+Performance follow-ups and qualification inputs: [experiment queue](review_performance_experiments.md).
+
+Status: implementation in progress; CPU/Metal hardening and boundary validation underway.

@@ -50,6 +50,14 @@ struct DeviceCommutationDlpackContext {
   }
 };
 
+// Use only for pure C++ computation. Arguments and buffers must already be
+// validated and pinned; Python result conversion happens after reacquiring GIL.
+template <typename Function>
+auto cpu_without_gil(Function&& function) {
+  nb::gil_scoped_release release;
+  return std::forward<Function>(function)();
+}
+
 class PythonBufferView {
 public:
   explicit PythonBufferView(nb::handle object) {
@@ -358,15 +366,15 @@ nb::object expectation_statevector(const PauliSum& op, nb::handle psi_obj) {
   const std::size_t size = static_cast<std::size_t>(view.shape[0]);
   try {
     if (is_complex128) {
-      return nb::cast(op.expectation_statevector_complex128(
+      return nb::cast(cpu_without_gil([&] { return op.expectation_statevector_complex128(
           std::span<const std::complex<double>>(
               static_cast<const std::complex<double>*>(view.buf),
-              size)));
+              size)); }));
     }
-    return nb::cast(op.expectation_statevector_complex64(
+    return nb::cast(cpu_without_gil([&] { return op.expectation_statevector_complex64(
         std::span<const std::complex<float>>(
             static_cast<const std::complex<float>*>(view.buf),
-            size)));
+            size)); }));
   } catch (const std::invalid_argument& error) {
     translate_invalid_argument(error);
   }
@@ -549,12 +557,21 @@ nb::object device_expectation_statevector(const DevicePauliSum& op, nb::handle p
 }
 
 nb::object coeff_array_from_vector(const std::vector<std::complex<double>>& coeffs) {
-  nb::list values;
-  for (const std::complex<double>& coeff : coeffs) {
-    values.append(nb::cast(coeff));
-  }
+  static_assert(sizeof(std::complex<double>) == 2 * sizeof(double));
   nb::module_ numpy = nb::module_::import_("numpy");
-  return numpy.attr("array")(values, numpy.attr("complex128"));
+  nb::object array = numpy.attr("empty")(nb::make_tuple(coeffs.size()), numpy.attr("complex128"));
+  if (coeffs.empty()) {
+    return array;
+  }
+  WritablePythonBufferView buffer(array);
+  const std::size_t bytes = coeffs.size() * sizeof(std::complex<double>);
+  if (buffer.get().len < 0 || static_cast<std::size_t>(buffer.get().len) != bytes) {
+    throw std::runtime_error("NumPy complex128 array buffer size mismatch");
+  }
+  // std::complex<double> uses adjacent real/imaginary doubles. One owning NumPy
+  // allocation avoids a Python list and a boxed complex object per coefficient.
+  std::memcpy(buffer.get().buf, coeffs.data(), bytes);
+  return array;
 }
 
 nb::object bool_array_from_vector(const std::vector<std::uint8_t>& values) {
@@ -1095,7 +1112,9 @@ void bind_pauli_sum(nb::module_& module) {
           "count_commuting",
           &count_commuting_device_matrix,
           nb::arg("axis") = nb::none(),
-          "Count commuting entries with the reduction performed on the owning device.\n\n"
+          "Count commuting entries using the backend consumer.\n\n"
+          "CUDA/HIP reduce on device and may finish partial sums on the host. Metal scans "
+          "shared memory on the CPU by default. "
           "axis=None returns a Python int total. axis=0 returns NumPy uint64 "
           "column counts. axis=1 returns NumPy uint64 row counts. The method "
           "synchronizes before returning, matching FastPauli's public accelerator "
@@ -1476,7 +1495,7 @@ void bind_pauli_sum(nb::module_& module) {
           [](const PauliSum& op, double atol, double rtol) {
             ensure_scalar_cpu_operation("simplify");
             try {
-              return op.simplify(atol, rtol);
+              return cpu_without_gil([&] { return op.simplify(atol, rtol); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }
@@ -1485,13 +1504,14 @@ void bind_pauli_sum(nb::module_& module) {
           nb::arg("rtol") = 0.0,
           "Combine duplicate Pauli strings and return canonical packed-word order.\n\n"
           "Terms with abs(coefficient) <= atol + rtol * max_abs_input_coefficient are dropped. "
-          "Negative or non-finite tolerances raise ValueError.")
+          "Negative or non-finite tolerances and non-finite coefficient components raise ValueError. "
+          "Duplicate accumulation overflow raises OverflowError. Idempotence requires rtol=0.")
       .def(
           "__add__",
           [](const PauliSum& lhs, const PauliSum& rhs) {
             ensure_scalar_cpu_operation("__add__");
             try {
-              return lhs.add(rhs);
+              return cpu_without_gil([&] { return lhs.add(rhs); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }
@@ -1502,7 +1522,8 @@ void bind_pauli_sum(nb::module_& module) {
           "__mul__",
           [](const PauliSum& op, nb::handle scalar_obj) {
             ensure_scalar_cpu_operation("__mul__");
-            return op.scalar_multiply(parse_complex_value(scalar_obj, "scalar"));
+            const auto scalar = parse_complex_value(scalar_obj, "scalar");
+            return cpu_without_gil([&] { return op.scalar_multiply(scalar); });
           },
           nb::is_operator(),
           "Scale coefficients by a Python numeric scalar.")
@@ -1510,7 +1531,8 @@ void bind_pauli_sum(nb::module_& module) {
           "__rmul__",
           [](const PauliSum& op, nb::handle scalar_obj) {
             ensure_scalar_cpu_operation("__rmul__");
-            return op.scalar_multiply(parse_complex_value(scalar_obj, "scalar"));
+            const auto scalar = parse_complex_value(scalar_obj, "scalar");
+            return cpu_without_gil([&] { return op.scalar_multiply(scalar); });
           },
           nb::is_operator(),
           "Scale coefficients by a Python numeric scalar.")
@@ -1519,10 +1541,8 @@ void bind_pauli_sum(nb::module_& module) {
           [](const PauliSum& lhs, const PauliSum& rhs, bool simplify_output, nb::handle max_terms_obj) {
             ensure_scalar_cpu_operation("matmul");
             try {
-              return lhs.matmul(
-                  rhs,
-                  simplify_output,
-                  checked_size_from_python_int(max_terms_obj, "max_intermediate_terms"));
+              const auto limit = checked_size_from_python_int(max_terms_obj, "max_intermediate_terms");
+              return cpu_without_gil([&] { return lhs.matmul(rhs, simplify_output, limit); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }
@@ -1538,7 +1558,7 @@ void bind_pauli_sum(nb::module_& module) {
           [](const PauliSum& lhs, const PauliSum& rhs) {
             ensure_scalar_cpu_operation("__matmul__");
             try {
-              return lhs.matmul(rhs);
+              return cpu_without_gil([&] { return lhs.matmul(rhs); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }
@@ -1550,11 +1570,8 @@ void bind_pauli_sum(nb::module_& module) {
           [](const PauliSum& lhs, const PauliSum& rhs, nb::handle max_entries_obj) -> nb::object {
             ensure_supported_cpu_backend();
             try {
-              const std::vector<std::uint8_t> flags = lhs.commutes_with(
-                  rhs,
-                  checked_size_from_python_int(
-                      max_entries_obj,
-                      "max_commutation_matrix_entries"));
+              const auto limit = checked_size_from_python_int(max_entries_obj, "max_commutation_matrix_entries");
+              const auto flags = cpu_without_gil([&] { return lhs.commutes_with(rhs, limit); });
 
               if (lhs.num_terms() == 1 && rhs.num_terms() == 1) {
                 return nb::cast(!flags.empty() && flags.front() != 0);
@@ -1584,11 +1601,10 @@ void bind_pauli_sum(nb::module_& module) {
               ensure_supported_cpu_backend();
             }
             try {
+              const auto limit = checked_size_from_python_int(max_terms_obj, "max_terms_for_graph");
+              const auto native_groups = cpu_without_gil([&] { return op.group_commuting(mode, strategy, limit); });
               nb::list groups;
-              for (const PauliSum& group : op.group_commuting(
-                       mode,
-                       strategy,
-                       checked_size_from_python_int(max_terms_obj, "max_terms_for_graph"))) {
+              for (const PauliSum& group : native_groups) {
                 groups.append(nb::cast(group));
               }
               return groups;
@@ -1618,7 +1634,7 @@ void bind_pauli_sum(nb::module_& module) {
             std::vector<double> counts;
             parse_z_counts_mapping(counts_obj, bitstrings, counts);
             try {
-              return op.expectation_z_counts(bitstrings, counts);
+              return cpu_without_gil([&] { return op.expectation_z_counts(bitstrings, counts); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }

@@ -61,7 +61,8 @@ def test_cmake_cuda_build_pins_cudatoolkit_root_from_selected_compiler() -> None
 def test_cmake_cuda_build_links_driver_api_when_driver_symbols_are_used() -> None:
     cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
 
-    assert "target_link_libraries(_wolfgang_core PRIVATE CUDA::cuda_driver CUDA::cudart)" in cmake
+    assert "target_link_libraries(wolfgang_core PRIVATE CUDA::cuda_driver CUDA::cudart)" in cmake
+    assert "target_link_libraries(_wolfgang_core PRIVATE wolfgang_core)" in cmake
 
 
 def test_to_device_reports_clear_cpu_only_error_or_round_trips() -> None:

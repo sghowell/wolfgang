@@ -50,3 +50,20 @@ def test_relative_tolerance_uses_input_maximum_on_each_call():
     once = op.simplify(atol=0, rtol=0.1)
     assert once.to_labels()[0] == ["X", "Y"]
     assert once.simplify(atol=0, rtol=0.1).to_labels()[0] == ["X"]
+
+
+@pytest.mark.parametrize("width", [1, 65])
+@pytest.mark.parametrize("terms", [127, 128, 256])
+def test_fused_matmul_rejects_duplicate_accumulation_overflow(width, terms):
+    lhs = PauliSum.from_labels(["X" * width] * terms, [1.7e308] * terms)
+    rhs = PauliSum.from_labels(["I" * width])
+    with pytest.raises(OverflowError, match="coefficient"):
+        lhs.matmul(rhs)
+
+
+@pytest.mark.parametrize("width", [1, 65])
+def test_fused_matmul_rejects_nonfinite_product_before_simplifying(width):
+    lhs = PauliSum.from_labels(["X" * width] * 128, [1.7e308] * 128)
+    rhs = PauliSum.from_labels(["I" * width], [2])
+    with pytest.raises(ValueError, match="finite coefficients"):
+        lhs.matmul(rhs)

@@ -88,3 +88,7 @@ docs/benchmarks/data/**/profiler/
 
 # Remote qualification and review evidence must stay untracked.
 review-artifacts/
+
+# Local checkouts and release staging must not enter project artifacts.
+.worktrees/
+.release-candidates/

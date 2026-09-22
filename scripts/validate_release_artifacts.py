@@ -26,6 +26,8 @@ SDIST_ARTIFACT_PREFIX = "wolfgang-quantum-"
 WHEEL_ARTIFACT_PREFIX = "wolfgang_quantum-"
 PROJECT_DISTRIBUTION = "wolfgang-quantum"
 FORBIDDEN_ARTIFACT_SUBSTRINGS = (
+    ".worktrees/",
+    ".release-candidates/",
     "bindings/python/internal_bindings.cpp",
     "fastpauli",
     "include/fastpauli/",

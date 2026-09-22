@@ -347,7 +347,7 @@ def test_workflows_and_packaging_prefer_wolfgang_canonical_flags() -> None:
     )
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 
-    assert "pyright python/wolfgang_quantum" in quality
+    assert "python scripts/validate.py --profile quality" in quality
     for workflow_text in (quality, codeql, release_wheelhouse):
         assert "cmake.define.WOLFGANG_ENABLE_CUDA=OFF" in workflow_text or "-DWOLFGANG_ENABLE_CUDA=OFF" in workflow_text
         assert "cmake.define.WOLFGANG_ENABLE_HIP=OFF" in workflow_text or "-DWOLFGANG_ENABLE_HIP=OFF" in workflow_text

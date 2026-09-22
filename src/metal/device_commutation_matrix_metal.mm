@@ -376,7 +376,8 @@ DeviceCommutationMatrix DeviceCommutationMatrix::empty(
     std::size_t cols,
     AcceleratorBackend backend,
     int device) {
-  @autoreleasepool {
+  {
+    metal_detail::ScopedAutoreleasePool pool;
     const MetalStatus status = DevicePauliSum::metal_status();
     const AcceleratorBackend selected = select_accelerator_backend(
         backend,

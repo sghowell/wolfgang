@@ -1,6 +1,7 @@
 #include "wolfgang/pauli_sum.hpp"
 
 #include "detail/packed_key.hpp"
+#include "detail/simplify_numeric.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -155,9 +156,7 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
 
   double max_abs_input = 0.0;
   for (const std::complex<double>& coeff : coeffs_) {
-    if (!std::isfinite(coeff.real()) || !std::isfinite(coeff.imag())) {
-      throw std::invalid_argument("simplify requires finite coefficients");
-    }
+    detail::require_finite_simplify_input(coeff);
     max_abs_input = std::max(max_abs_input, std::abs(coeff));
   }
   // Finite complex128 components can have a magnitude above DBL_MAX. Avoid
@@ -175,9 +174,7 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
     drop_threshold = half_threshold * 2.0;
   }
   const auto survives = [drop_threshold, half_threshold](const std::complex<double>& coeff) {
-    if (!std::isfinite(coeff.real()) || !std::isfinite(coeff.imag())) {
-      throw std::overflow_error("simplify coefficient accumulation overflowed complex128");
-    }
+    detail::require_finite_simplify_accumulator(coeff);
     return std::isfinite(drop_threshold)
         ? std::abs(coeff) > drop_threshold
         : std::hypot(coeff.real() * 0.5, coeff.imag() * 0.5) > half_threshold;

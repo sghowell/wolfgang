@@ -792,7 +792,7 @@ def summarize_wave1d_evidence(reports: list[dict[str, Any]], *, repeat: int) -> 
             if row.get("status") != "ok":
                 continue
             case = row.get("case", {})
-            if case.get("name") not in expected_cases or row.get("variant") not in boundaries:
+            if case.get("profile") != "wave1d" or case.get("name") not in expected_cases or row.get("variant") not in boundaries:
                 continue
             timing = row.get("timing")
             if not isinstance(timing, dict) or "median" not in timing:

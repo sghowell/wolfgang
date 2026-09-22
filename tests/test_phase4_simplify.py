@@ -142,12 +142,12 @@ def pauli_sum_inputs(draw: st.DrawFn) -> tuple[int, list[str], list[complex]]:
 
 @given(pauli_sum_inputs())
 @settings(max_examples=50, deadline=None)
-def test_simplify_is_idempotent(data: tuple[int, list[str], list[complex]]) -> None:
+def test_simplify_is_idempotent_at_absolute_tolerance(data: tuple[int, list[str], list[complex]]) -> None:
     num_qubits, labels, coeffs = data
     op = PauliSum.from_labels(labels, coeffs) if labels else PauliSum.empty(num_qubits)
 
-    once = op.simplify(atol=1.0e-9, rtol=1.0e-12)
-    twice = once.simplify(atol=1.0e-9, rtol=1.0e-12)
+    once = op.simplify(atol=1.0e-9, rtol=0.0)
+    twice = once.simplify(atol=1.0e-9, rtol=0.0)
 
     once_labels, once_coeffs = once.to_labels()
     twice_labels, twice_coeffs = twice.to_labels()

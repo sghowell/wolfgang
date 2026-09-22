@@ -1,5 +1,22 @@
 # Wolfgang Testing And CI Architecture
 
+## Shared validation profiles
+
+`python scripts/validate.py` defaults to `--profile core`: source checks, fresh
+editable build, native standalone contracts, Python tests, benchmark smoke and
+sdist build. `--profile quality` runs Ruff, Pyright, spelling and artifact policy;
+`--profile docs` builds strict MkDocs. `--profile all` runs all three. CI uses the
+same profile functions; GPU qualification remains explicitly opt-in.
+
+Install the tools for `all` with the test/docs extras, optional adapters, and the
+versions pinned in `.github/workflows/quality.yml`. Quality profiles do not install
+or update dependencies implicitly. Use `--site-dir` to select the docs output;
+the local default is `_skbuild/validate-site`.
+
+Standalone native sanitizer tests also run in CI, without importing Python.
+The core CI matrix includes Python 3.13; wheel publication support is unchanged.
+
+
 This document defines how Wolfgang maintains correctness while moving from scaffold to optimized CPU and CUDA kernels.
 
 ## Principles

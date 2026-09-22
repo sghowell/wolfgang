@@ -1,5 +1,32 @@
 # Wolfgang Benchmark Protocol
 
+## Loaded-build provenance and repeated controls
+
+New reports record `environment.loaded_native_build`: the loaded extension's
+SHA-256, its embedded native-source fingerprint, the current native-source
+fingerprint and their equality. A checkout revision alone cannot identify an
+editable binary. Unknown or mismatched fingerprints cannot support attribution
+to that checkout. Compiler/options metadata remains necessary in addition to the
+source fingerprint. Fingerprints include native sources, headers, bindings,
+vendored DLPack headers and CMake configuration; they exclude Python/docs edits.
+
+`WOLFGANG_BENCHMARK_GIT_COMMIT` is a requested label, not proof of a clean build.
+Reports preserve actual git status and record the requested label separately.
+Historical reports retain their original schema and limitations.
+
+Paired performance comparisons must randomize baseline/candidate order, warm both
+paths, retain individual repetitions and include an unchanged control. If an
+unchanged control moves comparably to the candidate, repeat the experiment before
+attributing the change to the implementation. Historical Wave 1B CPU measurements
+showed substantial movement in unchanged controls; those rows alone do not isolate
+the effect of the dispatch change. New paired evidence must establish attribution.
+
+Wave 1D aggregation requires at least three complete reruns, the canonical small,
+medium and large cases, all three required variants, matching datasets/repeats,
+correctness success, finite positive medians and exact boundary labels. Missing
+hardware is `skipped`; missing or invalid evidence cannot produce `go`.
+
+
 This document defines how Wolfgang benchmarks are designed, run, and interpreted.
 
 ## Principles

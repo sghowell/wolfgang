@@ -49,8 +49,12 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[test]" \
   --config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON
-python scripts/validate.py
+python scripts/validate.py --profile core
 ```
+
+For lint, typing, spelling and strict docs, install the quality tools pinned in
+`.github/workflows/quality.yml` and the `docs`, `qiskit`, and `openfermion` extras,
+then run `python scripts/validate.py --profile all`.
 
 ## Accelerator source builds
 

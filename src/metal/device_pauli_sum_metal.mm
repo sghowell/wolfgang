@@ -73,7 +73,8 @@ DevicePauliSum DevicePauliSum::from_host(
     const PauliSum& host,
     AcceleratorBackend backend,
     int device) {
-  @autoreleasepool {
+  {
+    metal_detail::ScopedAutoreleasePool pool;
     const MetalStatus status = metal_status();
     const AcceleratorBackend selected = select_accelerator_backend(
         backend,
@@ -150,7 +151,8 @@ bool DevicePauliSum::hip_available() {
 }
 
 MetalStatus DevicePauliSum::metal_status() {
-  @autoreleasepool {
+  {
+    metal_detail::ScopedAutoreleasePool pool;
     MetalStatus status;
     status.built = true;
     status.storage_mode = "MTLResourceStorageModeShared";

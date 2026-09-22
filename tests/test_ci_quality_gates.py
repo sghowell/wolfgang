@@ -96,13 +96,10 @@ def test_quality_workflow_has_hardened_job_boundaries() -> None:
 def test_quality_job_gates_whole_repository_python_and_public_artifacts() -> None:
     workflow = workflow_text(QUALITY_WORKFLOW)
 
-    for required in (
-        "ruff check --config ruff.toml .",
-        "pyright python/wolfgang_quantum",
-        'codespell --skip="./docs/javascripts/vendor/mermaid-11.4.1.min.js" .',
-        "python scripts/audit_public_artifacts.py --tracked",
-    ):
-        assert required in workflow
+    assert "python scripts/validate.py --profile quality" in workflow
+    validation = (ROOT / "scripts/validate.py").read_text()
+    for required in ("ruff", "pyright", "codespell", "scripts/audit_public_artifacts.py"):
+        assert required in validation
     for pinned_tool in (
         '"ruff==0.16.2"',
         "pyright==",
@@ -153,7 +150,7 @@ def test_documentation_gate_is_strict_pinned_and_bounded() -> None:
     workflow = workflow_text(DOCS_WORKFLOW)
 
     assert 'python -m pip install -e ".[test,docs]"' in workflow
-    assert "mkdocs build --strict" in workflow
+    assert "python scripts/validate.py --profile docs --site-dir site" in workflow
     assert "python -m pytest tests/docs_mermaid_integration.py -q" in workflow
     assert workflow.count("timeout-minutes:") >= 2
     assert workflow.count("!github.event.repository.private") == 2
@@ -172,4 +169,6 @@ def test_docs_extra_pins_the_documentation_toolchain() -> None:
 def test_codespell_skips_vendored_mermaid_runtime() -> None:
     workflow = workflow_text(QUALITY_WORKFLOW)
 
-    assert 'codespell --skip="./docs/javascripts/vendor/mermaid-11.4.1.min.js" .' in workflow
+    assert "python scripts/validate.py --profile quality" in workflow
+    config = (ROOT / "pyproject.toml").read_text()
+    assert "./docs/javascripts/vendor/mermaid-11.4.1.min.js" in config

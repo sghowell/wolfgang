@@ -247,3 +247,13 @@ def test_install_and_smoke_uses_clean_virtual_environment(monkeypatch, tmp_path:
     ]
     assert str(wheel) in calls[2][1]
     assert "-c" in calls[3][1]
+
+
+@pytest.mark.parametrize("directory", [".worktrees", ".release-candidates"])
+def test_release_artifacts_reject_local_staging_directories(tmp_path: Path, directory: str) -> None:
+    validator = load_release_validator()
+    wheel = tmp_path / f"{WHEEL_PREFIX}-cp312-cp312-macosx_26_0_arm64.whl"
+    with zipfile.ZipFile(wheel, "w") as archive:
+        archive.writestr(f"{directory}/notes.txt", "local-only data")
+    with pytest.raises(SystemExit, match="forbidden internal payloads"):
+        validator.ensure_release_artifact_boundary(wheel)

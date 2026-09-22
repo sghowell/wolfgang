@@ -6,6 +6,13 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- Exclude local worktrees and release staging from source distributions.
+- Separate the native CMake library from Python, add standalone sanitizer
+  contracts, bulk coefficient export and scoped CPU GIL release.
+- Record loaded-extension/source fingerprints in benchmarks and keep requested
+  revision labels separate from verified git state.
+- Share core, quality, docs and all validation profiles with CI; add Python 3.13
+  core coverage and reject unsupported forced streaming-grouping selectors.
 - Preserve arbitrarily small nonzero coefficients when exporting to OpenFermion;
   duplicate export terms are combined before exact-zero removal.
 - Harden CPU simplify at finite complex128 limits and normalize count weights

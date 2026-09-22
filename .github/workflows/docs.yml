@@ -43,7 +43,7 @@ jobs:
       - name: Verify Mermaid integration rendering
         run: python -m pytest tests/docs_mermaid_integration.py -q
       - name: Build strict documentation
-        run: mkdocs build --strict --site-dir site
+        run: python scripts/validate.py --profile docs --site-dir site
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request' && !github.event.repository.private
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3

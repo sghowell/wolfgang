@@ -9,6 +9,7 @@ clear evidence trail.
 
 from __future__ import annotations
 
+import argparse
 import os
 import re
 import shutil
@@ -1128,8 +1129,39 @@ def run_editable_install_check() -> None:
     fail("Neither python -m pip nor uv is available for editable install validation")
 
 
+def run_native_contract_checks() -> None:
+    cmake = cmake_executable_for_build_isolation() or "cmake"
+    build_dir = ROOT / "_skbuild" / "validate-native"
+    run_check("Configure independent native core", [cmake, "-S", str(ROOT), "-B", str(build_dir),
+        "-DWOLFGANG_BUILD_PYTHON=OFF", "-DWOLFGANG_BUILD_NATIVE_TESTS=ON", "-DCMAKE_BUILD_TYPE=Release"])
+    run_check("Build independent native tests", [cmake, "--build", str(build_dir), "--parallel", "2"])
+    ctest = str(Path(cmake).with_name("ctest")) if Path(cmake).is_absolute() else "ctest"
+    run_check("Native contracts", [ctest, "--test-dir", str(build_dir), "--output-on-failure"])
+
+
+def run_quality_checks() -> None:
+    run_check("Python lint", [sys.executable, "-m", "ruff", "check", "--config", "ruff.toml", "."])
+    run_check("Public Python typing", [sys.executable, "-m", "pyright", "--pythonpath", sys.executable, "python/wolfgang_quantum"])
+    run_check("Spelling", [sys.executable, "-m", "codespell_lib", "."])
+    run_check("public artifact policy", [sys.executable, "scripts/audit_public_artifacts.py", "--tracked"])
+
+
+def run_docs_checks(site_dir: Path) -> None:
+    run_check("Strict documentation build", [sys.executable, "-m", "mkdocs", "build", "--strict", "--site-dir", str(site_dir)])
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--profile", choices=("core", "quality", "docs", "all"), default="core")
+    parser.add_argument("--site-dir", type=Path, default=ROOT / "_skbuild" / "validate-site")
+    args = parser.parse_args()
     prepend_executable_directory_to_path(os.environ)
+    if args.profile in {"quality", "all"}:
+        run_quality_checks()
+    if args.profile in {"docs", "all"}:
+        run_docs_checks(args.site_dir)
+    if args.profile in {"quality", "docs"}:
+        return
 
     check_source_docs_exist()
     check_markdown_links()
@@ -1152,6 +1184,7 @@ def main() -> None:
 
     run_editable_install_check()
     run_cmake_configure_check()
+    run_native_contract_checks()
     run_build_info_check()
     run_check("pytest", [sys.executable, "-m", "pytest"])
     run_check(

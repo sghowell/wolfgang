@@ -300,25 +300,30 @@ if(WOLFGANG_ENABLE_ARM_SVE STREQUAL "ON")
   message(FATAL_ERROR "WOLFGANG_ENABLE_ARM_SVE=ON requested, but ARM SVE kernels are not implemented yet.")
 endif()
 
-if(DEFINED Python_EXECUTABLE AND NOT Python_EXECUTABLE STREQUAL "")
-  get_filename_component(WOLFGANG_PYTHON_BINDIR "${Python_EXECUTABLE}" DIRECTORY)
-  get_filename_component(WOLFGANG_PYTHON_PREFIX "${WOLFGANG_PYTHON_BINDIR}" DIRECTORY)
-  set(Python_ROOT_DIR "${WOLFGANG_PYTHON_PREFIX}")
-  set(Python_FIND_VIRTUALENV ONLY)
-  set(Python_FIND_STRATEGY LOCATION)
-endif()
+option(WOLFGANG_BUILD_PYTHON "Build the Python extension" ON)
+option(WOLFGANG_BUILD_NATIVE_TESTS "Build standalone native contract tests" OFF)
 
-find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
-execute_process(
-  COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
-  RESULT_VARIABLE WOLFGANG_NANOBIND_CMAKE_DIR_RESULT
-  OUTPUT_VARIABLE WOLFGANG_NANOBIND_CMAKE_DIR
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-if(WOLFGANG_NANOBIND_CMAKE_DIR_RESULT EQUAL 0 AND WOLFGANG_NANOBIND_CMAKE_DIR)
-  list(APPEND CMAKE_PREFIX_PATH "${WOLFGANG_NANOBIND_CMAKE_DIR}")
+if(WOLFGANG_BUILD_PYTHON)
+  if(DEFINED Python_EXECUTABLE AND NOT Python_EXECUTABLE STREQUAL "")
+    get_filename_component(WOLFGANG_PYTHON_BINDIR "${Python_EXECUTABLE}" DIRECTORY)
+    get_filename_component(WOLFGANG_PYTHON_PREFIX "${WOLFGANG_PYTHON_BINDIR}" DIRECTORY)
+    set(Python_ROOT_DIR "${WOLFGANG_PYTHON_PREFIX}")
+    set(Python_FIND_VIRTUALENV ONLY)
+    set(Python_FIND_STRATEGY LOCATION)
+  endif()
+
+  find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
+  execute_process(
+    COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+    RESULT_VARIABLE WOLFGANG_NANOBIND_CMAKE_DIR_RESULT
+    OUTPUT_VARIABLE WOLFGANG_NANOBIND_CMAKE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  if(WOLFGANG_NANOBIND_CMAKE_DIR_RESULT EQUAL 0 AND WOLFGANG_NANOBIND_CMAKE_DIR)
+    list(APPEND CMAKE_PREFIX_PATH "${WOLFGANG_NANOBIND_CMAKE_DIR}")
+  endif()
+  find_package(nanobind CONFIG REQUIRED)
 endif()
-find_package(nanobind CONFIG REQUIRED)
 
 set(WOLFGANG_STABLE_BINDING_SOURCES
   bindings/python/module.cpp
@@ -331,8 +336,7 @@ set(WOLFGANG_INTERNAL_BINDING_SOURCES
   bindings/python/internal_bindings.cpp
 )
 
-set(WOLFGANG_EXTENSION_SOURCES
-  ${WOLFGANG_STABLE_BINDING_SOURCES}
+set(WOLFGANG_CORE_SOURCES
   src/accelerator_status.cpp
   src/arithmetic.cpp
   src/commute.cpp
@@ -351,10 +355,6 @@ set(WOLFGANG_ACCELERATOR_STUB_SOURCES
   src/device_commutation_matrix_stub.cpp
   src/device_pauli_sum_stub.cpp
 )
-
-if(WOLFGANG_ENABLE_INTERNAL_BINDINGS)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES ${WOLFGANG_INTERNAL_BINDING_SOURCES})
-endif()
 
 set(WOLFGANG_CUDA_EXTENSION_SOURCES
   src/cuda/device_commutation_matrix.cu
@@ -386,56 +386,55 @@ set(WOLFGANG_METAL_EXTENSION_SOURCES
 )
 
 if(WOLFGANG_BUILD_CUDA_ENABLED)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES ${WOLFGANG_CUDA_EXTENSION_SOURCES})
+  list(APPEND WOLFGANG_CORE_SOURCES ${WOLFGANG_CUDA_EXTENSION_SOURCES})
 endif()
 
 if(WOLFGANG_BUILD_HIP_ENABLED)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES ${WOLFGANG_HIP_EXTENSION_SOURCES})
+  list(APPEND WOLFGANG_CORE_SOURCES ${WOLFGANG_HIP_EXTENSION_SOURCES})
   set_source_files_properties(
     ${WOLFGANG_HIP_EXTENSION_SOURCES}
     PROPERTIES LANGUAGE HIP)
 endif()
 
 if(WOLFGANG_BUILD_METAL_ENABLED)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES ${WOLFGANG_METAL_EXTENSION_SOURCES})
+  list(APPEND WOLFGANG_CORE_SOURCES ${WOLFGANG_METAL_EXTENSION_SOURCES})
   set_source_files_properties(
     ${WOLFGANG_METAL_EXTENSION_SOURCES}
     PROPERTIES LANGUAGE OBJCXX)
 endif()
 
 if(NOT WOLFGANG_BUILD_CUDA_ENABLED AND NOT WOLFGANG_BUILD_HIP_ENABLED AND NOT WOLFGANG_BUILD_METAL_ENABLED)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES ${WOLFGANG_ACCELERATOR_STUB_SOURCES})
+  list(APPEND WOLFGANG_CORE_SOURCES ${WOLFGANG_ACCELERATOR_STUB_SOURCES})
 endif()
 
 if(WOLFGANG_BUILD_TBB_ENABLED)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES src/parallel/commute_kernels_tbb.cpp)
+  list(APPEND WOLFGANG_CORE_SOURCES src/parallel/commute_kernels_tbb.cpp)
 endif()
 
 if(WOLFGANG_BUILD_AVX2_ENABLED)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES src/simd/commute_kernels_avx2.cpp)
+  list(APPEND WOLFGANG_CORE_SOURCES src/simd/commute_kernels_avx2.cpp)
 endif()
 
 if(WOLFGANG_BUILD_AVX512_ENABLED)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES src/simd/commute_kernels_avx512.cpp)
+  list(APPEND WOLFGANG_CORE_SOURCES src/simd/commute_kernels_avx512.cpp)
 endif()
 
 if(WOLFGANG_BUILD_ARM_NEON_ENABLED)
-  list(APPEND WOLFGANG_EXTENSION_SOURCES src/simd/commute_kernels_neon.cpp)
+  list(APPEND WOLFGANG_CORE_SOURCES src/simd/commute_kernels_neon.cpp)
 endif()
 
-nanobind_add_module(_wolfgang_core ${WOLFGANG_EXTENSION_SOURCES})
+add_library(wolfgang_core STATIC ${WOLFGANG_CORE_SOURCES})
+set_target_properties(wolfgang_core PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  CXX_VISIBILITY_PRESET hidden
+  VISIBILITY_INLINES_HIDDEN ON)
+target_compile_features(wolfgang_core PUBLIC cxx_std_20)
+target_include_directories(wolfgang_core PUBLIC include PRIVATE src)
 
-target_compile_features(_wolfgang_core PRIVATE cxx_std_20)
-target_include_directories(
-  _wolfgang_core
-  PRIVATE
-    include
-    src
-    third_party/dlpack/include)
 if(WOLFGANG_BUILD_CUDA_ENABLED)
-  target_link_libraries(_wolfgang_core PRIVATE CUDA::cuda_driver CUDA::cudart)
+  target_link_libraries(wolfgang_core PRIVATE CUDA::cuda_driver CUDA::cudart)
   set_target_properties(
-    _wolfgang_core
+    wolfgang_core
     PROPERTIES
       CUDA_ARCHITECTURES "${WOLFGANG_CUDA_ARCHITECTURES}"
       CUDA_STANDARD 20
@@ -443,7 +442,7 @@ if(WOLFGANG_BUILD_CUDA_ENABLED)
 endif()
 if(WOLFGANG_BUILD_HIP_ENABLED)
   set_target_properties(
-    _wolfgang_core
+    wolfgang_core
     PROPERTIES
       HIP_ARCHITECTURES "${WOLFGANG_HIP_ARCHITECTURES}"
       HIP_STANDARD 20
@@ -451,18 +450,18 @@ if(WOLFGANG_BUILD_HIP_ENABLED)
 endif()
 if(WOLFGANG_BUILD_METAL_ENABLED)
   target_link_libraries(
-    _wolfgang_core
+    wolfgang_core
     PRIVATE
       ${WOLFGANG_METAL_FRAMEWORK}
       ${WOLFGANG_FOUNDATION_FRAMEWORK})
   set_target_properties(
-    _wolfgang_core
+    wolfgang_core
     PROPERTIES
       OBJCXX_STANDARD 20
       OBJCXX_STANDARD_REQUIRED ON)
 endif()
 if(WOLFGANG_BUILD_TBB_ENABLED)
-  target_link_libraries(_wolfgang_core PRIVATE TBB::tbb)
+  target_link_libraries(wolfgang_core PRIVATE TBB::tbb)
 endif()
 if(WOLFGANG_BUILD_AVX2_ENABLED AND WOLFGANG_AVX2_COMPILE_OPTIONS)
   set_source_files_properties(
@@ -474,9 +473,25 @@ if(WOLFGANG_BUILD_AVX512_ENABLED AND WOLFGANG_AVX512_COMPILE_OPTIONS)
     src/simd/commute_kernels_avx512.cpp
     PROPERTIES COMPILE_OPTIONS "${WOLFGANG_AVX512_COMPILE_OPTIONS}")
 endif()
+# Bind provenance to native source contents, not the checkout's HEAD label.
+# CONFIGURE_DEPENDS detects additions; CMAKE_CONFIGURE_DEPENDS detects edits.
+file(GLOB_RECURSE WOLFGANG_NATIVE_INPUTS CONFIGURE_DEPENDS
+  RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+  "src/*" "include/*" "bindings/*" "third_party/dlpack/include/*")
+list(APPEND WOLFGANG_NATIVE_INPUTS CMakeLists.txt)
+list(SORT WOLFGANG_NATIVE_INPUTS)
+set(WOLFGANG_SOURCE_MANIFEST "")
+foreach(input IN LISTS WOLFGANG_NATIVE_INPUTS)
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${input}")
+  file(SHA256 "${CMAKE_CURRENT_SOURCE_DIR}/${input}" input_hash)
+  string(APPEND WOLFGANG_SOURCE_MANIFEST "${input}:${input_hash}\n")
+endforeach()
+string(SHA256 WOLFGANG_SOURCE_SHA256 "${WOLFGANG_SOURCE_MANIFEST}")
+
 target_compile_definitions(
-  _wolfgang_core
-  PRIVATE
+  wolfgang_core
+  PUBLIC
+    WOLFGANG_NATIVE_SOURCE_SHA256="${WOLFGANG_SOURCE_SHA256}"
     WOLFGANG_ENABLE_INTERNAL_BINDINGS=$<BOOL:${WOLFGANG_ENABLE_INTERNAL_BINDINGS}>
     WOLFGANG_BUILD_CUDA_ENABLED=${WOLFGANG_BUILD_CUDA_ENABLED}
     WOLFGANG_BUILD_CUDA_ARCHITECTURES="${WOLFGANG_BUILD_CUDA_ARCHITECTURES}"
@@ -524,4 +539,27 @@ target_compile_definitions(
     WOLFGANG_CMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}"
 )
 
-install(TARGETS _wolfgang_core LIBRARY DESTINATION wolfgang_quantum)
+if(WOLFGANG_BUILD_PYTHON)
+  set(WOLFGANG_BINDING_SOURCES ${WOLFGANG_STABLE_BINDING_SOURCES})
+  if(WOLFGANG_ENABLE_INTERNAL_BINDINGS)
+    list(APPEND WOLFGANG_BINDING_SOURCES ${WOLFGANG_INTERNAL_BINDING_SOURCES})
+  endif()
+  nanobind_add_module(_wolfgang_core ${WOLFGANG_BINDING_SOURCES})
+  target_link_libraries(_wolfgang_core PRIVATE wolfgang_core)
+  target_include_directories(_wolfgang_core PRIVATE src third_party/dlpack/include)
+  install(TARGETS _wolfgang_core LIBRARY DESTINATION wolfgang_quantum)
+endif()
+
+if(WOLFGANG_BUILD_NATIVE_TESTS)
+  enable_testing()
+  add_executable(wolfgang_native_contracts tests/native/contracts.cpp)
+  target_link_libraries(wolfgang_native_contracts PRIVATE wolfgang_core)
+  add_test(NAME native_contracts COMMAND wolfgang_native_contracts)
+  if(WOLFGANG_BUILD_METAL_ENABLED)
+    add_executable(wolfgang_metal_lifetimes tests/native/metal_lifetimes.mm)
+    target_include_directories(wolfgang_metal_lifetimes PRIVATE src)
+    target_link_libraries(wolfgang_metal_lifetimes PRIVATE wolfgang_core)
+    set_target_properties(wolfgang_metal_lifetimes PROPERTIES OBJCXX_STANDARD 20)
+    add_test(NAME metal_exception_lifetimes COMMAND wolfgang_metal_lifetimes)
+  endif()
+endif()

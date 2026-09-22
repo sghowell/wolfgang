@@ -3,6 +3,7 @@
 #include "detail/checked_arithmetic.hpp"
 #include "detail/packed_key.hpp"
 #include "detail/phase.hpp"
+#include "detail/simplify_numeric.hpp"
 
 #include <algorithm>
 #include <bit>
@@ -129,6 +130,7 @@ PauliSum PauliSum::matmul(
         const std::complex<double> product_coeff = detail::multiply_by_phase_exponent(
             lhs_coeff * rhs.coeffs_[rhs_term],
             phase_exponent);
+        detail::require_finite_simplify_input(product_coeff);
         auto [iterator, inserted] = accumulators.try_emplace(
             PackedKey1{out_word_x, out_word_z},
             product_coeff);
@@ -141,6 +143,7 @@ PauliSum PauliSum::matmul(
     std::vector<std::pair<PackedKey1, std::complex<double>>> survivors;
     survivors.reserve(accumulators.size());
     for (const auto& [key, coeff] : accumulators) {
+      detail::require_finite_simplify_accumulator(coeff);
       if (std::abs(coeff) > 1.0e-12) {
         survivors.push_back({key, coeff});
       }
@@ -211,6 +214,7 @@ PauliSum PauliSum::matmul(
         const std::complex<double> product_coeff = detail::multiply_by_phase_exponent(
             lhs_coeff * rhs.coeffs_[rhs_term],
             phase_exponent);
+        detail::require_finite_simplify_input(product_coeff);
         auto [iterator, inserted] = accumulators.try_emplace(
             PackedKey2{out_x0, out_z0, out_x1, out_z1},
             product_coeff);
@@ -223,6 +227,7 @@ PauliSum PauliSum::matmul(
     std::vector<std::pair<PackedKey2, std::complex<double>>> survivors;
     survivors.reserve(accumulators.size());
     for (const auto& [key, coeff] : accumulators) {
+      detail::require_finite_simplify_accumulator(coeff);
       if (std::abs(coeff) > 1.0e-12) {
         survivors.push_back({key, coeff});
       }

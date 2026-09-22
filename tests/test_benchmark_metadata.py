@@ -28,19 +28,16 @@ def test_preferred_cpuinfo_value_reports_model_before_vendor() -> None:
     assert preferred_cpuinfo_value(cpuinfo) == "AMD EPYC 9654 96-Core Processor"
 
 
-def test_git_provenance_honors_benchmark_commit_override(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("WOLFGANG_BENCHMARK_GIT_COMMIT", "abc1234")
-
+def test_git_provenance_does_not_treat_a_requested_label_as_verified(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("WOLFGANG_BENCHMARK_GIT_COMMIT", "unverified-label")
+    monkeypatch.setattr("benchmarks._benchmark_metadata.git_status_short", lambda: [" M src/simplify.cpp"])
     provenance = git_provenance()
-
-    assert git_commit() == "abc1234"
-    assert provenance == {
-        "commit": "abc1234",
-        "commit_label": "abc1234",
-        "dirty": False,
-        "source": "WOLFGANG_BENCHMARK_GIT_COMMIT",
-        "working_tree_status": [],
-    }
+    assert provenance["requested_commit_label"] == "unverified-label"
+    assert provenance["requested_label_matches_checkout"] is False
+    assert provenance["dirty"] is True
+    assert provenance["source"] == "git"
+    assert git_commit() == provenance["commit_label"]
+    assert git_commit().endswith("+dirty")
 
 
 def test_command_string_redacts_private_python_and_repo_paths(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -138,3 +135,15 @@ def test_benchmark_row_boundary_normalizes_campaign9_status_rows() -> None:
         "runtime_visible_backends": ["cpu"],
         "transfer_boundary": "status_only",
     }
+
+
+def test_loaded_native_provenance_detects_stale_sources():
+    from benchmarks._benchmark_metadata import loaded_native_provenance, native_source_sha256
+
+    actual = loaded_native_provenance({"native_source_sha256": native_source_sha256()})
+    assert actual["matches_checkout_native_sources"] is True
+    assert len(actual["artifact_sha256"]) == 64
+    stale = loaded_native_provenance({"native_source_sha256": "old"})
+    assert stale["matches_checkout_native_sources"] is False
+    unknown = loaded_native_provenance({})
+    assert unknown["matches_checkout_native_sources"] is None

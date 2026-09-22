@@ -140,6 +140,25 @@ def test_wave1d_invalid_evidence_cannot_promote(problem: str) -> None:
     assert summary["aggregated_cases"] == []
 
 
+def test_wave1d_aggregation_uses_only_validated_profile_rows() -> None:
+    module = load_benchmark_module()
+    reports = wave1d_reports(module)
+    for report in reports:
+        for row in report["cases"]:
+            if row["variant"] == "metal_device_matrix_reuse":
+                row["timing"]["median"] = 0.0025
+    expected = module.summarize_wave1d_evidence(reports, repeat=7)
+    for report in reports:
+        unrelated = copy.deepcopy(report["cases"])
+        for row in unrelated:
+            row["case"]["profile"] = "campaign8"
+            row["correct"] = False
+            row["timing"]["median"] = 0.00001
+        report["cases"].extend(unrelated)
+    assert module.summarize_wave1d_evidence(reports, repeat=7) == expected
+    assert expected["status"] == "reject_investigate"
+
+
 def test_wave1d_cpu_only_report_is_a_skip(monkeypatch) -> None:
     module = load_benchmark_module()
     monkeypatch.setattr(module, "build_single_report", lambda **kwargs: {

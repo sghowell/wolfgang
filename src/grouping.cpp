@@ -237,6 +237,9 @@ std::vector<PauliSum> PauliSum::group_commuting(
     }
   } else {
     const bool use_graph = should_precompute_full_graph(num_terms_, max_terms_for_graph);
+    if (!use_graph) {
+      ensure_cpu_backend_supports_scalar_operation("streaming full grouping");
+    }
     const std::vector<std::uint8_t> graph = use_graph
         ? build_full_commutation_graph(*this)
         : std::vector<std::uint8_t>{};

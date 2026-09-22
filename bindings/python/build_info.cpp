@@ -17,6 +17,7 @@ void bind_build_info(nb::module_& module) {
         const wolfgang::CpuBackendReport cpu_backend =
             wolfgang::cpu_backend_report_from_environment();
         nb::dict info;
+        info["native_source_sha256"] = WOLFGANG_NATIVE_SOURCE_SHA256;
         info["cpu_backend"] = cpu_backend.active_backend;
         info["active_cpu_backend"] = cpu_backend.active_backend;
         info["requested_cpu_backend"] = cpu_backend.requested_backend;

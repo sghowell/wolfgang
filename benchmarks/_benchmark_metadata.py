@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
 import platform
 import shlex
@@ -73,9 +74,6 @@ PUBLIC_COMPILER_BUILD_KEYS = {
 
 
 def git_commit() -> str:
-    override = os.environ.get("WOLFGANG_BENCHMARK_GIT_COMMIT")
-    if override:
-        return override
     provenance = git_provenance()
     return str(provenance["commit_label"])
 
@@ -95,14 +93,6 @@ def git_status_short() -> list[str]:
 
 def git_provenance() -> dict[str, Any]:
     override = os.environ.get("WOLFGANG_BENCHMARK_GIT_COMMIT")
-    if override:
-        return {
-            "commit": override,
-            "commit_label": override,
-            "dirty": False,
-            "source": "WOLFGANG_BENCHMARK_GIT_COMMIT",
-            "working_tree_status": [],
-        }
     completed = subprocess.run(
         ["git", "rev-parse", "--short", "HEAD"],
         cwd=ROOT,
@@ -127,6 +117,36 @@ def git_provenance() -> dict[str, Any]:
         "dirty": dirty,
         "source": "git",
         "working_tree_status": status,
+        "requested_commit_label": override,
+        "requested_label_matches_checkout": override is None or override == commit,
+    }
+
+
+def native_source_sha256(root: Path = ROOT) -> str:
+    """Match the deterministic CMake native-input fingerprint."""
+    inputs = [root / "CMakeLists.txt"]
+    for directory in ("src", "include", "bindings", "third_party/dlpack/include"):
+        inputs.extend(path for path in (root / directory).rglob("*") if path.is_file())
+    manifest = "".join(
+        f"{path.relative_to(root).as_posix()}:{hashlib.sha256(path.read_bytes()).hexdigest()}\n"
+        for path in sorted(inputs, key=lambda path: path.relative_to(root).as_posix())
+    )
+    return hashlib.sha256(manifest.encode()).hexdigest()
+
+
+def loaded_native_provenance(build_info: dict[str, Any]) -> dict[str, Any]:
+    """Report the loaded artifact separately from the checkout and requested label."""
+    core = sys.modules.get("wolfgang_quantum._wolfgang_core")
+    module_path = getattr(core, "__file__", None)
+    artifact = Path(module_path) if module_path else None
+    built_source = build_info.get("native_source_sha256")
+    checkout_source = native_source_sha256()
+    return {
+        "artifact_name": artifact.name if artifact else None,
+        "artifact_sha256": hashlib.sha256(artifact.read_bytes()).hexdigest() if artifact and artifact.is_file() else None,
+        "built_native_source_sha256": built_source,
+        "checkout_native_source_sha256": checkout_source,
+        "matches_checkout_native_sources": built_source == checkout_source if built_source else None,
     }
 
 
@@ -437,6 +457,7 @@ def benchmark_environment(build_info: dict[str, Any], *, numpy_version: str) -> 
     cpu_backend_build_flags = build_info.get("cpu_backend_build_flags", {"scalar": True})
     accelerator_sets = accelerator_backend_sets(build_info)
     environment = {
+        "loaded_native_build": loaded_native_provenance(build_info),
         "operating_system": platform.platform(),
         "python_version": platform.python_version(),
         "numpy_version": numpy_version,
