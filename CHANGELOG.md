@@ -14,6 +14,19 @@ Next version: TBD
   two-word paths use stable sorts with no measured cost.
 - CUDA simplify no longer drops every term when a finite coefficient's
   magnitude overflows `DBL_MAX`; it now applies the CPU drop rule.
+- Add `PauliSum.from_arrays` / `to_arrays` for packed `uint64` mask and
+  `complex128` coefficient exchange; `to_arrays` returns read-only zero-copy
+  views. `from_labels` converts NumPy coefficient arrays in bulk.
+- Add subtraction, exact negation, `len`, indexing and slicing, structural
+  `==` (unhashable), `equiv`, `adjoint`, and fused `commutator` /
+  `anticommutator` that skip term pairs which cancel (7-9x faster than
+  composing two products in `docs/benchmarks/reports/host_api_2026-11-03.md`).
+- Behavior change: `PauliSum == other` now compares structure (same terms,
+  order and coefficients) instead of object identity, `PauliSum` is no longer
+  hashable, and `bool(op)` follows `len(op)`, so an empty operator is falsy.
+  Migration: use `op is other` for identity, `op.equiv(other)` for mathematical
+  equality, `id(op)` as a dictionary key, and `op.num_terms > 0` where
+  truthiness meant "not None".
 - Exclude local worktrees and release staging from source distributions.
 - Separate the native CMake library from Python, add standalone sanitizer
   contracts, bulk coefficient export and scoped CPU GIL release.

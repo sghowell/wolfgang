@@ -1,0 +1,905 @@
+{
+  "environment": {
+    "active_fastpauli_cpu_backend": "scalar",
+    "compiler": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "cpu_architecture": "x86_64",
+    "cpu_model": "x86_64",
+    "logical_cpu_count": 26,
+    "operating_system": "Linux-6.8.0-1046-nvidia-x86_64-with-glibc2.39",
+    "python_version": "3.12.3"
+  },
+  "rows": [
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.00026692299979913514,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.00026692299979913514,
+        0.00026557199998933356,
+        0.0002590250001048844,
+        0.0002787430003081681,
+        0.0002658379999047611,
+        0.00026783300017996226,
+        0.00028327400013949955
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.028665264999744977,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.02883009199990738,
+        0.028342284000245854,
+        0.028600599000128568,
+        0.028751673999977356,
+        0.028665264999744977,
+        0.02865956699997696,
+        0.028717856000184838
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.02428724199990029,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.02428724199990029,
+        0.024283431000185374,
+        0.0243091209999875,
+        0.024423678000403015,
+        0.024270278999665607,
+        0.02420866100010244,
+        0.024561691000144492
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 6.866000148875173e-06,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        6.4089999796124175e-06,
+        6.801999916206114e-06,
+        6.633999873884022e-06,
+        6.928999937372282e-06,
+        7.672999799979152e-06,
+        6.866000148875173e-06,
+        7.841000297048595e-06
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.0293324629997187,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.029339700000036828,
+        0.029260993999741913,
+        0.02938321600004201,
+        0.029338053000174114,
+        0.0293324629997187,
+        0.029277147999891895,
+        0.029252033999910054
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.02956859899995834,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.029551147999882232,
+        0.029554569000083575,
+        0.03052509100007228,
+        0.02956859899995834,
+        0.029587720999643352,
+        0.029493669000203226,
+        0.02990209900008267
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.0050331859997641,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.005000639000172669,
+        0.0050716470000224945,
+        0.0049577560002944665,
+        0.004996433999622241,
+        0.0050331859997641,
+        0.005060920999767404,
+        0.005087989999992715
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.3024209690001953,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.30262473000016143,
+        0.30312921299992013,
+        0.302070115999868,
+        0.303417680000166,
+        0.3024209690001953,
+        0.30022664399984933,
+        0.30234244400026
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.24952186399968923,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.24952186399968923,
+        0.24808154599986665,
+        0.2483661530000063,
+        0.2501414120001755,
+        0.24936978899995665,
+        0.24978363799982617,
+        0.25339237900016087
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.9053999949392164e-05,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        1.9053999949392164e-05,
+        1.803599980121362e-05,
+        1.9112999780190876e-05,
+        1.8401000033918535e-05,
+        1.9597999653342413e-05,
+        1.7827999727160204e-05,
+        1.9766999685089104e-05
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.311431513999878,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.311431513999878,
+        0.3126880360000541,
+        0.3115371410003718,
+        0.31128429799991864,
+        0.3114417639999374,
+        0.3105776449997393,
+        0.31065732200022467
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.3150105039999289,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.3150105039999289,
+        0.3149732739998399,
+        0.32394009600011486,
+        0.31526115899987417,
+        0.3148778129998391,
+        0.31421712700011994,
+        0.31713539600013974
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.0004883759997937887,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.00047752099999343045,
+        0.00043596400018941495,
+        0.00047719899976073066,
+        0.0006477629999608325,
+        0.0004883759997937887,
+        0.0005209269997976662,
+        0.0005155889998604835
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.0763958630000161,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.07662216500011709,
+        0.07608076099995742,
+        0.0763958630000161,
+        0.07645003800007544,
+        0.07622091000030196,
+        0.0764298410003903,
+        0.07619696299980205
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.07202565899979163,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.07218296799965174,
+        0.0715772180001295,
+        0.07178050799984703,
+        0.07198694300041097,
+        0.07202565899979163,
+        0.0722878030001084,
+        0.07207016200027283
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.0080000265588751e-05,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        8.807000085653272e-06,
+        1.0080000265588751e-05,
+        9.418999979970977e-06,
+        1.1948000064876396e-05,
+        1.1291999726381619e-05,
+        1.1359999916749075e-05,
+        9.271000180888223e-06
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.09953898000003392,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.0995567420000043,
+        0.10049619799974607,
+        0.09951129600040076,
+        0.09953898000003392,
+        0.09958210900003905,
+        0.0993326929997238,
+        0.09926291800002218
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.10133362299984583,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.10108030900028098,
+        0.10087312900031975,
+        0.10219335700003285,
+        0.10172514300029434,
+        0.10133362299984583,
+        0.10098810499994215,
+        0.10143917999994301
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.00749674300004699,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.007841120000193769,
+        0.00765494100005526,
+        0.0072723959997347265,
+        0.007460682999862911,
+        0.007379746999959025,
+        0.007789761999902112,
+        0.00749674300004699
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.8055473929998698,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.783621390999997,
+        0.8043176959999983,
+        0.7803379040001346,
+        0.8074236080001356,
+        0.8080810179999389,
+        0.8055473929998698,
+        0.808794324000246
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.7594525140002588,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.7584755040002165,
+        0.7594525140002588,
+        0.7587176160000126,
+        0.7745121220000328,
+        0.7626849780003795,
+        0.7594512569999097,
+        0.7608662329998879
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 2.073399991786573e-05,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        2.2816999717178987e-05,
+        2.022300031967461e-05,
+        2.0203000076435274e-05,
+        2.073399991786573e-05,
+        2.11690003197873e-05,
+        2.0896000023640227e-05,
+        1.9624999822553946e-05
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 1.0315234750000855,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        1.0287706110002546,
+        1.0325712769999882,
+        1.0266931629998908,
+        1.0343235659997845,
+        1.0315234750000855,
+        1.029574663999938,
+        1.034444775999873
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.048709350000081,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        1.0496185279998826,
+        1.048709350000081,
+        1.0615822350000599,
+        1.0638225540001258,
+        1.0480867900000703,
+        1.0463419960001374,
+        1.0475198529998124
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.11676857900010873,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.11653914199996507,
+        0.11706287000015436,
+        0.11688936800010197,
+        0.11661434999996345,
+        0.11807388099987293,
+        0.11624837999988813,
+        0.11676857900010873
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "composed_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.11744434699994599,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.11725613700036774,
+        0.11779497099996661,
+        0.11774402699984421,
+        0.11744434699994599,
+        0.11872665300006702,
+        0.1170063790000313,
+        0.11729461899994931
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "composed_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.015518841999892174,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.015518841999892174,
+        0.015520204000040394,
+        0.015508856999986165,
+        0.015567666000151803,
+        0.015500036000048567,
+        0.01564981399997123,
+        0.015495920000375918
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "fused_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.015423799000018334,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.015437880999797926,
+        0.0156463570001506,
+        0.015351261000432714,
+        0.015439605999745254,
+        0.015365312000085396,
+        0.015423799000018334,
+        0.015332685999965179
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "fused_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 2.97434972200017,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        2.9949863490001007,
+        2.9745349380000334,
+        2.968624513999657,
+        2.9642398470000444,
+        2.9675126369997997,
+        2.97434972200017,
+        2.97956928900021
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "composed_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 3.022372515999905,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        3.0437217270000474,
+        3.0137304159998166,
+        3.0259636769997087,
+        3.022372515999905,
+        3.0199887720000334,
+        3.0132416430001285,
+        3.02736203700033
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "composed_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.32166198499999155,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.31740156099976957,
+        0.30906735300004584,
+        0.3259634789997108,
+        0.3232225990000188,
+        0.32469672399975025,
+        0.30927194500009136,
+        0.32166198499999155
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "fused_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.3241413350001494,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.33159457600004316,
+        0.3245282379998571,
+        0.3241413350001494,
+        0.3050538239999696,
+        0.3166588160001993,
+        0.32524899600002755,
+        0.3204486340000585
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "fused_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.13320621299999402,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.13285634000021673,
+        0.13327544100002342,
+        0.13320621299999402,
+        0.13298538299977736,
+        0.13372602800018285,
+        0.13252494199969078,
+        0.13354711900001348
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "composed_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.13429935100020884,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.1336528379997617,
+        0.13430222399983904,
+        0.13429935100020884,
+        0.13370698399967296,
+        0.13466061000008267,
+        0.1333837119996133,
+        0.13458879200015872
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "composed_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.018561218999820994,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.018556166000053054,
+        0.0187058189999334,
+        0.018561218999820994,
+        0.018359954000061407,
+        0.018732057000306668,
+        0.01850214700016295,
+        0.018602988999646186
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "fused_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.018551909000052547,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.018701504000091518,
+        0.018518338999911066,
+        0.018707482000081654,
+        0.018834233999768912,
+        0.01836433800008308,
+        0.018448742000146012,
+        0.018551909000052547
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "fused_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 3.6481923520000237,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        3.5856848739999805,
+        3.6597998420002114,
+        3.641099481999845,
+        3.6481923520000237,
+        3.6606480650002595,
+        3.5843622139996114,
+        3.662825055999747
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "composed_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 3.75577817400017,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        3.6616627620001054,
+        3.758758258000398,
+        3.75577817400017,
+        3.753040996999971,
+        3.763968866999676,
+        3.6604909009997755,
+        3.7822306759999265
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "composed_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.4206795869999951,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.39773310300006415,
+        0.4225891959999899,
+        0.4206795869999951,
+        0.4183162059998722,
+        0.42237941900020815,
+        0.39926334699975996,
+        0.42691697999998723
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "fused_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.4196961940001529,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.4006164419997731,
+        0.42697564599984617,
+        0.4221521380000013,
+        0.4196961940001529,
+        0.41965717799985214,
+        0.39360368200004814,
+        0.42203317799976503
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "fused_commutator"
+    }
+  ],
+  "runs": [
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261104 --output base_1.json",
+      "file": "base_1.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "be73c7a5dfc8921b54c74774366524dc7244340ba5afc88dc41cbcb28aea3ee9",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261104
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261105 --output base_2.json",
+      "file": "base_2.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "be73c7a5dfc8921b54c74774366524dc7244340ba5afc88dc41cbcb28aea3ee9",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261105
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261106 --output base_3.json",
+      "file": "base_3.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "be73c7a5dfc8921b54c74774366524dc7244340ba5afc88dc41cbcb28aea3ee9",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261106
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261107 --output base_4.json",
+      "file": "base_4.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "be73c7a5dfc8921b54c74774366524dc7244340ba5afc88dc41cbcb28aea3ee9",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261107
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261108 --output base_5.json",
+      "file": "base_5.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "be73c7a5dfc8921b54c74774366524dc7244340ba5afc88dc41cbcb28aea3ee9",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261108
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261109 --output base_6.json",
+      "file": "base_6.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "be73c7a5dfc8921b54c74774366524dc7244340ba5afc88dc41cbcb28aea3ee9",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261109
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261110 --output base_7.json",
+      "file": "base_7.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "be73c7a5dfc8921b54c74774366524dc7244340ba5afc88dc41cbcb28aea3ee9",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261110
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261104 --output cand_1.json",
+      "file": "cand_1.json",
+      "git_commit": "7c64436",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "c409b4fdaf69a7a9c826f64381662850be72f380f7412b4fc5e323d3c81ee480",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261104
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261105 --output cand_2.json",
+      "file": "cand_2.json",
+      "git_commit": "7c64436",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "c409b4fdaf69a7a9c826f64381662850be72f380f7412b4fc5e323d3c81ee480",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261105
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261106 --output cand_3.json",
+      "file": "cand_3.json",
+      "git_commit": "7c64436",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "c409b4fdaf69a7a9c826f64381662850be72f380f7412b4fc5e323d3c81ee480",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261106
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261107 --output cand_4.json",
+      "file": "cand_4.json",
+      "git_commit": "7c64436",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "c409b4fdaf69a7a9c826f64381662850be72f380f7412b4fc5e323d3c81ee480",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261107
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261108 --output cand_5.json",
+      "file": "cand_5.json",
+      "git_commit": "7c64436",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "c409b4fdaf69a7a9c826f64381662850be72f380f7412b4fc5e323d3c81ee480",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261108
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261109 --output cand_6.json",
+      "file": "cand_6.json",
+      "git_commit": "7c64436",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "c409b4fdaf69a7a9c826f64381662850be72f380f7412b4fc5e323d3c81ee480",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261109
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261110 --output cand_7.json",
+      "file": "cand_7.json",
+      "git_commit": "7c64436",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "c409b4fdaf69a7a9c826f64381662850be72f380f7412b4fc5e323d3c81ee480",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261110
+    }
+  ]
+}

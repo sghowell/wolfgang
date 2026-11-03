@@ -1,0 +1,912 @@
+{
+  "environment": {
+    "active_fastpauli_cpu_backend": "scalar",
+    "apple_hardware": {
+      "chip": "Apple M4 Pro",
+      "core_summary": "12 (8 Performance and 4 Efficiency)",
+      "model_identifier": "Mac16,11",
+      "model_name": "Mac mini",
+      "total_core_count": 12
+    },
+    "compiler": "Apple clang version 21.0.0 (clang-2100.0.123.102)",
+    "cpu_architecture": "arm64",
+    "cpu_model": "arm",
+    "logical_cpu_count": 12,
+    "operating_system": "macOS-26.6.2-arm64-arm-64bit",
+    "python_version": "3.12.12"
+  },
+  "rows": [
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.00010420940816402435,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.0001048743724822998,
+        0.0001216251403093338,
+        0.00010362453758716583,
+        9.983405470848083e-05,
+        0.00010658428072929382,
+        0.00010420940816402435,
+        0.0001022927463054657
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.019305958412587643,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.019376667216420174,
+        0.01904349960386753,
+        0.019181542098522186,
+        0.019305958412587643,
+        0.019223124720156193,
+        0.019507916644215584,
+        0.019348375499248505
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.016419959254562855,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.016269749961793423,
+        0.01645808294415474,
+        0.016455791890621185,
+        0.015883750282227993,
+        0.01643791701644659,
+        0.016419959254562855,
+        0.016240334138274193
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 7.750466465950012e-06,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        7.166527211666107e-06,
+        7.2503462433815e-06,
+        7.209368050098419e-06,
+        8.041970431804657e-06,
+        7.750466465950012e-06,
+        1.0250136256217957e-05,
+        8.124858140945435e-06
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.005253458395600319,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.005168791860342026,
+        0.0053333742544054985,
+        0.005191999487578869,
+        0.005292500369250774,
+        0.005408916622400284,
+        0.005147291347384453,
+        0.005253458395600319
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.005352291278541088,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.005309375002980232,
+        0.005356708541512489,
+        0.005406875163316727,
+        0.00521183293312788,
+        0.005187666043639183,
+        0.0055108750239014626,
+        0.005352291278541088
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.0009333742782473564,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.0013171657919883728,
+        0.0008595837280154228,
+        0.0009067505598068237,
+        0.0009757494553923607,
+        0.0009333742782473564,
+        0.002125583589076996,
+        0.0009134998545050621
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.19270495790988207,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.19253654219210148,
+        0.19270495790988207,
+        0.19186566676944494,
+        0.19333437457680702,
+        0.1939017502591014,
+        0.197351542301476,
+        0.19240854028612375
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.16450716648250818,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.1629854580387473,
+        0.16450716648250818,
+        0.1648541670292616,
+        0.16701262444257736,
+        0.16395404189825058,
+        0.16555920895189047,
+        0.16069437563419342
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.2082979083061218e-05,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        9.375624358654022e-06,
+        1.1124648153781891e-05,
+        1.3333745300769806e-05,
+        1.2082979083061218e-05,
+        1.0250136256217957e-05,
+        1.2459233403205872e-05,
+        1.2249685823917389e-05
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.0595204159617424,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.05957454163581133,
+        0.0595204159617424,
+        0.05859066732227802,
+        0.05892195925116539,
+        0.060499499551951885,
+        0.05999958422034979,
+        0.058051624335348606
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.05869658384472132,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.06068812496960163,
+        0.05851966701447964,
+        0.05869658384472132,
+        0.059671083465218544,
+        0.057983167469501495,
+        0.06066050007939339,
+        0.057169209234416485
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.00012749992311000824,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.00012745801359415054,
+        0.00012758281081914902,
+        0.00012424960732460022,
+        0.00013350043445825577,
+        0.00012999959290027618,
+        0.00012749992311000824,
+        0.0001249583438038826
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.05923212505877018,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.059508916921913624,
+        0.05919483304023743,
+        0.05889845825731754,
+        0.05936479102820158,
+        0.05923212505877018,
+        0.061745041981339455,
+        0.058394541032612324
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.05593825038522482,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.057294207625091076,
+        0.05685424990952015,
+        0.05664395820349455,
+        0.05593825038522482,
+        0.05583424959331751,
+        0.055502500385046005,
+        0.05556770786643028
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 8.833594620227814e-06,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        1.0000541806221008e-05,
+        9.709037840366364e-06,
+        8.791685104370117e-06,
+        1.0583549737930298e-05,
+        8.792616426944733e-06,
+        8.250586688518524e-06,
+        8.833594620227814e-06
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.01263416651636362,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.012437207624316216,
+        0.01280458364635706,
+        0.01263416651636362,
+        0.012522334232926369,
+        0.012639207765460014,
+        0.012504291720688343,
+        0.013060666620731354
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.012686250731348991,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.012710874900221825,
+        0.012450250796973705,
+        0.01278000045567751,
+        0.01253979280591011,
+        0.012302207760512829,
+        0.013072500005364418,
+        0.012686250731348991
+      ],
+      "suite": "boundary",
+      "terms": 100000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.001164083369076252,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.0011899573728442192,
+        0.0012997901067137718,
+        0.0011403337121009827,
+        0.0012842090800404549,
+        0.001164083369076252,
+        0.0011624163016676903,
+        0.0011571664363145828
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.5921082496643066,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.5921082496643066,
+        0.5883599165827036,
+        0.5930282901972532,
+        0.5872152913361788,
+        0.5952499164268374,
+        0.5984680000692606,
+        0.5918335830792785
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.5654034996405244,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.5655273329466581,
+        0.5737988343462348,
+        0.5654034996405244,
+        0.5636813752353191,
+        0.5661484161391854,
+        0.559124750085175,
+        0.5602255826815963
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "from_labels_numpy_coeffs"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.3582408428192139e-05,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        1.4500692486763e-05,
+        1.3582408428192139e-05,
+        1.404155045747757e-05,
+        1.4083459973335266e-05,
+        1.1792406439781189e-05,
+        1.3542361557483673e-05,
+        1.1958181858062744e-05
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_arrays"
+    },
+    {
+      "label": "base",
+      "median_of_medians_seconds": 0.13337466586381197,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.13337466586381197,
+        0.13098137453198433,
+        0.1347417077049613,
+        0.13278604205697775,
+        0.13391983415931463,
+        0.1290899170562625,
+        0.13942416664212942
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.13378454186022282,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.13378904201090336,
+        0.1306448746472597,
+        0.1333452919498086,
+        0.13378454186022282,
+        0.13750408310443163,
+        0.13898162450641394,
+        0.13280766643583775
+      ],
+      "suite": "boundary",
+      "terms": 1000000,
+      "variant": "to_labels"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.0708837928250432,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.07073816563934088,
+        0.07121074944734573,
+        0.07058325037360191,
+        0.0708837928250432,
+        0.07217399962246418,
+        0.07079312484711409,
+        0.07175987493246794
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "composed_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.0710752084851265,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.0716540003195405,
+        0.07037716638296843,
+        0.07059820741415024,
+        0.07129608280956745,
+        0.0710752084851265,
+        0.07095091603696346,
+        0.07180433254688978
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "composed_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.008663916029036045,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.008663916029036045,
+        0.008706375025212765,
+        0.008635042235255241,
+        0.008652334101498127,
+        0.008801458403468132,
+        0.00866212509572506,
+        0.00896337442100048
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "fused_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.008769708685576916,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.008647166192531586,
+        0.008769708685576916,
+        0.008613166399300098,
+        0.008806958794593811,
+        0.008779709227383137,
+        0.008710792288184166,
+        0.008932959288358688
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "fused_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.528601374477148,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        1.5144250001758337,
+        1.5553699992597103,
+        1.5202579163014889,
+        1.528601374477148,
+        1.5304567916318774,
+        1.5430509587749839,
+        1.5056006666272879
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "composed_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.5319066662341356,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        1.5319066662341356,
+        1.545232874341309,
+        1.5207505840808153,
+        1.5339791672304273,
+        1.5586636252701283,
+        1.5089033329859376,
+        1.5283590825274587
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "composed_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.16242612432688475,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.16242612432688475,
+        0.16199529264122248,
+        0.16066891700029373,
+        0.16267616674304008,
+        0.1674099573865533,
+        0.16424820851534605,
+        0.16197204031050205
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "fused_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.16386820748448372,
+      "num_qubits": 24,
+      "per_run_median_seconds": [
+        0.16220845840871334,
+        0.16538108233362436,
+        0.16113895922899246,
+        0.16386820748448372,
+        0.16312445793300867,
+        0.16525058262050152,
+        0.1650454169139266
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "fused_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.0739682074636221,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.07356016617268324,
+        0.07324716541916132,
+        0.07580566685646772,
+        0.0738473329693079,
+        0.0739682074636221,
+        0.07408033404499292,
+        0.07409549970179796
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "composed_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.07388800010085106,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.07352824974805117,
+        0.073059874586761,
+        0.07514462433755398,
+        0.07391341682523489,
+        0.07369375042617321,
+        0.07393420860171318,
+        0.07388800010085106
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "composed_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.009409583173692226,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.009428959339857101,
+        0.00927004124969244,
+        0.009530332870781422,
+        0.009364665485918522,
+        0.009525667876005173,
+        0.009409583173692226,
+        0.009336915798485279
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "fused_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.009512750431895256,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.009567665867507458,
+        0.009315582923591137,
+        0.009512750431895256,
+        0.009540500119328499,
+        0.00957991648465395,
+        0.009444791823625565,
+        0.009439791552722454
+      ],
+      "suite": "commutator",
+      "terms": 500,
+      "variant": "fused_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.6398713337257504,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        1.6700152503326535,
+        1.6290433341637254,
+        1.622116582468152,
+        1.6398713337257504,
+        1.7076415829360485,
+        1.6212234999984503,
+        1.6512502497062087
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "composed_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 1.6631857911124825,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        1.6856292085722089,
+        1.6631857911124825,
+        1.6644132919609547,
+        1.6432182919234037,
+        1.678011292591691,
+        1.6350442497059703,
+        1.6517869168892503
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "composed_commutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.17913000006228685,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.17764424998313189,
+        0.1789702083915472,
+        0.17781879100948572,
+        0.17913000006228685,
+        0.1797614162787795,
+        0.18021679110825062,
+        0.1838114159181714
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "fused_anticommutator"
+    },
+    {
+      "label": "cand",
+      "median_of_medians_seconds": 0.17822520807385445,
+      "num_qubits": 100,
+      "per_run_median_seconds": [
+        0.18462008330971003,
+        0.1813535001128912,
+        0.17802695743739605,
+        0.17962079122662544,
+        0.17822520807385445,
+        0.17732550017535686,
+        0.176985084079206
+      ],
+      "suite": "commutator",
+      "terms": 2000,
+      "variant": "fused_commutator"
+    }
+  ],
+  "runs": [
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261104 --output base_1.json",
+      "file": "base_1.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "5166d986aad2b2eded50b5727ffe8d364d375aad748fc6b7dd51a53c45d2b217",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261104
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261105 --output base_2.json",
+      "file": "base_2.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "5166d986aad2b2eded50b5727ffe8d364d375aad748fc6b7dd51a53c45d2b217",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261105
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261106 --output base_3.json",
+      "file": "base_3.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "5166d986aad2b2eded50b5727ffe8d364d375aad748fc6b7dd51a53c45d2b217",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261106
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261107 --output base_4.json",
+      "file": "base_4.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "5166d986aad2b2eded50b5727ffe8d364d375aad748fc6b7dd51a53c45d2b217",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261107
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261108 --output base_5.json",
+      "file": "base_5.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "5166d986aad2b2eded50b5727ffe8d364d375aad748fc6b7dd51a53c45d2b217",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261108
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261109 --output base_6.json",
+      "file": "base_6.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "5166d986aad2b2eded50b5727ffe8d364d375aad748fc6b7dd51a53c45d2b217",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261109
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite boundary --label base --seed 20261110 --output base_7.json",
+      "file": "base_7.json",
+      "git_commit": "d555868",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "5166d986aad2b2eded50b5727ffe8d364d375aad748fc6b7dd51a53c45d2b217",
+        "built_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "checkout_native_source_sha256": "f6929cd3324effa789a3285f2e07045c67064436b1a03638c25bcb3334856f21",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261110
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261104 --output cand_1.json",
+      "file": "cand_1.json",
+      "git_commit": "7c64436",
+      "git_dirty": true,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "abc252fe9c9cba92e51f60dbaff808b8e4e8e8c0732a7a544d0cfe2224cfda3e",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261104
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261105 --output cand_2.json",
+      "file": "cand_2.json",
+      "git_commit": "7c64436",
+      "git_dirty": true,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "abc252fe9c9cba92e51f60dbaff808b8e4e8e8c0732a7a544d0cfe2224cfda3e",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261105
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261106 --output cand_3.json",
+      "file": "cand_3.json",
+      "git_commit": "7c64436",
+      "git_dirty": true,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "abc252fe9c9cba92e51f60dbaff808b8e4e8e8c0732a7a544d0cfe2224cfda3e",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261106
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261107 --output cand_4.json",
+      "file": "cand_4.json",
+      "git_commit": "7c64436",
+      "git_dirty": true,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "abc252fe9c9cba92e51f60dbaff808b8e4e8e8c0732a7a544d0cfe2224cfda3e",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261107
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261108 --output cand_5.json",
+      "file": "cand_5.json",
+      "git_commit": "7c64436",
+      "git_dirty": true,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "abc252fe9c9cba92e51f60dbaff808b8e4e8e8c0732a7a544d0cfe2224cfda3e",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261108
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261109 --output cand_6.json",
+      "file": "cand_6.json",
+      "git_commit": "7c64436",
+      "git_dirty": true,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "abc252fe9c9cba92e51f60dbaff808b8e4e8e8c0732a7a544d0cfe2224cfda3e",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261109
+    },
+    {
+      "command": "python benchmarks/bench_host_api.py --suite all --label cand --seed 20261110 --output cand_7.json",
+      "file": "cand_7.json",
+      "git_commit": "7c64436",
+      "git_dirty": true,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "abc252fe9c9cba92e51f60dbaff808b8e4e8e8c0732a7a544d0cfe2224cfda3e",
+        "built_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "checkout_native_source_sha256": "f13f609b7bffeb43939eeaf1c6e5d72415462fd6c981802cac59fa57d05a9b0c",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261110
+    }
+  ]
+}

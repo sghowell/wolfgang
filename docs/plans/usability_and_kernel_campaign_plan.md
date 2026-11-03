@@ -38,3 +38,5 @@ hardware evidence for any accelerator or speed claim.
 Slice 1 merged with H100 evidence:
 `docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`. Review closeout:
 `docs/reviews/usability_kernel_campaign_2026-11-03.md`.
+
+Slices 2 and 3 merged: `docs/benchmarks/reports/host_api_2026-11-03.md`.

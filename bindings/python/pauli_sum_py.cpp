@@ -27,6 +27,7 @@
 #include <vector>
 
 #include <nanobind/nanobind.h>
+#include <nanobind/ndarray.h>
 #include <nanobind/stl/complex.h>
 #include <nanobind/stl/string.h>
 
@@ -80,6 +81,17 @@ public:
 private:
   Py_buffer view_{};
 };
+
+// View a C-contiguous array the caller keeps alive. The buffer export is
+// released immediately; the memory stays valid while the array object lives.
+template <typename T>
+std::span<const T> contiguous_span(nb::handle array, std::size_t count) {
+  if (count == 0) {
+    return {};
+  }
+  PythonBufferView buffer(array);
+  return {static_cast<const T*>(buffer.get().buf), count};
+}
 
 class WritablePythonBufferView {
 public:
@@ -169,6 +181,25 @@ std::vector<std::complex<double>> parse_coefficients(
     return {scalar};
   } catch (const nb::cast_error&) {
     // Non-scalar coefficient inputs are parsed as iterables below.
+  }
+
+  // One-dimensional numeric NumPy arrays convert in bulk; boxing one Python
+  // complex per element dominated label construction for large operators.
+  // Only real NumPy arrays take this path; other array-likes (CuPy, torch) keep
+  // the element-wise path they used before.
+  nb::module_ numpy = nb::module_::import_("numpy");
+  if (PyObject_IsInstance(coeffs_obj.ptr(), numpy.attr("ndarray").ptr()) == 1 &&
+      nb::cast<int>(coeffs_obj.attr("ndim")) == 1) {
+    const std::string kind = nb::cast<std::string>(coeffs_obj.attr("dtype").attr("kind"));
+    if (kind == "b" || kind == "i" || kind == "u" || kind == "f" || kind == "c") {
+      nb::object array = numpy.attr("ascontiguousarray")(coeffs_obj, numpy.attr("complex128"));
+      const std::size_t size = nb::cast<std::size_t>(array.attr("shape")[0]);
+      if (size != expected_size) {
+        throw nb::value_error("coefficient count must match label count");
+      }
+      const auto values = contiguous_span<std::complex<double>>(array, size);
+      return {values.begin(), values.end()};
+    }
   }
 
   std::vector<std::complex<double>> coeffs;
@@ -572,6 +603,73 @@ nb::object coeff_array_from_vector(const std::vector<std::complex<double>>& coef
   // allocation avoids a Python list and a boxed complex object per coefficient.
   std::memcpy(buffer.get().buf, coeffs.data(), bytes);
   return array;
+}
+
+// Packed-array boundary. Inputs are normalized through NumPy so non-contiguous
+// arrays are accepted (the operator always copies), but the word dtype is never
+// cast: a signed or float array could reinterpret bits silently.
+struct PackedArrayInput {
+  nb::object x;
+  nb::object z;
+  nb::object coeffs;
+};
+
+PackedArrayInput normalize_packed_arrays(
+    nb::handle x_obj,
+    nb::handle z_obj,
+    nb::handle coeffs_obj,
+    std::size_t words) {
+  nb::module_ numpy = nb::module_::import_("numpy");
+  nb::object uint64 = numpy.attr("dtype")("uint64");
+  auto words_array = [&](nb::handle obj, const char* name) {
+    nb::object array = numpy.attr("asarray")(obj);
+    if (!array.attr("dtype").equal(uint64)) {
+      throw nb::type_error(
+          (std::string(name) + " must have dtype uint64 in native byte order").c_str());
+    }
+    if (nb::cast<int>(array.attr("ndim")) != 2) {
+      throw nb::value_error((std::string(name) + " must have shape (num_terms, words)").c_str());
+    }
+    return numpy.attr("ascontiguousarray")(array);
+  };
+  PackedArrayInput input;
+  input.x = words_array(x_obj, "x");
+  input.z = words_array(z_obj, "z");
+
+  nb::object coeffs = numpy.attr("asarray")(coeffs_obj);
+  const std::string kind = nb::cast<std::string>(coeffs.attr("dtype").attr("kind"));
+  if (kind != "b" && kind != "i" && kind != "u" && kind != "f" && kind != "c") {
+    throw nb::type_error("coeffs must be a numeric array");
+  }
+  if (nb::cast<int>(coeffs.attr("ndim")) != 1) {
+    throw nb::value_error("coeffs must be 1-dimensional");
+  }
+  input.coeffs = numpy.attr("ascontiguousarray")(coeffs, numpy.attr("complex128"));
+
+  const std::size_t num_terms = nb::cast<std::size_t>(input.coeffs.attr("shape")[0]);
+  for (const nb::object* array : {&input.x, &input.z}) {
+    nb::object shape = array->attr("shape");
+    if (nb::cast<std::size_t>(shape[0]) != num_terms || nb::cast<std::size_t>(shape[1]) != words) {
+      throw nb::value_error(
+          "x and z must have shape (len(coeffs), ceil(num_qubits / 64))");
+    }
+  }
+  return input;
+}
+
+// Read-only NumPy views over the operator's own buffers. The view holds a
+// reference to the Python PauliSum, and PauliSum is immutable, so the memory
+// stays valid and unchanged for the view's lifetime.
+template <typename T>
+nb::object readonly_view(nb::handle owner, const T* data, std::initializer_list<std::size_t> shape) {
+  static const T empty_storage{};
+  std::size_t count = 1;
+  for (std::size_t extent : shape) {
+    count *= extent;
+  }
+  const T* pointer = count == 0 ? &empty_storage : data;
+  return nb::cast(nb::ndarray<nb::numpy, const T>(
+      pointer, shape.size(), shape.begin(), owner));
 }
 
 nb::object bool_array_from_vector(const std::vector<std::uint8_t>& values) {
@@ -1433,6 +1531,33 @@ void bind_pauli_sum(nb::module_& module) {
           "Each local string is aligned with its qubit_indices sequence. Indices are global qubit "
           "numbers with qubit 0 matching the right-most dense-label character. num_qubits is "
           "explicit so empty sparse input has well-defined metadata.")
+      .def_static(
+          "from_arrays",
+          [](nb::handle x_obj, nb::handle z_obj, nb::handle coeffs_obj, long long num_qubits_obj) {
+            const std::size_t num_qubits = checked_size_from_signed(num_qubits_obj, "num_qubits");
+            const std::size_t words = (num_qubits + 63) / 64;
+            const PackedArrayInput input = normalize_packed_arrays(x_obj, z_obj, coeffs_obj, words);
+            const std::size_t num_terms = nb::cast<std::size_t>(input.coeffs.attr("shape")[0]);
+            const std::size_t packed = num_terms * words;
+            const auto x = contiguous_span<std::uint64_t>(input.x, packed);
+            const auto z = contiguous_span<std::uint64_t>(input.z, packed);
+            const auto coeffs = contiguous_span<std::complex<double>>(input.coeffs, num_terms);
+            try {
+              return cpu_without_gil([&] { return PauliSum::from_words(num_qubits, x, z, coeffs); });
+            } catch (const std::invalid_argument& error) {
+              translate_invalid_argument(error);
+            }
+          },
+          nb::arg("x"),
+          nb::arg("z"),
+          nb::arg("coeffs"),
+          nb::arg("num_qubits"),
+          "Build from packed symplectic bit masks.\n\n"
+          "x and z are uint64 arrays of shape (num_terms, ceil(num_qubits / 64)); qubit q is bit "
+          "q % 64 of word q // 64, so X sets x, Z sets z and Y sets both. coeffs is a 1-D numeric "
+          "array of length num_terms and is converted to complex128. Bits at or above num_qubits "
+          "must be zero. Data is always copied into the new operator. Other word dtypes raise "
+          "TypeError rather than being cast.")
       .def_prop_ro(
           "num_qubits",
           &PauliSum::num_qubits,
@@ -1493,6 +1618,22 @@ void bind_pauli_sum(nb::module_& module) {
           "Term order is preserved. Identity terms export as an empty local string with an empty "
           "index list.")
       .def(
+          "to_arrays",
+          [](nb::handle_t<PauliSum> self) {
+            const PauliSum& op = nb::cast<const PauliSum&>(self);
+            const std::size_t terms = op.num_terms();
+            const std::size_t words = op.words();
+            return nb::make_tuple(
+                readonly_view(self, op.x_words().data(), {terms, words}),
+                readonly_view(self, op.z_words().data(), {terms, words}),
+                readonly_view(self, op.coeffs().data(), {terms}));
+          },
+          "Return (x, z, coeffs) as read-only NumPy views of the packed storage.\n\n"
+          "x and z have dtype uint64 and shape (num_terms, ceil(num_qubits / 64)); coeffs is "
+          "complex128 with shape (num_terms,). The views share memory with this immutable "
+          "operator and keep it alive; call .copy() for writable arrays. "
+          "PauliSum.from_arrays(*op.to_arrays(), op.num_qubits) reproduces op.")
+      .def(
           "simplify",
           [](const PauliSum& op, double atol, double rtol) {
             ensure_scalar_cpu_operation("simplify");
@@ -1520,6 +1661,111 @@ void bind_pauli_sum(nb::module_& module) {
           },
           nb::is_operator(),
           "Concatenate two PauliSum objects without implicit simplify.")
+      .def(
+          "__sub__",
+          [](const PauliSum& lhs, const PauliSum& rhs) {
+            ensure_scalar_cpu_operation("__sub__");
+            try {
+              return cpu_without_gil([&] { return lhs.add(rhs.negate()); });
+            } catch (const std::invalid_argument& error) {
+              translate_invalid_argument(error);
+            }
+          },
+          nb::is_operator(),
+          "Concatenate self with the negated terms of rhs, without implicit simplify.")
+      .def(
+          "__neg__",
+          [](const PauliSum& op) {
+            ensure_scalar_cpu_operation("__neg__");
+            return cpu_without_gil([&] { return op.negate(); });
+          },
+          "Return the operator with every coefficient's sign flipped exactly.")
+      .def(
+          "__len__",
+          &PauliSum::num_terms,
+          "Number of terms; equal to num_terms.")
+      .def(
+          "__getitem__",
+          [](const PauliSum& op, nb::handle key) {
+            std::vector<std::size_t> indices;
+            const auto num_terms = static_cast<Py_ssize_t>(op.num_terms());
+            if (PySlice_Check(key.ptr())) {
+              Py_ssize_t start = 0;
+              Py_ssize_t stop = 0;
+              Py_ssize_t step = 0;
+              if (PySlice_Unpack(key.ptr(), &start, &stop, &step) != 0) {
+                throw nb::python_error();
+              }
+              const Py_ssize_t count = PySlice_AdjustIndices(num_terms, &start, &stop, step);
+              indices.reserve(static_cast<std::size_t>(count));
+              for (Py_ssize_t i = 0; i < count; ++i) {
+                indices.push_back(static_cast<std::size_t>(start + i * step));
+              }
+            } else {
+              PyObject* index_obj = PyNumber_Index(key.ptr());
+              if (index_obj == nullptr) {
+                PyErr_Clear();
+                throw nb::type_error("PauliSum indices must be integers or slices");
+              }
+              Py_ssize_t index = PyNumber_AsSsize_t(index_obj, PyExc_IndexError);
+              Py_DECREF(index_obj);
+              if (index == -1 && PyErr_Occurred()) {
+                throw nb::python_error();
+              }
+              if (index < 0) {
+                index += num_terms;
+              }
+              if (index < 0 || index >= num_terms) {
+                throw nb::index_error("PauliSum term index out of range");
+              }
+              indices.push_back(static_cast<std::size_t>(index));
+            }
+            return op.select_terms(indices);
+          },
+          nb::arg("key").none(),
+          "Return the term at an integer index, or the terms in a slice, as a new PauliSum.\n\n"
+          "Negative indices count from the end. Out-of-range integers raise IndexError; "
+          "iteration yields one single-term PauliSum per term.")
+      .def(
+          "__eq__",
+          [](const PauliSum& lhs, nb::handle rhs) -> nb::object {
+            if (!nb::isinstance<PauliSum>(rhs)) {
+              return nb::borrow(Py_NotImplemented);
+            }
+            return nb::cast(lhs.structurally_equal(nb::cast<const PauliSum&>(rhs)));
+          },
+          nb::is_operator(),
+          "Structural equality: same num_qubits and the same terms in the same order with equal "
+          "coefficients. Use equiv() to compare operators mathematically.")
+      .def(
+          "equiv",
+          [](const PauliSum& lhs, const PauliSum& rhs, double atol, double rtol) {
+            ensure_scalar_cpu_operation("equiv");
+            if (lhs.num_qubits() != rhs.num_qubits()) {
+              return false;
+            }
+            try {
+              return cpu_without_gil([&] {
+                return lhs.add(rhs.negate()).simplify(atol, rtol).num_terms() == 0;
+              });
+            } catch (const std::invalid_argument& error) {
+              translate_invalid_argument(error);
+            }
+          },
+          nb::arg("other"),
+          nb::arg("atol") = 1.0e-12,
+          nb::arg("rtol") = 0.0,
+          "Return True when self and other are the same operator up to tolerance.\n\n"
+          "Equivalent to (self - other).simplify(atol, rtol).num_terms == 0, so term order and "
+          "unmerged duplicates do not matter. Operators on different qubit counts are never "
+          "equivalent.")
+      .def(
+          "adjoint",
+          [](const PauliSum& op) {
+            ensure_scalar_cpu_operation("adjoint");
+            return cpu_without_gil([&] { return op.adjoint(); });
+          },
+          "Return the Hermitian adjoint: coefficients are conjugated, terms and order unchanged.")
       .def(
           "__mul__",
           [](const PauliSum& op, nb::handle scalar_obj) {
@@ -1567,6 +1813,42 @@ void bind_pauli_sum(nb::module_& module) {
           },
           nb::is_operator(),
           "Compose two PauliSum objects with matrix multiplication semantics.")
+      .def(
+          "commutator",
+          [](const PauliSum& lhs, const PauliSum& rhs, bool simplify_output, nb::handle max_terms_obj) {
+            ensure_scalar_cpu_operation("commutator");
+            try {
+              const auto limit = checked_size_from_python_int(max_terms_obj, "max_intermediate_terms");
+              return cpu_without_gil([&] { return lhs.commutator(rhs, simplify_output, limit); });
+            } catch (const std::invalid_argument& error) {
+              translate_invalid_argument(error);
+            }
+          },
+          nb::arg("other"),
+          nb::arg("simplify") = true,
+          nb::arg("max_intermediate_terms") = 50000000,
+          "Return the commutator [self, other] = self @ other - other @ self.\n\n"
+          "Commuting term pairs cancel exactly and are never generated, so this is faster and "
+          "more precise than composing two products. Each anticommuting pair contributes "
+          "2 * a * b * (P @ Q). With simplify=False the surviving products keep self-outer, "
+          "other-inner order. max_intermediate_terms bounds len(self) * len(other). Non-finite "
+          "coefficients raise ValueError.")
+      .def(
+          "anticommutator",
+          [](const PauliSum& lhs, const PauliSum& rhs, bool simplify_output, nb::handle max_terms_obj) {
+            ensure_scalar_cpu_operation("anticommutator");
+            try {
+              const auto limit = checked_size_from_python_int(max_terms_obj, "max_intermediate_terms");
+              return cpu_without_gil([&] { return lhs.anticommutator(rhs, simplify_output, limit); });
+            } catch (const std::invalid_argument& error) {
+              translate_invalid_argument(error);
+            }
+          },
+          nb::arg("other"),
+          nb::arg("simplify") = true,
+          nb::arg("max_intermediate_terms") = 50000000,
+          "Return the anticommutator {self, other} = self @ other + other @ self.\n\n"
+          "Only commuting term pairs contribute, each as 2 * a * b * (P @ Q).")
       .def(
           "commutes_with",
           [](const PauliSum& lhs, const PauliSum& rhs, nb::handle max_entries_obj) -> nb::object {
@@ -1646,6 +1928,10 @@ void bind_pauli_sum(nb::module_& module) {
           "counts must map dense bitstrings to finite non-negative numeric counts. Dense "
           "bitstrings follow the label convention: the right-most bit is qubit 0. Only "
           "diagonal Pauli terms are supported by this initial CPU path.");
+
+  // Structural __eq__ makes PauliSum unhashable, matching Python's rule for
+  // classes that define equality without a consistent hash.
+  module.attr("PauliSum").attr("__hash__") = nb::none();
 }
 
 }  // namespace wolfgang::python

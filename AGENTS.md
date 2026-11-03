@@ -43,6 +43,7 @@ docs/plans/backend_neutral_accelerator_campaign9_plan.md
 docs/plans/usability_and_kernel_campaign_plan.md
 docs/benchmarks/reports/backend_neutral_accelerator_campaign9_2026-05-01.md
 docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md
+docs/benchmarks/reports/host_api_2026-11-03.md
 docs/benchmarks/reports/cuda_cross_architecture_campaign10_2026-04-29.md
 docs/benchmarks/reports/cuda_residual_risk_campaign11_2026-04-29.md
 docs/benchmarks/reports/rocm_mi300x_bringup_2026-04-29.md

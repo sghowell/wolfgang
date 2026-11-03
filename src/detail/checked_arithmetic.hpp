@@ -34,14 +34,16 @@ inline std::size_t checked_sum(std::size_t lhs, std::size_t rhs, const char* fie
 inline std::size_t checked_matmul_intermediate_terms(
     std::size_t lhs_terms,
     std::size_t rhs_terms,
-    std::size_t max_intermediate_terms) {
+    std::size_t max_intermediate_terms,
+    const char* operation = "matmul") {
   if (lhs_terms != 0 && rhs_terms > std::numeric_limits<std::size_t>::max() / lhs_terms) {
-    throw std::invalid_argument("matmul intermediate term count overflows size_t");
+    throw std::invalid_argument(std::string(operation) + " intermediate term count overflows size_t");
   }
 
   const std::size_t intermediate_terms = lhs_terms * rhs_terms;
   if (intermediate_terms > max_intermediate_terms) {
-    throw std::invalid_argument("matmul intermediate term count exceeds max_intermediate_terms");
+    throw std::invalid_argument(
+        std::string(operation) + " intermediate term count exceeds max_intermediate_terms");
   }
   return intermediate_terms;
 }

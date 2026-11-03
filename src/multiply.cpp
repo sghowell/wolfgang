@@ -406,6 +406,199 @@ PauliSum PauliSum::matmul(
   return product;
 }
 
+namespace {
+
+// P and Q anticommute exactly when the symplectic form
+// popcount(x_P & z_Q) + popcount(z_P & x_Q) is odd. A commutator keeps odd
+// pairs and an anticommutator keeps even pairs, each as 2 c_i d_j P_i Q_j; the
+// rest cancel exactly in PQ -/+ QP and are never materialized. kWords > 0 fixes
+// the word count at compile time for the common one- and two-word layouts.
+template <std::size_t kWords>
+bool pair_kept(
+    std::size_t runtime_words,
+    const std::uint64_t* lhs_x,
+    const std::uint64_t* lhs_z,
+    const std::uint64_t* rhs_x,
+    const std::uint64_t* rhs_z,
+    std::uint64_t wanted_parity) noexcept {
+  const std::size_t words = kWords == 0 ? runtime_words : kWords;
+  std::uint64_t symplectic = 0;
+  for (std::size_t word = 0; word < words; ++word) {
+    symplectic += static_cast<std::uint64_t>(
+        std::popcount((lhs_x[word] & rhs_z[word]) ^ (lhs_z[word] & rhs_x[word])));
+  }
+  return (symplectic & 1U) == wanted_parity;
+}
+
+// Two passes: count kept pairs, then write them into exactly sized buffers, so
+// peak memory near max_intermediate_terms is the output itself.
+template <std::size_t kWords>
+void emit_parity_filtered_products(
+    std::size_t runtime_words,
+    const std::vector<std::uint64_t>& lhs_x,
+    const std::vector<std::uint64_t>& lhs_z,
+    const std::vector<std::complex<double>>& lhs_coeffs,
+    const std::vector<std::int64_t>& lhs_y_parity,
+    const std::vector<std::uint64_t>& rhs_x,
+    const std::vector<std::uint64_t>& rhs_z,
+    const std::vector<std::complex<double>>& rhs_coeffs,
+    const std::vector<std::int64_t>& rhs_y_parity,
+    bool keep_anticommuting,
+    std::vector<std::uint64_t>& out_x,
+    std::vector<std::uint64_t>& out_z,
+    std::vector<std::complex<double>>& out_coeffs) {
+  const std::size_t words = kWords == 0 ? runtime_words : kWords;
+  const std::size_t lhs_terms = lhs_coeffs.size();
+  const std::size_t rhs_terms = rhs_coeffs.size();
+  const std::uint64_t wanted_parity = keep_anticommuting ? 1U : 0U;
+
+  std::size_t kept = 0;
+  for (std::size_t lhs_term = 0; lhs_term < lhs_terms; ++lhs_term) {
+    for (std::size_t rhs_term = 0; rhs_term < rhs_terms; ++rhs_term) {
+      kept += pair_kept<kWords>(
+          words,
+          lhs_x.data() + lhs_term * words,
+          lhs_z.data() + lhs_term * words,
+          rhs_x.data() + rhs_term * words,
+          rhs_z.data() + rhs_term * words,
+          wanted_parity);
+    }
+  }
+  out_x.resize(detail::checked_product(kept, words, "commutator x"));
+  out_z.resize(out_x.size());
+  out_coeffs.resize(kept);
+
+  std::size_t output_term = 0;
+  for (std::size_t lhs_term = 0; lhs_term < lhs_terms; ++lhs_term) {
+    const std::size_t lhs_offset = lhs_term * words;
+    for (std::size_t rhs_term = 0; rhs_term < rhs_terms; ++rhs_term) {
+      const std::size_t rhs_offset = rhs_term * words;
+      if (!pair_kept<kWords>(
+              words,
+              lhs_x.data() + lhs_offset,
+              lhs_z.data() + lhs_offset,
+              rhs_x.data() + rhs_offset,
+              rhs_z.data() + rhs_offset,
+              wanted_parity)) {
+        continue;
+      }
+      const std::size_t out_offset = output_term * words;
+      std::int64_t phase_exponent = -lhs_y_parity[lhs_term] - rhs_y_parity[rhs_term];
+      for (std::size_t word = 0; word < words; ++word) {
+        const std::uint64_t lx = lhs_x[lhs_offset + word];
+        const std::uint64_t lz = lhs_z[lhs_offset + word];
+        const std::uint64_t rx = rhs_x[rhs_offset + word];
+        const std::uint64_t rz = rhs_z[rhs_offset + word];
+        const std::uint64_t ox = lx ^ rx;
+        const std::uint64_t oz = lz ^ rz;
+        out_x[out_offset + word] = ox;
+        out_z[out_offset + word] = oz;
+        phase_exponent += static_cast<std::int64_t>(std::popcount(ox & oz));
+        phase_exponent += 2 * static_cast<std::int64_t>(std::popcount(lx & rz));
+      }
+      // Scale after multiplying so 2 * c_i alone can never overflow.
+      out_coeffs[output_term] = detail::multiply_by_phase_exponent(
+          2.0 * (lhs_coeffs[lhs_term] * rhs_coeffs[rhs_term]),
+          phase_exponent);
+      ++output_term;
+    }
+  }
+}
+
+std::vector<std::int64_t> y_parities(
+    const std::vector<std::uint64_t>& x,
+    const std::vector<std::uint64_t>& z,
+    std::size_t num_terms,
+    std::size_t words) {
+  std::vector<std::int64_t> parity(num_terms, 0);
+  for (std::size_t term = 0; term < num_terms; ++term) {
+    for (std::size_t word = 0; word < words; ++word) {
+      parity[term] += static_cast<std::int64_t>(
+          std::popcount(x[term * words + word] & z[term * words + word]));
+    }
+  }
+  return parity;
+}
+
+}  // namespace
+
+PauliSum PauliSum::commutator(
+    const PauliSum& rhs,
+    bool simplify_output,
+    std::size_t max_intermediate_terms) const {
+  return parity_filtered_product(rhs, true, simplify_output, max_intermediate_terms);
+}
+
+PauliSum PauliSum::anticommutator(
+    const PauliSum& rhs,
+    bool simplify_output,
+    std::size_t max_intermediate_terms) const {
+  return parity_filtered_product(rhs, false, simplify_output, max_intermediate_terms);
+}
+
+PauliSum PauliSum::parity_filtered_product(
+    const PauliSum& rhs,
+    bool keep_anticommuting,
+    bool simplify_output,
+    std::size_t max_intermediate_terms) const {
+  if (num_qubits_ != rhs.num_qubits_) {
+    throw std::invalid_argument(
+        keep_anticommuting ? "PauliSum commutator requires the same num_qubits"
+                           : "PauliSum anticommutator requires the same num_qubits");
+  }
+  const std::size_t candidate_terms = detail::checked_matmul_intermediate_terms(
+      num_terms_,
+      rhs.num_terms_,
+      max_intermediate_terms,
+      keep_anticommuting ? "commutator" : "anticommutator");
+  if (candidate_terms == 0) {
+    return PauliSum::empty(num_qubits_);
+  }
+  // Pairs that cancel are never formed, so check every coefficient up front:
+  // otherwise whether a NaN or infinity raised would depend on which pairs
+  // commute.
+  for (const auto* operand : {&coeffs_, &rhs.coeffs_}) {
+    for (const std::complex<double>& coeff : *operand) {
+      if (!std::isfinite(coeff.real()) || !std::isfinite(coeff.imag())) {
+        throw std::invalid_argument(
+            keep_anticommuting ? "commutator requires finite coefficients"
+                               : "anticommutator requires finite coefficients");
+      }
+    }
+  }
+
+  const std::vector<std::int64_t> lhs_y = y_parities(x_, z_, num_terms_, words_);
+  const std::vector<std::int64_t> rhs_y = y_parities(rhs.x_, rhs.z_, rhs.num_terms_, words_);
+  std::vector<std::uint64_t> out_x;
+  std::vector<std::uint64_t> out_z;
+  std::vector<std::complex<double>> out_coeffs;
+  switch (words_) {
+    case 1:
+      emit_parity_filtered_products<1>(
+          words_, x_, z_, coeffs_, lhs_y, rhs.x_, rhs.z_, rhs.coeffs_, rhs_y,
+          keep_anticommuting, out_x, out_z, out_coeffs);
+      break;
+    case 2:
+      emit_parity_filtered_products<2>(
+          words_, x_, z_, coeffs_, lhs_y, rhs.x_, rhs.z_, rhs.coeffs_, rhs_y,
+          keep_anticommuting, out_x, out_z, out_coeffs);
+      break;
+    default:
+      emit_parity_filtered_products<0>(
+          words_, x_, z_, coeffs_, lhs_y, rhs.x_, rhs.z_, rhs.coeffs_, rhs_y,
+          keep_anticommuting, out_x, out_z, out_coeffs);
+      break;
+  }
+
+  const std::size_t out_terms = out_coeffs.size();
+  PauliSum product(
+      num_qubits_, words_, out_terms, std::move(out_x), std::move(out_z), std::move(out_coeffs));
+  if (simplify_output) {
+    return product.simplify();
+  }
+  return product;
+}
+
 std::size_t PauliSum::checked_matmul_intermediate_terms_for_testing(
     std::size_t lhs_terms,
     std::size_t rhs_terms,

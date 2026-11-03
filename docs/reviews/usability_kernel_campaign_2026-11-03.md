@@ -43,3 +43,39 @@ Branch `codex/cuda-simplify-hardening`, commits `c65553c`..`3198e0e`.
   - CPU CI still compiles no `.cu` sources.
 
 Evidence: [CUDA simplify paths report](../benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md).
+
+## Slices 2 and 3: packed-array I/O and operator algebra
+
+Branch `codex/host-array-io-and-algebra`, commits `7c64436`..`de87752`. The
+branch is merged with a merge commit so the benchmark revisions stay reachable.
+
+- Reviewer: independent agent (semantic/API and C++ safety roles), read-only.
+- Findings: P0 0, P1 0, P2 6, P3 8.
+- P2 resolutions:
+  - Commutator coefficients are computed as `2 * (a * b)`, so doubling cannot
+    overflow on its own.
+  - Non-finite coefficients raise up front, regardless of which pairs cancel.
+  - The bulk `from_labels` path is limited to NumPy arrays, so duck-typed
+    arrays keep working.
+  - The changelog records the `==`, hashing and `bool()` behavior change with a
+    migration note.
+  - The speed wording is backed by the host API report.
+  - Zero-copy CUDA `DevicePauliSum` views moved to slice 7 in the plan.
+- P3 resolutions:
+  - `from_words` validates its own copy;
+  - the binding policy documents the zero-copy view exception;
+  - typed `self`, `op[None]` and guardrail messages fixed;
+  - commutator output is sized exactly with a counting pass;
+  - the NumPy object-array quirk and the `equiv` `rtol` scale are documented;
+  - bool coefficients are accepted, and the byte-order message is clearer;
+  - native contract tests cover `from_words`, `commutator`, `select_terms` and
+    equality.
+- Validation after fixes (Apple M4 Pro): `python scripts/validate.py --profile core`
+  passed (598 Python tests, native CTest); the new test file passes 37 tests.
+  The refreshed timings showed no commutator regression.
+- Residual risk:
+  - random operands only; Hamiltonians where most terms commute change the
+    fused-vs-composed ratio;
+  - x86_64 commutator rows predate the counting pass.
+
+Evidence: [host API report](../benchmarks/reports/host_api_2026-11-03.md).
