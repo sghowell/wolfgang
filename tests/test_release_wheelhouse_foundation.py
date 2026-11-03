@@ -135,7 +135,9 @@ def test_cibuildwheel_cpu_only_configuration_is_present() -> None:
     assert "cmake.define.WOLFGANG_ENABLE_HIP" in pyproject
     assert "cmake.define.WOLFGANG_ENABLE_METAL" in pyproject
     assert "cmake.define.WOLFGANG_ENABLE_NATIVE" in pyproject
-    assert 'test-command = "python {project}/scripts/wheel_smoke.py"' in pyproject
+    assert 'test-command = "python {project}/scripts/wheel_smoke.py --require-tbb"' in pyproject
+    assert 'before-all = "bash {project}/scripts/build_onetbb.sh /tmp/wolfgang-onetbb"' in pyproject
+    assert '"cmake.define.WOLFGANG_ENABLE_TBB" = "ON"' in pyproject
     assert "[tool.cibuildwheel.linux]" in pyproject
     assert 'archs = ["x86_64"]' in pyproject
     assert "[tool.cibuildwheel.macos]" in pyproject
@@ -424,3 +426,36 @@ def test_prepare_publish_dist_excludes_checksum_manifest(tmp_path: Path) -> None
         "wolfgang-quantum-0.1.0.tar.gz",
         "wolfgang_quantum-0.1.0-cp310-cp310-manylinux_2_28_x86_64.whl",
     ]
+
+
+def test_bundled_onetbb_build_is_pinned_to_a_commit() -> None:
+    script = (ROOT / "scripts/build_onetbb.sh").read_text(encoding="utf-8")
+    assert 'ONETBB_TAG="v2022.3.0"' in script
+    assert 'ONETBB_COMMIT="f1862f38f83568d96e814e469ab61f88336cc595"' in script
+    assert 'git -C "${work}/src" rev-parse HEAD' in script
+    assert "-DTBB_TEST=OFF" in script and "-DTBBMALLOC_BUILD=OFF" in script
+    assert "LICENSE.txt" in script and "third-party-programs.txt" in script
+
+
+def test_wheel_smoke_requires_bundled_onetbb_matching_scalar() -> None:
+    wheel_smoke = load_module("scripts/wheel_smoke.py", "fastpauli_wheel_smoke_tbb")
+    info = {
+        "compiled_cpu_backends": ["scalar", "tbb"],
+        "available_cpu_backends": ["scalar", "tbb"],
+        "oneTBB_version": "2022.3.0",
+    }
+
+    def matching(backend: str) -> dict[str, object]:
+        return {"backend": backend, "terms": 10000, "digest": "same"}
+
+    assert wheel_smoke.check_bundled_onetbb(info, matching)["tbb_simplify_matches_scalar"] is True
+
+    def diverging(backend: str) -> dict[str, object]:
+        return {"backend": backend, "terms": 10000, "digest": backend}
+
+    with pytest.raises(AssertionError):
+        wheel_smoke.check_bundled_onetbb(info, diverging)
+    with pytest.raises(AssertionError):
+        wheel_smoke.check_bundled_onetbb({**info, "compiled_cpu_backends": ["scalar"]}, matching)
+    with pytest.raises(AssertionError):
+        wheel_smoke.check_bundled_onetbb({**info, "oneTBB_version": "not_available"}, matching)
