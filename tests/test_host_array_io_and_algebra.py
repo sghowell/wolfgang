@@ -236,3 +236,52 @@ def test_commutator_guards_and_validation() -> None:
     with pytest.raises(ValueError):
         a.commutator(PauliSum.from_labels(["XX"], [1.0]))
     assert a.commutator(PauliSum.empty(1)).num_terms == 0
+
+
+# --- review regressions ----------------------------------------------------------
+
+
+def test_commutator_scales_after_multiplying_and_rejects_non_finite() -> None:
+    big = PauliSum.from_labels(["X"], [1e308])
+    tiny = PauliSum.from_labels(["Z"], [1e-10])
+    assert big.commutator(tiny).equiv((big @ tiny - tiny @ big).simplify())
+    # A NaN or infinity raises even when its pairs would all cancel.
+    poisoned = PauliSum.from_labels(["X", "Z"], [math.inf, 1.0])
+    x = PauliSum.from_labels(["X"], [1.0])
+    with pytest.raises(ValueError, match="finite"):
+        poisoned.commutator(x)
+    with pytest.raises(ValueError, match="finite"):
+        x.anticommutator(PauliSum.from_labels(["Z"], [math.nan]))
+    with pytest.raises(ValueError, match="commutator intermediate term count"):
+        x.commutator(x, max_intermediate_terms=0)
+
+
+def test_from_labels_coefficient_paths() -> None:
+    class ArrayLike:
+        """Duck-typed array: has dtype/ndim but is not a NumPy array."""
+
+        dtype = object()
+        ndim = 1
+
+        def __iter__(self):
+            return iter([1.0, 2.0j])
+
+    op = PauliSum.from_labels(["X", "Z"], ArrayLike())
+    np.testing.assert_array_equal(op.to_labels()[1], [1.0, 2.0j])
+    bools = PauliSum.from_labels(["X", "Z"], np.array([True, False]))
+    np.testing.assert_array_equal(bools.to_labels()[1], [1.0, 0.0])
+    arrays = PauliSum.from_arrays(
+        np.zeros((2, 1), np.uint64), np.zeros((2, 1), np.uint64), np.array([True, False]), 1
+    )
+    np.testing.assert_array_equal(arrays.to_arrays()[2], [1.0, 0.0])
+    with pytest.raises(TypeError, match="native byte order"):
+        PauliSum.from_arrays(np.zeros((1, 1), ">u8"), np.zeros((1, 1), ">u8"), [1.0], 3)
+
+
+def test_getitem_none_and_to_arrays_self_type() -> None:
+    op = PauliSum.from_labels(["X"], [1.0])
+    with pytest.raises(TypeError, match="integers or slices"):
+        op[None]  # type: ignore[index]
+    with pytest.raises(TypeError):
+        PauliSum.to_arrays(1)  # type: ignore[arg-type]
+    assert not PauliSum.empty(2)  # empty operators are falsy via __len__

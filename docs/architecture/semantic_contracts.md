@@ -199,7 +199,14 @@ equal). It never simplifies, so reordered or unmerged operators compare unequal.
 
 `h1.equiv(h2, atol=1e-12, rtol=0.0)` is mathematical equality:
 `(h1 - h2).simplify(atol, rtol).num_terms == 0`. Operators with different
-`num_qubits` are never equivalent.
+`num_qubits` are never equivalent. Because `rtol` scales with the largest
+coefficient in `h1 - h2` before duplicates merge, `rtol >= 1` makes any two
+operators equivalent; keep `rtol` well below 1. Non-finite coefficients raise
+`ValueError`, as in `simplify`.
+
+Because `PauliSum` is a sequence of single-term operators, NumPy treats it as
+nested data: `np.array([op1, op2], dtype=object)` recurses into the terms.
+Build object arrays with `np.empty(n, dtype=object)` and item assignment.
 
 ## Commutators
 
@@ -212,7 +219,10 @@ P, Q anticommute: commutator gets 2ab PQ, anticommutator gets nothing
 P, Q commute:     commutator gets nothing, anticommutator gets 2ab PQ
 ```
 
-Pairs that contribute nothing are never generated. With `simplify=True` (the
+Pairs that contribute nothing are never generated. Each kept coefficient is
+computed as `2 * (a * b)`, so doubling never overflows before the product. Any
+non-finite coefficient in either operand raises `ValueError`, even if its pairs
+would all cancel. With `simplify=True` (the
 default) the result is simplified with default tolerances into canonical order.
 With `simplify=False` the surviving products keep lhs-outer, rhs-inner order.
 `max_intermediate_terms` bounds `len(h1) * len(h2)` before any work, as in

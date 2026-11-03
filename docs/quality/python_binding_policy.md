@@ -42,4 +42,10 @@ GIL pending a separate accelerator cache and concurrency review.
 
 Coefficient export allocates one owning NumPy complex128 array and copies the
 contiguous native buffer, avoiding per-coefficient Python objects. Returned arrays
-remain independent of the native operator.
+remain independent of the native operator. The exception is `PauliSum.to_arrays()`,
+which returns read-only zero-copy views; each view holds a reference to the
+immutable operator, so its memory stays valid and unchanged.
+
+`PauliSum.from_arrays()` releases the input buffer export before the GIL-released
+copy but keeps a reference to every input array, and validates the packed-word
+invariant on its own copy, so concurrent writes cannot break the invariant.

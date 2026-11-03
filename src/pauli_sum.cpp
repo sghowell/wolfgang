@@ -56,14 +56,18 @@ PauliSum PauliSum::from_words(
         "x and z must each hold num_terms * ceil(num_qubits / 64) packed words");
   }
 
-  // Bits above num_qubits would let two packed keys describe the same Pauli
-  // string and silently break simplify, equality and commutation.
+  // Validate the owned copy, so a caller mutating its buffer concurrently
+  // cannot change words between validation and use. Bits above num_qubits
+  // would let two packed keys describe the same Pauli string and silently
+  // break simplify, equality and commutation.
+  std::vector<std::uint64_t> x_copy(x.begin(), x.end());
+  std::vector<std::uint64_t> z_copy(z.begin(), z.end());
   const std::size_t tail_bits = num_qubits % 64;
   if (words > 0 && tail_bits != 0) {
     const std::uint64_t invalid_mask = ~((std::uint64_t{1} << tail_bits) - 1);
     for (std::size_t term = 0; term < num_terms; ++term) {
       const std::size_t last = term * words + words - 1;
-      if (((x[last] | z[last]) & invalid_mask) != 0) {
+      if (((x_copy[last] | z_copy[last]) & invalid_mask) != 0) {
         throw std::invalid_argument("packed words set bits at or above num_qubits");
       }
     }
@@ -73,8 +77,8 @@ PauliSum PauliSum::from_words(
       num_qubits,
       words,
       num_terms,
-      std::vector<std::uint64_t>(x.begin(), x.end()),
-      std::vector<std::uint64_t>(z.begin(), z.end()),
+      std::move(x_copy),
+      std::move(z_copy),
       std::vector<std::complex<double>>(coeffs.begin(), coeffs.end()));
 }
 

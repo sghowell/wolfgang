@@ -40,6 +40,36 @@ int main() {
           std::numeric_limits<std::size_t>::max(), 2, std::numeric_limits<std::size_t>::max());
     } catch (const std::invalid_argument&) { overflow = true; }
     require(overflow, "multiplication size overflow guard");
+
+    // Packed-word construction rejects bits above num_qubits and round-trips.
+    const std::vector<std::uint64_t> x_words{0b101}, z_words{0b001};
+    const std::vector<std::complex<double>> one{1.0};
+    require(PauliSum::from_words(3, x_words, z_words, one).to_labels() ==
+                std::vector<std::string>{"XIY"},
+            "from_words label packing");
+    bool tail_rejected = false;
+    try {
+      (void)PauliSum::from_words(2, x_words, z_words, one);
+    } catch (const std::invalid_argument&) { tail_rejected = true; }
+    require(tail_rejected, "from_words tail-bit guard");
+
+    // Commutators keep only anticommuting pairs, each doubled: [X, Y] = 2iZ.
+    const auto xs = PauliSum::from_labels({"X", "Z"}, {1.0, 1.0});
+    const auto ys = PauliSum::from_labels({"Y"}, {1.0});
+    const auto commutator = xs.commutator(ys, false);
+    require(commutator.to_labels() == std::vector<std::string>{"Z", "X"}, "commutator terms");
+    require(commutator.coeffs()[0] == std::complex<double>(0, 2), "commutator phase");
+    require(xs.anticommutator(xs).simplify().to_labels() == std::vector<std::string>{"I"},
+            "anticommutator identity");
+    const std::complex<double> huge(1.0e308, 0.0);
+    const auto big = PauliSum::from_labels({"X"}, {huge});
+    const auto tiny = PauliSum::from_labels({"Z"}, {1.0e-10});
+    require(big.commutator(tiny).num_terms() == 1, "commutator scales after multiplying");
+    const std::vector<std::size_t> picks{1, 1, 0};
+    const auto picked = xs.select_terms(picks);
+    require(picked.to_labels() == std::vector<std::string>{"Z", "Z", "X"}, "select_terms order");
+    require(picked.structurally_equal(picked) && !picked.structurally_equal(xs), "structural equality");
+    require(xs.negate().adjoint().coeffs()[0] == std::complex<double>(-1.0, -0.0), "negate/adjoint");
   } catch (const std::exception& error) {
     std::cerr << error.what() << '\n';
     return 1;

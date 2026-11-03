@@ -185,11 +185,13 @@ std::vector<std::complex<double>> parse_coefficients(
 
   // One-dimensional numeric NumPy arrays convert in bulk; boxing one Python
   // complex per element dominated label construction for large operators.
-  if (nb::hasattr(coeffs_obj, "dtype") && nb::hasattr(coeffs_obj, "ndim") &&
+  // Only real NumPy arrays take this path; other array-likes (CuPy, torch) keep
+  // the element-wise path they used before.
+  nb::module_ numpy = nb::module_::import_("numpy");
+  if (PyObject_IsInstance(coeffs_obj.ptr(), numpy.attr("ndarray").ptr()) == 1 &&
       nb::cast<int>(coeffs_obj.attr("ndim")) == 1) {
     const std::string kind = nb::cast<std::string>(coeffs_obj.attr("dtype").attr("kind"));
-    if (kind == "i" || kind == "u" || kind == "f" || kind == "c") {
-      nb::module_ numpy = nb::module_::import_("numpy");
+    if (kind == "b" || kind == "i" || kind == "u" || kind == "f" || kind == "c") {
       nb::object array = numpy.attr("ascontiguousarray")(coeffs_obj, numpy.attr("complex128"));
       const std::size_t size = nb::cast<std::size_t>(array.attr("shape")[0]);
       if (size != expected_size) {
@@ -622,7 +624,8 @@ PackedArrayInput normalize_packed_arrays(
   auto words_array = [&](nb::handle obj, const char* name) {
     nb::object array = numpy.attr("asarray")(obj);
     if (!array.attr("dtype").equal(uint64)) {
-      throw nb::type_error((std::string(name) + " must have dtype uint64").c_str());
+      throw nb::type_error(
+          (std::string(name) + " must have dtype uint64 in native byte order").c_str());
     }
     if (nb::cast<int>(array.attr("ndim")) != 2) {
       throw nb::value_error((std::string(name) + " must have shape (num_terms, words)").c_str());
@@ -635,7 +638,7 @@ PackedArrayInput normalize_packed_arrays(
 
   nb::object coeffs = numpy.attr("asarray")(coeffs_obj);
   const std::string kind = nb::cast<std::string>(coeffs.attr("dtype").attr("kind"));
-  if (kind != "i" && kind != "u" && kind != "f" && kind != "c") {
+  if (kind != "b" && kind != "i" && kind != "u" && kind != "f" && kind != "c") {
     throw nb::type_error("coeffs must be a numeric array");
   }
   if (nb::cast<int>(coeffs.attr("ndim")) != 1) {
@@ -1616,7 +1619,7 @@ void bind_pauli_sum(nb::module_& module) {
           "index list.")
       .def(
           "to_arrays",
-          [](nb::handle self) {
+          [](nb::handle_t<PauliSum> self) {
             const PauliSum& op = nb::cast<const PauliSum&>(self);
             const std::size_t terms = op.num_terms();
             const std::size_t words = op.words();
@@ -1719,7 +1722,7 @@ void bind_pauli_sum(nb::module_& module) {
             }
             return op.select_terms(indices);
           },
-          nb::arg("key"),
+          nb::arg("key").none(),
           "Return the term at an integer index, or the terms in a slice, as a new PauliSum.\n\n"
           "Negative indices count from the end. Out-of-range integers raise IndexError; "
           "iteration yields one single-term PauliSum per term.")
@@ -1828,7 +1831,8 @@ void bind_pauli_sum(nb::module_& module) {
           "Commuting term pairs cancel exactly and are never generated, so this is faster and "
           "more precise than composing two products. Each anticommuting pair contributes "
           "2 * a * b * (P @ Q). With simplify=False the surviving products keep self-outer, "
-          "other-inner order. max_intermediate_terms bounds len(self) * len(other).")
+          "other-inner order. max_intermediate_terms bounds len(self) * len(other). Non-finite "
+          "coefficients raise ValueError.")
       .def(
           "anticommutator",
           [](const PauliSum& lhs, const PauliSum& rhs, bool simplify_output, nb::handle max_terms_obj) {

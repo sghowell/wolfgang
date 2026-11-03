@@ -103,6 +103,7 @@ def boundary_case(
             x, z, packed_coeffs, num_qubits
         )
         variants["to_arrays"] = op.to_arrays
+        variants["to_arrays_copy"] = lambda: tuple(array.copy() for array in op.to_arrays())
     return {
         "suite": "boundary",
         "num_qubits": num_qubits,
