@@ -38,6 +38,9 @@ def test_mermaid_fences_build_as_runtime_backed_diagrams(tmp_path: Path) -> None
 
     initializer = (site_dir / MERMAID_INIT).read_text(encoding="utf-8")
     assert "document$.subscribe" in initializer
+    # The initializer must select the containers the fence format emits; it once
+    # looked only for pre.mermaid, so every diagram stayed as source text.
+    assert 'querySelectorAll("div.mermaid' in initializer
     assert "mermaid.run" in initializer
     assert "data-md-color-scheme" in initializer
 

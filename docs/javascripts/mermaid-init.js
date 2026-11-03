@@ -30,7 +30,9 @@
     if (!(scope instanceof ParentNode)) {
       return [];
     }
-    const promoted = Array.from(scope.querySelectorAll("pre.mermaid")).map(promoteFence);
+    // pymdownx.superfences' fence_div_format (mkdocs.yml) emits div.mermaid;
+    // pre.mermaid covers the code-block format.
+    const promoted = Array.from(scope.querySelectorAll("div.mermaid, pre.mermaid")).map(promoteFence);
     const existing = Array.from(scope.querySelectorAll(".mermaid[data-mermaid-source]"));
     return [...new Set([...promoted, ...existing])];
   };
