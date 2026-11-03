@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="600" viewBox="0 0 980 600" role="img" aria-labelledby="title desc" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+<title id="title">Simplify time by backend and operator size</title>
+<desc id="desc">Log-log lines of simplify time against term count. CPU scalar (Xeon 8480+): 128 terms 6.38 µs, 2K terms 153 µs, 4K terms 319 µs, 8K terms 746 µs, 10K terms 944 µs, 30K terms 2.9 ms, 100K terms 10.4 ms, 1M terms 127 ms; CPU oneTBB, 26 threads (Xeon): 2K terms 140 µs, 4K terms 222 µs, 8K terms 386 µs, 10K terms 486 µs, 30K terms 1.12 ms, 100K terms 3.1 ms, 1M terms 29 ms; CUDA, H100: 128 terms 18.4 µs, 1.024K terms 35.4 µs, 4.096K terms 108 µs, 50K terms 166 µs, 1M terms 388 µs; HIP, MI300X: 128 terms 27.1 µs, 1.024K terms 44.9 µs, 4.096K terms 97.9 µs, 50K terms 158 µs, 1M terms 579 µs; Metal, M4 Pro: 12.288K terms 538 µs, 16.384K terms 589 µs, 65.536K terms 1.71 ms, 262.144K terms 6.46 ms, 1.04858M terms 19.9 ms, 4.1943M terms 81.8 ms</desc>
+<style>
+.bg { fill: #fcfcfb; } .t1 { fill: #0b0b0b; } .t2 { fill: #52514e; } .t3 { fill: #75746f; }
+.grid { stroke: #e4e3df; } .axis { stroke: #c9c8c3; }
+.s-s1 { stroke: #2a78d6; } .f-s1 { fill: #2a78d6; } .s-s2 { stroke: #eb6834; } .f-s2 { fill: #eb6834; } .s-s3 { stroke: #1baf7a; } .f-s3 { fill: #1baf7a; } .s-s4 { stroke: #eda100; } .f-s4 { fill: #eda100; } .s-s5 { stroke: #e87ba4; } .f-s5 { fill: #e87ba4; } .s-neutral { stroke: #6f6e69; } .f-neutral { fill: #6f6e69; }
+@media (prefers-color-scheme: dark) {
+  .bg { fill: #1a1a19; } .t1 { fill: #f2f1ed; } .t2 { fill: #b5b4ae; } .t3 { fill: #94938d; }
+  .grid { stroke: #33322f; } .axis { stroke: #4a4945; }
+  .s-s1 { stroke: #3987e5; } .f-s1 { fill: #3987e5; } .s-s2 { stroke: #d95926; } .f-s2 { fill: #d95926; } .s-s3 { stroke: #199e70; } .f-s3 { fill: #199e70; } .s-s4 { stroke: #c98500; } .f-s4 { fill: #c98500; } .s-s5 { stroke: #d55181; } .f-s5 { fill: #d55181; } .s-neutral { stroke: #a3a29d; } .f-neutral { fill: #a3a29d; }
+}
+</style>
+<rect class="bg" width="980" height="600"/>
+<text x="24.0" y="38.0" class="t1" font-size="20" text-anchor="start" font-weight="600">Simplify time by backend and operator size</text>
+<text x="24.0" y="62.0" class="t2" font-size="13" text-anchor="start" font-weight="400">Median time per call, 24 qubits, log-log. Accelerator times are device-resident (operator already on the device).</text>
+<text x="24.0" y="82.0" class="t2" font-size="13" text-anchor="start" font-weight="400">Where a line sits below CPU scalar, that backend is faster at that size.</text>
+<line class="grid" x1="90.0" y1="112" x2="90.0" y2="500"/>
+<text x="90.0" y="518.0" class="t3" font-size="11" text-anchor="middle" font-weight="400">100</text>
+<line class="grid" x1="224.1" y1="112" x2="224.1" y2="500"/>
+<text x="224.1" y="518.0" class="t3" font-size="11" text-anchor="middle" font-weight="400">1K terms</text>
+<line class="grid" x1="358.1" y1="112" x2="358.1" y2="500"/>
+<text x="358.1" y="518.0" class="t3" font-size="11" text-anchor="middle" font-weight="400">10K terms</text>
+<line class="grid" x1="492.2" y1="112" x2="492.2" y2="500"/>
+<text x="492.2" y="518.0" class="t3" font-size="11" text-anchor="middle" font-weight="400">100K terms</text>
+<line class="grid" x1="626.3" y1="112" x2="626.3" y2="500"/>
+<text x="626.3" y="518.0" class="t3" font-size="11" text-anchor="middle" font-weight="400">1M terms</text>
+<line class="grid" x1="90" y1="461.1" x2="720" y2="461.1"/>
+<text x="82.0" y="465.1" class="t3" font-size="11" text-anchor="end" font-weight="400">10 µs</text>
+<line class="grid" x1="90" y1="386.8" x2="720" y2="386.8"/>
+<text x="82.0" y="390.8" class="t3" font-size="11" text-anchor="end" font-weight="400">100 µs</text>
+<line class="grid" x1="90" y1="312.5" x2="720" y2="312.5"/>
+<text x="82.0" y="316.5" class="t3" font-size="11" text-anchor="end" font-weight="400">1 ms</text>
+<line class="grid" x1="90" y1="238.2" x2="720" y2="238.2"/>
+<text x="82.0" y="242.2" class="t3" font-size="11" text-anchor="end" font-weight="400">10 ms</text>
+<line class="grid" x1="90" y1="163.9" x2="720" y2="163.9"/>
+<text x="82.0" y="167.9" class="t3" font-size="11" text-anchor="end" font-weight="400">100 ms</text>
+<line class="axis" x1="90" y1="500" x2="720" y2="500"/>
+<path class="s-s1" d="M104.4,475.6 L264.4,373.1 L304.8,349.4 L345.2,322.0 L358.1,314.4 L422.1,278.2 L492.2,237.0 L626.3,156.2" fill="none" stroke-width="2" stroke-linejoin="round"/>
+<circle class="f-s1" cx="104.4" cy="475.6" r="4.5" stroke="none"/>
+<circle class="f-s1" cx="264.4" cy="373.1" r="4.5" stroke="none"/>
+<circle class="f-s1" cx="304.8" cy="349.4" r="4.5" stroke="none"/>
+<circle class="f-s1" cx="345.2" cy="322.0" r="4.5" stroke="none"/>
+<circle class="f-s1" cx="358.1" cy="314.4" r="4.5" stroke="none"/>
+<circle class="f-s1" cx="422.1" cy="278.2" r="4.5" stroke="none"/>
+<circle class="f-s1" cx="492.2" cy="237.0" r="4.5" stroke="none"/>
+<circle class="f-s1" cx="626.3" cy="156.2" r="4.5" stroke="none"/>
+<path class="s-s5" d="M264.4,376.1 L304.8,361.1 L345.2,343.3 L358.1,335.8 L422.1,308.8 L492.2,276.0 L626.3,203.8" fill="none" stroke-width="2" stroke-linejoin="round"/>
+<circle class="f-s5" cx="264.4" cy="376.1" r="4.5" stroke="none"/>
+<circle class="f-s5" cx="304.8" cy="361.1" r="4.5" stroke="none"/>
+<circle class="f-s5" cx="345.2" cy="343.3" r="4.5" stroke="none"/>
+<circle class="f-s5" cx="358.1" cy="335.8" r="4.5" stroke="none"/>
+<circle class="f-s5" cx="422.1" cy="308.8" r="4.5" stroke="none"/>
+<circle class="f-s5" cx="492.2" cy="276.0" r="4.5" stroke="none"/>
+<circle class="f-s5" cx="626.3" cy="203.8" r="4.5" stroke="none"/>
+<path class="s-s2" d="M104.4,441.5 L225.5,420.3 L306.2,384.3 L451.9,370.4 L626.3,343.1" fill="none" stroke-width="2" stroke-linejoin="round"/>
+<circle class="f-s2" cx="104.4" cy="441.5" r="4.5" stroke="none"/>
+<circle class="f-s2" cx="225.5" cy="420.3" r="4.5" stroke="none"/>
+<circle class="f-s2" cx="306.2" cy="384.3" r="4.5" stroke="none"/>
+<circle class="f-s2" cx="451.9" cy="370.4" r="4.5" stroke="none"/>
+<circle class="f-s2" cx="626.3" cy="343.1" r="4.5" stroke="none"/>
+<path class="s-s3" d="M104.4,429.0 L225.5,412.7 L306.2,387.5 L451.9,372.2 L626.3,330.2" fill="none" stroke-width="2" stroke-linejoin="round"/>
+<circle class="f-s3" cx="104.4" cy="429.0" r="4.5" stroke="none"/>
+<circle class="f-s3" cx="225.5" cy="412.7" r="4.5" stroke="none"/>
+<circle class="f-s3" cx="306.2" cy="387.5" r="4.5" stroke="none"/>
+<circle class="f-s3" cx="451.9" cy="372.2" r="4.5" stroke="none"/>
+<circle class="f-s3" cx="626.3" cy="330.2" r="4.5" stroke="none"/>
+<path class="s-s4" d="M370.1,332.6 L386.9,329.6 L467.6,295.2 L548.3,252.3 L629.0,216.1 L709.8,170.4" fill="none" stroke-width="2" stroke-linejoin="round"/>
+<circle class="f-s4" cx="370.1" cy="332.6" r="4.5" stroke="none"/>
+<circle class="f-s4" cx="386.9" cy="329.6" r="4.5" stroke="none"/>
+<circle class="f-s4" cx="467.6" cy="295.2" r="4.5" stroke="none"/>
+<circle class="f-s4" cx="548.3" cy="252.3" r="4.5" stroke="none"/>
+<circle class="f-s4" cx="629.0" cy="216.1" r="4.5" stroke="none"/>
+<circle class="f-s4" cx="709.8" cy="170.4" r="4.5" stroke="none"/>
+<line class="s-s1" x1="632.3" y1="156.2" x2="734.0" y2="152.2" stroke-width="1" opacity="0.6"/>
+<text x="738.0" y="156.2" class="t1" font-size="12" text-anchor="start" font-weight="400">CPU scalar (Xeon 8480+)</text>
+<line class="s-s5" x1="632.3" y1="203.8" x2="734.0" y2="199.8" stroke-width="1" opacity="0.6"/>
+<text x="738.0" y="203.8" class="t1" font-size="12" text-anchor="start" font-weight="400">CPU oneTBB, 26 threads (Xeon)</text>
+<line class="s-s2" x1="632.3" y1="343.1" x2="734.0" y2="341.2" stroke-width="1" opacity="0.6"/>
+<text x="738.0" y="345.2" class="t1" font-size="12" text-anchor="start" font-weight="400">CUDA, H100</text>
+<line class="s-s3" x1="632.3" y1="330.2" x2="734.0" y2="326.2" stroke-width="1" opacity="0.6"/>
+<text x="738.0" y="330.2" class="t1" font-size="12" text-anchor="start" font-weight="400">HIP, MI300X</text>
+<line class="s-s4" x1="715.8" y1="170.4" x2="734.0" y2="167.2" stroke-width="1" opacity="0.6"/>
+<text x="738.0" y="171.2" class="t1" font-size="12" text-anchor="start" font-weight="400">Metal, M4 Pro</text>
+<text x="24.0" y="540.0" class="t3" font-size="11" text-anchor="start" font-weight="400">128-4,096 terms on CUDA and HIP, and 128 terms on the CPU: distinct terms, one call (call-overhead suite). Other points: half of the terms are duplicates.</text>
+<text x="24.0" y="558.0" class="t3" font-size="11" text-anchor="start" font-weight="400">Metal runs its GPU-sort hybrid from 12,288 terms; below that the public path is the CPU. CPU on a Xeon 8480+ host (the H100&#x27;s); Metal on an Apple M4 Pro.</text>
+<text x="24.0" y="576.0" class="t3" font-size="11" text-anchor="start" font-weight="400">Sources: cpu_parallel_simplify, cuda_device_counts, hip_device_counts, metal_hybrid_simplify and metal_followups reports (docs/benchmarks/).</text>
+</svg>
