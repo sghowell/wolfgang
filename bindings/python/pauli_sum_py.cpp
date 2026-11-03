@@ -558,6 +558,23 @@ bool has_cuda_array_interface(nb::handle object) {
   return result != 0;
 }
 
+// The object's __cuda_array_interface__, or TypeError if it has none. Other
+// errors raised by the attribute (PyTorch refuses tensors that require grad)
+// propagate unchanged, so the caller sees the producer's reason.
+[[maybe_unused]] nb::object cuda_array_interface_or_raise(nb::handle object, const char* name) {
+  PyObject* interface = PyObject_GetAttrString(object.ptr(), "__cuda_array_interface__");
+  if (interface == nullptr) {
+    if (!PyErr_ExceptionMatches(PyExc_AttributeError)) {
+      throw nb::python_error();
+    }
+    PyErr_Clear();
+    throw nb::type_error(
+        (std::string(name) + " must expose __cuda_array_interface__ (for example a CuPy array or "
+         "a CUDA PyTorch tensor)").c_str());
+  }
+  return nb::steal<nb::object>(interface);
+}
+
 nb::object mapping_get_required(nb::handle mapping, const char* key) {
   PyObject* item = PyMapping_GetItemString(mapping.ptr(), key);
   if (item == nullptr) {
@@ -968,10 +985,14 @@ void device_commutation_versioned_dlpack_capsule_destructor(PyObject* capsule) {
   }
 }
 
-void validate_dlpack_arguments(nb::object stream_obj, nb::object max_version_obj, nb::object copy_obj) {
+void validate_dlpack_arguments(
+    nb::object stream_obj,
+    nb::object max_version_obj,
+    nb::object copy_obj,
+    const char* type_name = "DeviceCommutationMatrix") {
   if (!copy_obj.is_none()) {
     if (PyObject_IsTrue(copy_obj.ptr()) == 1) {
-      throw_buffer_error("DeviceCommutationMatrix.__dlpack__ does not support copy=True");
+      throw_buffer_error((std::string(type_name) + ".__dlpack__ does not support copy=True").c_str());
     }
     PyErr_Clear();
   }
@@ -1295,8 +1316,24 @@ nb::object device_array_dlpack(
     const DeviceArrayView& view,
     nb::object stream_obj,
     nb::object max_version_obj,
+    nb::object dl_device_obj,
     nb::object copy_obj) {
-  validate_dlpack_arguments(stream_obj, max_version_obj, copy_obj);
+  validate_dlpack_arguments(stream_obj, max_version_obj, copy_obj, "DeviceArrayView");
+  // A consumer may name the device it wants (array API dl_device); only the
+  // buffer's own device can be served without a copy.
+  if (!dl_device_obj.is_none()) {
+    bool matches = false;
+    try {
+      const nb::tuple requested = nb::cast<nb::tuple>(dl_device_obj);
+      matches = requested.size() == 2 && nb::cast<int>(requested[0]) == view.device_type &&
+          nb::cast<int>(requested[1]) == view.device;
+    } catch (const nb::cast_error&) {
+      throw nb::type_error("dl_device must be None or a (device_type, device_id) tuple");
+    }
+    if (!matches) {
+      throw_buffer_error("DeviceArrayView.__dlpack__ cannot copy to another device");
+    }
+  }
   const auto [major, minor] = parse_dlpack_max_version(max_version_obj);
   const auto negotiated = major == 0 && minor == 0 && max_version_obj.is_none()
       ? std::optional<DLPackVersion>{}
@@ -1379,19 +1416,13 @@ nb::tuple device_pauli_sum_device_arrays(nb::pointer_and_handle<DevicePauliSum> 
 
 // A device array received through __cuda_array_interface__ with the expected
 // typestr and shape, C-contiguous.
-std::uintptr_t parse_cuda_array_interface_input(
+[[maybe_unused]] std::uintptr_t parse_cuda_array_interface_input(
     nb::handle object,
     const char* name,
     const std::string& expected_typestr,
     std::initializer_list<long long> expected_shape,
     std::size_t itemsize) {
-  if (!has_cuda_array_interface(object)) {
-    throw nb::type_error(
-        (std::string(name) + " must expose __cuda_array_interface__ (for example a CuPy array or "
-         "a CUDA PyTorch tensor)").c_str());
-  }
-  nb::object interface_obj = nb::steal<nb::object>(
-      PyObject_GetAttrString(object.ptr(), "__cuda_array_interface__"));
+  nb::object interface_obj = cuda_array_interface_or_raise(object, name);
   if (!PyMapping_Check(interface_obj.ptr())) {
     throw nb::type_error("__cuda_array_interface__ must be a mapping");
   }
@@ -1417,8 +1448,14 @@ std::uintptr_t parse_cuda_array_interface_input(
     }
     ++axis;
   }
+  nb::object mask_obj = mapping_get_optional(interface_obj, "mask");
+  if (!mask_obj.is_none()) {
+    throw nb::type_error((std::string(name) + " must not be a masked array").c_str());
+  }
+  // Strides are irrelevant for an empty array, whatever the producer reports.
+  const bool empty = std::find(expected_shape.begin(), expected_shape.end(), 0LL) != expected_shape.end();
   nb::object strides_obj = mapping_get_optional(interface_obj, "strides");
-  if (!strides_obj.is_none()) {
+  if (!strides_obj.is_none() && !empty) {
     if (!PySequence_Check(strides_obj.ptr()) || PyUnicode_Check(strides_obj.ptr()) ||
         PySequence_Size(strides_obj.ptr()) != static_cast<Py_ssize_t>(expected_shape.size())) {
       throw nb::type_error((std::string(name) + " strides must match its shape").c_str());
@@ -1451,13 +1488,20 @@ std::uintptr_t parse_cuda_array_interface_input(
 
 DevicePauliSum device_pauli_sum_from_device_arrays(
     nb::handle x_obj, nb::handle z_obj, nb::handle coeffs_obj, std::size_t num_qubits, int device) {
-  nb::object coeff_interface;
-  if (!has_cuda_array_interface(coeffs_obj)) {
-    throw nb::type_error(
-        "coeffs must expose __cuda_array_interface__ (for example a CuPy array or a CUDA PyTorch tensor)");
+#if !WOLFGANG_BUILD_CUDA_ENABLED
+  (void)x_obj;
+  (void)z_obj;
+  (void)coeffs_obj;
+  (void)num_qubits;
+  (void)device;
+  throw std::runtime_error(
+      "DevicePauliSum.from_device_arrays requires a CUDA build (WOLFGANG_ENABLE_CUDA=ON); "
+      "HIP and Metal builds do not import device arrays yet");
+#else
+  if (num_qubits > std::numeric_limits<std::size_t>::max() - 63) {
+    throw nb::value_error("num_qubits is too large");
   }
-  coeff_interface = nb::steal<nb::object>(
-      PyObject_GetAttrString(coeffs_obj.ptr(), "__cuda_array_interface__"));
+  nb::object coeff_interface = cuda_array_interface_or_raise(coeffs_obj, "coeffs");
   nb::object coeff_shape = mapping_get_required(coeff_interface, "shape");
   if (!PySequence_Check(coeff_shape.ptr()) || PySequence_Size(coeff_shape.ptr()) != 1) {
     throw nb::value_error("coeffs must be 1-dimensional");
@@ -1479,6 +1523,7 @@ DevicePauliSum device_pauli_sum_from_device_arrays(
   } catch (const std::invalid_argument& error) {
     translate_invalid_argument(error);
   }
+#endif
 }
 
 
@@ -1613,9 +1658,11 @@ void bind_pauli_sum(nb::module_& module) {
       module,
       "DeviceArrayView",
       "Read-only view of one DevicePauliSum device buffer for zero-copy interop.\n\n"
-      "Pass it to cupy.from_dlpack, torch.from_dlpack or cupy.asarray. The view and every "
-      "exported capsule keep the owning DevicePauliSum alive. Consumers must not write to "
-      "it. CUDA only.")
+      "Pass it to cupy.from_dlpack, torch.from_dlpack or cupy.asarray (PyTorch rejects "
+      "read-only CUDA Array Interface input, so use torch.from_dlpack). The view and every "
+      "exported array keep the owning DevicePauliSum alive. The buffer is flagged read-only, "
+      "but CuPy and PyTorch do not enforce the flag: writing through a consumer array is "
+      "undefined behavior. CUDA only.")
       .def_prop_ro("shape", &device_array_shape, "Array shape: (num_terms, words) or (num_terms,).")
       .def_prop_ro(
           "dtype",
@@ -1624,10 +1671,15 @@ void bind_pauli_sum(nb::module_& module) {
       .def(
           "__dlpack__",
           &device_array_dlpack,
+          nb::kw_only(),
           nb::arg("stream") = nb::none(),
           nb::arg("max_version") = nb::none(),
+          nb::arg("dl_device") = nb::none(),
           nb::arg("copy") = nb::none(),
-          "Export a read-only DLPack capsule (max_version must be at least (1, 0)).")
+          "Export a DLPack capsule flagged read-only.\n\n"
+          "max_version must be at least (1, 0), because legacy capsules cannot carry the "
+          "read-only flag (CuPy 14 and current PyTorch request versioned capsules). "
+          "dl_device must be None or this buffer's device; copy=True is rejected.")
       .def(
           "__dlpack_device__",
           [](const DeviceArrayView& view) { return nb::make_tuple(view.device_type, view.device); },
@@ -1667,8 +1719,10 @@ void bind_pauli_sum(nb::module_& module) {
           "Return read-only zero-copy views (x, z, coeffs) of the device buffers.\n\n"
           "x and z are (num_terms, words) uint64 packed words; coeffs is (num_terms,) "
           "complex128. Each view supports __dlpack__ and __cuda_array_interface__ and keeps "
-          "this operator alive. After an export, freeing the operator synchronizes the device "
-          "first, in case a consumer still has work queued. CUDA only; HIP and Metal raise.")
+          "this operator alive. Consumers do not enforce the read-only flag; writing through "
+          "a view is undefined behavior. After an export, freeing the operator synchronizes "
+          "the device first, in case a consumer still has work queued. CUDA only; HIP and "
+          "Metal raise.")
       .def_static(
           "from_device_arrays",
           &device_pauli_sum_from_device_arrays,
@@ -1681,7 +1735,9 @@ void bind_pauli_sum(nb::module_& module) {
           "x and z are (num_terms, words) uint64 packed words and coeffs is (num_terms,) "
           "complex128, all C-contiguous objects exposing __cuda_array_interface__ on one "
           "device (CuPy arrays or CUDA PyTorch tensors). Bits at or above num_qubits raise "
-          "ValueError. device=-1 uses the arrays' device. CUDA only.")
+          "ValueError. device=-1 uses the arrays' device (the current device when empty). "
+          "The call synchronizes the device before copying, so producers on any stream are "
+          "finished, and returns after the copy completes. CUDA only.")
       .def(
           "simplify",
           [](const DevicePauliSum& op, double atol, double rtol) {

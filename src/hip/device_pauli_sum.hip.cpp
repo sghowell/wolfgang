@@ -223,7 +223,7 @@ bool DevicePauliSum::metal_available() {
 
 DeviceArrayPointers DevicePauliSum::export_device_arrays() const {
   throw std::runtime_error(
-      "ROCm/HIP DLPack interop is unavailable until a validated ROCm consumer enforces the read-only export contract (docs/architecture/rocm_backend.md).");
+      "DevicePauliSum DLPack export is CUDA-only; no ROCm/HIP consumer has been validated for it yet (docs/architecture/rocm_backend.md).");
 }
 
 DevicePauliSum DevicePauliSum::from_device_arrays(
@@ -234,8 +234,7 @@ DevicePauliSum DevicePauliSum::from_device_arrays(
     std::uintptr_t,
     AcceleratorBackend,
     int) {
-  throw std::runtime_error(
-      "ROCm/HIP DLPack interop is unavailable until a validated ROCm consumer enforces the read-only export contract (docs/architecture/rocm_backend.md).");
+  throw std::runtime_error("DevicePauliSum.from_device_arrays is CUDA-only; HIP builds do not import device arrays yet.");
 }
 
 PauliSum DevicePauliSum::to_host() const {

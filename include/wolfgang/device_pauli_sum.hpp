@@ -139,11 +139,13 @@ public:
   [[nodiscard]] static bool metal_available();
 
   [[nodiscard]] PauliSum to_host() const;
-  // Pointers to this operator's device buffers for zero-copy export. CUDA
-  // only: HIP and Metal raise until a validated consumer enforces the
-  // read-only export contract. Exporting marks the operator so that its
-  // buffers are freed only after a device synchronization, because a consumer
-  // may still have work queued on another stream.
+  // Pointers to this operator's device buffers for zero-copy export. The
+  // Python views flag them read-only, but CUDA consumers (CuPy, PyTorch) do
+  // not enforce the flag; writing through them is undefined behavior. CUDA
+  // only: HIP and Metal raise until a consumer on those backends is validated.
+  // Exporting marks the operator so that its buffers are freed only after a
+  // device synchronization, because a consumer may still have work queued on
+  // another stream.
   [[nodiscard]] DeviceArrayPointers export_device_arrays() const;
   [[nodiscard]] DevicePauliSum simplify(double atol = 1.0e-12, double rtol = 0.0) const;
   [[nodiscard]] std::complex<double> expectation_statevector_complex128(

@@ -11,8 +11,9 @@ and building a DevicePauliSum from CuPy arrays:
 - import_device: DevicePauliSum.from_device_arrays (device-to-device copy);
 - import_via_host: cupy.asnumpy, PauliSum.from_arrays, to_device.
 
-Each variant runs --repeat times after warmups in a randomized order; results
-are checked for equality before timing.
+Each variant runs --repeat times after warmups in a randomized order and ends
+with a device synchronization, so a timing covers its own GPU work and none of
+another variant's; results are checked for equality before timing.
 """
 
 from __future__ import annotations
@@ -58,7 +59,7 @@ def main() -> int:
     parser.add_argument("--repeat", type=int, default=15)
     parser.add_argument("--seed", type=int, default=20261106)
     parser.add_argument("--sizes", type=int, nargs="+", default=[1_000, 100_000, 1_000_000])
-    parser.add_argument("--qubits", type=int, default=64)
+    parser.add_argument("--qubits", type=int, nargs="+", default=[64, 100])
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     if not core._cuda_status().get("runtime_available"):
@@ -69,8 +70,9 @@ def main() -> int:
     rng = np.random.default_rng(args.seed)
     order_rng = random.Random(args.seed)
     rows = []
-    for num_terms in args.sizes:
-        op = packed_operator(rng, args.qubits, num_terms)
+    cases = [(num_qubits, num_terms) for num_qubits in args.qubits for num_terms in args.sizes]
+    for num_qubits, num_terms in cases:
+        op = packed_operator(rng, num_qubits, num_terms)
         device = op.to_device(backend="cuda")
         host_x, host_z, host_coeffs = op.to_arrays()
         dx, dz, dc = (cupy.asarray(array) for array in (host_x, host_z, host_coeffs))
@@ -86,13 +88,17 @@ def main() -> int:
             return arrays
 
         def import_device() -> Any:
-            return wolfgang_quantum.DevicePauliSum.from_device_arrays(dx, dz, dc, args.qubits)
+            result = wolfgang_quantum.DevicePauliSum.from_device_arrays(dx, dz, dc, num_qubits)
+            cupy.cuda.runtime.deviceSynchronize()
+            return result
 
         def import_via_host() -> Any:
             host = wolfgang_quantum.PauliSum.from_arrays(
-                cupy.asnumpy(dx), cupy.asnumpy(dz), cupy.asnumpy(dc), args.qubits
+                cupy.asnumpy(dx), cupy.asnumpy(dz), cupy.asnumpy(dc), num_qubits
             )
-            return host.to_device(backend="cuda")
+            result = host.to_device(backend="cuda")
+            cupy.cuda.runtime.deviceSynchronize()
+            return result
 
         variants = {
             "export_dlpack": export_dlpack,
@@ -121,7 +127,7 @@ def main() -> int:
         rows.append(
             {
                 "num_terms": num_terms,
-                "num_qubits": args.qubits,
+                "num_qubits": num_qubits,
                 "variants": {
                     name: {"median_seconds": float(np.median(values)), "raw_seconds": values}
                     for name, values in samples.items()

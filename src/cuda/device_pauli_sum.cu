@@ -80,6 +80,12 @@ int validated_import_device(std::uintptr_t pointer, std::size_t bytes, const cha
   if (attributes.type != cudaMemoryTypeDevice && attributes.type != cudaMemoryTypeManaged) {
     throw std::invalid_argument(std::string(name) + " must point to CUDA device memory");
   }
+  if (attributes.device < 0) {
+    throw std::invalid_argument(std::string(name) + " has no owning CUDA device");
+  }
+  // Query the extent in the owning device's context, as the statevector path
+  // does; the current context may belong to another device or not exist yet.
+  ScopedCudaDevice guard(attributes.device);
   CUdeviceptr base = 0;
   std::size_t allocation_bytes = 0;
   if (cuMemGetAddressRange(&base, &allocation_bytes, static_cast<CUdeviceptr>(pointer)) != CUDA_SUCCESS) {
@@ -305,7 +311,10 @@ DevicePauliSum DevicePauliSum::from_device_arrays(
   if (selected != AcceleratorBackend::Cuda) {
     throw std::runtime_error(accelerator_not_built_message(selected));
   }
-  const std::size_t words = (num_qubits + 63) / 64;
+  if (device < -1) {
+    throw std::invalid_argument("device must be -1 or a CUDA device ordinal");
+  }
+  const std::size_t words = detail::checked_word_count(num_qubits);
   const std::size_t packed_words =
       detail::checked_product(num_terms, words, "device array packed words");
   const std::size_t word_bytes = checked_bytes(packed_words, sizeof(std::uint64_t), "device array words");
@@ -329,7 +338,7 @@ DevicePauliSum DevicePauliSum::from_device_arrays(
     device = coeff_device;
   }
   if (device < 0) {
-    device = 0;
+    check_cuda(cudaGetDevice(&device), "query the current CUDA device");
   }
   validate_device_ordinal_for_transfer(device);
 
@@ -339,6 +348,12 @@ DevicePauliSum DevicePauliSum::from_device_arrays(
   impl->num_terms = num_terms;
   impl->device_ordinal = device;
   ScopedCudaDevice guard(device);
+  // A CUDA Array Interface producer may have written the inputs on a
+  // non-blocking stream, which does not order with the legacy stream used for
+  // the copies below; wait for all of the device's work first.
+  if (num_terms > 0) {
+    check_cuda(cudaDeviceSynchronize(), "synchronize device array producers");
+  }
   pool_allocate(impl->x, packed_words, "device x words");
   pool_allocate(impl->z, packed_words, "device z words");
   pool_allocate(impl->coeffs, num_terms, "device coefficients");
@@ -365,6 +380,9 @@ DevicePauliSum DevicePauliSum::from_device_arrays(
       throw std::invalid_argument("packed words set bits at or above num_qubits");
     }
   }
+  // Device-to-device cudaMemcpy returns before the copy completes. Finish it,
+  // so the caller may reuse the inputs and any stream may read the result.
+  check_cuda(cudaStreamSynchronize(cudaStreamLegacy), "finish device array copies");
   return DevicePauliSum(std::move(impl));
 }
 
