@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <limits>
 #include <new>
+#include <type_traits>
 #include <utility>
 
 namespace wolfgang::cuda_detail {
@@ -87,6 +88,27 @@ private:
   int device_ = 0;
 };
 
+// Uninitialized pooled device array for scratch that every caller fully writes
+// before reading. Unlike thrust::device_vector it launches no value-initializing
+// fill kernel. Element types must be trivially copyable (implicit-lifetime).
+template <typename T>
+class PooledArray {
+  static_assert(std::is_trivially_copyable_v<T>, "PooledArray holds raw device storage");
+
+public:
+  explicit PooledArray(std::size_t count) : buffer_(count, "device scratch"), count_(count) {}
+
+  [[nodiscard]] thrust::device_ptr<T> begin() const noexcept {
+    return thrust::device_pointer_cast(buffer_.get());
+  }
+  [[nodiscard]] thrust::device_ptr<T> end() const noexcept { return begin() + count_; }
+  [[nodiscard]] thrust::device_ptr<T> data() const noexcept { return begin(); }
+
+private:
+  PoolBuffer<T> buffer_;
+  std::size_t count_ = 0;
+};
+
 // Allocator for thrust::device_vector storage drawn from the pool.
 template <typename T>
 class PoolAllocator : public thrust::device_malloc_allocator<T> {
@@ -129,9 +151,13 @@ struct PoolTemporaryAllocator {
 };
 
 // Execution policy whose algorithm temporaries come from the pool.
+// par_nosync skips the stream synchronization Thrust otherwise performs after
+// every algorithm. That is safe here: all work is ordered on the legacy
+// stream, algorithms that return a value to the host still synchronize, and
+// each public operation synchronizes before returning.
 inline auto pooled_policy() {
   static PoolTemporaryAllocator allocator;
-  return thrust::cuda::par(allocator);
+  return thrust::cuda::par_nosync(allocator);
 }
 
 }  // namespace wolfgang::cuda_detail
