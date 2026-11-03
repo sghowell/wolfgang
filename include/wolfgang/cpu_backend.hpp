@@ -9,8 +9,10 @@ namespace wolfgang {
 
 inline constexpr std::size_t kAutoTbbPairwiseEntryThreshold = 331776;
 inline constexpr std::size_t kAutoNeonFullGroupingScalarMinEntries = 1024;
-// Auto dispatch sends simplify to the oneTBB kernel at or above this term count.
-inline constexpr std::size_t kAutoTbbSimplifyTermThreshold = 65536;
+// Auto dispatch sends simplify to the oneTBB kernel at or above this term count;
+// below it, thread start-up costs more than the parallel sort saves (measured
+// crossover near 4-8k terms on 16- and 26-vCPU x86 hosts).
+inline constexpr std::size_t kAutoTbbSimplifyTermThreshold = 8192;
 
 struct CpuBackendCandidate {
   std::string name;
