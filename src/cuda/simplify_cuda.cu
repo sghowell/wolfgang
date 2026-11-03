@@ -208,6 +208,31 @@ struct ComplexHalfAbs {
   }
 };
 
+__host__ __device__ inline bool components_finite(thrust::complex<double> value) noexcept {
+  return ::isfinite(value.real()) && ::isfinite(value.imag());
+}
+
+// |c|, or NaN when a component is not finite. With MaxPropagatingNaN one
+// reduction yields both the drop-rule scale and the CPU's finite-input check.
+// A finite coefficient whose magnitude overflows maps to +inf, not NaN.
+struct ComplexAbsOrNaN {
+  __host__ __device__ double operator()(thrust::complex<double> value) const noexcept {
+    return components_finite(value) ? thrust::abs(value) : ::nan("");
+  }
+};
+
+struct MaxPropagatingNaN {
+  __host__ __device__ double operator()(double lhs, double rhs) const noexcept {
+    if (lhs != lhs) {
+      return lhs;
+    }
+    if (rhs != rhs) {
+      return rhs;
+    }
+    return lhs < rhs ? rhs : lhs;
+  }
+};
+
 // Mirrors the CPU drop rule (src/simplify.cpp). Finite complex128 components can
 // have a magnitude above DBL_MAX: at rtol == 0 the threshold is atol itself, so
 // 0 * inf never produces NaN, and when atol + rtol * max overflows, magnitudes
@@ -216,12 +241,33 @@ struct CoeffSurvives {
   double drop_threshold;
   double half_threshold = 0.0;
   bool use_half_units = false;
+  // Device flag set when a reduced coefficient is not finite (the CPU raises
+  // OverflowError). Tree-ordered sums can even turn inf + -inf into NaN, which
+  // the magnitude test alone would drop silently. Every reduction path passes
+  // its sums through this predicate, so one flag covers them all.
+  int* overflowed = nullptr;
 
   __host__ __device__ bool operator()(thrust::complex<double> value) const noexcept {
+    if (!components_finite(value)) {
+      if (overflowed != nullptr) {
+        *overflowed = 1;
+      }
+      return false;
+    }
     return use_half_units ? ::hypot(value.real() * 0.5, value.imag() * 0.5) > half_threshold
                           : thrust::abs(value) > drop_threshold;
   }
 };
+
+void require_finite_input(double max_abs_or_nan) {
+  if (max_abs_or_nan != max_abs_or_nan) {
+    throw std::invalid_argument("simplify requires finite coefficients");
+  }
+}
+
+[[noreturn]] void throw_accumulation_overflow() {
+  throw std::overflow_error("simplify coefficient accumulation overflowed complex128");
+}
 
 template <typename HalfMagnitudeMax>
 CoeffSurvives survival_rule(
@@ -498,6 +544,9 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     // removes their fixed setup cost from this common degenerate case.
     thrust::complex<double> coeff;
     copy_to_host(&coeff, impl_->coeffs, 1, "single-term coefficient");
+    if (!components_finite(coeff)) {
+      throw std::invalid_argument("simplify requires finite coefficients");
+    }
     const CoeffSurvives survives =
         survival_rule(atol, rtol, thrust::abs(coeff), [&] { return ComplexHalfAbs{}(coeff); });
     if (!survives(coeff)) {
@@ -524,10 +573,11 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   const double max_abs_input = thrust::transform_reduce(pooled_policy(),
       coeff_ptr,
       coeff_ptr + impl_->num_terms,
-      ComplexAbs{},
+      ComplexAbsOrNaN{},
       0.0,
-      thrust::maximum<double>{});
-  const CoeffSurvives survives = survival_rule(atol, rtol, max_abs_input, [&] {
+      MaxPropagatingNaN{});
+  require_finite_input(max_abs_input);
+  CoeffSurvives survives = survival_rule(atol, rtol, max_abs_input, [&] {
     return thrust::transform_reduce(pooled_policy(),
         coeff_ptr,
         coeff_ptr + impl_->num_terms,
@@ -543,6 +593,9 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
             coeff_ptr,
             coeff_ptr + impl_->num_terms,
             thrust::complex<double>{0.0, 0.0});
+    if (!components_finite(accumulator)) {
+      throw_accumulation_overflow();
+    }
     if (!survives(accumulator)) {
       return make_empty();
     }
@@ -556,6 +609,20 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     check_cuda(cudaDeviceSynchronize(), "synchronize after CUDA simplify");
     return DevicePauliSum(std::move(out));
   }
+
+  PooledArray<int> overflow_flag(1);
+  check_cuda(
+      cudaMemsetAsync(thrust::raw_pointer_cast(overflow_flag.data()), 0, sizeof(int), cudaStreamLegacy),
+      "clear simplify overflow flag");
+  survives.overflowed = thrust::raw_pointer_cast(overflow_flag.data());
+  // Called once the predicate has seen every reduced coefficient.
+  const auto check_overflow = [&survives] {
+    int overflowed = 0;
+    copy_to_host(&overflowed, survives.overflowed, 1, "simplify overflow flag");
+    if (overflowed != 0) {
+      throw_accumulation_overflow();
+    }
+  };
 
   if (impl_->words == 1 && impl_->num_qubits <= 32) {
     if (duplicate_strategy == DuplicateReductionStrategy::kCubRadixSortReduce) {
@@ -629,6 +696,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
           survivor_zip,
           survives);
       const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+      check_overflow();
       if (survivors == 0) {
         return make_empty();
       }
@@ -701,6 +769,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         survivor_zip,
         survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+    check_overflow();
     if (survivors == 0) {
       return make_empty();
     }
@@ -775,6 +844,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         survivor_zip,
         survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+    check_overflow();
     if (survivors == 0) {
       return make_empty();
     }
@@ -849,6 +919,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         survivor_zip,
         survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+    check_overflow();
     if (survivors == 0) {
       return make_empty();
     }
@@ -924,6 +995,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         survivor_zip,
         survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+    check_overflow();
     if (survivors == 0) {
       return make_empty();
     }
@@ -984,6 +1056,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
       thrust::raw_pointer_cast(temp_count.data()),
       1,
       "generic simplify count");
+  check_overflow();
   if (survivors == 0) {
     return make_empty();
   }

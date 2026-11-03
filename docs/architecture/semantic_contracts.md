@@ -146,12 +146,14 @@ its input scale and can drop additional terms after duplicates have combined.
 For example, `X + X + 0.15 Y` with `atol=0, rtol=0.1` first becomes
 `2 X + 0.15 Y`, then `2 X`. This input-relative formula is intentional.
 
-CPU simplify (also used by the public Metal bridge) rejects nonfinite coefficient
-components with `ValueError` and raises `OverflowError` if duplicate accumulation
-produces nonfinite components. Finite components are compared safely even when
-their complex magnitude exceeds the maximum double. CUDA/HIP numerical-limit
-parity remains a hardware qualification task; these new guards are CPU/Metal
-behavior only.
+Simplify on every backend (CPU, CUDA, HIP and both Metal paths) rejects
+nonfinite coefficient components with `ValueError` and raises `OverflowError`
+if duplicate accumulation produces nonfinite components, including the
+`inf + -inf = NaN` a tree-ordered GPU reduction can form. Finite components
+are compared safely even when their complex magnitude exceeds the maximum
+double. `tests/test_accelerator_simplify_parity.py` checks each available
+accelerator against CPU simplify; CUDA and HIP may associate long duplicate
+sums differently, so their coefficients match CPU to rounding.
 
 ## Addition And Scalar Multiplication
 
