@@ -56,7 +56,12 @@ def test_tbb_simplify_matches_scalar_bit_for_bit(
     scalar = _simplify_with(monkeypatch, "scalar", op)
     _assert_bit_identical(_simplify_with(monkeypatch, "tbb", op), scalar)
     _assert_bit_identical(_simplify_with(monkeypatch, "auto", op), scalar)
-    negated = -op  # negation produces -0.0 components
+    # Zero every third imaginary part, then negate, so -0.0 components exist
+    # (plain -op of random coefficients has none).
+    x, z, coeffs = (array.copy() for array in op.to_arrays())
+    coeffs[::3] = coeffs[::3].real
+    negated = -wolfgang_quantum.PauliSum.from_arrays(x, z, coeffs, num_qubits)
+    assert np.signbit(negated.to_arrays()[2].imag[::3]).all()
     _assert_bit_identical(_simplify_with(monkeypatch, "tbb", negated), _simplify_with(monkeypatch, "scalar", negated))
 
 
