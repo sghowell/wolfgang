@@ -169,13 +169,17 @@ Evidence: `docs/benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md`.
 HIP device buffers use `hipMalloc`/`hipFree`. The pipeline's scratch and
 rocThrust's algorithm temporaries come from a per-thread block cache instead
 (`src/hip/pool_allocator.hip.hpp`): a `hipMalloc`/`hipFree` pair for a
-multi-megabyte block cost up to about 100 us on the MI300X (ROCm caches only
-small blocks), which made the pipeline slower than the rocThrust stages at
-50,000 terms until scratch was reused. Each thread keeps up to two freed
-blocks of at most 256 MiB each and reuses them; larger requests, requests while
-both blocks are in use, and devices on the optional pool go straight to the
-allocator. A thread's blocks are freed when it exits, when it moves to another
-device, and before a failed allocation is retried. Simplify scratch is
+multi-megabyte block per call made the pipeline slower than the rocThrust
+stages at 50,000 terms on the MI300X; reusing it made the same calls about
+twice as fast. Each thread keeps up to two freed blocks of at most 256 MiB
+each, shared by every call site, and reuses them; larger requests, requests
+while both blocks are in use, and devices on the optional pool go straight to
+the allocator. A block on another device is never handed out and is freed when
+a later allocation evicts it. A thread's idle blocks are freed when it exits and
+before any Wolfgang allocation on that thread is retried after running out of
+memory. Other threads keep theirs, so a process can hold up to 512 MiB of
+cached device memory per thread that has run HIP simplify, which other
+frameworks on the GPU cannot use. Simplify scratch is
 uninitialized (every buffer is fully written before it is read), and rocThrust
 algorithms run under `thrust::hip::par_nosync`, which drops the stream
 synchronization rocThrust otherwise performs after every algorithm. All work is
@@ -288,11 +292,11 @@ tolerance thresholds, and the same invalid-tolerance public error class as the
 host path where applicable.
 
 rocThrust is the retained duplicate-reduction implementation path for Campaign
-3. hipCUB and custom duplicate-reduction probes remain unavailable or rejected
-until they pass CPU/HIP equivalence, allocation accounting, and rocprof
-evidence in a separate campaign. (The accelerator follow-ups campaign met that
-bar: HIP simplify beyond the fused kernel now uses the hipCUB pipeline
-described above.)
+3. hipCUB and custom duplicate-reduction probes were left unavailable or rejected
+until they passed CPU/HIP equivalence, allocation accounting, and rocprof
+evidence in a separate campaign. The accelerator follow-ups campaign provided
+that evidence, and HIP simplify beyond the fused kernel now runs the shared
+hipCUB pipeline described above.
 
 HIP DLPack, public streams, public workspaces, multi-GPU, ROCm wheels,
 additional AMD GPU support claims, and simultaneous CUDA+HIP builds remain
@@ -313,12 +317,13 @@ Campaign 4 changed only private `DevicePauliSum.simplify()` implementation
 details after MI300X correctness, benchmark, and profiler evidence. The
 retained change is the parallel generic multi-word sorted-index
 `reduce_by_key` path. The serial generic reducer remains private
-benchmark-only fallback. Custom packed-key duplicate-reduction probes are
-unavailable because no distinct lower-level implementation is retained or
-timed, and rocPRIM/hipCUB scratch workspace probes are unavailable for the
-current rocThrust boundary. These mechanisms stay private unless a
-separate public API decision accepts their lifetime, ownership,
-synchronization, and documentation contracts.
+benchmark-only fallback. Campaign 4 recorded custom packed-key
+duplicate-reduction probes as unavailable because no distinct lower-level
+implementation was retained or timed, and rocPRIM/hipCUB scratch workspace
+probes as unavailable for the rocThrust boundary of the time. The accelerator
+follow-ups campaign later replaced that boundary with the shared hipCUB
+pipeline, whose scratch is private and drawn from the per-thread block cache;
+the Campaign 4 selector labels for those probes remain rejected.
 
 Campaign 4 must preserve:
 

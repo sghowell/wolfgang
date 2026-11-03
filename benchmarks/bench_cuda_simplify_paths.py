@@ -298,6 +298,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
 def report_provenance(report: dict[str, Any]) -> dict[str, Any]:
     loaded = report["environment"].get("loaded_native_build", {})
     return {
+        "benchmark": report.get("benchmark", ""),
         "label": report.get("label", ""),
         "command": report.get("command", ""),
         "seed": report.get("seed"),
@@ -332,6 +333,8 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
                 for name, median in medians.items():
                     key = (row["path"], row["num_qubits"], row["num_terms"], name)
                     paired.setdefault(key, {}).setdefault(report.get("label", ""), []).append(median)
+    if len({run["benchmark"] for run in runs}) > 1:
+        raise SystemExit("refusing to summarize CUDA and HIP reports together; use one directory per backend")
     specialized = [
         {
             "path": path,

@@ -1677,7 +1677,7 @@ def benchmark_simplify_case(
         strategy_reason = (
             "Campaign 3 retained rocThrust default only"
             if strategy != "rocthrust_default"
-            else "rocThrust default retained"
+            else "default selector; runs the shared hipCUB pipeline since the accelerator follow-ups campaign"
         )
 
     with forced_cpu_backend("scalar"):

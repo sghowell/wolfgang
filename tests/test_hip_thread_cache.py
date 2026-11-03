@@ -46,13 +46,17 @@ def _operator(num_qubits: int, num_terms: int, seed: int) -> wolfgang_quantum.Pa
     # Random packed words with a 50% duplicate share, built from arrays so
     # multi-million-term operators stay quick to create.
     rng = np.random.default_rng(seed)
+    words = (num_qubits + 63) // 64
     unique = num_terms // 2
-    mask = (1 << num_qubits) - 1
-    x = rng.integers(0, mask, size=unique, dtype=np.uint64, endpoint=True)
-    z = rng.integers(0, mask, size=unique, dtype=np.uint64, endpoint=True)
+    x = rng.integers(0, 2**63, size=(unique, words), dtype=np.uint64)
+    z = rng.integers(0, 2**63, size=(unique, words), dtype=np.uint64)
+    if num_qubits % 64:
+        tail = np.uint64((1 << (num_qubits % 64)) - 1)
+        x[:, -1] &= tail
+        z[:, -1] &= tail
     picks = rng.integers(0, unique, size=num_terms - unique)
-    x = np.concatenate([x, x[picks]]).reshape(-1, 1)
-    z = np.concatenate([z, z[picks]]).reshape(-1, 1)
+    x = np.concatenate([x, x[picks]])
+    z = np.concatenate([z, z[picks]])
     coeffs = rng.normal(size=num_terms) + 1j * rng.normal(size=num_terms)
     return wolfgang_quantum.PauliSum.from_arrays(x, z, coeffs, num_qubits)
 
@@ -64,9 +68,12 @@ def _same(actual: wolfgang_quantum.PauliSum, expected: wolfgang_quantum.PauliSum
     np.testing.assert_allclose(ac, ec, rtol=1e-11, atol=1e-11)
 
 
-def test_simplify_scratch_is_reused_across_calls() -> None:
+@pytest.mark.parametrize("num_qubits", [24, 60, 100])
+def test_simplify_scratch_is_reused_across_calls(num_qubits: int) -> None:
+    # 24 qubits radix-sort inside the pipeline's scratch; 60 and 100 qubits also
+    # hold a rocThrust merge-sort temporary while the scratch is in use.
     _require()
-    op = _operator(24, 50_000, seed=1)
+    op = _operator(num_qubits, 50_000, seed=num_qubits)
     device = op.to_device(backend="hip")
     expected = op.simplify()
     _same(device.simplify().to_host(), expected)
@@ -128,12 +135,22 @@ def test_optional_pool_bypasses_the_cache() -> None:
         "z = rng.integers(0, 1 << 24, size=40000, dtype=np.uint64).reshape(-1, 1)\n"
         "op = wolfgang_quantum.PauliSum.from_arrays(x, z, rng.normal(size=40000) + 0j, 24)\n"
         "op.to_device(backend='hip').simplify().to_host()\n"
-        "print(json.dumps(dict(core._hip_thread_cache_status_for_testing())))\n"
+        "status = dict(core._hip_thread_cache_status_for_testing())\n"
+        "status['pool_enabled'] = bool(core._hip_pool_status_for_testing(0)['enabled'])\n"
+        "print(json.dumps(status))\n"
     )
-    env = {**os.environ, "WOLFGANG_HIP_BENCH_ENABLE_POOL": "1"}
-    completed = subprocess.run(
-        [sys.executable, "-c", script], cwd=ROOT, env=env, capture_output=True, text=True, check=True
-    )
-    status = json.loads(completed.stdout.strip().splitlines()[-1])
-    assert status["cached_bytes"] == 0
-    assert status["block_allocations"] == 0
+
+    def run(env: dict[str, str]) -> dict[str, object]:
+        completed = subprocess.run(
+            [sys.executable, "-c", script], cwd=ROOT, env=env, capture_output=True, text=True, check=True
+        )
+        return json.loads(completed.stdout.strip().splitlines()[-1])
+
+    plain_env = {k: v for k, v in os.environ.items() if k != "WOLFGANG_HIP_BENCH_ENABLE_POOL"}
+    plain = run(plain_env)
+    assert plain["block_allocations"] > 0  # the workload does reach the cache
+    pooled = run({**plain_env, "WOLFGANG_HIP_BENCH_ENABLE_POOL": "1"})
+    if not pooled["pool_enabled"]:
+        pytest.skip("this HIP device does not support memory pools")
+    assert pooled["cached_bytes"] == 0
+    assert pooled["block_allocations"] == 0

@@ -135,8 +135,9 @@ void release_cached_block(CachedBlock& block) noexcept {
   block = CachedBlock{};
 }
 
-// One per thread. Its destructor runs at thread exit; for the main thread
-// that is before the HIP runtime's exit handlers, which it registered first.
+// One per thread. Its destructor runs at thread exit; for the main thread,
+// thread_local destructors run before any atexit handler, including the HIP
+// runtime's.
 struct ThreadBlockCache {
   std::array<CachedBlock, kThreadCacheBlocks> blocks{};
 
@@ -232,6 +233,10 @@ void* thread_cached_allocate(std::size_t bytes, const char* name) {
   return pointer;
 }
 
+void release_idle_thread_cache() noexcept {
+  thread_block_cache().release_idle();
+}
+
 void thread_cached_free(void* pointer) noexcept {
   if (pointer == nullptr) {
     return;
@@ -270,9 +275,11 @@ void* pool_allocate_bytes(std::size_t bytes, const char* name) {
   void* pointer = nullptr;
   hipError_t result = allocate_on_device(device, &pointer, bytes);
   if (result == hipErrorOutOfMemory) {
-    // Cached blocks may be what is short: return them to the driver and retry once.
+    // Cached blocks may be what is short: return the pools' and this thread's
+    // idle blocks to the driver and retry once.
     (void)hipGetLastError();
     trim_pools_after_allocation_failure();
+    release_idle_thread_cache();
     result = allocate_on_device(device, &pointer, bytes);
   }
   if (result == hipErrorOutOfMemory) {

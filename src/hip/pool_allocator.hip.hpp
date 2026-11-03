@@ -55,20 +55,28 @@ void pool_free_bytes_on_device(void* pointer, int device) noexcept;
 void trim_pools_after_allocation_failure() noexcept;
 
 // Per-thread reusable blocks for operation scratch and rocThrust algorithm
-// temporaries. On an MI300X a hipMalloc/hipFree pair for a multi-megabyte
-// block costs up to about 100 us, while ROCm caches small blocks itself, so
-// each thread keeps up to kThreadCacheBlocks freed blocks per call site and
-// reuses them. Every Wolfgang HIP operation runs on the null stream, so work
-// that reuses a released block is ordered after the work that used it.
-// Requests above kThreadCacheLimitBytes, requests while every cached block is
-// in use, and devices using the optional pool (which caches by itself) go
-// straight to the allocator. Cached blocks are freed when their thread exits,
-// when the thread switches devices, and before retrying a failed allocation.
+// temporaries. On an MI300X, reusing the simplify pipeline's multi-megabyte
+// scratch instead of a hipMalloc/hipFree pair per call made 50,000-term
+// simplify about twice as fast, while ROCm already caches small blocks. Each
+// thread keeps up to kThreadCacheBlocks freed blocks, shared by every call
+// site, and reuses them. Every Wolfgang HIP operation runs on the null stream,
+// so work that reuses a released block is ordered after the work that used
+// it. Requests above kThreadCacheLimitBytes, requests while every cached block
+// is in use, and devices using the optional pool (which caches by itself) go
+// straight to the allocator. A block on another device is never handed out;
+// it is freed when a later allocation evicts it. Freeing a block relies on
+// hipFree waiting for queued work on its device. Blocks idle in a thread are
+// freed when that thread exits and before any Wolfgang allocation on it is
+// retried after running out of memory; other threads keep theirs, so each
+// thread can hold up to kThreadCacheBlocks * kThreadCacheLimitBytes. Blocks
+// are not revalidated after hipDeviceReset.
 inline constexpr std::size_t kThreadCacheLimitBytes = std::size_t{256} << 20;
 inline constexpr std::size_t kThreadCacheBlocks = 2;
 
 [[nodiscard]] void* thread_cached_allocate(std::size_t bytes, const char* name);
 void thread_cached_free(void* pointer) noexcept;
+// Frees the calling thread's idle cached blocks.
+void release_idle_thread_cache() noexcept;
 
 template <typename T>
 void pool_allocate(T*& pointer, std::size_t count, const char* name) {

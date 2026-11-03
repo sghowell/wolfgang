@@ -202,6 +202,9 @@ struct HipPipelineBackend {
   throw std::overflow_error("simplify coefficient accumulation overflowed complex128");
 }
 
+// Benchmark selector. Its default value keeps the historical name
+// rocthrust_default, but now runs the shared hipCUB pipeline; the two Campaign 4
+// labels below were never implemented as separate paths and stay rejected.
 DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
   const char* value = std::getenv("WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION");
   if (value == nullptr || std::string(value).empty() ||
@@ -213,7 +216,7 @@ DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
       setting == "hipcub_radix_sort_reduce") {
     throw std::invalid_argument(
         "WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION selected an unavailable "
-        "Campaign 4 candidate; only rocthrust_default is executable");
+        "Campaign 4 candidate; only rocthrust_default (the default pipeline) is executable");
   }
   throw std::invalid_argument(
       "WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION must be rocthrust_default, "
