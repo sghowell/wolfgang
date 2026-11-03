@@ -310,10 +310,11 @@ Apple Metal Campaign 8 simplify performance-relevance evidence, not a public
 API expansion. Campaign 8 rows include `timing_decomposition_seconds`,
 `pipeline_cache`, `dispatch_counts`, and `performance_decision` metadata so the
 report's timing decomposition can separate host preflight, scratch/output
-allocation, command encoding, command execution, and output accounting. The
-public `DevicePauliSum.simplify(atol, rtol)` remains the transfer-reference bridge
-unless a later design proves a broader, correct, device-resident implementation
-that beats same-host CPU simplify and the transfer-reference path.
+allocation, command encoding, command execution, and output accounting.
+Campaign 8 kept public simplify on the transfer-reference bridge. For
+operators below the hybrid threshold described next, or wider than one word,
+the public `DevicePauliSum.simplify(atol, rtol)` remains the transfer-reference
+bridge.
 
 The usability and kernel campaign (slice 8) adds a hybrid public simplify for
 one-word operators of at least `kHybridSimplifyMinTerms` (12,288) terms. The

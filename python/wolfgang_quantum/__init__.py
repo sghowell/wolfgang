@@ -17,8 +17,9 @@ statevector expectation, pairwise commutation, experimental device-resident
 commutation matrices, and matrix-product kernels on `DevicePauliSum`. ROCm/HIP
 source builds expose the same transfer entrypoint on HIP-only builds as bring-up
 evidence lands. Apple Metal source builds expose the backend-neutral transfer,
-pairwise commutation, device-resident commutation matrix surfaces, and a
-source-build simplify transfer-reference correctness bridge.
+pairwise commutation, device-resident commutation matrix surfaces, and
+simplify: a GPU-sort hybrid for one-word operators of at least 12,288 terms,
+otherwise the source-build simplify transfer-reference correctness bridge.
 """
 
 from . import _wolfgang_core as _wolfgang_core

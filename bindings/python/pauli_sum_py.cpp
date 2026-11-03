@@ -1433,10 +1433,12 @@ void bind_pauli_sum(nb::module_& module) {
           nb::arg("rtol") = 0.0,
           "Simplify a device operator and return a new DevicePauliSum on the same backend.\n\n"
           "CUDA and HIP use retained device simplify implementations. Metal source builds "
-          "currently use a transfer-reference correctness bridge: device operator to host "
+          "sort one-word operators (up to 64 qubits) of at least 12,288 terms on the GPU and "
+          "sum duplicate runs in float64 on the CPU over shared memory; smaller or wider "
+          "operators use the transfer-reference correctness bridge: device operator to host "
           "PauliSum, CPU PauliSum.simplify(), then a new Metal DevicePauliSum. "
           "Output follows the same canonical packed-word order and tolerance semantics as "
-          "PauliSum.simplify().")
+          "PauliSum.simplify(); both Metal paths match it bit for bit.")
       .def(
           "expectation_statevector",
           &device_expectation_statevector,

@@ -406,7 +406,11 @@ Apple Metal Campaign 8 simplify performance-relevance evidence keeps that
 public path unchanged while adding private timing decomposition,
 pipeline-cache boundary, dispatch-count, and `performance_decision` metadata
 to decide whether the Campaign 7 device candidate is performance-relevant or
-must stay benchmark-only experimental.
+must stay benchmark-only experimental. The usability and kernel campaign
+(slice 8) later promoted a hybrid public Metal simplify for one-word operators
+of at least 12,288 terms: GPU key sort, float64 duplicate sums on the CPU, and
+results identical to CPU simplify
+(`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md`).
 Evidence is recorded in
 `docs/benchmarks/reports/apple_metal_bringup_2026-05-01.md` and
 `docs/benchmarks/reports/apple_metal_optimization_campaign1_2026-05-05.md` and

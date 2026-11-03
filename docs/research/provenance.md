@@ -188,6 +188,10 @@ output accounting. The candidate remains experimental and public simplify stays
 on the transfer-reference bridge. The checked rows currently classify the
 candidate as `experimental`. Evidence is recorded in
 `docs/benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md`.
+The usability and kernel campaign later replaced the bridge for one-word
+operators of at least 12,288 terms with a GPU-sort, CPU-float64 hybrid that
+matches CPU simplify bit for bit
+(`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md`).
 
 Wave 1D re-opens the Apple Metal commutation side of the cross-backend kernel
 performance campaign without broadening public semantics. It adds a local Apple

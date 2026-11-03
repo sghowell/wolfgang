@@ -46,6 +46,7 @@ docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md
 docs/benchmarks/reports/host_api_2026-11-03.md
 docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md
 docs/benchmarks/reports/cpu_parallel_simplify_2026-11-03.md
+docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md
 docs/benchmarks/reports/cuda_cross_architecture_campaign10_2026-04-29.md
 docs/benchmarks/reports/cuda_residual_risk_campaign11_2026-04-29.md
 docs/benchmarks/reports/rocm_mi300x_bringup_2026-04-29.md
@@ -92,7 +93,7 @@ CONTRIBUTING.md
 ```
 
 Use progressive disclosure. Start with `README.md` and `docs/roadmap.md`, then load only the phase-specific docs needed for the task.
-Apple Metal Wave 1D is the latest Apple Metal commutation evidence slice; Apple Metal Campaign 8 remains the latest simplify slice.
+Apple Metal Wave 1D is the latest Apple Metal commutation evidence slice; the usability campaign's Metal hybrid simplify (slice 8) supersedes Apple Metal Campaign 8 as the latest simplify slice.
 Active repository hardening: `docs/plans/review_hardening_plan.md`.
 Active campaign: `docs/plans/usability_and_kernel_campaign_plan.md`.
 
