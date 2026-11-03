@@ -70,6 +70,31 @@ int main() {
     require(picked.to_labels() == std::vector<std::string>{"Z", "Z", "X"}, "select_terms order");
     require(picked.structurally_equal(picked) && !picked.structurally_equal(xs), "structural equality");
     require(xs.negate().adjoint().coeffs()[0] == std::complex<double>(-1.0, -0.0), "negate/adjoint");
+
+    // Statevector tools: Y|0> = i|1>, and dense/CSR matrices agree.
+    const auto y_op = PauliSum::from_labels({"Y"}, {1.0});
+    const std::vector<std::complex<double>> zero_state{1.0, 0.0};
+    const auto applied = y_op.apply_statevector_complex128(zero_state);
+    require(applied[0] == std::complex<double>(0, 0) && applied[1] == std::complex<double>(0, 1),
+            "apply Y|0>");
+    require(std::abs(y_op.variance_statevector_complex128(zero_state) - 1.0) < 1e-15, "variance");
+    const auto dense = y_op.to_dense_matrix(4);
+    require(dense[1] == std::complex<double>(0, -1) && dense[2] == std::complex<double>(0, 1),
+            "dense Y matrix");
+    const auto csr = PauliSum::from_labels({"XX", "YY"}, {1.0, 1.0}).to_csr_matrix(64);
+    require(csr.data.size() == 2 && csr.indptr.size() == 5, "csr cancellation");
+    bool sparse_guard = false;
+    try {
+      (void)PauliSum::empty(20).to_csr_matrix(1024);
+    } catch (const std::invalid_argument&) { sparse_guard = true; }
+    require(sparse_guard, "csr row-pointer guard");
+
+    // Counts in the X basis: outcome 0 is the +1 eigenstate.
+    const auto x_op = PauliSum::from_labels({"X"}, {2.0});
+    const auto estimate = x_op.estimate_counts({"0", "1"}, {70.0, 30.0}, "X");
+    require(std::abs(estimate.mean.real() - 0.8) < 1e-12, "estimate_counts mean");
+    require(std::abs(estimate.standard_error - std::sqrt(3.36 / 99.0)) < 1e-12,
+            "estimate_counts standard error");
   } catch (const std::exception& error) {
     std::cerr << error.what() << '\n';
     return 1;

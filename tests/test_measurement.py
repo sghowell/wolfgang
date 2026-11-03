@@ -94,6 +94,34 @@ def test_estimate_counts_in_z_basis_matches_expectation_z_counts() -> None:
     assert op.estimate_counts(counts, basis="ZZ")[0] == pytest.approx(mean)
 
 
+def sampled_counts(rng: np.random.Generator, state: np.ndarray, num_qubits: int, shots: int) -> dict:
+    probabilities = np.abs(state) ** 2
+    outcomes = rng.choice(state.size, size=shots, p=probabilities / probabilities.sum())
+    values, frequencies = np.unique(outcomes, return_counts=True)
+    return {format(int(v), f"0{num_qubits}b"): int(f) for v, f in zip(values, frequencies, strict=True)}
+
+
+@pytest.mark.parametrize("labels", [["YY", "YI", "IY"], ["XY", "XI"], ["ZX", "IX"]])
+def test_qwc_basis_counts_estimate_matches_statevector(labels: list[str]) -> None:
+    # Outcome 0 after the basis rotation is the +1 eigenstate: X uses h, Y uses sdg then h.
+    rng = np.random.default_rng(len("".join(labels)))
+    group = PauliSum.from_labels(labels, rng.normal(size=len(labels)))
+    psi = rng.normal(size=4) + 1j * rng.normal(size=4)
+    psi /= np.linalg.norm(psi)
+    gates, _ = group.diagonalizing_clifford()
+    counts = sampled_counts(rng, circuit_unitary(gates, 2) @ psi, 2, 200_000)
+    mean, error = group.estimate_counts(counts, basis=group.qwc_basis())
+    exact = group.expectation_statevector(psi.astype(np.complex128))
+    assert abs(mean - exact) < 5 * error
+
+
+def test_estimate_counts_standard_error_survives_huge_counts() -> None:
+    op = PauliSum.from_labels(["Z"], [1.0])
+    mean, error = op.estimate_counts({"0": 1.7e308, "1": 0.85e308})
+    assert mean == pytest.approx(1.0 / 3.0)
+    assert math.isfinite(error)
+
+
 def test_estimate_counts_validation() -> None:
     op = PauliSum.from_labels(["XZ"], [1.0])
     with pytest.raises(ValueError, match="basis letter"):
@@ -141,6 +169,34 @@ def test_bell_stabilizers_need_entangling_gates() -> None:
     assert any(name in ("cx", "cz") for name, _ in gates)
     unitary = circuit_unitary(gates, 2)
     np.testing.assert_allclose(unitary @ group.to_matrix() @ unitary.conj().T, diagonal.to_matrix(), atol=1e-12)
+
+
+def test_identity_duplicate_and_empty_groups() -> None:
+    group = PauliSum.from_labels(["II", "XX", "XX", "ZZ", "YY"], [0.5, 1.0, -0.25, 2.0, 0.75])
+    gates, diagonal = group.diagonalizing_clifford()
+    unitary = circuit_unitary(gates, 2)
+    np.testing.assert_allclose(unitary @ group.to_matrix() @ unitary.conj().T, diagonal.to_matrix(), atol=1e-12)
+    empty_gates, empty_diagonal = PauliSum.empty(3).diagonalizing_clifford()
+    assert empty_gates == [] and empty_diagonal.num_terms == 0
+    zero_gates, zero_diagonal = PauliSum.from_sparse_list([("", [], 2.0)], 0).diagonalizing_clifford()
+    assert zero_gates == [] and zero_diagonal.to_labels()[1].tolist() == [2.0]
+
+
+def test_wide_groups_beyond_one_word() -> None:
+    labels = ["X" + "I" * 68 + "Z", "X" + "I" * 69, "I" * 69 + "Z"]
+    group = PauliSum.from_labels(labels, [1.0, 2.0, 3.0])
+    assert group.qwc_basis() == "X" + "I" * 68 + "Z"
+    gates, diagonal = group.diagonalizing_clifford()
+    assert gates == [("h", (69,))]
+    assert diagonal.to_labels()[0] == ["Z" + "I" * 68 + "Z", "Z" + "I" * 69, "I" * 69 + "Z"]
+    counts = {"0" * 70: 3, "1" + "0" * 68 + "1": 1}
+    mean, _ = group.estimate_counts(counts, basis=group.qwc_basis())
+    # Outcome 0...0 gives 1 + 2 + 3; outcome 1...1 gives 1 - 2 - 3.
+    assert mean == pytest.approx((3 * 6.0 + 1 * -4.0) / 4)
+    full = PauliSum.from_labels(["X" + "I" * 68 + "X", "Z" + "I" * 68 + "Z"], [1.0, 1.0])
+    full_gates, full_diagonal = full.diagonalizing_clifford()
+    assert not full_diagonal.to_arrays()[0].any()
+    assert any(name in ("cx", "cz") for name, _ in full_gates)
 
 
 def test_non_commuting_terms_are_rejected() -> None:

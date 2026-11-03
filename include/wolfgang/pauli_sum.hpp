@@ -166,27 +166,56 @@ public:
   // A Pauli string with masks (x, z) maps |b> to i^popcount(x & z) *
   // (-1)^popcount(z & b) |b ^ x>. All require num_qubits <= 63.
 
+  // Throw std::invalid_argument unless num_qubits <= 63 and length == 2^n.
+  void validate_statevector_length(std::size_t length) const;
+
   // Return H|psi>.
   [[nodiscard]] std::vector<std::complex<double>> apply_statevector_complex128(
       std::span<const std::complex<double>> psi) const;
   [[nodiscard]] std::vector<std::complex<double>> apply_statevector_complex64(
       std::span<const std::complex<float>> psi) const;
 
-  // Return <psi|H^dagger H|psi> - |<psi|H|psi>|^2, clamped at zero. For a
-  // Hermitian H this is the variance of H in |psi>.
+  // Apply H to `rows` consecutive statevectors of length 2^n, writing H|psi_r>
+  // into out[r * 2^n, (r + 1) * 2^n). Terms are grouped once per call.
+  void apply_statevector_batch_complex128(
+      std::span<const std::complex<double>> states,
+      std::size_t rows,
+      std::span<std::complex<double>> out) const;
+  void apply_statevector_batch_complex64(
+      std::span<const std::complex<float>> states,
+      std::size_t rows,
+      std::span<std::complex<double>> out) const;
+
+  // Variance of H in the normalized state psi / ||psi||:
+  // <H^dagger H> / N - |<H>|^2 / N^2 with N = <psi|psi>, clamped at zero.
+  // A zero statevector throws std::invalid_argument.
   [[nodiscard]] double variance_statevector_complex128(
       std::span<const std::complex<double>> psi) const;
   [[nodiscard]] double variance_statevector_complex64(
       std::span<const std::complex<float>> psi) const;
+  void variance_statevector_batch_complex128(
+      std::span<const std::complex<double>> states,
+      std::size_t rows,
+      std::span<double> out) const;
+  void variance_statevector_batch_complex64(
+      std::span<const std::complex<float>> states,
+      std::size_t rows,
+      std::span<double> out) const;
+
+  // Return 4^num_qubits, or throw std::invalid_argument when it exceeds
+  // max_entries or cannot be represented. Call before allocating a dense matrix.
+  [[nodiscard]] std::size_t dense_matrix_entries(std::size_t max_entries) const;
 
   // Row-major dense matrix with entry [r * 2^n + c] = <r|H|c>. Throws
   // std::invalid_argument before allocating when 4^num_qubits > max_entries.
   [[nodiscard]] std::vector<std::complex<double>> to_dense_matrix(std::size_t max_entries) const;
+  // Fill a caller-provided buffer of exactly 4^num_qubits entries.
+  void to_dense_matrix_into(std::span<std::complex<double>> out) const;
 
   // Compressed sparse rows with column indices sorted within each row. Each
   // row holds one entry per distinct x mask; entries that cancel to exactly
-  // zero are omitted. Throws before allocating when 2^n * distinct_x_masks
-  // exceeds max_nonzeros.
+  // zero are omitted. Throws before allocating when the stored entries plus
+  // the 2^n + 1 row pointers exceed max_nonzeros.
   struct CsrMatrix {
     std::size_t dimension = 0;
     std::vector<std::complex<double>> data;

@@ -88,8 +88,23 @@ def test_sparse_matrix_omits_exact_cancellation_and_guards_size() -> None:
 
 def test_sparse_matrix_reports_missing_scipy(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setitem(sys.modules, "scipy.sparse", None)
-    with pytest.raises(ImportError, match="pip install scipy"):
+    with pytest.raises(ImportError, match=r"wolfgang-quantum\[scipy\]") as raised:
         PauliSum.from_labels(["X"], [1.0]).to_matrix(sparse=True)
+    assert raised.value.__cause__ is not None
+
+
+def test_sparse_guard_counts_row_pointers_for_empty_operators() -> None:
+    with pytest.raises(ValueError, match="max_entries"):
+        PauliSum.empty(30).to_matrix(sparse=True)
+    pytest.importorskip("scipy.sparse")
+    assert PauliSum.empty(3).to_matrix(sparse=True).nnz == 0
+
+
+def test_importing_wolfgang_does_not_import_scipy() -> None:
+    import subprocess
+
+    code = "import sys, wolfgang_quantum; assert 'scipy' not in sys.modules"
+    subprocess.run([sys.executable, "-c", code], check=True)
 
 
 @pytest.mark.parametrize("num_qubits", [0, 1, 4, 7])
@@ -132,6 +147,14 @@ def test_batched_expectation_and_variance_match_per_row_oracle() -> None:
     assert isinstance(hermitian.variance_statevector(batch[0]), float)
 
 
+def test_variance_uses_the_normalized_state() -> None:
+    op = PauliSum.from_labels(["X", "Z"], [1.0, 0.5])
+    psi = np.array([0.6, 0.8j], dtype=np.complex128)
+    assert op.variance_statevector(3.0 * psi) == pytest.approx(op.variance_statevector(psi))
+    with pytest.raises(ValueError, match="nonzero"):
+        op.variance_statevector(np.zeros(2, dtype=np.complex128))
+
+
 def test_variance_is_zero_in_an_eigenstate() -> None:
     op = PauliSum.from_labels(["ZZ", "ZI"], [1.0, 0.5])
     basis_state = np.zeros(4, dtype=np.complex128)
@@ -153,3 +176,7 @@ def test_statevector_input_validation(method: str) -> None:
         call(np.ones((4, 2), dtype=np.complex128)[:, 0])
     empty_batch = call(np.ones((0, 4), dtype=np.complex128))
     assert len(empty_batch) == 0
+    with pytest.raises(ValueError, match="2 \\*\\* num_qubits"):
+        call(np.ones((0, 7), dtype=np.complex128))
+    with pytest.raises(ValueError, match="num_qubits <= 63"):
+        getattr(PauliSum.from_labels(["Z" * 70], [1.0]), method)(np.ones((0, 4), dtype=np.complex128))

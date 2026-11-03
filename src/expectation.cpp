@@ -169,17 +169,18 @@ void validate_diagonal_terms(const PauliSum& op) {
 std::vector<std::uint64_t> pack_count_bitstrings(
     const std::vector<std::string>& bitstrings,
     std::size_t num_qubits,
-    std::size_t words) {
+    std::size_t words,
+    const std::string& what = "Z-count") {
   std::vector<std::uint64_t> packed(detail::checked_product(bitstrings.size(), words, "counts"), 0);
   for (std::size_t row = 0; row < bitstrings.size(); ++row) {
     const std::string& bitstring = bitstrings[row];
     if (bitstring.size() != num_qubits) {
-      throw std::invalid_argument("Z-count bitstring length must equal num_qubits");
+      throw std::invalid_argument(what + " bitstring length must equal num_qubits");
     }
     for (std::size_t char_index = 0; char_index < bitstring.size(); ++char_index) {
       const char bit = bitstring[char_index];
       if (bit != '0' && bit != '1') {
-        throw std::invalid_argument("Z-count bitstrings may contain only 0 or 1");
+        throw std::invalid_argument(what + " bitstrings may contain only 0 or 1");
       }
       if (bit == '1') {
         const std::size_t qubit = num_qubits - 1 - char_index;
@@ -195,19 +196,21 @@ struct NormalizedCounts {
   double total = 0.0;
 };
 
-NormalizedCounts normalize_counts(const std::vector<double>& counts) {
+NormalizedCounts normalize_counts(
+    const std::vector<double>& counts,
+    const std::string& what = "Z-count") {
   double maximum = 0.0;
   for (double count : counts) {
     if (count < 0.0) {
-      throw std::invalid_argument("Z-count values must be non-negative");
+      throw std::invalid_argument(what + " values must be non-negative");
     }
     if (!std::isfinite(count)) {
-      throw std::invalid_argument("Z-count values must be finite");
+      throw std::invalid_argument(what + " values must be finite");
     }
     maximum = std::max(maximum, count);
   }
   if (maximum == 0.0) {
-    throw std::invalid_argument("Z-count total count must be positive");
+    throw std::invalid_argument(what + " total count must be positive");
   }
   // A common positive rescaling preserves expectations while bounding both
   // the total and the signed per-term numerator by the number of entries.
@@ -306,12 +309,13 @@ PauliSum::CountsEstimate PauliSum::estimate_counts(
     }
   }
 
-  const NormalizedCounts normalized = normalize_counts(counts);
+  const NormalizedCounts normalized = normalize_counts(counts, "count");
   double shots = 0.0;
   for (double count : counts) {
     shots += count;
   }
-  const std::vector<std::uint64_t> packed = pack_count_bitstrings(bitstrings, num_qubits_, words_);
+  const std::vector<std::uint64_t> packed =
+      pack_count_bitstrings(bitstrings, num_qubits_, words_, "count");
 
   // Per-outcome estimator O(b) = sum_t c_t (-1)^popcount(support_t & b).
   std::vector<std::complex<double>> outcome_values(bitstrings.size(), {0.0, 0.0});
@@ -342,10 +346,11 @@ PauliSum::CountsEstimate PauliSum::estimate_counts(
     weighted_square_deviation += normalized.values[row] * std::norm(outcome_values[row] - estimate.mean);
   }
   // Normalized weights share one scale factor, so the weighted mean square
-  // deviation equals the per-shot population variance; rescale to unbiased.
+  // deviation equals the per-shot population variance. The unbiased sample
+  // variance over N is pop * N / (N - 1); dividing by N for the standard error
+  // leaves pop / (N - 1), which never forms inf / inf for huge counts.
   const double population_variance = weighted_square_deviation / normalized.total;
-  const double sample_variance = population_variance * shots / (shots - 1.0);
-  estimate.standard_error = std::sqrt(sample_variance / shots);
+  estimate.standard_error = std::sqrt(population_variance / (shots - 1.0));
   return estimate;
 }
 

@@ -68,7 +68,7 @@ public:
             &view_,
             PyBUF_FORMAT | PyBUF_ND | PyBUF_STRIDES) != 0) {
       PyErr_Clear();
-      throw nb::type_error("psi must be a 1-dimensional NumPy array");
+      throw nb::type_error("psi must be a NumPy array or another buffer-protocol object");
     }
   }
 
@@ -433,6 +433,19 @@ public:
         static_cast<const std::complex<float>*>(data) + row * length_, length_));
   }
 
+  // Call fn with every row as one contiguous span.
+  template <typename Function>
+  auto visit_all(Function&& fn) const {
+    const void* data = buffer_.get().buf;
+    const std::size_t count = rows_ * length_;
+    if (is_complex128_) {
+      return fn(std::span<const std::complex<double>>(
+          static_cast<const std::complex<double>*>(data), count));
+    }
+    return fn(std::span<const std::complex<float>>(
+        static_cast<const std::complex<float>*>(data), count));
+  }
+
 private:
   PythonBufferView buffer_;
   bool is_complex128_ = false;
@@ -441,10 +454,31 @@ private:
   std::size_t length_ = 0;
 };
 
+// Allocate an owned, writable C-contiguous NumPy array of the given shape and
+// return it with a raw pointer to its data. The pointer stays valid while the
+// returned object lives.
+template <typename T>
+std::pair<nb::object, T*> new_numpy_array(std::initializer_list<std::size_t> shape, const char* dtype) {
+  nb::module_ numpy = nb::module_::import_("numpy");
+  nb::list dims;
+  std::size_t count = 1;
+  for (std::size_t extent : shape) {
+    dims.append(extent);
+    count *= extent;
+  }
+  nb::object array = numpy.attr("empty")(nb::tuple(dims), numpy.attr(dtype));
+  if (count == 0) {
+    return {array, nullptr};
+  }
+  WritablePythonBufferView buffer(array);
+  return {array, static_cast<T*>(buffer.get().buf)};
+}
+
 nb::object expectation_statevector(const PauliSum& op, nb::handle psi_obj) {
   ensure_scalar_cpu_operation("expectation_statevector");
   const StatevectorInput psi(psi_obj);
   try {
+    op.validate_statevector_length(psi.length());
     std::vector<std::complex<double>> values(psi.rows());
     cpu_without_gil([&] {
       for (std::size_t row = 0; row < psi.rows(); ++row) {
@@ -470,22 +504,22 @@ nb::object variance_statevector(const PauliSum& op, nb::handle psi_obj) {
   ensure_scalar_cpu_operation("variance_statevector");
   const StatevectorInput psi(psi_obj);
   try {
-    std::vector<double> values(psi.rows());
+    op.validate_statevector_length(psi.length());
+    auto [array, out] = new_numpy_array<double>({psi.rows()}, "float64");
+    const std::span<double> out_span(out, psi.rows());
     cpu_without_gil([&] {
-      for (std::size_t row = 0; row < psi.rows(); ++row) {
-        values[row] = psi.visit_row(row, [&](auto state) {
-          if constexpr (std::is_same_v<typename decltype(state)::element_type, const std::complex<double>>) {
-            return op.variance_statevector_complex128(state);
-          } else {
-            return op.variance_statevector_complex64(state);
-          }
-        });
-      }
+      psi.visit_all([&](auto states) {
+        if constexpr (std::is_same_v<typename decltype(states)::element_type, const std::complex<double>>) {
+          op.variance_statevector_batch_complex128(states, psi.rows(), out_span);
+        } else {
+          op.variance_statevector_batch_complex64(states, psi.rows(), out_span);
+        }
+      });
     });
     if (!psi.batched()) {
-      return nb::cast(values.front());
+      return nb::cast(out_span.front());
     }
-    return numeric_array_from_vector(values, "float64");
+    return array;
   } catch (const std::invalid_argument& error) {
     translate_invalid_argument(error);
   }
@@ -495,26 +529,20 @@ nb::object apply_statevector(const PauliSum& op, nb::handle psi_obj) {
   ensure_scalar_cpu_operation("apply_statevector");
   const StatevectorInput psi(psi_obj);
   try {
-    std::vector<std::complex<double>> out;
+    op.validate_statevector_length(psi.length());
+    auto [array, out] = psi.batched()
+        ? new_numpy_array<std::complex<double>>({psi.rows(), psi.length()}, "complex128")
+        : new_numpy_array<std::complex<double>>({psi.length()}, "complex128");
+    const std::span<std::complex<double>> out_span(out, psi.rows() * psi.length());
     cpu_without_gil([&] {
-      for (std::size_t row = 0; row < psi.rows(); ++row) {
-        std::vector<std::complex<double>> applied = psi.visit_row(row, [&](auto state) {
-          if constexpr (std::is_same_v<typename decltype(state)::element_type, const std::complex<double>>) {
-            return op.apply_statevector_complex128(state);
-          } else {
-            return op.apply_statevector_complex64(state);
-          }
-        });
-        if (row == 0) {
-          out.reserve(applied.size() * psi.rows());
+      psi.visit_all([&](auto states) {
+        if constexpr (std::is_same_v<typename decltype(states)::element_type, const std::complex<double>>) {
+          op.apply_statevector_batch_complex128(states, psi.rows(), out_span);
+        } else {
+          op.apply_statevector_batch_complex64(states, psi.rows(), out_span);
         }
-        out.insert(out.end(), applied.begin(), applied.end());
-      }
+      });
     });
-    nb::object array = coeff_array_from_vector(out);
-    if (psi.batched()) {
-      return array.attr("reshape")(nb::make_tuple(psi.rows(), psi.length()));
-    }
     return array;
   } catch (const std::invalid_argument& error) {
     translate_invalid_argument(error);
@@ -2025,8 +2053,9 @@ void bind_pauli_sum(nb::module_& module) {
           "variance_statevector",
           &variance_statevector,
           nb::arg("psi"),
-          "Return <psi|H^dagger H|psi> - |<psi|H|psi>|^2, clamped at zero.\n\n"
-          "For Hermitian H this is the variance of H in psi; psi is not normalized first. "
+          "Return the variance of H in the normalized state psi / ||psi||, clamped at zero.\n\n"
+          "Computes <H^dagger H> / N - |<H>|^2 / N^2 with N = <psi|psi>; a zero state raises "
+          "ValueError. "
           "Accepts the same 1-D or batched inputs as expectation_statevector and returns a float "
           "or a float64 array.")
       .def(
@@ -2043,18 +2072,23 @@ void bind_pauli_sum(nb::module_& module) {
             const auto limit = checked_size_from_python_int(max_entries_obj, "max_entries");
             try {
               if (!sparse) {
-                const auto dense = cpu_without_gil([&] { return op.to_dense_matrix(limit); });
+                const std::size_t entries = op.dense_matrix_entries(limit);
                 const std::size_t dimension = std::size_t{1} << op.num_qubits();
-                return coeff_array_from_vector(dense).attr("reshape")(
-                    nb::make_tuple(dimension, dimension));
+                auto [array, out] =
+                    new_numpy_array<std::complex<double>>({dimension, dimension}, "complex128");
+                const std::span<std::complex<double>> out_span(out, entries);
+                cpu_without_gil([&] { op.to_dense_matrix_into(out_span); });
+                return array;
               }
               nb::object scipy_sparse;
               try {
                 scipy_sparse = nb::module_::import_("scipy.sparse");
-              } catch (const nb::python_error&) {
-                throw nb::import_error(
+              } catch (nb::python_error& error) {
+                nb::raise_from(
+                    error,
+                    PyExc_ImportError,
                     "to_matrix(sparse=True) requires SciPy; install it with "
-                    "`python -m pip install scipy`");
+                    "`python -m pip install 'wolfgang-quantum[scipy]'`");
               }
               const auto csr = cpu_without_gil([&] { return op.to_csr_matrix(limit); });
               nb::object data = coeff_array_from_vector(csr.data);
@@ -2102,7 +2136,9 @@ void bind_pauli_sum(nb::module_& module) {
           nb::arg("basis").none() = nb::none(),
           "Estimate <H> and its standard error from shot counts in a local measurement basis.\n\n"
           "basis is a dense-label-order string of X, Y, Z or I giving the basis each qubit was "
-          "measured in (the right-most character is qubit 0); None means all Z. Every term must act "
+          "measured in (the right-most character is qubit 0); None means all Z. Outcome bit 0 is "
+          "the +1 eigenstate of that qubit's basis Pauli (h rotates X, sdg then h rotates Y). "
+          "Every term must act "
           "on each qubit as I or as that qubit's basis letter. counts maps measured bitstrings to "
           "raw shot counts. Returns (mean, standard_error), where standard_error is the unbiased "
           "sample standard deviation of the per-shot estimator divided by sqrt(total shots), or "
