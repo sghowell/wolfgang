@@ -56,6 +56,51 @@ def with_selector(selector: str, fn: Callable[[], Any]) -> Callable[[], Any]:
     return run
 
 
+def summarize_reports(directory: Path) -> dict[str, Any]:
+    """Aggregate saved reports into medians of per-run medians plus provenance."""
+    runs: list[dict[str, Any]] = []
+    medians: dict[tuple[int, int, float], dict[str, list[float]]] = {}
+    environment: dict[str, Any] = {}
+    for path in sorted(directory.glob("*.json")):
+        report = json.loads(path.read_text(encoding="utf-8"))
+        if report.get("benchmark") != "cpu_parallel_simplify":
+            continue
+        environment = environment or report["environment"]
+        runs.append(
+            {
+                "file": path.name,
+                "seed": report.get("seed"),
+                "command": report.get("command"),
+                "git_commit": report["git"].get("commit"),
+                "git_dirty": report["git"].get("dirty"),
+                "loaded_native_build": report["environment"].get("loaded_native_build", {}),
+            }
+        )
+        for row in report["rows"]:
+            key = (row["num_qubits"], row["num_terms"], row["duplicate_fraction"])
+            for name, data in row["variants"].items():
+                medians.setdefault(key, {}).setdefault(name, []).append(data["median_seconds"])
+    rows = [
+        {
+            "num_qubits": qubits,
+            "num_terms": terms,
+            "duplicate_fraction": duplicates,
+            "median_of_medians_seconds": {
+                name: float(np.median(values)) for name, values in by_variant.items()
+            },
+            "per_run_median_seconds": by_variant,
+        }
+        for (qubits, terms, duplicates), by_variant in sorted(medians.items())
+    ]
+    keys = ("cpu_model", "cpu_architecture", "logical_cpu_count", "physical_core_count",
+            "compiler", "python_version", "oneTBB", "operating_system")
+    return {
+        "environment": {key: environment.get(key) for key in keys if key in environment},
+        "runs": runs,
+        "rows": rows,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--smoke", action="store_true")
@@ -63,7 +108,15 @@ def main() -> int:
     parser.add_argument("--repeat", type=int, default=7)
     parser.add_argument("--seed", type=int, default=20261104)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--summarize", type=Path, help="aggregate saved reports in this directory")
     args = parser.parse_args()
+    if args.summarize:
+        text = json.dumps(summarize_reports(args.summarize), indent=2, sort_keys=True)
+        if args.output:
+            args.output.write_text(text + "\n", encoding="utf-8")
+        else:
+            sys.stdout.write(text + "\n")
+        return 0
     build = dict(core._build_info())
     tbb_compiled = "simplify" in build["optimized_cpu_kernels"].get("tbb", [])
     try:
