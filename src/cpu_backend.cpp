@@ -3,21 +3,68 @@
 #include <array>
 #include <atomic>
 #if WOLFGANG_BUILD_TBB_ENABLED
+#include <oneapi/tbb/global_control.h>
+#include <oneapi/tbb/info.h>
 #include <oneapi/tbb/task_arena.h>
 #endif
 #if !defined(_WIN32)
 #include <pthread.h>
 #endif
+#include <algorithm>
+#include <charconv>
 #include <cstdlib>
+#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <utility>
 
 namespace wolfgang {
 
 namespace {
 
 constexpr std::string_view kBackendEnvVar = "WOLFGANG_CPU_BACKEND";
+constexpr std::string_view kThreadsEnvVar = "WOLFGANG_NUM_THREADS";
+
+void apply_thread_cap_from_environment();
+
+// The process-wide thread cap. The oneTBB global_control that enforces it is
+// heap-allocated and never destroyed at exit: destroying it after oneTBB's own
+// teardown is unsafe, and the cap lives as long as the process anyway. The
+// mutex is held across fork() (pthread_atfork), so a child never inherits it
+// locked by a thread that does not exist there.
+struct ThreadLimitState {
+  std::mutex mutex;
+  bool environment_read = false;
+  std::size_t cap = 0;  // 0: no cap
+#if WOLFGANG_BUILD_TBB_ENABLED
+  oneapi::tbb::global_control* control = nullptr;
+#endif
+};
+
+ThreadLimitState& thread_limit_state() {
+  static auto* state = [] {
+    auto* created = new ThreadLimitState();
+#if !defined(_WIN32)
+    (void)pthread_atfork(
+        [] { thread_limit_state().mutex.lock(); },
+        [] { thread_limit_state().mutex.unlock(); },
+        [] { thread_limit_state().mutex.unlock(); });
+#endif
+    return created;
+  }();
+  return *state;
+}
+
+std::size_t parse_thread_count(std::string_view text) {
+  std::size_t value = 0;
+  const auto [end, error] = std::from_chars(text.data(), text.data() + text.size(), value);
+  if (error != std::errc{} || end != text.data() + text.size() || value == 0) {
+    throw std::invalid_argument(std::string(kThreadsEnvVar) + " must be a positive integer, got '" +
+                                std::string(text) + "'");
+  }
+  return value;
+}
 
 // Set by the first oneTBB kernel in this process (or inherited across fork).
 std::atomic<bool> g_tbb_used{false};
@@ -187,6 +234,7 @@ CpuBackendReport cpu_backend_report_from_environment() {
 
 void ensure_cpu_backend_available_from_environment() {
   (void)cpu_backend_report_from_environment();
+  apply_thread_cap_from_environment();
 }
 
 void ensure_cpu_backend_supports_scalar_operation(std::string_view operation) {
@@ -211,11 +259,87 @@ void ensure_cpu_backend_supports_simplify() {
   ensure_cpu_backend_supports_scalar_operation("simplify");
 }
 
+namespace {
+
+// Applies the cap to oneTBB when oneTBB is usable here. Callers hold the
+// state mutex. Only a cap below oneTBB's default concurrency installs a
+// control: a larger value would raise oneTBB's own worker limit rather than
+// leave it alone, and oneTBB narrows the value to unsigned and int internally,
+// so values near 2^31 and above misbehave there. The new control is built
+// before the old one is released, so the cap never lapses.
+void apply_thread_cap_locked(ThreadLimitState& state) {
+#if WOLFGANG_BUILD_TBB_ENABLED
+  if (backend_status("tbb") != "available") {
+    return;
+  }
+  const auto default_concurrency = static_cast<std::size_t>(oneapi::tbb::info::default_concurrency());
+  oneapi::tbb::global_control* replacement = nullptr;
+  if (state.cap != 0 && state.cap < default_concurrency) {
+    replacement = new oneapi::tbb::global_control(
+        oneapi::tbb::global_control::max_allowed_parallelism, state.cap);
+  }
+  delete std::exchange(state.control, replacement);
+#else
+  (void)state;
+#endif
+}
+
+// Reads WOLFGANG_NUM_THREADS once. An invalid value throws on every call
+// until it is fixed, as an invalid WOLFGANG_CPU_BACKEND does.
+void read_thread_cap_from_environment_locked(ThreadLimitState& state) {
+  if (state.environment_read) {
+    return;
+  }
+  const char* raw = std::getenv(kThreadsEnvVar.data());
+  if (raw != nullptr && *raw != '\0') {
+    state.cap = parse_thread_count(raw);
+    apply_thread_cap_locked(state);
+  }
+  state.environment_read = true;
+}
+
+void apply_thread_cap_from_environment() {
+  ThreadLimitState& state = thread_limit_state();
+  const std::lock_guard<std::mutex> lock(state.mutex);
+  read_thread_cap_from_environment_locked(state);
+}
+
+}  // namespace
+
+std::size_t cpu_thread_limit() {
+  ThreadLimitState& state = thread_limit_state();
+  const std::lock_guard<std::mutex> lock(state.mutex);
+  read_thread_cap_from_environment_locked(state);
+#if WOLFGANG_BUILD_TBB_ENABLED
+  if (backend_status("tbb") != "available") {
+    return 1;
+  }
+  const std::size_t allowed = oneapi::tbb::global_control::active_value(
+      oneapi::tbb::global_control::max_allowed_parallelism);
+  const auto arena = static_cast<std::size_t>(oneapi::tbb::this_task_arena::max_concurrency());
+  return std::max<std::size_t>(1, std::min(allowed, arena));
+#else
+  return 1;
+#endif
+}
+
+void set_cpu_thread_limit(std::size_t threads) {
+  if (threads == 0) {
+    throw std::invalid_argument("the CPU thread limit must be at least 1");
+  }
+  ThreadLimitState& state = thread_limit_state();
+  const std::lock_guard<std::mutex> lock(state.mutex);
+  state.environment_read = true;  // an explicit cap replaces WOLFGANG_NUM_THREADS
+  state.cap = threads;
+  apply_thread_cap_locked(state);
+}
+
 bool cpu_backend_selects_tbb_simplify(std::size_t num_terms) {
 #if WOLFGANG_BUILD_TBB_ENABLED
   const char* raw_selector = std::getenv(kBackendEnvVar.data());
   const std::string_view selector = raw_selector == nullptr ? std::string_view{} : raw_selector;
   if (selector == "tbb") {
+    apply_thread_cap_from_environment();
     return cpu_backend_report_from_environment().active_backend == "tbb";
   }
   if (!(selector.empty() || selector == "auto") || num_terms < kAutoTbbSimplifyTermThreshold) {
@@ -234,7 +358,7 @@ bool tbb_auto_has_min_concurrency() {
   if (backend_status("tbb") != "available") {
     return false;
   }
-  return oneapi::tbb::this_task_arena::max_concurrency() >= kAutoTbbSimplifyMinConcurrency;
+  return cpu_thread_limit() >= static_cast<std::size_t>(kAutoTbbSimplifyMinConcurrency);
 #else
   return false;
 #endif
@@ -249,6 +373,13 @@ void note_tbb_kernel_use() noexcept {
   (void)registered;
 #endif
   g_tbb_used.store(true, std::memory_order_relaxed);
+  // Kernels can be reached from C++ without the Python compute-boundary check
+  // that validates WOLFGANG_NUM_THREADS, so a valid cap is applied here too;
+  // an invalid value is left to that check and to get_num_threads().
+  try {
+    apply_thread_cap_from_environment();
+  } catch (...) {
+  }
 }
 
 }  // namespace wolfgang

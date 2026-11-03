@@ -30,7 +30,7 @@ Quantum workloads routinely manipulate Hamiltonians containing thousands or mill
 
 ## Installation
 
-The default distribution is a portable CPU package. Release CPU wheels built after `v0.2.3` bundle oneTBB, so large `simplify` and pairwise commutation calls run in parallel on hosts with at least four oneTBB threads (no published release includes it yet); source builds use oneTBB when CMake finds it. `WOLFGANG_CPU_BACKEND=scalar` selects the portable path. When a package-index release is available for your platform:
+The default distribution is a portable CPU package. Release CPU wheels built after `v0.2.3` bundle oneTBB, so large `simplify` and pairwise commutation calls run in parallel on hosts with at least four oneTBB threads (no published release includes it yet); source builds use oneTBB when CMake finds it. `wolfgang_quantum.set_num_threads(n)` or `WOLFGANG_NUM_THREADS=n` caps its threads (useful inside CPU quotas), and `WOLFGANG_CPU_BACKEND=scalar` selects the portable path. When a package-index release is available for your platform:
 
 ```bash
 python -m pip install wolfgang-quantum

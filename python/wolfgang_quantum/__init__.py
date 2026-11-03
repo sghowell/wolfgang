@@ -9,7 +9,8 @@ commuting groups, plus scalar CPU statevector and diagonal Z-count expectation
 kernels. CPU backend dispatch metadata, forced scalar execution, and optional
 oneTBB/SIMD selectors for covered commutation and grouping kernels are
 available through the `WOLFGANG_CPU_BACKEND` environment variable when the
-optimized paths are compiled and runtime-available.
+optimized paths are compiled and runtime-available. `set_num_threads()` and the
+`WOLFGANG_NUM_THREADS` environment variable cap the oneTBB threads.
 
 CUDA source builds can additionally expose explicit host/device transfers through
 `PauliSum.to_device()` and `DevicePauliSum.to_host()`, plus CUDA simplify,
@@ -38,10 +39,12 @@ from ._wolfgang_core import (
     PauliSum,
     cuda_available,
     cuda_devices,
+    get_num_threads,
     hip_available,
     hip_devices,
     metal_available,
     metal_devices,
+    set_num_threads,
 )
 from .cudaq import _install_pauli_sum_cudaq_methods
 from .measurement import _install_pauli_sum_measurement_methods
@@ -66,9 +69,11 @@ __all__ = [
     "capabilities",
     "cuda_available",
     "cuda_devices",
+    "get_num_threads",
     "hip_available",
     "hip_devices",
     "measurement",
     "metal_available",
     "metal_devices",
+    "set_num_threads",
 ]

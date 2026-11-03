@@ -14,6 +14,29 @@ per-backend records. Convenience helpers such as `cuda_available()` and
 Capability discovery reports what this build and runtime can use; it does not
 upgrade an experimental accelerator backend into a supported wheel target.
 
+## CPU threads
+
+`set_num_threads(n)` caps the threads Wolfgang's parallel CPU kernels (oneTBB)
+may use, for the whole process. `get_num_threads()` returns the current count:
+oneTBB's default (hardware threads, respecting the process affinity mask), the
+cap if it is lower, or 1 in builds without oneTBB. The `WOLFGANG_NUM_THREADS`
+environment variable sets the same cap without code changes; it is read the
+first time Wolfgang needs it, a later `set_num_threads()` replaces it, and a
+value that is not a positive integer raises `ValueError`. Results do not
+depend on the cap.
+
+```python
+import wolfgang_quantum
+
+wolfgang_quantum.set_num_threads(4)  # e.g. one of four worker processes on 16 cores
+assert wolfgang_quantum.get_num_threads() <= 4
+```
+
+Below four threads, auto dispatch uses the scalar or SIMD kernels instead of
+oneTBB, so `set_num_threads(1)` gives single-threaded execution, and a process
+pool with fewer than four threads per process runs those kernels. A cap at or
+above oneTBB's default concurrency leaves oneTBB uncapped.
+
 ## `PauliSum`
 
 Host-owned sparse Pauli operator.

@@ -57,9 +57,24 @@ void ensure_cpu_backend_supports_simplify();
 // selector environment variable, so small simplify calls stay cheap.
 [[nodiscard]] bool cpu_backend_selects_tbb_simplify(std::size_t num_terms);
 
-// True when oneTBB is available and has at least kAutoTbbSimplifyMinConcurrency
-// threads, the floor below which auto dispatch prefers scalar or SIMD kernels.
+// True when oneTBB is available and may use at least
+// kAutoTbbSimplifyMinConcurrency threads (cpu_thread_limit()), the floor below
+// which auto dispatch prefers scalar or SIMD kernels.
 [[nodiscard]] bool tbb_auto_has_min_concurrency();
+
+// Threads the oneTBB CPU kernels may use: the smaller of oneTBB's default
+// concurrency (hardware threads, respecting the process affinity mask) and any
+// cap from WOLFGANG_NUM_THREADS or set_cpu_thread_limit(). 1 when oneTBB is not
+// compiled or not usable in this process (for example after fork()). Throws
+// std::invalid_argument when WOLFGANG_NUM_THREADS is set but is not a positive
+// integer.
+[[nodiscard]] std::size_t cpu_thread_limit();
+
+// Caps the oneTBB CPU kernels at `threads` for the whole process, replacing any
+// earlier cap, including one from WOLFGANG_NUM_THREADS. Throws
+// std::invalid_argument when threads is 0. Without a usable oneTBB the cap is
+// recorded but has nothing to limit.
+void set_cpu_thread_limit(std::size_t threads);
 
 // oneTBB does not support fork(): a child forked after the parent ran a oneTBB
 // kernel can crash or hang inside oneTBB (macOS libdispatch traps outright).

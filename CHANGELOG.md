@@ -11,6 +11,14 @@ Next version: TBD
   vendored DLPack header (version and SHA-256) alongside the Python
   dependencies, and the release workflow validates it against the CycloneDX
   schema (`scripts/sbom_bundled_components.py`).
+- `wolfgang_quantum.set_num_threads(n)` and the `WOLFGANG_NUM_THREADS`
+  environment variable cap the threads Wolfgang's oneTBB CPU kernels use, for
+  the whole process; `get_num_threads()` reports the current count. Auto
+  dispatch's four-thread oneTBB floor now counts the capped threads, so a cap
+  below four runs the scalar or SIMD kernels. Inside a 4-CPU quota on a
+  26-vCPU host, a cap of 4 made simplify 1.25x faster on average and its
+  90th-percentile time 2.6x shorter, at the cost of a slower median call
+  (`docs/benchmarks/reports/cpu_threads_2026-11-03.md`).
 - CUDA and HIP: `DevicePauliSum.to_host()` stages its copies through pinned
   buffers borrowed from a small process-wide pool, waiting for the GPU once
   per batch instead of once per buffer (HIP stages only transfers up to
