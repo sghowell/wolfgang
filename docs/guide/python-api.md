@@ -40,7 +40,11 @@ Core operations:
 - `op == other` (structural, unhashable) and `op.equiv(other, atol)` (mathematical)
 - `commutes_with(rhs)`
 - `group_commuting()`
-- statevector and counts expectation values
+- statevector tools: `expectation_statevector`, `variance_statevector` and
+  `apply_statevector` (single states or 2-D batches), and `to_matrix(sparse=False)`
+- counts estimation: `expectation_z_counts(counts)` and
+  `estimate_counts(counts, basis=None)` returning `(mean, standard_error)`
+- measurement planning: `qwc_basis()` and `diagonalizing_clifford()`
 - `to_device(device=0, backend=None)` in a matching accelerator source build
 
 Packed arrays avoid string conversion at the Python boundary:
@@ -60,6 +64,32 @@ assert generator.equiv((h @ zz - zz @ h).simplify())
 ```
 
 The precise rules are in the [semantic contracts](../architecture/semantic_contracts.md).
+
+## Measuring grouped operators
+
+`wolfgang_quantum.measurement` turns commuting groups into circuits and turns
+counts back into estimates:
+
+```python
+from wolfgang_quantum import PauliSum
+from wolfgang_quantum.measurement import allocate_shots
+
+h = PauliSum.from_labels(["XX", "YY", "ZZ", "ZI"], [0.5, 0.5, 1.0, -0.3])
+groups = h.group_commuting(mode="full")
+shots = allocate_shots(groups, total_shots=10_000)
+
+for group, budget in zip(groups, shots):
+    gates, diagonal = group.diagonalizing_clifford()
+    print(budget, gates, diagonal.to_labels()[0])
+    # Run `gates`, measure every qubit in Z for `budget` shots, then:
+    #     mean, error = diagonal.estimate_counts(counts)
+```
+
+Qubit-wise commuting groups need only single-qubit rotations; pass
+`group.qwc_basis()` as `basis` to `group.estimate_counts` to skip building `D`.
+
+`measurement.to_qiskit_circuit(gates, num_qubits)` converts a gate list to a
+Qiskit circuit when Qiskit is installed.
 
 ## `DevicePauliSum`
 

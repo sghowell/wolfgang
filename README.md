@@ -49,6 +49,7 @@ Optional adapters are separate extras:
 ```bash
 python -m pip install ".[qiskit]"
 python -m pip install ".[openfermion]"
+python -m pip install ".[scipy]"        # sparse PauliSum.to_matrix(sparse=True)
 ```
 
 CUDA, ROCm/HIP, and Metal are opt-in source builds. They are **not** silently downloaded, and backend implementation does not imply that an accelerator wheel exists. Start with the [installation guide](docs/getting-started/installation.md) and [support matrix](docs/release/support_matrix.md).

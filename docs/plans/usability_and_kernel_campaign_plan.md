@@ -40,3 +40,4 @@ Slice 1 merged with H100 evidence:
 `docs/reviews/usability_kernel_campaign_2026-11-03.md`.
 
 Slices 2 and 3 merged: `docs/benchmarks/reports/host_api_2026-11-03.md`.
+Slices 4 and 5 merged (no speed claims; correctness-oracle evidence only).

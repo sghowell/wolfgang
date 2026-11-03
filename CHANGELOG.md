@@ -14,6 +14,15 @@ Next version: TBD
   two-word paths use stable sorts with no measured cost.
 - CUDA simplify no longer drops every term when a finite coefficient's
   magnitude overflows `DBL_MAX`; it now applies the CPU drop rule.
+- Add `apply_statevector`, `variance_statevector` (of the normalized state),
+  batched 2-D input for `expectation_statevector`, and `to_matrix` (dense, or
+  SciPy CSR with `sparse=True` and the new `scipy` extra) with explicit size
+  guards. Behavior change: a 2-D `psi` used to raise `ValueError`; it is now a
+  batch, and the stubs return `complex | ndarray`.
+- Add `estimate_counts(counts, basis)` for mean and standard error in any local
+  measurement basis, and `wolfgang_quantum.measurement` with `qwc_basis`,
+  `diagonalizing_clifford`, variance-weighted `allocate_shots` and
+  `to_qiskit_circuit`.
 - Add `PauliSum.from_arrays` / `to_arrays` for packed `uint64` mask and
   `complex128` coefficient exchange; `to_arrays` returns read-only zero-copy
   views. `from_labels` converts NumPy coefficient arrays in bulk.

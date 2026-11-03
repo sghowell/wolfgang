@@ -126,6 +126,7 @@ jobs:
           "numpy==2.3.3"
           "pytest==8.4.2"
           "hypothesis==6.138.15"
+          "scipy==1.16.2"
 
       - name: Test standalone native core under sanitizers
         env:
@@ -175,4 +176,7 @@ jobs:
             tests/test_phase4_simplify.py \
             tests/test_phase5_arithmetic.py \
             tests/test_phase6_commutation_grouping.py \
-            tests/test_phase8_expectation.py
+            tests/test_phase8_expectation.py \
+            tests/test_host_array_io_and_algebra.py \
+            tests/test_statevector_tools.py \
+            tests/test_measurement.py

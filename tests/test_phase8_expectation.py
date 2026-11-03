@@ -122,7 +122,7 @@ def test_expectation_statevector_rejects_invalid_inputs() -> None:
     op = PauliSum.from_labels(["ZI"], [1.0])
 
     with pytest.raises(ValueError, match="1-dimensional"):
-        op.expectation_statevector(np.ones((2, 2), dtype=np.complex128))
+        op.expectation_statevector(np.ones((2, 2, 4), dtype=np.complex128))
 
     with pytest.raises(TypeError, match="complex64 or complex128"):
         op.expectation_statevector(np.ones(4, dtype=np.float64))

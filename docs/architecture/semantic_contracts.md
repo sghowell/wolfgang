@@ -308,7 +308,37 @@ psi dtype complex64 or complex128
 num_qubits <= 63 for the initial CPU implementation
 ```
 
-The return type is Python `complex`.
+A 1-D `psi` returns Python `complex`. A C-contiguous 2-D `psi` of shape
+`(batch, 2 ** num_qubits)` is a batch of states and returns a `complex128` array
+with one value per row. Other dimensions raise `ValueError`.
+
+## Statevector Tools
+
+All statevector tools use the dense-index convention: bit `q` of a basis index is
+qubit `q`, so a Pauli string with masks `(x, z)` maps `|b>` to
+`i^popcount(x & z) * (-1)^popcount(z & b) |b ^ x>`. They accept the same 1-D or
+batched `complex64`/`complex128` inputs as `expectation_statevector` and require
+`num_qubits <= 63`.
+
+```text
+apply_statevector(psi)    -> H @ psi as a new complex128 array of psi's shape
+variance_statevector(psi) -> variance of H in psi / ||psi||: <H^dagger H>/N - |<H>|^2/N^2, N = <psi|psi>, clamped at 0
+to_matrix()               -> dense complex128 (2^n, 2^n) array, entry [r, c] = <r|H|c>
+to_matrix(sparse=True)    -> SciPy CSR matrix with sorted column indices
+```
+
+`apply_statevector` and `expectation_statevector` use `psi` as given;
+`variance_statevector` normalizes and raises `ValueError` for a zero state.
+Batched inputs are validated even when empty. `DevicePauliSum.expectation_statevector`
+accepts only 1-D states. `to_matrix(max_entries=2**24)` raises `ValueError`
+before allocating when `4 ** num_qubits` (dense) or
+`2 ** num_qubits * distinct_x_masks + 2 ** num_qubits + 1` (sparse entries plus
+row pointers) exceeds `max_entries`. The sparse
+form omits entries that cancel to exactly zero. `to_matrix(sparse=True)` raises
+`ImportError` with an installation hint when SciPy is absent; SciPy is never
+imported at package import.
+
+## Counts Estimation
 
 `expectation_z_counts(counts)` initially accepts Python dictionaries mapping dense bitstrings to counts. Dense bitstrings use the same display convention as dense labels: the right-most bit is qubit 0.
 
@@ -318,6 +348,52 @@ finite counts do not overflow the total. Rescaling all weights by the same
 positive factor preserves the result within floating-point rounding.
 
 Only diagonal terms are accepted by `expectation_z_counts()` in the initial implementation. If any term has nonzero `x` mask, raise `ValueError`.
+
+`estimate_counts(counts, basis=None)` generalizes this to local measurement
+bases. `basis` is a dense-label-order string of `X`, `Y`, `Z` or `I`, one per
+qubit (right-most is qubit 0), naming the basis each qubit was measured in;
+`None` means all `Z`. Each term must act on every qubit as `I` or as that
+qubit's basis letter, otherwise `ValueError`. A term's eigenvalue on outcome `b`
+is `(-1)^popcount(support & b)`: outcome bit 0 is the +1 eigenstate of the
+qubit's basis Pauli, which is what the standard rotations produce (`h` for X,
+`sdg` then `h` for Y, nothing for Z). It returns `(mean, standard_error)`:
+
+```text
+O(b)            = sum_t c_t * (-1)^popcount(support_t & b)
+mean            = sum_b n_b O(b) / N                     (N = total shots)
+standard_error  = sqrt(s^2 / N), s^2 = sum_b n_b |O(b) - mean|^2 / (N - 1)
+                = sqrt(population variance / (N - 1))
+```
+
+Counts are raw shot counts; `standard_error` is NaN when `N <= 1`.
+
+## Measurement Planning
+
+`wolfgang_quantum.measurement` turns commuting groups into runnable
+measurements. Gates are `(name, qubits)` tuples, names `h`, `s`, `sdg`, `cx`
+(control first) and `cz`, in application order, using Wolfgang qubit indices.
+
+```text
+qwc_basis(group)              -> basis string for a qubit-wise commuting group; ValueError otherwise
+diagonalizing_clifford(group) -> (gates U, Z-only PauliSum D) with D = U group U^dagger
+allocate_shots(groups, total, variances=None) -> integer shots per group summing to total
+to_qiskit_circuit(gates, n)   -> Qiskit QuantumCircuit (imports Qiskit lazily)
+```
+
+`qwc_basis` and `diagonalizing_clifford` are also `PauliSum` methods.
+`diagonalizing_clifford` uses only `h` and `sdg` for qubit-wise commuting groups
+and raises `ValueError` when terms do not all commute. `D` keeps the group's term
+order, with each coefficient multiplied by the sign picked up under
+conjugation, so `<psi|group|psi> = <U psi|D|U psi>` and
+`D.estimate_counts(counts)` estimates the group from Z-basis counts of `U psi`.
+
+`allocate_shots` minimizes the variance of the summed estimate,
+`sum_g sigma_g^2 / N_g`, by choosing `N_g` proportional to `sigma_g`. Without
+`variances`, `sigma_g` is bounded by the sum of `|c|` over the group's
+non-identity terms, so identity-only groups get zero shots; with `variances`,
+groups with zero variance get zero shots. Every group with nonzero weight gets
+at least one shot when `total` allows. Rounding uses largest remainders, so
+counts approximate the continuous optimum.
 
 ## Error Policy
 

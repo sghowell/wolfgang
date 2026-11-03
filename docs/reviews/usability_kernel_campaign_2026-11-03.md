@@ -79,3 +79,45 @@ branch is merged with a merge commit so the benchmark revisions stay reachable.
   - x86_64 commutator rows predate the counting pass.
 
 Evidence: [host API report](../benchmarks/reports/host_api_2026-11-03.md).
+
+## Slices 4 and 5: statevector tools and measurement workflow
+
+Branch `codex/statevector-and-measurement`, commits `1a12a7d`..`0519f97`.
+
+- Reviewer: independent agent (semantic/API, C++ safety and testing roles),
+  read-only. It checked against Qiskit oracles:
+  - `to_matrix`, `apply_statevector` and `variance_statevector` against
+    `SparsePauliOp.to_matrix`;
+  - Clifford synthesis on 300 random commuting groups of 1-8 qubits and 20
+    groups of 64-79 qubits, with 0 mismatches;
+  - Y-basis counts at 400k shots.
+- Findings: P0 0, P1 0, P2 2, P3 10.
+- P2 resolutions:
+  - Sparse export budgets its `2^n + 1` row pointers, so an empty operator can
+    no longer allocate an unbounded index array.
+  - The CI sanitizer job now runs the new test files with pinned SciPy, and
+    native contracts cover `apply_statevector`, the dense and CSR matrices and
+    `estimate_counts`.
+- P3 resolutions:
+  - the standard error is computed as `sqrt(pop / (N - 1))`, so huge counts no
+    longer form inf / inf;
+  - empty batches are validated;
+  - error messages are generic;
+  - the basis-rotation convention is documented and tested for X and Y and for
+    the `qwc_basis` estimate path;
+  - wide-group, identity, duplicate, empty-group and SciPy import-isolation
+    tests added;
+  - README and dependency-policy entries for the `scipy` extra;
+  - the SciPy ImportError keeps its cause;
+  - changelog wording and the documented 2-D behavior change;
+  - variance uses the normalized state;
+  - term grouping happens once per batch, and results are written into NumPy
+    buffers directly.
+- Validation after fixes (Apple M4 Pro): `python scripts/validate.py --profile core`
+  passed (670 Python tests, native CTest); the quality profile passed with CI's
+  pinned tools.
+- Residual risk:
+  - statevector tools are scalar CPU kernels of O(terms * 2^n), with no SIMD
+    or oneTBB variant;
+  - `scipy>=1.10` is a declared lower bound, while CI tests a newer pinned
+    version.

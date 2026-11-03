@@ -9,9 +9,11 @@
 #include <complex>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 #include <span>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -167,17 +169,18 @@ void validate_diagonal_terms(const PauliSum& op) {
 std::vector<std::uint64_t> pack_count_bitstrings(
     const std::vector<std::string>& bitstrings,
     std::size_t num_qubits,
-    std::size_t words) {
+    std::size_t words,
+    const std::string& what = "Z-count") {
   std::vector<std::uint64_t> packed(detail::checked_product(bitstrings.size(), words, "counts"), 0);
   for (std::size_t row = 0; row < bitstrings.size(); ++row) {
     const std::string& bitstring = bitstrings[row];
     if (bitstring.size() != num_qubits) {
-      throw std::invalid_argument("Z-count bitstring length must equal num_qubits");
+      throw std::invalid_argument(what + " bitstring length must equal num_qubits");
     }
     for (std::size_t char_index = 0; char_index < bitstring.size(); ++char_index) {
       const char bit = bitstring[char_index];
       if (bit != '0' && bit != '1') {
-        throw std::invalid_argument("Z-count bitstrings may contain only 0 or 1");
+        throw std::invalid_argument(what + " bitstrings may contain only 0 or 1");
       }
       if (bit == '1') {
         const std::size_t qubit = num_qubits - 1 - char_index;
@@ -193,19 +196,21 @@ struct NormalizedCounts {
   double total = 0.0;
 };
 
-NormalizedCounts normalize_counts(const std::vector<double>& counts) {
+NormalizedCounts normalize_counts(
+    const std::vector<double>& counts,
+    const std::string& what = "Z-count") {
   double maximum = 0.0;
   for (double count : counts) {
     if (count < 0.0) {
-      throw std::invalid_argument("Z-count values must be non-negative");
+      throw std::invalid_argument(what + " values must be non-negative");
     }
     if (!std::isfinite(count)) {
-      throw std::invalid_argument("Z-count values must be finite");
+      throw std::invalid_argument(what + " values must be finite");
     }
     maximum = std::max(maximum, count);
   }
   if (maximum == 0.0) {
-    throw std::invalid_argument("Z-count total count must be positive");
+    throw std::invalid_argument(what + " total count must be positive");
   }
   // A common positive rescaling preserves expectations while bounding both
   // the total and the signed per-term numerator by the number of entries.
@@ -259,6 +264,94 @@ std::complex<double> PauliSum::expectation_z_counts(
     result += coeffs_[term] * (weighted_sum / normalized.total);
   }
   return result;
+}
+
+PauliSum::CountsEstimate PauliSum::estimate_counts(
+    const std::vector<std::string>& bitstrings,
+    const std::vector<double>& counts,
+    std::string_view basis) const {
+  if (bitstrings.size() != counts.size()) {
+    throw std::invalid_argument("count bitstring and count arrays must have the same length");
+  }
+  if (!basis.empty() && basis.size() != num_qubits_) {
+    throw std::invalid_argument("measurement basis length must equal num_qubits");
+  }
+
+  // Basis masks use the packed convention: X sets x, Z sets z, Y sets both.
+  std::vector<std::uint64_t> basis_x(words_, 0);
+  std::vector<std::uint64_t> basis_z(words_, 0);
+  for (std::size_t qubit = 0; qubit < num_qubits_; ++qubit) {
+    const char letter = basis.empty() ? 'Z' : basis[num_qubits_ - 1 - qubit];
+    const std::uint64_t bit = std::uint64_t{1} << (qubit % 64);
+    if (letter == 'X' || letter == 'Y') {
+      basis_x[qubit / 64] |= bit;
+    }
+    if (letter == 'Z' || letter == 'Y') {
+      basis_z[qubit / 64] |= bit;
+    }
+    if (letter != 'X' && letter != 'Y' && letter != 'Z' && letter != 'I') {
+      throw std::invalid_argument("measurement basis may contain only X, Y, Z or I");
+    }
+  }
+
+  // A term is measurable in the basis when, on its support, it matches the
+  // basis letter exactly; its outcome eigenvalue then depends only on support.
+  std::vector<std::uint64_t> support(detail::checked_product(num_terms_, words_, "support"), 0);
+  for (std::size_t term = 0; term < num_terms_; ++term) {
+    for (std::size_t word = 0; word < words_; ++word) {
+      const std::size_t index = term * words_ + word;
+      const std::uint64_t mask = x_[index] | z_[index];
+      if (x_[index] != (basis_x[word] & mask) || z_[index] != (basis_z[word] & mask)) {
+        throw std::invalid_argument(
+            "every term must act as I or as the measurement basis letter on each qubit");
+      }
+      support[index] = mask;
+    }
+  }
+
+  const NormalizedCounts normalized = normalize_counts(counts, "count");
+  double shots = 0.0;
+  for (double count : counts) {
+    shots += count;
+  }
+  const std::vector<std::uint64_t> packed =
+      pack_count_bitstrings(bitstrings, num_qubits_, words_, "count");
+
+  // Per-outcome estimator O(b) = sum_t c_t (-1)^popcount(support_t & b).
+  std::vector<std::complex<double>> outcome_values(bitstrings.size(), {0.0, 0.0});
+  for (std::size_t row = 0; row < bitstrings.size(); ++row) {
+    std::complex<double> value{0.0, 0.0};
+    for (std::size_t term = 0; term < num_terms_; ++term) {
+      bool odd = false;
+      for (std::size_t word = 0; word < words_; ++word) {
+        odd ^= (std::popcount(support[term * words_ + word] & packed[row * words_ + word]) & 1U) != 0;
+      }
+      value += odd ? -coeffs_[term] : coeffs_[term];
+    }
+    outcome_values[row] = value;
+  }
+
+  CountsEstimate estimate;
+  estimate.shots = shots;
+  for (std::size_t row = 0; row < outcome_values.size(); ++row) {
+    estimate.mean += normalized.values[row] * outcome_values[row];
+  }
+  estimate.mean /= normalized.total;
+  if (!(shots > 1.0)) {
+    estimate.standard_error = std::numeric_limits<double>::quiet_NaN();
+    return estimate;
+  }
+  double weighted_square_deviation = 0.0;
+  for (std::size_t row = 0; row < outcome_values.size(); ++row) {
+    weighted_square_deviation += normalized.values[row] * std::norm(outcome_values[row] - estimate.mean);
+  }
+  // Normalized weights share one scale factor, so the weighted mean square
+  // deviation equals the per-shot population variance. The unbiased sample
+  // variance over N is pop * N / (N - 1); dividing by N for the standard error
+  // leaves pop / (N - 1), which never forms inf / inf for huge counts.
+  const double population_variance = weighted_square_deviation / normalized.total;
+  estimate.standard_error = std::sqrt(population_variance / (shots - 1.0));
+  return estimate;
 }
 
 }  // namespace wolfgang

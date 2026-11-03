@@ -342,6 +342,7 @@ set(WOLFGANG_CORE_SOURCES
   src/commute.cpp
   src/cpu_backend.cpp
   src/expectation.cpp
+  src/statevector.cpp
   src/export.cpp
   src/grouping.cpp
   src/multiply.cpp
