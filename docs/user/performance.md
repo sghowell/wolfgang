@@ -246,6 +246,14 @@ a `multiprocessing` fork pool), Wolfgang runs the bit-identical scalar or SIMD
 kernels instead, and `WOLFGANG_CPU_BACKEND=tbb` raises. Use the `spawn` or
 `forkserver` start method to keep oneTBB in workers.
 
+By default oneTBB uses every hardware thread the process may run on. When
+several processes share a machine (a process pool, MPI ranks, a CPU-limited
+container whose quota is smaller than its visible cores), cap each one with
+`wolfgang_quantum.set_num_threads(n)` or `WOLFGANG_NUM_THREADS=n` so the
+processes do not oversubscribe the cores; `get_num_threads()` reports the
+current count. A cap below four threads makes auto dispatch use the scalar or
+SIMD kernels.
+
 Current covered optimized kernels:
 
 ```text

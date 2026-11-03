@@ -20,6 +20,7 @@ help(wolfgang_quantum.PauliSum)
 - `wolfgang_quantum.cuda_available` / `wolfgang_quantum.cuda_devices`
 - `wolfgang_quantum.hip_available` / `wolfgang_quantum.hip_devices`
 - `wolfgang_quantum.metal_available` / `wolfgang_quantum.metal_devices`
+- `wolfgang_quantum.set_num_threads` / `wolfgang_quantum.get_num_threads`
 - `wolfgang_quantum.__version__`
 
 Optional adapter methods are available through the base class with lazy dependency checks.
