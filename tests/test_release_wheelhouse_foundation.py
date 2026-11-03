@@ -435,6 +435,7 @@ def test_bundled_onetbb_build_is_pinned_to_a_commit() -> None:
     assert 'git -C "${work}/src" rev-parse HEAD' in script
     assert "-DTBB_TEST=OFF" in script and "-DTBBMALLOC_BUILD=OFF" in script
     assert "LICENSE.txt" in script and "third-party-programs.txt" in script
+    assert 'cmp -s "${work}/src/${notice}" "${notices}/${notice}"' in script
 
 
 def test_wheel_smoke_requires_bundled_onetbb_matching_scalar() -> None:
@@ -444,18 +445,35 @@ def test_wheel_smoke_requires_bundled_onetbb_matching_scalar() -> None:
         "available_cpu_backends": ["scalar", "tbb"],
         "oneTBB_version": "2022.3.0",
     }
+    notices = lambda: [  # noqa: E731
+        "wolfgang_quantum-0.2.3.dist-info/licenses/third_party/onetbb/LICENSE.txt",
+        "wolfgang_quantum-0.2.3.dist-info/licenses/third_party/onetbb/third-party-programs.txt",
+    ]
+    forked = lambda: True  # noqa: E731
 
     def matching(backend: str) -> dict[str, object]:
-        return {"backend": backend, "terms": 10000, "digest": "same"}
+        return {"backend": backend, "digests": ["a", "b", "c"]}
 
-    assert wheel_smoke.check_bundled_onetbb(info, matching)["tbb_simplify_matches_scalar"] is True
+    summary = wheel_smoke.check_bundled_onetbb(info, matching, notices, forked)
+    assert summary["tbb_simplify_matches_scalar"] is True and summary["fork_after_tbb_checked"] is True
 
     def diverging(backend: str) -> dict[str, object]:
-        return {"backend": backend, "terms": 10000, "digest": backend}
+        return {"backend": backend, "digests": [backend]}
 
     with pytest.raises(AssertionError):
-        wheel_smoke.check_bundled_onetbb(info, diverging)
+        wheel_smoke.check_bundled_onetbb(info, diverging, notices, forked)
     with pytest.raises(AssertionError):
-        wheel_smoke.check_bundled_onetbb({**info, "compiled_cpu_backends": ["scalar"]}, matching)
+        wheel_smoke.check_bundled_onetbb({**info, "compiled_cpu_backends": ["scalar"]}, matching, notices, forked)
     with pytest.raises(AssertionError):
-        wheel_smoke.check_bundled_onetbb({**info, "oneTBB_version": "not_available"}, matching)
+        wheel_smoke.check_bundled_onetbb({**info, "oneTBB_version": "2022.2.0"}, matching, notices, forked)
+    with pytest.raises(AssertionError):
+        wheel_smoke.check_bundled_onetbb(info, matching, lambda: notices()[:1], forked)
+
+
+def test_bundled_onetbb_notices_are_committed_and_listed() -> None:
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert 'license = "MIT AND Apache-2.0 AND BSD-3-Clause"' in pyproject
+    for notice in ("third_party/onetbb/LICENSE.txt", "third_party/onetbb/third-party-programs.txt"):
+        assert (ROOT / notice).is_file()
+        assert f'"{notice}"' in pyproject
+    assert 'MACOSX_DEPLOYMENT_TARGET = "11.0"' in pyproject
