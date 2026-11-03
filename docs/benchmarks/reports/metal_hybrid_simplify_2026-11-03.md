@@ -164,14 +164,17 @@ measurements motivated the gather kernel and the in-place output.
 - Measured against scalar CPU simplify only. A Metal source build on a Mac
   with oneTBB (`WOLFGANG_ENABLE_TBB=auto` finds Homebrew's) runs parallel CPU
   simplify from 8,192 terms in both the bridge and CPU paths, while the
-  hybrid's CPU reduction stays single-threaded. The threshold and speedups are
-  unmeasured there. This shares the Apple Silicon oneTBB deferral in the plan.
+  hybrid's CPU reduction stayed single-threaded in this report (it is parallel
+  from 2^20 terms since `metal_followups_2026-11-03.md`). The threshold and
+  speedups are unmeasured there. This shares the Apple Silicon oneTBB deferral in the plan.
 - One-word operators only. Wider operators use the host bridge.
 - The reduction runs on the CPU, so the public capability record for Metal
   `simplify` stays `host_bridge`.
 - One command buffer covers the whole sort. Nothing above 1,048,577 terms was
-  measured; very large inputs could approach the GPU command-buffer timeout on
-  a Mac driving a display.
+  measured here; very large inputs could approach the GPU command-buffer
+  timeout on a Mac driving a display. Follow-up: `metal_followups_2026-11-03.md`
+  ran 4M, 16M and 64M terms without a timeout and splits large sorts across
+  command buffers.
 - GPU clocks ramp with load. Medians are from interleaved variants, so the GPU
   idles while the CPU variants run, which is representative of mixed workloads
   but slower than back-to-back GPU calls.

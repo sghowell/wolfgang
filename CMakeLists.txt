@@ -184,6 +184,7 @@ if(WOLFGANG_ENABLE_HIP)
 endif()
 
 set(WOLFGANG_BUILD_METAL_ENABLED 0)
+set(WOLFGANG_BUILD_METAL_PRECOMPILED_KERNELS 0)
 set(WOLFGANG_CMAKE_OBJCXX_COMPILER_ID "not_available")
 set(WOLFGANG_CMAKE_OBJCXX_COMPILER_VERSION "not_available")
 set(WOLFGANG_CMAKE_OBJCXX_FLAGS "not_available")
@@ -471,6 +472,68 @@ if(WOLFGANG_BUILD_METAL_ENABLED)
     CONTENT "R\"wolfgang_metal(@WOLFGANG_SIMPLIFY_METAL_SOURCE@)wolfgang_metal\"\n"
     @ONLY)
   target_include_directories(wolfgang_core PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated")
+  # The hybrid sort tile size, shared by the host code and both kernel paths.
+  set(WOLFGANG_HYBRID_SORT_TILE 1024)
+  target_compile_definitions(wolfgang_core PRIVATE WOLFGANG_HYBRID_SORT_TILE=${WOLFGANG_HYBRID_SORT_TILE})
+  # Also precompile the kernels into an embedded .metallib when Xcode's Metal
+  # compiler works here (it is a separate download on recent Xcode). Loading
+  # the library skips the run-time source compile on each process's first
+  # hybrid simplify; without the compiler the embedded source is used.
+  # A trial compile of the real kernels (not just `metal --version`) decides,
+  # so a toolchain that answers but cannot compile falls back cleanly.
+  find_program(WOLFGANG_XCRUN xcrun)
+  set(WOLFGANG_METAL_PRECOMPILE_RESULT 1)
+  set(WOLFGANG_METAL_TARGET_FLAGS "")
+  if(CMAKE_OSX_DEPLOYMENT_TARGET)
+    set(WOLFGANG_METAL_TARGET_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+  endif()
+  if(WOLFGANG_XCRUN)
+    execute_process(
+      COMMAND "${WOLFGANG_XCRUN}" -sdk macosx metal -c ${WOLFGANG_METAL_TARGET_FLAGS}
+              -DWOLFGANG_HYBRID_SORT_TILE=${WOLFGANG_HYBRID_SORT_TILE}
+              "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/kernels/simplify.metal"
+              -o "${CMAKE_CURRENT_BINARY_DIR}/wolfgang_metal_probe.air"
+      RESULT_VARIABLE WOLFGANG_METAL_PRECOMPILE_RESULT
+      OUTPUT_QUIET ERROR_QUIET)
+    if(WOLFGANG_METAL_PRECOMPILE_RESULT EQUAL 0)
+      execute_process(
+        COMMAND "${WOLFGANG_XCRUN}" -sdk macosx -f metallib
+        RESULT_VARIABLE WOLFGANG_METAL_PRECOMPILE_RESULT
+        OUTPUT_QUIET ERROR_QUIET)
+    endif()
+  endif()
+  if(WOLFGANG_METAL_PRECOMPILE_RESULT EQUAL 0)
+    set(WOLFGANG_BUILD_METAL_PRECOMPILED_KERNELS 1)
+    set(WOLFGANG_SIMPLIFY_METAL_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated/metal")
+    add_custom_command(
+      OUTPUT "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.metallib"
+      COMMAND "${WOLFGANG_XCRUN}" -sdk macosx metal -c ${WOLFGANG_METAL_TARGET_FLAGS}
+              -DWOLFGANG_HYBRID_SORT_TILE=${WOLFGANG_HYBRID_SORT_TILE}
+              "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/kernels/simplify.metal"
+              -o "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.air"
+      COMMAND "${WOLFGANG_XCRUN}" -sdk macosx metallib "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.air"
+              -o "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.metallib"
+      BYPRODUCTS "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.air"
+      DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/kernels/simplify.metal"
+      VERBATIM)
+    add_custom_command(
+      OUTPUT "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify_metallib.inc"
+      COMMAND "${CMAKE_COMMAND}" -DINPUT=${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.metallib
+              -DOUTPUT=${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify_metallib.inc
+              -P "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/embed_binary.cmake"
+      DEPENDS "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.metallib"
+              "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/embed_binary.cmake"
+      VERBATIM)
+    target_sources(wolfgang_core PRIVATE "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify_metallib.inc")
+    set_source_files_properties(
+      "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify_metallib.inc" PROPERTIES HEADER_FILE_ONLY ON)
+    set_source_files_properties(
+      src/metal/simplify_metal.mm
+      PROPERTIES OBJECT_DEPENDS "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify_metallib.inc")
+    message(STATUS "Wolfgang: Metal simplify kernels are precompiled into the extension")
+  else()
+    message(STATUS "Wolfgang: Metal compiler unavailable; simplify kernels compile at run time")
+  endif()
 endif()
 if(WOLFGANG_BUILD_TBB_ENABLED)
   target_link_libraries(wolfgang_core PRIVATE TBB::tbb)
@@ -510,6 +573,7 @@ target_compile_definitions(
     WOLFGANG_BUILD_HIP_ENABLED=${WOLFGANG_BUILD_HIP_ENABLED}
     WOLFGANG_BUILD_HIP_ARCHITECTURES="${WOLFGANG_BUILD_HIP_ARCHITECTURES}"
     WOLFGANG_BUILD_METAL_ENABLED=${WOLFGANG_BUILD_METAL_ENABLED}
+    WOLFGANG_BUILD_METAL_PRECOMPILED_KERNELS=${WOLFGANG_BUILD_METAL_PRECOMPILED_KERNELS}
     WOLFGANG_BUILD_NATIVE_ENABLED=0
     WOLFGANG_BUILD_CPU_BACKEND="scalar"
     WOLFGANG_BUILD_TBB_ENABLED=${WOLFGANG_BUILD_TBB_ENABLED}

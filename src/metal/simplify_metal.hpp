@@ -73,4 +73,9 @@ struct MetalSimplifyCandidateResult {
 // which path a call took (both paths return identical results).
 [[nodiscard]] std::uint64_t hybrid_simplify_runs_for_testing() noexcept;
 
+// "precompiled", "runtime_source" or "not_loaded": which simplify kernel
+// library this process actually loaded (a rejected precompiled library falls
+// back to the source).
+[[nodiscard]] const char* simplify_library_kind_for_testing() noexcept;
+
 }  // namespace wolfgang::metal_detail

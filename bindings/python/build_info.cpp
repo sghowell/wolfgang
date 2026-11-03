@@ -140,6 +140,11 @@ void bind_build_info(nb::module_& module) {
           metal_kernels.append("benchmark_simplify_primitives");
         }
         info["metal_kernels"] = metal_kernels;
+        // Whether the Metal simplify kernels were precompiled into the
+        // extension (a .metallib) or compile from embedded source at run time.
+        info["metal_simplify_kernels"] = !WOLFGANG_BUILD_METAL_ENABLED
+            ? "not_available"
+            : (WOLFGANG_BUILD_METAL_PRECOMPILED_KERNELS ? "precompiled" : "runtime_source");
 
         nb::dict compiler_build_config;
         compiler_build_config["CMAKE_CXX_COMPILER_ID"] =

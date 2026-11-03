@@ -4,12 +4,15 @@
 
 #include "detail/simplify_numeric.hpp"
 
+#include <dispatch/dispatch.h>
+
 #include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <cmath>
 #include <complex>
 #include <cstdint>
+#include <cstdlib>
 #include <cstring>
 #include <limits>
 #include <memory>
@@ -17,6 +20,8 @@
 #include <new>
 #include <stdexcept>
 #include <string>
+#include <thread>
+#include <vector>
 
 namespace wolfgang::metal_detail {
 namespace {
@@ -58,10 +63,24 @@ enum class SimplifyKernel {
   HybridGatherCoeffs,
 };
 
-// Must match kHybridSortTile in kernels/simplify.metal.
-constexpr std::uint32_t kHybridSortTile = 1024;
+// CMake defines the tile size once for the host code, the precompiled library
+// and the run-time compile options, so the kernels cannot disagree with it.
+#ifndef WOLFGANG_HYBRID_SORT_TILE
+#error "WOLFGANG_HYBRID_SORT_TILE must be defined by the build"
+#endif
+constexpr std::uint32_t kHybridSortTile = WOLFGANG_HYBRID_SORT_TILE;
 static_assert((kHybridSortTile & (kHybridSortTile - 1U)) == 0, "the tile must be a power of two");
 constexpr std::uint32_t kHybridSortTileThreads = kHybridSortTile / 2;
+// The CPU reduction runs in parallel from this many terms. On an M4 Pro it was
+// neutral below 2^20 terms (the GPU sort dominates there) and 1.15x and 1.3x
+// faster end to end at 4M and 16M terms. Each chunk gets at least
+// kHybridReduceChunkMinTerms.
+constexpr std::size_t kHybridParallelReduceMinTerms = std::size_t{1} << 20;
+constexpr std::size_t kHybridReduceChunkMinTerms = 16384;
+// Above this many sort positions each merge stage gets its own command buffer,
+// and above kHybridSingleStageMaxPositions each global step does too.
+constexpr std::uint32_t kHybridSingleCommandBufferMaxPositions = std::uint32_t{1} << 22;
+constexpr std::uint32_t kHybridSingleStageMaxPositions = std::uint32_t{1} << 26;
 
 struct HybridSortParams {
   std::uint32_t terms = 0;
@@ -129,13 +148,45 @@ constexpr const char kSimplifyKernelSource[] =
 #include "metal/simplify_kernel_source.inc"
     ;
 
-// Compiles the simplify kernels once per process; every pipeline comes from
-// this library. The caller holds the pipeline cache mutex.
+#if WOLFGANG_BUILD_METAL_PRECOMPILED_KERNELS
+// Built from kernels/simplify.metal at build time (see CMakeLists.txt).
+alignas(16) constexpr unsigned char kSimplifyMetallib[] = {
+#include "metal/simplify_metallib.inc"
+};
+#endif
+
+// Benchmark-only: WOLFGANG_METAL_BENCH_RUNTIME_KERNELS=1 skips the precompiled
+// library so first-call timings of both paths can come from one build.
+bool runtime_kernels_forced() {
+  const char* value = std::getenv("WOLFGANG_METAL_BENCH_RUNTIME_KERNELS");
+  return value != nullptr && std::strcmp(value, "1") == 0;
+}
+
+// Which library the process actually loaded, for tests: a rejected
+// precompiled library falls back to the source silently.
+std::atomic<int> g_simplify_library_kind{0};  // 0 none, 1 precompiled, 2 runtime source
+
+// Loads (or compiles) the simplify kernels once per process; every pipeline
+// comes from this library. The caller holds the pipeline cache mutex.
 id<MTLLibrary> simplify_library(id<MTLDevice> device) {
   static id<MTLLibrary> library = nil;
   if (library != nil) {
     return library;
   }
+#if WOLFGANG_BUILD_METAL_PRECOMPILED_KERNELS
+  if (!runtime_kernels_forced()) {
+    dispatch_data_t data = dispatch_data_create(
+        kSimplifyMetallib, sizeof(kSimplifyMetallib), nullptr, DISPATCH_DATA_DESTRUCTOR_DEFAULT);
+    NSError* load_error = nil;
+    library = [device newLibraryWithData:data error:&load_error];
+    dispatch_release(data);
+    if (library != nil) {
+      g_simplify_library_kind.store(1);
+      return library;
+    }
+    // Fall through to the embedded source if this device rejects the library.
+  }
+#endif
   NSString* source = [NSString stringWithUTF8String:kSimplifyKernelSource];
   if (source == nil) {
     throw std::runtime_error("failed to build Metal simplify kernel source string");
@@ -149,6 +200,7 @@ id<MTLLibrary> simplify_library(id<MTLDevice> device) {
     throw std::runtime_error(
         "Metal failed to compile simplify kernels: " + nsstring_to_string([error localizedDescription]));
   }
+  g_simplify_library_kind.store(2);
   return library;
 }
 
@@ -744,6 +796,17 @@ std::uint64_t hybrid_simplify_runs_for_testing() noexcept {
   return g_hybrid_simplify_runs.load(std::memory_order_relaxed);
 }
 
+const char* simplify_library_kind_for_testing() noexcept {
+  switch (g_simplify_library_kind.load()) {
+    case 1:
+      return "precompiled";
+    case 2:
+      return "runtime_source";
+    default:
+      return "not_loaded";
+  }
+}
+
 
 HybridSimplifyOutput simplify_words1_hybrid(
     id<MTLDevice> device,
@@ -791,14 +854,41 @@ HybridSimplifyOutput simplify_words1_hybrid(
   ScopedMetalBuffer sort_coeffs(make_hybrid_buffer(
       device, nullptr, checked_bytes<std::complex<double>>(terms, "Metal hybrid sorted coefficients")));
 
-  id<MTLCommandBuffer> command_buffer = [command_queue commandBuffer];
-  if (command_buffer == nil) {
-    throw std::runtime_error("Metal failed to create a hybrid simplify command buffer");
-  }
-  id<MTLComputeCommandEncoder> encoder = [command_buffer computeCommandEncoder];
-  if (encoder == nil) {
-    throw std::runtime_error("Metal failed to create a hybrid simplify command encoder");
-  }
+  // Ordinary sizes encode the whole sort into one command buffer. Larger inputs
+  // commit one buffer per merge stage, queued in order with only the last one
+  // waited on, so no single buffer approaches the GPU watchdog on a Mac that
+  // drives a display (one buffer ran about two seconds at 2^26 positions on an
+  // M4 Pro).
+  const bool split_stages = padded_u32 > kHybridSingleCommandBufferMaxPositions;
+  // From 2^27 positions one merge stage alone can approach the watchdog, so
+  // each global step also gets its own command buffer there.
+  const bool split_steps = padded_u32 > kHybridSingleStageMaxPositions;
+  std::vector<id<MTLCommandBuffer>> committed;
+  id<MTLCommandBuffer> command_buffer = nil;
+  id<MTLComputeCommandEncoder> encoder = nil;
+  const auto begin_command_buffer = [&] {
+    command_buffer = [command_queue commandBuffer];
+    if (command_buffer == nil) {
+      throw std::runtime_error("Metal failed to create a hybrid simplify command buffer");
+    }
+    encoder = [command_buffer computeCommandEncoder];
+    if (encoder == nil) {
+      throw std::runtime_error("Metal failed to create a hybrid simplify command encoder");
+    }
+  };
+  const auto commit_buffer = [&] {
+    [encoder endEncoding];
+    [command_buffer commit];
+    committed.push_back(command_buffer);
+    begin_command_buffer();
+  };
+  const auto commit_stage = [&] {
+    if (!split_stages) {
+      return;
+    }
+    commit_buffer();
+  };
+  begin_command_buffer();
   const MTLSize tile_grid = MTLSizeMake(tiles, 1, 1);
   const MTLSize tile_threads = MTLSizeMake(kHybridSortTileThreads, 1, 1);
   HybridSortParams params{terms_u32, 0, 0};
@@ -810,6 +900,7 @@ HybridSimplifyOutput simplify_words1_hybrid(
   [encoder setBuffer:sort_index.get() offset:0 atIndex:4];
   [encoder setBytes:&params length:sizeof(params) atIndex:5];
   [encoder dispatchThreadgroups:tile_grid threadsPerThreadgroup:tile_threads];
+  commit_stage();
   for (std::uint32_t k = 2U * kHybridSortTile; k != 0U && k <= padded_u32; k <<= 1U) {
     params.k = k;
     [encoder setBuffer:sort_x.get() offset:0 atIndex:0];
@@ -820,10 +911,18 @@ HybridSimplifyOutput simplify_words1_hybrid(
       params.j = j;
       [encoder setBytes:&params length:sizeof(params) atIndex:3];
       dispatch_1d(encoder, padded_u32 / 2U);
+      if (split_steps) {
+        commit_buffer();
+        [encoder setComputePipelineState:global_step];
+        [encoder setBuffer:sort_x.get() offset:0 atIndex:0];
+        [encoder setBuffer:sort_z.get() offset:0 atIndex:1];
+        [encoder setBuffer:sort_index.get() offset:0 atIndex:2];
+      }
     }
     [encoder setComputePipelineState:tile_merge];
     [encoder setBytes:&params length:sizeof(params) atIndex:3];
     [encoder dispatchThreadgroups:tile_grid threadsPerThreadgroup:tile_threads];
+    commit_stage();
   }
   [encoder setComputePipelineState:gather];
   [encoder setBuffer:coeffs offset:0 atIndex:0];
@@ -832,52 +931,195 @@ HybridSimplifyOutput simplify_words1_hybrid(
   [encoder setBytes:&params length:sizeof(params) atIndex:3];
   dispatch_1d(encoder, terms);
   [encoder endEncoding];
-  wait_for_completion(command_buffer, "Metal hybrid simplify sort");
+  [command_buffer commit];
+  committed.push_back(command_buffer);
+  // Buffers on one queue run in order. Report the first that failed: after a
+  // fault Metal also fails every later buffer, which would hide the cause.
+  for (id<MTLCommandBuffer> stage : committed) {
+    [stage waitUntilCompleted];
+  }
+  for (id<MTLCommandBuffer> stage : committed) {
+    if ([stage status] != MTLCommandBufferStatusCompleted) {
+      NSError* error = [stage error];
+      throw std::runtime_error(
+          std::string("Metal hybrid simplify sort failed: ") +
+          (error == nil ? std::string("unknown command buffer error")
+                        : nsstring_to_string([error localizedDescription])));
+    }
+  }
+  // The input-index permutation is dead once coefficients are gathered.
+  [sort_index.release() release];
 
   // The buffers hold every input term in canonical (x, z) order with
-  // input-index tie-breaks, and its coefficient. Summing each run left to right
-  // reproduces the CPU paths' input-order sums bit for bit. Survivors compact
-  // in place: the write position never passes the read position.
+  // input-index tie-breaks, and its coefficient. Summing each run left to right,
+  // seeded with its first coefficient, reproduces the CPU paths' input-order
+  // sums bit for bit (signed zeros included).
   auto* keys_x = static_cast<std::uint64_t*>([sort_x.get() contents]);
   auto* keys_z = static_cast<std::uint64_t*>([sort_z.get() contents]);
   auto* sums = static_cast<std::complex<double>*>([sort_coeffs.get() contents]);
-  std::size_t survivors = 0;
-  std::size_t position = 0;
-  while (position < terms) {
-    const std::uint64_t key_x = keys_x[position];
-    const std::uint64_t key_z = keys_z[position];
-    // Seed with the run's first coefficient, as every CPU path does, so
-    // signed zeros match CPU simplify bit for bit.
-    std::complex<double> accumulated = sums[position];
-    std::size_t next = position + 1;
-    while (next < terms && keys_x[next] == key_x && keys_z[next] == key_z) {
-      accumulated += sums[next];
-      ++next;
+
+  if (terms < kHybridParallelReduceMinTerms) {
+    // Sequential pass; survivors compact in place because the write position
+    // never passes the read position.
+    std::size_t survivors = 0;
+    std::size_t position = 0;
+    while (position < terms) {
+      const std::uint64_t key_x = keys_x[position];
+      const std::uint64_t key_z = keys_z[position];
+      std::complex<double> accumulated = sums[position];
+      std::size_t next = position + 1;
+      while (next < terms && keys_x[next] == key_x && keys_z[next] == key_z) {
+        accumulated += sums[next];
+        ++next;
+      }
+      if (rule.survives(accumulated)) {
+        keys_x[survivors] = key_x;
+        keys_z[survivors] = key_z;
+        sums[survivors] = accumulated;
+        ++survivors;
+      }
+      position = next;
     }
-    if (rule.survives(accumulated)) {
-      keys_x[survivors] = key_x;
-      keys_z[survivors] = key_z;
-      sums[survivors] = accumulated;
-      ++survivors;
+    out.num_terms = survivors;
+    if (survivors == 0) {
+      return out;
     }
-    position = next;
+    // Keep the scratch buffers as the output when at most half of them would
+    // be slack; otherwise copy survivors into exact-size buffers.
+    if (survivors >= terms / 2) {
+      out.x = sort_x.release();
+      out.z = sort_z.release();
+      out.coeffs = sort_coeffs.release();
+    } else {
+      out.x = make_hybrid_buffer(device, keys_x, survivors * sizeof(std::uint64_t));
+      out.z = make_hybrid_buffer(device, keys_z, survivors * sizeof(std::uint64_t));
+      out.coeffs = make_hybrid_buffer(device, sums, survivors * sizeof(std::complex<double>));
+    }
+    return out;
   }
 
+  // Parallel pass over chunks that start on run boundaries, so no run is split
+  // and every sum keeps its sequential input order. Pass 1 sums each run into
+  // its head and marks surviving heads; pass 2 copies survivors to exact-size
+  // outputs at per-chunk prefix offsets. In-place compaction is not safe across
+  // chunks, because a later chunk's destination can overlap an earlier chunk's
+  // unread runs.
+  // Four chunks per hardware thread lets performance cores pick up work while
+  // efficiency cores finish theirs.
+  const std::size_t chunk_count = std::max<std::size_t>(
+      2,
+      std::min<std::size_t>(
+          4 * static_cast<std::size_t>(std::thread::hardware_concurrency()),
+          terms / kHybridReduceChunkMinTerms));
+  std::vector<std::size_t> chunk_start(chunk_count + 1, terms);
+  chunk_start[0] = 0;
+  for (std::size_t chunk = 1; chunk < chunk_count; ++chunk) {
+    std::size_t start = std::max(chunk_start[chunk - 1], chunk * (terms / chunk_count));
+    while (start < terms && start > 0 && keys_x[start] == keys_x[start - 1] &&
+           keys_z[start] == keys_z[start - 1]) {
+      ++start;
+    }
+    chunk_start[chunk] = start;
+  }
+  std::vector<std::uint8_t> keep(terms, 0);
+  std::vector<std::size_t> chunk_survivors(chunk_count, 0);
+  std::atomic<bool> overflowed{false};
+  const std::size_t* starts = chunk_start.data();
+  std::uint8_t* keep_flags = keep.data();
+  std::size_t* counts = chunk_survivors.data();
+  std::atomic<bool>* overflow_flag = &overflowed;
+  const detail::SimplifyDropRule drop_rule = rule;
+  dispatch_apply(chunk_count, DISPATCH_APPLY_AUTO, ^(std::size_t chunk) {
+    std::size_t count = 0;
+    std::size_t position = starts[chunk];
+    const std::size_t end = starts[chunk + 1];
+    while (position < end) {
+      const std::uint64_t key_x = keys_x[position];
+      const std::uint64_t key_z = keys_z[position];
+      std::complex<double> accumulated = sums[position];
+      std::size_t next = position + 1;
+      while (next < end && keys_x[next] == key_x && keys_z[next] == key_z) {
+        accumulated += sums[next];
+        ++next;
+      }
+      // survives() throws on a non-finite sum; a block must not throw, so the
+      // check is made here and raised after the pass.
+      if (!std::isfinite(accumulated.real()) || !std::isfinite(accumulated.imag())) {
+        overflow_flag->store(true, std::memory_order_relaxed);
+      } else if (drop_rule.survives(accumulated)) {
+        sums[position] = accumulated;
+        keep_flags[position] = 1;
+        ++count;
+      }
+      position = next;
+    }
+    counts[chunk] = count;
+  });
+  if (overflowed.load()) {
+    detail::require_finite_simplify_accumulator(
+        std::complex<double>(std::numeric_limits<double>::infinity(), 0.0));
+  }
+  std::vector<std::size_t> chunk_offset(chunk_count, 0);
+  std::size_t survivors = 0;
+  for (std::size_t chunk = 0; chunk < chunk_count; ++chunk) {
+    chunk_offset[chunk] = survivors;
+    survivors += chunk_survivors[chunk];
+  }
   out.num_terms = survivors;
   if (survivors == 0) {
     return out;
   }
-  // Keep the scratch buffers as the output when at most half of them would be
-  // slack; otherwise copy survivors into exact-size buffers to release memory.
+  const std::size_t* offsets = chunk_offset.data();
   if (survivors >= terms / 2) {
+    // Mostly survivors: reuse the scratch buffers as the output, as the
+    // sequential path does, so peak memory does not grow. Each chunk compacts
+    // in place (writes never pass reads within a chunk); then the chunks shift
+    // left in chunk order, where a destination never reaches a later chunk's
+    // unmoved survivors.
+    dispatch_apply(chunk_count, DISPATCH_APPLY_AUTO, ^(std::size_t chunk) {
+      std::size_t write = starts[chunk];
+      for (std::size_t position = starts[chunk]; position < starts[chunk + 1]; ++position) {
+        if (keep_flags[position] != 0) {
+          keys_x[write] = keys_x[position];
+          keys_z[write] = keys_z[position];
+          sums[write] = sums[position];
+          ++write;
+        }
+      }
+    });
+    for (std::size_t chunk = 0; chunk < chunk_count; ++chunk) {
+      if (counts[chunk] != 0 && offsets[chunk] != starts[chunk]) {
+        std::memmove(keys_x + offsets[chunk], keys_x + starts[chunk], counts[chunk] * sizeof(std::uint64_t));
+        std::memmove(keys_z + offsets[chunk], keys_z + starts[chunk], counts[chunk] * sizeof(std::uint64_t));
+        std::memmove(sums + offsets[chunk], sums + starts[chunk], counts[chunk] * sizeof(std::complex<double>));
+      }
+    }
     out.x = sort_x.release();
     out.z = sort_z.release();
     out.coeffs = sort_coeffs.release();
-  } else {
-    out.x = make_hybrid_buffer(device, keys_x, survivors * sizeof(std::uint64_t));
-    out.z = make_hybrid_buffer(device, keys_z, survivors * sizeof(std::uint64_t));
-    out.coeffs = make_hybrid_buffer(device, sums, survivors * sizeof(std::complex<double>));
+    return out;
   }
+  ScopedMetalBuffer out_x(make_hybrid_buffer(device, nullptr, survivors * sizeof(std::uint64_t)));
+  ScopedMetalBuffer out_z(make_hybrid_buffer(device, nullptr, survivors * sizeof(std::uint64_t)));
+  ScopedMetalBuffer out_coeffs(
+      make_hybrid_buffer(device, nullptr, survivors * sizeof(std::complex<double>)));
+  auto* dst_x = static_cast<std::uint64_t*>([out_x.get() contents]);
+  auto* dst_z = static_cast<std::uint64_t*>([out_z.get() contents]);
+  auto* dst_coeffs = static_cast<std::complex<double>*>([out_coeffs.get() contents]);
+  dispatch_apply(chunk_count, DISPATCH_APPLY_AUTO, ^(std::size_t chunk) {
+    std::size_t write = offsets[chunk];
+    for (std::size_t position = starts[chunk]; position < starts[chunk + 1]; ++position) {
+      if (keep_flags[position] != 0) {
+        dst_x[write] = keys_x[position];
+        dst_z[write] = keys_z[position];
+        dst_coeffs[write] = sums[position];
+        ++write;
+      }
+    }
+  });
+  out.x = out_x.release();
+  out.z = out_z.release();
+  out.coeffs = out_coeffs.release();
   return out;
 }
 

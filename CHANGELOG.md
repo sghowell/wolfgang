@@ -42,10 +42,17 @@ Next version: TBD
   in float64 on the CPU over shared memory, with results identical to CPU
   simplify bit for bit. On an M4 Pro it is 1.3-4.1x faster than the previous
   host bridge and 1.05-4.0x faster than CPU simplify from 12,288 terms
-  (`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md`). The first
-  such call in a process compiles the simplify kernels (about 4 ms). The kernel
-  source is embedded in the extension, and Metal uploads no longer recreate the
-  default device on every call.
+  (`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md`). Metal
+  uploads no longer recreate the default device on every call.
+- Metal hybrid simplify from 2^20 terms reduces duplicate runs on all CPU
+  cores, with results still identical to CPU simplify bit for bit, and splits
+  the GPU sort across command buffers above 2^22 positions. Inputs of 4M, 16M
+  and 64M terms ran without a GPU timeout. When Xcode's Metal compiler works
+  at configure time, the kernels are embedded precompiled, so the first call
+  in a process takes about 3.1 ms instead of 3.9 ms (49 ms instead of 154 ms
+  with a cold shader cache); otherwise the embedded source compiles on the
+  first call. `build_info()["metal_simplify_kernels"]` reports which
+  (`docs/benchmarks/reports/metal_followups_2026-11-03.md`).
 - oneTBB source builds: `simplify` runs a parallel sort-and-reduce kernel from
   8,192 terms on hosts with at least four oneTBB threads
   (`WOLFGANG_CPU_BACKEND=tbb` forces it), with results identical to scalar bit

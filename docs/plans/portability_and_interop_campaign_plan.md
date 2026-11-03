@@ -57,6 +57,14 @@ with coefficients bit-identical to CPU
 (`docs/benchmarks/reports/small_simplify_2026-11-03.md`). Every backend now
 rounds the drop threshold's product separately.
 
+Slice 6 merged: the Metal hybrid simplify reduces duplicate runs on all CPU
+cores from 2^20 terms (1.0-1.2x end to end, bit-identical), ran 4M, 16M and
+64M-term inputs without a GPU timeout, splits large sorts across command
+buffers, and embeds precompiled kernels when Xcode's Metal compiler is
+available (first call 3.1 ms against 3.9 ms)
+(`docs/benchmarks/reports/metal_followups_2026-11-03.md`). Apple oneTBB
+timings stay deferred: oneTBB is not installed on the M4 Pro.
+
 Slice 3 merged: CUDA `DevicePauliSum.device_arrays()` hands the packed
 buffers to CuPy and PyTorch without a copy (36 us against 8.8 ms through the
 host at 1M terms), and `DevicePauliSum.from_device_arrays()` builds an operator

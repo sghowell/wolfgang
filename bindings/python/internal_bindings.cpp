@@ -219,6 +219,10 @@ void register_internal_bindings(nb::module_& module) {
       []() { return wolfgang::metal_detail::hybrid_simplify_runs_for_testing(); },
       "Private count of public Metal hybrid simplify runs in this process.");
   module.def(
+      "_metal_simplify_library_kind_for_testing",
+      []() { return std::string(wolfgang::metal_detail::simplify_library_kind_for_testing()); },
+      "Private: which Metal simplify kernel library this process loaded.");
+  module.def(
       "_metal_simplify_words1_candidate_for_testing",
       [](const wolfgang::DevicePauliSum& input,
          double atol,
