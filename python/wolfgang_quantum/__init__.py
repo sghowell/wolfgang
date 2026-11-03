@@ -42,12 +42,14 @@ from ._wolfgang_core import (
     metal_available,
     metal_devices,
 )
+from .cudaq import _install_pauli_sum_cudaq_methods
 from .measurement import _install_pauli_sum_measurement_methods
 from .openfermion import _install_pauli_sum_openfermion_methods
 from .qiskit import _install_pauli_sum_qiskit_methods
 
 _install_pauli_sum_qiskit_methods()
 _install_pauli_sum_openfermion_methods()
+_install_pauli_sum_cudaq_methods()
 _install_pauli_sum_measurement_methods()
 
 __all__ = [

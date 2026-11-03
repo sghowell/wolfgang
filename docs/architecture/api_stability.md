@@ -327,7 +327,7 @@ CI matrix
 release notes
 ```
 
-Do not claim platform, Python, compiler, CUDA, Qiskit, or OpenFermion support unless it is validated locally or in CI.
+Do not claim platform, Python, compiler, CUDA, Qiskit, OpenFermion, or CUDA-Q support unless it is validated locally or in CI.
 
 Do not claim CPU feature, SIMD, oneTBB, CUDA toolkit, CUDA architecture, Apple
 Metal backend, MPSGraph adjunct, or wheel-platform support unless it satisfies

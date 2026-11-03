@@ -108,7 +108,22 @@ Owning dense device output with compact reductions. Dense outputs are guarded be
 
 ## Optional dependencies
 
-The base package imports without Qiskit or OpenFermion. Adapter calls provide install guidance when an optional library is absent.
+The base package imports without Qiskit, OpenFermion or CUDA-Q. Adapter calls provide install guidance when an optional library is absent.
+
+`PauliSum.from_cudaq(op, num_qubits=None)` and `PauliSum.to_cudaq()` convert to
+and from CUDA-Q spin operators (the `cudaq` extra, CUDA-Q 0.11 or later):
+
+```python
+import cudaq
+from cudaq import spin
+from wolfgang_quantum import PauliSum
+
+hamiltonian = PauliSum.from_cudaq(0.5 * spin.x(0) * spin.z(2) - 1.0j * spin.y(1))
+energy = cudaq.observe(kernel, hamiltonian.simplify().to_cudaq()).expectation()  # any @cudaq.kernel
+```
+
+CUDA-Q operators carry no width, so pass `num_qubits` to keep identity
+qubits above the largest index. Qubit `q` is the same qubit in both libraries.
 
 ## Stability
 

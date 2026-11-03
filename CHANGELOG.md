@@ -6,6 +6,11 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- `PauliSum.from_cudaq()` and `PauliSum.to_cudaq()` convert to and from CUDA-Q
+  `SpinOperator` (the `cudaq` extra, CUDA-Q 0.11 or later). Whole operators
+  move through CUDA-Q's flat serialization, checked once per process, with a
+  fallback to CUDA-Q's public term API. Expectation values agree with
+  `cudaq.observe`. A new CI job tests CUDA-Q 0.11.0 and the latest release.
 - CUDA and HIP: operators of up to 256 qubits and 1,024 terms simplify in one
   fused kernel. On an H100 small simplify is 3.0-7.8x faster (128 terms:
   143.5 to 18.4 us); on an MI300X it is 3.5-5.7x faster. Their coefficients

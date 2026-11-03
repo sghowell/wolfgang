@@ -24,7 +24,7 @@ Quantum workloads routinely manipulate Hamiltonians containing thousands or mill
 - checked simplification and canonical ordering;
 - runtime-dispatched AVX2, AVX-512, NEON, and oneTBB kernels;
 - owning CUDA, ROCm/HIP, and Apple Metal source-build paths;
-- Qiskit and OpenFermion interoperability without mandatory heavy dependencies;
+- Qiskit, OpenFermion and CUDA-Q interoperability without mandatory heavy dependencies;
 - explicit allocation, transfer, synchronization, and host-materialization boundaries;
 - reproducible performance decisions instead of unaudited “GPU accelerated” claims.
 
@@ -49,6 +49,7 @@ Optional adapters are separate extras:
 ```bash
 python -m pip install ".[qiskit]"
 python -m pip install ".[openfermion]"
+python -m pip install ".[cudaq]"        # PauliSum.from_cudaq / to_cudaq
 python -m pip install ".[scipy]"        # sparse PauliSum.to_matrix(sparse=True)
 ```
 
@@ -84,7 +85,7 @@ print([group.num_terms for group in groups])
 print(expectation)
 ```
 
-Construction is available from dense labels, sparse local terms, Qiskit `SparsePauliOp`, and OpenFermion `QubitOperator`. See the [quickstart](docs/getting-started/quickstart.md) and [Pauli conventions](docs/getting-started/conventions.md).
+Construction is available from dense labels, sparse local terms, Qiskit `SparsePauliOp`, OpenFermion `QubitOperator`, and CUDA-Q `SpinOperator`. See the [quickstart](docs/getting-started/quickstart.md) and [Pauli conventions](docs/getting-started/conventions.md).
 
 ## Architecture
 
@@ -182,7 +183,7 @@ The package intentionally exposes a small surface:
 - `PauliSum`: host-owned packed operator and CPU semantics;
 - `DevicePauliSum`: owning accelerator mirror;
 - `DeviceCommutationMatrix`: owning dense device output with compact reductions;
-- lazy Qiskit and OpenFermion adapters.
+- lazy Qiskit, OpenFermion and CUDA-Q adapters.
 
 Invalid values, dtypes, layouts, device ownership, moved-from objects, and oversized outputs fail explicitly. Private names and benchmark hooks are not compatibility promises. See the [Python API guide](docs/guide/python-api.md) and [API reference](docs/api/index.md).
 

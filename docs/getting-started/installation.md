@@ -34,11 +34,12 @@ PY
 - a supported wheel platform, or CMake 3.24+ and a C++20 compiler for source builds;
 - NumPy at runtime.
 
-Qiskit and OpenFermion adapters are optional:
+Qiskit, OpenFermion and CUDA-Q adapters are optional:
 
 ```bash
 python -m pip install ".[qiskit]"
 python -m pip install ".[openfermion]"
+python -m pip install ".[cudaq]"        # CUDA-Q publishes Linux wheels
 ```
 
 ## Developer install

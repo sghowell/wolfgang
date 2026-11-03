@@ -94,6 +94,7 @@ Runtime dependencies:
 NumPy is required
 Qiskit is optional
 OpenFermion is optional
+CUDA-Q is optional
 SciPy is optional and only imported by PauliSum.to_matrix(sparse=True)
 CUDA runtime is optional and only required for CUDA builds or CUDA execution
 ```

@@ -46,6 +46,9 @@ Changelog = "https://github.com/sghowell/wolfgang/blob/main/CHANGELOG.md"
 docs = [
   "mkdocs-material==9.7.7",
 ]
+cudaq = [
+  "cudaq>=0.11",
+]
 openfermion = [
   "openfermion>=1.7.1",
 ]
