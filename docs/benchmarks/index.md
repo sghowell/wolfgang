@@ -35,18 +35,18 @@ Plan: `docs/plans/portability_and_interop_campaign_plan.md`. Review closeout:
 
 ## All reports
 
-By backend, oldest first.
+By backend, oldest first. Link text is each report's title (early reports predate the project's rename).
 
 ### CUDA
 
-- 2026-04-27: [FastPauli CUDA Evidence - NVIDIA H100 PCIe - 2026-04-27](reports/cuda_phase11_h100_2026-04-27.md)
-- 2026-04-28: [FastPauli CUDA Deep Optimization Report - NVIDIA H100 PCIe - 2026-04-28](reports/cuda_deep_optimization_h100_2026-04-28.md)
-- 2026-04-28: [FastPauli H100 CUDA Deep Optimization Campaign 2](reports/cuda_deep_optimization_h100_campaign2_2026-04-28.md)
-- 2026-04-28: [FastPauli H100 CUDA Deep Optimization Campaign 3](reports/cuda_deep_optimization_h100_campaign3_2026-04-28.md)
-- 2026-04-28: [FastPauli CUDA Nsight Hillclimb - NVIDIA H100 PCIe - 2026-04-28](reports/cuda_h100_nsight_hillclimb_2026-04-28.md)
-- 2026-04-28: [FastPauli CUDA Performance Hardening - NVIDIA H100 PCIe - 2026-04-28](reports/cuda_h100_performance_hardening_2026-04-28.md)
+- 2026-04-27: [CUDA Evidence - NVIDIA H100 PCIe - 2026-04-27](reports/cuda_phase11_h100_2026-04-27.md)
+- 2026-04-28: [CUDA Deep Optimization Report - NVIDIA H100 PCIe - 2026-04-28](reports/cuda_deep_optimization_h100_2026-04-28.md)
+- 2026-04-28: [H100 CUDA Deep Optimization Campaign 2](reports/cuda_deep_optimization_h100_campaign2_2026-04-28.md)
+- 2026-04-28: [H100 CUDA Deep Optimization Campaign 3](reports/cuda_deep_optimization_h100_campaign3_2026-04-28.md)
+- 2026-04-28: [CUDA Nsight Hillclimb - NVIDIA H100 PCIe - 2026-04-28](reports/cuda_h100_nsight_hillclimb_2026-04-28.md)
+- 2026-04-28: [CUDA Performance Hardening - NVIDIA H100 PCIe - 2026-04-28](reports/cuda_h100_performance_hardening_2026-04-28.md)
 - 2026-04-29: [CUDA Cross-Architecture Campaign 10 Report](reports/cuda_cross_architecture_campaign10_2026-04-29.md)
-- 2026-04-29: [FastPauli H100 CUDA Deep Optimization Campaign 4](reports/cuda_deep_optimization_h100_campaign4_2026-04-29.md)
+- 2026-04-29: [H100 CUDA Deep Optimization Campaign 4](reports/cuda_deep_optimization_h100_campaign4_2026-04-29.md)
 - 2026-04-29: [H100 CUDA Deep Optimization Campaign 5](reports/cuda_deep_optimization_h100_campaign5_2026-04-29.md)
 - 2026-04-29: [H100 CUDA Deep Optimization Campaign 6](reports/cuda_deep_optimization_h100_campaign6_2026-04-29.md)
 - 2026-04-29: [CUDA Deep Optimization H100 Campaign 7](reports/cuda_deep_optimization_h100_campaign7_2026-04-29.md)
@@ -92,8 +92,8 @@ By backend, oldest first.
 
 ### CPU and host
 
-- 2026-04-25: [FastPauli CPU Evidence - Apple Silicon M4 Pro - 2026-04-25](reports/cpu_phase9_apple_silicon_m4_pro_2026-04-25.md)
-- 2026-04-25: [FastPauli CPU Evidence - x86_64 AMD EPYC 9654 - 2026-04-25](reports/cpu_phase9_x86_64_amd_epyc_9654_2026-04-25.md)
+- 2026-04-25: [CPU Evidence - Apple Silicon M4 Pro - 2026-04-25](reports/cpu_phase9_apple_silicon_m4_pro_2026-04-25.md)
+- 2026-04-25: [CPU Evidence - x86_64 AMD EPYC 9654 - 2026-04-25](reports/cpu_phase9_x86_64_amd_epyc_9654_2026-04-25.md)
 - 2026-08-21: [Wave 1B CPU Small-Shape Dispatch Report](reports/cpu_small_shape_dispatch_wave1b_2026-08-21.md)
 - 2026-09-21: [Python Boundary Hardening (2026-09-21)](reports/python_boundary_hardening_2026-09-21.md)
 - 2026-11-03: [CPU Parallel Simplify With oneTBB](reports/cpu_parallel_simplify_2026-11-03.md)
