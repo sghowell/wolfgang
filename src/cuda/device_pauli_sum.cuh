@@ -67,6 +67,12 @@ private:
   int previous_device_ = -1;
 };
 
+// Defined with the Wolfgang memory pool (cuda/pool_allocator.cu).
+void trim_pools_after_allocation_failure() noexcept;
+
+// Plain cudaMalloc for buffers that may be exported to other frameworks. When
+// memory is short, cached pool blocks are returned to the driver and the
+// allocation is retried once before the failure is reported.
 template <typename T>
 void cuda_allocate(T*& pointer, std::size_t count, const char* name) {
   pointer = nullptr;
@@ -74,7 +80,13 @@ void cuda_allocate(T*& pointer, std::size_t count, const char* name) {
   if (bytes == 0) {
     return;
   }
-  check_cuda(cudaMalloc(reinterpret_cast<void**>(&pointer), bytes), "allocate device buffer");
+  cudaError_t result = cudaMalloc(reinterpret_cast<void**>(&pointer), bytes);
+  if (result == cudaErrorMemoryAllocation) {
+    (void)cudaGetLastError();
+    trim_pools_after_allocation_failure();
+    result = cudaMalloc(reinterpret_cast<void**>(&pointer), bytes);
+  }
+  check_cuda(result, "allocate device buffer");
 }
 
 template <typename T>

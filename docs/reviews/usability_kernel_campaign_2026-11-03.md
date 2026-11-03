@@ -121,3 +121,47 @@ Branch `codex/statevector-and-measurement`, commits `1a12a7d`..`0519f97`.
     or oneTBB variant;
   - `scipy>=1.10` is a declared lower bound, while CI tests a newer pinned
     version.
+
+## Slice 7: CUDA allocation reuse and call overhead
+
+Branch `codex/cuda-allocation-reuse`, commits `781efb9`..`d998314`. The
+benchmarked candidate is `6e48c14`.
+
+- Reviewer: independent agent (CUDA, C++ safety and performance roles),
+  read-only.
+- Findings: P0 0, P1 1, P2 3, P3 several.
+- P1 resolution (memory retention and out-of-memory recovery):
+  - The pool now caches at most 1 GiB per device.
+  - Every allocation path, pooled or `cudaMalloc`, trims the pools and retries
+    once on out-of-memory, then raises `MemoryError`.
+  - The changelog and `cuda_backend.md` document retention and its effect on
+    other libraries.
+- P2 resolutions:
+  - Nsight Systems CUDA API breakdown recorded before and after the change.
+  - Deferral of `_inplace` methods recorded in the plan.
+  - Scratch value-initialization fills and redundant Thrust synchronizations
+    removed (`par_nosync`, uninitialized pooled scratch), which the Nsight data
+    attributes.
+  - A test that the pool returns to baseline, and a forced-fallback switch with
+    a test.
+  - `git diff --check` clean.
+- P3 resolutions:
+  - the mutex lives for the whole process;
+  - only self-raised CUDA errors are cleared;
+  - buffers are freed on their known device;
+  - byte copies replace typed casts;
+  - stale comments and unused declarations removed;
+  - out-of-memory raises `MemoryError`;
+  - report and changelog wording fixed.
+- Validation after fixes (H100):
+  - `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core` passed
+    (720 tests in the CUDA run);
+  - the suites pass with `WOLFGANG_CUDA_BENCH_DISABLE_POOL=1`;
+  - memcheck, racecheck and synccheck clean;
+  - initcheck gives 1,356 CUB look-back reports, identical to the baseline.
+- Deferred: zero-copy CUDA `DevicePauliSum` views (needs HIP and Metal changes
+  that cannot be validated here); public streams and graphs.
+- Residual risk:
+  - one GPU model;
+  - multi-GPU and `cudaDeviceReset` behavior unexercised;
+  - pool retention up to 1 GiB per device.

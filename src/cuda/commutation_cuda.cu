@@ -1,4 +1,5 @@
 #include "device_pauli_sum.cuh"
+#include "cuda/pool_allocator.cuh"
 #include "device_commutation_matrix.cuh"
 
 #include <cstdlib>
@@ -211,20 +212,15 @@ void DevicePauliSum::commutes_with_into(
 
   ScopedCudaDevice guard(impl_->device_ordinal);
   std::uint8_t* device_output = nullptr;
-  std::unique_ptr<std::uint8_t, void (*)(std::uint8_t*)> output_guard(
-      nullptr,
-      [](std::uint8_t* ptr) {
-        if (ptr != nullptr) {
-          (void)cudaFree(ptr);
-        }
-      });
+  cuda_detail::PoolBuffer<std::uint8_t> output_buffer;
   if (benchmark_reusable_device_output_enabled()) {
     // Private benchmark-only path: reuse device output storage to quantify
     // allocation overhead without changing the public dense host-output API.
     device_output = benchmark_device_output_workspace().reserve(impl_->device_ordinal, entries);
   } else {
-    cuda_allocate(device_output, entries, "commutation output");
-    output_guard.reset(device_output);
+    // The output is copied to host before returning, so pooled scratch is safe.
+    output_buffer = cuda_detail::PoolBuffer<std::uint8_t>(entries, "commutation output");
+    device_output = output_buffer.get();
   }
   commutation_kernel<<<blocks, kCudaThreadsPerBlock>>>(
       impl_->x,

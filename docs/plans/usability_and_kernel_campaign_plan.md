@@ -41,3 +41,20 @@ Slice 1 merged with H100 evidence:
 
 Slices 2 and 3 merged: `docs/benchmarks/reports/host_api_2026-11-03.md`.
 Slices 4 and 5 merged (no speed claims; correctness-oracle evidence only).
+
+Slice 7: pooled CUDA allocations, cheap device selection, and fewer Thrust
+synchronizations and scratch fills
+(`docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`, with an
+Nsight Systems API breakdown).
+Deferred with reason:
+- **Zero-copy CUDA `DevicePauliSum` views.** These need backend-neutral pointer
+  accessors implemented in the CUDA, HIP and Metal backends, plus an
+  export-aware free path for pooled memory. HIP cannot be compiled or validated
+  in this campaign's environment.
+- **`_inplace` public methods.** Not added. Pooled allocation removed the
+  allocation cost they were meant to avoid without new API surface.
+- **Public streams and graphs.** These stay out. The remaining small-operator
+  floor (about 120-145 us for device-resident simplify after this slice) comes
+  from the sort and reduction kernels and the synchronizations that
+  value-returning Thrust algorithms still need, so the next lever is a fused
+  small-operator simplify kernel, not stream-aware APIs.
