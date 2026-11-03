@@ -1,0 +1,57 @@
+{
+ "benchmark": "host_copy_microbench",
+ "source": "benchmarks/native/host_copy_microbench.cu",
+ "command": "nvcc -O2 -std=c++17 -o host_copy_microbench benchmarks/native/host_copy_microbench.cu && ./host_copy_microbench",
+ "device": "NVIDIA H100 80GB HBM3, driver 580.105.08, CUDA 12.8; host Intel Xeon Platinum 8480+ (KVM guest), transparent huge pages = madvise",
+ "units": "median microseconds per copy (200 repetitions up to 2 MiB, 12 above)",
+ "rows": [
+  {
+   "bytes": 4096,
+   "h2d_pageable": 3.4,
+   "h2d_staged": 7.6,
+   "d2h_pageable": 8.9,
+   "d2h_staged": 7.3,
+   "d2h_staged_huge": 6.5
+  },
+  {
+   "bytes": 65536,
+   "h2d_pageable": 8.9,
+   "h2d_staged": 20.0,
+   "d2h_pageable": 23.2,
+   "d2h_staged": 16.9,
+   "d2h_staged_huge": 11.0
+  },
+  {
+   "bytes": 2097152,
+   "h2d_pageable": 129.2,
+   "h2d_staged": 174.4,
+   "d2h_pageable": 319.9,
+   "d2h_staged": 256.7,
+   "d2h_staged_huge": 169.2
+  },
+  {
+   "bytes": 8388608,
+   "h2d_pageable": 521.0,
+   "h2d_staged": 936.1,
+   "d2h_pageable": 1391.2,
+   "d2h_staged": 676.5,
+   "d2h_staged_huge": 664.0
+  },
+  {
+   "bytes": 33554432,
+   "h2d_pageable": 2177.9,
+   "h2d_staged": 2678.0,
+   "d2h_pageable": 16210.0,
+   "d2h_staged": 17959.8,
+   "d2h_staged_huge": 9416.4
+  },
+  {
+   "bytes": 134217728,
+   "h2d_pageable": 13641.2,
+   "h2d_staged": 12213.6,
+   "d2h_pageable": 63774.8,
+   "d2h_staged": 71375.5,
+   "d2h_staged_huge": 35244.0
+  }
+ ]
+}

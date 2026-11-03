@@ -1,0 +1,600 @@
+{
+  "rows": {
+    "to_device_100q_1": {
+      "num_qubits": 100,
+      "num_terms": 1,
+      "payload_bytes": 48,
+      "pbase": {
+        "median_of_medians_seconds": 1.6255999071290717e-05,
+        "per_run_median_seconds": [
+          1.6255999071290717e-05,
+          1.640299888094887e-05,
+          1.6198497178265825e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 1.6306999896187335e-05,
+        "per_run_median_seconds": [
+          1.6289497580146417e-05,
+          1.6379501175833866e-05,
+          1.6306999896187335e-05
+        ]
+      }
+    },
+    "to_device_100q_1000000": {
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "payload_bytes": 48000000,
+      "pbase": {
+        "median_of_medians_seconds": 0.0028092409993405454,
+        "per_run_median_seconds": [
+          0.0028092409993405454,
+          0.0027926669936277904,
+          0.0028426119970390573
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.002888789000280667,
+        "per_run_median_seconds": [
+          0.002888789000280667,
+          0.003009580999787431,
+          0.002819055000145454
+        ]
+      }
+    },
+    "to_device_100q_128": {
+      "num_qubits": 100,
+      "num_terms": 128,
+      "payload_bytes": 6144,
+      "pbase": {
+        "median_of_medians_seconds": 1.820699981180951e-05,
+        "per_run_median_seconds": [
+          1.820699981180951e-05,
+          1.8315498891752213e-05,
+          1.8075999832944945e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 1.8044498574454337e-05,
+        "per_run_median_seconds": [
+          1.796249853214249e-05,
+          1.80690003617201e-05,
+          1.8044498574454337e-05
+        ]
+      }
+    },
+    "to_device_100q_4000000": {
+      "num_qubits": 100,
+      "num_terms": 4000000,
+      "payload_bytes": 192000000,
+      "pbase": {
+        "median_of_medians_seconds": 0.018548065003415104,
+        "per_run_median_seconds": [
+          0.018548065003415104,
+          0.018319281996809877,
+          0.018572405002487358
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.018584161000035238,
+        "per_run_median_seconds": [
+          0.018621404997247737,
+          0.018584161000035238,
+          0.017514863997348584
+        ]
+      }
+    },
+    "to_device_100q_4096": {
+      "num_qubits": 100,
+      "num_terms": 4096,
+      "payload_bytes": 196608,
+      "pbase": {
+        "median_of_medians_seconds": 4.162350160186179e-05,
+        "per_run_median_seconds": [
+          4.162350160186179e-05,
+          4.1624996811151505e-05,
+          4.148850348428823e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 4.171250475337729e-05,
+        "per_run_median_seconds": [
+          4.171250475337729e-05,
+          4.208599784760736e-05,
+          4.1420000343350694e-05
+        ]
+      }
+    },
+    "to_device_100q_65536": {
+      "num_qubits": 100,
+      "num_terms": 65536,
+      "payload_bytes": 3145728,
+      "pbase": {
+        "median_of_medians_seconds": 0.00025682900377432816,
+        "per_run_median_seconds": [
+          0.0002627374997246079,
+          0.00025298850232502446,
+          0.00025682900377432816
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.00025999200443038717,
+        "per_run_median_seconds": [
+          0.00025999200443038717,
+          0.00026938550217892043,
+          0.00025212749824277125
+        ]
+      }
+    },
+    "to_device_24q_1": {
+      "num_qubits": 24,
+      "num_terms": 1,
+      "payload_bytes": 32,
+      "pbase": {
+        "median_of_medians_seconds": 1.6044501535361633e-05,
+        "per_run_median_seconds": [
+          1.6044501535361633e-05,
+          1.6082001820905134e-05,
+          1.5995501598808914e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 1.6030502592911944e-05,
+        "per_run_median_seconds": [
+          1.6014502762118354e-05,
+          1.6104495443869382e-05,
+          1.6030502592911944e-05
+        ]
+      }
+    },
+    "to_device_24q_1000000": {
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "payload_bytes": 32000000,
+      "pbase": {
+        "median_of_medians_seconds": 0.0018924850010080263,
+        "per_run_median_seconds": [
+          0.0018924850010080263,
+          0.001873699999123346,
+          0.0019171120002283715
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.0019340039943926968,
+        "per_run_median_seconds": [
+          0.0019340039943926968,
+          0.0020319920004112646,
+          0.0018727409988059662
+        ]
+      }
+    },
+    "to_device_24q_128": {
+      "num_qubits": 24,
+      "num_terms": 128,
+      "payload_bytes": 4096,
+      "pbase": {
+        "median_of_medians_seconds": 1.792299735825509e-05,
+        "per_run_median_seconds": [
+          1.792299735825509e-05,
+          1.7971000488614663e-05,
+          1.7816997569752857e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 1.784500273060985e-05,
+        "per_run_median_seconds": [
+          1.784500273060985e-05,
+          1.7918497178470716e-05,
+          1.7748498066794127e-05
+        ]
+      }
+    },
+    "to_device_24q_4000000": {
+      "num_qubits": 24,
+      "num_terms": 4000000,
+      "payload_bytes": 128000000,
+      "pbase": {
+        "median_of_medians_seconds": 0.01012861100025475,
+        "per_run_median_seconds": [
+          0.009853429000941105,
+          0.01012861100025475,
+          0.010990131995640695
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.010194726004556287,
+        "per_run_median_seconds": [
+          0.009927399005391635,
+          0.010194726004556287,
+          0.010945307003566995
+        ]
+      }
+    },
+    "to_device_24q_4096": {
+      "num_qubits": 24,
+      "num_terms": 4096,
+      "payload_bytes": 131072,
+      "pbase": {
+        "median_of_medians_seconds": 3.379800182301551e-05,
+        "per_run_median_seconds": [
+          3.379800182301551e-05,
+          3.370500053279102e-05,
+          3.385050149518065e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 3.4303498978260905e-05,
+        "per_run_median_seconds": [
+          3.436849874560721e-05,
+          3.4303498978260905e-05,
+          3.3874501241371036e-05
+        ]
+      }
+    },
+    "to_device_24q_65536": {
+      "num_qubits": 24,
+      "num_terms": 65536,
+      "payload_bytes": 2097152,
+      "pbase": {
+        "median_of_medians_seconds": 0.00018107250070897862,
+        "per_run_median_seconds": [
+          0.00017985200247494504,
+          0.00018107250070897862,
+          0.0001835194998420775
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.00017756099623511545,
+        "per_run_median_seconds": [
+          0.0001779790000000503,
+          0.00017756099623511545,
+          0.000169928498507943
+        ]
+      }
+    },
+    "to_host_100q_1": {
+      "num_qubits": 100,
+      "num_terms": 1,
+      "payload_bytes": 48,
+      "pbase": {
+        "median_of_medians_seconds": 2.3969005269464105e-05,
+        "per_run_median_seconds": [
+          2.3969005269464105e-05,
+          2.414199843769893e-05,
+          2.3825003154342994e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 9.701001545181498e-06,
+        "per_run_median_seconds": [
+          9.62949707172811e-06,
+          9.732499165693298e-06,
+          9.701001545181498e-06
+        ]
+      }
+    },
+    "to_host_100q_1000000": {
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "payload_bytes": 48000000,
+      "pbase": {
+        "median_of_medians_seconds": 0.007724964998487849,
+        "per_run_median_seconds": [
+          0.007835996999347117,
+          0.007724964998487849,
+          0.0074501700000837445
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.0032228729978669435,
+        "per_run_median_seconds": [
+          0.0032228729978669435,
+          0.0033810309978434816,
+          0.003193444004864432
+        ]
+      }
+    },
+    "to_host_100q_128": {
+      "num_qubits": 100,
+      "num_terms": 128,
+      "payload_bytes": 6144,
+      "pbase": {
+        "median_of_medians_seconds": 2.7280002541374415e-05,
+        "per_run_median_seconds": [
+          2.6782498025568202e-05,
+          2.766649777186103e-05,
+          2.7280002541374415e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 1.0472500434843823e-05,
+        "per_run_median_seconds": [
+          1.0385996574768797e-05,
+          1.0501003998797387e-05,
+          1.0472500434843823e-05
+        ]
+      }
+    },
+    "to_host_100q_4000000": {
+      "num_qubits": 100,
+      "num_terms": 4000000,
+      "payload_bytes": 192000000,
+      "pbase": {
+        "median_of_medians_seconds": 0.08653785200294806,
+        "per_run_median_seconds": [
+          0.08596730800491059,
+          0.0865612119960133,
+          0.08653785200294806
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.04731804699986242,
+        "per_run_median_seconds": [
+          0.04891603600117378,
+          0.04731804699986242,
+          0.04694985200330848
+        ]
+      }
+    },
+    "to_host_100q_4096": {
+      "num_qubits": 100,
+      "num_terms": 4096,
+      "payload_bytes": 196608,
+      "pbase": {
+        "median_of_medians_seconds": 7.795000055921264e-05,
+        "per_run_median_seconds": [
+          7.751950033707544e-05,
+          7.795000055921264e-05,
+          7.830699541955255e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 2.5208501028828323e-05,
+        "per_run_median_seconds": [
+          2.5208501028828323e-05,
+          2.7195495931664482e-05,
+          2.502899951650761e-05
+        ]
+      }
+    },
+    "to_host_100q_65536": {
+      "num_qubits": 100,
+      "num_terms": 65536,
+      "payload_bytes": 3145728,
+      "pbase": {
+        "median_of_medians_seconds": 0.0006547095035784878,
+        "per_run_median_seconds": [
+          0.0006547095035784878,
+          0.0006923895016370807,
+          0.0006518034970213193
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.00025990949870902114,
+        "per_run_median_seconds": [
+          0.00025990949870902114,
+          0.00027010799749405123,
+          0.00025705599909997545
+        ]
+      }
+    },
+    "to_host_24q_1": {
+      "num_qubits": 24,
+      "num_terms": 1,
+      "payload_bytes": 32,
+      "pbase": {
+        "median_of_medians_seconds": 2.371200025663711e-05,
+        "per_run_median_seconds": [
+          2.371200025663711e-05,
+          2.3878499632701278e-05,
+          2.35030020121485e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 9.732499165693298e-06,
+        "per_run_median_seconds": [
+          9.65300205280073e-06,
+          9.73799978964962e-06,
+          9.732499165693298e-06
+        ]
+      }
+    },
+    "to_host_24q_1000000": {
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "payload_bytes": 32000000,
+      "pbase": {
+        "median_of_medians_seconds": 0.014382268003828358,
+        "per_run_median_seconds": [
+          0.014327126998978201,
+          0.014539480995154008,
+          0.014382268003828358
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.0054274900030577555,
+        "per_run_median_seconds": [
+          0.0054274900030577555,
+          0.0057616650010459125,
+          0.005317248003848363
+        ]
+      }
+    },
+    "to_host_24q_128": {
+      "num_qubits": 24,
+      "num_terms": 128,
+      "payload_bytes": 4096,
+      "pbase": {
+        "median_of_medians_seconds": 2.6193003577645868e-05,
+        "per_run_median_seconds": [
+          2.6193003577645868e-05,
+          2.629199661896564e-05,
+          2.609000148368068e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 1.0161998943658546e-05,
+        "per_run_median_seconds": [
+          1.0070503776660189e-05,
+          1.0161998943658546e-05,
+          1.016899841488339e-05
+        ]
+      }
+    },
+    "to_host_24q_4000000": {
+      "num_qubits": 24,
+      "num_terms": 4000000,
+      "payload_bytes": 128000000,
+      "pbase": {
+        "median_of_medians_seconds": 0.03703984500316437,
+        "per_run_median_seconds": [
+          0.03683458099840209,
+          0.0370722170046065,
+          0.03703984500316437
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.016292296000756323,
+        "per_run_median_seconds": [
+          0.016292296000756323,
+          0.016858726005011704,
+          0.015238904998113867
+        ]
+      }
+    },
+    "to_host_24q_4096": {
+      "num_qubits": 24,
+      "num_terms": 4096,
+      "payload_bytes": 131072,
+      "pbase": {
+        "median_of_medians_seconds": 6.521949762827717e-05,
+        "per_run_median_seconds": [
+          6.413799928850494e-05,
+          6.521949762827717e-05,
+          6.76535019010771e-05
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 2.0903000404359773e-05,
+        "per_run_median_seconds": [
+          2.0903000404359773e-05,
+          2.255799699923955e-05,
+          2.061749910353683e-05
+        ]
+      }
+    },
+    "to_host_24q_65536": {
+      "num_qubits": 24,
+      "num_terms": 65536,
+      "payload_bytes": 2097152,
+      "pbase": {
+        "median_of_medians_seconds": 0.0005158054991625249,
+        "per_run_median_seconds": [
+          0.0005109115008963272,
+          0.0005158054991625249,
+          0.000524227500136476
+        ]
+      },
+      "pinf": {
+        "median_of_medians_seconds": 0.00017560299966135062,
+        "per_run_median_seconds": [
+          0.00017560299966135062,
+          0.00018476600234862417,
+          0.0001752379976096563
+        ]
+      }
+    }
+  },
+  "runs": [
+    {
+      "benchmark": "cuda_host_transfers",
+      "command": "python benchmarks/bench_host_transfers.py --backend cuda --label pbase --output transfers_pbase_1.json",
+      "file": "transfers_pbase_1.json",
+      "git_commit": "4ca82d5",
+      "git_dirty": true,
+      "label": "pbase",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "2b3c88b104f186880988f40b41e1908867a49a524de3cf263411c4678769009f",
+        "built_native_source_sha256": "a2b10ecc78b184479bbdd7f6b114e7d78c6426bb2897e69ce8b18db749c1f6e7",
+        "checkout_native_source_sha256": "a2b10ecc78b184479bbdd7f6b114e7d78c6426bb2897e69ce8b18db749c1f6e7",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_host_transfers",
+      "command": "python benchmarks/bench_host_transfers.py --backend cuda --label pbase --output transfers_pbase_2.json",
+      "file": "transfers_pbase_2.json",
+      "git_commit": "4ca82d5",
+      "git_dirty": true,
+      "label": "pbase",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "2b3c88b104f186880988f40b41e1908867a49a524de3cf263411c4678769009f",
+        "built_native_source_sha256": "a2b10ecc78b184479bbdd7f6b114e7d78c6426bb2897e69ce8b18db749c1f6e7",
+        "checkout_native_source_sha256": "a2b10ecc78b184479bbdd7f6b114e7d78c6426bb2897e69ce8b18db749c1f6e7",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_host_transfers",
+      "command": "python benchmarks/bench_host_transfers.py --backend cuda --label pbase --output transfers_pbase_3.json",
+      "file": "transfers_pbase_3.json",
+      "git_commit": "4ca82d5",
+      "git_dirty": true,
+      "label": "pbase",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "2b3c88b104f186880988f40b41e1908867a49a524de3cf263411c4678769009f",
+        "built_native_source_sha256": "a2b10ecc78b184479bbdd7f6b114e7d78c6426bb2897e69ce8b18db749c1f6e7",
+        "checkout_native_source_sha256": "a2b10ecc78b184479bbdd7f6b114e7d78c6426bb2897e69ce8b18db749c1f6e7",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_host_transfers",
+      "command": "python benchmarks/bench_host_transfers.py --backend cuda --label pinf --output transfers_pinf_1.json",
+      "file": "transfers_pinf_1.json",
+      "git_commit": "1ea926e",
+      "git_dirty": false,
+      "label": "pinf",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "3aa8d32c7531f639c3668d29a3310a83873d257efdf6d64337bedb165f81d534",
+        "built_native_source_sha256": "3577b01d2f60d5699824e26eddafda855b79a74b083491ef5a1bd7b83c775efe",
+        "checkout_native_source_sha256": "3577b01d2f60d5699824e26eddafda855b79a74b083491ef5a1bd7b83c775efe",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_host_transfers",
+      "command": "python benchmarks/bench_host_transfers.py --backend cuda --label pinf --output transfers_pinf_2.json",
+      "file": "transfers_pinf_2.json",
+      "git_commit": "1ea926e",
+      "git_dirty": false,
+      "label": "pinf",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "3aa8d32c7531f639c3668d29a3310a83873d257efdf6d64337bedb165f81d534",
+        "built_native_source_sha256": "3577b01d2f60d5699824e26eddafda855b79a74b083491ef5a1bd7b83c775efe",
+        "checkout_native_source_sha256": "3577b01d2f60d5699824e26eddafda855b79a74b083491ef5a1bd7b83c775efe",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_host_transfers",
+      "command": "python benchmarks/bench_host_transfers.py --backend cuda --label pinf --output transfers_pinf_3.json",
+      "file": "transfers_pinf_3.json",
+      "git_commit": "1ea926e",
+      "git_dirty": false,
+      "label": "pinf",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "3aa8d32c7531f639c3668d29a3310a83873d257efdf6d64337bedb165f81d534",
+        "built_native_source_sha256": "3577b01d2f60d5699824e26eddafda855b79a74b083491ef5a1bd7b83c775efe",
+        "checkout_native_source_sha256": "3577b01d2f60d5699824e26eddafda855b79a74b083491ef5a1bd7b83c775efe",
+        "matches_checkout_native_sources": true
+      }
+    }
+  ]
+}
