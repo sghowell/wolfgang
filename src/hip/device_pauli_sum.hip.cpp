@@ -22,7 +22,7 @@ namespace {
 // kPinnedStagingMaxBytes, and is freed when the thread exits. If pinned
 // memory cannot be allocated, to_host falls back to pageable copies.
 constexpr std::size_t kPinnedStagingMaxBytes = std::size_t{16} << 20;
-constexpr std::size_t kHipStagedMaxBytes = std::size_t{256} << 10;
+constexpr std::size_t kHipStagedMaxBytes = std::size_t{64} << 10;
 
 class ThreadPinnedStaging {
  public:
@@ -304,9 +304,10 @@ PauliSum DevicePauliSum::to_host() const {
   std::vector<std::complex<double>> coeffs;
 
   hip_detail::ScopedHipDevice guard(impl_->device_ordinal);
-  // On the MI300X, ROCm's pageable copies beat staging from about 2 MB, so only
-  // small operators stage, where the gain is one wait instead of three; larger
-  // destinations are copied directly, with huge pages requested first.
+  // On the MI300X, staging pays off only for small operators, where one wait
+  // replaces three (it was 2% slower at 131 KB and up to 1.5x slower from
+  // 2 MB); larger destinations are copied directly, with huge pages requested
+  // first.
   ThreadPinnedStaging& staging = thread_pinned_staging();
   std::byte* staged = total_bytes == 0 || total_bytes > kHipStagedMaxBytes
       ? nullptr
