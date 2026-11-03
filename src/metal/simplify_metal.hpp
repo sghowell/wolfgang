@@ -3,6 +3,7 @@
 #include "wolfgang/device_pauli_sum.hpp"
 
 #include <cstddef>
+#include <cstdint>
 
 namespace wolfgang::metal_detail {
 
@@ -67,5 +68,9 @@ struct MetalSimplifyCandidateResult {
     const DevicePauliSum& input,
     double atol,
     double rtol);
+
+// Number of public hybrid simplify runs in this process, so tests can assert
+// which path a call took (both paths return identical results).
+[[nodiscard]] std::uint64_t hybrid_simplify_runs_for_testing() noexcept;
 
 }  // namespace wolfgang::metal_detail

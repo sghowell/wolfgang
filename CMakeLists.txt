@@ -461,6 +461,15 @@ if(WOLFGANG_BUILD_METAL_ENABLED)
     PROPERTIES
       OBJCXX_STANDARD 20
       OBJCXX_STANDARD_REQUIRED ON)
+  # Embed the simplify kernels so wheels, sdist builds and moved checkouts
+  # never read the build tree at run time. Edits to the .metal file reconfigure
+  # through the native input manifest below (CMAKE_CONFIGURE_DEPENDS).
+  file(READ "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/kernels/simplify.metal" WOLFGANG_SIMPLIFY_METAL_SOURCE)
+  file(CONFIGURE
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/generated/metal/simplify_kernel_source.inc"
+    CONTENT "R\"wolfgang_metal(@WOLFGANG_SIMPLIFY_METAL_SOURCE@)wolfgang_metal\"\n"
+    @ONLY)
+  target_include_directories(wolfgang_core PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated")
 endif()
 if(WOLFGANG_BUILD_TBB_ENABLED)
   target_link_libraries(wolfgang_core PRIVATE TBB::tbb)

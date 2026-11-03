@@ -200,6 +200,10 @@ void register_internal_bindings(nb::module_& module) {
 
 #if WOLFGANG_BUILD_METAL_ENABLED
   module.def(
+      "_metal_hybrid_simplify_runs_for_testing",
+      []() { return wolfgang::metal_detail::hybrid_simplify_runs_for_testing(); },
+      "Private count of public Metal hybrid simplify runs in this process.");
+  module.def(
       "_metal_simplify_words1_candidate_for_testing",
       [](const wolfgang::DevicePauliSum& input,
          double atol,

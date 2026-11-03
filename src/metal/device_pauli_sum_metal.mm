@@ -232,7 +232,8 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   const char* selector = std::getenv("WOLFGANG_METAL_BENCH_SIMPLIFY");
   const std::string_view forced = selector == nullptr ? std::string_view{} : std::string_view{selector};
   const bool use_hybrid = forced != "host_bridge" &&
-      (forced == "hybrid" || impl_->num_terms >= metal_detail::kHybridSimplifyMinTerms);
+      (forced == "hybrid" || impl_->num_terms >= metal_detail::kHybridSimplifyMinTerms) &&
+      impl_->num_terms <= metal_detail::kHybridSimplifyMaxTerms;
   if (use_hybrid && impl_->words == 1 && metal_detail::hybrid_simplify_supported(impl_->device)) {
     metal_detail::HybridSimplifyOutput output = metal_detail::simplify_words1_hybrid(
         impl_->device,

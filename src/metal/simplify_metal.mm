@@ -5,15 +5,16 @@
 #include "detail/simplify_numeric.hpp"
 
 #include <algorithm>
+#include <atomic>
 #include <chrono>
 #include <cmath>
 #include <complex>
 #include <cstdint>
 #include <cstring>
-#include <fstream>
 #include <limits>
 #include <memory>
-#include <sstream>
+#include <mutex>
+#include <new>
 #include <stdexcept>
 #include <string>
 
@@ -59,6 +60,7 @@ enum class SimplifyKernel {
 
 // Must match kHybridSortTile in kernels/simplify.metal.
 constexpr std::uint32_t kHybridSortTile = 1024;
+static_assert((kHybridSortTile & (kHybridSortTile - 1U)) == 0, "the tile must be a power of two");
 constexpr std::uint32_t kHybridSortTileThreads = kHybridSortTile / 2;
 
 struct HybridSortParams {
@@ -122,34 +124,39 @@ NSString* simplify_kernel_name(SimplifyKernel kernel) {
   return @"fp_simplify_words1_init_keys";
 }
 
-std::string simplify_kernel_source_text() {
-  const std::string source_file = __FILE__;
-  const std::string marker = "simplify_metal.mm";
-  const std::size_t marker_pos = source_file.rfind(marker);
-  if (marker_pos == std::string::npos) {
-    throw std::runtime_error("cannot locate Metal simplify source directory");
-  }
-  const std::string kernel_path =
-      source_file.substr(0, marker_pos) + "kernels/simplify.metal";
-  std::ifstream input(kernel_path);
-  if (!input) {
-    throw std::runtime_error("failed to open Metal simplify kernel source: " + kernel_path);
-  }
-  std::ostringstream buffer;
-  buffer << input.rdbuf();
-  return buffer.str();
-}
+// Embedded at configure time from kernels/simplify.metal (see CMakeLists.txt).
+constexpr const char kSimplifyKernelSource[] =
+#include "metal/simplify_kernel_source.inc"
+    ;
 
-NSString* simplify_kernel_source() {
-  static const std::string source_text = simplify_kernel_source_text();
-  NSString* source = [NSString stringWithUTF8String:source_text.c_str()];
+// Compiles the simplify kernels once per process; every pipeline comes from
+// this library. The caller holds the pipeline cache mutex.
+id<MTLLibrary> simplify_library(id<MTLDevice> device) {
+  static id<MTLLibrary> library = nil;
+  if (library != nil) {
+    return library;
+  }
+  NSString* source = [NSString stringWithUTF8String:kSimplifyKernelSource];
   if (source == nil) {
     throw std::runtime_error("failed to build Metal simplify kernel source string");
   }
-  return source;
+  MTLCompileOptions* options = [[MTLCompileOptions alloc] init];
+  options.preprocessorMacros = @{@"WOLFGANG_HYBRID_SORT_TILE" : @(kHybridSortTile)};
+  NSError* error = nil;
+  library = [device newLibraryWithSource:source options:options error:&error];
+  [options release];
+  if (library == nil) {
+    throw std::runtime_error(
+        "Metal failed to compile simplify kernels: " + nsstring_to_string([error localizedDescription]));
+  }
+  return library;
 }
 
 id<MTLComputePipelineState> simplify_pipeline(id<MTLDevice> device, SimplifyKernel kernel) {
+  // Public simplify reaches this cache, so concurrent callers must not race
+  // on first use.
+  static std::mutex mutex;
+  const std::lock_guard<std::mutex> lock(mutex);
   static id<MTLComputePipelineState> init = nil;
   static id<MTLComputePipelineState> sort = nil;
   static id<MTLComputePipelineState> mark = nil;
@@ -199,7 +206,18 @@ id<MTLComputePipelineState> simplify_pipeline(id<MTLDevice> device, SimplifyKern
       break;
   }
   if (*selected == nil) {
-    *selected = make_compute_pipeline(device, simplify_kernel_name(kernel), simplify_kernel_source());
+    id<MTLFunction> function = [simplify_library(device) newFunctionWithName:simplify_kernel_name(kernel)];
+    if (function == nil) {
+      throw std::runtime_error(
+          "Metal simplify kernel function is missing: " + nsstring_to_string(simplify_kernel_name(kernel)));
+    }
+    NSError* error = nil;
+    *selected = [device newComputePipelineStateWithFunction:function error:&error];
+    [function release];
+    if (*selected == nil) {
+      throw std::runtime_error(
+          "Metal failed to create simplify pipeline: " + nsstring_to_string([error localizedDescription]));
+    }
   }
   return *selected;
 }
@@ -685,12 +703,47 @@ MetalSimplifyCandidateResult simplify_words1_device_candidate_for_testing(
   return result;
 }
 
-bool hybrid_simplify_supported(id<MTLDevice> device) {
-  return [simplify_pipeline(device, SimplifyKernel::HybridTileSort) maxTotalThreadsPerThreadgroup] >=
-             kHybridSortTileThreads &&
-      [simplify_pipeline(device, SimplifyKernel::HybridTileMerge) maxTotalThreadsPerThreadgroup] >=
-             kHybridSortTileThreads;
+namespace {
+
+std::atomic<std::uint64_t> g_hybrid_simplify_runs{0};
+
+// Shared scratch for the hybrid. Allocation failure raises std::bad_alloc
+// (MemoryError in Python), as CPU simplify would for the same size.
+id<MTLBuffer> make_hybrid_buffer(id<MTLDevice> device, const void* source, std::size_t bytes) {
+  id<MTLBuffer> buffer = [device newBufferWithLength:bytes options:MTLResourceStorageModeShared];
+  if (buffer == nil) {
+    throw std::bad_alloc();
+  }
+  if (source != nullptr) {
+    std::memcpy([buffer contents], source, bytes);
+  }
+  return buffer;
 }
+
+}  // namespace
+
+bool hybrid_simplify_supported(id<MTLDevice> device) noexcept {
+  // Any pipeline failure keeps the host bridge; tests assert through
+  // hybrid_simplify_runs_for_testing that the hybrid really runs.
+  try {
+    ScopedAutoreleasePool pool;
+    for (const SimplifyKernel kernel :
+         {SimplifyKernel::HybridTileSort, SimplifyKernel::HybridTileMerge,
+          SimplifyKernel::HybridGlobalStep, SimplifyKernel::HybridGatherCoeffs}) {
+      if ([simplify_pipeline(device, kernel) maxTotalThreadsPerThreadgroup] < kHybridSortTileThreads) {
+        return false;
+      }
+    }
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+std::uint64_t hybrid_simplify_runs_for_testing() noexcept {
+  return g_hybrid_simplify_runs.load(std::memory_order_relaxed);
+}
+
 
 HybridSimplifyOutput simplify_words1_hybrid(
     id<MTLDevice> device,
@@ -709,6 +762,7 @@ HybridSimplifyOutput simplify_words1_hybrid(
       atol,
       rtol);
   HybridSimplifyOutput out;
+  g_hybrid_simplify_runs.fetch_add(1, std::memory_order_relaxed);
   if (terms == 0) {
     return out;
   }
@@ -723,23 +777,19 @@ HybridSimplifyOutput simplify_words1_hybrid(
   id<MTLComputePipelineState> tile_sort = simplify_pipeline(device, SimplifyKernel::HybridTileSort);
   id<MTLComputePipelineState> tile_merge = simplify_pipeline(device, SimplifyKernel::HybridTileMerge);
   id<MTLComputePipelineState> global_step = simplify_pipeline(device, SimplifyKernel::HybridGlobalStep);
-  if (!hybrid_simplify_supported(device)) {
+  id<MTLComputePipelineState> gather = simplify_pipeline(device, SimplifyKernel::HybridGatherCoeffs);
+  if ([tile_sort maxTotalThreadsPerThreadgroup] < kHybridSortTileThreads ||
+      [tile_merge maxTotalThreadsPerThreadgroup] < kHybridSortTileThreads) {
     throw std::runtime_error("Metal hybrid simplify tile kernels exceed this device's threadgroup limit");
   }
-  ScopedMetalBuffer sort_x(make_shared_buffer(
-      device, nullptr, checked_bytes<std::uint64_t>(terms, "Metal hybrid sort x"), "Metal hybrid sorted x"));
-  ScopedMetalBuffer sort_z(make_shared_buffer(
-      device, nullptr, checked_bytes<std::uint64_t>(terms, "Metal hybrid sort z"), "Metal hybrid sorted z"));
-  ScopedMetalBuffer sort_index(make_shared_buffer(
-      device,
-      nullptr,
-      checked_bytes<std::uint32_t>(terms, "Metal hybrid sort index"),
-      "Metal hybrid sorted input index"));
-  ScopedMetalBuffer sort_coeffs(make_shared_buffer(
-      device,
-      nullptr,
-      checked_bytes<std::complex<double>>(terms, "Metal hybrid sorted coefficients"),
-      "Metal hybrid sorted coefficients"));
+  ScopedMetalBuffer sort_x(make_hybrid_buffer(
+      device, nullptr, checked_bytes<std::uint64_t>(terms, "Metal hybrid sort x")));
+  ScopedMetalBuffer sort_z(make_hybrid_buffer(
+      device, nullptr, checked_bytes<std::uint64_t>(terms, "Metal hybrid sort z")));
+  ScopedMetalBuffer sort_index(make_hybrid_buffer(
+      device, nullptr, checked_bytes<std::uint32_t>(terms, "Metal hybrid sort index")));
+  ScopedMetalBuffer sort_coeffs(make_hybrid_buffer(
+      device, nullptr, checked_bytes<std::complex<double>>(terms, "Metal hybrid sorted coefficients")));
 
   id<MTLCommandBuffer> command_buffer = [command_queue commandBuffer];
   if (command_buffer == nil) {
@@ -775,7 +825,7 @@ HybridSimplifyOutput simplify_words1_hybrid(
     [encoder setBytes:&params length:sizeof(params) atIndex:3];
     [encoder dispatchThreadgroups:tile_grid threadsPerThreadgroup:tile_threads];
   }
-  [encoder setComputePipelineState:simplify_pipeline(device, SimplifyKernel::HybridGatherCoeffs)];
+  [encoder setComputePipelineState:gather];
   [encoder setBuffer:coeffs offset:0 atIndex:0];
   [encoder setBuffer:sort_index.get() offset:0 atIndex:1];
   [encoder setBuffer:sort_coeffs.get() offset:0 atIndex:2];
@@ -824,10 +874,9 @@ HybridSimplifyOutput simplify_words1_hybrid(
     out.z = sort_z.release();
     out.coeffs = sort_coeffs.release();
   } else {
-    out.x = make_shared_buffer(device, keys_x, survivors * sizeof(std::uint64_t), "x words");
-    out.z = make_shared_buffer(device, keys_z, survivors * sizeof(std::uint64_t), "z words");
-    out.coeffs =
-        make_shared_buffer(device, sums, survivors * sizeof(std::complex<double>), "coefficients");
+    out.x = make_hybrid_buffer(device, keys_x, survivors * sizeof(std::uint64_t));
+    out.z = make_hybrid_buffer(device, keys_z, survivors * sizeof(std::uint64_t));
+    out.coeffs = make_hybrid_buffer(device, sums, survivors * sizeof(std::complex<double>));
   }
   return out;
 }

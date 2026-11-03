@@ -79,14 +79,17 @@ void wait_for_completion(id<MTLCommandBuffer> command_buffer, const char* action
 // kHybridSimplifyMinTerms terms: the GPU sorts (x, z, input index) and the CPU
 // sums each duplicate run in float64, in input order, over the shared buffers.
 // The result equals CPU simplify bit for bit; smaller inputs use the host bridge.
-// On an M4 Pro the hybrid beat the bridge in every measured case from 12,288
-// terms and broke even near 8,192, where its fixed command-buffer round trip
-// (about 0.3 ms) dominates.
+// On an M4 Pro the hybrid beat the bridge in every measured case from 8,192
+// terms and same-host scalar CPU simplify (the campaign's promotion gate) from
+// 12,288; below that its fixed command-buffer round trip (about 0.25 ms)
+// dominates.
 inline constexpr std::size_t kHybridSimplifyMinTerms = 12288;
+// The sort network's padded size must fit in uint32 grid indices.
+inline constexpr std::size_t kHybridSimplifyMaxTerms = std::size_t{1} << 31;
 
-// False when the hybrid's 512-thread tile kernels exceed the device's
-// threadgroup limit; simplify then keeps the host bridge.
-[[nodiscard]] bool hybrid_simplify_supported(id<MTLDevice> device);
+// False when a hybrid pipeline cannot be built or its 512-thread tile kernels
+// exceed the device's threadgroup limit; simplify then keeps the host bridge.
+[[nodiscard]] bool hybrid_simplify_supported(id<MTLDevice> device) noexcept;
 // Owns +1 references to the simplified operator's buffers until the caller
 // moves them into a DevicePauliSum::Impl. Buffers are nil when num_terms is 0
 // and may be longer than num_terms entries.

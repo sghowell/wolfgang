@@ -1,6 +1,7 @@
 #include "device_pauli_sum_metal.hpp"
 
 #include <cstring>
+#include <mutex>
 #include <stdexcept>
 #include <string>
 
@@ -22,10 +23,16 @@ std::string nsstring_to_string(NSString* value) {
 }
 
 id<MTLDevice> create_default_device() {
-  // MTLCreateSystemDefaultDevice costs about 45 us per call on an M4 Pro and
-  // returns the same device each time, so create it once per process. Callers
+  // MTLCreateSystemDefaultDevice returns the same device on every call but is
+  // not free, and uploads used to call it three times. Keep the first device
+  // for the process; a failed probe (nil) is retried on the next call. Callers
   // own (and release) a +1 reference, as before.
-  static id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+  static std::mutex mutex;
+  static id<MTLDevice> device = nil;
+  const std::lock_guard<std::mutex> lock(mutex);
+  if (device == nil) {
+    device = MTLCreateSystemDefaultDevice();
+  }
   return [device retain];
 }
 
