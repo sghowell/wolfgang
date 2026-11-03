@@ -147,7 +147,9 @@ thread per GPU keeps several GPUs busy at once; threads that share a GPU take
 turns, since a GPU runs one Wolfgang computation at a time. A call switches back
 to the thread's current device afterwards, unless that device has no CUDA
 context yet: then the thread stays on the operator's device, so a process that
-only uses GPU 1 never allocates a context on GPU 0.
+only uses GPU 1 never allocates a context on GPU 0. A kernel on another GPU can
+read a CUDA export when the two GPUs support peer access; freeing the exported
+operator waits for that GPU too.
 
 ```python
 from concurrent.futures import ThreadPoolExecutor

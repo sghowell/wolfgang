@@ -103,7 +103,8 @@ faulted with an illegal address; the first export from a device now maps its
 memory pool into every peer that can access it (26 ms once). Device calls held
 the GIL, so two threads on two GPUs ran no faster than one; CUDA calls now
 release it and reach 1.88-1.98 times one thread's throughput, with a per-device
-lock keeping same-device threads at their old throughput. A process that used
+lock holding same-device threads at 0.95-0.99 times one thread (0.99-1.02
+before; 0.63-0.65 without the lock). A process that used
 only GPU 1 created a 516 MiB context on GPU 0; device switches now go back
 only to a device that has a context. Single-GPU call overhead is unchanged
 (`docs/benchmarks/reports/cuda_multi_gpu_h100_2026-11-03.md`).

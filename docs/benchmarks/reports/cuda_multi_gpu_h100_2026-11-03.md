@@ -24,23 +24,34 @@ fixes:
   `DeviceCommutationMatrix` through DLPack or the CUDA Array Interface) maps
   that device's pool into every peer GPU that can access it, with
   `cudaMemPoolSetAccess`. The mapping covers the pool's current and future
-  blocks; processes that never export pay nothing.
+  blocks; processes that never export pay nothing. Peers are mapped one at a
+  time, and a failure is retried at the next export. Freeing an exported
+  buffer synchronizes the owning device and every mapped peer that has a live
+  context: once peers can read a buffer, a peer kernel may still be doing so
+  when its last reference goes away. The first version of this slice
+  synchronized only the owner, and a test caught a peer kernel reading memory
+  the pool had already reused.
 - **GIL.** CUDA device calls release the GIL
   (`device_without_gil` in `bindings/python/pauli_sum_py.cpp`). Argument
   parsing, buffer pinning and NumPy results stay under it. Compute calls
   then take a per-device lock: without it, two threads on one GPU contended for
   its default stream and launch path and lost about a third of their
   throughput on small calls (0.63-0.65 times one thread for `matmul` of
-  128 x 128 terms and simplify of 4,096 terms). Transfers skip the lock
+  128 x 128 terms and simplify of 4,096 terms in three runs at `3e5ba24`,
+  `threads_no_lock_summary.json`). Transfers skip the lock
   because their host-side copying overlaps. HIP and Metal builds keep the GIL.
 - **Device switches.** One guard (`src/cuda/device_guard.cuh`) replaces the
   seven places that switched devices. It switches back to the caller's device
   only if that device already has a primary context; otherwise the thread
-  stays on the operand's device, as with PyTorch's device guard.
+  stays on the operand's device, so `cudaGetDevice` reports that device to
+  every library on the thread. PyTorch's guard avoids the same context but
+  keeps a thread-local device of its own.
 - **Exit.** compute-sanitizer counted the idle pinned buffers of the
   process-wide `to_host` staging pool (slice 3) as leaks. An exit handler
   registered after the first pinned allocation, so it runs before the
-  runtime's own, now frees them.
+  runtime's own, now frees them. Both exit handlers (this one and the device
+  pool's) skip in a forked child, where the CUDA state and any lock held at
+  fork are unusable.
 
 ## Evidence
 
@@ -50,6 +61,7 @@ benchmarks: benchmarks/bench_cuda_multi_gpu.py --suite threads --repeat 5   (3 r
             benchmarks/bench_cuda_multi_gpu.py --suite peer --repeat 5      (5 fresh processes per mode)
 data:       docs/benchmarks/data/cuda_multi_gpu_h100_2026-11-03/multi_gpu_summary.json
             docs/benchmarks/data/cuda_multi_gpu_h100_2026-11-03/overhead_summary.json
+            docs/benchmarks/data/cuda_multi_gpu_h100_2026-11-03/threads_no_lock_summary.json
 ```
 
 | Item | Value |
@@ -81,8 +93,8 @@ one-thread throughput, median over three runs:
 | `to_device`, 1M terms | 1.98 ms | 0.99 | 1.96 | 1.00 | 0.99 |
 | `to_host`, 1M terms | 2.31 ms | 1.00 | 1.98 | 1.00 | 1.96 |
 
-The per-run spread of the two-GPU ratio was within 0.04 for every candidate
-row. `to_host` overlaps even on one GPU because most of its time is host-side
+The per-run spread of the two-GPU ratio was within 0.04 for the compute rows
+and within 0.09 for the transfer rows. `to_host` overlaps even on one GPU because most of its time is host-side
 copying into new memory, which the lock does not cover.
 
 ### Cost of the peer mapping
@@ -129,7 +141,10 @@ added no measurable cost to calls of 10 us and up.
 - Peer reads were checked with a CuPy kernel. PyTorch refuses cross-device
   tensors, so it was not tested.
 - HIP and Metal keep the GIL and were not tested on more than one device; no
-  two-GPU MI300X host was available.
+  two-GPU MI300X host was available. The staging pool's exit handler is shared
+  with HIP and was not run on an MI300X.
+- The pool-growth row is dominated by about 88 ms of host-to-device copying,
+  so it cannot resolve a mapping cost smaller than its 1.5 ms spread.
 - Threads that share a GPU gain nothing from concurrency by design: they take
   turns on the device lock.
 - When a thread's previous device has no context, the thread now stays on the
