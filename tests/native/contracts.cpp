@@ -1,7 +1,9 @@
 #include "wolfgang/pauli_sum.hpp"
+#include "detail/staged_transfer.hpp"
 
 #include <cmath>
 #include <cstdlib>
+#include <cstring>
 #include <complex>
 #include <iostream>
 #include <limits>
@@ -13,10 +15,63 @@ namespace {
 void require(bool condition, const char* message) {
   if (!condition) throw std::runtime_error(message);
 }
+
+// Staged device-to-host copies (src/detail/staged_transfer.hpp) with a fake
+// stream: copies run only at the next wait, as on a GPU, so draining a half
+// before its copy lands, or refilling a half before it is drained, corrupts
+// the result.
+void check_staged_device_to_host() {
+  namespace acc = wolfgang::accelerator_detail;
+  struct Pending {
+    std::byte* dst;
+    const std::byte* src;
+    std::size_t bytes;
+  };
+  for (const std::size_t staging_bytes : {std::size_t{64}, std::size_t{96}, std::size_t{4096}, std::size_t{1} << 16}) {
+    for (const std::size_t terms : {std::size_t{0}, std::size_t{1}, std::size_t{3}, std::size_t{37}, std::size_t{1000}}) {
+      const std::size_t words = 3;
+      std::vector<std::uint64_t> x_src(terms * words), z_src(terms * words);
+      std::vector<std::complex<double>> c_src(terms);
+      for (std::size_t i = 0; i < x_src.size(); ++i) {
+        x_src[i] = 0x9E3779B97F4A7C15ULL * (i + 1);
+        z_src[i] = ~x_src[i];
+      }
+      for (std::size_t i = 0; i < terms; ++i) {
+        c_src[i] = {static_cast<double>(i), -0.5 * static_cast<double>(i)};
+      }
+      std::vector<std::uint64_t> x{7}, z;
+      std::vector<std::complex<double>> c;
+      const std::vector<acc::DeviceToHostSegment> segments{
+          acc::device_to_host_segment(x, x_src.data(), x_src.size()),
+          acc::device_to_host_segment(z, z_src.data(), z_src.size()),
+          acc::device_to_host_segment(c, c_src.data(), c_src.size())};
+      std::vector<std::byte> staging(staging_bytes);
+      std::vector<Pending> pending;
+      std::size_t waits = 0;
+      acc::staged_device_to_host(
+          staging.data(), staging.size(), segments,
+          [&](std::byte* dst, const std::byte* src, std::size_t bytes) { pending.push_back({dst, src, bytes}); },
+          [&] {
+            ++waits;
+            for (const Pending& copy : pending) std::memcpy(copy.dst, copy.src, copy.bytes);
+            pending.clear();
+          });
+      require(pending.empty(), "staged copy left a copy unfinished");
+      require(x == x_src && z == z_src && c == c_src, "staged copy round trip");
+      if (terms == 3 && staging_bytes == (std::size_t{1} << 16)) {
+        require(waits == 1, "a small operator waits once");
+      }
+    }
+  }
+  require(acc::staging_bytes_for(10, std::size_t{16} << 20) == (std::size_t{64} << 10), "minimum staging");
+  require(acc::staging_bytes_for(std::size_t{40} << 20, std::size_t{16} << 20) == (std::size_t{16} << 20),
+          "staging cap");
+}
 }
 
 int main() {
   try {
+    check_staged_device_to_host();
     using wolfgang::PauliSum;
     // Independent Pauli algebra oracle: X Y = i Z, including multiword packing.
     for (const std::size_t width : {1U, 65U, 130U}) {

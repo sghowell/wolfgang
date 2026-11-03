@@ -1,5 +1,6 @@
 #include "device_pauli_sum.cuh"
 #include "cuda/pool_allocator.cuh"
+#include "detail/staged_transfer.hpp"
 
 #include <cuda.h>
 #include <cuda_runtime_api.h>
@@ -32,6 +33,55 @@ using cuda_detail::ScopedCudaDevice;
 static_assert(sizeof(std::complex<double>) == sizeof(thrust::complex<double>));
 
 namespace {
+
+// Per-thread pinned buffer for device-to-host copies
+// (detail/staged_transfer.hpp). It grows to the largest transfer seen, up to
+// kPinnedStagingMaxBytes, and is freed when the thread exits. If pinned
+// memory cannot be allocated, to_host falls back to pageable copies.
+constexpr std::size_t kPinnedStagingMaxBytes = std::size_t{16} << 20;
+
+class ThreadPinnedStaging {
+ public:
+  ThreadPinnedStaging() = default;
+  ThreadPinnedStaging(const ThreadPinnedStaging&) = delete;
+  ThreadPinnedStaging& operator=(const ThreadPinnedStaging&) = delete;
+  // The main thread's thread_local destructors run before the CUDA runtime's
+  // exit handlers; any error from a runtime already unloading is ignored.
+  ~ThreadPinnedStaging() {
+    if (pointer_ != nullptr) {
+      (void)cudaFreeHost(pointer_);
+    }
+  }
+
+  // At least `bytes` of pinned memory, or nullptr when it cannot be had.
+  std::byte* reserve(std::size_t bytes) noexcept {
+    if (bytes > capacity_) {
+      if (pointer_ != nullptr) {
+        (void)cudaFreeHost(pointer_);
+        pointer_ = nullptr;
+        capacity_ = 0;
+      }
+      void* pointer = nullptr;
+      if (cudaHostAlloc(&pointer, bytes, cudaHostAllocPortable) != cudaSuccess) {
+        (void)cudaGetLastError();
+        return nullptr;
+      }
+      pointer_ = static_cast<std::byte*>(pointer);
+      capacity_ = bytes;
+    }
+    return pointer_;
+  }
+  [[nodiscard]] std::size_t capacity() const noexcept { return capacity_; }
+
+ private:
+  std::byte* pointer_ = nullptr;
+  std::size_t capacity_ = 0;
+};
+
+ThreadPinnedStaging& thread_pinned_staging() {
+  thread_local ThreadPinnedStaging staging;
+  return staging;
+}
 
 std::string cuda_version_string(int version) {
   if (version <= 0) {
@@ -399,22 +449,45 @@ PauliSum DevicePauliSum::to_host() const {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }
 
+  namespace acc = wolfgang::accelerator_detail;
   const std::size_t packed_words =
       detail::checked_product(impl_->num_terms, impl_->words, "host packed words");
-  std::vector<std::uint64_t> x(packed_words);
-  std::vector<std::uint64_t> z(packed_words);
-  std::vector<std::complex<double>> coeffs(impl_->num_terms);
+  const std::size_t total_bytes =
+      2 * checked_bytes(packed_words, sizeof(std::uint64_t), "host packed words") +
+      checked_bytes(impl_->num_terms, sizeof(std::complex<double>), "host coefficients");
+  std::vector<std::uint64_t> x;
+  std::vector<std::uint64_t> z;
+  std::vector<std::complex<double>> coeffs;
 
   ScopedCudaDevice guard(impl_->device_ordinal);
-  copy_to_host(x.data(), impl_->x, packed_words, "host x words");
-  copy_to_host(z.data(), impl_->z, packed_words, "host z words");
-  if (!coeffs.empty()) {
+  ThreadPinnedStaging& staging = thread_pinned_staging();
+  std::byte* staged = total_bytes == 0
+      ? nullptr
+      : staging.reserve(acc::staging_bytes_for(total_bytes, kPinnedStagingMaxBytes));
+  if (staged != nullptr) {
+    // Device buffers are complex<double> in thrust's layout, which matches
+    // std::complex<double>.
+    const std::vector<acc::DeviceToHostSegment> segments{
+        acc::device_to_host_segment(x, impl_->x, packed_words),
+        acc::device_to_host_segment(z, impl_->z, packed_words),
+        acc::device_to_host_segment(
+            coeffs, reinterpret_cast<const std::complex<double>*>(impl_->coeffs), impl_->num_terms)};
+    acc::staged_device_to_host(
+        staged,
+        staging.capacity(),
+        segments,
+        [](std::byte* dst, const std::byte* src, std::size_t bytes) {
+          check_cuda(cudaMemcpyAsync(dst, src, bytes, cudaMemcpyDeviceToHost, 0), "copy device buffer to host");
+        },
+        [] { check_cuda(cudaStreamSynchronize(0), "synchronize device-to-host copy"); });
+  } else if (total_bytes != 0) {
+    x.resize(packed_words);
+    z.resize(packed_words);
+    coeffs.resize(impl_->num_terms);
+    copy_to_host(x.data(), impl_->x, packed_words, "host x words");
+    copy_to_host(z.data(), impl_->z, packed_words, "host z words");
     check_cuda(
-        cudaMemcpy(
-            coeffs.data(),
-            impl_->coeffs,
-            checked_bytes(coeffs.size(), sizeof(std::complex<double>), "host coefficients"),
-            cudaMemcpyDeviceToHost),
+        cudaMemcpy(coeffs.data(), impl_->coeffs, coeffs.size() * sizeof(std::complex<double>), cudaMemcpyDeviceToHost),
         "copy device buffer to host");
   }
 
