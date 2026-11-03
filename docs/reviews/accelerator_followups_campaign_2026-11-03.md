@@ -297,3 +297,79 @@ Branch `codex/sbom-bundled`.
   run 41699199577 passed every job with the `--validate` step; the review
   fixes were validated against that run's SBOM with cyclonedx-bom 7.1.0, and
   run 41702026420, on the reviewed branch, passed every job.
+
+## Slice 7: Documentation and figures
+
+Branch `codex/docs-refresh`.
+
+- Scope: `scripts/render_readme_figures.py` (new), its three SVGs under
+  `docs/benchmarks/plots/`, `tests/test_readme_figures.py` (new),
+  `docs/javascripts/mermaid-init.js` and the two Mermaid tests; `README.md`,
+  `docs/index.md`, `docs/user/performance.md` and `docs/benchmarks/index.md`;
+  a prose edit of the getting-started, guide, user, API, accelerator,
+  architecture, quality and release-process docs, the benchmark protocol,
+  `docs/roadmap.md`, `docs/research/provenance.md`, `CONTRIBUTING.md`,
+  `SECURITY.md`, `SUPPORT.md` and `GOVERNANCE.md`; "FastPauli" wording left in
+  two binding docstrings, a HIP error message and a CUDA comment;
+  `CHANGELOG.md` and the plan. Plans, benchmark reports, review closeouts and
+  release ledgers were not edited for prose.
+- Figures: hand-written SVG with light and dark styles, drawn from committed
+  JSON. Simplify time per host, each accelerator (device-resident and with
+  copies) beside the CPU of its own host; Wolfgang against Qiskit,
+  OpenFermion and cuStateVec; per-call GPU times across the November
+  campaigns. `tests/test_readme_figures.py` runs the renderer with `--check`.
+- Diagrams: `pymdownx.superfences` emits `<div class="mermaid">`, but the
+  initializer selected only `pre.mermaid`, so every diagram showed as source
+  text on the site. It now selects both, and the integration test asserts
+  it. The architecture diagram was redrawn and the agent-driven loop laid out
+  top to bottom, so their text stays legible at the site's content width;
+  both were checked in headless Chrome against a local build.
+- Prose: three editors worked on disjoint file groups against
+  `docs/quality/documentation_standards.md`, which gained a prose-patterns
+  section, while checking every phrase a test asserts. Stale statements found
+  on the way and fixed: a `simplify(backend=...)` selector that does not
+  exist; Metal described as bring-up only; HIP expectation and `matmul`
+  listed as absent after ROCm Campaign 6 shipped them; three native types
+  instead of four; device-side counts and pinned transfers listed as future
+  CUDA work; `SECURITY.md` described as not yet written; the kernel
+  performance campaign called the current ranking handoff; ROCm Campaign 6
+  named as the latest ROCm report.
+- Tests: the figure freshness test was written with the renderer; the
+  Mermaid selector assertion was added with the fix, and the layout tests now
+  accept top-to-bottom flowcharts.
+- Reviewer: independent agent (editorial, figure and factual accuracy),
+  read-only.
+- Findings: P0 0, P1 3, P2 3, P3 9.
+- P1 resolutions: the README and guide credited device-side counts with the
+  drop from the pre-pool baseline and now quote 188 to 108 us (H100) and 182
+  to 98 us (MI300X); they credited pooled allocation with the MI300X's
+  128-term gain, which came from the HIP parity changes (HIP has no pool); and
+  the simplify figure set Metal and HIP against the H100 host's CPU under a
+  "below CPU scalar means faster" subtitle. It now has one panel per host
+  with that host's CPU rows (the M4 Pro's scalar and release-wheel oneTBB, the
+  MI300X host's CPU control), and the prose says that oneTBB beats the Metal
+  hybrid on the M4 Pro at 1M terms.
+- P2 resolutions: the per-call figure describes a baseline and three changes,
+  with only steps 2-4 as paired candidates; footnotes that clipped with the
+  macOS system font are wrapped and the speedup bars rescaled; the simplify
+  figure gained transfer-inclusive rows; the protocol's README-plot rules now
+  describe the three figures (the broad per-host view first, external
+  baselines second, a before/after figure only after them) and keep the
+  accelerator landscape in the evidence index; provenance no longer calls
+  the landscape the current README plot.
+- P3 resolutions: small-operator timings are quoted at 128 terms; SIMD is no
+  longer listed as covering simplify; 225 us is used throughout; the step-1
+  footnote names both baselines; the H100 campaign-numbering note covers
+  Campaigns 10 and 11; the README's API list includes `DeviceArrayView` and
+  `measurement`; a dead branch in the renderer is gone; "Recent changes" is
+  ordered by campaign; the Metal hybrid threshold names one-word operators.
+- Not changed: two pairs of ledger lines in `docs/release/support_matrix.md`
+  read as contradictory but are pinned verbatim by release tests, and
+  `docs/release/history_sanitization.md` keeps FastPauli paths in its
+  historical commands.
+- Validation after the review fixes, on macOS arm64: `scripts/validate.py`
+  with `--profile quality`, `--profile docs` (strict build) and
+  `--profile core` (695 passed, 964 skipped for absent accelerators and
+  optional libraries; native contracts, benchmark smokes and the sdist smoke)
+  passed; `scripts/render_readme_figures.py --check` and `git diff --check`
+  passed.

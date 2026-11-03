@@ -84,3 +84,15 @@ Slice 5 merged: the release CycloneDX SBOM lists the bundled oneTBB runtime
 header (version, SHA-256) next to the Python dependencies, added by `scripts/sbom_bundled_components.py` from the
 files that pin them and checked against the CycloneDX schema in the release
 workflow.
+
+Slice 7 merged: the README, the site home page, the performance guide and the
+evidence index show three figures that `scripts/render_readme_figures.py`
+draws from committed benchmark data (simplify time per host, each accelerator
+beside that host's CPU; Wolfgang against Qiskit, OpenFermion and cuStateVec;
+per-call GPU times across the November campaigns), and
+`tests/test_readme_figures.py` fails when one is stale. Mermaid diagrams render
+on the site again: the initializer looked only for `pre.mermaid`, while the
+fence format emits `div.mermaid`. The user and engineering docs were edited
+for plain, specific prose, `docs/quality/documentation_standards.md` gained a
+prose-patterns section, and the benchmark protocol's README-plot rules now
+describe the three figures.
