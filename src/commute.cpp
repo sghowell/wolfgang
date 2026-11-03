@@ -66,9 +66,15 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
   const CpuBackendReport backend = cpu_backend_report_from_environment();
   if (backend.requested_backend == "auto") {
 #if WOLFGANG_BUILD_TBB_ENABLED
-    if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb") &&
-        tbb_auto_has_min_concurrency()) {
-      return detail::commutes_with_tbb(*this, rhs, entries, tbb_commutation_rows(backend, words_));
+    if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb")) {
+      const detail::CommutationRowsKernel rows = tbb_commutation_rows(backend, words_);
+      // Two threads beat the scalar kernel, but matching a SIMD kernel takes three.
+      const int minimum = rows == detail::commutes_with_scalar_rows
+          ? kAutoTbbPairwiseMinConcurrency
+          : kAutoTbbPairwiseMinConcurrencyOverSimd;
+      if (tbb_auto_has_min_concurrency(minimum)) {
+        return detail::commutes_with_tbb(*this, rhs, entries, rows);
+      }
     }
 #endif
 #if WOLFGANG_BUILD_AVX512_ENABLED

@@ -352,14 +352,15 @@ bool cpu_backend_selects_tbb_simplify(std::size_t num_terms) {
 #endif
 }
 
-bool tbb_auto_has_min_concurrency() {
+bool tbb_auto_has_min_concurrency(int minimum) {
 #if WOLFGANG_BUILD_TBB_ENABLED
   // Check availability first: after a fork, querying oneTBB itself is unsafe.
   if (backend_status("tbb") != "available") {
     return false;
   }
-  return cpu_thread_limit() >= static_cast<std::size_t>(kAutoTbbSimplifyMinConcurrency);
+  return cpu_thread_limit() >= static_cast<std::size_t>(std::max(minimum, 1));
 #else
+  (void)minimum;
   return false;
 #endif
 }

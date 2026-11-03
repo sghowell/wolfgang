@@ -14,9 +14,21 @@ inline constexpr std::size_t kAutoNeonFullGroupingScalarMinEntries = 1024;
 // measured between 4k and 8k terms on a 16-vCPU EPYC 9654; a 26-vCPU host won
 // in every case from 10k).
 inline constexpr std::size_t kAutoTbbSimplifyTermThreshold = 8192;
-// Auto dispatch also needs at least this many oneTBB worker threads; with fewer
-// (cgroup-limited runners, taskset) the parallel path does more work than scalar.
-inline constexpr int kAutoTbbSimplifyMinConcurrency = 4;
+// Auto dispatch also needs at least this many oneTBB threads. Two threads beat
+// scalar simplify from the term threshold upward on every host measured (one
+// core's two hyperthreads and two separate cores on an EPYC 9654 and a Xeon
+// 8480+, and an M4 Pro); one thread did not
+// (docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md).
+inline constexpr int kAutoTbbSimplifyMinConcurrency = 2;
+// Pairwise commutation from kAutoTbbPairwiseEntryThreshold entries runs on
+// oneTBB with at least kAutoTbbPairwiseMinConcurrency threads when the
+// alternative is the scalar kernel, and with at least
+// kAutoTbbPairwiseMinConcurrencyOverSimd when a SIMD kernel covers the
+// operator. Each oneTBB thread runs that SIMD kernel, and one core's two
+// hyperthreads share its vector units, so two threads were 0.85-1.10 times one
+// SIMD thread there; three threads won everywhere.
+inline constexpr int kAutoTbbPairwiseMinConcurrency = 2;
+inline constexpr int kAutoTbbPairwiseMinConcurrencyOverSimd = 3;
 
 struct CpuBackendCandidate {
   std::string name;
@@ -52,15 +64,17 @@ void ensure_cpu_backend_supports_simplify();
 
 // True when simplify of num_terms terms should run the oneTBB kernel: auto
 // selects it at or above kAutoTbbSimplifyTermThreshold when oneTBB is compiled,
-// available and has at least kAutoTbbSimplifyMinConcurrency threads, and
+// available and may use at least kAutoTbbSimplifyMinConcurrency threads, and
 // WOLFGANG_CPU_BACKEND=tbb forces it. Below the threshold it only reads the
 // selector environment variable, so small simplify calls stay cheap.
 [[nodiscard]] bool cpu_backend_selects_tbb_simplify(std::size_t num_terms);
 
-// True when oneTBB is available and may use at least
-// kAutoTbbSimplifyMinConcurrency threads (cpu_thread_limit()), the floor below
-// which auto dispatch prefers scalar or SIMD kernels.
-[[nodiscard]] bool tbb_auto_has_min_concurrency();
+// True when oneTBB is available and may use at least `minimum` threads
+// (cpu_thread_limit()). Auto dispatch prefers the scalar or SIMD kernels below
+// an operation's floor: kAutoTbbSimplifyMinConcurrency for simplify (the
+// default), kAutoTbbPairwiseMinConcurrency or
+// kAutoTbbPairwiseMinConcurrencyOverSimd for pairwise commutation.
+[[nodiscard]] bool tbb_auto_has_min_concurrency(int minimum = kAutoTbbSimplifyMinConcurrency);
 
 // Threads the oneTBB CPU kernels may use: the smaller of oneTBB's default
 // concurrency (hardware threads, respecting the process affinity mask) and any
