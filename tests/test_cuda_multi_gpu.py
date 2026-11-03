@@ -13,6 +13,7 @@ would poison the CUDA context for every later test in this process.
 
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
 import textwrap
@@ -142,16 +143,14 @@ _SECOND_DEVICE_ONLY = textwrap.dedent(
     import wolfgang_quantum
 
 
-    def memory_on_gpu0_mib():
-        uuid = subprocess.run(["nvidia-smi", "-i", "0", "--query-gpu=uuid", "--format=csv,noheader"],
-                              capture_output=True, text=True, check=True).stdout.strip()
+    def gpus_holding_memory():
+        # By GPU UUID, so neither CUDA_VISIBLE_DEVICES nor nvidia-smi's own
+        # ordering matters.
         apps = subprocess.run(["nvidia-smi", "--query-compute-apps=gpu_uuid,pid,used_memory",
                                "--format=csv,noheader,nounits"], capture_output=True, text=True, check=True).stdout
-        for line in apps.splitlines():
-            fields = [field.strip() for field in line.split(",")]
-            if fields[:2] == [uuid, str(os.getpid())]:
-                return float(fields[2])
-        return 0.0
+        return sorted({fields[0] for fields in ([field.strip() for field in line.split(",")]
+                                                for line in apps.splitlines())
+                       if len(fields) == 3 and fields[1] == str(os.getpid()) and float(fields[2]) > 0})
 
 
     rng = np.random.default_rng(10)
@@ -169,7 +168,7 @@ _SECOND_DEVICE_ONLY = textwrap.dedent(
     device_op.expectation_statevector(psi)
     views = device_op.device_arrays()
     del views, matrix, device_op
-    print(memory_on_gpu0_mib())
+    print(len(gpus_holding_memory()))
     """
 )
 
@@ -178,11 +177,16 @@ def test_a_process_using_only_the_second_device_leaves_the_first_alone() -> None
     # Since CUDA 12, cudaSetDevice creates the device's primary context; switching
     # back to an unused device 0 after each call used to cost about 500 MiB there.
     _two_devices()
+    if shutil.which("nvidia-smi") is None:
+        pytest.skip("nvidia-smi is needed to see which GPUs hold this process's memory")
     result = subprocess.run(
         [sys.executable, "-c", _SECOND_DEVICE_ONLY], capture_output=True, text=True, timeout=300, check=False
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    assert float(result.stdout.strip().splitlines()[-1]) == 0.0, result.stdout
+    gpus = int(result.stdout.strip().splitlines()[-1])
+    if gpus == 0:
+        pytest.skip("nvidia-smi does not list this process (a separate PID namespace)")
+    assert gpus == 1, result.stdout
 
 
 _PEER_READ = textwrap.dedent(
@@ -228,6 +232,58 @@ def test_a_peer_device_kernel_reads_exported_buffers(source: str) -> None:
         text=True,
         timeout=300,
         check=False,
+    )
+    if result.stdout.startswith("SKIP"):
+        pytest.skip(result.stdout.strip())
+    assert result.returncode == 0 and result.stdout.strip().endswith("OK"), result.stdout + result.stderr
+
+
+_PEER_FREE = textwrap.dedent(
+    '''
+    import cupy
+    import numpy as np
+    import wolfgang_quantum
+
+    if not cupy.cuda.runtime.deviceCanAccessPeer(0, 1):
+        print("SKIP no peer access between devices 0 and 1")
+        raise SystemExit(0)
+    n = 1 << 20
+    x = np.arange(n, dtype=np.uint64).reshape(-1, 1) % (1 << 24)
+    op = wolfgang_quantum.PauliSum.from_arrays(x, x.copy(), np.ones(n, dtype=np.complex128), 24)
+    device_op = op.to_device(device=1)
+    coeffs = cupy.from_dlpack(device_op.device_arrays()[2])
+    late_copy = cupy.RawKernel(r"""
+    extern "C" __global__ void late_copy(const double2* src, double2* dst, int n, long long wait) {
+        long long start = clock64();
+        while (clock64() - start < wait) {}
+        for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < n; i += gridDim.x * blockDim.x) {
+            dst[i] = src[i];
+        }
+    }""", "late_copy")
+    with cupy.cuda.Device(0):
+        cupy.cuda.runtime.deviceEnablePeerAccess(1)
+        out = cupy.zeros(n, dtype=cupy.complex128)
+        # About 0.2 s of spinning before the copy, on device 0's default stream.
+        late_copy((132,), (256,), (np.uint64(coeffs.data.ptr), out, np.int32(n), np.int64(400_000_000)))
+    del coeffs, device_op  # the operator is freed while the kernel still waits
+    reused = [wolfgang_quantum.PauliSum.from_arrays(x, x.copy(), np.full(n, 7.0 + 0j), 24).to_device(device=1)
+              for _ in range(4)]
+    with cupy.cuda.Device(0):
+        cupy.cuda.Device(0).synchronize()
+        values = out.get()
+    assert np.all(values == 1.0), f"the peer kernel read reused memory: {np.unique(values)[:4]}"
+    print("OK")
+    '''
+)
+
+
+def test_freeing_an_export_waits_for_a_peer_kernel() -> None:
+    # A peer kernel can still be reading an export when its last reference
+    # goes away, so the free must wait for the peers, not only the owner.
+    _two_devices()
+    _cupy()
+    result = subprocess.run(
+        [sys.executable, "-c", _PEER_FREE], capture_output=True, text=True, timeout=300, check=False
     )
     if result.stdout.startswith("SKIP"):
         pytest.skip(result.stdout.strip())
