@@ -2,7 +2,7 @@
 
 This document defines the review stage for Codex-driven Wolfgang development. Review is a required quality control, not a substitute for tests, benchmarks, sanitizers, static analysis, or CI.
 
-The goal is adversarial engineering review: catch contract drift, unsafe native patterns, weak validation, unsupported performance claims, and documentation gaps before a slice merges to `main`.
+Review is adversarial: it looks for contract drift, unsafe native patterns, weak validation, unsupported performance claims, and documentation gaps before a slice merges to `main`.
 
 ## Review Requirement
 
@@ -57,7 +57,7 @@ The normal sequence is:
 9. Push and confirm CI when CI exists.
 ```
 
-Review should happen after the implementer believes the slice is ready, but before local merge to `main`.
+Review should start once the implementer believes the slice is ready and finish before the local merge to `main`.
 
 ## Reviewer Inputs
 
@@ -169,7 +169,7 @@ validation rerun after review fixes
 residual risk
 ```
 
-Before Phase 1 creates a durable validation script, this evidence may live in the agent final report. After Phase 1, the repo should add a lightweight closeout template or script support so review evidence is captured consistently for implementation and review-required docs/process slices.
+Record this evidence in the campaign's closeout under `docs/reviews/` (for example `docs/reviews/accelerator_followups_campaign_2026-11-03.md`), one section per implementation or review-required docs/process slice.
 
 ## Review Automation Roadmap
 
@@ -193,7 +193,7 @@ release evidence schema checks
 CUDA availability and hardware metadata checks
 ```
 
-Do not block early implementation on heavyweight review tooling. The required standard is independent review and recorded evidence; automation should make that easier over time.
+Do not block early implementation on heavyweight review tooling. The requirement is independent review and recorded evidence; automation should make both cheaper over time.
 
 ## Non-Goals
 
@@ -205,5 +205,3 @@ multiple reviewers for trivial docs typo fixes
 human review for every local commit before a branch is ready
 review replacing tests, benchmarks, sanitizers, or CI
 ```
-
-Review exists to raise execution quality while preserving small, fast, validated slices.

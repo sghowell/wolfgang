@@ -1,6 +1,6 @@
 # Wolfgang Documentation Standards
 
-Wolfgang documentation should meet the bar of a top-tier open source numerical library: accurate, concise, example-driven, and synchronized with implementation.
+Wolfgang documentation should be accurate, concise, example-driven, and kept in step with the implementation.
 
 ## Documentation Audiences
 
@@ -175,7 +175,7 @@ release-wheel behavior
 
 ## Documentation Style
 
-Use direct, precise prose. Prefer concrete examples over broad claims.
+Use direct, precise prose. Prefer concrete examples over broad claims. Write the way an engineer explains a system to a colleague: state the behavior, the condition under which it holds, and the evidence, then stop.
 
 Formatting rules:
 
@@ -196,6 +196,37 @@ ambiguous terms like fast or optimized without evidence
 duplicated contract text that can drift
 long unexplained formulas in user guides
 ```
+
+## Prose Patterns
+
+Readers stop trusting a page that reads as padded or machine-generated, even when its facts are right. Do not use these patterns:
+
+```text
+stock or inflated words: robust, seamless, comprehensive, leverage, powerful, cutting-edge, crucial, pivotal, delve
+filler transitions that open a sentence: Moreover, Furthermore, Additionally, Importantly, Notably, Overall, In summary
+hedges and intensifiers: it is worth noting, it should be noted, arguably, simply, just, very, truly
+"not only X but also Y" and "plays a key role in" constructions
+reflexive groups of three adjectives or clauses where one specific claim would do
+bolded lead-ins on list items, such as "- **Fast:** ..."
+em dashes used for rhythm; use a comma, colon, parentheses, or a new sentence
+openers that announce what follows instead of saying it
+sentences that restate the heading or the previous sentence
+closing summaries that repeat the section
+chatty asides, rhetorical questions, and exclamation marks
+```
+
+Prefer:
+
+```text
+plain declarative sentences with a concrete subject and verb
+the number, path, command, or condition instead of an adjective
+active voice when the actor matters; passive voice when it does not
+one term per concept, used the same way on every page
+short paragraphs that each make one point
+present tense for current behavior; past tense for completed campaigns and measurements
+```
+
+A listed word is acceptable when it is the precise technical term, such as a test harness, an underscored Python name, or the README landscape plot. Requirement words keep their strength when prose is edited: do not soften "must" to "should" or drop "only" to make a sentence read better.
 
 ## Documentation Tests And Checks
 

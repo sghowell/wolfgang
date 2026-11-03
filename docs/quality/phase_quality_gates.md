@@ -1,6 +1,6 @@
 # Wolfgang Phase Quality Gates
 
-This document defines the quality bar for every Wolfgang phase. It complements the roadmap and implementation plan by defining what evidence must exist before a phase can be called complete.
+This document defines the quality bar for every Wolfgang phase: the evidence that must exist before a phase can be called complete. The roadmap and implementation plan say what each phase builds.
 
 ## Global Gates
 
@@ -42,7 +42,7 @@ known limitations
 follow-up items that are explicitly out of scope
 ```
 
-For now this can be captured in the final agent report. Once CI and release docs exist, release-candidate evidence should also live in a checked-in artifact or GitHub release notes.
+Record it in the slice's closeout under `docs/reviews/`. Release-candidate evidence also lives in the release ledgers under `docs/release/` or in GitHub release notes.
 
 ## Phase 0: Planning And Architecture Lock
 

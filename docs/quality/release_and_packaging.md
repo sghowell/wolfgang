@@ -98,9 +98,9 @@ requires the pinned oneTBB version, its license files, bit-identical parallel
 and scalar simplify, and a working simplify in a child forked after a oneTBB
 call. oneTBB does not support `fork()`, so children forked after a oneTBB
 kernel run the scalar or SIMD kernels instead. `WOLFGANG_CPU_BACKEND=scalar`
-still selects the portable path. Wheels
-published before this change (through `v0.2.3`) do not bundle oneTBB.
-Evidence: `docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`.
+still selects the portable path. Wheels published before this change (through
+`v0.2.3`) do not bundle oneTBB. Evidence:
+`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`.
 
 The final `0.1.0` CPU wheelhouse readiness lane is
 `docs/plans/release_0_1_0_wheelhouse_foundation_plan.md`. It keeps the first
@@ -108,6 +108,7 @@ package-index-ready wheelhouse to manylinux x86_64 and macOS arm64 for Python
 3.10, 3.11, and 3.12, with CUDA, ROCm/HIP, Metal, Windows, combined
 accelerator, macOS x86_64, and broad hardware support claims unavailable until
 separate evidence accepts those surfaces.
+
 Package-index publish jobs must run only from the exact `v${project.version}`
 tag ref and must upload from a checksum-free package artifact directory such as
 `publish-dist/`. Workflows must use immutable full-SHA action pins, read-only
@@ -149,9 +150,9 @@ known limitations are documented
 The reusable paid-instance source-build lane generator is
 `docs/release/cloud_hardware_qualification_harness.md` with implementation in
 `scripts/cloud_hardware_qualification_harness.py`. Use it for local CPU dry-runs
-and for future Hopper, Blackwell, and MI300X qualification bundles so that raw
-environment/profiler data stays in `private/` and the public tree only records
-sanitized derived evidence.
+and for future Hopper, Blackwell, and MI300X qualification bundles, so that raw
+environment and profiler data stays in `private/` and the public tree records
+only sanitized derived evidence.
 
 CUDA release candidates additionally require:
 
@@ -229,7 +230,9 @@ successful `WOLFGANG_ENABLE_METAL=ON` source build and a local runtime blocker:
 the host reports an Apple M4 Pro GPU with Metal support through
 `system_profiler`, while `MTLCreateSystemDefaultDevice()` and
 `MTLCopyAllDevices()` return no visible Metal device in the Codex execution
-context. That is not sufficient for a Metal source-build support claim.
+context. That was not sufficient for a Metal source-build support claim. Later
+Apple Metal campaigns ran with a runtime-visible M4 Pro device and supply the
+source-build evidence that `docs/release/support_matrix.md` cites.
 
 Release evidence for a Metal source-build claim must include:
 
@@ -259,13 +262,17 @@ support-matrix wording that distinguishes CPU wheels from Metal source builds
 
 ## Release Evidence Template
 
-Use `docs/release/README.md`, the published successor ledger
-`docs/release/0.2.3.md`, the current active release ledger,
-`docs/release/0.2.2.md`, the immutable historical provenance ledger,
-`docs/release/0.1.0.md`, the current published final-release ledger,
-`docs/release/0.1.0-wheelhouse-dry-run.md`, and historical ledgers such as
-`docs/release/0.1.0-rc2.md` and `docs/release/0.1.0-rc1.md` for checked-in
-release evidence. Release evidence must include:
+Use `docs/release/README.md` and these ledgers for checked-in release evidence:
+
+- `docs/release/0.2.3.md`, the published successor ledger and the current active
+  release ledger;
+- `docs/release/0.2.2.md`, the immutable historical provenance ledger;
+- `docs/release/0.1.0.md`, the current published final-release ledger;
+- `docs/release/0.1.0-wheelhouse-dry-run.md`, the `0.1.0` wheelhouse dry run;
+- historical ledgers such as `docs/release/0.1.0-rc2.md` and
+  `docs/release/0.1.0-rc1.md`.
+
+Release evidence must include:
 
 ```text
 Version:

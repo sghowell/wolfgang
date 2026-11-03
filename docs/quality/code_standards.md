@@ -1,6 +1,6 @@
 # Wolfgang Code Standards
 
-Wolfgang code should read like it was written by an expert numerical systems team: explicit invariants, predictable ownership, measured performance, and no ambiguity around correctness.
+Wolfgang code should state its invariants, keep ownership predictable, back performance with measurements, and leave no doubt about correctness.
 
 This document sets the coding standard for C++, CUDA, Python, tests, and comments.
 
@@ -16,7 +16,7 @@ deterministic behavior before incidental container iteration
 explicit guardrails before large allocations
 ```
 
-Every nontrivial code path should make its preconditions, invariants, and failure behavior obvious either in the API contract, the type shape, or a concise local comment.
+Every nontrivial code path should make its preconditions, invariants, and failure behavior obvious in the API contract, the type shape, or a short local comment.
 
 ## C++ Standard
 

@@ -4,7 +4,7 @@ This document preserves the detailed implementation, benchmark, profiler, and re
 
 Before public visibility, sensitive removed evidence must also be purged from reachable Git history using the reviewed [history-sanitization runbook](../release/history_sanitization.md).
 
-The current public support boundary remains [`docs/release/support_matrix.md`](../release/support_matrix.md). Reports retain the exact timing, hardware, toolchain, and negative-result context for each campaign. Raw infrastructure captures are intentionally excluded from the public artifact.
+The current public support boundary remains [`docs/release/support_matrix.md`](../release/support_matrix.md). Reports retain the exact timing, hardware, toolchain, and negative-result context for each campaign. Raw infrastructure captures are excluded from the public artifact.
 The reusable public/private cloud-run harness for future paid hardware
 qualification is [`docs/release/cloud_hardware_qualification_harness.md`](../release/cloud_hardware_qualification_harness.md).
 
@@ -105,15 +105,15 @@ exact-tag wheelhouse evidence, and keeps TestPyPI/PyPI out of scope for this
 successor slice.
 The Apple Silicon accelerator implementation lane is tracked in
 `docs/architecture/apple_accelerator.md` and
-`docs/plans/apple_metal_mps_bringup_plan.md`, with the first measured
-optimization refresh tracked in
-`docs/plans/apple_metal_optimization_campaign1_plan.md` and
-`docs/plans/apple_metal_optimization_campaign2_plan.md` and
-`docs/plans/apple_metal_optimization_campaign3_plan.md` and
-`docs/plans/apple_metal_optimization_campaign4_plan.md` and
-`docs/plans/apple_metal_optimization_campaign5_plan.md` and
-`docs/plans/apple_metal_optimization_campaign6_plan.md` and
-`docs/plans/apple_metal_optimization_campaign7_plan.md` and
+`docs/plans/apple_metal_mps_bringup_plan.md`, with the measured optimization
+campaigns tracked in
+`docs/plans/apple_metal_optimization_campaign1_plan.md`,
+`docs/plans/apple_metal_optimization_campaign2_plan.md`,
+`docs/plans/apple_metal_optimization_campaign3_plan.md`,
+`docs/plans/apple_metal_optimization_campaign4_plan.md`,
+`docs/plans/apple_metal_optimization_campaign5_plan.md`,
+`docs/plans/apple_metal_optimization_campaign6_plan.md`,
+`docs/plans/apple_metal_optimization_campaign7_plan.md`, and
 `docs/plans/apple_metal_optimization_campaign8_plan.md`. It adds the
 `backend="metal"` identity, `WOLFGANG_ENABLE_METAL=ON` source-build flag,
 Metal status metadata, transfers, and pairwise commutation source code while
@@ -184,9 +184,8 @@ Apple Metal Campaign 8 makes the Campaign 7 candidate measurable enough to
 decide whether it is performance-relevant or still experimental. It adds
 timing decomposition and pipeline-cache metadata so command execution can be
 separated from host preflight, scratch/output allocation, command encoding, and
-output accounting. The candidate remains experimental and public simplify stays
-on the transfer-reference bridge. The checked rows currently classify the
-candidate as `experimental`. Evidence is recorded in
+output accounting. The checked rows classify the candidate as `experimental`,
+and public simplify stays on the transfer-reference bridge. Evidence is recorded in
 `docs/benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md`.
 The usability and kernel campaign later replaced the bridge for one-word
 operators of at least 12,288 terms with a GPU-sort, CPU-float64 hybrid that
@@ -260,8 +259,10 @@ default for CPU wheels.
 
 The latest checked-in accelerator reports are source-build evidence on MI300X
 ROCm/HIP, Apple M4 Pro Metal, A100, RTX PRO 6000 Blackwell, and H100. They are
-not portable wheel claims and not promises for every CPU or GPU. The current
-README plot is the tracked across-the-board performance landscape view: it
+not portable wheel claims and not promises for every CPU or GPU. The
+accelerator landscape plot below, an earlier README plot, is the tracked broad
+performance view. The README now carries the figures described
+in `docs/benchmarks/protocol.md`. The landscape
 includes FastPauli CPU scalar, default, oneTBB, AVX2, and AVX-512 selectors
 where captured; CUDA transfer-inclusive and device-resident paths; CUDA operator-resident,
 device-output, compact-consumer, and CSR-baseline rows where relevant; CuPy and
@@ -343,7 +344,7 @@ completed architecture-readiness plan in
 The accepted implementation plan for backend-neutral target-specific accelerator
 builds is
 [Backend-neutral accelerator Campaign 9](../plans/backend_neutral_accelerator_campaign9_plan.md).
-The current cross-backend ranking handoff for the next kernel-performance wave
+The cross-backend ranking handoff for the kernel-performance work that followed
 is [Wolfgang cross-backend kernel performance campaign](../plans/wolfgang-kernel-performance-campaign.md).
 The checked closeout report is
 [Backend-neutral accelerator Campaign 9 closeout](../benchmarks/reports/backend_neutral_accelerator_campaign9_2026-05-01.md).
@@ -538,7 +539,7 @@ python scripts/render_cuda_deep_report_assets.py \
 
 GPU-library baselines such as NVIDIA cuQuantum, CUDA-Q, and Qiskit Aer GPU are
 tracked in the benchmark protocol and should be added only where the workload
-semantics are genuinely comparable.
+semantics are comparable.
 
 ## Local Validation
 

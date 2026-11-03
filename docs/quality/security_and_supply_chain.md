@@ -1,6 +1,6 @@
 # Wolfgang Security And Supply Chain Standards
 
-Wolfgang is a C++/CUDA-backed Python package. Security and reliability risks include memory safety, unsafe native builds, dependency drift, malformed user inputs, and binary distribution integrity.
+Wolfgang is a Python package backed by C++ and CUDA. Its security and reliability risks include memory safety, unsafe native builds, dependency drift, malformed user input, and the integrity of distributed binaries.
 
 ## Security Principles
 
@@ -13,7 +13,7 @@ keep optional dependencies optional
 prefer reproducible release evidence
 ```
 
-Security work must be practical and phase-appropriate. Early phases should establish checks and policy; later phases should add sanitizers, fuzzers, and release provenance as implementation surfaces exist.
+Security work must be practical and fit the phase. Early phases should establish checks and policy; later phases should add sanitizers, fuzzers, and release provenance as the code they protect lands.
 
 ## Native Code Safety
 
@@ -178,7 +178,8 @@ keep release credentials in GitHub secrets or equivalent managed secret storage
 
 ## Vulnerability Handling
 
-Until a formal security policy is added, handle security issues by:
+`SECURITY.md` at the repository root tells reporters how to report a
+vulnerability privately. Handle a report by:
 
 ```text
 reproducing privately when possible
@@ -188,7 +189,7 @@ documenting affected versions once releases exist
 cutting a patch release for released vulnerable code
 ```
 
-Phase 1 should add a basic `SECURITY.md` only if the repo starts accepting external reports before the first release. Before that, this document is the internal security standard.
+This document is the internal security standard; `SECURITY.md` is the public reporting policy.
 
 ## Security Review Checklist
 

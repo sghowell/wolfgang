@@ -1,8 +1,8 @@
 # Git history sanitization before public visibility
 
-This runbook removes sensitive raw benchmark/profiler objects from every reachable Git revision. It is intentionally separate from the normal feature pull request because history rewriting changes every affected commit identifier and requires coordinated remote administration.
+This runbook removes sensitive raw benchmark and profiler objects from every reachable Git revision. It is kept out of normal feature pull requests because rewriting history changes every affected commit identifier and needs coordinated remote administration.
 
-Do not run this procedure merely to reduce repository size. Run it only after the public tree and source distribution pass `scripts/audit_public_artifacts.py`, all retained evidence is backed up privately, collaborators are notified, and repository visibility remains private.
+Do not run this procedure to reduce repository size. Run it only after the public tree and source distribution pass `scripts/audit_public_artifacts.py`, all retained evidence is backed up privately, collaborators are notified, and repository visibility remains private.
 
 ## Preconditions
 
@@ -58,12 +58,12 @@ git filter-repo --invert-paths --paths-from-file ../paths-to-remove.txt --force
 If sensitive strings also appear in otherwise retained text files, use a reviewed replacement-expression file with `--replace-text`. Do not place real credentials in the replacement file; use exact non-secret infrastructure identifiers and replace them with neutral markers.
 
 If the full-history audit still reports findings after path removal, do not keep
-expanding an opaque rewrite indefinitely. A safer publication option is a new
-repository with a single root commit created from the fully reviewed current
-tree. Exclude private workspace-only files, run every gate below against that
-one-commit repository, and retain the original history only in private archival
-storage. This clean-history option intentionally sacrifices public commit
-provenance to make the privacy boundary independently auditable.
+expanding an opaque rewrite. The safer option is to publish a new repository
+with a single root commit created from the fully reviewed current tree. Exclude
+private workspace-only files, run every gate below against that one-commit
+repository, and retain the original history only in private archival storage.
+This option gives up public commit provenance so that the privacy boundary can
+be audited independently.
 
 ## 4. Verify every reachable object
 

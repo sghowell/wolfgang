@@ -101,7 +101,7 @@ The validation command should be:
 python scripts/validate.py
 ```
 
-The script must print each check it runs and fail on the first failing required check. It should be easy for agents and CI to use without extra context.
+The script must print each check it runs and fail on the first failing required check. Agents and CI should be able to run it without extra context.
 
 Initial validation checks:
 

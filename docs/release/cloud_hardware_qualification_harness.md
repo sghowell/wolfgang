@@ -1,9 +1,9 @@
 # Wolfgang cloud hardware qualification harness
 
 This document defines the reusable, non-secret harness that future paid Hopper,
-Blackwell, and MI300X release-qualification runs must use. It exists so the
-repo can dry-run the structure locally on CPU, then execute the exact same
-bundle shape on cloud hardware without publishing raw private evidence.
+Blackwell, and MI300X release-qualification runs must use. The repository can
+dry-run a bundle locally on CPU and then run the same bundle shape on cloud
+hardware without publishing raw private evidence.
 
 Canonical entrypoint:
 
@@ -61,7 +61,7 @@ Every lane must record these gates before the support boundary changes:
 2. Numerical parity gate: deterministic CPU-vs-device comparisons using the
    release thresholds from the hardware qualification plan.
 3. Interop gate: host/device roundtrip, non-contiguous-input smoke, and the
-   lane-specific adapter checks actually claimed in user-facing docs.
+   lane-specific adapter checks that user-facing docs claim.
 4. Diagnostics gate: compute-sanitizer on NVIDIA or rocprof/credible ROCm
    diagnostics on MI300X, with the public artifact reduced to a sanitized
    outcome summary.
@@ -76,8 +76,7 @@ The generated `scripts/run_lane.sh` uses `set -euo pipefail` and a cleanup trap.
 On any failing gate, the harness must stop and invoke the operator-provided
 termination command rather than continuing with ambiguous evidence. A failed run
 may still publish a sanitized failure summary, but it must not leave the cloud
-instance running out of habit and must not convert partial evidence into a
-support claim.
+instance running and must not convert partial evidence into a support claim.
 
 ## Inventory capture policy
 
@@ -86,7 +85,7 @@ Remote inventory collectors are allowlisted:
 - `tools/remote/collect_cuda_inventory.sh`
 - `tools/remote/collect_rocm_inventory.sh`
 
-They intentionally avoid raw environment dumps, `nvidia-smi -q`, `rocminfo`,
+They avoid raw environment dumps, `nvidia-smi -q`, `rocminfo`,
 SSH targets, UUID queries, and other broad/private metadata. If a new field is
 needed for release support, add the smallest possible allowlisted query and keep
 it auditable.
@@ -111,6 +110,6 @@ tracked-files manifest provides deterministic `--tracked` enumeration for
 
 ## Release support boundary
 
-This harness does not itself broaden support claims. The support boundary stays
+Running this harness does not broaden support claims. The support boundary stays
 where `docs/release/support_matrix.md` says it is until a reviewed release slice
 runs this harness on named hardware and records sanitized derived evidence.

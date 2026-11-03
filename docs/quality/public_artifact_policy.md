@@ -55,7 +55,7 @@ Archive/no-`.git` tracked-tree audits remain fail-closed. Use either an explicit
 exported with the archive. If neither Git metadata nor a tracked manifest exists,
 `python scripts/audit_public_artifacts.py --tracked` must fail rather than guess.
 
-The scanner deliberately prints only the affected path and rule. Do not paste a
+The scanner prints only the affected path and rule. Do not paste a
 matched private value into an issue, review, commit message, or sanitization
 report. Treat a finding as potentially sensitive until reviewed locally.
 

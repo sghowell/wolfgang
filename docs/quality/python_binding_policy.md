@@ -7,19 +7,20 @@ Wolfgang's native extension has two registration layers:
   benchmark, probe, and test hooks. Underscored hooks are not compatibility promises.
 
 `WOLFGANG_ENABLE_INTERNAL_BINDINGS=OFF` is the default for every source and wheel
-build. Repository developers explicitly opt in with
+build. Repository developers opt in with
 `-Ccmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON` when running validation
-campaigns. Keeping the default off removes research, benchmark, probe, and test
-registrations. The underscored build
-function remains because the supported `capabilities()` API uses it internally.
-Public device discovery supplies accelerator records when private status helpers
-are absent; callers should use `wolfgang_quantum.capabilities()` instead.
+campaigns. With the default, the research, benchmark, probe, and test hooks
+are not registered. The underscored build function remains because
+the supported `capabilities()` API uses it internally. Public device discovery
+supplies accelerator records when private status helpers are absent; callers
+should use `wolfgang_quantum.capabilities()` instead.
 
 Official release wheels set `WOLFGANG_ENABLE_INTERNAL_BINDINGS=OFF` explicitly in
 the cibuildwheel configuration. Release wheels therefore contain the stable API and
 the minimum internal operational introspection needed to implement it, but not the
-unsupported campaign machinery. Git checkouts retain the research registration and native tests for opt-in
-validation; release source distributions omit those development-only files.
+unsupported campaign machinery. Git checkouts retain the research registration
+and native tests for opt-in validation; release source distributions omit those
+development-only files.
 
 The option does not enable an accelerator and makes no accelerator support claim.
 CUDA, HIP, and Metal availability remains governed by their dedicated build options

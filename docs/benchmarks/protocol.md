@@ -1,5 +1,7 @@
 # Wolfgang Benchmark Protocol
 
+This document defines how Wolfgang benchmarks are designed, run, and interpreted.
+
 ## Loaded-build provenance and repeated controls
 
 New reports record `environment.loaded_native_build`: the loaded extension's
@@ -26,9 +28,6 @@ medium and large cases, all three required variants, matching datasets/repeats,
 correctness success, finite positive medians and exact boundary labels. Missing
 hardware is `skipped`; missing or invalid evidence cannot produce `go`.
 
-
-This document defines how Wolfgang benchmarks are designed, run, and interpreted.
-
 ## Principles
 
 ```text
@@ -41,8 +40,10 @@ benchmark datasets are generated from documented parameters and deterministic se
 
 Benchmarks do not replace correctness tests. A benchmark result is valid only when the corresponding correctness validation passes on the same code revision.
 
-The current source-of-truth ranking handoff for shared follow-up CPU, CUDA,
-ROCm/HIP, and Apple Metal optimization work is the Cross-backend kernel performance campaign in `docs/plans/wolfgang-kernel-performance-campaign.md`.
+The Cross-backend kernel performance campaign
+(`docs/plans/wolfgang-kernel-performance-campaign.md`) ranked the shared CPU,
+CUDA, ROCm/HIP and Apple Metal optimization work that followed it.
+`docs/roadmap.md` names the campaign in progress.
 
 ## Benchmark Entrypoints
 
@@ -78,8 +79,8 @@ python scripts/cuda_deep_profile.py --dry-run --json --profile smoke
 Report rendering commands fall into two categories. Commands that consume only
 checked-in summaries can run from a public clone. Commands below that pass a
 `--raw-dir` reproduce historical reports only when the separately retained
-private raw benchmark archive is available; those inputs are intentionally not
-part of the public repository or source distribution.
+private raw benchmark archive is available; those inputs are kept out of the
+public repository and the source distribution.
 
 ```bash
 python scripts/render_benchmark_plots.py \
@@ -296,7 +297,7 @@ Optional-library baselines must record both availability and package version.
 If a library is not installed, the benchmark must emit an explicit unavailable
 status instead of omitting the case.
 Competitive baseline cases must also report whether competitor correctness was
-actually checked for that case. If a competitor canonicalizes inputs before the
+checked for that case. If a competitor canonicalizes inputs before the
 timed operation, the report must include the effective competitor term counts or
 otherwise document the workload semantics.
 
@@ -331,7 +332,7 @@ availability or unavailable reason
 ## Comprehensive Overnight Optimization Report
 
 At the end of an extended CPU/CUDA optimization and hillclimb run, the agent
-must create a comprehensive checked-in performance optimization and profiling
+must create a complete checked-in performance optimization and profiling
 report under `docs/benchmarks/reports/`. This report is a source-of-truth
 engineering artifact, not a chat summary. It must explain what changed, why it
 changed, how it was validated, what was rejected, and where the next bottlenecks
@@ -396,9 +397,9 @@ attempted install command and error or incompatibility reason.
 
 ### Visual Standards
 
-The comprehensive report must include publication-quality visuals. Data-driven
+The overnight report must include publication-quality visuals. Data-driven
 plots must be generated from checked-in benchmark artifacts or directly emitted
-benchmark JSON, not hallucinated or hand-drawn. Conceptual visuals, diagrams,
+benchmark JSON, not invented or hand-drawn. Conceptual visuals, diagrams,
 and illustrative architecture figures may use `gpt-image-2` when it can produce
 a clearer result than code-generated SVG or Mermaid. Every generated visual must
 store the prompt, source data or source description, generation date, and any
@@ -431,8 +432,8 @@ color choices that remain readable in grayscale and by colorblind readers where 
 alt text or adjacent caption explaining what the visual proves
 ```
 
-When using `gpt-image-2`, prompts must be detailed enough to produce optimal
-technical visuals. Prompts should specify diagram type, layout, exact labels,
+When using `gpt-image-2`, prompts must be detailed enough to produce the
+intended technical visual. Prompts should specify diagram type, layout, exact labels,
 style, color palette, aspect ratio, typography preference, visual hierarchy,
 what to exclude, and that the image must avoid clutter. Generated conceptual
 visuals must not be used as evidence for numeric performance claims; numeric
@@ -526,7 +527,7 @@ workspace_reserved_bytes
 ```
 
 Apple Metal does not support `double` arithmetic in kernels on the local
-Campaign 7 host. Therefore Campaign 7 device-candidate rows are benchmark-only
+Campaign 7 host, so Campaign 7 device-candidate rows are benchmark-only
 and limited to coefficients exactly representable as signed fixed32 dyadic
 values whose accumulated fixed32 sums and tolerance threshold fit exact uint64
 squared-magnitude comparison. Reports must not present those rows as a general
@@ -1020,7 +1021,7 @@ cupy_dlpack_dense_to_host_seconds and p10/p90/min/max variants
 Large profiler binaries such as `.ncu-rep` may be kept out of git when they
 are too large for normal repository storage, but the report must check in
 human-readable CSV/stdout/stderr evidence, record the omitted binary path, and
-add ignore rules so the binary is not accidentally staged.
+add ignore rules so the binary cannot be staged by accident.
 
 Plots and A/B summaries must compare the same timing boundary. A report must
 not present a workspace-preallocated or device-output prototype as a speedup
@@ -1040,17 +1041,23 @@ The Wave 1D promotion metric is the mean-of-medians across 3 independent reruns
 of the same case on the same Apple host. Small-row cases are a regression guard,
 not a headline speedup claim: reject and investigate any undocumented >5%
 retained reused-output slowdown versus the device_output_allocating boundary.
-The small-row guard is explicitly about preserving cheap host-facing rows while
-reused-output evidence is gathered for medium and large retained rows.
+The small-row guard protects cheap host-facing rows while reused-output
+evidence is gathered for medium and large retained rows.
 
-The README performance plot must remain a broad landscape view, not a narrow
-single-hot-path snapshot. When refreshing CUDA evidence, regenerate and check in
-the README plot from tracked raw JSON so it includes the available operation
-families, CPU scalar, captured optimized CPU selectors, CUDA transfer-inclusive
-and device-resident timings, boundary-specific CUDA rows such as
-operator-resident host-statevector timings where relevant, and semantically
-comparable external baselines where available. Renderer freshness tests must
-fail when this view is missing or stale.
+README performance figures must stay broad, not a narrow single-hot-path
+snapshot. `scripts/render_readme_figures.py` draws them from tracked JSON, and
+`tests/test_readme_figures.py` fails when a committed figure is missing or
+stale. The first figure shows an operation that every backend implements, one
+panel per host, with CPU scalar and the captured optimized CPU selectors from
+that host beside the accelerator's transfer-inclusive and device-resident
+timings. The second compares Wolfgang with semantically comparable external
+baselines and names their versions and hosts. A before/after figure across
+campaigns may follow these two but must not replace them. The broad accelerator
+landscape (`docs/benchmarks/plots/accelerator_landscape_with_rocm.svg`), which
+covers the other operation families and boundary-specific CUDA rows such as
+operator-resident host-statevector timings, stays in the benchmark evidence
+index and the research provenance ledger and is regenerated from tracked raw
+JSON when that evidence changes.
 
 For CPU:
 
@@ -1144,7 +1151,7 @@ CPU and CUDA are compared on the same datasets
 every available optimized CPU selector covered by a CUDA benchmark operation is timed separately
 unavailable optimized CPU selectors are reported with reasons instead of omitted
 transfer-inclusive and device-resident timings are reported
-README plots include CPU scalar, every captured optimized CPU selector, CUDA transfer-inclusive, boundary-specific CUDA rows, CUDA device-resident, and semantically comparable external package baselines from checked-in evidence reports
+README figures and the accelerator landscape together include CPU scalar, every captured optimized CPU selector, CUDA transfer-inclusive, boundary-specific CUDA rows, CUDA device-resident, and semantically comparable external package baselines from checked-in evidence reports
 README plots record unavailable external baseline status or reasons when a planned comparable baseline cannot run
 GPU-library competitors are classified and included when a comparable accelerator-library workload mapping exists
 reports identify CPU-faster, CUDA-faster, and transfer-bound regimes
@@ -1155,9 +1162,9 @@ overnight hillclimb reports satisfy the Comprehensive Overnight Optimization Rep
 
 Campaign 3 established the README-ready cross-comparison format. Future H100
 or GPU reports that update README benchmark visuals must keep the same
-discipline: broad CPU/CUDA/external comparisons from checked raw JSON first,
-CUDA-only before/after plots only as supporting report evidence, and any
-private prototype path visibly labeled as a prototype timing boundary.
+discipline: broad CPU/accelerator/external comparisons from checked JSON
+first, a before/after figure only after them, and any private prototype path
+visibly labeled as a prototype timing boundary.
 
 Post-CUDA accelerator phases:
 
