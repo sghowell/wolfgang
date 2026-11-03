@@ -2,8 +2,9 @@
 
 From the hybrid threshold, one-word Metal simplify sorts on the GPU and sums
 duplicate runs in input order on the CPU, so results are bit-identical to CPU
-simplify. The benchmark selector WOLFGANG_METAL_BENCH_SIMPLIFY=host_bridge keeps
-the previous host bridge for comparison.
+simplify. The selector WOLFGANG_METAL_BENCH_SIMPLIFY=host_bridge keeps the
+previous host bridge for comparison, and =hybrid runs the hybrid at any size so
+small and odd sizes exercise the sort network's tile and sentinel edges.
 """
 
 from __future__ import annotations
@@ -15,7 +16,8 @@ import pytest
 import wolfgang_quantum
 import wolfgang_quantum._wolfgang_core as core
 
-HYBRID_MIN_TERMS = 196_608
+HYBRID_MIN_TERMS = 12_288
+SELECTOR = "WOLFGANG_METAL_BENCH_SIMPLIFY"
 
 
 def _require_metal() -> None:
@@ -89,3 +91,30 @@ def test_hybrid_simplify_full_cancellation() -> None:
     cancelled = (op + (-op)).to_device(backend="metal").simplify()
     assert cancelled.num_terms == 0
     assert cancelled.num_qubits == 20
+
+
+@pytest.mark.parametrize("num_terms", [1, 2, 3, 1023, 1024, 1025, 2047, 2049, 5000, 70_001])
+def test_forced_hybrid_matches_cpu_at_tile_edges(monkeypatch: pytest.MonkeyPatch, num_terms: int) -> None:
+    _require_metal()
+    monkeypatch.setenv(SELECTOR, "hybrid")
+    for duplicates in (0.0, 0.7):
+        op = _operator(64, num_terms, duplicates, seed=num_terms)
+        _assert_bit_identical(op.to_device(backend="metal").simplify().to_host(), op.simplify())
+
+
+def test_forced_hybrid_orders_all_y_key_before_padding(monkeypatch: pytest.MonkeyPatch) -> None:
+    # An all-Y 64-qubit term packs to x = z = 2**64 - 1, the padding sentinel's
+    # key; the input-index tie-break must still keep it inside the output.
+    _require_metal()
+    monkeypatch.setenv(SELECTOR, "hybrid")
+    labels = ["Y" * 64, "X" * 64, "Y" * 64, "Z" * 64] * 300 + ["Y" * 64]
+    coeffs = np.arange(1, len(labels) + 1, dtype=np.float64) * (1.0 + 0.5j)
+    op = wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
+    _assert_bit_identical(op.to_device(backend="metal").simplify().to_host(), op.simplify())
+
+
+@pytest.mark.parametrize("num_terms", [262_145, 300_007])
+def test_hybrid_simplify_just_past_a_power_of_two(num_terms: int) -> None:
+    _require_metal()
+    op = _operator(48, num_terms, 0.5, seed=num_terms)
+    _assert_bit_identical(op.to_device(backend="metal").simplify().to_host(), op.simplify())

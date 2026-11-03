@@ -1,9 +1,10 @@
 """Metal simplify: hybrid (GPU sort, CPU float64 reduce) vs host bridge vs CPU.
 
 For one-word operators the public Metal simplify uses the hybrid from its term
-threshold. Each repetition times the hybrid, the previous host bridge (forced
-with WOLFGANG_METAL_BENCH_SIMPLIFY=host_bridge) and CPU simplify in a randomized
-order. Hybrid and host-bridge outputs are checked against CPU simplify bit for
+threshold. Each repetition times the hybrid (forced with
+WOLFGANG_METAL_BENCH_SIMPLIFY=hybrid, so sizes below the threshold measure it
+too), the previous host bridge (forced with =host_bridge) and CPU simplify in a
+randomized order. Hybrid and host-bridge outputs are checked against CPU simplify bit for
 bit before any timing is kept. All three are host-in, host-out from the
 caller's view: Metal buffers are shared storage, and the device operator is
 created once outside the timed region.
@@ -36,7 +37,12 @@ import wolfgang_quantum
 import wolfgang_quantum._wolfgang_core as core
 
 SELECTOR = "WOLFGANG_METAL_BENCH_SIMPLIFY"
-SIZES = (196_608, 262_144, 524_288, 1_048_576)
+# Powers of two and sizes just past them: the sort network spans
+# next_power_of_two(terms) positions, so 2**k + 1 is its worst case.
+SIZES = (
+    4_096, 8_192, 12_288, 16_384, 16_385, 65_536, 65_537,
+    262_144, 262_145, 1_048_576, 1_048_577,
+)
 SMOKE_SIZES = (2_000,)
 
 
@@ -104,6 +110,9 @@ def main() -> int:
     parser.add_argument("--warmup", type=int, default=2)
     parser.add_argument("--repeat", type=int, default=9)
     parser.add_argument("--seed", type=int, default=20261105)
+    parser.add_argument("--sizes", type=int, nargs="+", help="override the term counts")
+    parser.add_argument("--qubits", type=int, nargs="+", default=[24, 60])
+    parser.add_argument("--duplicates", type=float, nargs="+", default=[0.0, 0.5, 0.9])
     parser.add_argument("--output", type=Path)
     parser.add_argument("--summarize", type=Path)
     args = parser.parse_args()
@@ -122,10 +131,10 @@ def main() -> int:
     rng = np.random.default_rng(args.seed)
     order_rng = random.Random(args.seed)
     rows = []
-    sizes = SMOKE_SIZES if args.smoke else SIZES
-    for num_qubits in (24, 60):
+    sizes = SMOKE_SIZES if args.smoke else tuple(args.sizes or SIZES)
+    for num_qubits in args.qubits:
         for num_terms in sizes:
-            for duplicates in (0.0, 0.5, 0.9):
+            for duplicates in args.duplicates:
                 op = random_operator(rng, num_qubits, num_terms, duplicates)
                 device = op.to_device(backend="metal")
 
@@ -140,7 +149,7 @@ def main() -> int:
                     return run
 
                 variants = {
-                    "metal_hybrid": with_selector(None, device.simplify),
+                    "metal_hybrid": with_selector("hybrid", device.simplify),
                     "metal_host_bridge": with_selector("host_bridge", device.simplify),
                     "cpu_simplify": with_selector(None, op.simplify),
                 }
