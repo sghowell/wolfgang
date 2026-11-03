@@ -143,8 +143,9 @@ void require_finite_input(double max_abs_or_nan) {
 
 // A per-thread value in pinned, device-mapped host memory: kernels write it
 // and the host reads it after a synchronization, with no copy. It holds the
-// overflow flag (read after the compaction's own synchronization) and the
-// fused small-simplify result. One allocation per type per thread, never freed.
+// fused small-simplify result, the pipeline result and the benchmark
+// baselines' overflow flag. One allocation per type per thread, freed when the
+// thread exits, so threads that come and go do not each keep pinned memory.
 template <typename T>
 struct MappedHostValue {
   volatile T* host = nullptr;
@@ -152,15 +153,35 @@ struct MappedHostValue {
 };
 
 template <typename T>
-MappedHostValue<T> mapped_host_value(const char* name) {
-  thread_local const MappedHostValue<T> value = [name] {
+class ThreadMappedHostValue {
+ public:
+  explicit ThreadMappedHostValue(const char* name) {
     T* host = nullptr;
     check_cuda(cudaHostAlloc(reinterpret_cast<void**>(&host), sizeof(T), cudaHostAllocMapped | cudaHostAllocPortable), name);
     T* device = nullptr;
-    check_cuda(cudaHostGetDevicePointer(reinterpret_cast<void**>(&device), host, 0), name);
-    return MappedHostValue<T>{host, device};
-  }();
-  return value;
+    const cudaError_t status = cudaHostGetDevicePointer(reinterpret_cast<void**>(&device), host, 0);
+    if (status != cudaSuccess) {
+      (void)cudaFreeHost(host);
+      check_cuda(status, name);
+    }
+    value_ = {host, device};
+  }
+  ThreadMappedHostValue(const ThreadMappedHostValue&) = delete;
+  ThreadMappedHostValue& operator=(const ThreadMappedHostValue&) = delete;
+  // The main thread's thread_local destructors run before the CUDA runtime's
+  // exit handlers; any error from a runtime already unloading is ignored.
+  ~ThreadMappedHostValue() { (void)cudaFreeHost(const_cast<T*>(value_.host)); }
+
+  [[nodiscard]] const MappedHostValue<T>& get() const noexcept { return value_; }
+
+ private:
+  MappedHostValue<T> value_;
+};
+
+template <typename T>
+MappedHostValue<T> mapped_host_value(const char* name) {
+  thread_local const ThreadMappedHostValue<T> value(name);
+  return value.get();
 }
 
 // Hooks for the shared multi-launch pipeline (detail/device_simplify_pipeline.cuh):
