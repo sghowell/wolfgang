@@ -507,6 +507,7 @@ std::uintptr_t DeviceCommutationMatrix::data_pointer_for_cuda_array_interface() 
     throw std::runtime_error("DeviceCommutationMatrix is empty or moved-from");
   }
   impl_->exported = true;  // freeing now synchronizes the device first
+  cuda_detail::grant_peer_access_for_export(impl_->device_ordinal);
   return reinterpret_cast<std::uintptr_t>(impl_->data);
 }
 

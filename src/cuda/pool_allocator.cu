@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace wolfgang::cuda_detail {
 
@@ -17,6 +18,7 @@ namespace {
 
 struct DevicePool {
   cudaMemPool_t pool = nullptr;  // null when the device lacks pool support or pooling is off
+  bool peers_granted = false;    // grant_peer_access_for_export() has mapped it into peers
 };
 
 // Both live for the whole process (never destroyed) so frees from objects with
@@ -114,6 +116,50 @@ cudaError_t allocate_on_device(int device, void** pointer, std::size_t bytes) {
 }
 
 }  // namespace
+
+void grant_peer_access_for_export(int device) noexcept {
+  try {
+    std::lock_guard<std::mutex> lock(pools_mutex());
+    auto found = pools().find(device);
+    if (found == pools().end() || found->second.pool == nullptr || found->second.peers_granted) {
+      return;  // cudaMalloc memory needs no grant: consumers enable peer access themselves
+    }
+    int device_count = 0;
+    if (cudaGetDeviceCount(&device_count) != cudaSuccess) {
+      (void)cudaGetLastError();
+      return;
+    }
+    std::vector<cudaMemAccessDesc> access;
+    for (int peer = 0; peer < device_count; ++peer) {
+      int can_access = 0;
+      if (peer == device) {
+        continue;
+      }
+      if (cudaDeviceCanAccessPeer(&can_access, peer, device) != cudaSuccess) {
+        (void)cudaGetLastError();
+        continue;
+      }
+      if (can_access != 0) {
+        cudaMemAccessDesc desc{};
+        desc.location.type = cudaMemLocationTypeDevice;
+        desc.location.id = peer;
+        // Exports are read-only by contract, but consumers do not enforce it;
+        // read-write matches cudaMalloc memory under peer access.
+        desc.flags = cudaMemAccessFlagsProtReadWrite;
+        access.push_back(desc);
+      }
+    }
+    // The mapping covers the pool's current and future allocations.
+    if (!access.empty() &&
+        cudaMemPoolSetAccess(found->second.pool, access.data(), access.size()) != cudaSuccess) {
+      (void)cudaGetLastError();
+      return;
+    }
+    found->second.peers_granted = true;
+  } catch (...) {
+    // Leave the pool unmapped; the next export retries.
+  }
+}
 
 void trim_pools_after_allocation_failure() noexcept {
   try {

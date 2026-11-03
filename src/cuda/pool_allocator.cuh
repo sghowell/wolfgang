@@ -36,12 +36,23 @@ namespace wolfgang::cuda_detail {
 // is marked when its pointer is handed out, and its owner synchronizes the
 // device before the block returns to the pool (DevicePauliSum after
 // device_arrays(), DeviceCommutationMatrix after an export).
+//
+// Pool memory is mapped only into its own device until the first export from
+// that device, when grant_peer_access_for_export() maps it into every peer that
+// can access it. Without that, a peer kernel reading an exported buffer faults
+// with an illegal address, which poisons the CUDA context.
 inline constexpr std::uint64_t kPoolReleaseThresholdBytes = std::uint64_t{1} << 30;
 
 // Allocation failures (after a trim and one retry) throw std::bad_alloc.
 [[nodiscard]] void* pool_allocate_bytes(std::size_t bytes, const char* name);
 void pool_free_bytes(void* pointer) noexcept;
 void pool_free_bytes_on_device(void* pointer, int device) noexcept;
+
+// Map `device`'s pool into every peer device that can access it, once per
+// pool. Called when a buffer is exported, so exported memory is readable from
+// those peers as cudaMalloc memory is once a consumer enables peer access. A
+// failure leaves the pool unmapped and is retried at the next export.
+void grant_peer_access_for_export(int device) noexcept;
 
 // Synchronize pooled devices and return cached blocks to the driver; used
 // before retrying an allocation that failed for lack of memory.

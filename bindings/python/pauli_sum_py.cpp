@@ -60,6 +60,20 @@ auto cpu_without_gil(Function&& function) {
   return std::forward<Function>(function)();
 }
 
+// Accelerator work, under the same rules as cpu_without_gil. CUDA builds release
+// the GIL so Python threads can keep several GPUs busy at once: the CUDA host
+// code is safe to enter concurrently because its caches are per thread
+// (workspaces, mapped results) or locked (memory pools, pinned staging
+// buffers). HIP and Metal builds keep the GIL until the same is verified on
+// their hardware.
+template <typename Function>
+auto device_without_gil(Function&& function) {
+#if WOLFGANG_BUILD_CUDA_ENABLED
+  nb::gil_scoped_release release;
+#endif
+  return std::forward<Function>(function)();
+}
+
 class PythonBufferView {
 public:
   explicit PythonBufferView(nb::handle object) {
@@ -699,10 +713,9 @@ nb::object device_expectation_statevector(const DevicePauliSum& op, nb::handle p
   try {
     if (has_cuda_array_interface(psi_obj)) {
       const CudaStatevectorView view = parse_cuda_array_interface_statevector(psi_obj);
-      return nb::cast(op.expectation_statevector_device_pointer(
-          view.pointer,
-          view.dtype,
-          view.length));
+      return nb::cast(device_without_gil([&] {
+        return op.expectation_statevector_device_pointer(view.pointer, view.dtype, view.length);
+      }));
     }
 
     PythonBufferView buffer(psi_obj);
@@ -728,15 +741,13 @@ nb::object device_expectation_statevector(const DevicePauliSum& op, nb::handle p
 
     const std::size_t size = static_cast<std::size_t>(view.shape[0]);
     if (is_complex128) {
-      return nb::cast(op.expectation_statevector_complex128(
-          std::span<const std::complex<double>>(
-              static_cast<const std::complex<double>*>(view.buf),
-              size)));
+      const std::span<const std::complex<double>> psi(
+          static_cast<const std::complex<double>*>(view.buf), size);
+      return nb::cast(device_without_gil([&] { return op.expectation_statevector_complex128(psi); }));
     }
-    return nb::cast(op.expectation_statevector_complex64(
-        std::span<const std::complex<float>>(
-            static_cast<const std::complex<float>*>(view.buf),
-            size)));
+    const std::span<const std::complex<float>> psi(
+        static_cast<const std::complex<float>*>(view.buf), size);
+    return nb::cast(device_without_gil([&] { return op.expectation_statevector_complex64(psi); }));
   } catch (const std::invalid_argument& error) {
     translate_invalid_argument(error);
   }
@@ -844,7 +855,7 @@ nb::object bool_array_from_vector(const std::vector<std::uint8_t>& values) {
 }
 
 nb::object bool_matrix_from_device_commutation(const DeviceCommutationMatrix& matrix) {
-  nb::object array = bool_array_from_vector(matrix.to_host());
+  nb::object array = bool_array_from_vector(device_without_gil([&] { return matrix.to_host(); }));
   return array.attr("reshape")(nb::make_tuple(matrix.rows(), matrix.cols()));
 }
 
@@ -871,7 +882,7 @@ nb::object count_commuting_device_matrix(
   try {
     if (axis_obj.is_none()) {
       return nb::steal<nb::object>(PyLong_FromUnsignedLongLong(
-          static_cast<unsigned long long>(matrix.count_commuting())));
+          static_cast<unsigned long long>(device_without_gil([&] { return matrix.count_commuting(); }))));
     }
 
     long long axis = 0;
@@ -881,10 +892,10 @@ nb::object count_commuting_device_matrix(
       throw nb::value_error("axis must be None, 0, or 1");
     }
     if (axis == 0) {
-      return uint64_array_from_vector(matrix.count_commuting_cols());
+      return uint64_array_from_vector(device_without_gil([&] { return matrix.count_commuting_cols(); }));
     }
     if (axis == 1) {
-      return uint64_array_from_vector(matrix.count_commuting_rows());
+      return uint64_array_from_vector(device_without_gil([&] { return matrix.count_commuting_rows(); }));
     }
     throw nb::value_error("axis must be None, 0, or 1");
   } catch (const std::invalid_argument& error) {
@@ -898,7 +909,8 @@ nb::object conflict_degrees_device_matrix(
   try {
     if (axis_obj.is_none()) {
       const auto entries = static_cast<unsigned long long>(matrix.num_entries());
-      const auto commuting = static_cast<unsigned long long>(matrix.count_commuting());
+      const auto commuting =
+          static_cast<unsigned long long>(device_without_gil([&] { return matrix.count_commuting(); }));
       return nb::steal<nb::object>(PyLong_FromUnsignedLongLong(entries - commuting));
     }
 
@@ -909,7 +921,7 @@ nb::object conflict_degrees_device_matrix(
       throw nb::value_error("axis must be None, 0, or 1");
     }
     if (axis == 0) {
-      std::vector<std::uint64_t> counts = matrix.count_commuting_cols();
+      std::vector<std::uint64_t> counts = device_without_gil([&] { return matrix.count_commuting_cols(); });
       const std::uint64_t row_count = static_cast<std::uint64_t>(matrix.rows());
       for (std::uint64_t& value : counts) {
         value = row_count - value;
@@ -917,7 +929,7 @@ nb::object conflict_degrees_device_matrix(
       return uint64_array_from_vector(counts);
     }
     if (axis == 1) {
-      std::vector<std::uint64_t> counts = matrix.count_commuting_rows();
+      std::vector<std::uint64_t> counts = device_without_gil([&] { return matrix.count_commuting_rows(); });
       const std::uint64_t col_count = static_cast<std::uint64_t>(matrix.cols());
       for (std::uint64_t& value : counts) {
         value = col_count - value;
@@ -1110,10 +1122,8 @@ nb::object bool_array_from_device_commutation(
   if (view.len != static_cast<Py_ssize_t>(entries)) {
     throw std::runtime_error("NumPy bool array buffer size mismatch");
   }
-  lhs.commutes_with_into(
-      rhs,
-      std::span<std::uint8_t>(static_cast<std::uint8_t*>(view.buf), entries),
-      max_commutation_matrix_entries);
+  const std::span<std::uint8_t> flags(static_cast<std::uint8_t*>(view.buf), entries);
+  device_without_gil([&] { lhs.commutes_with_into(rhs, flags, max_commutation_matrix_entries); });
   return array;
 }
 
@@ -1518,8 +1528,10 @@ DevicePauliSum device_pauli_sum_from_device_arrays(
   const std::uintptr_t x = parse_cuda_array_interface_input(x_obj, "x", u8, {num_terms, words}, 8);
   const std::uintptr_t z = parse_cuda_array_interface_input(z_obj, "z", u8, {num_terms, words}, 8);
   try {
-    return DevicePauliSum::from_device_arrays(
-        num_qubits, static_cast<std::size_t>(num_terms), x, z, coeffs, AcceleratorBackend::Cuda, device);
+    return device_without_gil([&] {
+      return DevicePauliSum::from_device_arrays(
+          num_qubits, static_cast<std::size_t>(num_terms), x, z, coeffs, AcceleratorBackend::Cuda, device);
+    });
   } catch (const std::invalid_argument& error) {
     translate_invalid_argument(error);
   }
@@ -1715,7 +1727,7 @@ void bind_pauli_sum(nb::module_& module) {
           "Compiled accelerator backend that owns the buffers: 'cuda', 'hip', or 'metal'.")
       .def(
           "to_host",
-          &DevicePauliSum::to_host,
+          [](const DevicePauliSum& op) { return device_without_gil([&] { return op.to_host(); }); },
           "Copy device buffers back to a new host PauliSum.")
       .def(
           "device_arrays",
@@ -1746,7 +1758,7 @@ void bind_pauli_sum(nb::module_& module) {
           "simplify",
           [](const DevicePauliSum& op, double atol, double rtol) {
             try {
-              return op.simplify(atol, rtol);
+              return device_without_gil([&] { return op.simplify(atol, rtol); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }
@@ -1785,7 +1797,9 @@ void bind_pauli_sum(nb::module_& module) {
 
               if (lhs.num_terms() == 1 && rhs.num_terms() == 1) {
                 std::uint8_t flag = 0;
-                lhs.commutes_with_into(rhs, std::span<std::uint8_t>(&flag, 1), max_entries);
+                device_without_gil([&] {
+                  lhs.commutes_with_into(rhs, std::span<std::uint8_t>(&flag, 1), max_entries);
+                });
                 return nb::cast(flag != 0);
               }
 
@@ -1817,10 +1831,8 @@ void bind_pauli_sum(nb::module_& module) {
                   rhs.num_terms(),
                   max_entries);
               WritablePythonBufferView buffer(output_obj);
-              lhs.commutes_with_into(
-                  rhs,
-                  writable_flat_bool_span(buffer.get(), entries),
-                  max_entries);
+              const std::span<std::uint8_t> flags = writable_flat_bool_span(buffer.get(), entries);
+              device_without_gil([&] { lhs.commutes_with_into(rhs, flags, max_entries); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }
@@ -1844,11 +1856,11 @@ void bind_pauli_sum(nb::module_& module) {
                   max_entries_obj,
                   "max_commutation_matrix_entries");
               if (output_obj.is_none()) {
-                return nb::cast(lhs.commutes_with_device(rhs, max_entries));
+                return nb::cast(device_without_gil([&] { return lhs.commutes_with_device(rhs, max_entries); }));
               }
               DeviceCommutationMatrix& output =
                   nb::cast<DeviceCommutationMatrix&>(output_obj);
-              lhs.commutes_with_device_into(rhs, output, max_entries);
+              device_without_gil([&] { lhs.commutes_with_device_into(rhs, output, max_entries); });
               return output_obj;
             } catch (const nb::cast_error&) {
               throw nb::type_error("commutes_with_device output must be a DeviceCommutationMatrix");
@@ -1867,10 +1879,8 @@ void bind_pauli_sum(nb::module_& module) {
           "matmul",
           [](const DevicePauliSum& lhs, const DevicePauliSum& rhs, bool simplify_output, nb::handle max_terms_obj) {
             try {
-              return lhs.matmul(
-                  rhs,
-                  simplify_output,
-                  checked_size_from_python_int(max_terms_obj, "max_intermediate_terms"));
+              const std::size_t limit = checked_size_from_python_int(max_terms_obj, "max_intermediate_terms");
+              return device_without_gil([&] { return lhs.matmul(rhs, simplify_output, limit); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }
@@ -2032,10 +2042,8 @@ void bind_pauli_sum(nb::module_& module) {
           "to_device",
           [](const PauliSum& op, int device, nb::object backend_obj) {
             try {
-              return DevicePauliSum::from_host(
-                  op,
-                  parse_backend_selector(std::move(backend_obj)),
-                  device);
+              const AcceleratorBackend backend = parse_backend_selector(std::move(backend_obj));
+              return device_without_gil([&] { return DevicePauliSum::from_host(op, backend, device); });
             } catch (const std::invalid_argument& error) {
               translate_invalid_argument(error);
             }
