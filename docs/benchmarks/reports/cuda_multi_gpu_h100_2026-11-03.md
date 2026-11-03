@@ -69,7 +69,7 @@ data:       docs/benchmarks/data/cuda_multi_gpu_h100_2026-11-03/multi_gpu_summar
 | Devices | 2 x NVIDIA H100 80GB HBM3 (SXM), sm_90, connected by NVLink (`nvidia-smi topo -m`: NV18), driver 570.148.08 |
 | Host | Intel Xeon Platinum 8480+, 52 vCPUs (KVM guest), Ubuntu 22.04.5, GCC 11.4, Python 3.12.16, CUDA 12.8.93, CuPy 14.2.0, NumPy 2.5.4 |
 | Baseline (`base`) | main at `e9c8d0e`; its checkout also held the new test and benchmark files |
-| Candidate (`cand`) | `f068943` |
+| Candidate (`cand`) | `f068943`. The final head also synchronizes peers when an exported buffer is freed and applies review fixes, none of which touch the measured paths |
 | Build | `WOLFGANG_ENABLE_CUDA=ON`, `WOLFGANG_CUDA_ARCHITECTURES=90`, system oneTBB 2021.5 |
 
 The threads and call-overhead suites alternated between the builds, three runs
@@ -125,9 +125,9 @@ added no measurable cost to calls of 10 us and up.
 
 | Check | Result |
 | --- | --- |
-| `tests/test_cuda_multi_gpu.py` (new, 13 tests) | Before the fix the peer-read, GIL and second-device-only tests failed (illegal address, a 48 ms stall in a 54 ms `to_host`, 516 MiB on GPU 0); all pass after it. They cover every operation on device 1 against the CPU, the current device after calls from either device, mixed-device errors, a device-array round trip on device 1, peer reads of exported arrays and matrices from device 0, four threads on two devices, and the GIL during a long transfer |
-| `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core` | Passed on the two-GPU host at `82e0fac` (1,098 tests in the CUDA run, 747 in the CPU run) |
-| `compute-sanitizer --tool memcheck --leak-check full` | 0 errors and 0 leaks over the in-process multi-GPU tests and `tests/test_device_transfers.py` at `3e5ba24` |
+| `tests/test_cuda_multi_gpu.py` (new, 14 tests) | Before the fixes the peer-read, GIL, second-device-only and peer-free tests failed (illegal address, a 48 ms stall in a 54 ms `to_host`, 516 MiB on GPU 0, a peer kernel reading reused memory); all pass after them. They cover every operation on device 1 against the CPU, the current device after calls from either device, mixed-device errors, a device-array round trip on device 1, peer reads of exported arrays and matrices from device 0, four threads on two devices, and the GIL during a long transfer |
+| `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core` | Passed on the two-GPU host at `9b0ec23` (1,099 tests in the CUDA run, 747 in the CPU-only run, which also builds the non-CUDA branches) |
+| `compute-sanitizer --tool memcheck --leak-check full` | 0 errors and 0 leaks over the in-process multi-GPU tests and `tests/test_device_transfers.py` at `9b0ec23`. Over `tests/test_device_arrays.py` it reports pool blocks still owned at exit by the 19 objects alive then, on main as on this branch; the count is higher once an export maps the pool into the peer. 6,000 export round trips changed free device memory by 0 MiB on either build |
 
 ## Limitations
 
@@ -147,6 +147,8 @@ added no measurable cost to calls of 10 us and up.
   so it cannot resolve a mapping cost smaller than its 1.5 ms spread.
 - Threads that share a GPU gain nothing from concurrency by design: they take
   turns on the device lock.
+- A daemon thread can now be inside a CUDA call while the interpreter exits
+  and the exit handlers run, because the GIL no longer holds it back.
 - When a thread's previous device has no context, the thread now stays on the
   operand's device after a call. Code that relied on Wolfgang making an unused
   device 0 current again would see device 1.
