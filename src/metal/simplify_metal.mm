@@ -77,8 +77,10 @@ constexpr std::uint32_t kHybridSortTileThreads = kHybridSortTile / 2;
 // kHybridReduceChunkMinTerms.
 constexpr std::size_t kHybridParallelReduceMinTerms = std::size_t{1} << 20;
 constexpr std::size_t kHybridReduceChunkMinTerms = 16384;
-// Above this many sort positions each merge stage gets its own command buffer.
+// Above this many sort positions each merge stage gets its own command buffer,
+// and above kHybridSingleStageMaxPositions each global step does too.
 constexpr std::uint32_t kHybridSingleCommandBufferMaxPositions = std::uint32_t{1} << 22;
+constexpr std::uint32_t kHybridSingleStageMaxPositions = std::uint32_t{1} << 26;
 
 struct HybridSortParams {
   std::uint32_t terms = 0;
@@ -160,6 +162,10 @@ bool runtime_kernels_forced() {
   return value != nullptr && std::strcmp(value, "1") == 0;
 }
 
+// Which library the process actually loaded, for tests: a rejected
+// precompiled library falls back to the source silently.
+std::atomic<int> g_simplify_library_kind{0};  // 0 none, 1 precompiled, 2 runtime source
+
 // Loads (or compiles) the simplify kernels once per process; every pipeline
 // comes from this library. The caller holds the pipeline cache mutex.
 id<MTLLibrary> simplify_library(id<MTLDevice> device) {
@@ -175,6 +181,7 @@ id<MTLLibrary> simplify_library(id<MTLDevice> device) {
     library = [device newLibraryWithData:data error:&load_error];
     dispatch_release(data);
     if (library != nil) {
+      g_simplify_library_kind.store(1);
       return library;
     }
     // Fall through to the embedded source if this device rejects the library.
@@ -193,6 +200,7 @@ id<MTLLibrary> simplify_library(id<MTLDevice> device) {
     throw std::runtime_error(
         "Metal failed to compile simplify kernels: " + nsstring_to_string([error localizedDescription]));
   }
+  g_simplify_library_kind.store(2);
   return library;
 }
 
@@ -788,6 +796,17 @@ std::uint64_t hybrid_simplify_runs_for_testing() noexcept {
   return g_hybrid_simplify_runs.load(std::memory_order_relaxed);
 }
 
+const char* simplify_library_kind_for_testing() noexcept {
+  switch (g_simplify_library_kind.load()) {
+    case 1:
+      return "precompiled";
+    case 2:
+      return "runtime_source";
+    default:
+      return "not_loaded";
+  }
+}
+
 
 HybridSimplifyOutput simplify_words1_hybrid(
     id<MTLDevice> device,
@@ -841,6 +860,9 @@ HybridSimplifyOutput simplify_words1_hybrid(
   // drives a display (one buffer ran about two seconds at 2^26 positions on an
   // M4 Pro).
   const bool split_stages = padded_u32 > kHybridSingleCommandBufferMaxPositions;
+  // From 2^27 positions one merge stage alone can approach the watchdog, so
+  // each global step also gets its own command buffer there.
+  const bool split_steps = padded_u32 > kHybridSingleStageMaxPositions;
   std::vector<id<MTLCommandBuffer>> committed;
   id<MTLCommandBuffer> command_buffer = nil;
   id<MTLComputeCommandEncoder> encoder = nil;
@@ -854,14 +876,17 @@ HybridSimplifyOutput simplify_words1_hybrid(
       throw std::runtime_error("Metal failed to create a hybrid simplify command encoder");
     }
   };
-  const auto commit_stage = [&] {
-    if (!split_stages) {
-      return;
-    }
+  const auto commit_buffer = [&] {
     [encoder endEncoding];
     [command_buffer commit];
     committed.push_back(command_buffer);
     begin_command_buffer();
+  };
+  const auto commit_stage = [&] {
+    if (!split_stages) {
+      return;
+    }
+    commit_buffer();
   };
   begin_command_buffer();
   const MTLSize tile_grid = MTLSizeMake(tiles, 1, 1);
@@ -886,6 +911,13 @@ HybridSimplifyOutput simplify_words1_hybrid(
       params.j = j;
       [encoder setBytes:&params length:sizeof(params) atIndex:3];
       dispatch_1d(encoder, padded_u32 / 2U);
+      if (split_steps) {
+        commit_buffer();
+        [encoder setComputePipelineState:global_step];
+        [encoder setBuffer:sort_x.get() offset:0 atIndex:0];
+        [encoder setBuffer:sort_z.get() offset:0 atIndex:1];
+        [encoder setBuffer:sort_index.get() offset:0 atIndex:2];
+      }
     }
     [encoder setComputePipelineState:tile_merge];
     [encoder setBytes:&params length:sizeof(params) atIndex:3];
@@ -899,17 +931,24 @@ HybridSimplifyOutput simplify_words1_hybrid(
   [encoder setBytes:&params length:sizeof(params) atIndex:3];
   dispatch_1d(encoder, terms);
   [encoder endEncoding];
-  wait_for_completion(command_buffer, "Metal hybrid simplify sort");
-  // Earlier stage buffers ran before the last one on the same queue.
+  [command_buffer commit];
+  committed.push_back(command_buffer);
+  // Buffers on one queue run in order. Report the first that failed: after a
+  // fault Metal also fails every later buffer, which would hide the cause.
+  for (id<MTLCommandBuffer> stage : committed) {
+    [stage waitUntilCompleted];
+  }
   for (id<MTLCommandBuffer> stage : committed) {
     if ([stage status] != MTLCommandBufferStatusCompleted) {
       NSError* error = [stage error];
       throw std::runtime_error(
-          std::string("Metal hybrid simplify sort stage failed: ") +
+          std::string("Metal hybrid simplify sort failed: ") +
           (error == nil ? std::string("unknown command buffer error")
                         : nsstring_to_string([error localizedDescription])));
     }
   }
+  // The input-index permutation is dead once coefficients are gathered.
+  [sort_index.release() release];
 
   // The buffers hold every input term in canonical (x, z) order with
   // input-index tie-breaks, and its coefficient. Summing each run left to right,
@@ -965,8 +1004,13 @@ HybridSimplifyOutput simplify_words1_hybrid(
   // outputs at per-chunk prefix offsets. In-place compaction is not safe across
   // chunks, because a later chunk's destination can overlap an earlier chunk's
   // unread runs.
+  // Four chunks per hardware thread lets performance cores pick up work while
+  // efficiency cores finish theirs.
   const std::size_t chunk_count = std::max<std::size_t>(
-      2, std::min<std::size_t>(std::thread::hardware_concurrency(), terms / kHybridReduceChunkMinTerms));
+      2,
+      std::min<std::size_t>(
+          4 * static_cast<std::size_t>(std::thread::hardware_concurrency()),
+          terms / kHybridReduceChunkMinTerms));
   std::vector<std::size_t> chunk_start(chunk_count + 1, terms);
   chunk_start[0] = 0;
   for (std::size_t chunk = 1; chunk < chunk_count; ++chunk) {
@@ -1025,6 +1069,36 @@ HybridSimplifyOutput simplify_words1_hybrid(
   if (survivors == 0) {
     return out;
   }
+  const std::size_t* offsets = chunk_offset.data();
+  if (survivors >= terms / 2) {
+    // Mostly survivors: reuse the scratch buffers as the output, as the
+    // sequential path does, so peak memory does not grow. Each chunk compacts
+    // in place (writes never pass reads within a chunk); then the chunks shift
+    // left in chunk order, where a destination never reaches a later chunk's
+    // unmoved survivors.
+    dispatch_apply(chunk_count, DISPATCH_APPLY_AUTO, ^(std::size_t chunk) {
+      std::size_t write = starts[chunk];
+      for (std::size_t position = starts[chunk]; position < starts[chunk + 1]; ++position) {
+        if (keep_flags[position] != 0) {
+          keys_x[write] = keys_x[position];
+          keys_z[write] = keys_z[position];
+          sums[write] = sums[position];
+          ++write;
+        }
+      }
+    });
+    for (std::size_t chunk = 0; chunk < chunk_count; ++chunk) {
+      if (counts[chunk] != 0 && offsets[chunk] != starts[chunk]) {
+        std::memmove(keys_x + offsets[chunk], keys_x + starts[chunk], counts[chunk] * sizeof(std::uint64_t));
+        std::memmove(keys_z + offsets[chunk], keys_z + starts[chunk], counts[chunk] * sizeof(std::uint64_t));
+        std::memmove(sums + offsets[chunk], sums + starts[chunk], counts[chunk] * sizeof(std::complex<double>));
+      }
+    }
+    out.x = sort_x.release();
+    out.z = sort_z.release();
+    out.coeffs = sort_coeffs.release();
+    return out;
+  }
   ScopedMetalBuffer out_x(make_hybrid_buffer(device, nullptr, survivors * sizeof(std::uint64_t)));
   ScopedMetalBuffer out_z(make_hybrid_buffer(device, nullptr, survivors * sizeof(std::uint64_t)));
   ScopedMetalBuffer out_coeffs(
@@ -1032,7 +1106,6 @@ HybridSimplifyOutput simplify_words1_hybrid(
   auto* dst_x = static_cast<std::uint64_t*>([out_x.get() contents]);
   auto* dst_z = static_cast<std::uint64_t*>([out_z.get() contents]);
   auto* dst_coeffs = static_cast<std::complex<double>*>([out_coeffs.get() contents]);
-  const std::size_t* offsets = chunk_offset.data();
   dispatch_apply(chunk_count, DISPATCH_APPLY_AUTO, ^(std::size_t chunk) {
     std::size_t write = offsets[chunk];
     for (std::size_t position = starts[chunk]; position < starts[chunk + 1]; ++position) {

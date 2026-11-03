@@ -196,9 +196,10 @@ def test_build_reports_how_simplify_kernels_load() -> None:
     assert core._build_info()["metal_simplify_kernels"] in ("precompiled", "runtime_source")
 
 
-def test_runtime_source_kernels_match_precompiled(tmp_path) -> None:
+def test_runtime_source_kernels_match_precompiled() -> None:
     # The benchmark-only switch forces the run-time compile; both paths must
-    # give identical results in fresh processes.
+    # give identical results in fresh processes, and each must really load the
+    # library it claims (a rejected precompiled library falls back silently).
     _require_metal()
     import json
     import os
@@ -213,14 +214,19 @@ def test_runtime_source_kernels_match_precompiled(tmp_path) -> None:
         "x[n // 2:] = x[: n - n // 2]; z[n // 2:] = z[: n - n // 2];"
         "op = wq.PauliSum.from_arrays(x, z, rng.normal(size=n) + 0j, 40);"
         "out = op.to_device(backend='metal').simplify().to_host();"
-        "print(json.dumps([out.num_terms, out.to_arrays()[2].view(np.uint64).tolist()[:200]]))"
+        "import wolfgang_quantum._wolfgang_core as core;"
+        "print(json.dumps([core._metal_simplify_library_kind_for_testing(),"
+        " out.num_terms, out.to_arrays()[2].view(np.uint64).tolist()[:200]]))"
     )
     results = []
     for forced in ("0", "1"):
         env = dict(os.environ, WOLFGANG_METAL_BENCH_RUNTIME_KERNELS=forced)
         completed = subprocess.run([sys.executable, "-c", script], env=env, capture_output=True, text=True, check=True)
         results.append(json.loads(completed.stdout.strip().splitlines()[-1]))
-    assert results[0] == results[1]
+    expected_default = "precompiled" if core._build_info()["metal_simplify_kernels"] == "precompiled" else "runtime_source"
+    assert results[0][0] == expected_default
+    assert results[1][0] == "runtime_source"
+    assert results[0][1:] == results[1][1:]
 
 
 def _packed_operator(num_terms: int, unique: int, seed: int) -> wolfgang_quantum.PauliSum:
@@ -244,6 +250,7 @@ def test_parallel_reduction_runs_spanning_chunks_and_late_overflow() -> None:
     # From 2^20 terms the CPU reduction runs in parallel chunks that start on
     # run boundaries; runs far longer than a chunk must not be split.
     _require_metal()
+    runs = _hybrid_runs()
     rng = np.random.default_rng(23)
     counts = [700_000, 250_000, 250_000]
     coeffs = rng.normal(size=sum(counts)) + 1j * rng.normal(size=sum(counts))
@@ -260,10 +267,15 @@ def test_parallel_reduction_runs_spanning_chunks_and_late_overflow() -> None:
     device = late.to_device(backend="metal")
     with pytest.raises(OverflowError):
         device.simplify()
+    assert _hybrid_runs() == runs + 4
 
 
 def test_large_input_splits_command_buffers_bit_identically() -> None:
     # Above 2^22 sort positions each merge stage commits its own command buffer.
     _require_metal()
+    runs = _hybrid_runs()
     op = _packed_operator(4_194_305, 2_097_152, seed=9)
     _assert_bit_identical(op.to_device(backend="metal").simplify().to_host(), op.simplify())
+    unique = _packed_operator(1_200_000, 1_200_000, seed=10)  # mostly survivors: in-place path
+    _assert_bit_identical(unique.to_device(backend="metal").simplify().to_host(), unique.simplify())
+    assert _hybrid_runs() == runs + 2

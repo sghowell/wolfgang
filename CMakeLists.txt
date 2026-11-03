@@ -478,34 +478,50 @@ if(WOLFGANG_BUILD_METAL_ENABLED)
   # compiler works here (it is a separate download on recent Xcode). Loading
   # the library skips the run-time source compile on each process's first
   # hybrid simplify; without the compiler the embedded source is used.
+  # A trial compile of the real kernels (not just `metal --version`) decides,
+  # so a toolchain that answers but cannot compile falls back cleanly.
   find_program(WOLFGANG_XCRUN xcrun)
   set(WOLFGANG_METAL_PRECOMPILE_RESULT 1)
+  set(WOLFGANG_METAL_TARGET_FLAGS "")
+  if(CMAKE_OSX_DEPLOYMENT_TARGET)
+    set(WOLFGANG_METAL_TARGET_FLAGS "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+  endif()
   if(WOLFGANG_XCRUN)
     execute_process(
-      COMMAND "${WOLFGANG_XCRUN}" -sdk macosx metal --version
+      COMMAND "${WOLFGANG_XCRUN}" -sdk macosx metal -c ${WOLFGANG_METAL_TARGET_FLAGS}
+              -DWOLFGANG_HYBRID_SORT_TILE=${WOLFGANG_HYBRID_SORT_TILE}
+              "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/kernels/simplify.metal"
+              -o "${CMAKE_CURRENT_BINARY_DIR}/wolfgang_metal_probe.air"
       RESULT_VARIABLE WOLFGANG_METAL_PRECOMPILE_RESULT
       OUTPUT_QUIET ERROR_QUIET)
+    if(WOLFGANG_METAL_PRECOMPILE_RESULT EQUAL 0)
+      execute_process(
+        COMMAND "${WOLFGANG_XCRUN}" -sdk macosx -f metallib
+        RESULT_VARIABLE WOLFGANG_METAL_PRECOMPILE_RESULT
+        OUTPUT_QUIET ERROR_QUIET)
+    endif()
   endif()
   if(WOLFGANG_METAL_PRECOMPILE_RESULT EQUAL 0)
     set(WOLFGANG_BUILD_METAL_PRECOMPILED_KERNELS 1)
     set(WOLFGANG_SIMPLIFY_METAL_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated/metal")
     add_custom_command(
       OUTPUT "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.metallib"
-      COMMAND "${WOLFGANG_XCRUN}" -sdk macosx metal -c
+      COMMAND "${WOLFGANG_XCRUN}" -sdk macosx metal -c ${WOLFGANG_METAL_TARGET_FLAGS}
               -DWOLFGANG_HYBRID_SORT_TILE=${WOLFGANG_HYBRID_SORT_TILE}
               "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/kernels/simplify.metal"
               -o "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.air"
       COMMAND "${WOLFGANG_XCRUN}" -sdk macosx metallib "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.air"
               -o "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.metallib"
+      BYPRODUCTS "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.air"
       DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/kernels/simplify.metal"
       VERBATIM)
     add_custom_command(
       OUTPUT "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify_metallib.inc"
       COMMAND "${CMAKE_COMMAND}" -DINPUT=${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.metallib
               -DOUTPUT=${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify_metallib.inc
-              -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/embed_binary.cmake"
+              -P "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/embed_binary.cmake"
       DEPENDS "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify.metallib"
-              "${CMAKE_CURRENT_SOURCE_DIR}/cmake/embed_binary.cmake"
+              "${CMAKE_CURRENT_SOURCE_DIR}/src/metal/embed_binary.cmake"
       VERBATIM)
     target_sources(wolfgang_core PRIVATE "${WOLFGANG_SIMPLIFY_METAL_DIR}/simplify_metallib.inc")
     set_source_files_properties(
