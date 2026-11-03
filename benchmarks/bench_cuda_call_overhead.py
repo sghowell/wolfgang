@@ -66,6 +66,7 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
         runs.append(
             {
                 "file": path.name,
+                "benchmark": report["benchmark"],
                 "label": label,
                 "command": report.get("command"),
                 "git_commit": report["git"].get("commit"),
@@ -75,6 +76,8 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
         )
         for name, row in report["rows"].items():
             medians.setdefault(name, {}).setdefault(label, []).append(row["median_seconds"])
+    if len({run["benchmark"] for run in runs}) > 1:
+        raise SystemExit("refusing to summarize CUDA and HIP reports together; use one directory per backend")
     rows = {
         name: {
             label: {"per_run_median_seconds": values, "median_of_medians_seconds": float(np.median(values))}

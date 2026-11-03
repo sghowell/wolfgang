@@ -5,7 +5,10 @@ drop rule, `ValueError` for non-finite input components, `OverflowError` when a
 duplicate sum overflows, and safe handling of finite components whose complex
 magnitude exceeds the largest double. Each available backend (CUDA, HIP, Metal)
 must match it. CUDA and HIP sum long duplicate runs in a different association
-order, so coefficients are compared to rounding, not bit for bit.
+order, so coefficients are compared to rounding, not bit for bit, and a
+duplicate sum within roughly a factor of the run length of DBL_MAX may overflow
+on one backend and not another; the overflow cases here overflow under any
+grouping.
 """
 
 from __future__ import annotations
@@ -81,15 +84,17 @@ def test_device_simplify_rejects_non_finite_coefficients(backend: str, num_qubit
     op = wolfgang_quantum.PauliSum.from_arrays(x, z, coeffs, num_qubits)
     with pytest.raises(ValueError, match="finite"):
         op.simplify()
+    device = op.to_device(backend=backend)  # transfers accept non-finite values
     with pytest.raises(ValueError, match="finite"):
-        op.to_device(backend=backend).simplify()
+        device.simplify()
     single = wolfgang_quantum.PauliSum.from_arrays(x[:1], z[:1], coeffs[len(coeffs) // 2 : len(coeffs) // 2 + 1], num_qubits)
+    single_device = single.to_device(backend=backend)
     with pytest.raises(ValueError, match="finite"):
-        single.to_device(backend=backend).simplify()
+        single_device.simplify()
 
 
 @pytest.mark.parametrize("backend", BACKENDS)
-@pytest.mark.parametrize("num_qubits", [0, 24, 100, 130])
+@pytest.mark.parametrize("num_qubits", [0, 24, 40, 100, 130])
 def test_device_simplify_raises_on_duplicate_sum_overflow(backend: str, num_qubits: int) -> None:
     _require(backend)
     label = "X" * num_qubits
@@ -99,8 +104,9 @@ def test_device_simplify_raises_on_duplicate_sum_overflow(backend: str, num_qubi
     )
     with pytest.raises(OverflowError):
         op.simplify()
+    device = op.to_device(backend=backend)
     with pytest.raises(OverflowError):
-        op.to_device(backend=backend).simplify()
+        device.simplify()
 
 
 @pytest.mark.parametrize("backend", BACKENDS)
@@ -117,3 +123,56 @@ def test_device_simplify_keeps_finite_coefficients_with_overflowing_magnitude(ba
     _assert_matches_cpu(backend, mixed)
     _assert_matches_cpu(backend, mixed, atol=1e-12, rtol=1e-300)
     assert mixed.to_device(backend=backend).simplify(rtol=1e-300).to_host().num_terms == 1
+
+
+@pytest.mark.parametrize("backend", BACKENDS)
+@pytest.mark.parametrize("num_qubits", [24, 40, 100, 130])
+def test_device_simplify_never_returns_non_finite_from_cancelling_overflow(backend: str, num_qubits: int) -> None:
+    # One run of [M, M, -M, -M] repeats spans reduction tiles. Input-order sums
+    # overflow (CPU raises); a tree-ordered GPU sum may instead meet as
+    # inf + -inf = NaN, or cancel. Either the call raises OverflowError or every
+    # coefficient it returns is finite; it must never return inf or NaN.
+    _require(backend)
+    big = 1.7e308
+    label = "Y" * num_qubits
+    others = ["Z" * num_qubits, "X" * num_qubits]
+    coeffs = np.tile([big, big, -big, -big], 6000)
+    op = wolfgang_quantum.PauliSum.from_labels([label] * len(coeffs) + others, np.concatenate([coeffs, [1.0, 2.0]]))
+    with pytest.raises(OverflowError):
+        op.simplify()
+    device = op.to_device(backend=backend)
+    try:
+        result = device.simplify().to_host()
+    except OverflowError:
+        return
+    assert np.isfinite(result.to_arrays()[2].view(np.float64)).all()
+
+
+SELECTOR_CASES = [
+    ("cuda", "WOLFGANG_CUDA_BENCH_DUPLICATE_REDUCTION", "cub_radix_sort_reduce", 24),
+    ("cuda", "WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION", "serial_kernel", 200),
+    ("hip", "WOLFGANG_HIP_BENCH_GENERIC_MULTIWORD_REDUCTION", "serial_kernel", 200),
+]
+
+
+@pytest.mark.parametrize(("backend", "variable", "value", "num_qubits"), SELECTOR_CASES)
+def test_benchmark_selected_reductions_follow_the_contract(
+    monkeypatch: pytest.MonkeyPatch, backend: str, variable: str, value: str, num_qubits: int
+) -> None:
+    # Benchmark-only reduction paths share the drop predicate and its overflow
+    # flag; pin that they keep the same contract as the default paths.
+    _require(backend)
+    monkeypatch.setenv(variable, value)
+    _assert_matches_cpu(backend, _operator(num_qubits, 3000, 0.5, seed=num_qubits))
+    label = "X" * num_qubits
+    overflow = wolfgang_quantum.PauliSum.from_labels(
+        ["Z" * num_qubits] * 50 + [label, label], np.concatenate([np.ones(50), [1.7e308, 1.7e308]])
+    )
+    device = overflow.to_device(backend=backend)
+    with pytest.raises(OverflowError):
+        device.simplify()
+    x, z, coeffs = (array.copy() for array in _operator(num_qubits, 500, 0.5, seed=1).to_arrays())
+    coeffs[7] = complex(math.nan, 0.0)
+    bad = wolfgang_quantum.PauliSum.from_arrays(x, z, coeffs, num_qubits).to_device(backend=backend)
+    with pytest.raises(ValueError, match="finite"):
+        bad.simplify()

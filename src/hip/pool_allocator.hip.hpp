@@ -36,8 +36,8 @@ namespace wolfgang::hip_detail {
 // pool handle is not revalidated after hipDeviceReset.
 //
 // Buffers exported to other frameworks (DLPack, the CUDA Array Interface) must
-// not come from this pool unless the export keeps the owner alive: a consumer
-// on another stream could still read a block after Wolfgang frees it.
+// not come from this pool: a consumer on another stream could still read a
+// block after Wolfgang frees it.
 inline constexpr std::uint64_t kPoolReleaseThresholdBytes = std::uint64_t{1} << 30;
 
 // rocThrust's default policy, hipMemcpy and Wolfgang's kernels all use the null

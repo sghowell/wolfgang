@@ -265,6 +265,27 @@ void require_finite_input(double max_abs_or_nan) {
   }
 }
 
+// Per-thread overflow flag in pinned, device-mapped host memory. Kernels write
+// it only when a reduced sum is not finite, and the host reads it after the
+// synchronization the compaction already performs to return its count, so the
+// check adds no copy, memset or extra synchronization to ordinary calls. The
+// allocation lives for the thread (never freed: one int per thread).
+struct MappedOverflowFlag {
+  volatile int* host = nullptr;
+  int* device = nullptr;
+};
+
+MappedOverflowFlag mapped_overflow_flag() {
+  thread_local const MappedOverflowFlag flag = [] {
+    int* host = nullptr;
+    check_cuda(cudaHostAlloc(reinterpret_cast<void**>(&host), sizeof(int), cudaHostAllocMapped | cudaHostAllocPortable), "allocate simplify overflow flag");
+    int* device = nullptr;
+    check_cuda(cudaHostGetDevicePointer(reinterpret_cast<void**>(&device), host, 0), "map simplify overflow flag");
+    return MappedOverflowFlag{host, device};
+  }();
+  return flag;
+}
+
 [[noreturn]] void throw_accumulation_overflow() {
   throw std::overflow_error("simplify coefficient accumulation overflowed complex128");
 }
@@ -610,16 +631,13 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     return DevicePauliSum(std::move(out));
   }
 
-  PooledArray<int> overflow_flag(1);
-  check_cuda(
-      cudaMemsetAsync(thrust::raw_pointer_cast(overflow_flag.data()), 0, sizeof(int), cudaStreamLegacy),
-      "clear simplify overflow flag");
-  survives.overflowed = thrust::raw_pointer_cast(overflow_flag.data());
-  // Called once the predicate has seen every reduced coefficient.
-  const auto check_overflow = [&survives] {
-    int overflowed = 0;
-    copy_to_host(&overflowed, survives.overflowed, 1, "simplify overflow flag");
-    if (overflowed != 0) {
+  const MappedOverflowFlag overflow_flag = mapped_overflow_flag();
+  *overflow_flag.host = 0;
+  survives.overflowed = overflow_flag.device;
+  // Called after the compaction (or serial kernel) has synchronized, so every
+  // predicate write is visible to the host.
+  const auto check_overflow = [&overflow_flag] {
+    if (*overflow_flag.host != 0) {
       throw_accumulation_overflow();
     }
   };

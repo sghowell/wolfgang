@@ -11,6 +11,9 @@
 
 namespace wolfgang {
 
+// Transfers copy coefficients as raw bytes between the two layouts.
+static_assert(sizeof(std::complex<double>) == sizeof(thrust::complex<double>));
+
 namespace {
 
 std::string hip_version_string(int version) {
