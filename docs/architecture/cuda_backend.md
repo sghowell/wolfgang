@@ -479,28 +479,49 @@ with at most 32 qubits. The packed key preserves canonical x-then-z ordering
 and does not change public output ordering, tolerance, transfer, stream, or
 ownership semantics.
 
-The one- and two-word simplify paths sort with `stable_sort_by_key`, so
-duplicate coefficients enter each reduction in input order, matching HIP.
-Operators wider than two words (more than 128 qubits) sort term indices with an
-index tie-break and reduce duplicates with a parallel segmented
-`reduce_by_key`. The original one-thread reduction kernel is retained only as a
-baseline behind the benchmark selector
-`WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION=serial_kernel`. Single-term
-inputs skip sorting and reduction and apply only the drop rule. Every path uses
-the CPU drop rule for finite coefficients whose magnitude exceeds `DBL_MAX`:
-the threshold is `atol` alone when `rtol == 0`, and magnitudes are compared in
-half units when `atol + rtol * max_abs` overflows. Evidence:
-`docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`.
+Operators the fused path below does not take run a multi-launch pipeline
+(`src/detail/device_simplify_pipeline.cuh`, which builds under nvcc and hipcc)
+that keeps every intermediate count on the device:
 
-Simplify also follows the CPU numeric contract. The max-magnitude reduction
-maps a non-finite component to NaN, so the same pass raises `ValueError` for
-non-finite input. The drop predicate sets an overflow flag for any non-finite
-reduced sum, including the `inf + -inf = NaN` a tree-ordered reduction can
-form. Every reduction path raises `OverflowError` after compaction, including
-the benchmark-only CUB and serial reducers. The flag is a per-thread pinned,
-device-mapped host integer that the host reads after the synchronization the
-compaction already performs, so it adds no copy to ordinary calls. Evidence:
+1. one CUB reduction computes the largest magnitude, NaN when a component is
+   not finite, and the largest half magnitude;
+2. a pack kernel writes the sort keys, and its first thread turns that
+   reduction into the CPU drop rule;
+3. one-word operators of at most 32 qubits radix-sort a packed key of
+   `2 * num_qubits` bits; other one- and two-word operators sort word keys with
+   `stable_sort_by_key`; wider operators sort term indices with an index
+   tie-break. Equal terms keep input order on every path;
+4. CUB reduce-by-key sums each duplicate run and leaves the run count in
+   device memory;
+5. an inclusive scan over "this run survives" flags assigns output positions
+   over the whole input length, flagging runs past the device-side run count
+   as 0;
+6. one thread copies the counts and status flags to a per-thread pinned,
+   device-mapped host buffer.
+
+The host synchronizes once, allocates exactly the surviving terms, scatters
+them with one kernel, and synchronizes again before returning. Non-finite input
+raises `ValueError`, which takes precedence as on the CPU. Any non-finite sum
+raises `OverflowError`, including the `inf + -inf = NaN` that a tree-ordered
+reduction can form. Every path uses the CPU drop rule for finite coefficients
+whose magnitude exceeds `DBL_MAX`: the threshold is `atol` alone when
+`rtol == 0`, and magnitudes are compared in half units when
+`atol + rtol * max_abs` overflows. Single-term inputs skip the pipeline and
+apply only the drop rule, and zero-qubit operators sum their coefficients in
+one reduction. The Thrust stages this pipeline replaced read the maximum, the
+run count and the survivor count back between stages, eight synchronizations
+per call; `simplify` on 4,096 terms dropped from 188 to 108 us on an H100.
+Evidence: `docs/benchmarks/reports/cuda_device_counts_h100_2026-11-03.md`,
+`docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`,
 `docs/benchmarks/reports/hip_parity_mi300x_2026-11-03.md`.
+
+Two benchmark-only baselines keep host-side counts for paired comparisons:
+the CUB radix-sort path behind
+`WOLFGANG_CUDA_BENCH_DUPLICATE_REDUCTION=cub_radix_sort_reduce`, and the
+original one-thread reduction kernel for operators wider than two words behind
+`WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION=serial_kernel`. Their drop
+predicate sets the same overflow flag, which the host reads after their
+compaction synchronizes.
 
 Small operators take a fused path shared with HIP
 (`src/detail/small_simplify_kernel.cuh`). This covers operators with one to

@@ -1,0 +1,251 @@
+{
+ "benchmark": "cuda_device_counts_api_breakdown",
+ "device": {
+  "arch": "sm_90",
+  "cccl": "2.7.0",
+  "cuda_toolkit": "12.8.93",
+  "driver": "580.105.08",
+  "name": "NVIDIA H100 80GB HBM3"
+ },
+ "git": {
+  "baseline": "ad6f7a8",
+  "candidate": "6ddf58b"
+ },
+ "method": "Per operation and build: 50 warmup and 500 profiled calls in one process. API entries called at least once per call report calls per call (count / 550) and the median duration. Wall time is the median of three separate 2,000-call loops without the profiler.",
+ "operators": "24 qubits; simplify_4096 has 4,096 distinct terms, matmul_128x128 composes a 128-term operator with itself (16,384 products), simplify_128 takes the fused path and is a control",
+ "ops": {
+  "matmul_128x128": {
+   "base": {
+    "api_per_call": {
+     "cudaDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 1.85
+     },
+     "cudaFreeAsync_v11020": {
+      "calls": 16.02,
+      "median_us": 0.52
+     },
+     "cudaLaunchKernel": {
+      "calls": 20.0,
+      "median_us": 3.21
+     },
+     "cudaMallocFromPoolAsync_v11020": {
+      "calls": 16.02,
+      "median_us": 1.74
+     },
+     "cudaMemcpyAsync": {
+      "calls": 5.0,
+      "median_us": 8.25
+     },
+     "cudaMemsetAsync": {
+      "calls": 10.0,
+      "median_us": 2.98
+     },
+     "cudaStreamSynchronize": {
+      "calls": 8.0,
+      "median_us": 5.69
+     }
+    },
+    "gpu_kernel_us_per_call": 70.3,
+    "gpu_memory_ops_per_call": {
+     "[CUDA memcpy Device-to-Device]": 2.0,
+     "[CUDA memcpy Device-to-Host]": 3.0,
+     "[CUDA memset]": 10.0
+    },
+    "kernel_launches_per_call": 20.0,
+    "wall_us_per_call": 203.2,
+    "wall_us_per_call_runs": [
+     207.3,
+     203.2,
+     201.9
+    ]
+   },
+   "cand": {
+    "api_per_call": {
+     "cudaDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 5.9
+     },
+     "cudaFreeAsync_v11020": {
+      "calls": 7.02,
+      "median_us": 0.5
+     },
+     "cudaLaunchKernel": {
+      "calls": 18.0,
+      "median_us": 3.17
+     },
+     "cudaMallocFromPoolAsync_v11020": {
+      "calls": 7.02,
+      "median_us": 0.49
+     },
+     "cudaMemsetAsync": {
+      "calls": 8.0,
+      "median_us": 3.0
+     },
+     "cudaStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 19.15
+     }
+    },
+    "gpu_kernel_us_per_call": 67.14,
+    "gpu_memory_ops_per_call": {
+     "[CUDA memset]": 8.0
+    },
+    "kernel_launches_per_call": 18.0,
+    "wall_us_per_call": 124.6,
+    "wall_us_per_call_runs": [
+     125.0,
+     124.6,
+     124.3
+    ]
+   }
+  },
+  "simplify_128": {
+   "base": {
+    "api_per_call": {
+     "cudaFreeAsync_v11020": {
+      "calls": 3.02,
+      "median_us": 0.52
+     },
+     "cudaLaunchKernel": {
+      "calls": 1.0,
+      "median_us": 3.34
+     },
+     "cudaMallocFromPoolAsync_v11020": {
+      "calls": 3.02,
+      "median_us": 0.42
+     },
+     "cudaStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 12.88
+     }
+    },
+    "gpu_kernel_us_per_call": 7.9,
+    "gpu_memory_ops_per_call": {},
+    "kernel_launches_per_call": 1.0,
+    "wall_us_per_call": 18.7,
+    "wall_us_per_call_runs": [
+     18.7,
+     18.7,
+     18.9
+    ]
+   },
+   "cand": {
+    "api_per_call": {
+     "cudaFreeAsync_v11020": {
+      "calls": 3.02,
+      "median_us": 0.52
+     },
+     "cudaLaunchKernel": {
+      "calls": 1.0,
+      "median_us": 3.33
+     },
+     "cudaMallocFromPoolAsync_v11020": {
+      "calls": 3.02,
+      "median_us": 0.42
+     },
+     "cudaStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 13.0
+     }
+    },
+    "gpu_kernel_us_per_call": 7.9,
+    "gpu_memory_ops_per_call": {},
+    "kernel_launches_per_call": 1.0,
+    "wall_us_per_call": 18.7,
+    "wall_us_per_call_runs": [
+     18.6,
+     18.8,
+     18.7
+    ]
+   }
+  },
+  "simplify_4096": {
+   "base": {
+    "api_per_call": {
+     "cudaDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 1.85
+     },
+     "cudaFreeAsync_v11020": {
+      "calls": 13.02,
+      "median_us": 0.52
+     },
+     "cudaLaunchKernel": {
+      "calls": 19.0,
+      "median_us": 3.25
+     },
+     "cudaMallocFromPoolAsync_v11020": {
+      "calls": 13.02,
+      "median_us": 1.84
+     },
+     "cudaMemcpyAsync": {
+      "calls": 5.0,
+      "median_us": 8.33
+     },
+     "cudaMemsetAsync": {
+      "calls": 10.0,
+      "median_us": 1.27
+     },
+     "cudaStreamSynchronize": {
+      "calls": 8.0,
+      "median_us": 5.8
+     }
+    },
+    "gpu_kernel_us_per_call": 65.82,
+    "gpu_memory_ops_per_call": {
+     "[CUDA memcpy Device-to-Device]": 2.0,
+     "[CUDA memcpy Device-to-Host]": 3.0,
+     "[CUDA memset]": 10.0
+    },
+    "kernel_launches_per_call": 19.0,
+    "wall_us_per_call": 189.0,
+    "wall_us_per_call_runs": [
+     189.3,
+     189.0,
+     187.5
+    ]
+   },
+   "cand": {
+    "api_per_call": {
+     "cudaDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 5.83
+     },
+     "cudaFreeAsync_v11020": {
+      "calls": 4.02,
+      "median_us": 0.54
+     },
+     "cudaLaunchKernel": {
+      "calls": 17.0,
+      "median_us": 3.19
+     },
+     "cudaMallocFromPoolAsync_v11020": {
+      "calls": 4.02,
+      "median_us": 0.57
+     },
+     "cudaMemsetAsync": {
+      "calls": 8.0,
+      "median_us": 1.28
+     },
+     "cudaStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 28.91
+     }
+    },
+    "gpu_kernel_us_per_call": 60.05,
+    "gpu_memory_ops_per_call": {
+     "[CUDA memset]": 8.0
+    },
+    "kernel_launches_per_call": 17.0,
+    "wall_us_per_call": 107.0,
+    "wall_us_per_call_runs": [
+     109.2,
+     106.7,
+     107.0
+    ]
+   }
+  }
+ },
+ "tool": "Nsight Systems 2024.6.2, nsys profile --trace=cuda --sample=none --cpuctxsw=none; nsys stats cuda_api_sum, cuda_gpu_kern_sum, cuda_gpu_mem_time_sum"
+}

@@ -22,7 +22,7 @@ report names.
 | 4 | CPU thread cap | A documented way to cap oneTBB's threads (environment variable and Python call), so processes in pools, MPI ranks and CPU-limited containers do not each start one thread per core; auto dispatch uses the capped count | Tests for the cap and the dispatch floor; timings with and without the cap under oversubscription |
 | 5 | oneTBB in the SBOM | The release software bill of materials lists the bundled oneTBB runtime (version, commit, license) beside the Python dependencies | Release workflow dry run with the generated SBOM checked by the release-wheelhouse checks |
 | 6 | Multi-GPU | Peer access for pooled exports and multi-GPU tests | Needs a host with two or more GPUs; the current H100 and MI300X hosts have one each, so this slice waits for hardware |
-| 7 | Documentation and figures | README and site figures for absolute timings, speedups against baselines and other libraries, and performance over time across the dated reports; fix diagrams that do not render on the site; review every user-facing doc | Strict docs build; diagrams checked in a browser on the live site; link and stale-claim audit |
+| 7 | Documentation and figures | README and site figures for absolute timings, speedups against baselines and other libraries, and performance over time across the dated reports; fix diagrams that do not render on the site; review every user-facing doc, including an editing pass so the prose reads as written by an engineer and technical writer, without stock phrasing, inflated adjectives, reflexive lists of three, bolded lead-ins, hedging or filler transitions | Strict docs build; diagrams checked in a browser on the live site; link and stale-claim audit; a phrase-pattern scan over README and `docs/` plus an independent editorial review |
 
 ## Decisions carried into the campaign
 
@@ -39,4 +39,10 @@ report names.
 
 ## Status
 
-Planned.
+Slice 1 merged: CUDA simplify beyond the fused kernel runs the device-count
+pipeline in `src/detail/device_simplify_pipeline.cuh`, one synchronization
+instead of eight; `simplify` on 4,096 terms takes 108 us instead of 188 us and
+`matmul` on 128 x 128 terms 123 us instead of 202 us on an H100
+(`docs/benchmarks/reports/cuda_device_counts_h100_2026-11-03.md`). Pinned
+per-thread result buffers are freed at thread exit. Review closeout:
+`docs/reviews/accelerator_followups_campaign_2026-11-03.md`.

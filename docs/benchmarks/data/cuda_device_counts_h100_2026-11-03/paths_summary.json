@@ -1,0 +1,2366 @@
+{
+  "generic_rows": [
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3800017768517137e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.9478000467643142e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.258000212255865e-05,
+        "cuda_generic_serial_kernel": 1.9843006157316267e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3419994502328336e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.9813000108115375e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.375399971147999e-05,
+        "cuda_generic_serial_kernel": 1.9577993953134865e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.532005161512643e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.1047002519480884e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.042500510578975e-05,
+        "cuda_generic_serial_kernel": 2.1210005797911435e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.284004146233201e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.7761998353525996e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.36599977244623e-05,
+        "cuda_generic_serial_kernel": 2.7292997401673347e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00041097700159298256,
+        "cuda_generic_parallel_reduce_by_key": 0.00015314200572902337,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002919170001405291,
+        "cuda_generic_serial_kernel": 0.0033078950000344776
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00043528599780984223,
+        "cuda_generic_parallel_reduce_by_key": 0.00021735799964517355,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002950510024675168,
+        "cuda_generic_serial_kernel": 0.003191395997419022
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0030066139952396043,
+        "cuda_generic_parallel_reduce_by_key": 0.0002509400001144968,
+        "cuda_generic_parallel_transfer_inclusive": 0.0014298140013124794,
+        "cuda_generic_serial_kernel": 0.05573025400371989
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.002481062001606915,
+        "cuda_generic_parallel_reduce_by_key": 0.00035269500222057104,
+        "cuda_generic_parallel_transfer_inclusive": 0.0008144789971993305,
+        "cuda_generic_serial_kernel": 0.05725466599687934
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2849995982833207e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.075899828923866e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.332400516839698e-05,
+        "cuda_generic_serial_kernel": 2.1186999219935387e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2800010154023767e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0564002625178546e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.3671002862975e-05,
+        "cuda_generic_serial_kernel": 2.05449978238903e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.905996997375041e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.306499663973227e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.203799759736285e-05,
+        "cuda_generic_serial_kernel": 2.3109998437575996e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.733993359375745e-06,
+        "cuda_generic_parallel_reduce_by_key": 3.0629002139903605e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.830499816918746e-05,
+        "cuda_generic_serial_kernel": 3.062999894609675e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00043188600102439523,
+        "cuda_generic_parallel_reduce_by_key": 0.00015994600107660517,
+        "cuda_generic_parallel_transfer_inclusive": 0.0003035240006283857,
+        "cuda_generic_serial_kernel": 0.003484918997855857
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004758259965456091,
+        "cuda_generic_parallel_reduce_by_key": 0.00023182100267149508,
+        "cuda_generic_parallel_transfer_inclusive": 0.0003211919975001365,
+        "cuda_generic_serial_kernel": 0.0035344650023034774
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.003384561001439579,
+        "cuda_generic_parallel_reduce_by_key": 0.00024296499759657308,
+        "cuda_generic_parallel_transfer_inclusive": 0.0016003689961507916,
+        "cuda_generic_serial_kernel": 0.05418347399972845
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0025100350030697882,
+        "cuda_generic_parallel_reduce_by_key": 0.0003391759964870289,
+        "cuda_generic_parallel_transfer_inclusive": 0.0009019749995786697,
+        "cuda_generic_serial_kernel": 0.056001723001827486
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.49600236909464e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.502599818399176e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.882200250402093e-05,
+        "cuda_generic_serial_kernel": 2.5127003027591854e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4969991752877831e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.5143999664578587e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.844600284239277e-05,
+        "cuda_generic_serial_kernel": 2.4854001821950078e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.0477000614628196e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.00011761700443457812,
+        "cuda_generic_parallel_transfer_inclusive": 0.00017651500093052164,
+        "cuda_generic_serial_kernel": 0.00035367999953450635
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3153003237675875e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.00029734300187556073,
+        "cuda_generic_parallel_transfer_inclusive": 0.0003544809951563366,
+        "cuda_generic_serial_kernel": 0.000583084998652339
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005661370014422573,
+        "cuda_generic_parallel_reduce_by_key": 0.0001982260000659153,
+        "cuda_generic_parallel_transfer_inclusive": 0.0005762650034739636,
+        "cuda_generic_serial_kernel": 0.008763307996559888
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007103850002749823,
+        "cuda_generic_parallel_reduce_by_key": 0.000564518995815888,
+        "cuda_generic_parallel_transfer_inclusive": 0.0007559180012322031,
+        "cuda_generic_serial_kernel": 0.011137911998957861
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.005154694001248572,
+        "cuda_generic_parallel_reduce_by_key": 0.00032169100450119004,
+        "cuda_generic_parallel_transfer_inclusive": 0.004287288000341505,
+        "cuda_generic_serial_kernel": 0.16699648099893238
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00348132799990708,
+        "cuda_generic_parallel_reduce_by_key": 0.0008741809942875989,
+        "cuda_generic_parallel_transfer_inclusive": 0.0024085769982775673,
+        "cuda_generic_serial_kernel": 0.17314455299492693
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3000026228837669e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.9548999262042344e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.309099990176037e-05,
+        "cuda_generic_serial_kernel": 1.9674997020047158e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3180033420212567e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.92320003407076e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.299200322246179e-05,
+        "cuda_generic_serial_kernel": 1.9478997273836285e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.2589970184490085e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0912004401907325e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.020699558779597e-05,
+        "cuda_generic_serial_kernel": 2.1190004190430045e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.294998118188232e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.7471003704704344e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.380900206044316e-05,
+        "cuda_generic_serial_kernel": 2.7342997782398015e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00041808000241871923,
+        "cuda_generic_parallel_reduce_by_key": 0.0001589640014572069,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002923279971582815,
+        "cuda_generic_serial_kernel": 0.003311664993816521
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00044945099944015965,
+        "cuda_generic_parallel_reduce_by_key": 0.00021203099458944052,
+        "cuda_generic_parallel_transfer_inclusive": 0.00029019700014032423,
+        "cuda_generic_serial_kernel": 0.0032007550034904853
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.003114172002824489,
+        "cuda_generic_parallel_reduce_by_key": 0.00025299199478467926,
+        "cuda_generic_parallel_transfer_inclusive": 0.0014344340015668422,
+        "cuda_generic_serial_kernel": 0.05576119900069898
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.002529321995098144,
+        "cuda_generic_parallel_reduce_by_key": 0.00037832000089110807,
+        "cuda_generic_parallel_transfer_inclusive": 0.0008298040047520772,
+        "cuda_generic_serial_kernel": 0.05724754300172208
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2550008250400424e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0724997739307582e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.486300117103383e-05,
+        "cuda_generic_serial_kernel": 2.009199670283124e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2840027920901775e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0487001165747643e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.393199873855338e-05,
+        "cuda_generic_serial_kernel": 2.0833998860325664e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 8.167997293639928e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.2741995053365827e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.126200216589496e-05,
+        "cuda_generic_serial_kernel": 2.2598003852181137e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.08799746260047e-06,
+        "cuda_generic_parallel_reduce_by_key": 3.0449999030679464e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.741500303382054e-05,
+        "cuda_generic_serial_kernel": 3.0452996725216508e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000433344001066871,
+        "cuda_generic_parallel_reduce_by_key": 0.00015861700376262888,
+        "cuda_generic_parallel_transfer_inclusive": 0.0003045229968847707,
+        "cuda_generic_serial_kernel": 0.003483047999907285
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000466373996459879,
+        "cuda_generic_parallel_reduce_by_key": 0.00022762500157114118,
+        "cuda_generic_parallel_transfer_inclusive": 0.00032253899553325027,
+        "cuda_generic_serial_kernel": 0.00353961500513833
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.003268683001806494,
+        "cuda_generic_parallel_reduce_by_key": 0.00026150300254812464,
+        "cuda_generic_parallel_transfer_inclusive": 0.0016018269961932674,
+        "cuda_generic_serial_kernel": 0.05418217200349318
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0025463280035182834,
+        "cuda_generic_parallel_reduce_by_key": 0.0003413520025787875,
+        "cuda_generic_parallel_transfer_inclusive": 0.0009317309959442355,
+        "cuda_generic_serial_kernel": 0.05603037199762184
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.486994733568281e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.530199708417058e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.954399577807635e-05,
+        "cuda_generic_serial_kernel": 2.5073000870179385e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4950055629014969e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.5430999812670052e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.893400131957605e-05,
+        "cuda_generic_serial_kernel": 2.5369998184032738e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.296499976888299e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.00012300100206630304,
+        "cuda_generic_parallel_transfer_inclusive": 0.00018289699801243842,
+        "cuda_generic_serial_kernel": 0.0003550469991751015
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4921002730261534e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.0002977679978357628,
+        "cuda_generic_parallel_transfer_inclusive": 0.0003588719991967082,
+        "cuda_generic_serial_kernel": 0.0005832040042150766
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005753139994340017,
+        "cuda_generic_parallel_reduce_by_key": 0.00018401600391371176,
+        "cuda_generic_parallel_transfer_inclusive": 0.0006023820023983717,
+        "cuda_generic_serial_kernel": 0.008771105996856932
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007015619994490407,
+        "cuda_generic_parallel_reduce_by_key": 0.0005573979942710139,
+        "cuda_generic_parallel_transfer_inclusive": 0.0007403429990517907,
+        "cuda_generic_serial_kernel": 0.011126715995487757
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.004870898999797646,
+        "cuda_generic_parallel_reduce_by_key": 0.0003086970027652569,
+        "cuda_generic_parallel_transfer_inclusive": 0.0046564650037907995,
+        "cuda_generic_serial_kernel": 0.18081704399810405
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0034231190002174117,
+        "cuda_generic_parallel_reduce_by_key": 0.0007954419997986406,
+        "cuda_generic_parallel_transfer_inclusive": 0.0023597530016559176,
+        "cuda_generic_serial_kernel": 0.17371334999916144
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3730023056268692e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.9628001609817147e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.281300011323765e-05,
+        "cuda_generic_serial_kernel": 1.9305000023450702e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3110038707964122e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.931499718921259e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.298399966908619e-05,
+        "cuda_generic_serial_kernel": 1.974100450752303e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 8.380004146602005e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.100400160998106e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.063399971229956e-05,
+        "cuda_generic_serial_kernel": 2.11770020541735e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.235000571701676e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.6998000976163894e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.463400106644258e-05,
+        "cuda_generic_serial_kernel": 2.750299609033391e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004170050015090965,
+        "cuda_generic_parallel_reduce_by_key": 0.0001558520016260445,
+        "cuda_generic_parallel_transfer_inclusive": 0.00029032299789832905,
+        "cuda_generic_serial_kernel": 0.003314964000310283
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00044369300303515047,
+        "cuda_generic_parallel_reduce_by_key": 0.00021805500000482425,
+        "cuda_generic_parallel_transfer_inclusive": 0.0003034109977306798,
+        "cuda_generic_serial_kernel": 0.003199369995854795
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.003021288001036737,
+        "cuda_generic_parallel_reduce_by_key": 0.0002481339979567565,
+        "cuda_generic_parallel_transfer_inclusive": 0.0014275100038503297,
+        "cuda_generic_serial_kernel": 0.055739944997185376
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.002474045002600178,
+        "cuda_generic_parallel_reduce_by_key": 0.0003490210001473315,
+        "cuda_generic_parallel_transfer_inclusive": 0.0008336319951922633,
+        "cuda_generic_serial_kernel": 0.05722841999522643
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2659947969950736e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0804000087082386e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.470000516856089e-05,
+        "cuda_generic_serial_kernel": 2.060100086964667e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2829987099394202e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0481995306909084e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.361099804053083e-05,
+        "cuda_generic_serial_kernel": 2.02369992621243e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.0259993663057685e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.2541004000231624e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.185299909906462e-05,
+        "cuda_generic_serial_kernel": 2.263500209664926e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.8150035329163074e-06,
+        "cuda_generic_parallel_reduce_by_key": 3.0252995202317834e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.657699461560696e-05,
+        "cuda_generic_serial_kernel": 3.052900137845427e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00042913499783026055,
+        "cuda_generic_parallel_reduce_by_key": 0.00015759099915158004,
+        "cuda_generic_parallel_transfer_inclusive": 0.00029919700318714604,
+        "cuda_generic_serial_kernel": 0.0034835230035241693
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00047108000580919906,
+        "cuda_generic_parallel_reduce_by_key": 0.00023272199905477464,
+        "cuda_generic_parallel_transfer_inclusive": 0.00032197299879044294,
+        "cuda_generic_serial_kernel": 0.003540055993653368
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0032152749990927987,
+        "cuda_generic_parallel_reduce_by_key": 0.000255776998528745,
+        "cuda_generic_parallel_transfer_inclusive": 0.0015156480003497563,
+        "cuda_generic_serial_kernel": 0.05420887700165622
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0025341019936604425,
+        "cuda_generic_parallel_reduce_by_key": 0.0003767380039789714,
+        "cuda_generic_parallel_transfer_inclusive": 0.0009104439959628507,
+        "cuda_generic_serial_kernel": 0.05600910499924794
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.5099940355867147e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.525700256228447e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.871900404803455e-05,
+        "cuda_generic_serial_kernel": 2.487099845893681e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.6170015442185104e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.4867003958206624e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.858399865450338e-05,
+        "cuda_generic_serial_kernel": 2.472599589964375e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.743599568726495e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.000132152003061492,
+        "cuda_generic_parallel_transfer_inclusive": 0.00019676400552270934,
+        "cuda_generic_serial_kernel": 0.00036038600228494033
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4286997611634433e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.0002915320001193322,
+        "cuda_generic_parallel_transfer_inclusive": 0.0003548460008460097,
+        "cuda_generic_serial_kernel": 0.0005787379996036179
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005562439982895739,
+        "cuda_generic_parallel_reduce_by_key": 0.00019504499505273998,
+        "cuda_generic_parallel_transfer_inclusive": 0.0005642300020554103,
+        "cuda_generic_serial_kernel": 0.008770462998654693
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0006828539990237914,
+        "cuda_generic_parallel_reduce_by_key": 0.0005623329998343252,
+        "cuda_generic_parallel_transfer_inclusive": 0.0007440900008077733,
+        "cuda_generic_serial_kernel": 0.01115123800263973
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0051770200007013045,
+        "cuda_generic_parallel_reduce_by_key": 0.00030178100132616237,
+        "cuda_generic_parallel_transfer_inclusive": 0.004156016999331769,
+        "cuda_generic_serial_kernel": 0.1814892550028162
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.003545258005033247,
+        "cuda_generic_parallel_reduce_by_key": 0.0008240140014095232,
+        "cuda_generic_parallel_transfer_inclusive": 0.002346813002077397,
+        "cuda_generic_serial_kernel": 0.1753432729965425
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3379976735450327e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.9635001081041992e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.316899816738442e-05,
+        "cuda_generic_serial_kernel": 1.976599742192775e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3349999790079892e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.996100036194548e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.423499871743843e-05,
+        "cuda_generic_serial_kernel": 1.9560997316148132e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.370995495468378e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.1510000806301832e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.023399666650221e-05,
+        "cuda_generic_serial_kernel": 2.131200017174706e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.397996574174613e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.7221001801081002e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.510400610044599e-05,
+        "cuda_generic_serial_kernel": 2.724699879763648e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00039619599556317553,
+        "cuda_generic_parallel_reduce_by_key": 0.00010083800589200109,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002371219961787574,
+        "cuda_generic_serial_kernel": 0.0033096870029112324
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00043258799996692687,
+        "cuda_generic_parallel_reduce_by_key": 0.00015872000221861526,
+        "cuda_generic_parallel_transfer_inclusive": 0.00024618599854875356,
+        "cuda_generic_serial_kernel": 0.0031943829962983727
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0030290030044852756,
+        "cuda_generic_parallel_reduce_by_key": 0.00019329800124978647,
+        "cuda_generic_parallel_transfer_inclusive": 0.0012616979947779328,
+        "cuda_generic_serial_kernel": 0.05576021800516173
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.002476070003467612,
+        "cuda_generic_parallel_reduce_by_key": 0.00029302600160008296,
+        "cuda_generic_parallel_transfer_inclusive": 0.0007408720048260875,
+        "cuda_generic_serial_kernel": 0.05728008900041459
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.344000338576734e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0731997210532427e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.495600246125832e-05,
+        "cuda_generic_serial_kernel": 2.0779996702913195e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3280005077831447e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0661995222326368e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.445100007113069e-05,
+        "cuda_generic_serial_kernel": 2.0815998141188174e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 9.109004167839885e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.2545995307154953e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.232200005091727e-05,
+        "cuda_generic_serial_kernel": 2.2815998818259686e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.048001523595303e-06,
+        "cuda_generic_parallel_reduce_by_key": 3.057699359487742e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.680300041101873e-05,
+        "cuda_generic_serial_kernel": 3.072899562539533e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004165980062680319,
+        "cuda_generic_parallel_reduce_by_key": 0.00010202299745287746,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002505689990357496,
+        "cuda_generic_serial_kernel": 0.00348620000295341
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00046930499956943095,
+        "cuda_generic_parallel_reduce_by_key": 0.00017473399930167943,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002643269981490448,
+        "cuda_generic_serial_kernel": 0.0035377430031076074
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.003401330999622587,
+        "cuda_generic_parallel_reduce_by_key": 0.00019405000057304278,
+        "cuda_generic_parallel_transfer_inclusive": 0.0015185070005827583,
+        "cuda_generic_serial_kernel": 0.054206781001994386
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0025268829995184205,
+        "cuda_generic_parallel_reduce_by_key": 0.00028783700690837577,
+        "cuda_generic_parallel_transfer_inclusive": 0.0008482830016873777,
+        "cuda_generic_serial_kernel": 0.05603319199872203
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.7049969756044447e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.5560999347362667e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.96279967087321e-05,
+        "cuda_generic_serial_kernel": 2.5623994588386267e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.558000803925097e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.519200643291697e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.895600381540135e-05,
+        "cuda_generic_serial_kernel": 2.4708999262657017e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.1298994650132954e-05,
+        "cuda_generic_parallel_reduce_by_key": 6.642800144618377e-05,
+        "cuda_generic_parallel_transfer_inclusive": 0.00012653400335693732,
+        "cuda_generic_serial_kernel": 0.0003547749947756529
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2643999070860445e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.00023702800535829738,
+        "cuda_generic_parallel_transfer_inclusive": 0.00029630200151586905,
+        "cuda_generic_serial_kernel": 0.0005815269978484139
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000549193995539099,
+        "cuda_generic_parallel_reduce_by_key": 0.00013094599853502586,
+        "cuda_generic_parallel_transfer_inclusive": 0.0005255959986243397,
+        "cuda_generic_serial_kernel": 0.008761551005591173
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0006988070017541759,
+        "cuda_generic_parallel_reduce_by_key": 0.0004930520008201711,
+        "cuda_generic_parallel_transfer_inclusive": 0.0006801260024076328,
+        "cuda_generic_serial_kernel": 0.011147499993967358
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.005248305002169218,
+        "cuda_generic_parallel_reduce_by_key": 0.000260224005614873,
+        "cuda_generic_parallel_transfer_inclusive": 0.004201145995466504,
+        "cuda_generic_serial_kernel": 0.17065254800399998
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.003457685001194477,
+        "cuda_generic_parallel_reduce_by_key": 0.0008014350023586303,
+        "cuda_generic_parallel_transfer_inclusive": 0.002367180000874214,
+        "cuda_generic_serial_kernel": 0.17386864800209878
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.296000846195966e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.9358994904905558e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.300699897110462e-05,
+        "cuda_generic_serial_kernel": 1.9796003471128643e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3219978427514434e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.9495993910823017e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.307099829427898e-05,
+        "cuda_generic_serial_kernel": 1.9571998564060777e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.088004738558084e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.1081003069411963e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.976200529607013e-05,
+        "cuda_generic_serial_kernel": 2.1413005015347153e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.525995220523328e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.748499537119642e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.385000208159909e-05,
+        "cuda_generic_serial_kernel": 2.7272995794191957e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00040493299457011744,
+        "cuda_generic_parallel_reduce_by_key": 0.00010114299948327243,
+        "cuda_generic_parallel_transfer_inclusive": 0.00023404900275636464,
+        "cuda_generic_serial_kernel": 0.003316902002552524
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004418540047481656,
+        "cuda_generic_parallel_reduce_by_key": 0.00016080699424492195,
+        "cuda_generic_parallel_transfer_inclusive": 0.00024691499856999144,
+        "cuda_generic_serial_kernel": 0.0031951040000421926
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0031486920051975176,
+        "cuda_generic_parallel_reduce_by_key": 0.00019346200133441016,
+        "cuda_generic_parallel_transfer_inclusive": 0.001286421000258997,
+        "cuda_generic_serial_kernel": 0.055763835000107065
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0025462229968979955,
+        "cuda_generic_parallel_reduce_by_key": 0.00031200699595501646,
+        "cuda_generic_parallel_transfer_inclusive": 0.0007466289971489459,
+        "cuda_generic_serial_kernel": 0.057252327002061065
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.324006007052958e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.082900027744472e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.418000702979043e-05,
+        "cuda_generic_serial_kernel": 2.065399894490838e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3660028344020247e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0503000996541232e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.442199810408056e-05,
+        "cuda_generic_serial_kernel": 2.102000144077465e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.884998245164752e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.2642998374067247e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.086600089678541e-05,
+        "cuda_generic_serial_kernel": 2.2656000510323793e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.153000867925584e-06,
+        "cuda_generic_parallel_reduce_by_key": 3.0633003916591406e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.641599950147793e-05,
+        "cuda_generic_serial_kernel": 3.058999573113397e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00041470900032436475,
+        "cuda_generic_parallel_reduce_by_key": 0.00010165500134462491,
+        "cuda_generic_parallel_transfer_inclusive": 0.00024652000138303265,
+        "cuda_generic_serial_kernel": 0.0034855830017477274
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00046254000335466117,
+        "cuda_generic_parallel_reduce_by_key": 0.00017257100262213498,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002620309969643131,
+        "cuda_generic_serial_kernel": 0.003539291996276006
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0033507240004837513,
+        "cuda_generic_parallel_reduce_by_key": 0.00019847599469358101,
+        "cuda_generic_parallel_transfer_inclusive": 0.0015552980039501563,
+        "cuda_generic_serial_kernel": 0.054211488997680135
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.002570863005530555,
+        "cuda_generic_parallel_reduce_by_key": 0.00028629099688259885,
+        "cuda_generic_parallel_transfer_inclusive": 0.0008278750028694049,
+        "cuda_generic_serial_kernel": 0.05603400400286773
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4610050129704177e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.5516994355712086e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.943500193301588e-05,
+        "cuda_generic_serial_kernel": 2.5250003091059625e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4890028978697956e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.5257999368477613e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.902599852764979e-05,
+        "cuda_generic_serial_kernel": 2.473199856467545e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.0395000572316349e-05,
+        "cuda_generic_parallel_reduce_by_key": 6.672200106550008e-05,
+        "cuda_generic_parallel_transfer_inclusive": 0.00012647800031118095,
+        "cuda_generic_serial_kernel": 0.0003554299983079545
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.468299888074398e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.00023810400307411328,
+        "cuda_generic_parallel_transfer_inclusive": 0.00030142600007820874,
+        "cuda_generic_serial_kernel": 0.000584606001211796
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000568019000638742,
+        "cuda_generic_parallel_reduce_by_key": 0.0001302310047321953,
+        "cuda_generic_parallel_transfer_inclusive": 0.0005178930005058646,
+        "cuda_generic_serial_kernel": 0.008776158996624872
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007013079957687296,
+        "cuda_generic_parallel_reduce_by_key": 0.0004872680001426488,
+        "cuda_generic_parallel_transfer_inclusive": 0.0006638239938183688,
+        "cuda_generic_serial_kernel": 0.011134345004393253
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.004840801004320383,
+        "cuda_generic_parallel_reduce_by_key": 0.0002541860012570396,
+        "cuda_generic_parallel_transfer_inclusive": 0.004371281000203453,
+        "cuda_generic_serial_kernel": 0.1810127399949124
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0034888189984485507,
+        "cuda_generic_parallel_reduce_by_key": 0.0007238149992190301,
+        "cuda_generic_parallel_transfer_inclusive": 0.002266029994643759,
+        "cuda_generic_serial_kernel": 0.17452750799566275
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.381995389238e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.944300311151892e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.252100138226524e-05,
+        "cuda_generic_serial_kernel": 1.948799763340503e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.276996044907719e-06,
+        "cuda_generic_parallel_reduce_by_key": 1.9525003153830767e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.215400208020583e-05,
+        "cuda_generic_serial_kernel": 1.9696002709679306e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.533998773898929e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0870000298600644e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.006599480519071e-05,
+        "cuda_generic_serial_kernel": 2.1353000192902982e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.317997420206666e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.698399475775659e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.431300036842003e-05,
+        "cuda_generic_serial_kernel": 2.7252004656475037e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00041104800038738176,
+        "cuda_generic_parallel_reduce_by_key": 9.727999713504687e-05,
+        "cuda_generic_parallel_transfer_inclusive": 0.00023067100119078532,
+        "cuda_generic_serial_kernel": 0.0033167350047733635
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004331399977672845,
+        "cuda_generic_parallel_reduce_by_key": 0.0001588020022609271,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002450719985063188,
+        "cuda_generic_serial_kernel": 0.0032025179971242324
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.002997665993461851,
+        "cuda_generic_parallel_reduce_by_key": 0.0001902699950733222,
+        "cuda_generic_parallel_transfer_inclusive": 0.0012925380069646053,
+        "cuda_generic_serial_kernel": 0.05573954499413958
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0025941839994629845,
+        "cuda_generic_parallel_reduce_by_key": 0.00029933499899925664,
+        "cuda_generic_parallel_transfer_inclusive": 0.0007469479969586246,
+        "cuda_generic_serial_kernel": 0.05723500600288389
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3270037015900016e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.0808001863770187e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.40560028841719e-05,
+        "cuda_generic_serial_kernel": 2.02329974854365e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.272994268219918e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.041800325969234e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.354200013447553e-05,
+        "cuda_generic_serial_kernel": 2.057500387309119e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 9.577001037541777e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.2584004909731448e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.101400115061551e-05,
+        "cuda_generic_serial_kernel": 2.2807005734648556e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 5.770998541265726e-06,
+        "cuda_generic_parallel_reduce_by_key": 3.025600017281249e-05,
+        "cuda_generic_parallel_transfer_inclusive": 7.552299939561635e-05,
+        "cuda_generic_serial_kernel": 3.039400326088071e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004111170055693947,
+        "cuda_generic_parallel_reduce_by_key": 0.00010027999815065414,
+        "cuda_generic_parallel_transfer_inclusive": 0.00023587200121255592,
+        "cuda_generic_serial_kernel": 0.0034837540006265044
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004629110044334084,
+        "cuda_generic_parallel_reduce_by_key": 0.000172234998899512,
+        "cuda_generic_parallel_transfer_inclusive": 0.0002592510063550435,
+        "cuda_generic_serial_kernel": 0.0035410950004006736
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0032781050031189807,
+        "cuda_generic_parallel_reduce_by_key": 0.00019445799989625812,
+        "cuda_generic_parallel_transfer_inclusive": 0.0014513289934257045,
+        "cuda_generic_serial_kernel": 0.054208673995162826
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0025604789989301935,
+        "cuda_generic_parallel_reduce_by_key": 0.00030422399868257344,
+        "cuda_generic_parallel_transfer_inclusive": 0.0008448420048807748,
+        "cuda_generic_serial_kernel": 0.05600807000155328
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4760007616132498e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.5348999770358205e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.860800203867257e-05,
+        "cuda_generic_serial_kernel": 2.5059001927729696e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.5979967429302633e-06,
+        "cuda_generic_parallel_reduce_by_key": 2.4934000975918025e-05,
+        "cuda_generic_parallel_transfer_inclusive": 6.830799975432456e-05,
+        "cuda_generic_serial_kernel": 2.5015993742272258e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2677002814598382e-05,
+        "cuda_generic_parallel_reduce_by_key": 6.541500624734908e-05,
+        "cuda_generic_parallel_transfer_inclusive": 0.00012653000158024952,
+        "cuda_generic_serial_kernel": 0.0003547369997249916
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3174998457543552e-05,
+        "cuda_generic_parallel_reduce_by_key": 0.00023063700064085424,
+        "cuda_generic_parallel_transfer_inclusive": 0.00029540899413404986,
+        "cuda_generic_serial_kernel": 0.0005767410038970411
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005490039984579198,
+        "cuda_generic_parallel_reduce_by_key": 0.00012859700655099005,
+        "cuda_generic_parallel_transfer_inclusive": 0.0005144780006958172,
+        "cuda_generic_serial_kernel": 0.008769389998633415
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0006856830004835501,
+        "cuda_generic_parallel_reduce_by_key": 0.000491765997139737,
+        "cuda_generic_parallel_transfer_inclusive": 0.0006706040003336966,
+        "cuda_generic_serial_kernel": 0.011145680997287855
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0051514000006136484,
+        "cuda_generic_parallel_reduce_by_key": 0.00025032499979715794,
+        "cuda_generic_parallel_transfer_inclusive": 0.004005057999165729,
+        "cuda_generic_serial_kernel": 0.18152788699808298
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cand_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.003628247999586165,
+        "cuda_generic_parallel_reduce_by_key": 0.0007444160000886768,
+        "cuda_generic_parallel_transfer_inclusive": 0.0022921100025996566,
+        "cuda_generic_serial_kernel": 0.1735779829978128
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    }
+  ],
+  "runs": [
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite all --label base --seed 20261201 --output paths_base_1.json",
+      "file": "paths_base_1.json",
+      "git_commit": "ad6f7a8",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "7fb9c87f81adfd3a609a221983dce463eeba1ee6596ba175e26eb4705b1a49f1",
+        "built_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "checkout_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261201
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite all --label base --seed 20261202 --output paths_base_2.json",
+      "file": "paths_base_2.json",
+      "git_commit": "ad6f7a8",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "7fb9c87f81adfd3a609a221983dce463eeba1ee6596ba175e26eb4705b1a49f1",
+        "built_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "checkout_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261202
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite all --label base --seed 20261203 --output paths_base_3.json",
+      "file": "paths_base_3.json",
+      "git_commit": "ad6f7a8",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "7fb9c87f81adfd3a609a221983dce463eeba1ee6596ba175e26eb4705b1a49f1",
+        "built_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "checkout_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261203
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite all --label cand --seed 20261201 --output paths_cand_1.json",
+      "file": "paths_cand_1.json",
+      "git_commit": "6ddf58b",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "b1b1bebb4dd96ff13014e1f4dcb4f0f7e09b5726b8a17453ad69d313e4feb50d",
+        "built_native_source_sha256": "091c4f4dcab5e84827a479279d67eb1f00075265bdd14acc39b9c57f6d7e6aee",
+        "checkout_native_source_sha256": "091c4f4dcab5e84827a479279d67eb1f00075265bdd14acc39b9c57f6d7e6aee",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261201
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite all --label cand --seed 20261202 --output paths_cand_2.json",
+      "file": "paths_cand_2.json",
+      "git_commit": "6ddf58b",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "b1b1bebb4dd96ff13014e1f4dcb4f0f7e09b5726b8a17453ad69d313e4feb50d",
+        "built_native_source_sha256": "091c4f4dcab5e84827a479279d67eb1f00075265bdd14acc39b9c57f6d7e6aee",
+        "checkout_native_source_sha256": "091c4f4dcab5e84827a479279d67eb1f00075265bdd14acc39b9c57f6d7e6aee",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261202
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite all --label cand --seed 20261203 --output paths_cand_3.json",
+      "file": "paths_cand_3.json",
+      "git_commit": "6ddf58b",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "b1b1bebb4dd96ff13014e1f4dcb4f0f7e09b5726b8a17453ad69d313e4feb50d",
+        "built_native_source_sha256": "091c4f4dcab5e84827a479279d67eb1f00075265bdd14acc39b9c57f6d7e6aee",
+        "checkout_native_source_sha256": "091c4f4dcab5e84827a479279d67eb1f00075265bdd14acc39b9c57f6d7e6aee",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261203
+    }
+  ],
+  "specialized_rows": [
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0016147749993251637,
+        "cand": 0.001652320999710355
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.001602877993718721,
+          0.001914886997838039,
+          0.0016147749993251637
+        ],
+        "cand": [
+          0.0016436890000477433,
+          0.0017909460002556443,
+          0.001652320999710355
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0002623009931994602,
+        "cand": 0.00016638200031593442
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0002623009931994602,
+          0.00026688499929150566,
+          0.00025366799673065543
+        ],
+        "cand": [
+          0.00016638200031593442,
+          0.00016821999452076852,
+          0.00016497700562467799
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0006122019985923544,
+        "cand": 0.000533243000973016
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0006107169974711724,
+          0.0006331320037133992,
+          0.0006122019985923544
+        ],
+        "cand": [
+          0.0005742770008509979,
+          0.000533243000973016,
+          0.0005330659987521358
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.028122242998506408,
+        "cand": 0.028239396997378208
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.027756247996876482,
+          0.028691241997876205,
+          0.028122242998506408
+        ],
+        "cand": [
+          0.027268839003227185,
+          0.028239396997378208,
+          0.02852989399980288
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0005351099971449003,
+        "cand": 0.0003877829949487932
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0005351099971449003,
+          0.0005459019957925193,
+          0.0005245479987934232
+        ],
+        "cand": [
+          0.00038131000474095345,
+          0.00039578400173923,
+          0.0003877829949487932
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.005501098996319342,
+        "cand": 0.005470178002724424
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.005483289001858793,
+          0.00557775900233537,
+          0.005501098996319342
+        ],
+        "cand": [
+          0.005364021002606023,
+          0.005710657998861279,
+          0.005470178002724424
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0017301699990639463,
+        "cand": 0.0016909409969230182
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0017416830014553852,
+          0.0016632080005365424,
+          0.0017301699990639463
+        ],
+        "cand": [
+          0.0016924079973250628,
+          0.0016395619968534447,
+          0.0016909409969230182
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.00024230599956354126,
+        "cand": 0.00016802400205051526
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.00025845200434559956,
+          0.00024230599956354126,
+          0.00024226100504165515
+        ],
+        "cand": [
+          0.00016877199959708378,
+          0.00016802400205051526,
+          0.00016413800040027127
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0006061029998818412,
+        "cand": 0.0005581090008490719
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0006360910047078505,
+          0.0006061029998818412,
+          0.0006060840023565106
+        ],
+        "cand": [
+          0.0005581090008490719,
+          0.0005351999934646301,
+          0.0005676910004694946
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.028481430999818258,
+        "cand": 0.028174869999929797
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.02869522900437005,
+          0.028481430999818258,
+          0.027914556994801387
+        ],
+        "cand": [
+          0.02897340500203427,
+          0.028174869999929797,
+          0.028005050000501797
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0007529639988206327,
+        "cand": 0.0006665010005235672
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0007529639988206327,
+          0.0007609589956700802,
+          0.0007312119996640831
+        ],
+        "cand": [
+          0.0006725900020683184,
+          0.0006665010005235672,
+          0.0006521410032291897
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.005806181994557846,
+        "cand": 0.005859944001713302
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.005965839998680167,
+          0.005806181994557846,
+          0.005777044003480114
+        ],
+        "cand": [
+          0.005859944001713302,
+          0.005967634999251459,
+          0.0057212979954783805
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.001765058004821185,
+        "cand": 0.0017663739999989048
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0018006399986916222,
+          0.001765058004821185,
+          0.0017509800018160604
+        ],
+        "cand": [
+          0.0018562219993327744,
+          0.0017616140030440874,
+          0.0017663739999989048
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0002734119989327155,
+        "cand": 0.0001918400012073107
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0002680189936654642,
+          0.00027598599990596995,
+          0.0002734119989327155
+        ],
+        "cand": [
+          0.00019465700461296365,
+          0.0001918400012073107,
+          0.0001876599999377504
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0008046840011957102,
+        "cand": 0.0007601100005558692
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0008392740055569448,
+          0.0007891560017014854,
+          0.0008046840011957102
+        ],
+        "cand": [
+          0.0007748409989289939,
+          0.0007601100005558692,
+          0.0007589289962197654
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.029909030999988317,
+        "cand": 0.02982359300222015
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.029921485998784192,
+          0.029909030999988317,
+          0.029715131997363642
+        ],
+        "cand": [
+          0.02955516400106717,
+          0.030525381996994838,
+          0.02982359300222015
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0011814030003733933,
+        "cand": 0.0010899639964918606
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0011906729996553622,
+          0.0011814030003733933,
+          0.0011727999954018742
+        ],
+        "cand": [
+          0.0010899639964918606,
+          0.001104773000406567,
+          0.0010843999989447184
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.00911811699916143,
+        "cand": 0.009048091997101437
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.009202173998346552,
+          0.00911811699916143,
+          0.00899930800369475
+        ],
+        "cand": [
+          0.009048091997101437,
+          0.009203478002746124,
+          0.008909340998798143
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    }
+  ]
+}

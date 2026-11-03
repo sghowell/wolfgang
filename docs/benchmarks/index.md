@@ -8,6 +8,15 @@ report names, not to every platform or shape.
 
 ![Speedups measured in the portability and interop campaign](plots/portability_campaign_speedups.svg)
 
+## Accelerator follow-ups campaign (November 2026)
+
+Plan: `docs/plans/accelerator_followups_campaign_plan.md`. Review closeout:
+`docs/reviews/accelerator_followups_campaign_2026-11-03.md`.
+
+| Report | What it measured |
+| --- | --- |
+| [Device-side simplify counts](reports/cuda_device_counts_h100_2026-11-03.md) | Simplify and `matmul` with one synchronization instead of eight on an H100 |
+
 ## Portability and interop campaign (November 2026)
 
 Plan: `docs/plans/portability_and_interop_campaign_plan.md`. Review closeout:
