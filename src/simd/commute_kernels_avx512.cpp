@@ -47,27 +47,31 @@ void commutes_with_avx512_rows(
     std::size_t row_begin,
     std::size_t row_end,
     std::uint8_t* out) noexcept {
-  const std::vector<std::uint64_t>& lhs_x_words = lhs.x_words();
-  const std::vector<std::uint64_t>& lhs_z_words = lhs.z_words();
-  const std::vector<std::uint64_t>& rhs_x_words = rhs.x_words();
-  const std::vector<std::uint64_t>& rhs_z_words = rhs.z_words();
+  // Raw pointers and the column count in locals: the output is written through
+  // a byte pointer, which may alias anything, so values read through the
+  // vectors would be reloaded after every store.
+  const std::uint64_t* const lhs_x_words = lhs.x_words().data();
+  const std::uint64_t* const lhs_z_words = lhs.z_words().data();
+  const std::uint64_t* const rhs_x_words = rhs.x_words().data();
+  const std::uint64_t* const rhs_z_words = rhs.z_words().data();
+  const std::size_t columns = rhs.num_terms();
 
   if (lhs.words() == 1) {
     for (std::size_t lhs_term = row_begin; lhs_term < row_end; ++lhs_term) {
       const __m512i lhs_x = _mm512_set1_epi64(intrinsic_word(lhs_x_words[lhs_term]));
       const __m512i lhs_z = _mm512_set1_epi64(intrinsic_word(lhs_z_words[lhs_term]));
-      const std::size_t row_offset = lhs_term * rhs.num_terms();
+      const std::size_t row_offset = lhs_term * columns;
       std::size_t rhs_term = 0;
-      for (; rhs_term + 8 <= rhs.num_terms(); rhs_term += 8) {
+      for (; rhs_term + 8 <= columns; rhs_term += 8) {
         const __m512i rhs_z =
-            _mm512_loadu_si512(reinterpret_cast<const void*>(rhs_z_words.data() + rhs_term));
+            _mm512_loadu_si512(reinterpret_cast<const void*>(rhs_z_words + rhs_term));
         const __m512i rhs_x =
-            _mm512_loadu_si512(reinterpret_cast<const void*>(rhs_x_words.data() + rhs_term));
+            _mm512_loadu_si512(reinterpret_cast<const void*>(rhs_x_words + rhs_term));
         const __m512i conflicts =
             _mm512_xor_si512(_mm512_and_si512(lhs_x, rhs_z), _mm512_and_si512(lhs_z, rhs_x));
         store_commutation_octet(_mm512_popcnt_epi64(conflicts), out, row_offset + rhs_term);
       }
-      for (; rhs_term < rhs.num_terms(); ++rhs_term) {
+      for (; rhs_term < columns; ++rhs_term) {
         const std::uint64_t conflicts =
             (lhs_x_words[lhs_term] & rhs_z_words[rhs_term]) ^
             (lhs_z_words[lhs_term] & rhs_x_words[rhs_term]);
@@ -83,9 +87,9 @@ void commutes_with_avx512_rows(
     const __m512i lhs_z0 = _mm512_set1_epi64(intrinsic_word(lhs_z_words[lhs_offset]));
     const __m512i lhs_x1 = _mm512_set1_epi64(intrinsic_word(lhs_x_words[lhs_offset + 1]));
     const __m512i lhs_z1 = _mm512_set1_epi64(intrinsic_word(lhs_z_words[lhs_offset + 1]));
-    const std::size_t row_offset = lhs_term * rhs.num_terms();
+    const std::size_t row_offset = lhs_term * columns;
     std::size_t rhs_term = 0;
-    for (; rhs_term + 8 <= rhs.num_terms(); rhs_term += 8) {
+    for (; rhs_term + 8 <= columns; rhs_term += 8) {
       const std::size_t rhs_offset = rhs_term * 2;
       const __m512i rhs_z0 = _mm512_set_epi64(
           intrinsic_word(rhs_z_words[rhs_offset + 14]),
@@ -132,7 +136,7 @@ void commutes_with_avx512_rows(
           out,
           row_offset + rhs_term);
     }
-    for (; rhs_term < rhs.num_terms(); ++rhs_term) {
+    for (; rhs_term < columns; ++rhs_term) {
       const std::size_t rhs_offset = rhs_term * 2;
       const std::uint64_t conflicts0 =
           (lhs_x_words[lhs_offset] & rhs_z_words[rhs_offset]) ^
