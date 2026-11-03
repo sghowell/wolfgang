@@ -23,10 +23,13 @@ def cudaq() -> Any:
 
 
 @pytest.fixture(params=["serialized", "term_api"])
-def conversion_path(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> str:
+def conversion_path(cudaq: Any, request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> str:
     """Run each conversion test on the fast serialized path and the term-API fallback."""
     if request.param == "term_api":
         monkeypatch.setattr(cudaq_adapter, "_serialized_format_supported", lambda: False)
+    else:
+        # A failed layout probe would silently run the fallback twice.
+        assert cudaq_adapter._serialized_format_supported(), cudaq.__version__
     return str(request.param)
 
 
@@ -64,6 +67,10 @@ def test_known_operator_converts_both_ways(cudaq: Any, conversion_path: str) -> 
 @pytest.mark.parametrize("num_qubits", [1, 7, 64, 65, 130])
 def test_random_operators_round_trip(cudaq: Any, conversion_path: str, num_qubits: int) -> None:
     op = _random_operator(num_qubits, 40, seed=num_qubits).simplify(atol=0.0)
+    if num_qubits > 64:
+        # Terms whose only Paulis sit in the second word exercise the sparse writer.
+        qubits = sorted({64, num_qubits - 1})
+        op = op + PauliSum.from_sparse_list([("Y" * len(qubits), qubits, 0.5j)], num_qubits)
     native = op.to_cudaq()
     assert native.term_count == op.num_terms
     rebuilt = PauliSum.from_cudaq(native, num_qubits=num_qubits)
@@ -106,6 +113,30 @@ def test_zero_coefficients_are_kept(cudaq: Any, conversion_path: str) -> None:
     assert op.to_arrays()[2].tolist() == [0.0, 1.0]
 
 
+def test_explicit_identities_set_the_inferred_width(cudaq: Any, conversion_path: str) -> None:
+    spin = cudaq.spin
+    padded = PauliSum.from_cudaq(spin.i(5))
+    assert padded == PauliSum.from_labels(["IIIIII"], [1.0])
+    mixed = PauliSum.from_cudaq(spin.i(5) * spin.x(1))
+    assert mixed == PauliSum.from_sparse_list([("X", [1], 1.0)], 6)
+    with pytest.raises(ValueError, match="out of range"):
+        PauliSum.from_cudaq(spin.i(5) * spin.x(1), num_qubits=5)
+
+
+def test_coefficients_are_read_exactly(cudaq: Any, conversion_path: str) -> None:
+    # Identity-only terms reach CUDA-Q's list constructor without rescaling.
+    infinite = PauliSum.from_cudaq(cudaq.SpinOperator([1.0, 1.0, np.inf, 0.0])).to_arrays()[2]
+    assert infinite[0].real == 1.0 and np.isposinf(infinite[0].imag)
+    signed = PauliSum.from_cudaq(cudaq.SpinOperator([1.0, 2.0, -0.0, 0.0])).to_arrays()[2]
+    assert signed[0].real == 2.0 and np.signbit(signed[0].imag)
+
+
+def test_parameterized_coefficients_raise(cudaq: Any, conversion_path: str) -> None:
+    parameterized = cudaq.ScalarOperator(lambda t: t) * cudaq.spin.x(0)
+    with pytest.raises(ValueError, match="numeric coefficients"):
+        PauliSum.from_cudaq(parameterized)
+
+
 def test_from_cudaq_validates_inputs(cudaq: Any, conversion_path: str) -> None:
     spin = cudaq.spin
     with pytest.raises(TypeError, match="SpinOperator"):
@@ -116,6 +147,9 @@ def test_from_cudaq_validates_inputs(cudaq: Any, conversion_path: str) -> None:
         PauliSum.from_cudaq(spin.x(0), num_qubits=-1)
     with pytest.raises(TypeError, match="integer"):
         PauliSum.from_cudaq(spin.x(0), num_qubits=1.5)  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="integer"):
+        PauliSum.from_cudaq(spin.x(0), num_qubits=True)
+    assert PauliSum.from_cudaq(spin.x(0), num_qubits=np.int64(3)).num_qubits == 3
 
 
 def test_to_cudaq_rejects_non_paulisum_receiver() -> None:

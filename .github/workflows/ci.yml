@@ -196,8 +196,25 @@ jobs:
       - name: Install CUDA-Q adapter extra
         run: python -m pip install -e ".[test,cudaq]" "${CUDAQ_REQUIREMENT}"
 
-      - name: Report CUDA-Q version
-        run: python -W ignore -c "import cudaq; print(cudaq.__version__)"
+      - name: Check the installed CUDA-Q matches the requirement
+        shell: python
+        run: |
+          import importlib.metadata as metadata
+          import os
+
+          requirement = os.environ["CUDAQ_REQUIREMENT"]
+          version = metadata.version("cudaq")
+          backends = {}
+          for name in ("cuda-quantum-cu12", "cuda-quantum-cu13"):
+              try:
+                  backends[name] = metadata.version(name)
+              except metadata.PackageNotFoundError:
+                  pass
+          print("cudaq", version, backends)
+          if requirement.startswith("cudaq=="):
+              assert version == requirement.removeprefix("cudaq=="), version
+          # The metapackage and its compiled backend must be the same release.
+          assert backends and all(v == version for v in backends.values()), backends
 
       - name: Test CUDA-Q adapter
         run: python -m pytest tests/test_cudaq_adapter.py

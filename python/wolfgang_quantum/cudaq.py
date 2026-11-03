@@ -11,12 +11,14 @@ instead of one Python call per Pauli. Since CUDA-Q 0.11 the list is::
 
 with ``code = 2 * x + z`` (I = 0, Z = 1, X = 2, Y = 3). CUDA-Q does not promise
 this layout, so the adapter checks it once per process against a known
-operator and otherwise uses the slower public term API.
+operator, and falls back to the public term API if the check fails or a
+serialized operator does not parse.
 """
 
 from __future__ import annotations
 
 import functools
+import operator
 from typing import Any
 
 import numpy as np
@@ -60,29 +62,46 @@ def _serialized_format_supported() -> bool:
 def _checked_num_qubits(num_qubits: int | None) -> int | None:
     if num_qubits is None:
         return None
-    if isinstance(num_qubits, bool) or not isinstance(num_qubits, int):
+    if isinstance(num_qubits, bool):
         raise TypeError("num_qubits must be an integer or None")
-    if num_qubits < 0:
+    try:
+        width = operator.index(num_qubits)
+    except TypeError:
+        raise TypeError("num_qubits must be an integer or None") from None
+    if width < 0:
         raise ValueError("num_qubits must be non-negative")
-    return num_qubits
+    return width
+
+
+class _LayoutError(RuntimeError):
+    """A serialized operator does not match the layout this adapter parses."""
 
 
 def _parse_serialized(data: list[float]) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Split a serialized operator into per-term coefficients and flat (term, target, code) ops."""
 
     values = np.asarray(data, dtype=np.float64)
-    num_terms = int(data[0]) if data else 0
-    starts = np.empty(num_terms, dtype=np.int64)
-    counts = np.empty(num_terms, dtype=np.int64)
-    position = 1
-    for term in range(num_terms):
-        starts[term] = position
-        count = int(data[position + 2])
-        counts[term] = count
-        position += 3 + 2 * count
+    try:
+        num_terms = int(data[0])
+        starts = np.empty(num_terms, dtype=np.int64)
+        counts = np.empty(num_terms, dtype=np.int64)
+        position = 1
+        for term in range(num_terms):
+            starts[term] = position
+            count = int(data[position + 2])
+            if count < 0:
+                raise _LayoutError("negative operator count")
+            counts[term] = count
+            position += 3 + 2 * count
+    except (IndexError, ValueError, OverflowError) as exc:
+        raise _LayoutError("CUDA-Q serialized the operator in an unexpected layout") from exc
     if position != len(values):
-        raise RuntimeError("CUDA-Q serialized the operator in an unexpected layout")
-    coeffs = values[starts] + 1j * values[starts + 1]
+        raise _LayoutError("CUDA-Q serialized the operator in an unexpected layout")
+    # Assign the parts separately: re + 1j * im would turn (1, inf) into (nan, inf)
+    # and lose the sign of a zero imaginary part.
+    coeffs = np.empty(num_terms, dtype=np.complex128)
+    coeffs.real = values[starts]
+    coeffs.imag = values[starts + 1]
     term_of_op = np.repeat(np.arange(num_terms, dtype=np.int64), counts)
     rank_in_term = np.arange(term_of_op.size, dtype=np.int64) - np.repeat(np.cumsum(counts) - counts, counts)
     op_positions = np.repeat(starts + 3, counts) + 2 * rank_in_term
@@ -93,7 +112,7 @@ def _parse_serialized(data: list[float]) -> tuple[np.ndarray, np.ndarray, np.nda
         and np.all(targets >= 0)
         and np.all(np.isin(codes, (0.0, 1.0, 2.0, 3.0)))
     ):
-        raise RuntimeError("CUDA-Q serialized the operator in an unexpected layout")
+        raise _LayoutError("CUDA-Q serialized the operator in an unexpected layout")
     return coeffs, term_of_op, targets.astype(np.int64), codes.astype(np.int64)
 
 
@@ -107,16 +126,14 @@ def _terms_from_api(op: Any) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.nda
     for index, term in enumerate(op):
         coeffs.append(complex(term.evaluate_coefficient()))
         # x bits for qubits 0..max_degree, then z bits for the same qubits.
-        # Explicit identities stay as code 0 so both paths infer one width.
+        # degrees lists every qubit the term names, explicit identities
+        # included (code 0), so both paths infer one width.
         form = term.get_binary_symplectic_form()
         width = len(form) // 2
-        mentioned = set(term.degrees)
-        for qubit in range(width):
-            code = 2 * int(form[qubit]) + int(form[width + qubit])
-            if code or qubit in mentioned:
-                term_of_op.append(index)
-                targets.append(qubit)
-                codes.append(code)
+        for qubit in term.degrees:
+            term_of_op.append(index)
+            targets.append(int(qubit))
+            codes.append(2 * int(form[qubit]) + int(form[width + qubit]))
     return (
         np.asarray(coeffs, dtype=np.complex128),
         np.asarray(term_of_op, dtype=np.int64),
@@ -130,9 +147,10 @@ def from_cudaq(op: Any, num_qubits: int | None = None) -> PauliSum:
 
     Terms keep CUDA-Q's order and coefficients exactly, including terms whose
     coefficient is zero. When ``num_qubits`` is omitted, the width is one more
-    than the largest qubit index the operator mentions, including explicit
-    identities such as ``spin.i(5)`` (zero for identity-only and empty
-    operators). Parameterized coefficients raise ``ValueError``.
+    than the largest qubit index the operator names, including explicit
+    identities such as ``spin.i(5)``; operators that name no qubit infer zero.
+    Coefficients that cannot be evaluated to numbers (parameterized ones)
+    raise ``ValueError``.
     """
 
     cudaq = _import_cudaq()
@@ -141,13 +159,28 @@ def from_cudaq(op: Any, num_qubits: int | None = None) -> PauliSum:
     elif not isinstance(op, cudaq.SpinOperator):
         raise TypeError("PauliSum.from_cudaq expects cudaq.SpinOperator or cudaq.SpinOperatorTerm")
     explicit_num_qubits = _checked_num_qubits(num_qubits)
+    message = "PauliSum.from_cudaq needs numeric coefficients; evaluate parameters first"
     if op.parameters:
-        raise ValueError("PauliSum.from_cudaq needs numeric coefficients; evaluate parameters first")
+        raise ValueError(message)
 
+    # Both paths evaluate every coefficient; a parameterized coefficient fails
+    # there with whatever its callback raises.
+    parsed = None
     if _serialized_format_supported():
-        coeffs, term_of_op, targets, codes = _parse_serialized(list(op.serialize()))
-    else:
-        coeffs, term_of_op, targets, codes = _terms_from_api(op)
+        try:
+            data = list(op.serialize())
+        except Exception as exc:  # noqa: BLE001 - coefficient callbacks raise anything
+            raise ValueError(message) from exc
+        try:
+            parsed = _parse_serialized(data)
+        except _LayoutError:
+            parsed = None
+    if parsed is None:
+        try:
+            parsed = _terms_from_api(op)
+        except Exception as exc:  # noqa: BLE001
+            raise ValueError(message) from exc
+    coeffs, term_of_op, targets, codes = parsed
 
     inferred = int(targets.max()) + 1 if targets.size else 0
     width = explicit_num_qubits if explicit_num_qubits is not None else inferred
@@ -165,19 +198,22 @@ def from_cudaq(op: Any, num_qubits: int | None = None) -> PauliSum:
 
 
 def _serialize(op: PauliSum) -> list[float]:
-    """Write ``op`` in CUDA-Q's serialized layout, targets ascending within each term."""
+    """Write a non-empty ``op`` in CUDA-Q's serialized layout, targets ascending within each term."""
 
     x_words, z_words, coeffs = op.to_arrays()
     num_terms = op.num_terms
-    if num_terms == 0:
-        return [0.0]
-    # Unpack each term's words to one x and one z bit per qubit (little-endian bit order).
-    x_bytes = x_words.astype("<u8", copy=False).view(np.uint8)
-    z_bytes = z_words.astype("<u8", copy=False).view(np.uint8)
-    x_bits = np.unpackbits(x_bytes, axis=1, bitorder="little")[:, : op.num_qubits]
-    z_bits = np.unpackbits(z_bytes, axis=1, bitorder="little")[:, : op.num_qubits]
-    term_of_op, targets = np.nonzero(x_bits | z_bits)  # row-major: terms in order, targets ascending
-    codes = 2 * x_bits[term_of_op, targets] + z_bits[term_of_op, targets]
+    x_words = x_words.astype("<u8", copy=False)
+    z_words = z_words.astype("<u8", copy=False)
+    # Unpack only words that hold a Pauli, so memory follows the operator's
+    # Paulis rather than num_terms * num_qubits. Row-major nonzero keeps terms
+    # in order and words ascending; little-endian bits keep targets ascending.
+    term_of_word, word_index = np.nonzero(x_words | z_words)
+    x_bits = np.unpackbits(x_words[term_of_word, word_index].view(np.uint8).reshape(-1, 8), axis=1, bitorder="little")
+    z_bits = np.unpackbits(z_words[term_of_word, word_index].view(np.uint8).reshape(-1, 8), axis=1, bitorder="little")
+    row, bit = np.nonzero(x_bits | z_bits)
+    term_of_op = term_of_word[row]
+    targets = 64 * word_index[row] + bit
+    codes = 2 * x_bits[row, bit] + z_bits[row, bit]
     counts = np.bincount(term_of_op, minlength=num_terms)
     header = 1 + 3 * np.arange(num_terms, dtype=np.int64) + 2 * (np.cumsum(counts) - counts)
     out = np.empty(1 + 3 * num_terms + 2 * term_of_op.size, dtype=np.float64)
@@ -209,8 +245,10 @@ def to_cudaq(self: PauliSum) -> Any:
 
     CUDA-Q merges duplicate terms, keeping the first occurrence's position and
     summing coefficients in input order, the same sums as
-    :meth:`PauliSum.simplify` with ``atol=0``. CUDA-Q operators carry no width,
-    so ``PauliSum.from_cudaq(op.to_cudaq(), op.num_qubits)`` restores it.
+    :meth:`PauliSum.simplify` with ``atol=0``. Finite coefficients transfer
+    exactly; CUDA-Q multiplies each one by 1.0 per Pauli, so an infinite
+    component can turn the other into NaN. CUDA-Q operators carry no width, so
+    ``PauliSum.from_cudaq(op.to_cudaq(), op.num_qubits)`` restores it.
     """
 
     if not isinstance(self, PauliSum):

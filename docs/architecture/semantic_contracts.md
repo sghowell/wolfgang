@@ -81,6 +81,7 @@ from_labels -> term order follows input labels
 from_sparse_list -> term order follows input triples
 from_qiskit -> term order follows the source SparsePauliOp
 from_openfermion -> term order follows the source QubitOperator iteration order only before simplify
+from_cudaq -> term order follows the source SpinOperator
 ```
 
 Canonical order is produced by `simplify()`. There is currently no public `sort()` API.

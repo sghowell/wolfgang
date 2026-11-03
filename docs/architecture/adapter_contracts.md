@@ -150,9 +150,9 @@ cudaq.SpinOperatorTerm (including a single Pauli such as cudaq.spin.z(5))
 ```text
 terms keep CUDA-Q's order and coefficients exactly, including zero coefficients
 qubit q of a CUDA-Q term maps to Wolfgang qubit q (both little-endian in statevector indices)
-if num_qubits is None, infer one more than the largest qubit index mentioned, including explicit identities
-identity-only and empty operators infer num_qubits = 0
-parameterized coefficients raise ValueError
+if num_qubits is None, infer one more than the largest qubit index named, including explicit identities such as spin.i(5)
+operators that name no qubit (identity-only terms, empty operators) infer num_qubits = 0
+coefficients that do not evaluate to numbers (parameterized ones) raise ValueError
 indices at or above an explicit num_qubits raise ValueError
 ```
 
@@ -163,24 +163,28 @@ returns cudaq.SpinOperator
 CUDA-Q merges duplicate terms at the first occurrence's position, summing in input order
 zero-term PauliSum exports as cudaq.SpinOperator.empty()
 CUDA-Q operators carry no width; from_cudaq(op.to_cudaq(), op.num_qubits) restores it
+finite coefficients transfer exactly; CUDA-Q scales each by 1.0 per Pauli, so an infinite component can make the other NaN
 ```
 
 Both directions exchange whole operators through `SpinOperator.serialize()` and
 the `SpinOperator(list[float])` constructor, whose layout CUDA-Q 0.11 through
 0.16 share. Because CUDA-Q does not promise that layout, the adapter checks it
 once per process against a known operator and otherwise converts through the
-public term API (`get_binary_symplectic_form`, `evaluate_coefficient`, and
-`cudaq.spin` products). Every conversion test runs on both paths.
+public term API (`get_binary_symplectic_form`, `degrees`,
+`evaluate_coefficient`, and `cudaq.spin` products); it also falls back when a
+serialized operator does not parse. Every conversion test runs on both paths,
+and the serialized variant fails if the probe rejects the installed CUDA-Q.
 
 Required tests:
 
 ```text
 known operator both ways
-random round trips at 1, 7, 64, 65 and 130 qubits
+random round trips at 1, 7, 64, 65 and 130 qubits, including terms whose Paulis are all above qubit 63
 term and single-Pauli inputs
-identity, empty and explicit-width operators
+identity, empty and explicit-width operators; explicit identities set the inferred width
 duplicates sum like simplify
-zero coefficients kept
+zero coefficients kept; non-finite and signed-zero coefficients read exactly
+parameterized coefficients raise ValueError
 input validation and missing-dependency install hint
 expectation values equal cudaq.observe on a double-precision simulator
 ```

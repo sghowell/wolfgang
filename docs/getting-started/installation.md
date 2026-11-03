@@ -39,7 +39,7 @@ Qiskit, OpenFermion and CUDA-Q adapters are optional:
 ```bash
 python -m pip install ".[qiskit]"
 python -m pip install ".[openfermion]"
-python -m pip install ".[cudaq]"        # CUDA-Q publishes Linux wheels
+python -m pip install ".[cudaq]"        # Linux x86_64/aarch64 only; CUDA-Q 0.16 needs Python 3.11+
 ```
 
 ## Developer install

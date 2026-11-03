@@ -26,6 +26,7 @@ Primary constructors:
 - `PauliSum.from_arrays(x, z, coeffs, num_qubits)` from packed `uint64` masks
 - optional `PauliSum.from_qiskit(...)`
 - optional `PauliSum.from_openfermion(...)`
+- optional `PauliSum.from_cudaq(...)`
 
 Core operations:
 
@@ -118,7 +119,7 @@ import cudaq
 from cudaq import spin
 from wolfgang_quantum import PauliSum
 
-hamiltonian = PauliSum.from_cudaq(0.5 * spin.x(0) * spin.z(2) - 1.0j * spin.y(1))
+hamiltonian = PauliSum.from_cudaq(0.5 * spin.x(0) * spin.z(2) - 0.25 * spin.y(1))
 energy = cudaq.observe(kernel, hamiltonian.simplify().to_cudaq()).expectation()  # any @cudaq.kernel
 ```
 
