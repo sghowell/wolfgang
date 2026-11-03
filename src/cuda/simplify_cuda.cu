@@ -8,6 +8,7 @@
 #include <thrust/device_vector.h>
 #include <thrust/functional.h>
 #include <thrust/iterator/counting_iterator.h>
+#include <thrust/iterator/permutation_iterator.h>
 #include <thrust/iterator/zip_iterator.h>
 #include <thrust/reduce.h>
 #include <thrust/sequence.h>
@@ -39,6 +40,14 @@ enum class DuplicateReductionStrategy {
   kThrustDefault,
   kCubRadixSortReduce,
   kCubRadixSortRunLength,
+};
+
+// Operators wider than two words use the generic index-sort path. The
+// production reduction is a parallel segmented reduce-by-key; the original
+// one-thread kernel is retained only as a benchmark baseline.
+enum class GenericReductionStrategy {
+  kParallelReduceByKey,
+  kSerialKernel,
 };
 
 struct CudaKey1 {
@@ -214,6 +223,19 @@ DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
       "cub_radix_sort_reduce, or cub_radix_sort_run_length");
 }
 
+GenericReductionStrategy generic_reduction_strategy_from_env() {
+  const char* value = std::getenv("WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION");
+  if (value == nullptr || std::string(value).empty() ||
+      std::string(value) == "reduce_by_key") {
+    return GenericReductionStrategy::kParallelReduceByKey;
+  }
+  if (std::string(value) == "serial_kernel") {
+    return GenericReductionStrategy::kSerialKernel;
+  }
+  throw std::invalid_argument(
+      "WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION must be reduce_by_key or serial_kernel");
+}
+
 int checked_cub_num_items(std::size_t count, const char* operation) {
   if (count > static_cast<std::size_t>(std::numeric_limits<int>::max())) {
     throw std::invalid_argument(std::string(operation) + " exceeds CUB int item-count limits");
@@ -299,6 +321,38 @@ struct GenericTermIndexLess {
       }
     }
     return lhs < rhs;
+  }
+};
+
+struct GenericTermIndexEqual {
+  const std::uint64_t* x;
+  const std::uint64_t* z;
+  std::size_t words;
+
+  __host__ __device__ bool operator()(std::size_t lhs, std::size_t rhs) const noexcept {
+    const std::size_t lhs_offset = lhs * words;
+    const std::size_t rhs_offset = rhs * words;
+    for (std::size_t word = 0; word < words; ++word) {
+      if (x[lhs_offset + word] != x[rhs_offset + word] ||
+          z[lhs_offset + word] != z[rhs_offset + word]) {
+        return false;
+      }
+    }
+    return true;
+  }
+};
+
+// Gathers packed words for each surviving term from its representative input
+// index, so output masks are written in one parallel pass per array.
+struct GenericRepresentativeToWord {
+  const std::uint64_t* words_in;
+  const std::size_t* representative_indices;
+  std::size_t words;
+
+  __host__ __device__ std::uint64_t operator()(std::size_t word_index) const noexcept {
+    const std::size_t output_term = word_index / words;
+    const std::size_t word = word_index - output_term * words;
+    return words_in[representative_indices[output_term] * words + word];
   }
 };
 
@@ -538,7 +592,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         keys.begin(),
         PackedKey32FromTerm{impl_->x, impl_->z});
     thrust::copy_n(coeff_ptr, impl_->num_terms, values.begin());
-    thrust::sort_by_key(keys.begin(), keys.end(), values.begin());
+    thrust::stable_sort_by_key(keys.begin(), keys.end(), values.begin());
 
     thrust::device_vector<std::uint64_t> reduced_keys(impl_->num_terms);
     thrust::device_vector<thrust::complex<double>> reduced_values(impl_->num_terms);
@@ -603,7 +657,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         keys.begin(),
         Key1FromTerm{impl_->x, impl_->z});
     thrust::copy_n(coeff_ptr, impl_->num_terms, values.begin());
-    thrust::sort_by_key(keys.begin(), keys.end(), values.begin(), Key1Less{});
+    thrust::stable_sort_by_key(keys.begin(), keys.end(), values.begin(), Key1Less{});
 
     thrust::device_vector<CudaKey1> reduced_keys(impl_->num_terms);
     thrust::device_vector<thrust::complex<double>> reduced_values(impl_->num_terms);
@@ -668,7 +722,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         keys.begin(),
         Key2FromTerm{impl_->x, impl_->z});
     thrust::copy_n(coeff_ptr, impl_->num_terms, values.begin());
-    thrust::sort_by_key(keys.begin(), keys.end(), values.begin(), Key2Less{});
+    thrust::stable_sort_by_key(keys.begin(), keys.end(), values.begin(), Key2Less{});
 
     thrust::device_vector<CudaKey2> reduced_keys(impl_->num_terms);
     thrust::device_vector<thrust::complex<double>> reduced_values(impl_->num_terms);
@@ -727,14 +781,76 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     return DevicePauliSum(std::move(out));
   }
 
+  const GenericReductionStrategy generic_strategy = generic_reduction_strategy_from_env();
   const std::size_t packed_words =
       detail::checked_product(impl_->num_terms, impl_->words, "generic simplify packed words");
+  // The comparator breaks ties on input index, so equal terms stay in input
+  // order and each duplicate run sums its operands left to right.
   thrust::device_vector<std::size_t> sorted_indices(impl_->num_terms);
   thrust::sequence(sorted_indices.begin(), sorted_indices.end());
   thrust::sort(
       sorted_indices.begin(),
       sorted_indices.end(),
       GenericTermIndexLess{impl_->x, impl_->z, impl_->words});
+
+  if (generic_strategy == GenericReductionStrategy::kParallelReduceByKey) {
+    auto sorted_coeffs = thrust::make_permutation_iterator(coeff_ptr, sorted_indices.begin());
+    thrust::device_vector<std::size_t> reduced_indices(impl_->num_terms);
+    thrust::device_vector<thrust::complex<double>> reduced_values(impl_->num_terms);
+    auto reduced_end = thrust::reduce_by_key(
+        sorted_indices.begin(),
+        sorted_indices.end(),
+        sorted_coeffs,
+        reduced_indices.begin(),
+        reduced_values.begin(),
+        GenericTermIndexEqual{impl_->x, impl_->z, impl_->words},
+        thrust::plus<thrust::complex<double>>{});
+    const std::size_t reduced_terms =
+        static_cast<std::size_t>(reduced_end.first - reduced_indices.begin());
+
+    thrust::device_vector<std::size_t> survivor_indices(reduced_terms);
+    thrust::device_vector<thrust::complex<double>> survivor_values(reduced_terms);
+    auto reduced_zip = thrust::make_zip_iterator(
+        thrust::make_tuple(reduced_indices.begin(), reduced_values.begin()));
+    auto survivor_zip = thrust::make_zip_iterator(
+        thrust::make_tuple(survivor_indices.begin(), survivor_values.begin()));
+    auto survivor_end = thrust::copy_if(
+        reduced_zip,
+        reduced_zip + reduced_terms,
+        reduced_values.begin(),
+        survivor_zip,
+        CoeffSurvives{drop_threshold});
+    const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+    if (survivors == 0) {
+      return make_empty();
+    }
+
+    auto out = std::make_unique<Impl>();
+    out->num_qubits = impl_->num_qubits;
+    out->words = impl_->words;
+    out->num_terms = survivors;
+    out->device_ordinal = impl_->device_ordinal;
+    const std::size_t survivor_packed_words =
+        detail::checked_product(survivors, impl_->words, "generic simplified packed words");
+    cuda_allocate(out->x, survivor_packed_words, "simplified x words");
+    cuda_allocate(out->z, survivor_packed_words, "simplified z words");
+    cuda_allocate(out->coeffs, survivors, "simplified coefficients");
+    auto survivor_word_indices = thrust::make_counting_iterator<std::size_t>(0);
+    const std::size_t* survivor_index_ptr = thrust::raw_pointer_cast(survivor_indices.data());
+    thrust::transform(
+        survivor_word_indices,
+        survivor_word_indices + survivor_packed_words,
+        thrust::device_pointer_cast(out->x),
+        GenericRepresentativeToWord{impl_->x, survivor_index_ptr, impl_->words});
+    thrust::transform(
+        survivor_word_indices,
+        survivor_word_indices + survivor_packed_words,
+        thrust::device_pointer_cast(out->z),
+        GenericRepresentativeToWord{impl_->z, survivor_index_ptr, impl_->words});
+    thrust::copy_n(survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+    check_cuda(cudaDeviceSynchronize(), "synchronize after generic CUDA simplify");
+    return DevicePauliSum(std::move(out));
+  }
 
   thrust::device_vector<std::uint64_t> temp_x(packed_words);
   thrust::device_vector<std::uint64_t> temp_z(packed_words);
