@@ -100,9 +100,10 @@ combinations at each size:
 | 1,048,577 | 21.2-26.4 ms | 79.4-83.2 ms | 78.1-79.6 ms | 3.08-3.74x | 2.97-3.68x |
 
 - **Threshold.** `kHybridSimplifyMinTerms = 12288` is the smallest measured
-  size at which the hybrid beats the bridge in every combination. At 4,096
-  terms the hybrid's fixed cost (one command-buffer round trip, about 0.25 ms)
-  dominates.
+  size at which the hybrid beats both the bridge and same-host CPU simplify in
+  every combination. Beating CPU simplify at the measured sizes is the plan's
+  promotion gate, and it holds at every size from 12,288 up. At 4,096 terms the
+  hybrid's fixed cost (one command-buffer round trip, about 0.25 ms) dominates.
 - **Just past a power of two.** Sizes of 2^k + 1 cost 1.1-1.5x the 2^k time,
   because the network gains a stage. The design keeps the cost proportional to
   the term count, not to the padded size. The hybrid still wins every
