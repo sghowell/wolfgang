@@ -36,9 +36,8 @@ namespace {
 
 // Pinned buffers for device-to-host copies (detail/staged_transfer.hpp),
 // borrowed from a process-wide pool for the duration of one to_host call.
-// Transfers that fit in kPinnedStagingMaxBytes stage through one; larger
-// transfers, and any transfer when pinned memory cannot be had, copy
-// directly.
+// Every transfer stages, double-buffered beyond half of the buffer; a direct
+// copy is used only when pinned memory cannot be had.
 constexpr std::size_t kPinnedStagingMaxBytes = std::size_t{16} << 20;
 
 void* allocate_pinned_staging(std::size_t bytes) {
@@ -433,10 +432,9 @@ PauliSum DevicePauliSum::to_host() const {
   std::vector<std::complex<double>> coeffs;
 
   ScopedCudaDevice guard(impl_->device_ordinal);
-  // On an H100, staging beat a direct pageable copy up to the 16 MiB buffer
-  // (2x at 8 MiB), and a direct copy into memory advised for huge pages beat
-  // it above (8.4 against 9.3 ms at 32 MiB).
-  PinnedStaging::Lease staging = total_bytes == 0 || total_bytes > kPinnedStagingMaxBytes
+  // On an H100, staging beat direct copies into huge-page-advised vectors at
+  // every operator size measured (5.4 against 9.9 ms at 1M terms, 24 qubits).
+  PinnedStaging::Lease staging = total_bytes == 0
       ? PinnedStaging::Lease()
       : PinnedStaging::borrow(acc::staging_bytes_for(total_bytes, kPinnedStagingMaxBytes));
   if (staging.data() != nullptr) {
