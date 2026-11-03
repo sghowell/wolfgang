@@ -1,6 +1,9 @@
 #include "wolfgang/pauli_sum.hpp"
 
+#include "wolfgang/cpu_backend.hpp"
+
 #include "detail/packed_key.hpp"
+#include "detail/simplify_kernels.hpp"
 #include "detail/simplify_numeric.hpp"
 
 #include <algorithm>
@@ -154,31 +157,30 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
     return PauliSum::empty(num_qubits_);
   }
 
-  double max_abs_input = 0.0;
-  for (const std::complex<double>& coeff : coeffs_) {
-    detail::require_finite_simplify_input(coeff);
-    max_abs_input = std::max(max_abs_input, std::abs(coeff));
-  }
-  // Finite complex128 components can have a magnitude above DBL_MAX. Avoid
-  // 0 * infinity at absolute tolerance; use half units only when the ordinary
-  // threshold overflows. Halving before hypot needs no extended precision.
-  double drop_threshold = rtol == 0.0 ? atol : atol + rtol * max_abs_input;
-  double half_threshold = 0.0;
-  if (!std::isfinite(drop_threshold)) {
-    double max_half_magnitude = 0.0;
-    for (const auto& coeff : coeffs_) {
-      max_half_magnitude = std::max(
-          max_half_magnitude, std::hypot(coeff.real() * 0.5, coeff.imag() * 0.5));
-    }
-    half_threshold = atol * 0.5 + rtol * max_half_magnitude;
-    drop_threshold = half_threshold * 2.0;
-  }
-  const auto survives = [drop_threshold, half_threshold](const std::complex<double>& coeff) {
-    detail::require_finite_simplify_accumulator(coeff);
-    return std::isfinite(drop_threshold)
-        ? std::abs(coeff) > drop_threshold
-        : std::hypot(coeff.real() * 0.5, coeff.imag() * 0.5) > half_threshold;
+  const detail::SimplifyDropRule rule =
+      detail::SimplifyDropRule::from_coefficients(coeffs_, atol, rtol);
+  const auto survives = [&rule](const std::complex<double>& coeff) {
+    return rule.survives(coeff);
   };
+
+#if WOLFGANG_BUILD_TBB_ENABLED
+  // Parallel sort-and-reduce produces the same canonical terms and the same
+  // input-order sums as the scalar paths below, bit for bit.
+  if (words_ > 0 && cpu_backend_selects_tbb_simplify(num_terms_)) {
+    detail::SimplifiedTerms terms = detail::simplify_tbb(*this, rule);
+    if (terms.coeffs.empty()) {
+      return PauliSum::empty(num_qubits_);
+    }
+    const std::size_t out_terms = terms.coeffs.size();
+    return PauliSum(
+        num_qubits_,
+        words_,
+        out_terms,
+        std::move(terms.x),
+        std::move(terms.z),
+        std::move(terms.coeffs));
+  }
+#endif
 
   if (words_ == 1) {
     if (should_hash_accumulate_words1(x_, z_, num_terms_)) {

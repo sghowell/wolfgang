@@ -409,7 +409,7 @@ if(NOT WOLFGANG_BUILD_CUDA_ENABLED AND NOT WOLFGANG_BUILD_HIP_ENABLED AND NOT WO
 endif()
 
 if(WOLFGANG_BUILD_TBB_ENABLED)
-  list(APPEND WOLFGANG_CORE_SOURCES src/parallel/commute_kernels_tbb.cpp)
+  list(APPEND WOLFGANG_CORE_SOURCES src/parallel/commute_kernels_tbb.cpp src/parallel/simplify_tbb.cpp)
 endif()
 
 if(WOLFGANG_BUILD_AVX2_ENABLED)

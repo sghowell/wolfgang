@@ -1774,7 +1774,7 @@ void bind_pauli_sum(nb::module_& module) {
       .def(
           "simplify",
           [](const PauliSum& op, double atol, double rtol) {
-            ensure_scalar_cpu_operation("simplify");
+            wolfgang::ensure_cpu_backend_supports_simplify();
             try {
               return cpu_without_gil([&] { return op.simplify(atol, rtol); });
             } catch (const std::invalid_argument& error) {

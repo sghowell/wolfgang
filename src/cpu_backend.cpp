@@ -182,4 +182,33 @@ void ensure_cpu_backend_supports_scalar_operation(std::string_view operation) {
       "named optimized kernel is documented for the operation.");
 }
 
+void ensure_cpu_backend_supports_simplify() {
+  const CpuBackendReport report = cpu_backend_report_from_environment();
+  if (report.active_backend == "tbb") {
+    return;
+  }
+  ensure_cpu_backend_supports_scalar_operation("simplify");
+}
+
+bool cpu_backend_selects_tbb_simplify(std::size_t num_terms) {
+#if WOLFGANG_BUILD_TBB_ENABLED
+  const CpuBackendReport report = cpu_backend_report_from_environment();
+  if (report.active_backend == "tbb") {
+    return true;
+  }
+  if (report.requested_backend != "auto" || num_terms < kAutoTbbSimplifyTermThreshold) {
+    return false;
+  }
+  for (const CpuBackendCandidate& candidate : report.candidates) {
+    if (candidate.name == "tbb") {
+      return candidate.status == "available";
+    }
+  }
+  return false;
+#else
+  (void)num_terms;
+  return false;
+#endif
+}
+
 }  // namespace wolfgang

@@ -9,6 +9,8 @@ namespace wolfgang {
 
 inline constexpr std::size_t kAutoTbbPairwiseEntryThreshold = 331776;
 inline constexpr std::size_t kAutoNeonFullGroupingScalarMinEntries = 1024;
+// Auto dispatch sends simplify to the oneTBB kernel at or above this term count.
+inline constexpr std::size_t kAutoTbbSimplifyTermThreshold = 65536;
 
 struct CpuBackendCandidate {
   std::string name;
@@ -37,6 +39,15 @@ void ensure_cpu_backend_available_from_environment();
 // are accepted because they truthfully execute the portable scalar
 // implementation.
 void ensure_cpu_backend_supports_scalar_operation(std::string_view operation);
+
+// Like ensure_cpu_backend_supports_scalar_operation, but also accepts a forced
+// WOLFGANG_CPU_BACKEND=tbb because simplify has a oneTBB kernel.
+void ensure_cpu_backend_supports_simplify();
+
+// True when simplify of num_terms terms should run the oneTBB kernel: auto
+// selects it at or above kAutoTbbSimplifyTermThreshold when oneTBB is compiled
+// and available, and WOLFGANG_CPU_BACKEND=tbb forces it.
+[[nodiscard]] bool cpu_backend_selects_tbb_simplify(std::size_t num_terms);
 
 }  // namespace wolfgang
 

@@ -113,6 +113,7 @@ BACKEND_SPECIALIZED_SOURCES = (
     "src/simd/commute_kernels_avx512.cpp",
     "src/simd/commute_kernels_neon.cpp",
     "src/parallel/commute_kernels_tbb.cpp",
+    "src/parallel/simplify_tbb.cpp",
 )
 
 CUDA_FOUNDATION_SOURCES = (

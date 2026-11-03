@@ -73,6 +73,8 @@ void bind_build_info(nb::module_& module) {
             wolfgang::kAutoTbbPairwiseEntryThreshold;
         cpu_auto_dispatch_thresholds["neon_full_grouping_scalar_min_entries"] =
             wolfgang::kAutoNeonFullGroupingScalarMinEntries;
+        cpu_auto_dispatch_thresholds["tbb_simplify_min_terms"] =
+            wolfgang::kAutoTbbSimplifyTermThreshold;
         info["cpu_auto_dispatch_thresholds"] = cpu_auto_dispatch_thresholds;
 
         nb::dict optimized_cpu_kernels;
@@ -80,6 +82,7 @@ void bind_build_info(nb::module_& module) {
         if (WOLFGANG_BUILD_TBB_ENABLED) {
           tbb_kernels.append("commutes_with");
           tbb_kernels.append("full_group_commutation_graph");
+          tbb_kernels.append("simplify");
         }
         optimized_cpu_kernels["tbb"] = tbb_kernels;
 
