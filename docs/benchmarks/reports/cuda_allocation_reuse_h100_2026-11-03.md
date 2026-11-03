@@ -1,118 +1,151 @@
-# CUDA Allocation Reuse On H100
+# CUDA Allocation Reuse And Call Overhead On H100
 
 Date: 2026-11-03
 
 This report measures slice 7 of the usability and kernel campaign
 (`docs/plans/usability_and_kernel_campaign_plan.md`):
 
-- `DevicePauliSum` buffers, Thrust device vectors, Thrust algorithm temporaries,
-  and expectation and commutation scratch now come from a Wolfgang-private
-  stream-ordered CUDA memory pool (`cudaMallocFromPoolAsync` /
-  `cudaFreeAsync` on the legacy default stream) that keeps freed blocks cached;
-- `to_device` and `commutes_with_device` select the backend with a device count
-  instead of `cuda_status()`, which queried every device's properties per call;
-- coefficients cross the host/device boundary without intermediate conversion
-  vectors.
+- **Pooled allocation.** `DevicePauliSum` buffers, Thrust algorithm temporaries,
+  and simplify, expectation and commutation scratch come from a Wolfgang-private
+  stream-ordered CUDA memory pool on the legacy default stream. The pool caches
+  up to 1 GiB of freed blocks per device; it trims and retries once on
+  out-of-memory and trims at exit.
+- **Cheap device selection.** `to_device` and `commutes_with_device` pick the
+  backend from a device count instead of `cuda_status()`, which queried every
+  device's properties on every call.
+- **Fewer syncs and fills in simplify.** It uses `thrust::cuda::par_nosync` and
+  uninitialized pooled scratch, so Thrust no longer synchronizes after
+  algorithms that return nothing to the host, or zero-fills buffers that are
+  overwritten next.
+- **No host conversion copies.** Coefficients cross the host/device boundary as
+  raw bytes.
 
-`DeviceCommutationMatrix` buffers, which can leave through DLPack and the CUDA
-Array Interface, still use `cudaMalloc`.
+`DeviceCommutationMatrix` buffers can leave through DLPack and the CUDA Array
+Interface, so they still use `cudaMalloc`.
 
 ## Evidence
 
 ```text
 summaries: docs/benchmarks/data/cuda_allocation_reuse_h100_2026-11-03/summary_call_overhead.json
            docs/benchmarks/data/cuda_allocation_reuse_h100_2026-11-03/summary_simplify_paths.json
-per-run reports: private archive (docs/benchmarks/data/**/raw/ is not published)
+per-run reports and Nsight reports: private archive (not published)
 benchmarks: benchmarks/bench_cuda_call_overhead.py, benchmarks/bench_cuda_simplify_paths.py
 ```
 
-Environment: NVIDIA H100 80GB HBM3 (compute capability 9.0, driver
+**Environment.** NVIDIA H100 80GB HBM3 (compute capability 9.0, driver
 580.105.08), CUDA toolkit 12.8.93, `sm_90`, x86_64 host with 26 logical CPUs,
-GCC 13.3.0, Python 3.12.3. Every run's loaded extension matched its checkout's
-native sources. The baseline checkout was dirty only because the overhead
-benchmark script was copied into it.
+GCC 13.3.0, Python 3.12.3, Nsight Systems 2024.6.2.
 
-The baseline is `main` at `23121d6` and the candidate is `98ef775`. The final
-branch adds only an exit-time pool flush (`d1502d9`) that does not run during
-timed calls.
+**Revisions.** Baseline `main` at `23121d6`; candidate `6e48c14`. Every run's
+loaded extension matched its checkout's native sources. The baseline checkout
+was dirty only because the overhead benchmark script was copied into it.
 
 ```text
 python benchmarks/bench_cuda_call_overhead.py --label <base|cand> --output ...      # 7 paired runs
-python benchmarks/bench_cuda_simplify_paths.py --suite specialized --label <base|cand> --seed <20261120+run> --output ...  # 3 paired runs
+python benchmarks/bench_cuda_simplify_paths.py --suite specialized --label <base|cand> --seed <20261130+run> --output ...  # 3 paired runs
+nsys profile --trace=cuda python roundtrip.py   # 200 x to_device().simplify().to_host(), 128 terms
 ```
 
 The baseline/candidate order is randomized per run. The call-overhead benchmark
 times 200 back-to-back calls per batch, 7 batches per variant, on small operands
-so kernel time is negligible.
+so kernel time is negligible. Timings are steady state, measured after the pool
+has warmed. The first call into a fresh process also pays pool creation (about
+1 ms, once).
 
 ## Per-call overhead
 
 Medians of per-run medians:
 
-| Call | main | candidate | candidate / main |
+| Call | main | candidate | speedup |
 | --- | ---: | ---: | ---: |
-| `PauliSum.to_device()`, 1 term | 907.5 us | 16.4 us | 0.018 |
-| `commutes_with_device`, 128 x 128 | 908.5 us | 64.3 us | 0.071 |
-| round trip `to_device().simplify().to_host()`, 128 terms | 1,167.6 us | 258.8 us | 0.222 |
-| `simplify`, 1 term (device-resident) | 33.0 us | 26.7 us | 0.809 |
-| `expectation_statevector`, 64 terms, 12 qubits, host psi | 34.2 us | 30.1 us | 0.880 |
-| `matmul`, 128 x 128, 24 qubits | 299.0 us | 281.1 us | 0.940 |
-| `simplify`, 128 terms, 24 qubits | 224.9 us | 211.8 us | 0.942 |
-| `simplify`, 128 terms, 130 qubits | 198.1 us | 187.7 us | 0.947 |
-| `simplify`, 4096 terms, 24 qubits | 275.7 us | 265.4 us | 0.963 |
-| `to_host()`, 1 term | 23.7 us | 23.8 us | 1.002 |
-| CPU `simplify`, 128 terms (control) | 3.7 us | 3.8 us | 1.005 |
+| `PauliSum.to_device()`, 1 term | 907.5 us | 15.9 us | 57x |
+| `commutes_with_device`, 128 x 128 | 907.3 us | 64.5 us | 14x |
+| round trip `to_device().simplify().to_host()`, 128 terms | 1,167.8 us | 189.3 us | 6.2x |
+| `simplify`, 128 terms, 130 qubits | 199.4 us | 117.3 us | 1.70x |
+| `simplify`, 128 terms, 24 qubits | 225.5 us | 143.4 us | 1.57x |
+| `matmul`, 128 x 128, 24 qubits | 301.2 us | 203.6 us | 1.48x |
+| `simplify`, 4096 terms, 24 qubits | 276.0 us | 190.0 us | 1.45x |
+| `simplify`, 1 term | 33.1 us | 26.3 us | 1.26x |
+| `expectation_statevector`, 64 terms, host psi | 34.2 us | 30.1 us | 1.14x |
+| `to_host()`, 1 term | 23.6 us | 23.7 us | 1.00x |
+| CPU `simplify`, 128 terms (control) | 3.7 us | 3.8 us | 0.98x |
 
-Device discovery was the cost behind `to_device` and `commutes_with_device`:
-each call queried every device's properties. The device-resident `simplify`
-floor of about 200 us barely moves, because it comes from Thrust's sequence of
-kernel launches and implicit synchronizations (maximum magnitude, sort,
-`reduce_by_key` and `copy_if` counts), not from allocation.
+The `to_device` and `commutes_with_device` gains come from skipping device
+discovery. The `commutes_with_device` output matrix still uses `cudaMalloc`.
+
+## What Nsight Systems shows
+
+CUDA API summary for 200 small round trips. Tracing adds overhead to each API
+call, so these shares explain where time goes rather than giving untraced
+costs.
+
+| | main | candidate |
+| --- | ---: | ---: |
+| total traced CUDA API time | 388.8 ms | 162.3 ms |
+| `cudaGetDeviceProperties` | 50.2% (220 calls) | 0 calls |
+| `cudaMalloc` / `cudaMallocFromPoolAsync` | 31.4% (3,520 calls) | 71.6% (3,520 calls) |
+| `cudaStreamSynchronize` calls | 4,400 | 2,201 |
+| `cudaLaunchKernel` calls | 3,300 | 1,980 |
+
+**Device discovery** was half of the traced API time on `main`, and the
+candidate removes it entirely.
+
+**Synchronization and launches** halve and fall 40%. The drop comes from
+`par_nosync` and from no longer filling scratch buffers before overwriting them.
+
+**Allocation** now dominates the remaining traced API time. Wall-clock timings
+imply the untraced pool allocation cost is much lower. The 128-term simplify
+makes about 11 allocations in 143 us total, far below the roughly 33 us per
+call the trace records.
 
 ## Simplify at scale
 
 Medians of per-run medians; random operators with duplicate fraction 0.5:
 
-| Path | terms | device-resident main | candidate | ratio | transfer-incl. main | candidate | ratio |
+| Path | terms | device-resident main | candidate | speedup | transfer-incl. main | candidate | speedup |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| one-word packed key, 24 qubits | 50,000 | 0.527 ms | 0.333 ms | 0.63 | 2.05 ms | 0.70 ms | 0.34 |
-| one-word packed key, 24 qubits | 1,000,000 | 1.58 ms | 0.64 ms | 0.41 | 15.2 ms | 5.76 ms | 0.38 |
-| one-word two-mask key, 60 qubits | 50,000 | 0.611 ms | 0.309 ms | 0.51 | 2.00 ms | 0.68 ms | 0.34 |
-| one-word two-mask key, 60 qubits | 1,000,000 | 1.87 ms | 0.86 ms | 0.46 | 12.0 ms | 5.96 ms | 0.50 |
-| two words, 100 qubits | 50,000 | 0.631 ms | 0.345 ms | 0.55 | 2.25 ms | 0.89 ms | 0.39 |
-| two words, 100 qubits | 1,000,000 | 2.52 ms | 1.40 ms | 0.56 | 16.8 ms | 9.43 ms | 0.56 |
+| one-word packed key, 24 qubits | 50,000 | 0.537 ms | 0.243 ms | 2.2x | 2.06 ms | 0.60 ms | 3.4x |
+| one-word packed key, 24 qubits | 1,000,000 | 1.54 ms | 0.52 ms | 2.9x | 14.7 ms | 5.47 ms | 2.7x |
+| one-word two-mask key, 60 qubits | 50,000 | 0.617 ms | 0.224 ms | 2.8x | 2.03 ms | 0.59 ms | 3.4x |
+| one-word two-mask key, 60 qubits | 1,000,000 | 1.85 ms | 0.72 ms | 2.6x | 12.1 ms | 5.65 ms | 2.1x |
+| two words, 100 qubits | 50,000 | 0.639 ms | 0.255 ms | 2.5x | 2.32 ms | 0.80 ms | 2.9x |
+| two words, 100 qubits | 1,000,000 | 2.46 ms | 1.17 ms | 2.1x | 16.7 ms | 8.76 ms | 1.9x |
 
-The CPU simplify control moved between -0.7% and +4.6%.
-
-**Device-resident.** At 50,000 to 1,000,000 terms, device-resident simplify is
-1.6-2.4x faster. Allocating the large Thrust temporaries was a major share of
-its time.
-
-**Transfer-inclusive.** It is 1.8-2.9x faster, from cheaper allocation plus the
-removed host conversion copies and device discovery.
+The CPU simplify control moved between -1.5% and +3.8%. For large operators,
+allocating and zero-filling big temporaries was most of simplify's time.
 
 ## Correctness and sanitizers
 
-- **Tests:** the CUDA foundation, kernel and generic-simplify suites pass (125
-  passed, 4 skipped).
-- **Clean runs:** Compute Sanitizer racecheck and synccheck report no errors on
-  those suites. Memcheck with `--leak-check full` reports no errors and no
-  leaks on the in-process generic-simplify tests.
-- **Expected leak reports:** memcheck on `tests/test_phase11_cuda_kernels.py`
-  reports leaks from subprocess tests whose device objects stay alive at
-  interpreter exit. The same command on `main` with `cudaMalloc` reports them
-  too (66 allocations there, 114 here, since the two allocators are tracked
-  differently).
+**Full validation.** `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py
+--profile core` passes at the candidate head. The CUDA foundation, kernel,
+generic-simplify and pool suites pass with the pool, and also with the
+`cudaMalloc` fallback forced by `WOLFGANG_CUDA_BENCH_DISABLE_POOL=1`.
+
+**Pool tests.** `tests/test_cuda_pool_allocator.py` checks that every public
+operation returns pool usage to its baseline, and that the fallback produces
+identical results.
+
+**Compute Sanitizer** on the generic-simplify and pool tests:
+
+| Tool | Result |
+| --- | --- |
+| memcheck (`--leak-check full`) | 0 errors, 0 leaks |
+| racecheck | 0 hazards |
+| synccheck | 0 errors |
+| initcheck | Reports only CUB `ReduceByKeyAgent` look-back reads, the same pattern recorded for `main` in `cuda_simplify_paths_h100_2026-11-03.md`. None are in Wolfgang kernels, so no uninitialized pooled scratch is ever read. |
+
+Memcheck on the subprocess tests in `tests/test_phase11_cuda_kernels.py` reports
+leaks of device objects still alive at interpreter exit. The same command on
+`main` reports them too.
 
 ## Limitations
 
-- **Hardware:** one H100 and one toolkit.
-- **Default pool required:** devices without memory-pool support fall back to
-  `cudaMalloc` and were not measured.
-- **Retained memory:** the pool keeps freed blocks cached for the process
-  lifetime, up to the largest working set seen, and trims at exit. Long-running
-  processes that once handled a very large operator keep that memory reserved
-  in Wolfgang's pool.
-- **Simplify floor:** the remaining small-operator floor comes from simplify's
-  multi-kernel Thrust pipeline. A fused small-operator kernel is the next lever,
-  and it is not part of this slice.
+- **Hardware.** One H100 and one toolkit.
+- **Devices without pool support.** These use `cudaMalloc`. That path is
+  exercised by the forced-fallback test run but was not timed.
+- **Retained memory.** The pool keeps up to 1 GiB of freed blocks per device
+  until another Wolfgang allocation fails or the process exits. Other libraries
+  in the same process cannot use that memory meanwhile.
+- **Remaining floor.** About 120-145 us for device-resident simplify, made of
+  the sort and reduction kernels plus the synchronizations that value-returning
+  Thrust algorithms still need. A fused small-operator kernel is the next lever.
