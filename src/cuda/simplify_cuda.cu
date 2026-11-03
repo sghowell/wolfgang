@@ -1,6 +1,7 @@
 #include "device_pauli_sum.cuh"
 #include "cuda/pool_allocator.cuh"
 #include "cuda/workspace.cuh"
+#include "detail/small_simplify_kernel.cuh"
 
 #include <cub/cub.cuh>
 #include <thrust/complex.h>
@@ -322,6 +323,56 @@ DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
       "cub_radix_sort_reduce, or cub_radix_sort_run_length");
 }
 
+// Benchmark-only: WOLFGANG_CUDA_BENCH_SMALL_SIMPLIFY=off keeps small operators on
+// the multi-launch path for paired comparisons.
+bool small_simplify_enabled_from_env() {
+  const char* value = std::getenv("WOLFGANG_CUDA_BENCH_SMALL_SIMPLIFY");
+  if (value == nullptr || std::string(value).empty() || std::string(value) == "fused") {
+    return true;
+  }
+  if (std::string(value) == "off") {
+    return false;
+  }
+  throw std::invalid_argument("WOLFGANG_CUDA_BENCH_SMALL_SIMPLIFY must be fused or off");
+}
+
+template <int Words>
+void launch_small_simplify(
+    const std::uint64_t* in_x,
+    const std::uint64_t* in_z,
+    const thrust::complex<double>* in_coeffs,
+    std::size_t terms,
+    double atol,
+    double rtol,
+    std::uint64_t* out_x,
+    std::uint64_t* out_z,
+    thrust::complex<double>* out_coeffs,
+    wolfgang::accelerator_detail::SmallSimplifyResult* device_result) {
+  using wolfgang::accelerator_detail::small_simplify_capacity;
+  using wolfgang::accelerator_detail::small_simplify_kernel;
+  using wolfgang::accelerator_detail::small_simplify_shared_bytes;
+  const std::size_t shared_bytes = small_simplify_shared_bytes(Words);
+  // Above 48 KiB of dynamic shared memory needs an explicit opt-in, once per
+  // kernel instantiation (thread-safe static initialization).
+  static const cudaError_t attribute_result = cudaFuncSetAttribute(
+      small_simplify_kernel<Words>,
+      cudaFuncAttributeMaxDynamicSharedMemorySize,
+      static_cast<int>(shared_bytes));
+  check_cuda(attribute_result, "configure small simplify shared memory");
+  small_simplify_kernel<Words><<<1, small_simplify_capacity(Words), shared_bytes>>>(
+      in_x,
+      in_z,
+      in_coeffs,
+      static_cast<std::uint32_t>(terms),
+      atol,
+      rtol,
+      out_x,
+      out_z,
+      out_coeffs,
+      device_result);
+  check_cuda(cudaGetLastError(), "launch small simplify");
+}
+
 GenericReductionStrategy generic_reduction_strategy_from_env() {
   const char* value = std::getenv("WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION");
   if (value == nullptr || std::string(value).empty() ||
@@ -553,6 +604,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
       impl_->words > 2 ? generic_reduction_strategy_from_env()
                        : GenericReductionStrategy::kParallelReduceByKey;
   const DuplicateReductionStrategy duplicate_strategy = duplicate_reduction_strategy_from_env();
+  const bool small_simplify_enabled = small_simplify_enabled_from_env();
 
   if (impl_->num_terms == 0) {
     return make_empty();
@@ -587,6 +639,55 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     pool_allocate(out->coeffs, 1, "simplified coefficients");
     copy_device_to_device(out->coeffs, impl_->coeffs, 1, "simplified coefficients");
     check_cuda(cudaDeviceSynchronize(), "synchronize after CUDA simplify");
+    return DevicePauliSum(std::move(out));
+  }
+
+  if (small_simplify_enabled &&
+      wolfgang::accelerator_detail::small_simplify_applies(impl_->words, impl_->num_terms)) {
+    // One fused launch (src/detail/small_simplify_kernel.cuh). Outputs are
+    // sized for every input term; num_terms records the survivors.
+    namespace acc = wolfgang::accelerator_detail;
+    auto out = std::make_unique<Impl>();
+    out->num_qubits = impl_->num_qubits;
+    out->words = impl_->words;
+    out->device_ordinal = impl_->device_ordinal;
+    const std::size_t packed_words =
+        detail::checked_product(impl_->num_terms, impl_->words, "small simplify packed words");
+    pool_allocate(out->x, packed_words, "simplified x words");
+    pool_allocate(out->z, packed_words, "simplified z words");
+    pool_allocate(out->coeffs, impl_->num_terms, "simplified coefficients");
+    PooledArray<acc::SmallSimplifyResult> device_result(1);
+    acc::SmallSimplifyResult* result_ptr = thrust::raw_pointer_cast(device_result.data());
+    switch (impl_->words) {
+      case 1:
+        launch_small_simplify<1>(
+            impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
+        break;
+      case 2:
+        launch_small_simplify<2>(
+            impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
+        break;
+      case 3:
+        launch_small_simplify<3>(
+            impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
+        break;
+      default:
+        launch_small_simplify<4>(
+            impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
+        break;
+    }
+    acc::SmallSimplifyResult result{};
+    copy_to_host(&result, result_ptr, 1, "small simplify result");  // synchronizes
+    if (result.status == acc::kSmallSimplifyNonFiniteInput) {
+      throw std::invalid_argument("simplify requires finite coefficients");
+    }
+    if (result.status == acc::kSmallSimplifyOverflow) {
+      throw_accumulation_overflow();
+    }
+    if (result.survivors == 0) {
+      return make_empty();
+    }
+    out->num_terms = static_cast<std::size_t>(result.survivors);
     return DevicePauliSum(std::move(out));
   }
 
