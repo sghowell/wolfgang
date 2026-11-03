@@ -5,7 +5,7 @@
 #include <cuda_runtime_api.h>
 #include <thrust/complex.h>
 #include <thrust/iterator/counting_iterator.h>
-#include <thrust/logical.h>
+#include <thrust/count.h>
 
 #include <complex>
 #include <cstddef>
@@ -370,13 +370,15 @@ DevicePauliSum DevicePauliSum::from_device_arrays(
   }
   const std::size_t tail = num_qubits % 64;
   if (num_terms > 0 && tail != 0) {
+    // count_if reduces a plain size_t; any_of's internal (bool, index) result
+    // returns padding bytes that compute-sanitizer initcheck reports.
     const auto counting = thrust::make_counting_iterator<std::size_t>(0);
-    const bool bad = thrust::any_of(
+    const std::size_t bad = thrust::count_if(
         pooled_policy(),
         counting,
         counting + num_terms,
         TailBitsSet{impl->x, impl->z, words, ~((std::uint64_t{1} << tail) - 1)});
-    if (bad) {
+    if (bad != 0) {
       throw std::invalid_argument("packed words set bits at or above num_qubits");
     }
   }
