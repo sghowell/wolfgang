@@ -12,11 +12,27 @@ struct DeviceCommutationMatrix::Impl {
   std::size_t rows = 0;
   std::size_t cols = 0;
   std::size_t entries = 0;
+  // Drawn from the Wolfgang pool. Once the pointer has been handed out through
+  // DLPack or the CUDA Array Interface, a consumer may still have work queued
+  // on another stream, so the buffer returns to the pool only after a device
+  // synchronization.
   std::uint8_t* data = nullptr;
   int device_ordinal = 0;
+  bool exported = false;
 
   ~Impl();
 };
+
+namespace detail {
+
+// Device data for Wolfgang's own kernels, without marking the matrix exported.
+struct DeviceCommutationMatrixAccess {
+  static const std::uint8_t* data(const DeviceCommutationMatrix& matrix) noexcept {
+    return matrix.impl_ ? matrix.impl_->data : nullptr;
+  }
+};
+
+}  // namespace detail
 
 namespace cuda::benchmark {
 

@@ -535,9 +535,11 @@ rule), and it trims at process exit. Cached blocks are not
 available to other libraries in the process until a trim. Devices without
 memory-pool support, or runs with the benchmark switch
 `WOLFGANG_CUDA_BENCH_DISABLE_POOL=1`, use `cudaMalloc`. `DeviceCommutationMatrix`
-buffers, which can be exported through DLPack or the CUDA Array Interface,
-always use `cudaMalloc`, because a consumer on another stream could still read
-a pooled block after Wolfgang frees it. The pool is not revalidated after
+buffers and their count scratch also come from the pool. A consumer on another
+stream could still read an exported block after Wolfgang frees it, so handing
+out a matrix's pointer through DLPack or the CUDA Array Interface marks it,
+and freeing a marked matrix synchronizes the device first, as for
+`DevicePauliSum.device_arrays()`. The pool is not revalidated after
 `cudaDeviceReset`. Transfers and output creation select the backend with a
 device count rather than a full device-property query.
 Evidence: `docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`.

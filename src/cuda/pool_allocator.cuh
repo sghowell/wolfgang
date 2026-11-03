@@ -32,10 +32,10 @@ namespace wolfgang::cuda_detail {
 // pool handle is not revalidated after cudaDeviceReset.
 //
 // A consumer on another stream could still read a block after Wolfgang frees
-// it, so buffers exported to other frameworks (DLPack, CUDA Array Interface)
-// either avoid this pool (DeviceCommutationMatrix uses cudaMalloc) or, like
-// DevicePauliSum after device_arrays(), synchronize the device before their
-// blocks return to the pool.
+// it, so a buffer exported to other frameworks (DLPack, CUDA Array Interface)
+// is marked when its pointer is handed out, and its owner synchronizes the
+// device before the block returns to the pool (DevicePauliSum after
+// device_arrays(), DeviceCommutationMatrix after an export).
 inline constexpr std::uint64_t kPoolReleaseThresholdBytes = std::uint64_t{1} << 30;
 
 // Allocation failures (after a trim and one retry) throw std::bad_alloc.

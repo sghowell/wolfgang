@@ -122,6 +122,7 @@ def main() -> int:
               {"tiny": tiny, "small": small, "medium": medium, "wide": wide,
                "edge": edge, "wide_edge": wide_edge, "expectation": expectation_op}.items()}
 
+    matrix = device["small"].commutes_with_device(device["small"])
     variants: dict[str, Callable[[], Any]] = {
         "to_device_1_term": lambda: tiny.to_device(backend=args.backend),
         "to_host_1_term": device["tiny"].to_host,
@@ -133,6 +134,8 @@ def main() -> int:
         "simplify_512_terms_200q": device["wide_edge"].simplify,
         "matmul_128x128_24q": lambda: device["small"].matmul(device["small"]),
         "commutes_with_device_128x128": lambda: device["small"].commutes_with_device(device["small"]),
+        "count_commuting_128x128": matrix.count_commuting,
+        "conflict_degrees_rows_128x128": lambda: matrix.conflict_degrees(axis=1),
         "expectation_64_terms_12q_host_psi": lambda: device["expectation"].expectation_statevector(psi),
         "round_trip_simplify_128_terms": lambda: small.to_device(backend=args.backend).simplify().to_host(),
         "cpu_simplify_128_terms_control": small.simplify,

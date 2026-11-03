@@ -1,6 +1,7 @@
 #include "device_commutation_matrix.cuh"
 
 #include "device_pauli_sum.cuh"
+#include "cuda/pool_allocator.cuh"
 #include "detail/checked_arithmetic.hpp"
 
 #include <cuda_runtime_api.h>
@@ -23,7 +24,9 @@ namespace wolfgang {
 using cuda_detail::check_cuda;
 using cuda_detail::copy_to_device;
 using cuda_detail::copy_to_host;
-using cuda_detail::cuda_allocate;
+using cuda_detail::PoolBuffer;
+using cuda_detail::pool_allocate;
+using cuda_detail::pool_free_bytes_on_device;
 using cuda_detail::ScopedCudaDevice;
 
 namespace {
@@ -248,17 +251,6 @@ __global__ void scatter_csr_conflicts_sorted_by_row_kernel(
   }
 }
 
-template <typename T>
-std::unique_ptr<T, void (*)(T*)> device_allocation_guard(T* ptr) {
-  return std::unique_ptr<T, void (*)(T*)>(
-      ptr,
-      [](T* value) {
-        if (value != nullptr) {
-          (void)cudaFree(value);
-        }
-      });
-}
-
 std::uint64_t checksum_uint64_values(const std::vector<std::uint64_t>& values) {
   std::uint64_t checksum = 1469598103934665603ULL;
   for (std::uint64_t value : values) {
@@ -317,13 +309,18 @@ DeviceCommutationMatrix::Impl::~Impl() {
   if (data == nullptr) {
     return;
   }
-  int previous_device = -1;
-  const cudaError_t current_result = cudaGetDevice(&previous_device);
-  (void)cudaSetDevice(device_ordinal);
-  (void)cudaFree(data);
-  if (current_result == cudaSuccess && previous_device >= 0 && previous_device != device_ordinal) {
-    (void)cudaSetDevice(previous_device);
+  if (exported) {
+    int previous = -1;
+    (void)cudaGetDevice(&previous);
+    if (cudaSetDevice(device_ordinal) == cudaSuccess) {
+      (void)cudaDeviceSynchronize();
+    }
+    if (previous >= 0) {
+      (void)cudaSetDevice(previous);
+    }
+    (void)cudaGetLastError();
   }
+  pool_free_bytes_on_device(data, device_ordinal);
 }
 
 DeviceCommutationMatrix::DeviceCommutationMatrix() noexcept = default;
@@ -378,7 +375,7 @@ DeviceCommutationMatrix DeviceCommutationMatrix::empty(
   impl->device_ordinal = device;
 
   ScopedCudaDevice guard(device);
-  cuda_allocate(impl->data, impl->entries, "device commutation matrix");
+  pool_allocate(impl->data, impl->entries, "device commutation matrix");
   return DeviceCommutationMatrix(std::move(impl));
 }
 
@@ -406,15 +403,8 @@ std::uint64_t DeviceCommutationMatrix::count_commuting() const {
       impl_->entries,
       "CUDA device commutation matrix total count");
   ScopedCudaDevice guard(impl_->device_ordinal);
-  std::uint64_t* device_partials = nullptr;
-  cuda_allocate(device_partials, static_cast<std::size_t>(blocks), "device commutation count partials");
-  std::unique_ptr<std::uint64_t, void (*)(std::uint64_t*)> partials_guard(
-      device_partials,
-      [](std::uint64_t* ptr) {
-        if (ptr != nullptr) {
-          (void)cudaFree(ptr);
-        }
-      });
+  const PoolBuffer<std::uint64_t> partials_buffer(static_cast<std::size_t>(blocks), "device commutation count partials");
+  std::uint64_t* device_partials = partials_buffer.get();
 
   count_total_kernel<<<blocks, kCountThreadsPerBlock>>>(
       impl_->data,
@@ -450,15 +440,8 @@ std::vector<std::uint64_t> DeviceCommutationMatrix::count_commuting_rows() const
       impl_->rows,
       "CUDA device commutation matrix row counts");
   ScopedCudaDevice guard(impl_->device_ordinal);
-  std::uint64_t* device_counts = nullptr;
-  cuda_allocate(device_counts, impl_->rows, "device commutation row counts");
-  std::unique_ptr<std::uint64_t, void (*)(std::uint64_t*)> counts_guard(
-      device_counts,
-      [](std::uint64_t* ptr) {
-        if (ptr != nullptr) {
-          (void)cudaFree(ptr);
-        }
-      });
+  const PoolBuffer<std::uint64_t> counts_buffer(impl_->rows, "device commutation row counts");
+  std::uint64_t* device_counts = counts_buffer.get();
 
   count_rows_kernel<<<blocks, kCountThreadsPerBlock>>>(
       impl_->data,
@@ -485,15 +468,8 @@ std::vector<std::uint64_t> DeviceCommutationMatrix::count_commuting_cols() const
       impl_->cols,
       "CUDA device commutation matrix column counts");
   ScopedCudaDevice guard(impl_->device_ordinal);
-  std::uint64_t* device_counts = nullptr;
-  cuda_allocate(device_counts, impl_->cols, "device commutation column counts");
-  std::unique_ptr<std::uint64_t, void (*)(std::uint64_t*)> counts_guard(
-      device_counts,
-      [](std::uint64_t* ptr) {
-        if (ptr != nullptr) {
-          (void)cudaFree(ptr);
-        }
-      });
+  const PoolBuffer<std::uint64_t> counts_buffer(impl_->cols, "device commutation column counts");
+  std::uint64_t* device_counts = counts_buffer.get();
 
   count_cols_kernel<<<blocks, kCountThreadsPerBlock>>>(
       impl_->data,
@@ -530,6 +506,7 @@ std::uintptr_t DeviceCommutationMatrix::data_pointer_for_cuda_array_interface() 
   if (!impl_) {
     throw std::runtime_error("DeviceCommutationMatrix is empty or moved-from");
   }
+  impl_->exported = true;  // freeing now synchronizes the device first
   return reinterpret_cast<std::uintptr_t>(impl_->data);
 }
 
@@ -583,16 +560,13 @@ FusedConflictDegreesResult fused_conflict_degrees(
 
   const std::size_t rows = matrix.rows();
   const std::size_t cols = matrix.cols();
-  const auto* data = reinterpret_cast<const std::uint8_t*>(
-      matrix.data_pointer_for_cuda_array_interface());
+  const auto* data = detail::DeviceCommutationMatrixAccess::data(matrix);
   ScopedCudaDevice guard(matrix.device());
 
-  std::uint64_t* device_row_conflicts = nullptr;
-  std::uint64_t* device_col_conflicts = nullptr;
-  cuda_allocate(device_row_conflicts, rows, "device row conflict counts");
-  cuda_allocate(device_col_conflicts, cols, "device column conflict counts");
-  auto row_guard = device_allocation_guard(device_row_conflicts);
-  auto col_guard = device_allocation_guard(device_col_conflicts);
+  const PoolBuffer<std::uint64_t> row_buffer(rows, "device row conflict counts");
+  const PoolBuffer<std::uint64_t> col_buffer(cols, "device column conflict counts");
+  std::uint64_t* device_row_conflicts = row_buffer.get();
+  std::uint64_t* device_col_conflicts = col_buffer.get();
 
   count_row_conflicts_kernel<<<checked_reduction_blocks(rows, "CUDA row conflicts"), kCountThreadsPerBlock>>>(
       data,
@@ -644,16 +618,13 @@ FusedCsrGraphResult fused_anticommutation_csr(
 
   const std::size_t rows = matrix.rows();
   const std::size_t cols = matrix.cols();
-  const auto* data = reinterpret_cast<const std::uint8_t*>(
-      matrix.data_pointer_for_cuda_array_interface());
+  const auto* data = detail::DeviceCommutationMatrixAccess::data(matrix);
   ScopedCudaDevice guard(matrix.device());
 
-  std::uint64_t* device_row_counts = nullptr;
-  std::uint64_t* device_row_offsets = nullptr;
-  cuda_allocate(device_row_counts, rows, "device CSR row conflict counts");
-  cuda_allocate(device_row_offsets, rows + 1U, "device CSR row offsets");
-  auto counts_guard = device_allocation_guard(device_row_counts);
-  auto offsets_guard = device_allocation_guard(device_row_offsets);
+  const PoolBuffer<std::uint64_t> row_counts_buffer(rows, "device CSR row conflict counts");
+  const PoolBuffer<std::uint64_t> row_offsets_buffer(rows + 1U, "device CSR row offsets");
+  std::uint64_t* device_row_counts = row_counts_buffer.get();
+  std::uint64_t* device_row_offsets = row_offsets_buffer.get();
 
   count_row_conflicts_kernel<<<checked_reduction_blocks(rows, "CUDA CSR row conflicts"), kCountThreadsPerBlock>>>(
       data,
@@ -686,9 +657,8 @@ FusedCsrGraphResult fused_anticommutation_csr(
   }
   const std::size_t edge_count = static_cast<std::size_t>(result.edge_count);
   if (edge_count != 0) {
-    std::uint64_t* device_col_indices = nullptr;
-    cuda_allocate(device_col_indices, edge_count, "device CSR column indices");
-    auto cols_guard = device_allocation_guard(device_col_indices);
+    const PoolBuffer<std::uint64_t> col_indices_buffer(edge_count, "device CSR column indices");
+    std::uint64_t* device_col_indices = col_indices_buffer.get();
     scatter_csr_conflicts_sorted_by_row_kernel<<<checked_reduction_blocks(rows, "CUDA CSR scatter"), kCsrThreadsPerBlock>>>(
         data,
         rows,

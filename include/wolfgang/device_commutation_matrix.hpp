@@ -13,6 +13,10 @@ namespace wolfgang {
 
 class DevicePauliSum;
 
+namespace detail {
+struct DeviceCommutationMatrixAccess;
+}
+
 class DeviceCommutationMatrix {
 public:
   DeviceCommutationMatrix() noexcept;
@@ -56,6 +60,7 @@ private:
   std::unique_ptr<Impl> impl_;
 
   friend class DevicePauliSum;
+  friend struct detail::DeviceCommutationMatrixAccess;
   friend void copy_device_commutation_matrix_from_host_for_testing(
       DeviceCommutationMatrix& matrix,
       std::span<const std::uint8_t> values);
