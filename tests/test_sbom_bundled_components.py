@@ -64,6 +64,6 @@ def test_merge_rejects_other_documents(tmp_path: Path) -> None:
 def test_release_workflow_adds_bundled_components_to_the_sbom() -> None:
     workflow = (ROOT / ".github" / "workflows" / "release-wheelhouse.yml").read_text(encoding="utf-8")
     generate = workflow.index("--output-file sbom/wolfgang-runtime.cdx.json")
-    add = workflow.index("python scripts/sbom_bundled_components.py sbom/wolfgang-runtime.cdx.json")
+    add = workflow.index("python scripts/sbom_bundled_components.py --validate sbom/wolfgang-runtime.cdx.json")
     upload = workflow.index("name: software-bill-of-materials")
     assert generate < add < upload

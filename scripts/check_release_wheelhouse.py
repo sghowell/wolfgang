@@ -70,7 +70,7 @@ WORKFLOW_TERMS = (
     "actions/attest-build-provenance@",
     "pip-audit",
     "cyclonedx-py",
-    "scripts/sbom_bundled_components.py sbom/wolfgang-runtime.cdx.json",
+    "scripts/sbom_bundled_components.py --validate sbom/wolfgang-runtime.cdx.json",
     "id-token: write",
 )
 

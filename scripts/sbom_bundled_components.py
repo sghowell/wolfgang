@@ -10,6 +10,8 @@ adds them as components to an existing CycloneDX JSON document:
     python scripts/sbom_bundled_components.py sbom/wolfgang-runtime.cdx.json
 
 Running it again replaces the same components instead of duplicating them.
+With --validate it then checks the result against the document's CycloneDX
+schema, using cyclonedx-python-lib (installed with cyclonedx-bom).
 """
 
 from __future__ import annotations
@@ -88,13 +90,27 @@ def merge(document: dict[str, Any], components: list[dict[str, Any]]) -> dict[st
     return document
 
 
+def validate(text: str, spec_version: str) -> None:
+    from cyclonedx.schema import SchemaVersion
+    from cyclonedx.validation.json import JsonStrictValidator
+
+    schema = SchemaVersion.from_version(spec_version)
+    error = JsonStrictValidator(schema).validate_str(text)
+    if error is not None:
+        raise ValueError(f"SBOM fails CycloneDX {spec_version} validation: {error}")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("sbom", type=Path, help="CycloneDX JSON file to update in place")
+    parser.add_argument("--validate", action="store_true", help="check the result against the CycloneDX schema")
     args = parser.parse_args(argv)
     document = json.loads(args.sbom.read_text(encoding="utf-8"))
     merged = merge(document, bundled_components())
-    args.sbom.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
+    text = json.dumps(merged, indent=2) + "\n"
+    if args.validate:
+        validate(text, str(merged.get("specVersion", "")))
+    args.sbom.write_text(text, encoding="utf-8")
     names = ", ".join(f"{c['name']} {c['version']}" for c in bundled_components())
     sys.stdout.write(f"added {names} to {args.sbom}\n")
     return 0
