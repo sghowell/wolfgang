@@ -188,7 +188,14 @@ synchronize, and each public operation synchronizes before returning, so work
 that reuses a cached block always runs after the work that last used it. On
 out-of-memory, allocation retries once and then raises `MemoryError`.
 Transfers select the backend with a device count rather than `hip_status()`
-and copy coefficients as raw bytes.
+and copy coefficients as raw bytes. `to_host()` stages transfers of up to
+64 KiB through a per-thread pinned buffer with one wait, as CUDA does
+(`src/detail/staged_transfer.hpp`). Larger transfers copy directly with
+pageable `hipMemcpy`, which on the MI300X beat staging from about 2 MB, into
+vectors advised for transparent huge pages from 4 MiB. `to_host` is 1.8-1.9x
+faster for small operators and 1.2-3.1x faster from 1M terms, and within
+0.95-1.01x in between; `to_device()` is unchanged. Evidence:
+`docs/benchmarks/reports/host_transfers_2026-11-03.md`.
 
 A Wolfgang-private stream-ordered pool, a port of the CUDA one, exists behind
 the benchmark-only switch `WOLFGANG_HIP_BENCH_ENABLE_POOL=1`. It is off by
