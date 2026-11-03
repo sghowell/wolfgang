@@ -112,13 +112,15 @@ def main() -> int:
     tiny = operator(24, 1, 1)
     small = operator(24, 128, 2)
     medium = operator(24, 4096, 3)
+    edge = operator(24, 1024, 6)
+    wide_edge = operator(200, 512, 7)
     wide = operator(130, 128, 4)
     psi = np.zeros(2**12, dtype=np.complex128)
     psi[0] = 1.0
     expectation_op = operator(12, 64, 5)
     device = {name: op.to_device(backend=args.backend) for name, op in
               {"tiny": tiny, "small": small, "medium": medium, "wide": wide,
-               "expectation": expectation_op}.items()}
+               "edge": edge, "wide_edge": wide_edge, "expectation": expectation_op}.items()}
 
     variants: dict[str, Callable[[], Any]] = {
         "to_device_1_term": lambda: tiny.to_device(backend=args.backend),
@@ -127,6 +129,8 @@ def main() -> int:
         "simplify_128_terms_24q": device["small"].simplify,
         "simplify_4096_terms_24q": device["medium"].simplify,
         "simplify_128_terms_130q": device["wide"].simplify,
+        "simplify_1024_terms_24q": device["edge"].simplify,
+        "simplify_512_terms_200q": device["wide_edge"].simplify,
         "matmul_128x128_24q": lambda: device["small"].matmul(device["small"]),
         "commutes_with_device_128x128": lambda: device["small"].commutes_with_device(device["small"]),
         "expectation_64_terms_12q_host_psi": lambda: device["expectation"].expectation_statevector(psi),
