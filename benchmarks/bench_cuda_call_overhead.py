@@ -1,4 +1,4 @@
-"""Per-call overhead of small CUDA DevicePauliSum operations.
+"""Per-call overhead of small CUDA or HIP DevicePauliSum operations.
 
 Small operands make kernel time negligible, so these timings expose the fixed
 cost of each public call: device discovery, allocation, transfers, launches and
@@ -60,7 +60,7 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
     medians: dict[str, dict[str, list[float]]] = {}
     for path in sorted(directory.glob("*.json")):
         report = json.loads(path.read_text(encoding="utf-8"))
-        if report.get("benchmark") != "cuda_call_overhead":
+        if report.get("benchmark") not in ("cuda_call_overhead", "hip_call_overhead"):
             continue
         label = report.get("label", "")
         runs.append(
@@ -87,6 +87,7 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--backend", choices=("cuda", "hip"), default="cuda")
     parser.add_argument("--calls", type=int, default=200)
     parser.add_argument("--repeat", type=int, default=7)
     parser.add_argument("--label", default="")
@@ -100,7 +101,8 @@ def main() -> int:
         else:
             sys.stdout.write(text + "\n")
         return 0
-    if not core._cuda_status().get("runtime_available"):
+    status = getattr(core, f"_{args.backend}_status")
+    if not status().get("runtime_available"):
         sys.stdout.write(json.dumps({"status": "skipped"}) + "\n")
         return 0
 
@@ -111,12 +113,12 @@ def main() -> int:
     psi = np.zeros(2**12, dtype=np.complex128)
     psi[0] = 1.0
     expectation_op = operator(12, 64, 5)
-    device = {name: op.to_device() for name, op in
+    device = {name: op.to_device(backend=args.backend) for name, op in
               {"tiny": tiny, "small": small, "medium": medium, "wide": wide,
                "expectation": expectation_op}.items()}
 
     variants: dict[str, Callable[[], Any]] = {
-        "to_device_1_term": tiny.to_device,
+        "to_device_1_term": lambda: tiny.to_device(backend=args.backend),
         "to_host_1_term": device["tiny"].to_host,
         "simplify_1_term": device["tiny"].simplify,
         "simplify_128_terms_24q": device["small"].simplify,
@@ -125,19 +127,19 @@ def main() -> int:
         "matmul_128x128_24q": lambda: device["small"].matmul(device["small"]),
         "commutes_with_device_128x128": lambda: device["small"].commutes_with_device(device["small"]),
         "expectation_64_terms_12q_host_psi": lambda: device["expectation"].expectation_statevector(psi),
-        "round_trip_simplify_128_terms": lambda: small.to_device().simplify().to_host(),
+        "round_trip_simplify_128_terms": lambda: small.to_device(backend=args.backend).simplify().to_host(),
         "cpu_simplify_128_terms_control": small.simplify,
     }
     rows = {name: per_call_seconds(fn, calls=args.calls, repeat=args.repeat) for name, fn in variants.items()}
     report = {
-        "benchmark": "cuda_call_overhead",
+        "benchmark": f"{args.backend}_call_overhead",
         "label": args.label,
         "command": command_string(),
         "git": git_provenance(),
         "calls": args.calls,
         "repeat": args.repeat,
         "environment": benchmark_environment(dict(core._build_info()), numpy_version=np.__version__),
-        "cuda_status": dict(core._cuda_status()),
+        f"{args.backend}_status": dict(status()),
         "rows": rows,
     }
     text = json.dumps(report, indent=2, sort_keys=True)
