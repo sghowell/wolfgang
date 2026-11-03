@@ -108,6 +108,49 @@ int main() {
     assert compile_result.returncode == 0, compile_result.stderr
 
 
+@pytest.mark.parametrize(
+    ("header", "namespace"),
+    [
+        ("cuda/workspace.cuh", "wolfgang::cuda::detail"),
+        ("hip/workspace_hip.hip.hpp", "wolfgang::hip_detail"),
+    ],
+)
+def test_gpu_workspace_headers_compile_without_gpu_toolkits(
+    tmp_path: Path, header: str, namespace: str
+) -> None:
+    # These headers are plain C++, so CPU-only CI can syntax-check them. The
+    # CUDA header broke for months (ee4f95f) because no CPU job compiled it.
+    compiler = shutil.which("c++") or shutil.which("g++") or shutil.which("clang++")
+    if compiler is None:
+        pytest.skip("a C++ compiler is required for GPU header smoke coverage")
+    assert compiler is not None
+
+    source = tmp_path / "gpu_workspace_header_smoke.cpp"
+    source.write_text(
+        f'''
+#include "{header}"
+
+int main() {{
+  using {namespace}::WorkspaceSnapshot;
+  using {namespace}::WorkspaceTimingMode;
+  using {namespace}::workspace_timing_mode_name;
+
+  WorkspaceSnapshot snapshot{{}};
+  (void)snapshot;
+  return workspace_timing_mode_name(WorkspaceTimingMode::kAbsent) == nullptr;
+}}
+''',
+        encoding="utf-8",
+    )
+    compile_result = subprocess.run(
+        [compiler, "-std=c++20", "-fsyntax-only", f"-I{ROOT / 'src'}", f"-I{ROOT}", str(source)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert compile_result.returncode == 0, compile_result.stderr
+
+
 def test_accelerator_host_helpers_compile_shared_workspace_contracts(tmp_path: Path) -> None:
     compiler = shutil.which("c++") or shutil.which("g++") or shutil.which("clang++")
     if compiler is None:

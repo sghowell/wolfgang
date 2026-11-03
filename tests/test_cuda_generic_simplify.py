@@ -38,8 +38,9 @@ def _operator(
     base = ["".join(rng.choice(alphabet, size=num_qubits).tolist()) for _ in range(unique_count)]
     labels = base + [base[int(index)] for index in rng.integers(0, unique_count, num_terms - unique_count)]
     coeffs = (rng.normal(size=len(labels)) + 1j * rng.normal(size=len(labels))).tolist()
-    # Exact negated copies must cancel to zero and be dropped on every backend.
-    for pair in range(min(cancel_pairs, unique_count)):
+    # Negated copies cancel to rounding level and must be dropped on every
+    # backend. A one-term case stays one term so it exercises the fast path.
+    for pair in range(min(cancel_pairs, unique_count) if num_terms > 1 else 0):
         labels.append(base[pair])
         coeffs.append(-sum(c for label, c in zip(labels[:-1], coeffs, strict=False) if label == base[pair]))
     return wolfgang_quantum.PauliSum.from_labels(labels, np.asarray(coeffs, dtype=np.complex128))
@@ -127,3 +128,36 @@ def test_cuda_single_term_simplify_matches_cpu(
     label = "".join("IXYZ"[(3 * qubit + 1) % 4] for qubit in range(num_qubits))
     op = wolfgang_quantum.PauliSum.from_labels([label], [coeff])
     _assert_matches_cpu(op, atol=atol, rtol=rtol)
+
+
+@pytest.mark.parametrize("num_qubits", [24, 60, 100, 130])
+def test_cuda_simplify_keeps_finite_coefficients_with_overflowing_magnitude(num_qubits: int) -> None:
+    # |c| exceeds DBL_MAX although both components are finite. At rtol=0 the CPU
+    # threshold is atol itself; with rtol > 0 it switches to half units.
+    _require_cuda_runtime()
+    huge = complex(1.5e308, 1.5e308)
+    a = "X" * num_qubits
+    b = "Z" * num_qubits
+    single = wolfgang_quantum.PauliSum.from_labels([a], [huge])
+    _assert_matches_cpu(single, atol=1.0e-12, rtol=0.0)
+    mixed = wolfgang_quantum.PauliSum.from_labels([a, b, b], [huge, 1.0, 2.0])
+    _assert_matches_cpu(mixed, atol=1.0e-12, rtol=0.0)
+    _assert_matches_cpu(mixed, atol=1.0e-12, rtol=1.0e-300)
+    assert mixed.to_device().simplify(rtol=1.0e-300).to_host().num_terms == 1
+
+
+@pytest.mark.parametrize("num_qubits", [24, 100, 130])
+def test_cuda_simplify_long_duplicate_runs_span_reduction_tiles(num_qubits: int) -> None:
+    # One label repeated far beyond a reduce_by_key tile, mixed with singletons.
+    _require_cuda_runtime()
+    rng = np.random.default_rng(777 + num_qubits)
+    repeated = "Y" * num_qubits
+    singles = ["".join(rng.choice(list("IXZ"), size=num_qubits)) for _ in range(64)]
+    labels = [repeated] * 24_000 + singles
+    coeffs = rng.normal(size=len(labels)) + 1j * rng.normal(size=len(labels))
+    op = wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
+    expected = op.simplify()
+    actual = op.to_device().simplify().to_host()
+    assert list(actual.to_labels()[0]) == list(expected.to_labels()[0])
+    # The 24,000-term sum may associate differently on the GPU.
+    np.testing.assert_allclose(actual.to_labels()[1], expected.to_labels()[1], rtol=1e-11, atol=1e-11)

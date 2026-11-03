@@ -97,19 +97,11 @@ def timed(fn: Callable[[], Any]) -> tuple[Any, float]:
     return result, time.perf_counter() - start
 
 
-def with_selector(value: str | None, fn: Callable[[], Any]) -> Any:
-    previous = os.environ.get(GENERIC_SELECTOR)
+def set_selector(value: str | None) -> None:
     if value is None:
         os.environ.pop(GENERIC_SELECTOR, None)
     else:
         os.environ[GENERIC_SELECTOR] = value
-    try:
-        return fn()
-    finally:
-        if previous is None:
-            os.environ.pop(GENERIC_SELECTOR, None)
-        else:
-            os.environ[GENERIC_SELECTOR] = previous
 
 
 def run_generic_case(
@@ -127,39 +119,52 @@ def run_generic_case(
     )
     device_op = op.to_device()
     expected = op.simplify()
-    variants: dict[str, Callable[[], Any]] = {
-        "cuda_generic_parallel_reduce_by_key": lambda: with_selector(
-            "reduce_by_key", device_op.simplify
+    # name -> (benchmark selector, callable). The selector is set before the
+    # timer starts so environment updates stay outside the measured region.
+    variants: dict[str, tuple[str | None, Callable[[], Any]]] = {
+        "cuda_generic_parallel_reduce_by_key": ("reduce_by_key", device_op.simplify),
+        "cuda_generic_parallel_transfer_inclusive": (
+            "reduce_by_key",
+            lambda: op.to_device().simplify().to_host(),
         ),
-        "cuda_generic_serial_kernel": lambda: with_selector("serial_kernel", device_op.simplify),
-        "cpu_simplify_control": op.simplify,
+        "cuda_generic_serial_kernel": ("serial_kernel", device_op.simplify),
+        "cpu_simplify_control": (None, op.simplify),
     }
-    for name, fn in variants.items():
-        result = fn()
-        host = result if name.startswith("cpu") else result.to_host()
-        if not same_operator(host, expected):
-            raise RuntimeError(f"{name} disagrees with CPU simplify for {num_qubits}q/{num_terms}")
-    samples: dict[str, list[float]] = {name: [] for name in variants}
-    for iteration in range(warmup + repeat):
-        names = list(variants)
-        order_rng.shuffle(names)
-        for name in names:
-            _, seconds = timed(variants[name])
-            if iteration >= warmup:
-                samples[name].append(seconds)
+    previous = os.environ.get(GENERIC_SELECTOR)
+    try:
+        for name, (selector, fn) in variants.items():
+            set_selector(selector)
+            result = fn()
+            host = result if isinstance(result, wolfgang_quantum.PauliSum) else result.to_host()
+            if not same_operator(host, expected):
+                raise RuntimeError(f"{name} disagrees with CPU simplify for {num_qubits}q/{num_terms}")
+        samples: dict[str, list[float]] = {name: [] for name in variants}
+        for iteration in range(warmup + repeat):
+            names = list(variants)
+            order_rng.shuffle(names)
+            for name in names:
+                selector, fn = variants[name]
+                set_selector(selector)
+                _, seconds = timed(fn)
+                if iteration >= warmup:
+                    samples[name].append(seconds)
+    finally:
+        set_selector(previous)
     rows = {name: {**summarize(values), "raw_seconds": values} for name, values in samples.items()}
     parallel = rows["cuda_generic_parallel_reduce_by_key"]["median_seconds"]
+    transfer = rows["cuda_generic_parallel_transfer_inclusive"]["median_seconds"]
+    cpu = rows["cpu_simplify_control"]["median_seconds"]
     return {
         "suite": "generic",
         "num_qubits": num_qubits,
         "num_terms": num_terms,
         "duplicate_fraction": duplicate_fraction,
         "output_terms": expected.num_terms,
-        "boundary": "device_resident",
-        "correctness_checked": True,
+        "correctness_checked": "first output of each variant against CPU simplify",
         "variants": rows,
         "parallel_speedup_vs_serial": rows["cuda_generic_serial_kernel"]["median_seconds"] / parallel,
-        "parallel_speedup_vs_cpu": rows["cpu_simplify_control"]["median_seconds"] / parallel,
+        "device_resident_speedup_vs_cpu": cpu / parallel,
+        "transfer_inclusive_speedup_vs_cpu": cpu / transfer,
     }
 
 
@@ -201,7 +206,7 @@ def run_specialized_case(
         "num_terms": num_terms,
         "duplicate_fraction": duplicate_fraction,
         "output_terms": expected.num_terms,
-        "correctness_checked": True,
+        "correctness_checked": "first output of each variant against CPU simplify",
         "variants": {
             name: {**summarize(values), "raw_seconds": values} for name, values in samples.items()
         },
@@ -274,6 +279,59 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
+def report_provenance(report: dict[str, Any]) -> dict[str, Any]:
+    loaded = report["environment"].get("loaded_native_build", {})
+    return {
+        "label": report.get("label", ""),
+        "command": report.get("command", ""),
+        "seed": report.get("seed"),
+        "git_commit": report["git"].get("commit"),
+        "git_dirty": report["git"].get("dirty"),
+        "loaded_native_build": loaded,
+    }
+
+
+def summarize_reports(directory: Path) -> dict[str, Any]:
+    """Aggregate saved reports into the tracked summary (medians plus provenance)."""
+    generic_rows: list[dict[str, Any]] = []
+    runs: list[dict[str, Any]] = []
+    paired: dict[tuple[str, int, int, str], dict[str, list[float]]] = {}
+    for path in sorted(directory.glob("*.json")):
+        report = json.loads(path.read_text(encoding="utf-8"))
+        if report.get("benchmark") != "cuda_simplify_paths":
+            continue
+        runs.append({"file": path.name, **report_provenance(report)})
+        for row in report["rows"]:
+            medians = {name: v["median_seconds"] for name, v in row["variants"].items()}
+            if row["suite"] == "generic":
+                generic_rows.append(
+                    {
+                        "file": path.name,
+                        **{k: row[k] for k in ("num_qubits", "num_terms", "duplicate_fraction")},
+                        "output_terms": row["output_terms"],
+                        "median_seconds": medians,
+                    }
+                )
+            else:
+                for name, median in medians.items():
+                    key = (row["path"], row["num_qubits"], row["num_terms"], name)
+                    paired.setdefault(key, {}).setdefault(report.get("label", ""), []).append(median)
+    specialized = [
+        {
+            "path": path,
+            "num_qubits": qubits,
+            "num_terms": terms,
+            "variant": variant,
+            "per_rerun_median_seconds": by_label,
+            "median_of_medians_seconds": {
+                label: float(np.median(values)) for label, values in by_label.items()
+            },
+        }
+        for (path, qubits, terms, variant), by_label in sorted(paired.items())
+    ]
+    return {"runs": runs, "generic_rows": generic_rows, "specialized_rows": specialized}
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--suite", choices=("generic", "specialized", "all"), default="all")
@@ -283,12 +341,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=20261102)
     parser.add_argument("--label", default="", help="free-form build label for paired runs")
     parser.add_argument("--output", type=Path, help="write the JSON report to this path")
+    parser.add_argument(
+        "--summarize", type=Path, help="aggregate saved reports in this directory instead of running"
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    report = build_report(args)
+    report = summarize_reports(args.summarize) if args.summarize else build_report(args)
     text = json.dumps(report, indent=2, sort_keys=True)
     if args.output:
         args.output.write_text(text + "\n", encoding="utf-8")

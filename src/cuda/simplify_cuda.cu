@@ -16,6 +16,7 @@
 #include <thrust/transform.h>
 #include <thrust/tuple.h>
 
+#include <cmath>
 #include <cstdlib>
 #include <cstddef>
 #include <cstdint>
@@ -198,13 +199,41 @@ struct ComplexAbs {
   }
 };
 
-struct CoeffSurvives {
-  double drop_threshold;
-
-  __host__ __device__ bool operator()(thrust::complex<double> value) const noexcept {
-    return thrust::abs(value) > drop_threshold;
+struct ComplexHalfAbs {
+  __host__ __device__ double operator()(thrust::complex<double> value) const noexcept {
+    return ::hypot(value.real() * 0.5, value.imag() * 0.5);
   }
 };
+
+// Mirrors the CPU drop rule (src/simplify.cpp). Finite complex128 components can
+// have a magnitude above DBL_MAX: at rtol == 0 the threshold is atol itself, so
+// 0 * inf never produces NaN, and when atol + rtol * max overflows, magnitudes
+// and the threshold are compared in half units instead.
+struct CoeffSurvives {
+  double drop_threshold;
+  double half_threshold = 0.0;
+  bool use_half_units = false;
+
+  __host__ __device__ bool operator()(thrust::complex<double> value) const noexcept {
+    return use_half_units ? ::hypot(value.real() * 0.5, value.imag() * 0.5) > half_threshold
+                          : thrust::abs(value) > drop_threshold;
+  }
+};
+
+template <typename HalfMagnitudeMax>
+CoeffSurvives survival_rule(
+    double atol,
+    double rtol,
+    double max_abs_input,
+    HalfMagnitudeMax&& max_half_magnitude) {
+  CoeffSurvives rule{rtol == 0.0 ? atol : atol + rtol * max_abs_input};
+  if (!std::isfinite(rule.drop_threshold)) {
+    rule.half_threshold = atol * 0.5 + rtol * max_half_magnitude();
+    rule.drop_threshold = rule.half_threshold * 2.0;
+    rule.use_half_units = true;
+  }
+  return rule;
+}
 
 DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
   const char* value = std::getenv("WOLFGANG_CUDA_BENCH_DUPLICATE_REDUCTION");
@@ -380,7 +409,7 @@ __global__ void reduce_sorted_generic_terms_kernel(
     const std::size_t* sorted_indices,
     std::size_t num_terms,
     std::size_t words,
-    double drop_threshold,
+    CoeffSurvives survives,
     std::uint64_t* out_x,
     std::uint64_t* out_z,
     thrust::complex<double>* out_coeffs,
@@ -403,7 +432,7 @@ __global__ void reduce_sorted_generic_terms_kernel(
       continue;
     }
 
-    if (thrust::abs(accumulator) > drop_threshold) {
+    if (survives(accumulator)) {
       const std::size_t out_offset = output_term * words;
       const std::size_t source_offset = group_start_index * words;
       for (std::size_t word = 0; word < words; ++word) {
@@ -418,7 +447,7 @@ __global__ void reduce_sorted_generic_terms_kernel(
     accumulator = coeffs[current_index];
   }
 
-  if (thrust::abs(accumulator) > drop_threshold) {
+  if (survives(accumulator)) {
     const std::size_t out_offset = output_term * words;
     const std::size_t source_offset = group_start_index * words;
     for (std::size_t word = 0; word < words; ++word) {
@@ -453,6 +482,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   const GenericReductionStrategy generic_strategy =
       impl_->words > 2 ? generic_reduction_strategy_from_env()
                        : GenericReductionStrategy::kParallelReduceByKey;
+  const DuplicateReductionStrategy duplicate_strategy = duplicate_reduction_strategy_from_env();
 
   if (impl_->num_terms == 0) {
     return make_empty();
@@ -465,8 +495,9 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     // removes their fixed setup cost from this common degenerate case.
     thrust::complex<double> coeff;
     copy_to_host(&coeff, impl_->coeffs, 1, "single-term coefficient");
-    const double magnitude = thrust::abs(coeff);
-    if (!(magnitude > atol + rtol * magnitude)) {
+    const CoeffSurvives survives =
+        survival_rule(atol, rtol, thrust::abs(coeff), [&] { return ComplexHalfAbs{}(coeff); });
+    if (!survives(coeff)) {
       return make_empty();
     }
     auto out = std::make_unique<Impl>();
@@ -493,13 +524,19 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
       ComplexAbs{},
       0.0,
       thrust::maximum<double>{});
-  const double drop_threshold = atol + rtol * max_abs_input;
-  const DuplicateReductionStrategy duplicate_strategy = duplicate_reduction_strategy_from_env();
+  const CoeffSurvives survives = survival_rule(atol, rtol, max_abs_input, [&] {
+    return thrust::transform_reduce(
+        coeff_ptr,
+        coeff_ptr + impl_->num_terms,
+        ComplexHalfAbs{},
+        0.0,
+        thrust::maximum<double>{});
+  });
 
   if (impl_->words == 0) {
     const thrust::complex<double> accumulator =
         thrust::reduce(coeff_ptr, coeff_ptr + impl_->num_terms, thrust::complex<double>{0.0, 0.0});
-    if (thrust::abs(accumulator) <= drop_threshold) {
+    if (!survives(accumulator)) {
       return make_empty();
     }
     auto out = std::make_unique<Impl>();
@@ -583,7 +620,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
           reduced_zip + reduced_terms,
           reduced_values.begin(),
           survivor_zip,
-          CoeffSurvives{drop_threshold});
+          survives);
       const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
       if (survivors == 0) {
         return make_empty();
@@ -651,7 +688,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         reduced_zip + reduced_terms,
         reduced_values.begin(),
         survivor_zip,
-        CoeffSurvives{drop_threshold});
+        survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
     if (survivors == 0) {
       return make_empty();
@@ -716,7 +753,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         reduced_zip + reduced_terms,
         reduced_values.begin(),
         survivor_zip,
-        CoeffSurvives{drop_threshold});
+        survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
     if (survivors == 0) {
       return make_empty();
@@ -781,7 +818,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         reduced_zip + reduced_terms,
         reduced_values.begin(),
         survivor_zip,
-        CoeffSurvives{drop_threshold});
+        survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
     if (survivors == 0) {
       return make_empty();
@@ -816,8 +853,9 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
 
   const std::size_t packed_words =
       detail::checked_product(impl_->num_terms, impl_->words, "generic simplify packed words");
-  // The comparator breaks ties on input index, so equal terms stay in input
-  // order and each duplicate run sums its operands left to right.
+  // The comparator breaks ties on input index, so each duplicate run lists its
+  // operands in input order. reduce_by_key may still associate partial sums in
+  // any order (cuda_backend.md allows implementation-defined reduction order).
   thrust::device_vector<std::size_t> sorted_indices(impl_->num_terms);
   thrust::sequence(sorted_indices.begin(), sorted_indices.end());
   thrust::sort(
@@ -851,7 +889,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         reduced_zip + reduced_terms,
         reduced_values.begin(),
         survivor_zip,
-        CoeffSurvives{drop_threshold});
+        survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
     if (survivors == 0) {
       return make_empty();
@@ -895,7 +933,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
       thrust::raw_pointer_cast(sorted_indices.data()),
       impl_->num_terms,
       impl_->words,
-      drop_threshold,
+      survives,
       thrust::raw_pointer_cast(temp_x.data()),
       thrust::raw_pointer_cast(temp_z.data()),
       thrust::raw_pointer_cast(temp_coeffs.data()),
