@@ -35,4 +35,5 @@ hardware evidence for any accelerator or speed claim.
 
 ## Status
 
-Slice 1 in progress.
+Slice 1 implemented with H100 evidence:
+`docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`.

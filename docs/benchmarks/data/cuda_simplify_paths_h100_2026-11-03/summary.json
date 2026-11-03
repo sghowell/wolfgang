@@ -1,0 +1,514 @@
+{
+  "benchmark": "cuda_simplify_paths",
+  "date": "2026-11-03",
+  "device": "NVIDIA H100 80GB HBM3 (sm_90), driver 580.105.08 (CUDA 13.0 driver API), CUDA toolkit 12.8.93, compiled architectures 90",
+  "host_cpu": "x86_64, 26 logical CPUs, GCC 13.3.0, scalar CPU backend",
+  "generic_revision": "2a3053b",
+  "generic_rows": [
+    {
+      "num_qubits": 130,
+      "num_terms": 1,
+      "duplicate_fraction": 0.0,
+      "output_terms": 1,
+      "parallel_median_ms": 0.0296,
+      "serial_median_ms": 0.0297,
+      "cpu_median_ms": 0.0009,
+      "parallel_speedup_vs_serial": 1.0,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 130,
+      "num_terms": 1,
+      "duplicate_fraction": 0.9,
+      "output_terms": 1,
+      "parallel_median_ms": 0.0301,
+      "serial_median_ms": 0.0309,
+      "cpu_median_ms": 0.0009,
+      "parallel_speedup_vs_serial": 1.03,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 130,
+      "num_terms": 128,
+      "duplicate_fraction": 0.0,
+      "output_terms": 128,
+      "parallel_median_ms": 0.2029,
+      "serial_median_ms": 0.2418,
+      "cpu_median_ms": 0.007,
+      "parallel_speedup_vs_serial": 1.19,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 130,
+      "num_terms": 128,
+      "duplicate_fraction": 0.9,
+      "output_terms": 13,
+      "parallel_median_ms": 0.2357,
+      "serial_median_ms": 0.2678,
+      "cpu_median_ms": 0.0065,
+      "parallel_speedup_vs_serial": 1.14,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "duplicate_fraction": 0.0,
+      "output_terms": 4096,
+      "parallel_median_ms": 0.2424,
+      "serial_median_ms": 3.5283,
+      "cpu_median_ms": 0.4443,
+      "parallel_speedup_vs_serial": 14.56,
+      "parallel_speedup_vs_cpu": 1.83
+    },
+    {
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "duplicate_fraction": 0.9,
+      "output_terms": 410,
+      "parallel_median_ms": 0.3046,
+      "serial_median_ms": 3.2152,
+      "cpu_median_ms": 0.4585,
+      "parallel_speedup_vs_serial": 10.55,
+      "parallel_speedup_vs_cpu": 1.51
+    },
+    {
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "duplicate_fraction": 0.0,
+      "output_terms": 65536,
+      "parallel_median_ms": 0.4362,
+      "serial_median_ms": 60.3839,
+      "cpu_median_ms": 10.0085,
+      "parallel_speedup_vs_serial": 138.42,
+      "parallel_speedup_vs_cpu": 22.94
+    },
+    {
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "duplicate_fraction": 0.9,
+      "output_terms": 6554,
+      "parallel_median_ms": 0.4989,
+      "serial_median_ms": 56.8146,
+      "cpu_median_ms": 10.0877,
+      "parallel_speedup_vs_serial": 113.88,
+      "parallel_speedup_vs_cpu": 20.22
+    },
+    {
+      "num_qubits": 256,
+      "num_terms": 1,
+      "duplicate_fraction": 0.0,
+      "output_terms": 1,
+      "parallel_median_ms": 0.0294,
+      "serial_median_ms": 0.0298,
+      "cpu_median_ms": 0.0009,
+      "parallel_speedup_vs_serial": 1.01,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 256,
+      "num_terms": 1,
+      "duplicate_fraction": 0.9,
+      "output_terms": 1,
+      "parallel_median_ms": 0.0289,
+      "serial_median_ms": 0.0292,
+      "cpu_median_ms": 0.0009,
+      "parallel_speedup_vs_serial": 1.01,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 256,
+      "num_terms": 128,
+      "duplicate_fraction": 0.0,
+      "output_terms": 128,
+      "parallel_median_ms": 0.2013,
+      "serial_median_ms": 0.2606,
+      "cpu_median_ms": 0.0076,
+      "parallel_speedup_vs_serial": 1.29,
+      "parallel_speedup_vs_cpu": 0.04
+    },
+    {
+      "num_qubits": 256,
+      "num_terms": 128,
+      "duplicate_fraction": 0.9,
+      "output_terms": 13,
+      "parallel_median_ms": 0.2383,
+      "serial_median_ms": 0.2932,
+      "cpu_median_ms": 0.0075,
+      "parallel_speedup_vs_serial": 1.23,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "duplicate_fraction": 0.0,
+      "output_terms": 4096,
+      "parallel_median_ms": 0.2441,
+      "serial_median_ms": 3.7298,
+      "cpu_median_ms": 0.4602,
+      "parallel_speedup_vs_serial": 15.28,
+      "parallel_speedup_vs_cpu": 1.89
+    },
+    {
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "duplicate_fraction": 0.9,
+      "output_terms": 410,
+      "parallel_median_ms": 0.3251,
+      "serial_median_ms": 3.5652,
+      "cpu_median_ms": 0.4822,
+      "parallel_speedup_vs_serial": 10.97,
+      "parallel_speedup_vs_cpu": 1.48
+    },
+    {
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "duplicate_fraction": 0.0,
+      "output_terms": 65536,
+      "parallel_median_ms": 0.5658,
+      "serial_median_ms": 58.5916,
+      "cpu_median_ms": 10.6906,
+      "parallel_speedup_vs_serial": 103.56,
+      "parallel_speedup_vs_cpu": 18.9
+    },
+    {
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "duplicate_fraction": 0.9,
+      "output_terms": 6554,
+      "parallel_median_ms": 0.5296,
+      "serial_median_ms": 55.5199,
+      "cpu_median_ms": 10.824,
+      "parallel_speedup_vs_serial": 104.83,
+      "parallel_speedup_vs_cpu": 20.44
+    },
+    {
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "duplicate_fraction": 0.0,
+      "output_terms": 1,
+      "parallel_median_ms": 0.029,
+      "serial_median_ms": 0.0295,
+      "cpu_median_ms": 0.0009,
+      "parallel_speedup_vs_serial": 1.02,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "duplicate_fraction": 0.9,
+      "output_terms": 1,
+      "parallel_median_ms": 0.0301,
+      "serial_median_ms": 0.0294,
+      "cpu_median_ms": 0.001,
+      "parallel_speedup_vs_serial": 0.98,
+      "parallel_speedup_vs_cpu": 0.03
+    },
+    {
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "duplicate_fraction": 0.0,
+      "output_terms": 128,
+      "parallel_median_ms": 0.2093,
+      "serial_median_ms": 0.4266,
+      "cpu_median_ms": 0.0163,
+      "parallel_speedup_vs_serial": 2.04,
+      "parallel_speedup_vs_cpu": 0.08
+    },
+    {
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "duplicate_fraction": 0.9,
+      "output_terms": 13,
+      "parallel_median_ms": 0.3962,
+      "serial_median_ms": 0.6665,
+      "cpu_median_ms": 0.0153,
+      "parallel_speedup_vs_serial": 1.68,
+      "parallel_speedup_vs_cpu": 0.04
+    },
+    {
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "duplicate_fraction": 0.0,
+      "output_terms": 4096,
+      "parallel_median_ms": 0.2819,
+      "serial_median_ms": 9.0742,
+      "cpu_median_ms": 0.7587,
+      "parallel_speedup_vs_serial": 32.19,
+      "parallel_speedup_vs_cpu": 2.69
+    },
+    {
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "duplicate_fraction": 0.9,
+      "output_terms": 410,
+      "parallel_median_ms": 0.6577,
+      "serial_median_ms": 11.2601,
+      "cpu_median_ms": 0.7977,
+      "parallel_speedup_vs_serial": 17.12,
+      "parallel_speedup_vs_cpu": 1.21
+    },
+    {
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "duplicate_fraction": 0.0,
+      "output_terms": 65536,
+      "parallel_median_ms": 0.6497,
+      "serial_median_ms": 183.7742,
+      "cpu_median_ms": 20.1669,
+      "parallel_speedup_vs_serial": 282.87,
+      "parallel_speedup_vs_cpu": 31.04
+    },
+    {
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "duplicate_fraction": 0.9,
+      "output_terms": 6554,
+      "parallel_median_ms": 1.1006,
+      "serial_median_ms": 196.2522,
+      "cpu_median_ms": 19.3659,
+      "parallel_speedup_vs_serial": 178.32,
+      "parallel_speedup_vs_cpu": 17.6
+    }
+  ],
+  "single_term_fast_path": {
+    "before_revision": "4232c1f",
+    "after_revision": "2a3053b",
+    "rows": [
+      {
+        "num_qubits": 130,
+        "duplicate_fraction": 0.0,
+        "before_parallel_median_ms": 0.2112,
+        "before_cpu_median_ms": 0.0012,
+        "after_median_ms": 0.0296,
+        "after_cpu_median_ms": 0.0009
+      },
+      {
+        "num_qubits": 130,
+        "duplicate_fraction": 0.9,
+        "before_parallel_median_ms": 0.2117,
+        "before_cpu_median_ms": 0.0013,
+        "after_median_ms": 0.0301,
+        "after_cpu_median_ms": 0.0009
+      },
+      {
+        "num_qubits": 256,
+        "duplicate_fraction": 0.0,
+        "before_parallel_median_ms": 0.2138,
+        "before_cpu_median_ms": 0.0013,
+        "after_median_ms": 0.0294,
+        "after_cpu_median_ms": 0.0009
+      },
+      {
+        "num_qubits": 256,
+        "duplicate_fraction": 0.9,
+        "before_parallel_median_ms": 0.2116,
+        "before_cpu_median_ms": 0.0012,
+        "after_median_ms": 0.0289,
+        "after_cpu_median_ms": 0.0009
+      },
+      {
+        "num_qubits": 1024,
+        "duplicate_fraction": 0.0,
+        "before_parallel_median_ms": 0.2565,
+        "before_cpu_median_ms": 0.0012,
+        "after_median_ms": 0.029,
+        "after_cpu_median_ms": 0.0009
+      },
+      {
+        "num_qubits": 1024,
+        "duplicate_fraction": 0.9,
+        "before_parallel_median_ms": 0.2556,
+        "before_cpu_median_ms": 0.0013,
+        "after_median_ms": 0.0301,
+        "after_cpu_median_ms": 0.001
+      }
+    ]
+  },
+  "specialized_paired": {
+    "baseline_revision": "c65553c",
+    "candidate_revision": "4232c1f",
+    "order": "randomized per rerun",
+    "rows": [
+      {
+        "path": "one_word_packed32",
+        "num_qubits": 24,
+        "num_terms": 50000,
+        "variant": "cuda_device_resident",
+        "reruns": 7,
+        "base_median_of_medians_ms": 0.5243,
+        "candidate_median_of_medians_ms": 0.5227,
+        "candidate_over_base": 0.9968
+      },
+      {
+        "path": "one_word_packed32",
+        "num_qubits": 24,
+        "num_terms": 50000,
+        "variant": "cuda_transfer_inclusive",
+        "reruns": 7,
+        "base_median_of_medians_ms": 2.0243,
+        "candidate_median_of_medians_ms": 2.0222,
+        "candidate_over_base": 0.999
+      },
+      {
+        "path": "one_word_packed32",
+        "num_qubits": 24,
+        "num_terms": 50000,
+        "variant": "cpu_simplify_control",
+        "reruns": 7,
+        "base_median_of_medians_ms": 4.7727,
+        "candidate_median_of_medians_ms": 4.8037,
+        "candidate_over_base": 1.0065
+      },
+      {
+        "path": "one_word_packed32",
+        "num_qubits": 24,
+        "num_terms": 1000000,
+        "variant": "cuda_device_resident",
+        "reruns": 7,
+        "base_median_of_medians_ms": 1.5311,
+        "candidate_median_of_medians_ms": 1.5287,
+        "candidate_over_base": 0.9984
+      },
+      {
+        "path": "one_word_packed32",
+        "num_qubits": 24,
+        "num_terms": 1000000,
+        "variant": "cuda_transfer_inclusive",
+        "reruns": 7,
+        "base_median_of_medians_ms": 14.74,
+        "candidate_median_of_medians_ms": 14.5669,
+        "candidate_over_base": 0.9883
+      },
+      {
+        "path": "one_word_packed32",
+        "num_qubits": 24,
+        "num_terms": 1000000,
+        "variant": "cpu_simplify_control",
+        "reruns": 7,
+        "base_median_of_medians_ms": 122.7433,
+        "candidate_median_of_medians_ms": 123.1771,
+        "candidate_over_base": 1.0035
+      },
+      {
+        "path": "one_word_two_mask",
+        "num_qubits": 60,
+        "num_terms": 50000,
+        "variant": "cuda_device_resident",
+        "reruns": 7,
+        "base_median_of_medians_ms": 0.6121,
+        "candidate_median_of_medians_ms": 0.6114,
+        "candidate_over_base": 0.9988
+      },
+      {
+        "path": "one_word_two_mask",
+        "num_qubits": 60,
+        "num_terms": 50000,
+        "variant": "cuda_transfer_inclusive",
+        "reruns": 7,
+        "base_median_of_medians_ms": 2.0192,
+        "candidate_median_of_medians_ms": 1.9902,
+        "candidate_over_base": 0.9856
+      },
+      {
+        "path": "one_word_two_mask",
+        "num_qubits": 60,
+        "num_terms": 50000,
+        "variant": "cpu_simplify_control",
+        "reruns": 7,
+        "base_median_of_medians_ms": 4.783,
+        "candidate_median_of_medians_ms": 4.7826,
+        "candidate_over_base": 0.9999
+      },
+      {
+        "path": "one_word_two_mask",
+        "num_qubits": 60,
+        "num_terms": 1000000,
+        "variant": "cuda_device_resident",
+        "reruns": 7,
+        "base_median_of_medians_ms": 1.8112,
+        "candidate_median_of_medians_ms": 1.8272,
+        "candidate_over_base": 1.0088
+      },
+      {
+        "path": "one_word_two_mask",
+        "num_qubits": 60,
+        "num_terms": 1000000,
+        "variant": "cuda_transfer_inclusive",
+        "reruns": 7,
+        "base_median_of_medians_ms": 12.0565,
+        "candidate_median_of_medians_ms": 11.7288,
+        "candidate_over_base": 0.9728
+      },
+      {
+        "path": "one_word_two_mask",
+        "num_qubits": 60,
+        "num_terms": 1000000,
+        "variant": "cpu_simplify_control",
+        "reruns": 7,
+        "base_median_of_medians_ms": 117.5539,
+        "candidate_median_of_medians_ms": 118.3342,
+        "candidate_over_base": 1.0066
+      },
+      {
+        "path": "two_word",
+        "num_qubits": 100,
+        "num_terms": 50000,
+        "variant": "cuda_device_resident",
+        "reruns": 7,
+        "base_median_of_medians_ms": 0.6407,
+        "candidate_median_of_medians_ms": 0.6361,
+        "candidate_over_base": 0.9928
+      },
+      {
+        "path": "two_word",
+        "num_qubits": 100,
+        "num_terms": 50000,
+        "variant": "cuda_transfer_inclusive",
+        "reruns": 7,
+        "base_median_of_medians_ms": 2.2879,
+        "candidate_median_of_medians_ms": 2.2528,
+        "candidate_over_base": 0.9847
+      },
+      {
+        "path": "two_word",
+        "num_qubits": 100,
+        "num_terms": 50000,
+        "variant": "cpu_simplify_control",
+        "reruns": 7,
+        "base_median_of_medians_ms": 5.2206,
+        "candidate_median_of_medians_ms": 5.1971,
+        "candidate_over_base": 0.9955
+      },
+      {
+        "path": "two_word",
+        "num_qubits": 100,
+        "num_terms": 1000000,
+        "variant": "cuda_device_resident",
+        "reruns": 7,
+        "base_median_of_medians_ms": 2.4601,
+        "candidate_median_of_medians_ms": 2.4627,
+        "candidate_over_base": 1.0011
+      },
+      {
+        "path": "two_word",
+        "num_qubits": 100,
+        "num_terms": 1000000,
+        "variant": "cuda_transfer_inclusive",
+        "reruns": 7,
+        "base_median_of_medians_ms": 16.6445,
+        "candidate_median_of_medians_ms": 16.6365,
+        "candidate_over_base": 0.9995
+      },
+      {
+        "path": "two_word",
+        "num_qubits": 100,
+        "num_terms": 1000000,
+        "variant": "cpu_simplify_control",
+        "reruns": 7,
+        "base_median_of_medians_ms": 137.9053,
+        "candidate_median_of_medians_ms": 137.1421,
+        "candidate_over_base": 0.9945
+      }
+    ]
+  }
+}
