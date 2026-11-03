@@ -100,7 +100,9 @@ def test_forced_simd_backends_still_reject_simplify(monkeypatch: pytest.MonkeyPa
 def test_auto_dispatch_thresholds_are_reported() -> None:
     thresholds = core._build_info()["cpu_auto_dispatch_thresholds"]
     assert thresholds["tbb_simplify_min_terms"] == 8192
-    assert thresholds["tbb_simplify_min_concurrency"] == 4
+    assert thresholds["tbb_simplify_min_concurrency"] == 2
+    assert thresholds["tbb_pairwise_min_concurrency"] == 2
+    assert thresholds["tbb_pairwise_min_concurrency_over_simd"] == 3
 
 
 @pytest.mark.parametrize("num_terms", [10, 3000, 10_000])

@@ -119,7 +119,7 @@ def test_set_num_threads_caps_the_count_and_auto_dispatch() -> None:
         assert result == {"before": 1, "two": 1, "eligible_two": False, "large": 1}
         return
     assert result["two"] == min(2, result["before"])
-    assert result["eligible_two"] is False  # below the oneTBB floor auto keeps scalar or SIMD
+    assert result["eligible_two"] is (result["two"] >= FLOOR)  # two threads meet the simplify floor
     assert result["large"] == result["before"]  # never above oneTBB's own concurrency
 
 
@@ -131,7 +131,7 @@ def test_environment_variable_sets_the_cap() -> None:
     default = _run(REPORT)
     assert result["threads"] == min(3, default["threads"])
     assert result["limit"] == result["threads"]
-    assert result["eligible"] is False
+    assert result["eligible"] is (result["threads"] >= FLOOR)
     assert default["eligible"] is (default["threads"] >= FLOOR)
 
 
