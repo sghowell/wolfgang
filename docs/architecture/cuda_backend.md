@@ -448,7 +448,11 @@ Operators wider than two words (more than 128 qubits) sort term indices with an
 index tie-break and reduce duplicates with a parallel segmented
 `reduce_by_key`. The original one-thread reduction kernel is retained only as a
 baseline behind the benchmark selector
-`WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION=serial_kernel`. Evidence:
+`WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION=serial_kernel`. Single-term
+inputs skip sorting and reduction and apply only the drop rule. Every path uses
+the CPU drop rule for finite coefficients whose magnitude exceeds `DBL_MAX`:
+the threshold is `atol` alone when `rtol == 0`, and magnitudes are compared in
+half units when `atol + rtol * max_abs` overflows. Evidence:
 `docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`.
 
 Campaign 3 also added a private benchmark-only commutation output reuse path

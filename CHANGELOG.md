@@ -9,9 +9,11 @@ Next version: TBD
 - Restore the CUDA source build, broken since the shared workspace helper
   refactor, and pin the fully qualified aliases in the header contract test.
 - CUDA simplify for operators wider than 128 qubits now reduces duplicates in
-  parallel (up to 283x faster than the previous one-thread kernel on H100 at
-  65,536 terms); single-term simplify skips sort and reduction; one- and
+  parallel: 91-273x faster than the previous one-thread kernel on H100 at
+  65,536 terms. Single-term simplify skips sort and reduction; one- and
   two-word paths use stable sorts with no measured cost.
+- CUDA simplify no longer drops every term when a finite coefficient's
+  magnitude overflows `DBL_MAX`; it now applies the CPU drop rule.
 - Exclude local worktrees and release staging from source distributions.
 - Separate the native CMake library from Python, add standalone sanitizer
   contracts, bulk coefficient export and scoped CPU GIL release.

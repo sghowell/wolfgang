@@ -1,6 +1,7 @@
 # Wolfgang Roadmap
 
-Active maintenance: [repository review hardening](plans/review_hardening_plan.md).
+Active campaign: [usability and kernel campaign](plans/usability_and_kernel_campaign_plan.md).
+Previous maintenance: [repository review hardening](plans/review_hardening_plan.md).
 
 This roadmap tracks implementation order and the decisions that must stay stable across phases.
 
