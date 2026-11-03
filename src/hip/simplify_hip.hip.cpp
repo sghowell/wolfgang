@@ -1,5 +1,6 @@
 #include "simplify_hip.hip.hpp"
 #include "hip/pool_allocator.hip.hpp"
+#include "detail/simplify_numeric.hpp"
 #include "detail/small_simplify_kernel.cuh"
 
 #include <thrust/complex.h>
@@ -228,34 +229,36 @@ CoeffSurvives survival_rule(
     double rtol,
     double max_abs_input,
     HalfMagnitudeMax&& max_half_magnitude) {
-  CoeffSurvives rule{rtol == 0.0 ? atol : atol + rtol * max_abs_input};
+  CoeffSurvives rule{
+      rtol == 0.0 ? atol : detail::separately_rounded_threshold(atol, rtol, max_abs_input)};
   if (!std::isfinite(rule.drop_threshold)) {
-    rule.half_threshold = atol * 0.5 + rtol * max_half_magnitude();
+    rule.half_threshold = detail::separately_rounded_threshold(atol * 0.5, rtol, max_half_magnitude());
     rule.drop_threshold = rule.half_threshold * 2.0;
     rule.use_half_units = true;
   }
   return rule;
 }
 
-// Per-thread overflow flag in pinned, device-mapped host memory. Kernels write
-// it only when a reduced sum is not finite, and the host reads it after the
-// synchronization the compaction already performs to return its count, so the
-// check adds no copy, memset or extra synchronization to ordinary calls. The
-// allocation lives for the thread (never freed: one int per thread).
-struct MappedOverflowFlag {
-  volatile int* host = nullptr;
-  int* device = nullptr;
+// A per-thread value in pinned, device-mapped host memory: kernels write it
+// and the host reads it after a synchronization, with no copy. It holds the
+// overflow flag (read after the compaction's own synchronization) and the
+// fused small-simplify result. One allocation per type per thread, never freed.
+template <typename T>
+struct MappedHostValue {
+  volatile T* host = nullptr;
+  T* device = nullptr;
 };
 
-MappedOverflowFlag mapped_overflow_flag() {
-  thread_local const MappedOverflowFlag flag = [] {
-    int* host = nullptr;
-    check_hip(hipHostMalloc(reinterpret_cast<void**>(&host), sizeof(int), hipHostMallocMapped | hipHostMallocPortable), "allocate simplify overflow flag");
-    int* device = nullptr;
-    check_hip(hipHostGetDevicePointer(reinterpret_cast<void**>(&device), host, 0), "map simplify overflow flag");
-    return MappedOverflowFlag{host, device};
+template <typename T>
+MappedHostValue<T> mapped_host_value(const char* name) {
+  thread_local const MappedHostValue<T> value = [name] {
+    T* host = nullptr;
+    check_hip(hipHostMalloc(reinterpret_cast<void**>(&host), sizeof(T), hipHostMallocMapped | hipHostMallocPortable), name);
+    T* device = nullptr;
+    check_hip(hipHostGetDevicePointer(reinterpret_cast<void**>(&device), host, 0), name);
+    return MappedHostValue<T>{host, device};
   }();
-  return flag;
+  return value;
 }
 
 [[noreturn]] void throw_accumulation_overflow() {
@@ -293,8 +296,11 @@ bool small_simplify_enabled_from_env() {
   throw std::invalid_argument("WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY must be fused or off");
 }
 
+// Launches the fused kernel and returns false, leaving no error behind, when
+// the device cannot run it as configured; the caller then uses the
+// multi-launch path.
 template <int Words>
-void launch_small_simplify(
+bool launch_small_simplify(
     const std::uint64_t* in_x,
     const std::uint64_t* in_z,
     const thrust::complex<double>* in_coeffs,
@@ -306,18 +312,22 @@ void launch_small_simplify(
     thrust::complex<double>* out_coeffs,
     wolfgang::accelerator_detail::SmallSimplifyResult* device_result) {
   using wolfgang::accelerator_detail::small_simplify_kernel;
-  using wolfgang::accelerator_detail::small_simplify_shared_bytes;
-  const std::size_t shared_bytes = small_simplify_shared_bytes(Words);
-  // Dynamic shared memory above the default needs an explicit opt-in, once per
-  // kernel instantiation (thread-safe static initialization).
-  static const hipError_t attribute_result = hipFuncSetAttribute(
-      reinterpret_cast<const void*>(&small_simplify_kernel<Words>),
-      hipFuncAttributeMaxDynamicSharedMemorySize,
-      static_cast<int>(shared_bytes));
-  check_hip(attribute_result, "configure small simplify shared memory");
   const int threads = wolfgang::accelerator_detail::small_simplify_block_threads(terms);
   const std::size_t launch_bytes =
       static_cast<std::size_t>(threads) * wolfgang::accelerator_detail::small_simplify_bytes_per_position(Words);
+  // More than 48 KiB of dynamic shared memory needs an opt-in, which the
+  // runtime applies per device; it is cheap, so it is set before each launch
+  // that needs it instead of being cached.
+  if (launch_bytes > std::size_t{48} * 1024) {
+    const hipError_t attribute_result = hipFuncSetAttribute(
+        reinterpret_cast<const void*>(&small_simplify_kernel<Words>),
+        hipFuncAttributeMaxDynamicSharedMemorySize,
+        static_cast<int>(launch_bytes));
+    if (attribute_result != hipSuccess) {
+      (void)hipGetLastError();
+      return false;
+    }
+  }
   small_simplify_kernel<Words><<<1, threads, launch_bytes>>>(
       in_x,
       in_z,
@@ -329,7 +339,13 @@ void launch_small_simplify(
       out_z,
       out_coeffs,
       device_result);
-  check_hip(hipGetLastError(), "launch small simplify");
+  const hipError_t launch_result = hipGetLastError();
+  if (launch_result == hipErrorInvalidConfiguration || launch_result == hipErrorInvalidValue ||
+      launch_result == hipErrorLaunchOutOfResources) {
+    return false;  // configuration errors are not sticky; use the multi-launch path
+  }
+  check_hip(launch_result, "launch small simplify");
+  return true;
 }
 
 GenericReductionStrategy generic_reduction_strategy_from_env() {
@@ -536,39 +552,46 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     pool_allocate(out->x, packed_words, "simplified x words");
     pool_allocate(out->z, packed_words, "simplified z words");
     pool_allocate(out->coeffs, impl_->num_terms, "simplified coefficients");
-    PooledArray<acc::SmallSimplifyResult> device_result(1);
-    acc::SmallSimplifyResult* result_ptr = thrust::raw_pointer_cast(device_result.data());
+    const MappedHostValue<acc::SmallSimplifyResult> result_value =
+        mapped_host_value<acc::SmallSimplifyResult>("map small simplify result");
+    acc::SmallSimplifyResult* result_ptr = result_value.device;
+    bool launched = false;
     switch (impl_->words) {
       case 1:
-        launch_small_simplify<1>(
+        launched = launch_small_simplify<1>(
             impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
         break;
       case 2:
-        launch_small_simplify<2>(
+        launched = launch_small_simplify<2>(
             impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
         break;
       case 3:
-        launch_small_simplify<3>(
+        launched = launch_small_simplify<3>(
             impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
         break;
       default:
-        launch_small_simplify<4>(
+        launched = launch_small_simplify<4>(
             impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
         break;
     }
-    acc::SmallSimplifyResult result{};
-    copy_to_host(&result, result_ptr, 1, "small simplify result");  // synchronizes
-    if (result.status == static_cast<unsigned long long>(acc::kSmallSimplifyNonFiniteInput)) {
-      throw std::invalid_argument("simplify requires finite coefficients");
+    if (launched) {
+      check_hip(hipStreamSynchronize(nullptr), "synchronize small simplify");
+      const unsigned long long status = result_value.host->status;
+      const unsigned long long survivors = result_value.host->survivors;
+      if (status == static_cast<unsigned long long>(acc::kSmallSimplifyNonFiniteInput)) {
+        throw std::invalid_argument("simplify requires finite coefficients");
+      }
+      if (status == static_cast<unsigned long long>(acc::kSmallSimplifyOverflow)) {
+        throw_accumulation_overflow();
+      }
+      if (survivors == 0) {
+        return make_empty();
+      }
+      out->num_terms = static_cast<std::size_t>(survivors);
+      return DevicePauliSum(std::move(out));
     }
-    if (result.status == static_cast<unsigned long long>(acc::kSmallSimplifyOverflow)) {
-      throw_accumulation_overflow();
-    }
-    if (result.survivors == 0) {
-      return make_empty();
-    }
-    out->num_terms = static_cast<std::size_t>(result.survivors);
-    return DevicePauliSum(std::move(out));
+    // The device could not run the fused kernel; continue on the multi-launch
+    // path (the unused outputs are freed with `out`).
   }
 
   if (impl_->num_terms == 1) {
@@ -641,7 +664,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     return DevicePauliSum(std::move(out));
   }
 
-  const MappedOverflowFlag overflow_flag = mapped_overflow_flag();
+  const MappedHostValue<int> overflow_flag = mapped_host_value<int>("map simplify overflow flag");
   *overflow_flag.host = 0;
   survives.overflowed = overflow_flag.device;
   // Called after the compaction (or serial kernel) has synchronized, so every

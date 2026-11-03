@@ -21,6 +21,15 @@ inline void require_finite_simplify_accumulator(const std::complex<double>& coef
   }
 }
 
+// atol + rtol * scale with the product rounded before the add. Compilers may
+// otherwise contract it into one fused multiply-add (Apple clang and GCC do by
+// default on arm64), which moves the threshold by an ulp and makes the drop
+// rule differ across platforms and backends; every backend uses this form.
+[[nodiscard]] inline double separately_rounded_threshold(double atol, double rtol, double scale) {
+  const volatile double product = rtol * scale;
+  return atol + product;
+}
+
 // Drop rule shared by the standalone CPU simplify paths (scalar and oneTBB) and
 // the Metal hybrid; fused matmul applies the same rule at default tolerances: a combined coefficient c
 // survives when |c| > atol + rtol * max_abs_input. Finite complex128 components
@@ -42,14 +51,14 @@ struct SimplifyDropRule {
       max_abs_input = std::max(max_abs_input, std::abs(coeff));
     }
     SimplifyDropRule rule;
-    rule.drop_threshold = rtol == 0.0 ? atol : atol + rtol * max_abs_input;
+    rule.drop_threshold = rtol == 0.0 ? atol : separately_rounded_threshold(atol, rtol, max_abs_input);
     if (!std::isfinite(rule.drop_threshold)) {
       double max_half_magnitude = 0.0;
       for (const auto& coeff : coeffs) {
         max_half_magnitude = std::max(
             max_half_magnitude, std::hypot(coeff.real() * 0.5, coeff.imag() * 0.5));
       }
-      rule.half_threshold = atol * 0.5 + rtol * max_half_magnitude;
+      rule.half_threshold = separately_rounded_threshold(atol * 0.5, rtol, max_half_magnitude);
       rule.drop_threshold = rule.half_threshold * 2.0;
     }
     return rule;

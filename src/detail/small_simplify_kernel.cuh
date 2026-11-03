@@ -75,22 +75,25 @@ struct SmallSimplifyResult {
 
 namespace small_simplify {
 
+// Keys are stored word-major (kx[word * capacity + position]), so threads
+// touching consecutive positions hit consecutive banks for every word count.
 template <int Words>
 __device__ inline bool key_less(
     const std::uint64_t* kx,
     const std::uint64_t* kz,
     const std::uint32_t* index,
+    int capacity,
     int lhs,
     int rhs) {
   // Canonical order: word by word, x before z, then input index.
   for (int word = 0; word < Words; ++word) {
-    const std::uint64_t lhs_x = kx[lhs * Words + word];
-    const std::uint64_t rhs_x = kx[rhs * Words + word];
+    const std::uint64_t lhs_x = kx[word * capacity + lhs];
+    const std::uint64_t rhs_x = kx[word * capacity + rhs];
     if (lhs_x != rhs_x) {
       return lhs_x < rhs_x;
     }
-    const std::uint64_t lhs_z = kz[lhs * Words + word];
-    const std::uint64_t rhs_z = kz[rhs * Words + word];
+    const std::uint64_t lhs_z = kz[word * capacity + lhs];
+    const std::uint64_t rhs_z = kz[word * capacity + rhs];
     if (lhs_z != rhs_z) {
       return lhs_z < rhs_z;
     }
@@ -99,10 +102,10 @@ __device__ inline bool key_less(
 }
 
 template <int Words>
-__device__ inline bool keys_equal(const std::uint64_t* kx, const std::uint64_t* kz, int lhs, int rhs) {
+__device__ inline bool keys_equal(const std::uint64_t* kx, const std::uint64_t* kz, int capacity, int lhs, int rhs) {
   for (int word = 0; word < Words; ++word) {
-    if (kx[lhs * Words + word] != kx[rhs * Words + word] ||
-        kz[lhs * Words + word] != kz[rhs * Words + word]) {
+    if (kx[word * capacity + lhs] != kx[word * capacity + rhs] ||
+        kz[word * capacity + lhs] != kz[word * capacity + rhs]) {
       return false;
     }
   }
@@ -110,14 +113,15 @@ __device__ inline bool keys_equal(const std::uint64_t* kx, const std::uint64_t* 
 }
 
 template <int Words>
-__device__ inline void swap_entries(std::uint64_t* kx, std::uint64_t* kz, std::uint32_t* index, int lhs, int rhs) {
+__device__ inline void swap_entries(
+    std::uint64_t* kx, std::uint64_t* kz, std::uint32_t* index, int capacity, int lhs, int rhs) {
   for (int word = 0; word < Words; ++word) {
-    const std::uint64_t x = kx[lhs * Words + word];
-    kx[lhs * Words + word] = kx[rhs * Words + word];
-    kx[rhs * Words + word] = x;
-    const std::uint64_t z = kz[lhs * Words + word];
-    kz[lhs * Words + word] = kz[rhs * Words + word];
-    kz[rhs * Words + word] = z;
+    const std::uint64_t x = kx[word * capacity + lhs];
+    kx[word * capacity + lhs] = kx[word * capacity + rhs];
+    kx[word * capacity + rhs] = x;
+    const std::uint64_t z = kz[word * capacity + lhs];
+    kz[word * capacity + lhs] = kz[word * capacity + rhs];
+    kz[word * capacity + rhs] = z;
   }
   const std::uint32_t i = index[lhs];
   index[lhs] = index[rhs];
@@ -146,7 +150,7 @@ __device__ inline double max_propagating_nan(double lhs, double rhs) {
 // 1 <= terms <= capacity. Outputs hold `terms` entries; result->survivors of
 // them are written.
 template <int Words>
-__global__ void small_simplify_kernel(
+__global__ void __launch_bounds__(1024) small_simplify_kernel(
     const std::uint64_t* in_x,
     const std::uint64_t* in_z,
     const thrust::complex<double>* in_coeffs,
@@ -172,8 +176,8 @@ __global__ void small_simplify_kernel(
   // index ~0) order after every real entry: real indices are below terms.
   const bool valid = t < n;
   for (int word = 0; word < Words; ++word) {
-    kx[t * Words + word] = valid ? in_x[t * Words + word] : ~std::uint64_t{0};
-    kz[t * Words + word] = valid ? in_z[t * Words + word] : ~std::uint64_t{0};
+    kx[word * capacity + t] = valid ? in_x[t * Words + word] : ~std::uint64_t{0};
+    kz[word * capacity + t] = valid ? in_z[t * Words + word] : ~std::uint64_t{0};
   }
   index[t] = valid ? static_cast<std::uint32_t>(t) : 0xffffffffu;
   double magnitude = 0.0;
@@ -209,11 +213,20 @@ __global__ void small_simplify_kernel(
     return;
   }
   // The CPU drop rule (src/detail/simplify_numeric.hpp): no 0 * inf at
-  // rtol == 0, and half units when the ordinary threshold overflows.
-  double drop_threshold = rtol == 0.0 ? atol : atol + rtol * max_abs;
+  // rtol == 0, and half units when the ordinary threshold overflows. The
+  // volatile products keep the multiply and add separately rounded, as
+  // separately_rounded_threshold does on the host: nvcc and HIP clang would
+  // otherwise contract them into an FMA and move the threshold by an ulp.
+  double drop_threshold = atol;
+  if (rtol != 0.0) {
+    const volatile double scaled = rtol * max_abs;
+    drop_threshold = atol + scaled;
+  }
   double half_threshold = 0.0;
   if (!::isfinite(drop_threshold)) {
-    half_threshold = atol * 0.5 + rtol * max_half;
+    const volatile double half_atol = atol * 0.5;
+    const volatile double half_scaled = rtol * max_half;
+    half_threshold = half_atol + half_scaled;
     drop_threshold = half_threshold * 2.0;
   }
 
@@ -224,8 +237,8 @@ __global__ void small_simplify_kernel(
       if (t < pairs) {
         const int lower = ((t & ~(j - 1)) << 1) | (t & (j - 1));
         const int upper = j == (k >> 1) ? (lower ^ (k - 1)) : (lower + j);
-        if (key_less<Words>(kx, kz, index, upper, lower)) {
-          swap_entries<Words>(kx, kz, index, lower, upper);
+        if (key_less<Words>(kx, kz, index, capacity, upper, lower)) {
+          swap_entries<Words>(kx, kz, index, capacity, lower, upper);
         }
       }
       __syncthreads();
@@ -237,12 +250,16 @@ __global__ void small_simplify_kernel(
   __syncthreads();
 
   // 4. Run heads sum their runs in input order (index tie-breaks keep it).
+  // Head flags are computed once, so a run sum is one load per element.
+  const bool head = valid && (t == 0 || !keys_equal<Words>(kx, kz, capacity, t, t - 1));
+  scan[t] = head ? 1U : 0U;
+  __syncthreads();
   int keep = 0;
   bool overflowed = false;
   thrust::complex<double> accumulated(0.0, 0.0);
-  if (valid && (t == 0 || !keys_equal<Words>(kx, kz, t, t - 1))) {
+  if (head) {
     accumulated = coef[t];
-    for (int next = t + 1; next < n && keys_equal<Words>(kx, kz, next, t); ++next) {
+    for (int next = t + 1; next < n && scan[next] == 0U; ++next) {
       accumulated += coef[next];
     }
     if (!components_finite(accumulated)) {
@@ -273,8 +290,8 @@ __global__ void small_simplify_kernel(
   if (keep != 0) {
     const int out = static_cast<int>(scan[t]) - 1;
     for (int word = 0; word < Words; ++word) {
-      out_x[out * Words + word] = kx[t * Words + word];
-      out_z[out * Words + word] = kz[t * Words + word];
+      out_x[out * Words + word] = kx[word * capacity + t];
+      out_z[out * Words + word] = kz[word * capacity + t];
     }
     out_coeffs[out] = accumulated;
   }
