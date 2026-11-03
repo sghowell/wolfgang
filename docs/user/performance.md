@@ -16,13 +16,13 @@ names its hardware, boundary and spread; the
 
 | Change | Measured | Report |
 | --- | --- | --- |
-| oneTBB in pip wheels, simplify of 1M terms | 141 to 65.4 ms on a 16-vCPU x86 VM; 70.7 to 12.7 ms on an M4 Pro | [oneTBB wheels](../benchmarks/reports/onetbb_wheels_2026-11-03.md) |
-| Fused small simplify, 128 terms | 143.5 to 18.4 us on an H100; 152.7 to 26.9 us on an MI300X | [small simplify](../benchmarks/reports/small_simplify_2026-11-03.md) |
-| Zero-copy export of a 1M-term CUDA operator to CuPy | 8.83 ms through the host to 36.2 us | [device arrays](../benchmarks/reports/device_arrays_h100_2026-11-03.md) |
-| Building a CUDA operator from CuPy arrays, 1M terms | 20.7 ms through the host to 83.7 us | [device arrays](../benchmarks/reports/device_arrays_h100_2026-11-03.md) |
-| Pooled `commutes_with_device` output, 128 x 128 | 64.1 to 10.6 us on an H100 (sole `cudaMalloc` buffer) | [pooled commutation](../benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md) |
-| HIP single-term simplify | 254.5 to 31.0 us on an MI300X | [HIP parity](../benchmarks/reports/hip_parity_mi300x_2026-11-03.md) |
-| Metal precompiled kernels, first simplify call | 3.89 to 3.08 ms on an M4 Pro | [Metal follow-ups](../benchmarks/reports/metal_followups_2026-11-03.md) |
+| oneTBB in release wheels, simplify of 1M terms (24 qubits, no duplicates) | 141 to 65.4 ms on a 16-vCPU x86 VM; 70.7 to 12.7 ms on an M4 Pro | [oneTBB wheels](../benchmarks/reports/onetbb_wheels_2026-11-03.md) |
+| Fused small simplify, device-resident, 128 terms, 24 qubits | 143.5 to 18.4 us on an H100; 152.7 to 26.9 us on an MI300X | [small simplify](../benchmarks/reports/small_simplify_2026-11-03.md) |
+| Zero-copy export of a 1M-term, 64-qubit CUDA operator to CuPy | 8.83 ms through the host to 36.2 us on an H100 | [device arrays](../benchmarks/reports/device_arrays_h100_2026-11-03.md) |
+| Building a CUDA operator from CuPy arrays, 1M terms, 64 qubits | 20.7 ms through the host to 83.7 us on an H100 | [device arrays](../benchmarks/reports/device_arrays_h100_2026-11-03.md) |
+| Pooled `commutes_with_device` output, 128 x 128 | 64.1 to 10.6 us on an H100 when its output was the only `cudaMalloc` buffer; about 1.14x when another was live | [pooled commutation](../benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md) |
+| HIP single-term simplify, device-resident | 254.5 to 31.0 us on an MI300X | [HIP parity](../benchmarks/reports/hip_parity_mi300x_2026-11-03.md) |
+| Metal precompiled kernels, first simplify call (12,288 terms, warm shader cache) | 3.89 to 3.08 ms on an M4 Pro | [Metal follow-ups](../benchmarks/reports/metal_followups_2026-11-03.md) |
 
 Where launch and synchronization overhead still dominates small CUDA
 operations is profiled in the
@@ -173,7 +173,15 @@ multiplication.
 ## Benchmark Plots
 
 Checked-in benchmark plots are generated from checked-in evidence reports, not
-from ad hoc local timings. The current README plot is generated from the
+from ad hoc local timings. The README plot, `portability_campaign_speedups.svg`,
+compares each new path with the one it replaced, using the medians from each
+row's report:
+
+```bash
+python scripts/render_portability_campaign_assets.py
+```
+
+The prior README plot was generated from the
 Campaign 10 summary, which preserves broad Campaign 9 comparison rows and adds
 cross-architecture A100 plus RTX PRO 6000 Blackwell source-build evidence,
 PyTorch CUDA DLPack coverage, and final public-grouping, stream/graph, and CSR
@@ -217,7 +225,7 @@ python scripts/render_cuda_campaign6_assets.py \
   --plot-dir docs/benchmarks/plots
 ```
 
-The plot includes CPU scalar, every optimized CPU selector captured by that
+The prior Campaign 10 plot includes CPU scalar, every optimized CPU selector captured by that
 report for the benchmarked operation, CUDA transfer-inclusive, and CUDA
 device-resident timings, plus operator-resident, device-output, compact
 consumer, CuPy consumer, and external package points where the operation
@@ -290,6 +298,8 @@ DeviceCommutationMatrix.count_commuting
 DeviceCommutationMatrix.conflict_degrees
 DeviceCommutationMatrix.__dlpack__
 DevicePauliSum.matmul
+DevicePauliSum.device_arrays
+DevicePauliSum.from_device_arrays
 ```
 
 For repeated dense commutation workflows that keep the result on GPU, allocate
@@ -408,10 +418,13 @@ rejects a true public grouping API while retaining
 Graph work because launch overhead is not dominant, and keeps CSR scatter
 closed because no retained Campaign 10 consumer requires full CSR edge lists.
 
-Future CUDA optimization paths should start from Campaign 10 evidence. New work
-should target release packaging, additional portability lanes such as `sm_86`
-or `sm_89`, non-H100 Nsight Compute counters when `ncu` is available, or a
-specific retained consumer with a written API and memory-ownership contract.
+Future CUDA optimization paths should start from the
+[small-operation profile](../benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md):
+keeping simplify's intermediate counts on the device for operators above
+1,024 terms and `matmul`, and staging transfers through pinned memory. Beyond
+that, additional portability lanes such as `sm_86` or `sm_89`, non-H100 Nsight
+Compute counters when `ncu` is available, or a specific retained consumer with
+a written API and memory-ownership contract.
 
 ## GPU Library Baselines
 

@@ -25,16 +25,15 @@ GRID = "#e4e3df"
 
 # (backend, label, speedup as reported, before, after, source report)
 ROWS: list[tuple[str, str, float, str, str, str]] = [
-    ("CPU", "pip wheel with oneTBB: simplify, 1M terms (M4 Pro)", 5.57, "70.7 ms", "12.7 ms", "onetbb_wheels_2026-11-03.md"),
-    ("CPU", "pip wheel with oneTBB: simplify, 1M terms (EPYC, 16 vCPU)", 2.15, "141 ms", "65.4 ms", "onetbb_wheels_2026-11-03.md"),
-    ("CUDA", "Hand 1M-term operator to CuPy (zero copy vs via host)", 244.0, "8.83 ms", "36.2 us", "device_arrays_h100_2026-11-03.md"),
-    ("CUDA", "Build operator from CuPy arrays, 1M terms (vs via host)", 247.0, "20.7 ms", "83.7 us", "device_arrays_h100_2026-11-03.md"),
-    ("CUDA", "Fused small simplify, 128 terms", 7.80, "143.5 us", "18.4 us", "small_simplify_2026-11-03.md"),
-    ("CUDA", "Pooled commutation output, 128 x 128 (sole cudaMalloc buffer)", 6.06, "64.1 us", "10.6 us", "cuda_commutation_pool_h100_2026-11-03.md"),
-    ("HIP", "Single-term simplify", 8.22, "254.5 us", "31.0 us", "hip_parity_mi300x_2026-11-03.md"),
-    ("HIP", "Fused small simplify, 128 terms", 5.68, "152.7 us", "26.9 us", "small_simplify_2026-11-03.md"),
-    ("Metal", "Precompiled kernels: first simplify call", 1.26, "3.89 ms", "3.08 ms", "metal_followups_2026-11-03.md"),
-    ("Metal", "Parallel reduction: hybrid simplify, 4M unique terms", 1.12, "85.6 ms", "76.7 ms", "metal_followups_2026-11-03.md"),
+    ("CPU", "Release wheel with oneTBB: simplify, 1M terms, 24q (M4 Pro)", 5.57, "70.7 ms", "12.7 ms", "onetbb_wheels_2026-11-03.md"),
+    ("CPU", "Release wheel with oneTBB: simplify, 1M terms, 24q (EPYC VM)", 2.15, "141 ms", "65.4 ms", "onetbb_wheels_2026-11-03.md"),
+    ("CUDA", "Zero-copy export to CuPy, 1M terms, 64q (vs via host)", 244.0, "8.83 ms", "36.2 us", "device_arrays_h100_2026-11-03.md"),
+    ("CUDA", "Build from CuPy arrays, 1M terms, 64q (vs via host)", 247.0, "20.7 ms", "83.7 us", "device_arrays_h100_2026-11-03.md"),
+    ("CUDA", "Fused simplify, device-resident, 128 terms, 24q", 7.80, "143.5 us", "18.4 us", "small_simplify_2026-11-03.md"),
+    ("CUDA", "Pooled commutation output, 128 x 128 (sole cudaMalloc)", 6.06, "64.1 us", "10.6 us", "cuda_commutation_pool_h100_2026-11-03.md"),
+    ("HIP", "Single-term simplify, device-resident", 8.22, "254.5 us", "31.0 us", "hip_parity_mi300x_2026-11-03.md"),
+    ("HIP", "Fused simplify, device-resident, 128 terms, 24q", 5.68, "152.7 us", "26.9 us", "small_simplify_2026-11-03.md"),
+    ("Metal", "Precompiled kernels: first simplify call, 12,288 terms", 1.26, "3.89 ms", "3.08 ms", "metal_followups_2026-11-03.md"),
 ]
 
 
@@ -74,7 +73,7 @@ def render(rows: list[tuple[str, str, float, str, str, str]]) -> str:
         f'<text x="{LABEL_X}" y="38" font-size="20" font-weight="600" fill="{TEXT_PRIMARY}">'
         "What the portability and interop campaign changed</text>",
         f'<text x="{LABEL_X}" y="62" font-size="13" fill="{TEXT_SECONDARY}">'
-        "Speedup of each new path over the one it replaced: medians at one named boundary per row. Log scale.</text>",
+        "Speedup of each new path over the one it replaced, from the medians in each row's report. Log scale.</text>",
     ]
     legend_x = LABEL_X
     for backend, color in BACKEND_COLORS.items():

@@ -105,3 +105,17 @@ on 128 x 128 terms takes 10.6 us instead of 64.1 us on an H100 when no other
 (`docs/benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md`). Keeping
 simplify's intermediate counts on the device and pinned transfers remain open
 follow-ups from the slice 9 profile.
+
+Slice 11 merged: the README, documentation home, performance guide,
+accelerator overview, roadmap and agent guide describe the campaign's results;
+a new chart (`docs/benchmarks/plots/portability_campaign_speedups.svg`, from
+`scripts/render_portability_campaign_assets.py`) replaces the README
+landscape; `docs/benchmarks/index.md` indexes every report; and the site
+navigation gains the contract and backend pages. The documentation site at
+https://sghowell.github.io/wolfgang/ deploys from main on every documentation
+change.
+
+The campaign is complete. Open follow-ups from slices 9 and 10: keep CUDA
+simplify's intermediate counts on the device, stage transfers through pinned
+memory, a HIP per-operation workspace, peer access for pooled exports, a
+CycloneDX component for the bundled oneTBB, and multi-GPU tests.

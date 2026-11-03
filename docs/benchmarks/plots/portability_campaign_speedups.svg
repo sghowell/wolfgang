@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="980" height="550" viewBox="0 0 980 550" role="img" aria-labelledby="title desc" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="516" viewBox="0 0 980 516" role="img" aria-labelledby="title desc" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
 <title id="title">Measured speedups from the portability and interop campaign</title>
-<desc id="desc">Horizontal bars on a log scale. CPU pip wheel with oneTBB: simplify, 1M terms (M4 Pro): 5.57x; CPU pip wheel with oneTBB: simplify, 1M terms (EPYC, 16 vCPU): 2.15x; CUDA Hand 1M-term operator to CuPy (zero copy vs via host): 244x; CUDA Build operator from CuPy arrays, 1M terms (vs via host): 247x; CUDA Fused small simplify, 128 terms: 7.80x; CUDA Pooled commutation output, 128 x 128 (sole cudaMalloc buffer): 6.06x; HIP Single-term simplify: 8.22x; HIP Fused small simplify, 128 terms: 5.68x; Metal Precompiled kernels: first simplify call: 1.26x; Metal Parallel reduction: hybrid simplify, 4M unique terms: 1.12x</desc>
-<rect width="980" height="550" fill="#fcfcfb"/>
+<desc id="desc">Horizontal bars on a log scale. CPU Release wheel with oneTBB: simplify, 1M terms, 24q (M4 Pro): 5.57x; CPU Release wheel with oneTBB: simplify, 1M terms, 24q (EPYC VM): 2.15x; CUDA Zero-copy export to CuPy, 1M terms, 64q (vs via host): 244x; CUDA Build from CuPy arrays, 1M terms, 64q (vs via host): 247x; CUDA Fused simplify, device-resident, 128 terms, 24q: 7.80x; CUDA Pooled commutation output, 128 x 128 (sole cudaMalloc): 6.06x; HIP Single-term simplify, device-resident: 8.22x; HIP Fused simplify, device-resident, 128 terms, 24q: 5.68x; Metal Precompiled kernels: first simplify call, 12,288 terms: 1.26x</desc>
+<rect width="980" height="516" fill="#fcfcfb"/>
 <text x="24" y="38" font-size="20" font-weight="600" fill="#0b0b0b">What the portability and interop campaign changed</text>
-<text x="24" y="62" font-size="13" fill="#52514e">Speedup of each new path over the one it replaced: medians at one named boundary per row. Log scale.</text>
+<text x="24" y="62" font-size="13" fill="#52514e">Speedup of each new path over the one it replaced, from the medians in each row's report. Log scale.</text>
 <rect x="24" y="80" width="12" height="12" rx="3" fill="#2a78d6"/>
 <text x="42" y="91" font-size="13" fill="#0b0b0b">CPU</text>
 <rect x="105" y="80" width="12" height="12" rx="3" fill="#eb6834"/>
@@ -12,73 +12,68 @@
 <text x="213" y="91" font-size="13" fill="#0b0b0b">HIP</text>
 <rect x="276" y="80" width="12" height="12" rx="3" fill="#eda100"/>
 <text x="294" y="91" font-size="13" fill="#0b0b0b">Metal</text>
-<line x1="470.0" y1="110" x2="470.0" y2="458" stroke="#e4e3df" stroke-width="1"/>
-<text x="470.0" y="476" font-size="12" text-anchor="middle" fill="#52514e">1x</text>
-<line x1="520.9" y1="110" x2="520.9" y2="458" stroke="#e4e3df" stroke-width="1"/>
-<text x="520.9" y="476" font-size="12" text-anchor="middle" fill="#52514e">2x</text>
-<line x1="588.2" y1="110" x2="588.2" y2="458" stroke="#e4e3df" stroke-width="1"/>
-<text x="588.2" y="476" font-size="12" text-anchor="middle" fill="#52514e">5x</text>
-<line x1="639.1" y1="110" x2="639.1" y2="458" stroke="#e4e3df" stroke-width="1"/>
-<text x="639.1" y="476" font-size="12" text-anchor="middle" fill="#52514e">10x</text>
-<line x1="690.0" y1="110" x2="690.0" y2="458" stroke="#e4e3df" stroke-width="1"/>
-<text x="690.0" y="476" font-size="12" text-anchor="middle" fill="#52514e">20x</text>
-<line x1="757.3" y1="110" x2="757.3" y2="458" stroke="#e4e3df" stroke-width="1"/>
-<text x="757.3" y="476" font-size="12" text-anchor="middle" fill="#52514e">50x</text>
-<line x1="808.2" y1="110" x2="808.2" y2="458" stroke="#e4e3df" stroke-width="1"/>
-<text x="808.2" y="476" font-size="12" text-anchor="middle" fill="#52514e">100x</text>
-<line x1="859.1" y1="110" x2="859.1" y2="458" stroke="#e4e3df" stroke-width="1"/>
-<text x="859.1" y="476" font-size="12" text-anchor="middle" fill="#52514e">200x</text>
-<g><title>CPU: pip wheel with oneTBB: simplify, 1M terms (M4 Pro). 70.7 ms to 12.7 ms (5.57x). Source: onetbb_wheels_2026-11-03.md</title>
-<text x="24" y="139.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CPU</tspan>  pip wheel with oneTBB: simplify, 1M terms (M4 Pro)</text>
+<line x1="470.0" y1="110" x2="470.0" y2="424" stroke="#e4e3df" stroke-width="1"/>
+<text x="470.0" y="442" font-size="12" text-anchor="middle" fill="#52514e">1x</text>
+<line x1="520.9" y1="110" x2="520.9" y2="424" stroke="#e4e3df" stroke-width="1"/>
+<text x="520.9" y="442" font-size="12" text-anchor="middle" fill="#52514e">2x</text>
+<line x1="588.2" y1="110" x2="588.2" y2="424" stroke="#e4e3df" stroke-width="1"/>
+<text x="588.2" y="442" font-size="12" text-anchor="middle" fill="#52514e">5x</text>
+<line x1="639.1" y1="110" x2="639.1" y2="424" stroke="#e4e3df" stroke-width="1"/>
+<text x="639.1" y="442" font-size="12" text-anchor="middle" fill="#52514e">10x</text>
+<line x1="690.0" y1="110" x2="690.0" y2="424" stroke="#e4e3df" stroke-width="1"/>
+<text x="690.0" y="442" font-size="12" text-anchor="middle" fill="#52514e">20x</text>
+<line x1="757.3" y1="110" x2="757.3" y2="424" stroke="#e4e3df" stroke-width="1"/>
+<text x="757.3" y="442" font-size="12" text-anchor="middle" fill="#52514e">50x</text>
+<line x1="808.2" y1="110" x2="808.2" y2="424" stroke="#e4e3df" stroke-width="1"/>
+<text x="808.2" y="442" font-size="12" text-anchor="middle" fill="#52514e">100x</text>
+<line x1="859.1" y1="110" x2="859.1" y2="424" stroke="#e4e3df" stroke-width="1"/>
+<text x="859.1" y="442" font-size="12" text-anchor="middle" fill="#52514e">200x</text>
+<g><title>CPU: Release wheel with oneTBB: simplify, 1M terms, 24q (M4 Pro). 70.7 ms to 12.7 ms (5.57x). Source: onetbb_wheels_2026-11-03.md</title>
+<text x="24" y="139.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CPU</tspan>  Release wheel with oneTBB: simplify, 1M terms, 24q (M4 Pro)</text>
 <path d="M470.0,128.0 h122.1 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-122.1 z" fill="#2a78d6"/>
 <text x="604.1" y="139.0" font-size="13" font-weight="600" fill="#0b0b0b">5.57x</text>
 </g>
-<g><title>CPU: pip wheel with oneTBB: simplify, 1M terms (EPYC, 16 vCPU). 141 ms to 65.4 ms (2.15x). Source: onetbb_wheels_2026-11-03.md</title>
-<text x="24" y="173.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CPU</tspan>  pip wheel with oneTBB: simplify, 1M terms (EPYC, 16 vCPU)</text>
+<g><title>CPU: Release wheel with oneTBB: simplify, 1M terms, 24q (EPYC VM). 141 ms to 65.4 ms (2.15x). Source: onetbb_wheels_2026-11-03.md</title>
+<text x="24" y="173.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CPU</tspan>  Release wheel with oneTBB: simplify, 1M terms, 24q (EPYC VM)</text>
 <path d="M470.0,162.0 h52.2 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-52.2 z" fill="#2a78d6"/>
 <text x="534.2" y="173.0" font-size="13" font-weight="600" fill="#0b0b0b">2.15x</text>
 </g>
-<g><title>CUDA: Hand 1M-term operator to CuPy (zero copy vs via host). 8.83 ms to 36.2 us (244x). Source: device_arrays_h100_2026-11-03.md</title>
-<text x="24" y="207.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CUDA</tspan>  Hand 1M-term operator to CuPy (zero copy vs via host)</text>
+<g><title>CUDA: Zero-copy export to CuPy, 1M terms, 64q (vs via host). 8.83 ms to 36.2 us (244x). Source: device_arrays_h100_2026-11-03.md</title>
+<text x="24" y="207.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CUDA</tspan>  Zero-copy export to CuPy, 1M terms, 64q (vs via host)</text>
 <path d="M470.0,196.0 h399.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-399.7 z" fill="#eb6834"/>
 <text x="881.7" y="207.0" font-size="13" font-weight="600" fill="#0b0b0b">244x</text>
 </g>
-<g><title>CUDA: Build operator from CuPy arrays, 1M terms (vs via host). 20.7 ms to 83.7 us (247x). Source: device_arrays_h100_2026-11-03.md</title>
-<text x="24" y="241.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CUDA</tspan>  Build operator from CuPy arrays, 1M terms (vs via host)</text>
+<g><title>CUDA: Build from CuPy arrays, 1M terms, 64q (vs via host). 20.7 ms to 83.7 us (247x). Source: device_arrays_h100_2026-11-03.md</title>
+<text x="24" y="241.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CUDA</tspan>  Build from CuPy arrays, 1M terms, 64q (vs via host)</text>
 <path d="M470.0,230.0 h400.6 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-400.6 z" fill="#eb6834"/>
 <text x="882.6" y="241.0" font-size="13" font-weight="600" fill="#0b0b0b">247x</text>
 </g>
-<g><title>CUDA: Fused small simplify, 128 terms. 143.5 us to 18.4 us (7.80x). Source: small_simplify_2026-11-03.md</title>
-<text x="24" y="275.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CUDA</tspan>  Fused small simplify, 128 terms</text>
+<g><title>CUDA: Fused simplify, device-resident, 128 terms, 24q. 143.5 us to 18.4 us (7.80x). Source: small_simplify_2026-11-03.md</title>
+<text x="24" y="275.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CUDA</tspan>  Fused simplify, device-resident, 128 terms, 24q</text>
 <path d="M470.0,264.0 h146.9 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-146.9 z" fill="#eb6834"/>
 <text x="628.9" y="275.0" font-size="13" font-weight="600" fill="#0b0b0b">7.80x</text>
 </g>
-<g><title>CUDA: Pooled commutation output, 128 x 128 (sole cudaMalloc buffer). 64.1 us to 10.6 us (6.06x). Source: cuda_commutation_pool_h100_2026-11-03.md</title>
-<text x="24" y="309.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CUDA</tspan>  Pooled commutation output, 128 x 128 (sole cudaMalloc buffer)</text>
+<g><title>CUDA: Pooled commutation output, 128 x 128 (sole cudaMalloc). 64.1 us to 10.6 us (6.06x). Source: cuda_commutation_pool_h100_2026-11-03.md</title>
+<text x="24" y="309.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">CUDA</tspan>  Pooled commutation output, 128 x 128 (sole cudaMalloc)</text>
 <path d="M470.0,298.0 h128.3 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-128.3 z" fill="#eb6834"/>
 <text x="610.3" y="309.0" font-size="13" font-weight="600" fill="#0b0b0b">6.06x</text>
 </g>
-<g><title>HIP: Single-term simplify. 254.5 us to 31.0 us (8.22x). Source: hip_parity_mi300x_2026-11-03.md</title>
-<text x="24" y="343.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">HIP</tspan>  Single-term simplify</text>
+<g><title>HIP: Single-term simplify, device-resident. 254.5 us to 31.0 us (8.22x). Source: hip_parity_mi300x_2026-11-03.md</title>
+<text x="24" y="343.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">HIP</tspan>  Single-term simplify, device-resident</text>
 <path d="M470.0,332.0 h150.7 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-150.7 z" fill="#1baf7a"/>
 <text x="632.7" y="343.0" font-size="13" font-weight="600" fill="#0b0b0b">8.22x</text>
 </g>
-<g><title>HIP: Fused small simplify, 128 terms. 152.7 us to 26.9 us (5.68x). Source: small_simplify_2026-11-03.md</title>
-<text x="24" y="377.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">HIP</tspan>  Fused small simplify, 128 terms</text>
+<g><title>HIP: Fused simplify, device-resident, 128 terms, 24q. 152.7 us to 26.9 us (5.68x). Source: small_simplify_2026-11-03.md</title>
+<text x="24" y="377.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">HIP</tspan>  Fused simplify, device-resident, 128 terms, 24q</text>
 <path d="M470.0,366.0 h123.6 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-123.6 z" fill="#1baf7a"/>
 <text x="605.6" y="377.0" font-size="13" font-weight="600" fill="#0b0b0b">5.68x</text>
 </g>
-<g><title>Metal: Precompiled kernels: first simplify call. 3.89 ms to 3.08 ms (1.26x). Source: metal_followups_2026-11-03.md</title>
-<text x="24" y="411.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">Metal</tspan>  Precompiled kernels: first simplify call</text>
+<g><title>Metal: Precompiled kernels: first simplify call, 12,288 terms. 3.89 ms to 3.08 ms (1.26x). Source: metal_followups_2026-11-03.md</title>
+<text x="24" y="411.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">Metal</tspan>  Precompiled kernels: first simplify call, 12,288 terms</text>
 <path d="M470.0,400.0 h13.0 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-13.0 z" fill="#eda100"/>
 <text x="495.0" y="411.0" font-size="13" font-weight="600" fill="#0b0b0b">1.26x</text>
 </g>
-<g><title>Metal: Parallel reduction: hybrid simplify, 4M unique terms. 85.6 ms to 76.7 ms (1.12x). Source: metal_followups_2026-11-03.md</title>
-<text x="24" y="445.0" font-size="13" fill="#0b0b0b"><tspan font-weight="600">Metal</tspan>  Parallel reduction: hybrid simplify, 4M unique terms</text>
-<path d="M470.0,434.0 h4.3 a4.0,4.0 0 0 1 4.0,4.0 v6.0 a4.0,4.0 0 0 1 -4.0,4.0 h-4.3 z" fill="#eda100"/>
-<text x="486.3" y="445.0" font-size="13" font-weight="600" fill="#0b0b0b">1.12x</text>
-</g>
-<line x1="470" y1="110" x2="470" y2="458" stroke="#52514e" stroke-width="1"/>
-<text x="24" y="506" font-size="12" fill="#52514e">Hosts: NVIDIA H100, AMD MI300X, Apple M4 Pro, AMD EPYC 9654 VM. Each row's report in docs/benchmarks/reports/ has the boundary, commands and spread.</text>
-<text x="24" y="524" font-size="12" fill="#52514e">Rows are not comparable with each other: they measure different operations, sizes and hardware.</text>
+<line x1="470" y1="110" x2="470" y2="424" stroke="#52514e" stroke-width="1"/>
+<text x="24" y="472" font-size="12" fill="#52514e">Hosts: NVIDIA H100, AMD MI300X, Apple M4 Pro, AMD EPYC 9654 VM. Each row's report in docs/benchmarks/reports/ has the boundary, commands and spread.</text>
+<text x="24" y="490" font-size="12" fill="#52514e">Rows are not comparable with each other: they measure different operations, sizes and hardware.</text>
 </svg>

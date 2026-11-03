@@ -6,8 +6,8 @@ Wolfgang uses one host representation and target-specific source builds. Acceler
 |---|---:|---:|---:|---:|
 | Import and host `PauliSum` | Yes | Yes | Yes | Yes |
 | Owning `DevicePauliSum` | No | Hardware/toolkit gated | Hardware/toolkit gated | Hardware/runtime gated |
-| Zero-copy device arrays (DLPack, CUDA Array Interface) | No | Yes (`device_arrays`, `from_device_arrays`) | No | No |
-| oneTBB CPU kernels | Bundled | When CMake finds oneTBB | When CMake finds oneTBB | When CMake finds oneTBB |
+| Device array interop: zero-copy export (DLPack, CUDA Array Interface), import by device copy (CUDA Array Interface) | No | Yes (`device_arrays`, `from_device_arrays`) | No | No |
+| oneTBB CPU kernels | Bundled in wheels built after `v0.2.3` | When CMake finds oneTBB | When CMake finds oneTBB | When CMake finds oneTBB |
 | Accelerator wheel | No | Not currently public | Not currently public | Not currently public |
 | Combined accelerator binary | N/A | No | No | No |
 

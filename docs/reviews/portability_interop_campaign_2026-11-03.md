@@ -398,3 +398,38 @@ documentation. The benchmarked candidate is `3ce446b` (native sources of
   per-operation workspace. They are recorded as follow-ups.
 - Residual risk: one H100; initcheck errors in Thrust `reduce_by_key`
   predate this campaign and are attributed to a CUB pattern without proof.
+
+## Slice 11: Documentation and site
+
+Branch `codex/docs-refresh`, documentation, one chart and its renderer.
+
+- Reviewer: independent agent (documentation accuracy and standards),
+  read-only. It recomputed every chart and table figure from the cited
+  reports, checked the README example against the bindings and stubs, resolved
+  every link, and searched user-facing docs for claims the campaign made
+  stale.
+- Findings: P0 0, P1 1, P2 3, P3 9.
+- P1 resolution: four places implied published wheels bundle oneTBB; no
+  release does yet. The README, home page and accelerator overview now say
+  release wheels built after `v0.2.3` bundle it, that source builds use
+  oneTBB when CMake finds it, and give the four-thread condition.
+- P2 resolutions: the Metal parallel-reduction row (a two-run spot check) left
+  the chart, whose subtitle now cites each row's report medians; the evidence
+  index lists all 52 reports, generated from their titles, and no longer
+  overstates the provenance ledger; the performance guide's plot section
+  documents the new chart and its renderer and labels the Campaign 10 plot as
+  prior.
+- P3 resolutions: qubit counts, hosts and device-resident boundaries on chart
+  and table rows; both regimes for the pooled commutation figure; a runnable,
+  dependency-labeled README interop example that states the read-only flag is
+  advisory and links the CUDA backend contract; the CUDA-Q extra marked
+  Linux-only; an accurate device-array row in the accelerator overview;
+  current AGENTS.md pointers; the CUDA coverage list and future-work pointer
+  in the performance guide; roadmap wording; a README license note for the
+  vendored and bundled components.
+- Site: the Documentation workflow already deploys the strict build to
+  https://sghowell.github.io/wolfgang/ on every documentation change to main.
+- Validation: `python scripts/validate.py --profile docs` (strict build),
+  `--profile quality` and `--profile core`, and `git diff --check`.
+- Residual risk: report descriptions in the index are titles, not summaries;
+  the earlier accelerator landscape plot is no longer refreshed.

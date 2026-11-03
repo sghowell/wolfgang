@@ -64,14 +64,14 @@ Contributing:       CONTRIBUTING.md
 ## Current Status
 
 The portability and interop campaign (November 2026) is complete. It added
-compile-only CUDA, HIP and Metal CI lanes; brought CUDA and HIP simplify to the
-CPU numeric contract; fused small-operator simplify into one kernel on CUDA and
-HIP; zero-copy CUDA device arrays through DLPack and the CUDA Array Interface;
-CUDA-Q conversion; oneTBB in release CPU wheels, with a fork guard; Metal
-hybrid simplify follow-ups; and a pooled CUDA commutation output. A profile
-ruled out CUDA graphs and public streams for now. Plan:
-`docs/plans/portability_and_interop_campaign_plan.md`; reports:
-`docs/benchmarks/index.md`; review closeout:
+compile-only CUDA, HIP and Metal CI lanes, brought CUDA and HIP simplify to
+the CPU numeric contract, fused small-operator simplify into one kernel on
+CUDA and HIP, exported CUDA device arrays without copies through DLPack and
+the CUDA Array Interface, added CUDA-Q conversion, bundled oneTBB in release
+CPU wheels with a fork guard, followed up the Metal hybrid simplify, and
+pooled the CUDA commutation output. A profile ruled out CUDA graphs and public
+streams for now. Plan: `docs/plans/portability_and_interop_campaign_plan.md`;
+reports: `docs/benchmarks/index.md`; review closeout:
 `docs/reviews/portability_interop_campaign_2026-11-03.md`.
 
 Wolfgang has completed the Phase 11 CUDA kernel slice:

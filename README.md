@@ -30,7 +30,7 @@ Quantum workloads routinely manipulate Hamiltonians containing thousands or mill
 
 ## Installation
 
-The default distribution is a portable CPU package. Wheels built from the current tree bundle oneTBB, so large `simplify` and commutation calls run in parallel; `WOLFGANG_CPU_BACKEND=scalar` selects the portable path. When a package-index release is available for your platform:
+The default distribution is a portable CPU package. Release CPU wheels built after `v0.2.3` bundle oneTBB, so large `simplify` and pairwise commutation calls run in parallel on hosts with at least four oneTBB threads (no published release includes it yet); source builds use oneTBB when CMake finds it. `WOLFGANG_CPU_BACKEND=scalar` selects the portable path. When a package-index release is available for your platform:
 
 ```bash
 python -m pip install wolfgang-quantum
@@ -49,7 +49,7 @@ Optional adapters are separate extras:
 ```bash
 python -m pip install ".[qiskit]"
 python -m pip install ".[openfermion]"
-python -m pip install ".[cudaq]"        # PauliSum.from_cudaq / to_cudaq
+python -m pip install ".[cudaq]"        # PauliSum.from_cudaq / to_cudaq (Linux only)
 python -m pip install ".[scipy]"        # sparse PauliSum.to_matrix(sparse=True)
 ```
 
@@ -92,18 +92,20 @@ Construction is available from dense labels, sparse local terms, Qiskit `SparseP
 Operators convert to and from other quantum libraries without dense matrices, and CUDA operators share their device buffers with GPU array libraries:
 
 ```python
+# Needs the qiskit and cudaq extras, a CUDA source build, and CuPy 14 or later.
 import cupy
+from qiskit.quantum_info import SparsePauliOp
 from wolfgang_quantum import DevicePauliSum, PauliSum
 
-op = PauliSum.from_qiskit(sparse_pauli_op)          # or from_openfermion / from_cudaq
-spin_op = op.to_cudaq()                             # cudaq.SpinOperator
+op = PauliSum.from_qiskit(SparsePauliOp(["XZ", "YY"], [0.5, -1.0]))  # or from_openfermion / from_cudaq
+spin_op = op.to_cudaq()                                              # cudaq.SpinOperator
 
 device = op.to_device(backend="cuda")
-x, z, coeffs = (cupy.from_dlpack(v) for v in device.device_arrays())  # zero copy, flagged read-only
+x, z, coeffs = (cupy.from_dlpack(v) for v in device.device_arrays())  # zero copy; treat as read-only
 rebuilt = DevicePauliSum.from_device_arrays(x, z, coeffs, op.num_qubits)  # device-to-device copy
 ```
 
-On an H100, handing a 1M-term operator to CuPy takes 36 us instead of 8.8 ms through the host. PyTorch reads the views with `torch.from_dlpack`. See the [Python API guide](docs/guide/python-api.md) and [adapter contracts](docs/architecture/adapter_contracts.md).
+On an H100, handing a 1M-term, 64-qubit operator to CuPy takes 36 us instead of 8.8 ms through the host ([report](docs/benchmarks/reports/device_arrays_h100_2026-11-03.md)). The views are flagged read-only, but consumers do not enforce the flag. PyTorch reads them with `torch.from_dlpack`. See the [Python API guide](docs/guide/python-api.md), the [adapter contracts](docs/architecture/adapter_contracts.md), and the [CUDA backend](docs/architecture/cuda_backend.md) for lifetime and synchronization rules.
 
 ## Architecture
 
@@ -261,4 +263,4 @@ If Wolfgang contributes to published work, cite the exact release or revision an
 
 ## License
 
-Wolfgang is released under the [MIT License](LICENSE).
+Wolfgang is released under the [MIT License](LICENSE). It vendors DLPack headers (Apache-2.0), and release CPU wheels built after `v0.2.3` bundle oneTBB (Apache-2.0, with BSD-3-Clause ITT Notify); their notices ship as license files, and the wheel metadata reads `MIT AND Apache-2.0 AND BSD-3-Clause`.

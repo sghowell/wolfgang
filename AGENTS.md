@@ -94,8 +94,8 @@ CONTRIBUTING.md
 ```
 
 Use progressive disclosure. Start with `README.md` and `docs/roadmap.md`, then load only the phase-specific docs needed for the task.
-Apple Metal Wave 1D is the latest Apple Metal commutation evidence slice; the usability campaign's Metal hybrid simplify (slice 8) supersedes Apple Metal Campaign 8 as the latest simplify slice.
-Active repository hardening: `docs/plans/review_hardening_plan.md`.
+Apple Metal Wave 1D is the latest Apple Metal commutation evidence slice; the portability campaign's Metal follow-ups (`docs/benchmarks/reports/metal_followups_2026-11-03.md`) are the latest simplify slice.
+Previous repository hardening: `docs/plans/review_hardening_plan.md`.
 Latest campaign (complete): `docs/plans/portability_and_interop_campaign_plan.md`; its reports are indexed in `docs/benchmarks/index.md`.
 
 ## Operating Rules
