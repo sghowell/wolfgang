@@ -1,6 +1,6 @@
 # Wolfgang Roadmap
 
-Active campaign: [portability and interop campaign](plans/portability_and_interop_campaign_plan.md).
+Latest campaign (complete): [portability and interop campaign](plans/portability_and_interop_campaign_plan.md).
 Previous maintenance: [repository review hardening](plans/review_hardening_plan.md).
 
 This roadmap tracks implementation order and the decisions that must stay stable across phases.
@@ -62,6 +62,17 @@ Contributing:       CONTRIBUTING.md
 ```
 
 ## Current Status
+
+The portability and interop campaign (November 2026) is complete. It added
+compile-only CUDA, HIP and Metal CI lanes; brought CUDA and HIP simplify to the
+CPU numeric contract; fused small-operator simplify into one kernel on CUDA and
+HIP; zero-copy CUDA device arrays through DLPack and the CUDA Array Interface;
+CUDA-Q conversion; oneTBB in release CPU wheels, with a fork guard; Metal
+hybrid simplify follow-ups; and a pooled CUDA commutation output. A profile
+ruled out CUDA graphs and public streams for now. Plan:
+`docs/plans/portability_and_interop_campaign_plan.md`; reports:
+`docs/benchmarks/index.md`; review closeout:
+`docs/reviews/portability_interop_campaign_2026-11-03.md`.
 
 Wolfgang has completed the Phase 11 CUDA kernel slice:
 C++20/scikit-build-core/nanobind

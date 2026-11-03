@@ -30,7 +30,7 @@ Quantum workloads routinely manipulate Hamiltonians containing thousands or mill
 
 ## Installation
 
-The default distribution is a portable CPU package. When a package-index release is available for your platform:
+The default distribution is a portable CPU package. Wheels built from the current tree bundle oneTBB, so large `simplify` and commutation calls run in parallel; `WOLFGANG_CPU_BACKEND=scalar` selects the portable path. When a package-index release is available for your platform:
 
 ```bash
 python -m pip install wolfgang-quantum
@@ -87,6 +87,24 @@ print(expectation)
 
 Construction is available from dense labels, sparse local terms, Qiskit `SparsePauliOp`, OpenFermion `QubitOperator`, and CUDA-Q `SpinOperator`. See the [quickstart](docs/getting-started/quickstart.md) and [Pauli conventions](docs/getting-started/conventions.md).
 
+## Interoperability
+
+Operators convert to and from other quantum libraries without dense matrices, and CUDA operators share their device buffers with GPU array libraries:
+
+```python
+import cupy
+from wolfgang_quantum import DevicePauliSum, PauliSum
+
+op = PauliSum.from_qiskit(sparse_pauli_op)          # or from_openfermion / from_cudaq
+spin_op = op.to_cudaq()                             # cudaq.SpinOperator
+
+device = op.to_device(backend="cuda")
+x, z, coeffs = (cupy.from_dlpack(v) for v in device.device_arrays())  # zero copy, flagged read-only
+rebuilt = DevicePauliSum.from_device_arrays(x, z, coeffs, op.num_qubits)  # device-to-device copy
+```
+
+On an H100, handing a 1M-term operator to CuPy takes 36 us instead of 8.8 ms through the host. PyTorch reads the views with `torch.from_dlpack`. See the [Python API guide](docs/guide/python-api.md) and [adapter contracts](docs/architecture/adapter_contracts.md).
+
 ## Architecture
 
 Wolfgang uses one packed invariant across the CPU and accelerator stack:
@@ -136,9 +154,9 @@ Read the [architecture guide](docs/guide/architecture.md), [API stability policy
 
 Wolfgang's benchmark discipline is designed to make fast results interpretable:
 
-![Wolfgang accelerator landscape](docs/benchmarks/plots/accelerator_landscape_with_rocm.svg)
+![Speedups measured in the portability and interop campaign](docs/benchmarks/plots/portability_campaign_speedups.svg)
 
-> The landscape is an engineering map, not one universal head-to-head benchmark. Each row retains its own semantic and timing boundary; consult the linked reports before comparing values.
+> Each bar compares a new path with the one it replaced, at one named boundary; rows measure different operations and hardware and are not comparable with each other. The [benchmark evidence index](docs/benchmarks/index.md) links every report, and the earlier [accelerator landscape](docs/benchmarks/plots/accelerator_landscape_with_rocm.svg) maps previous campaigns.
 
 - deterministic datasets and seeds;
 - correctness checks against scalar or independent-library oracles;
@@ -149,14 +167,14 @@ Wolfgang's benchmark discipline is designed to make fast results interpretable:
 - scoped claims that name the shapes and regimes where a kernel wins;
 - retained reports for negative results and external-tool blockers.
 
-The optimized CPU surface currently concentrates on commutation-heavy kernels, where packed popcount and batched parity map cleanly to SIMD and threading. Accelerator work emphasizes device-resident operations and compact consumers so that large dense outputs are not transferred merely to compute a summary.
+Optimized CPU kernels cover commutation, where packed popcount and batched parity map cleanly to SIMD and threading, and simplify, which oneTBB parallelizes with results identical to scalar bit for bit. Accelerator work emphasizes device-resident operations, fused kernels for small operators, and compact consumers, so that large dense outputs are not transferred merely to compute a summary.
 
 For the methodology and current evidence, see:
 
 - [Performance guide](docs/user/performance.md)
 - [Benchmark protocol](docs/benchmarks/protocol.md)
 - [Research provenance and campaign ledger](docs/research/provenance.md)
-- [CUDA reports](docs/benchmarks/reports/)
+- [Benchmark evidence index](docs/benchmarks/index.md)
 - [Hardware targets and testing](docs/architecture/hardware_targets_and_testing.md)
 
 Performance reports are evidence for a named configuration—not a promise that every platform or shape will see the same speedup.
@@ -203,13 +221,14 @@ Validation covers formatting and source hygiene, editable native builds, imports
 
 ## Documentation
 
-- [Documentation home](docs/index.md)
+- [Documentation site](https://sghowell.github.io/wolfgang/) ([source](docs/index.md))
 - [Installation](docs/getting-started/installation.md)
 - [Quickstart](docs/getting-started/quickstart.md)
+- [Python API guide](docs/guide/python-api.md) and [API reference](docs/api/index.md)
 - [Architecture](docs/guide/architecture.md)
 - [Accelerator overview](docs/accelerators/overview.md)
 - [Expectation values](docs/user/expectation_values.md)
-- [Performance](docs/user/performance.md)
+- [Performance](docs/user/performance.md) and [benchmark evidence](docs/benchmarks/index.md)
 - [Release support matrix](docs/release/support_matrix.md)
 - [Roadmap](docs/roadmap.md)
 - [Research provenance](docs/research/provenance.md)

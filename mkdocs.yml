@@ -71,11 +71,16 @@ nav:
       - Overview: accelerators/overview.md
       - Hardware evidence policy: architecture/hardware_targets_and_testing.md
       - CUDA architecture: architecture/cuda_backend.md
+      - ROCm/HIP architecture: architecture/rocm_backend.md
       - Apple accelerator: architecture/apple_accelerator.md
+      - Backend-neutral accelerators: architecture/backend_neutral_accelerators.md
   - API reference:
       - Overview: api/index.md
+      - Semantic contracts: architecture/semantic_contracts.md
+      - Adapter contracts: architecture/adapter_contracts.md
       - Stability policy: architecture/api_stability.md
   - Engineering:
+      - Benchmark evidence: benchmarks/index.md
       - Benchmark protocol: benchmarks/protocol.md
       - Research provenance: research/provenance.md
       - Testing and CI: architecture/testing_and_ci.md

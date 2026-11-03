@@ -6,6 +6,8 @@ Wolfgang uses one host representation and target-specific source builds. Acceler
 |---|---:|---:|---:|---:|
 | Import and host `PauliSum` | Yes | Yes | Yes | Yes |
 | Owning `DevicePauliSum` | No | Hardware/toolkit gated | Hardware/toolkit gated | Hardware/runtime gated |
+| Zero-copy device arrays (DLPack, CUDA Array Interface) | No | Yes (`device_arrays`, `from_device_arrays`) | No | No |
+| oneTBB CPU kernels | Bundled | When CMake finds oneTBB | When CMake finds oneTBB | When CMake finds oneTBB |
 | Accelerator wheel | No | Not currently public | Not currently public | Not currently public |
 | Combined accelerator binary | N/A | No | No | No |
 
@@ -13,7 +15,7 @@ The exact release boundary—not this summary—is maintained in [`docs/release/
 
 ## CUDA
 
-CUDA work covers owning transfers, commutation, compact consumers, simplify, multiplication, statevector expectation, and carefully reviewed interoperability. Each public operation defines whether timing includes allocation, transfer, host materialization, and synchronization.
+CUDA work covers owning transfers, commutation, compact consumers, simplify (one fused kernel for small operators), multiplication, statevector expectation, and carefully reviewed interoperability: zero-copy device arrays and commutation matrices through DLPack and the CUDA Array Interface. Each public operation defines whether timing includes allocation, transfer, host materialization, and synchronization.
 
 ## ROCm/HIP
 

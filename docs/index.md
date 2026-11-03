@@ -2,7 +2,7 @@
 
 **Packed Pauli algebra with a portable CPU oracle and evidence-gated accelerator kernels.**
 
-Wolfgang stores sparse sums of Pauli strings as compact symplectic bit masks and complex coefficients. The same representation drives deterministic CPU semantics, runtime-dispatched SIMD and oneTBB kernels, and source-build CUDA, ROCm/HIP, and Apple Metal experiments.
+Wolfgang stores sparse sums of Pauli strings as compact symplectic bit masks and complex coefficients. The same representation drives deterministic CPU semantics, runtime-dispatched SIMD and oneTBB kernels (oneTBB is bundled in CPU wheels), source-build CUDA, ROCm/HIP and Apple Metal backends, and conversions to Qiskit, OpenFermion and CUDA-Q. CUDA operators share their device buffers with CuPy and PyTorch without copies.
 
 ```python
 import numpy as np
@@ -36,8 +36,11 @@ This makes the repository both a usable library and an inspectable record of low
 - [Run the quickstart](getting-started/quickstart.md)
 - [Understand the packed representation](guide/architecture.md)
 - [Read the accelerator support boundary](accelerators/overview.md)
-- [Inspect the benchmark protocol](benchmarks/protocol.md)
+- [Browse the benchmark evidence](benchmarks/index.md) and [protocol](benchmarks/protocol.md)
+- [Read the semantic contracts](architecture/semantic_contracts.md)
 - [Check the current release matrix](release/support_matrix.md)
 
+![Speedups measured in the portability and interop campaign](benchmarks/plots/portability_campaign_speedups.svg)
+
 !!! warning "Accelerator packaging"
-    Default wheels are portable CPU builds. CUDA, ROCm/HIP, and Metal capabilities are source-build and evidence-gated; backend implementation does not imply a public accelerator wheel.
+    Default wheels are portable CPU builds (with oneTBB). CUDA, ROCm/HIP, and Metal capabilities are source-build and evidence-gated; backend implementation does not imply a public accelerator wheel.

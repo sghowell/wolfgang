@@ -8,6 +8,26 @@ grouping graph construction, and oneTBB simplify. CUDA source builds additionall
 device-resident simplify, statevector expectation, pairwise commutation, and
 matrix-product kernels on `DevicePauliSum`.
 
+## Current Results
+
+Headline measurements from the latest campaign. Each links the report that
+names its hardware, boundary and spread; the
+[benchmark evidence index](../benchmarks/index.md) lists every report.
+
+| Change | Measured | Report |
+| --- | --- | --- |
+| oneTBB in pip wheels, simplify of 1M terms | 141 to 65.4 ms on a 16-vCPU x86 VM; 70.7 to 12.7 ms on an M4 Pro | [oneTBB wheels](../benchmarks/reports/onetbb_wheels_2026-11-03.md) |
+| Fused small simplify, 128 terms | 143.5 to 18.4 us on an H100; 152.7 to 26.9 us on an MI300X | [small simplify](../benchmarks/reports/small_simplify_2026-11-03.md) |
+| Zero-copy export of a 1M-term CUDA operator to CuPy | 8.83 ms through the host to 36.2 us | [device arrays](../benchmarks/reports/device_arrays_h100_2026-11-03.md) |
+| Building a CUDA operator from CuPy arrays, 1M terms | 20.7 ms through the host to 83.7 us | [device arrays](../benchmarks/reports/device_arrays_h100_2026-11-03.md) |
+| Pooled `commutes_with_device` output, 128 x 128 | 64.1 to 10.6 us on an H100 (sole `cudaMalloc` buffer) | [pooled commutation](../benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md) |
+| HIP single-term simplify | 254.5 to 31.0 us on an MI300X | [HIP parity](../benchmarks/reports/hip_parity_mi300x_2026-11-03.md) |
+| Metal precompiled kernels, first simplify call | 3.89 to 3.08 ms on an M4 Pro | [Metal follow-ups](../benchmarks/reports/metal_followups_2026-11-03.md) |
+
+Where launch and synchronization overhead still dominates small CUDA
+operations is profiled in the
+[small-operation profile](../benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md).
+
 ## Backend Selection
 
 The runtime backend selector is controlled by `WOLFGANG_CPU_BACKEND`.
