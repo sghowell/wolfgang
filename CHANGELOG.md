@@ -6,15 +6,17 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
-- CUDA and HIP: `DevicePauliSum.to_host()` waits for the GPU once per batch
-  instead of once per buffer, through a per-thread pinned staging buffer (up to
-  16 MiB, freed at thread exit; HIP stages only transfers up to 64 KiB), and
-  no longer zero-fills its result before copying. On Linux, results of 4 MiB or
-  more ask for transparent huge pages before their first touch. On an H100,
-  `to_host` is 1.8-3.1x faster from 1 term to 4M terms (1M terms at 24 qubits:
-  5.4 ms instead of 14.4 ms); on an MI300X, 1.8-1.9x for small operators and
-  1.2-3.1x from 1M terms, within 0.95-1.01x in between
-  (`docs/benchmarks/reports/host_transfers_2026-11-03.md`).
+- CUDA and HIP: `DevicePauliSum.to_host()` stages its copies through pinned
+  buffers borrowed from a small process-wide pool, waiting for the GPU once
+  per batch instead of once per buffer (HIP stages only transfers up to
+  64 KiB and copies larger ones directly). Staged results are no longer
+  zero-filled before the copy, and on Linux results of 4 MiB or more ask for
+  transparent huge pages before their first touch. On an H100, `to_host` is
+  1.9-3.2x faster from 1 term to 4M terms (1M terms at 24 qubits: 5.5 ms
+  instead of 14.8 ms); on an MI300X, 1.8-1.9x for small operators and
+  2.2-3.2x at 1M terms (24 qubits) and 4M terms, and unchanged in between
+  (`docs/benchmarks/reports/host_transfers_2026-11-03.md`). `to_device()` is
+  unchanged.
 - HIP: simplify for operators the fused kernel does not take uses the
   pipeline shared with CUDA, built with hipCUB, so it no longer returns counts through blocking
   copies, and its scratch (with rocThrust's algorithm temporaries) comes from a

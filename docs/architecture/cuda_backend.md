@@ -570,19 +570,20 @@ device count rather than a full device-property query.
 Evidence: `docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`,
 `docs/benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md`.
 
-`DevicePauliSum.to_host()` copies the three buffers asynchronously into a
-per-thread pinned staging buffer on the legacy stream
+`DevicePauliSum.to_host()` copies the three buffers asynchronously on the
+legacy stream into a pinned buffer borrowed from a process-wide pool
 (`src/detail/staged_transfer.hpp`) and appends them to result vectors that are
 reserved rather than zero-filled. One wait covers each batch, so an operator
 that fits in half the buffer waits once; larger operators alternate between
-the two halves, copying one while appending the other. The buffer grows to at
-most 16 MiB and is freed when its thread exits; if pinned memory cannot be
-allocated, `to_host` falls back to pageable copies. On Linux, result vectors of
-4 MiB or more are advised for transparent huge pages before their first touch,
-because on the KVM hosts measured, faulting in fresh 4 KiB pages cost more
-than the copy itself. `to_host` is 1.8-3.1x faster on an H100 from 1 term to
-4M terms. `to_device()` and statevector uploads keep pageable `cudaMemcpy`,
-which beat staging up to 32 MB. Evidence:
+the two halves, copying into one while appending the other. Buffers grow to at
+most 16 MiB, the pool keeps at most four idle, and if pinned memory cannot be
+had `to_host` copies directly. On Linux, result vectors of 4 MiB or more are
+advised for transparent huge pages before their first touch, because on the
+KVM hosts measured, faulting in fresh 4 KiB pages cost more than the copy
+itself. `to_host` is 1.9-3.2x faster on an H100 from 1 term to 4M terms; a
+direct copy into huge-page memory above 16 MiB measured slower end to end.
+`to_device()` and statevector uploads keep pageable `cudaMemcpy`, which beat
+staging up to 32 MB. Evidence:
 `docs/benchmarks/reports/host_transfers_2026-11-03.md`.
 
 Campaign 3 also added a private benchmark-only commutation output reuse path

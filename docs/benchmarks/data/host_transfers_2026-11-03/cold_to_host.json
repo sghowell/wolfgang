@@ -1,0 +1,77 @@
+{
+ "benchmark": "cold_to_host",
+ "h100": {
+  "builds": {
+   "pbase": "main at 4ca82d5",
+   "pinp": "9e667c3"
+  },
+  "results": {
+   "pbase": {
+    "1": {
+     "first_call_us": 59.2,
+     "second_call_us": 25.6
+    },
+    "1000000": {
+     "first_call_us": 6287.7,
+     "second_call_us": 6012.1
+    },
+    "128": {
+     "first_call_us": 41.0,
+     "second_call_us": 27.1
+    }
+   },
+   "pinp": {
+    "1": {
+     "first_call_us": 46.5,
+     "second_call_us": 11.2
+    },
+    "1000000": {
+     "first_call_us": 9836.5,
+     "second_call_us": 2851.2
+    },
+    "128": {
+     "first_call_us": 27.3,
+     "second_call_us": 10.8
+    }
+   }
+  }
+ },
+ "method": "15 fresh threads per size, each timing one first and one second to_host of a 24-qubit operator; medians",
+ "mi300x": {
+  "builds": {
+   "base": "main at ad6f7a8",
+   "pinp": "9e667c3"
+  },
+  "results": {
+   "base": {
+    "1": {
+     "first_call_us": 49.6,
+     "second_call_us": 42.2
+    },
+    "1000000": {
+     "first_call_us": 1668.4,
+     "second_call_us": 1639.1
+    },
+    "128": {
+     "first_call_us": 61.4,
+     "second_call_us": 32.8
+    }
+   },
+   "pinp": {
+    "1": {
+     "first_call_us": 26.1,
+     "second_call_us": 22.3
+    },
+    "1000000": {
+     "first_call_us": 1703.1,
+     "second_call_us": 1693.6
+    },
+    "128": {
+     "first_call_us": 45.1,
+     "second_call_us": 18.4
+    }
+   }
+  }
+ },
+ "script": "benchmarks/probe_cold_to_host.py"
+}
