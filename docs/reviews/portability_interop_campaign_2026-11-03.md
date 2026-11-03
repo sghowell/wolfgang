@@ -129,3 +129,44 @@ documentation. The benchmarked candidate is `b072c0a`.
 - Residual risk:
   - one H100 and one MI300X;
   - device `hypot` can differ from host libm by a few ulps at the threshold.
+
+## Slice 6: Metal follow-ups
+
+Branch `codex/metal-followups`, commits `a26a756`..`c014c0f`, then a merge of
+main (`ec7d9b0`), plus documentation. The benchmarked candidate is `ec7d9b0`.
+
+- Reviewer: independent agent (Metal, numerics, build and packaging roles),
+  read-only.
+- Findings: P0 0, P1 1, P2 3, P3 6.
+- P1 resolution (sdist audit): the embed script lived in a new top-level
+  `cmake/` directory, which the source-distribution audit rejects. It moved to
+  `src/metal/embed_binary.cmake`.
+- P2 resolutions:
+  - peak memory: the parallel path held the sort index and full-size outputs
+    alongside the scratch buffers. When at least half the terms survive,
+    chunks now compact in place and become the output. The sort index is
+    released right after the GPU wait.
+  - documentation and evidence were missing; they are now in
+    `docs/architecture/apple_accelerator.md` and the report.
+  - the precompiled-kernel test could pass even if the runtime source loaded.
+    A private hook now reports the loaded library, and the test asserts it in
+    fresh processes for both kinds.
+- P3 resolutions:
+  - with split command buffers, the first failed buffer is reported only after
+    all committed buffers finish;
+  - every global step gets its own buffer above 2^26 positions, so one buffer
+    never covers a whole 2^28-position sort;
+  - the CMake probe trial-compiles the kernels instead of only finding
+    `xcrun metal`, and passes the deployment target;
+  - chunk count is four per hardware thread for load balance;
+  - tests assert the parallel and split paths through hybrid run counters.
+- Validation after fixes (M4 Pro, at the documentation commit):
+  `WOLFGANG_VALIDATE_METAL=1 python scripts/validate.py --profile core`,
+  `--profile quality` and `--profile docs` passed; an independent stress
+  script was bit-identical to CPU at chunk-boundary sizes.
+- Deferred: Apple oneTBB timings (oneTBB is not installed on the M4 Pro);
+  inputs near the 2^31-term limit.
+- Residual risk:
+  - one Apple GPU and one macOS version;
+  - the GPU timeout depends on the display and driver; large inputs were run
+    only on this Mac.

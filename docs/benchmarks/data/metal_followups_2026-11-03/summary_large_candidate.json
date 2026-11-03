@@ -1,0 +1,1168 @@
+{
+  "correctness": "hybrid and host-bridge outputs checked bit-identical to CPU simplify before timing",
+  "environment": {
+    "Metal": {
+      "capability_summary": "unified_memory=true; low_power=false; headless=false; removable=false; recommended_max_working_set_size_bytes=40200896512",
+      "device_name": "Apple M4 Pro",
+      "enabled": true,
+      "macos_version": "Version 26.6.2 (Build 25G83)",
+      "runtime_available": true,
+      "storage_mode": "MTLResourceStorageModeShared",
+      "xcode_or_clt_version": "AppleClang 21.0.0.21000099"
+    },
+    "active_fastpauli_cpu_backend": "scalar",
+    "apple_hardware": {
+      "chip": "Apple M4 Pro",
+      "core_summary": "12 (8 Performance and 4 Efficiency)",
+      "model_identifier": "Mac16,11",
+      "model_name": "Mac mini",
+      "total_core_count": 12
+    },
+    "compiler": "Apple clang version 21.0.0 (clang-2100.0.123.102)",
+    "compiler_build_config": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CUDA_COMPILER_ID": "not_available",
+      "CMAKE_CUDA_COMPILER_VERSION": "not_available",
+      "CMAKE_CXX_COMPILER_ID": "AppleClang",
+      "CMAKE_CXX_COMPILER_VERSION": "21.0.0.21000099",
+      "CMAKE_HIP_COMPILER_ID": "not_available",
+      "CMAKE_HIP_COMPILER_VERSION": "not_available",
+      "CMAKE_OBJCXX_COMPILER_ID": "AppleClang",
+      "CMAKE_OBJCXX_COMPILER_VERSION": "21.0.0.21000099"
+    },
+    "compiler_cpu_flags": {
+      "detected": [],
+      "sources_checked": [
+        "ARCHFLAGS",
+        "CFLAGS",
+        "CMAKE_ARGS",
+        "CMAKE_BUILD_TYPE",
+        "CMAKE_CXX_FLAGS",
+        "CPPFLAGS",
+        "CXXFLAGS",
+        "SKBUILD_CMAKE_ARGS"
+      ]
+    },
+    "cpu_architecture": "arm64",
+    "cpu_cmake_options": {
+      "WOLFGANG_BUILD_CPU_BACKEND": "scalar",
+      "WOLFGANG_CUDA_ARCHITECTURES": "80,86,89,90,100-real,120",
+      "WOLFGANG_CUDA_USE_CUB": "ON",
+      "WOLFGANG_CUDA_USE_THRUST": "ON",
+      "WOLFGANG_ENABLE_ARM_NEON": "auto",
+      "WOLFGANG_ENABLE_ARM_SVE": "auto",
+      "WOLFGANG_ENABLE_AVX2": "auto",
+      "WOLFGANG_ENABLE_AVX512": "auto",
+      "WOLFGANG_ENABLE_CUDA": "OFF",
+      "WOLFGANG_ENABLE_HIP": "OFF",
+      "WOLFGANG_ENABLE_METAL": "ON",
+      "WOLFGANG_ENABLE_NATIVE": "OFF",
+      "WOLFGANG_ENABLE_OPENMP": "OFF",
+      "WOLFGANG_ENABLE_TBB": "auto",
+      "WOLFGANG_HIP_ARCHITECTURES": "gfx942"
+    },
+    "logical_cpu_count": 12,
+    "oneTBB": {
+      "enabled": false,
+      "version": "not_available"
+    },
+    "operating_system": "macOS-26.6.2-arm64-arm-64bit",
+    "python_version": "3.12.12",
+    "thread_settings": {
+      "MKL_NUM_THREADS": "unset",
+      "OMP_NUM_THREADS": "unset",
+      "controlled_thread_count": "not_controlled"
+    }
+  },
+  "rows": [
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.08057683426886797,
+        "metal_host_bridge": 0.08424937538802624,
+        "metal_hybrid": 0.018638083711266518
+      },
+      "num_qubits": 24,
+      "num_terms": 1048576,
+      "output_terms": [
+        1048576
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.08057683426886797,
+          0.08237908408045769,
+          0.080507249571383
+        ],
+        "metal_host_bridge": [
+          0.08424937538802624,
+          0.08578925020992756,
+          0.08361054211854935
+        ],
+        "metal_hybrid": [
+          0.018638083711266518,
+          0.02132145781069994,
+          0.013374541886150837
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.08050256222486496,
+          0.08160675037652254
+        ],
+        "metal_host_bridge": [
+          0.08375758258625865,
+          0.08562908368185163
+        ],
+        "metal_hybrid": [
+          0.0150693547911942,
+          0.020698062609881163
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07893912494182587,
+          0.08250591717660427
+        ],
+        "metal_host_bridge": [
+          0.0833209166303277,
+          0.10116424970328808
+        ],
+        "metal_hybrid": [
+          0.011849625036120415,
+          0.02253770735114813
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07971658278256655,
+        "metal_host_bridge": 0.0829867497086525,
+        "metal_hybrid": 0.01988887507468462
+      },
+      "num_qubits": 24,
+      "num_terms": 1048576,
+      "output_terms": [
+        524288
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.0810156250372529,
+          0.07971658278256655,
+          0.07884483225643635
+        ],
+        "metal_host_bridge": [
+          0.08426245860755444,
+          0.0829867497086525,
+          0.08176629152148962
+        ],
+        "metal_hybrid": [
+          0.02036433294415474,
+          0.01988887507468462,
+          0.016987834125757217
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.07935958309099078,
+          0.08042918751016259
+        ],
+        "metal_host_bridge": [
+          0.08211227133870125,
+          0.08323629153892398
+        ],
+        "metal_hybrid": [
+          0.016318958718329668,
+          0.020484771113842726
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07850137539207935,
+          0.08488795813173056
+        ],
+        "metal_host_bridge": [
+          0.0809418335556984,
+          0.08921404182910919
+        ],
+        "metal_hybrid": [
+          0.01376112550497055,
+          0.021690708585083485
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07943404279649258,
+        "metal_host_bridge": 0.08083770796656609,
+        "metal_hybrid": 0.018274209462106228
+      },
+      "num_qubits": 24,
+      "num_terms": 1048576,
+      "output_terms": [
+        104857
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07897720765322447,
+          0.07943404279649258,
+          0.07947875000536442
+        ],
+        "metal_host_bridge": [
+          0.08083770796656609,
+          0.0812603747472167,
+          0.08027699962258339
+        ],
+        "metal_hybrid": [
+          0.018274209462106228,
+          0.019352207891643047,
+          0.013636624440550804
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.07893283246085048,
+          0.07956622913479805
+        ],
+        "metal_host_bridge": [
+          0.08029102068394423,
+          0.08105070888996124
+        ],
+        "metal_hybrid": [
+          0.013497249688953161,
+          0.018652666360139847
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.0781595828011632,
+          0.08164529222995043
+        ],
+        "metal_host_bridge": [
+          0.07970354240387678,
+          0.08137695956975222
+        ],
+        "metal_hybrid": [
+          0.012217041105031967,
+          0.020923499949276447
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.08099291659891605,
+        "metal_host_bridge": 0.08466812502592802,
+        "metal_hybrid": 0.02305216621607542
+      },
+      "num_qubits": 24,
+      "num_terms": 1048577,
+      "output_terms": [
+        1048577
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.08099291659891605,
+          0.08232833351939917,
+          0.07884033396840096
+        ],
+        "metal_host_bridge": [
+          0.08466812502592802,
+          0.08547516725957394,
+          0.08258929196745157
+        ],
+        "metal_hybrid": [
+          0.025329584255814552,
+          0.02305216621607542,
+          0.01693512499332428
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.08031837502494454,
+          0.08197237551212311
+        ],
+        "metal_host_bridge": [
+          0.08432514639571309,
+          0.08564931293949485
+        ],
+        "metal_hybrid": [
+          0.01674852054566145,
+          0.024810396134853363
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07837420795112848,
+          0.08317408431321383
+        ],
+        "metal_host_bridge": [
+          0.08226408250629902,
+          0.09162733424454927
+        ],
+        "metal_hybrid": [
+          0.015404750593006611,
+          0.028330457396805286
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07987879030406475,
+        "metal_host_bridge": 0.08214304130524397,
+        "metal_hybrid": 0.023317459039390087
+      },
+      "num_qubits": 24,
+      "num_terms": 1048577,
+      "output_terms": [
+        524288
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.0804726667702198,
+          0.07987879030406475,
+          0.07836912479251623
+        ],
+        "metal_host_bridge": [
+          0.0834897505119443,
+          0.08214304130524397,
+          0.08140137512236834
+        ],
+        "metal_hybrid": [
+          0.023317459039390087,
+          0.025230875238776207,
+          0.017588958144187927
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.07881550025194883,
+          0.0805624583736062
+        ],
+        "metal_host_bridge": [
+          0.08173754205927253,
+          0.08333160495385528
+        ],
+        "metal_hybrid": [
+          0.016794416587799788,
+          0.024821145460009575
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07803879212588072,
+          0.08197220787405968
+        ],
+        "metal_host_bridge": [
+          0.08099879138171673,
+          0.08475195802748203
+        ],
+        "metal_hybrid": [
+          0.015577750280499458,
+          0.027750499546527863
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07853245828300714,
+        "metal_host_bridge": 0.08035900071263313,
+        "metal_hybrid": 0.02105187438428402
+      },
+      "num_qubits": 24,
+      "num_terms": 1048577,
+      "output_terms": [
+        104857
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07853245828300714,
+          0.0798109583556652,
+          0.0780712915584445
+        ],
+        "metal_host_bridge": [
+          0.08035900071263313,
+          0.0815978329628706,
+          0.07999145891517401
+        ],
+        "metal_hybrid": [
+          0.02105187438428402,
+          0.024310999549925327,
+          0.015338875353336334
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.07817441644147038,
+          0.0797496666200459
+        ],
+        "metal_host_bridge": [
+          0.08011704217642546,
+          0.08168172929435968
+        ],
+        "metal_hybrid": [
+          0.01548514561727643,
+          0.024790271185338497
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07769208215177059,
+          0.08774933312088251
+        ],
+        "metal_host_bridge": [
+          0.0794674577191472,
+          0.08373591676354408
+        ],
+        "metal_hybrid": [
+          0.014944209717214108,
+          0.02690008282661438
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.3750977087765932,
+        "metal_host_bridge": 0.39139450062066317,
+        "metal_hybrid": 0.08587883412837982
+      },
+      "num_qubits": 24,
+      "num_terms": 4194304,
+      "output_terms": [
+        4194304
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.3745227921754122,
+          0.37576779164373875,
+          0.3750977087765932
+        ],
+        "metal_host_bridge": [
+          0.3902036249637604,
+          0.39139450062066317,
+          0.3918317072093487
+        ],
+        "metal_hybrid": [
+          0.08587883412837982,
+          0.08763837534934282,
+          0.08147245738655329
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.37415058352053165,
+          0.37585195805877447
+        ],
+        "metal_host_bridge": [
+          0.3900666041299701,
+          0.39196627121418715
+        ],
+        "metal_hybrid": [
+          0.07920579193159938,
+          0.08793685445562005
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.3700986662879586,
+          0.38394708279520273
+        ],
+        "metal_host_bridge": [
+          0.3818750837817788,
+          0.3943267082795501
+        ],
+        "metal_hybrid": [
+          0.07583216670900583,
+          0.09529254119843245
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.3600737499073148,
+        "metal_host_bridge": 0.36926816683262587,
+        "metal_hybrid": 0.08182150032371283
+      },
+      "num_qubits": 24,
+      "num_terms": 4194304,
+      "output_terms": [
+        2097152
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.3600737499073148,
+          0.3622863329946995,
+          0.3584528751671314
+        ],
+        "metal_host_bridge": [
+          0.36926816683262587,
+          0.3730306662619114,
+          0.366219125688076
+        ],
+        "metal_hybrid": [
+          0.08545941766351461,
+          0.08182150032371283,
+          0.07768512517213821
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.35877564596012235,
+          0.3665164583362639
+        ],
+        "metal_host_bridge": [
+          0.36858281306922436,
+          0.37308991653844714
+        ],
+        "metal_hybrid": [
+          0.0790076875127852,
+          0.08544193860143423
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.35760266706347466,
+          0.374183707870543
+        ],
+        "metal_host_bridge": [
+          0.36483566649258137,
+          0.4162558326497674
+        ],
+        "metal_hybrid": [
+          0.07630845811218023,
+          0.09136558324098587
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.3471839586272836,
+        "metal_host_bridge": 0.35316395852714777,
+        "metal_hybrid": 0.08023875020444393
+      },
+      "num_qubits": 24,
+      "num_terms": 4194304,
+      "output_terms": [
+        419430
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.3471839586272836,
+          0.35267904214560986,
+          0.344197042286396
+        ],
+        "metal_host_bridge": [
+          0.35316395852714777,
+          0.35977895744144917,
+          0.3505817912518978
+        ],
+        "metal_hybrid": [
+          0.08417112473398447,
+          0.08023875020444393,
+          0.07670262549072504
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.34611014602705836,
+          0.3526153960265219
+        ],
+        "metal_host_bridge": [
+          0.3509334367699921,
+          0.3589142495766282
+        ],
+        "metal_hybrid": [
+          0.07648879149928689,
+          0.08426427049562335
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.34298037458211184,
+          0.37744833342731
+        ],
+        "metal_host_bridge": [
+          0.3491584165021777,
+          0.3675652500241995
+        ],
+        "metal_hybrid": [
+          0.07487429212778807,
+          0.10638533346354961
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.08216429129242897,
+        "metal_host_bridge": 0.08607154153287411,
+        "metal_hybrid": 0.0191793330013752
+      },
+      "num_qubits": 60,
+      "num_terms": 1048576,
+      "output_terms": [
+        1048576
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.08216429129242897,
+          0.08220916707068682,
+          0.08143158443272114
+        ],
+        "metal_host_bridge": [
+          0.08674370776861906,
+          0.08607154153287411,
+          0.08398491702973843
+        ],
+        "metal_hybrid": [
+          0.020020000636577606,
+          0.0191793330013752,
+          0.013572082854807377
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.0803756881505251,
+          0.08281239587813616
+        ],
+        "metal_host_bridge": [
+          0.08426416711881757,
+          0.08651454141363502
+        ],
+        "metal_hybrid": [
+          0.013566853944212198,
+          0.020163542591035366
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07715866714715958,
+          0.08636741619557142
+        ],
+        "metal_host_bridge": [
+          0.0798228345811367,
+          0.0889252508059144
+        ],
+        "metal_hybrid": [
+          0.011986874975264072,
+          0.02126083429902792
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.08028300013393164,
+        "metal_host_bridge": 0.08283737488090992,
+        "metal_hybrid": 0.02016300056129694
+      },
+      "num_qubits": 60,
+      "num_terms": 1048576,
+      "output_terms": [
+        524288
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.08030462451279163,
+          0.08028300013393164,
+          0.07884158287197351
+        ],
+        "metal_host_bridge": [
+          0.08283737488090992,
+          0.08305799961090088,
+          0.08192349970340729
+        ],
+        "metal_hybrid": [
+          0.02016300056129694,
+          0.020914999768137932,
+          0.018063917756080627
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.07931350031867623,
+          0.08055106271058321
+        ],
+        "metal_host_bridge": [
+          0.08223308390006423,
+          0.08307837462052703
+        ],
+        "metal_hybrid": [
+          0.01682349992915988,
+          0.020657978951931
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07841287460178137,
+          0.09591837506741285
+        ],
+        "metal_host_bridge": [
+          0.08127029240131378,
+          0.09536595828831196
+        ],
+        "metal_hybrid": [
+          0.014217499643564224,
+          0.02357195969671011
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07857987470924854,
+        "metal_host_bridge": 0.08038445748388767,
+        "metal_hybrid": 0.017543583177030087
+      },
+      "num_qubits": 60,
+      "num_terms": 1048576,
+      "output_terms": [
+        104857
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07857987470924854,
+          0.07943058293312788,
+          0.07801645807921886
+        ],
+        "metal_host_bridge": [
+          0.08038445748388767,
+          0.08128262497484684,
+          0.08001841697841883
+        ],
+        "metal_hybrid": [
+          0.018953874707221985,
+          0.017543583177030087,
+          0.013614875264465809
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.07821462489664555,
+          0.07951531279832125
+        ],
+        "metal_host_bridge": [
+          0.08001024974510074,
+          0.08109574997797608
+        ],
+        "metal_hybrid": [
+          0.013501958455890417,
+          0.020454833284020424
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07776566781103611,
+          0.08659820817410946
+        ],
+        "metal_host_bridge": [
+          0.07964941672980785,
+          0.14381404127925634
+        ],
+        "metal_hybrid": [
+          0.011523834429681301,
+          0.023011166602373123
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.0813466664403677,
+        "metal_host_bridge": 0.0861218748614192,
+        "metal_hybrid": 0.023446083068847656
+      },
+      "num_qubits": 60,
+      "num_terms": 1048577,
+      "output_terms": [
+        1048577
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.0813466664403677,
+          0.0830387081950903,
+          0.08007791638374329
+        ],
+        "metal_host_bridge": [
+          0.0861218748614192,
+          0.08679720759391785,
+          0.08448045793920755
+        ],
+        "metal_hybrid": [
+          0.023899375461041927,
+          0.023446083068847656,
+          0.016834291629493237
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.08009441662579775,
+          0.08197320811450481
+        ],
+        "metal_host_bridge": [
+          0.08461066661402583,
+          0.08688547881320119
+        ],
+        "metal_hybrid": [
+          0.01610204204916954,
+          0.02427585469558835
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07883683405816555,
+          0.08376816660165787
+        ],
+        "metal_host_bridge": [
+          0.08267549984157085,
+          0.09798295889049768
+        ],
+        "metal_hybrid": [
+          0.015350583009421825,
+          0.026117833331227303
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07925779186189175,
+        "metal_host_bridge": 0.08255883399397135,
+        "metal_hybrid": 0.02303370740264654
+      },
+      "num_qubits": 60,
+      "num_terms": 1048577,
+      "output_terms": [
+        524288
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07925779186189175,
+          0.0819151671603322,
+          0.07875445764511824
+        ],
+        "metal_host_bridge": [
+          0.08255883399397135,
+          0.08378508407622576,
+          0.08146716747432947
+        ],
+        "metal_hybrid": [
+          0.02303370740264654,
+          0.02375150006264448,
+          0.01775966677814722
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.07893945835530758,
+          0.08093106187880039
+        ],
+        "metal_host_bridge": [
+          0.08169270865619183,
+          0.08365368796512485
+        ],
+        "metal_hybrid": [
+          0.017861250322312117,
+          0.02388256276026368
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07822179235517979,
+          0.08217800036072731
+        ],
+        "metal_host_bridge": [
+          0.0812130831182003,
+          0.09358366765081882
+        ],
+        "metal_hybrid": [
+          0.01576029136776924,
+          0.033993582241237164
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07870554178953171,
+        "metal_host_bridge": 0.08086195960640907,
+        "metal_hybrid": 0.019927958957850933
+      },
+      "num_qubits": 60,
+      "num_terms": 1048577,
+      "output_terms": [
+        104857
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07870554178953171,
+          0.07940141670405865,
+          0.0786875830963254
+        ],
+        "metal_host_bridge": [
+          0.08086195960640907,
+          0.08128487505018711,
+          0.08006399963051081
+        ],
+        "metal_hybrid": [
+          0.019927958957850933,
+          0.022964375093579292,
+          0.018526083789765835
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.07867610407993197,
+          0.07943985378369689
+        ],
+        "metal_host_bridge": [
+          0.0804462293162942,
+          0.08120779134333134
+        ],
+        "metal_hybrid": [
+          0.016719041392207146,
+          0.022781479638069868
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.07819233275949955,
+          0.08614875003695488
+        ],
+        "metal_host_bridge": [
+          0.0797523744404316,
+          0.08187266625463963
+        ],
+        "metal_hybrid": [
+          0.015222583897411823,
+          0.025105792097747326
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.3732282919809222,
+        "metal_host_bridge": 0.3879185002297163,
+        "metal_hybrid": 0.0818105423822999
+      },
+      "num_qubits": 60,
+      "num_terms": 4194304,
+      "output_terms": [
+        4194304
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.3732282919809222,
+          0.3767107082530856,
+          0.37276995833963156
+        ],
+        "metal_host_bridge": [
+          0.3892184169963002,
+          0.3879185002297163,
+          0.38335754070430994
+        ],
+        "metal_hybrid": [
+          0.0818105423822999,
+          0.08531916700303555,
+          0.07653516624122858
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.37212820816785097,
+          0.37625327054411173
+        ],
+        "metal_host_bridge": [
+          0.38501873007044196,
+          0.3903966252692044
+        ],
+        "metal_hybrid": [
+          0.07806518720462918,
+          0.08583933394402266
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.36423812434077263,
+          0.3943693330511451
+        ],
+        "metal_host_bridge": [
+          0.3764687916263938,
+          0.40258645825088024
+        ],
+        "metal_hybrid": [
+          0.07612366694957018,
+          0.09247612487524748
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.3596179997548461,
+        "metal_host_bridge": 0.37041808292269707,
+        "metal_hybrid": 0.08428770862519741
+      },
+      "num_qubits": 60,
+      "num_terms": 4194304,
+      "output_terms": [
+        2097152
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.3596179997548461,
+          0.362126125022769,
+          0.355407833121717
+        ],
+        "metal_host_bridge": [
+          0.37041808292269707,
+          0.37141162529587746,
+          0.36212662514299154
+        ],
+        "metal_hybrid": [
+          0.08428770862519741,
+          0.0851258747279644,
+          0.07762195821851492
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.35912135476246476,
+          0.3622323335148394
+        ],
+        "metal_host_bridge": [
+          0.36396831227466464,
+          0.3714429587125778
+        ],
+        "metal_hybrid": [
+          0.07730125030502677,
+          0.08616120787337422
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.3548079151660204,
+          0.37466925010085106
+        ],
+        "metal_host_bridge": [
+          0.3598731253296137,
+          0.38071887474507093
+        ],
+        "metal_hybrid": [
+          0.07502404134720564,
+          0.09621483273804188
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.34559987485408783,
+        "metal_host_bridge": 0.35150916688144207,
+        "metal_hybrid": 0.08395845908671618
+      },
+      "num_qubits": 60,
+      "num_terms": 4194304,
+      "output_terms": [
+        419430
+      ],
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.3511691661551595,
+          0.34559987485408783,
+          0.3442073753103614
+        ],
+        "metal_host_bridge": [
+          0.35581466648727655,
+          0.35150916688144207,
+          0.3499737922102213
+        ],
+        "metal_hybrid": [
+          0.08395845908671618,
+          0.08883754257112741,
+          0.07618049997836351
+        ]
+      },
+      "raw_seconds_iqr": {
+        "cpu_simplify": [
+          0.3446603752672672,
+          0.3510171249508858
+        ],
+        "metal_host_bridge": [
+          0.35011395858600736,
+          0.356466312892735
+        ],
+        "metal_hybrid": [
+          0.07593237515538931,
+          0.0849806871265173
+        ]
+      },
+      "raw_seconds_min_max": {
+        "cpu_simplify": [
+          0.34332258254289627,
+          0.3517410410568118
+        ],
+        "metal_host_bridge": [
+          0.3485048748552799,
+          0.3882341245189309
+        ],
+        "metal_hybrid": [
+          0.07314241677522659,
+          0.09341887477785349
+        ]
+      }
+    }
+  ],
+  "runs": [
+    {
+      "command": "python benchmarks/bench_metal_hybrid_simplify.py --sizes 1048576 1048577 4194304 --repeat 5 --seed 20261106 --output cand_1.json",
+      "file": "cand_1.json",
+      "git_commit": "ec7d9b0",
+      "git_dirty": true,
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "4118aa9c1a8348f5f06bed0e46e84e0aff393c32691349a075edff0cf7b9c7f7",
+        "built_native_source_sha256": "29196fa0e8690948288709dce9a61c2e83169fa23bdc8f6cfcf495c9125c3f08",
+        "checkout_native_source_sha256": "29196fa0e8690948288709dce9a61c2e83169fa23bdc8f6cfcf495c9125c3f08",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261106
+    },
+    {
+      "command": "python benchmarks/bench_metal_hybrid_simplify.py --sizes 1048576 1048577 4194304 --repeat 5 --seed 20261107 --output cand_2.json",
+      "file": "cand_2.json",
+      "git_commit": "ec7d9b0",
+      "git_dirty": true,
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "4118aa9c1a8348f5f06bed0e46e84e0aff393c32691349a075edff0cf7b9c7f7",
+        "built_native_source_sha256": "29196fa0e8690948288709dce9a61c2e83169fa23bdc8f6cfcf495c9125c3f08",
+        "checkout_native_source_sha256": "29196fa0e8690948288709dce9a61c2e83169fa23bdc8f6cfcf495c9125c3f08",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261107
+    },
+    {
+      "command": "python benchmarks/bench_metal_hybrid_simplify.py --sizes 1048576 1048577 4194304 --repeat 5 --seed 20261108 --output cand_3.json",
+      "file": "cand_3.json",
+      "git_commit": "ec7d9b0",
+      "git_dirty": true,
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "4118aa9c1a8348f5f06bed0e46e84e0aff393c32691349a075edff0cf7b9c7f7",
+        "built_native_source_sha256": "29196fa0e8690948288709dce9a61c2e83169fa23bdc8f6cfcf495c9125c3f08",
+        "checkout_native_source_sha256": "29196fa0e8690948288709dce9a61c2e83169fa23bdc8f6cfcf495c9125c3f08",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261108
+    }
+  ],
+  "simplify_arguments": "defaults: atol=1e-12, rtol=0.0"
+}

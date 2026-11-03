@@ -320,8 +320,9 @@ kernel void fp_simplify_words1_compact_survivors(
 //
 // Steps with j <= kHybridSortTile / 2 stay inside an aligned tile and run in
 // threadgroup memory, so a 2^20-position sort needs 66 dispatches, not 210.
-// The host compiles this file with WOLFGANG_HYBRID_SORT_TILE set from
-// kHybridSortTile in simplify_metal.mm, so the two cannot drift apart.
+// WOLFGANG_HYBRID_SORT_TILE comes from the CMake variable that also defines
+// the host's kHybridSortTile, for both the precompiled library and the runtime
+// source compile, so the two cannot drift apart.
 #ifndef WOLFGANG_HYBRID_SORT_TILE
 #error "WOLFGANG_HYBRID_SORT_TILE must be defined by the host compile options"
 #endif

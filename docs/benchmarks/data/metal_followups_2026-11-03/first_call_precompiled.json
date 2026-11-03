@@ -1,0 +1,305 @@
+{
+  "benchmark": "metal_hybrid_simplify_first_call",
+  "command": "python benchmarks/bench_metal_hybrid_simplify.py --first-call-processes 10 --output first_call_precompiled.json",
+  "environment": {
+    "CUDA": {
+      "enabled": false
+    },
+    "HIP": {
+      "architectures": "not_available",
+      "driver_version": "",
+      "enabled": false,
+      "rocm_toolkit_version": "not_available",
+      "runtime_available": false,
+      "runtime_version": ""
+    },
+    "Metal": {
+      "capability_summary": "unified_memory=true; low_power=false; headless=false; removable=false; recommended_max_working_set_size_bytes=40200896512",
+      "device_name": "Apple M4 Pro",
+      "enabled": true,
+      "macos_version": "Version 26.6.2 (Build 25G83)",
+      "runtime_available": true,
+      "storage_mode": "MTLResourceStorageModeShared",
+      "xcode_or_clt_version": "AppleClang 21.0.0.21000099"
+    },
+    "accelerator_build_mode": "metal_only",
+    "active_fastpauli_cpu_backend": "scalar",
+    "apple_hardware": {
+      "chip": "Apple M4 Pro",
+      "core_summary": "12 (8 Performance and 4 Efficiency)",
+      "model_identifier": "Mac16,11",
+      "model_name": "Mac mini",
+      "total_core_count": 12
+    },
+    "available_fastpauli_cpu_backends": [
+      "scalar",
+      "neon"
+    ],
+    "cmake": "not_available",
+    "compiled_accelerator_backends": [
+      "metal"
+    ],
+    "compiled_backends": [
+      "cpu",
+      "metal"
+    ],
+    "compiled_fastpauli_cpu_backends": [
+      "scalar",
+      "neon"
+    ],
+    "compiler": "Apple clang version 21.0.0 (clang-2100.0.123.102)",
+    "compiler_build_config": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CUDA_COMPILER_ID": "not_available",
+      "CMAKE_CUDA_COMPILER_VERSION": "not_available",
+      "CMAKE_CXX_COMPILER_ID": "AppleClang",
+      "CMAKE_CXX_COMPILER_VERSION": "21.0.0.21000099",
+      "CMAKE_HIP_COMPILER_ID": "not_available",
+      "CMAKE_HIP_COMPILER_VERSION": "not_available",
+      "CMAKE_OBJCXX_COMPILER_ID": "AppleClang",
+      "CMAKE_OBJCXX_COMPILER_VERSION": "21.0.0.21000099"
+    },
+    "compiler_cpu_flags": {
+      "detected": [],
+      "sources_checked": [
+        "ARCHFLAGS",
+        "CFLAGS",
+        "CMAKE_ARGS",
+        "CMAKE_BUILD_TYPE",
+        "CMAKE_CXX_FLAGS",
+        "CPPFLAGS",
+        "CXXFLAGS",
+        "SKBUILD_CMAKE_ARGS"
+      ]
+    },
+    "cpu_architecture": "arm64",
+    "cpu_backend_build_flags": {
+      "avx2": false,
+      "avx512": false,
+      "neon": true,
+      "scalar": true,
+      "sve": false,
+      "tbb": false
+    },
+    "cpu_cmake_options": {
+      "WOLFGANG_BUILD_CPU_BACKEND": "scalar",
+      "WOLFGANG_CUDA_ARCHITECTURES": "80,86,89,90,100-real,120",
+      "WOLFGANG_CUDA_USE_CUB": "ON",
+      "WOLFGANG_CUDA_USE_THRUST": "ON",
+      "WOLFGANG_ENABLE_ARM_NEON": "auto",
+      "WOLFGANG_ENABLE_ARM_SVE": "auto",
+      "WOLFGANG_ENABLE_AVX2": "auto",
+      "WOLFGANG_ENABLE_AVX512": "auto",
+      "WOLFGANG_ENABLE_CUDA": "OFF",
+      "WOLFGANG_ENABLE_HIP": "OFF",
+      "WOLFGANG_ENABLE_METAL": "ON",
+      "WOLFGANG_ENABLE_NATIVE": "OFF",
+      "WOLFGANG_ENABLE_OPENMP": "OFF",
+      "WOLFGANG_ENABLE_TBB": "auto",
+      "WOLFGANG_HIP_ARCHITECTURES": "gfx942"
+    },
+    "cpu_model": "arm",
+    "cpu_vendor_or_soc": "Apple M4 Pro",
+    "instruction_set_probe": {
+      "features": [
+        "aes",
+        "armv8_1_atomics",
+        "bf16",
+        "crc32",
+        "dotprod",
+        "fcma",
+        "fp16",
+        "i8mm",
+        "jscvt",
+        "lse",
+        "neon",
+        "pmull",
+        "sha1",
+        "sha256"
+      ],
+      "source": [
+        "hw.optional.arm.FEAT_AES",
+        "hw.optional.arm.FEAT_BF16",
+        "hw.optional.arm.FEAT_CRC32",
+        "hw.optional.arm.FEAT_DotProd",
+        "hw.optional.arm.FEAT_FCMA",
+        "hw.optional.arm.FEAT_FP16",
+        "hw.optional.arm.FEAT_I8MM",
+        "hw.optional.arm.FEAT_JSCVT",
+        "hw.optional.arm.FEAT_LSE",
+        "hw.optional.arm.FEAT_PMULL",
+        "hw.optional.arm.FEAT_SHA1",
+        "hw.optional.arm.FEAT_SHA256",
+        "hw.optional.armv8_1_atomics",
+        "hw.optional.neon"
+      ],
+      "status": "available"
+    },
+    "instruction_sets": [
+      "aes",
+      "armv8_1_atomics",
+      "bf16",
+      "crc32",
+      "dotprod",
+      "fcma",
+      "fp16",
+      "i8mm",
+      "jscvt",
+      "lse",
+      "neon",
+      "pmull",
+      "sha1",
+      "sha256"
+    ],
+    "loaded_native_build": {
+      "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+      "artifact_sha256": "4118aa9c1a8348f5f06bed0e46e84e0aff393c32691349a075edff0cf7b9c7f7",
+      "built_native_source_sha256": "29196fa0e8690948288709dce9a61c2e83169fa23bdc8f6cfcf495c9125c3f08",
+      "checkout_native_source_sha256": "29196fa0e8690948288709dce9a61c2e83169fa23bdc8f6cfcf495c9125c3f08",
+      "matches_checkout_native_sources": true
+    },
+    "logical_cpu_count": 12,
+    "numpy_version": "2.5.4",
+    "oneTBB": {
+      "enabled": false,
+      "version": "not_available"
+    },
+    "operating_system": "macOS-26.6.2-arm64-arm-64bit",
+    "physical_core_count": 12,
+    "python_version": "3.12.12",
+    "requested_fastpauli_cpu_backend": "auto",
+    "runtime_visible_accelerator_backends": [
+      "metal"
+    ],
+    "runtime_visible_backends": [
+      "cpu",
+      "metal"
+    ],
+    "thread_settings": {
+      "MKL_NUM_THREADS": "unset",
+      "OMP_NUM_THREADS": "unset",
+      "controlled_thread_count": "not_controlled"
+    },
+    "unavailable_fastpauli_cpu_backends": {
+      "avx2": "not_compiled",
+      "avx512": "not_compiled",
+      "sve": "not_compiled",
+      "tbb": "not_compiled"
+    }
+  },
+  "git": {
+    "commit": "ec7d9b0",
+    "commit_label": "ec7d9b0+dirty",
+    "dirty": true,
+    "requested_commit_label": null,
+    "requested_label_matches_checkout": true,
+    "source": "git",
+    "working_tree_status": [
+      " M docs/architecture/apple_accelerator.md"
+    ]
+  },
+  "num_qubits": 40,
+  "num_terms": 12288,
+  "rows": [
+    {
+      "first_seconds": 0.0030695823952555656,
+      "second_seconds": 0.0006460407748818398,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.001165958121418953,
+      "second_seconds": 0.0010579153895378113,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.0028400830924510956,
+      "second_seconds": 0.0006502075120806694,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.001158083789050579,
+      "second_seconds": 0.000940125435590744,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.003411625511944294,
+      "second_seconds": 0.0009394586086273193,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.0007922910153865814,
+      "second_seconds": 0.000963166356086731,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.0030905837193131447,
+      "second_seconds": 0.0008452916517853737,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.0010845428332686424,
+      "second_seconds": 0.0010938327759504318,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.0029120827093720436,
+      "second_seconds": 0.0006945831701159477,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.0008186670020222664,
+      "second_seconds": 0.0007370831444859505,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.004786917008459568,
+      "second_seconds": 0.0007805414497852325,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.0012584170326590538,
+      "second_seconds": 0.001049332320690155,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.0030043330043554306,
+      "second_seconds": 0.0007340824231505394,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.0008290829136967659,
+      "second_seconds": 0.0007461672648787498,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.0029534166678786278,
+      "second_seconds": 0.0007553752511739731,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.0011673755943775177,
+      "second_seconds": 0.001023625023663044,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.0031569581478834152,
+      "second_seconds": 0.0007917499169707298,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.0007825000211596489,
+      "second_seconds": 0.0007673325017094612,
+      "variant": "host_bridge"
+    },
+    {
+      "first_seconds": 0.003951749764382839,
+      "second_seconds": 0.0005037086084485054,
+      "variant": "hybrid"
+    },
+    {
+      "first_seconds": 0.001132957637310028,
+      "second_seconds": 0.0009488752111792564,
+      "variant": "host_bridge"
+    }
+  ]
+}

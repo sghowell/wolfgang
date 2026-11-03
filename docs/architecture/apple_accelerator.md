@@ -323,16 +323,38 @@ past the term count act as fixed sentinels, so buffers are not padded to a
 power of two, and steps within a 1,024-entry tile run in threadgroup memory. The
 GPU then gathers coefficient bits into sorted order. The CPU sums each duplicate
 run in float64, seeded with the run's first coefficient and in input order,
-applies the CPU drop rule, and compacts survivors in place; the result keeps the
-input's device and command queue. Results equal CPU simplify bit for bit, signed
-zeros included. This sidesteps the Metal
+applies the CPU drop rule, and compacts survivors; the result keeps the input's
+device and command queue. Results equal CPU simplify bit for bit, signed zeros
+included.
+
+From 2^20 terms the CPU reduction runs in parallel with GCD:
+
+- chunks start on run boundaries, so every run keeps its sequential
+  input-order sum;
+- when at least half the terms survive, chunks compact in place and shift into
+  the scratch buffers, which become the output, so peak memory does not grow;
+- otherwise survivors are copied into exact-size outputs.
+
+Above 2^22 sort positions each merge stage commits its own command buffer, and
+above 2^26 each global step does too, so no single buffer nears the GPU
+watchdog. One CMake variable sets the sort tile for the host code and both
+kernel paths.
+
+When Xcode's Metal compiler works at configure time (a trial compile of the
+kernels), the kernels are precompiled into an embedded `.metallib`. Otherwise,
+for example on Command Line Tools-only machines or Xcode without the
+downloaded Metal Toolchain, they compile from the embedded source on each
+process's first hybrid simplify. `_build_info()["metal_simplify_kernels"]`
+reports `precompiled` or `runtime_source`. The benchmark-only switch
+`WOLFGANG_METAL_BENCH_RUNTIME_KERNELS=1` forces the source compile. This sidesteps the Metal
 toolchain's lack of `double` arithmetic without restricting the coefficient
 domain, unlike the fixed32 Campaign 7 candidate. Smaller or wider operators
 keep the transfer-reference host bridge. The benchmark and test selector
 `WOLFGANG_METAL_BENCH_SIMPLIFY` forces the bridge (`host_bridge`) or the hybrid
 at any size (`hybrid`). The public capability record for Metal `simplify` stays
 `host_bridge`, because the reduction always runs on the CPU. Evidence:
-`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md`.
+`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md` and, for large
+inputs and kernel loading, `docs/benchmarks/reports/metal_followups_2026-11-03.md`.
 
 The Wave 1D cross-backend prestage report is
 `docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md`. It records the
