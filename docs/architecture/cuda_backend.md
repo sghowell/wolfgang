@@ -280,6 +280,39 @@ rechecked the same surface in
 default-stream synchronize-before-return invariant. It added no stream handle,
 event object, graph-capture contract, or async Python return object.
 
+## Multiple Devices And Threads
+
+Each `DevicePauliSum` and `DeviceCommutationMatrix` lives on one device.
+Operations whose operands, output or statevector sit on different devices
+raise `ValueError`. Every device switch goes through one guard
+(`src/cuda/device_guard.cuh`), which makes the operand's device current for the
+call and then switches back to the caller's device, unless that device has no
+primary context yet. Since CUDA 12, `cudaSetDevice` creates the primary
+context, about 500 MiB on an H100, so switching back to a device the process
+never used would charge a process that only works on device 1 for a context on
+device 0. In that case the calling thread stays on the operand's device, so
+`cudaGetDevice` reports that device to every library on the thread afterwards.
+PyTorch's device guard avoids the same context but keeps its own thread-local
+device, so its `current_device()` does not change. A non-primary context made
+current through the driver API is not restored, as before. HIP switches back
+unconditionally: ROCm initializes its devices at startup, so switching back
+creates nothing.
+
+CUDA device calls release the GIL, so Python threads can keep several GPUs busy
+at once. The host-side state they touch is per thread (workspaces, mapped
+results) or locked (memory pools, pinned staging buffers). Compute calls also
+take a per-device lock after releasing the GIL: concurrent small calls on one
+device only contended for its default stream and launch path and lost about a
+third of their throughput, so threads on one device run one after another, as
+they did under the GIL, while threads on different devices overlap. Transfers
+(`to_device`, `to_host`, `from_device_arrays`) skip the lock because most of
+their time is host-side copying, which does overlap. Two threads driving two
+H100s reach 1.88-1.98 times one thread's throughput
+(`docs/benchmarks/reports/cuda_multi_gpu_h100_2026-11-03.md`). Concurrent calls
+that write the same `DeviceCommutationMatrix` output race, as with any shared
+buffer. HIP and Metal builds keep the GIL until the same is verified on their
+hardware.
+
 ## Python GPU Array Interop
 
 Initial CUDA expectation support must accept host NumPy arrays by copying them to device internally.
@@ -576,10 +609,19 @@ runs with the benchmark switch `WOLFGANG_CUDA_BENCH_DISABLE_POOL=1`, use
 pool. A consumer on another stream could still read an exported block after
 Wolfgang frees it, so handing out a matrix's pointer through DLPack or the CUDA
 Array Interface marks it, and freeing a marked matrix synchronizes the device
-first, as for `DevicePauliSum.device_arrays()`. Pool memory is not mapped for
-peer devices (the pool grants no `cudaMemPoolSetAccess`), so exported matrices
-and device arrays are readable from their owning device only, even with peer
-access enabled. The pool is not revalidated after `cudaDeviceReset`. Transfers
+first, as for `DevicePauliSum.device_arrays()`. The first export from a
+device maps that device's pool into every peer GPU that can access it
+(`cudaMemPoolSetAccess`, read-write), so a kernel on a peer reads exported
+matrices and device arrays as it would `cudaMalloc` memory once peer access is
+enabled. Before, such a read faulted with an illegal address that poisoned the
+CUDA context. Freeing an exported buffer then synchronizes the mapped peers
+that have a live context, as well as the owning device, because a peer kernel
+may still be reading it. The mapping covers the pool's current and future
+blocks; on two
+NVLink-connected H100s it cost 26 ms once, created no context on the peer, and
+left pool growth and per-call times unchanged
+(`docs/benchmarks/reports/cuda_multi_gpu_h100_2026-11-03.md`). The pool is not
+revalidated after `cudaDeviceReset`. Transfers
 and output creation select the backend with a device count rather than a full
 device-property query.
 Evidence: `docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`,

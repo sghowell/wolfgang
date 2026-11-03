@@ -89,13 +89,11 @@ private:
       device_ordinal_ = -1;
       return;
     }
-    int previous_device = -1;
-    const cudaError_t current_result = cudaGetDevice(&previous_device);
-    (void)cudaSetDevice(device_ordinal_);
-    (void)cudaFree(ptr_);
-    if (current_result == cudaSuccess && previous_device >= 0 &&
-        previous_device != device_ordinal_) {
-      (void)cudaSetDevice(previous_device);
+    {
+      const cuda_detail::ScopedCudaDevice guard(device_ordinal_, std::nothrow);
+      if (cudaFree(ptr_) != cudaSuccess) {
+        (void)cudaGetLastError();
+      }
     }
     ptr_ = nullptr;
     capacity_ = 0;

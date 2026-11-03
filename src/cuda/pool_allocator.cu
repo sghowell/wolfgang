@@ -1,7 +1,11 @@
 #include "cuda/pool_allocator.cuh"
 
+#include "cuda/device_guard.cuh"
+
 #include <cuda_runtime_api.h>
 
+#include <algorithm>
+#include <atomic>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -10,6 +14,11 @@
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <vector>
+
+#if !defined(_WIN32)
+#include <pthread.h>
+#endif
 
 namespace wolfgang::cuda_detail {
 
@@ -17,7 +26,16 @@ namespace {
 
 struct DevicePool {
   cudaMemPool_t pool = nullptr;  // null when the device lacks pool support or pooling is off
+  std::vector<int> mapped_peers;  // peers grant_peer_access_for_export() has mapped it into
+  bool peers_settled = false;     // every peer that can access the pool is mapped
 };
+
+// Set in a child forked from this process: the CUDA state, and any lock a
+// parent thread held at fork, are not usable there, so the exit handler skips.
+std::atomic<bool>& forked_child() {
+  static auto* flag = new std::atomic<bool>(false);
+  return *flag;
+}
 
 // Both live for the whole process (never destroyed) so frees from objects with
 // static storage duration, or from the exit handler, never touch a destroyed
@@ -42,16 +60,15 @@ bool pooling_disabled_by_environment() {
 // Synchronize each pooled device and return every cached block to the driver.
 // Callers hold pools_mutex.
 void trim_pools_locked() {
-  int previous = -1;
-  (void)cudaGetDevice(&previous);
   for (auto& [device, entry] : pools()) {
-    if (entry.pool != nullptr && cudaSetDevice(device) == cudaSuccess) {
+    if (entry.pool == nullptr) {
+      continue;
+    }
+    const ScopedCudaDevice guard(device, std::nothrow);
+    if (guard.ok()) {
       (void)cudaStreamSynchronize(cudaStreamLegacy);
       (void)cudaMemPoolTrimTo(entry.pool, 0);
     }
-  }
-  if (previous >= 0) {
-    (void)cudaSetDevice(previous);
   }
 }
 
@@ -60,6 +77,9 @@ void trim_pools_locked() {
 // CUDA runtime installs its exit handlers on first use, before any pool exists,
 // so this handler runs ahead of runtime teardown.
 void release_pools_at_exit() {
+  if (forked_child().load()) {
+    return;
+  }
   std::lock_guard<std::mutex> lock(pools_mutex());
   trim_pools_locked();
 }
@@ -99,7 +119,12 @@ DevicePool device_pool(int device) {
     }
   }
   if (entry.pool != nullptr) {
-    static const bool registered = std::atexit(release_pools_at_exit) == 0;
+    static const bool registered = [] {
+#if !defined(_WIN32)
+      (void)pthread_atfork(nullptr, nullptr, [] { forked_child().store(true); });
+#endif
+      return std::atexit(release_pools_at_exit) == 0;
+    }();
     (void)registered;
   }
   pools().emplace(device, entry);
@@ -114,6 +139,87 @@ cudaError_t allocate_on_device(int device, void** pointer, std::size_t bytes) {
 }
 
 }  // namespace
+
+void grant_peer_access_for_export(int device) noexcept {
+  try {
+    std::lock_guard<std::mutex> lock(pools_mutex());
+    auto found = pools().find(device);
+    if (found == pools().end() || found->second.pool == nullptr || found->second.peers_settled) {
+      return;  // cudaMalloc memory needs no grant: consumers enable peer access themselves
+    }
+    DevicePool& entry = found->second;
+    int device_count = 0;
+    if (cudaGetDeviceCount(&device_count) != cudaSuccess) {
+      (void)cudaGetLastError();
+      return;
+    }
+    // Peers are mapped one at a time, so one that fails does not keep the
+    // others unmapped; any failure leaves the pool unsettled for the next export.
+    bool settled = true;
+    for (int peer = 0; peer < device_count; ++peer) {
+      if (peer == device ||
+          std::find(entry.mapped_peers.begin(), entry.mapped_peers.end(), peer) != entry.mapped_peers.end()) {
+        continue;
+      }
+      int can_access = 0;
+      if (cudaDeviceCanAccessPeer(&can_access, peer, device) != cudaSuccess) {
+        (void)cudaGetLastError();
+        settled = false;
+        continue;
+      }
+      if (can_access == 0) {
+        continue;
+      }
+      cudaMemAccessDesc desc{};
+      desc.location.type = cudaMemLocationTypeDevice;
+      desc.location.id = peer;
+      // Exports are read-only by contract, but consumers do not enforce it;
+      // read-write matches cudaMalloc memory under peer access.
+      desc.flags = cudaMemAccessFlagsProtReadWrite;
+      // The mapping covers the pool's current and future allocations.
+      if (cudaMemPoolSetAccess(entry.pool, &desc, 1) != cudaSuccess) {
+        (void)cudaGetLastError();
+        settled = false;
+        continue;
+      }
+      entry.mapped_peers.push_back(peer);
+    }
+    entry.peers_settled = settled;
+  } catch (...) {
+    // Leave the pool as it is; the next export retries.
+  }
+}
+
+void synchronize_export_readers(int device) noexcept {
+  {
+    const ScopedCudaDevice guard(device, std::nothrow);
+    if (guard.ok()) {
+      (void)cudaDeviceSynchronize();
+    }
+  }
+  std::vector<int> peers;
+  try {
+    std::lock_guard<std::mutex> lock(pools_mutex());
+    auto found = pools().find(device);
+    if (found != pools().end()) {
+      peers = found->second.mapped_peers;
+    }
+  } catch (...) {
+    peers.clear();
+  }
+  for (const int peer : peers) {
+    // A peer without a primary context has run no kernel that could read the
+    // buffer, and synchronizing it would create one.
+    if (!device_has_primary_context(peer)) {
+      continue;
+    }
+    const ScopedCudaDevice guard(peer, std::nothrow);
+    if (guard.ok()) {
+      (void)cudaDeviceSynchronize();
+    }
+  }
+  (void)cudaGetLastError();  // a destructor must not leave its own error behind
+}
 
 void trim_pools_after_allocation_failure() noexcept {
   try {
@@ -164,19 +270,12 @@ void pool_free_bytes_on_device(void* pointer, int device) noexcept {
   } catch (...) {
     pooled = false;
   }
-  int previous = -1;
-  (void)cudaGetDevice(&previous);
-  if (device != previous) {
-    (void)cudaSetDevice(device);
-  }
+  const ScopedCudaDevice guard(device, std::nothrow);
   // Pool support is fixed per device, so this matches the allocation path.
   const cudaError_t result =
       pooled ? cudaFreeAsync(pointer, cudaStreamLegacy) : cudaFree(pointer);
   if (result != cudaSuccess) {
     (void)cudaGetLastError();  // a destructor must not leave its own error behind
-  }
-  if (device != previous && previous >= 0) {
-    (void)cudaSetDevice(previous);
   }
 }
 

@@ -22,6 +22,21 @@ Next version: TBD
   - Single-threaded commutation kernels are faster: AVX-512 by 1.10-1.24x, AVX2
     by 1.21-1.40x, scalar by up to 1.6x.
   (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`)
+- CUDA, several GPUs:
+  - Device calls release the GIL, so one Python thread per GPU keeps several
+    GPUs busy. Two threads on two H100s reach 1.88-1.98 times one thread's
+    throughput, against 1.0 before. Threads on the same GPU take turns
+    through a per-device lock; transfers overlap.
+  - A kernel on a peer GPU can read buffers exported with `device_arrays()`,
+    DLPack or the CUDA Array Interface. Before, such a read faulted with an
+    illegal address. The first export from a device maps its memory pool into
+    every peer that supports peer access, which took 26 ms on the H100 pair,
+    and freeing an exported buffer now waits for those peers as well as its
+    own device.
+  - A process that only uses GPU 1 no longer creates a 516 MiB context on
+    GPU 0. Wolfgang switches back to the caller's device only if that device
+    already has a context
+    (`docs/benchmarks/reports/cuda_multi_gpu_h100_2026-11-03.md`).
 - Documentation: the README, the site home page, the performance guide and the
   benchmark evidence index show three figures generated from committed
   benchmark data by `scripts/render_readme_figures.py`: simplify time against

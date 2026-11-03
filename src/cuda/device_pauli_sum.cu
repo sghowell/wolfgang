@@ -25,6 +25,7 @@ using cuda_detail::copy_to_host;
 using cuda_detail::pool_allocate;
 using cuda_detail::pooled_policy;
 using cuda_detail::copy_bytes_to_device;
+using cuda_detail::grant_peer_access_for_export;
 using cuda_detail::pool_free_bytes_on_device;
 using cuda_detail::ScopedCudaDevice;
 
@@ -142,15 +143,9 @@ DevicePauliSum::Impl::~Impl() {
     return;
   }
   if (exported) {
-    int previous = -1;
-    (void)cudaGetDevice(&previous);
-    if (cudaSetDevice(device_ordinal) == cudaSuccess) {
-      (void)cudaDeviceSynchronize();
-    }
-    if (previous >= 0) {
-      (void)cudaSetDevice(previous);
-    }
-    (void)cudaGetLastError();
+    // A consumer on any stream, on this device or a mapped peer, may still be
+    // reading the buffers.
+    cuda_detail::synchronize_export_readers(device_ordinal);
   }
   // Buffers come from the Wolfgang pool on device_ordinal.
   pool_free_bytes_on_device(x, device_ordinal);
@@ -306,6 +301,7 @@ DeviceArrayPointers DevicePauliSum::export_device_arrays() const {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }
   impl_->exported = true;
+  grant_peer_access_for_export(impl_->device_ordinal);
   // A pageable host-to-device cudaMemcpy (to_device) can return before its DMA
   // lands; finish the legacy stream so a consumer on any stream sees the data.
   {

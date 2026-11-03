@@ -21,7 +21,7 @@ report names.
 | 3 | Pinned transfers | Host-device copies of operators and host statevectors staged through pinned memory where that is measurably faster | Paired transfer timings on H100 and MI300X |
 | 4 | CPU thread cap | A documented way to cap oneTBB's threads (environment variable and Python call), so processes in pools, MPI ranks and CPU-limited containers do not each start one thread per core; auto dispatch uses the capped count | Tests for the cap and the dispatch floor; timings with and without the cap under oversubscription |
 | 5 | oneTBB in the SBOM | The release software bill of materials lists the bundled oneTBB runtime (version, commit, license) beside the Python dependencies | Release workflow dry run with the generated SBOM checked by the release-wheelhouse checks |
-| 6 | Multi-GPU | Peer access for pooled exports and multi-GPU tests | Needs a host with two or more GPUs; the current H100 and MI300X hosts have one each, so this slice waits for hardware |
+| 6 | Multi-GPU | Peer access for pooled exports and multi-GPU tests | A host with two or more GPUs (two NVLink-connected H100s) |
 | 7 | Documentation and figures | README and site figures for absolute timings, speedups against baselines and other libraries, and performance over time across the dated reports; fix diagrams that do not render on the site; review every user-facing doc, including an editing pass so the prose reads as written by an engineer and technical writer, without stock phrasing, inflated adjectives, reflexive lists of three, bolded lead-ins, hedging or filler transitions | Strict docs build; diagrams checked in a browser on the live site; link and stale-claim audit; a phrase-pattern scan over README and `docs/` plus an independent editorial review |
 
 ## Follow-ups found during the campaign
@@ -100,6 +100,18 @@ fence format emits `div.mermaid`. The user and engineering docs were edited
 for plain, specific prose, `docs/quality/documentation_standards.md` gained a
 prose-patterns section, and the benchmark protocol's README-plot rules now
 describe the three figures.
+
+Slice 6 merged: the first multi-GPU test run, on two NVLink-connected H100s,
+found three problems, all fixed. A peer kernel reading an exported buffer
+faulted with an illegal address; the first export from a device now maps its
+memory pool into every peer that can access it (26 ms once). Device calls held
+the GIL, so two threads on two GPUs ran no faster than one; CUDA calls now
+release it and reach 1.88-1.98 times one thread's throughput, with a per-device
+lock holding same-device threads at 0.95-0.99 times one thread (0.99-1.02
+before; 0.63-0.65 without the lock). A process that used
+only GPU 1 created a 516 MiB context on GPU 0; device switches now go back
+only to a device that has a context. Single-GPU call overhead is unchanged
+(`docs/benchmarks/reports/cuda_multi_gpu_h100_2026-11-03.md`).
 
 Slice 8 (oneTBB thread floors) merged: measured on an EPYC 9654 and a Xeon
 8480+ pinned to one core's two hyperthreads, two cores, three and four vCPUs

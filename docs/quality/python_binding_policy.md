@@ -38,8 +38,12 @@ CPU arithmetic, simplify, multiplication, commutation, grouping and expectation
 release the GIL around native computation. Python parsing, buffer acquisition,
 error translation and result conversion hold the GIL. Statevector buffers stay
 pinned for the call; callers must not mutate an input array or change dispatch
-environment variables concurrently with an operation. Device methods retain the
-GIL pending a separate accelerator cache and concurrency review.
+environment variables concurrently with an operation. In CUDA builds, device
+methods also release the GIL around the native call, and compute calls take a
+per-device lock while it is released (`docs/architecture/cuda_backend.md`,
+"Multiple Devices And Threads"); the CUDA host-side caches are per thread or
+locked. HIP and Metal device methods keep the GIL until the same review is done
+on their hardware.
 
 Coefficient export allocates one owning NumPy complex128 array and copies the
 contiguous native buffer, avoiding per-coefficient Python objects. Returned arrays

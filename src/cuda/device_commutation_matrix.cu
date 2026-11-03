@@ -310,15 +310,7 @@ DeviceCommutationMatrix::Impl::~Impl() {
     return;
   }
   if (exported) {
-    int previous = -1;
-    (void)cudaGetDevice(&previous);
-    if (cudaSetDevice(device_ordinal) == cudaSuccess) {
-      (void)cudaDeviceSynchronize();
-    }
-    if (previous >= 0) {
-      (void)cudaSetDevice(previous);
-    }
-    (void)cudaGetLastError();
+    cuda_detail::synchronize_export_readers(device_ordinal);
   }
   pool_free_bytes_on_device(data, device_ordinal);
 }
@@ -507,6 +499,7 @@ std::uintptr_t DeviceCommutationMatrix::data_pointer_for_cuda_array_interface() 
     throw std::runtime_error("DeviceCommutationMatrix is empty or moved-from");
   }
   impl_->exported = true;  // freeing now synchronizes the device first
+  cuda_detail::grant_peer_access_for_export(impl_->device_ordinal);
   return reinterpret_cast<std::uintptr_t>(impl_->data);
 }
 

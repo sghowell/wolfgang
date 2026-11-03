@@ -25,25 +25,31 @@ wheels exposed, and ends with a documentation pass. Review closeout:
   (`docs/benchmarks/reports/host_transfers_2026-11-03.md`).
 - Slice 4 (merged): `set_num_threads()`, `get_num_threads()` and
   `WOLFGANG_NUM_THREADS` cap the oneTBB CPU kernels for the whole process, and
-  auto dispatch's four-thread floor counts the capped threads
+  auto dispatch's oneTBB floors count the capped threads
   (`docs/benchmarks/reports/cpu_threads_2026-11-03.md`).
 - Slice 5 (merged): the release CycloneDX SBOM lists the bundled oneTBB
   runtime and the vendored DLPack header next to the Python dependencies,
   added by `scripts/sbom_bundled_components.py`.
-- Slice 6, multi-GPU peer access and tests, waits for a host with two or more
-  GPUs; the current H100 and MI300X hosts have one each.
+- Slice 6 (merged): on two NVLink-connected H100s, peer GPUs can read exported
+  buffers, CUDA calls release the GIL so two threads reach 1.88-1.98 times one
+  thread's throughput, and a process that uses only GPU 1 no longer holds a
+  context on GPU 0 (`docs/benchmarks/reports/cuda_multi_gpu_h100_2026-11-03.md`).
+- Slice 7 (merged): README and site figures drawn from committed benchmark
+  data (`scripts/render_readme_figures.py`), Mermaid diagrams that render on
+  the site, and an editing pass over the user and engineering docs.
 - Slice 8 (merged): auto dispatch runs simplify on oneTBB from two threads and
   pairwise commutation from two or three, and the oneTBB commutation kernel
   runs SIMD in each thread
   (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`).
-- Slice 7 (merged): README and site figures drawn from committed benchmark
-  data (`scripts/render_readme_figures.py`), Mermaid diagrams that render on
-  the site, and an editing pass over the user and engineering docs.
 
 Next:
 
-- Run slice 6 once a multi-GPU host is available.
-- Publishing a release (tags, PyPI uploads) waits for explicit approval.
+- One-word commutation spends most of its time zero-filling its output and
+  copying it into NumPy; filling the NumPy array directly would remove both.
+- A fused CUDA simplify kernel for roughly 1K-64K terms, where simplify still
+  launches the multi-stage pipeline.
+- Publishing a release (tags, PyPI uploads) waits for explicit approval and the
+  end of this campaign.
 
 Previous campaign (complete):
 [portability and interop campaign](plans/portability_and_interop_campaign_plan.md),

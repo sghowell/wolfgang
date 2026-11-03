@@ -116,13 +116,9 @@ void CudaWorkspace::reset() noexcept {
 
 void CudaWorkspace::release() noexcept {
   if (base_ptr_ != nullptr) {
-    int previous_device = -1;
-    const cudaError_t current_result = cudaGetDevice(&previous_device);
-    (void)cudaSetDevice(device_ordinal_);
-    (void)cudaFree(base_ptr_);
-    if (current_result == cudaSuccess && previous_device >= 0 &&
-        previous_device != device_ordinal_) {
-      (void)cudaSetDevice(previous_device);
+    const cuda_detail::ScopedCudaDevice guard(device_ordinal_, std::nothrow);
+    if (cudaFree(base_ptr_) != cudaSuccess) {
+      (void)cudaGetLastError();
     }
   }
   base_ptr_ = nullptr;

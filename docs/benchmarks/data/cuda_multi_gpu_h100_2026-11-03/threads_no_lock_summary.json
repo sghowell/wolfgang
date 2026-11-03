@@ -1,0 +1,220 @@
+{
+  "peer": {},
+  "runs": [
+    {
+      "benchmark": "cuda_multi_gpu_threads",
+      "command": "python benchmarks/bench_cuda_multi_gpu.py --suite threads --repeat 5 --label cand --output threads_cand_1.json",
+      "file": "threads_no_lock_1.json",
+      "git_commit": "3e5ba24",
+      "git_dirty": false,
+      "label": "no_lock",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "94d9fa46359e364c34dd327bca2f37549323e8c7edc730e353754a830c3e63fc",
+        "built_native_source_sha256": "6946dd4aba7b0c8c28c208808cabf7a75ecca543b03c681b307deb10f8fbfa6c",
+        "checkout_native_source_sha256": "6946dd4aba7b0c8c28c208808cabf7a75ecca543b03c681b307deb10f8fbfa6c",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_multi_gpu_threads",
+      "command": "python benchmarks/bench_cuda_multi_gpu.py --suite threads --repeat 5 --label cand --output threads_cand_2.json",
+      "file": "threads_no_lock_2.json",
+      "git_commit": "3e5ba24",
+      "git_dirty": false,
+      "label": "no_lock",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "94d9fa46359e364c34dd327bca2f37549323e8c7edc730e353754a830c3e63fc",
+        "built_native_source_sha256": "6946dd4aba7b0c8c28c208808cabf7a75ecca543b03c681b307deb10f8fbfa6c",
+        "checkout_native_source_sha256": "6946dd4aba7b0c8c28c208808cabf7a75ecca543b03c681b307deb10f8fbfa6c",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_multi_gpu_threads",
+      "command": "python benchmarks/bench_cuda_multi_gpu.py --suite threads --repeat 5 --label cand --output threads_cand_3.json",
+      "file": "threads_no_lock_3.json",
+      "git_commit": "3e5ba24",
+      "git_dirty": false,
+      "label": "no_lock",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "94d9fa46359e364c34dd327bca2f37549323e8c7edc730e353754a830c3e63fc",
+        "built_native_source_sha256": "6946dd4aba7b0c8c28c208808cabf7a75ecca543b03c681b307deb10f8fbfa6c",
+        "checkout_native_source_sha256": "6946dd4aba7b0c8c28c208808cabf7a75ecca543b03c681b307deb10f8fbfa6c",
+        "matches_checkout_native_sources": true
+      }
+    }
+  ],
+  "threads": {
+    "commutes_with_device_2048x2048_count": {
+      "no_lock": {
+        "one_thread_seconds_per_call": {
+          "median": 9.784387333335568e-05,
+          "values": [
+            0.00010495860999981232,
+            9.59297833317881e-05,
+            9.784387333335568e-05
+          ]
+        },
+        "same_device_throughput_vs_one_thread": {
+          "median": 1.0733176359102716,
+          "values": [
+            1.0733176359102716,
+            1.055399349466206,
+            1.080860935427817
+          ]
+        },
+        "two_device_throughput_vs_one_thread": {
+          "median": 1.8961688096612093,
+          "values": [
+            1.8961688096612093,
+            1.8712007707782015,
+            1.9129967019177812
+          ]
+        }
+      }
+    },
+    "matmul_128x128_24q": {
+      "no_lock": {
+        "one_thread_seconds_per_call": {
+          "median": 0.00012507409600038955,
+          "values": [
+            0.00012444474199946854,
+            0.00012799141899995448,
+            0.00012507409600038955
+          ]
+        },
+        "same_device_throughput_vs_one_thread": {
+          "median": 0.6267517311360561,
+          "values": [
+            0.6371052706558245,
+            0.6255903148870391,
+            0.6267517311360561
+          ]
+        },
+        "two_device_throughput_vs_one_thread": {
+          "median": 1.8486944370478378,
+          "values": [
+            1.844631295417877,
+            1.8486944370478378,
+            1.8544746491211872
+          ]
+        }
+      }
+    },
+    "simplify_1m_terms_24q": {
+      "no_lock": {
+        "one_thread_seconds_per_call": {
+          "median": 0.00034335319999627244,
+          "values": [
+            0.000342418500003987,
+            0.00034829595000701374,
+            0.00034335319999627244
+          ]
+        },
+        "same_device_throughput_vs_one_thread": {
+          "median": 0.9285613575985303,
+          "values": [
+            0.9278762470835096,
+            0.9335365820568773,
+            0.9285613575985303
+          ]
+        },
+        "two_device_throughput_vs_one_thread": {
+          "median": 1.900236388619122,
+          "values": [
+            1.8975255254461147,
+            1.93036045321423,
+            1.900236388619122
+          ]
+        }
+      }
+    },
+    "simplify_4096_terms_24q": {
+      "no_lock": {
+        "one_thread_seconds_per_call": {
+          "median": 0.00011145765399942321,
+          "values": [
+            0.00011115939899991645,
+            0.00011348238800019317,
+            0.00011145765399942321
+          ]
+        },
+        "same_device_throughput_vs_one_thread": {
+          "median": 0.6489702733881328,
+          "values": [
+            0.6441999838327098,
+            0.6500867780001729,
+            0.6489702733881328
+          ]
+        },
+        "two_device_throughput_vs_one_thread": {
+          "median": 1.8596595081217344,
+          "values": [
+            1.8591086089656235,
+            1.88152172080249,
+            1.8596595081217344
+          ]
+        }
+      }
+    },
+    "to_device_1m_terms_24q": {
+      "no_lock": {
+        "one_thread_seconds_per_call": {
+          "median": 0.001994431766646206,
+          "values": [
+            0.0019946502333065535,
+            0.001988268433342455,
+            0.001994431766646206
+          ]
+        },
+        "same_device_throughput_vs_one_thread": {
+          "median": 0.9902081554474996,
+          "values": [
+            0.9905920952030645,
+            0.9819175261199838,
+            0.9902081554474996
+          ]
+        },
+        "two_device_throughput_vs_one_thread": {
+          "median": 1.9443696444672214,
+          "values": [
+            1.9443696444672214,
+            1.936717720328989,
+            1.9529665437326895
+          ]
+        }
+      }
+    },
+    "to_host_1m_terms_24q": {
+      "no_lock": {
+        "one_thread_seconds_per_call": {
+          "median": 0.0023295848999926724,
+          "values": [
+            0.00236047513332475,
+            0.002329550933336577,
+            0.0023295848999926724
+          ]
+        },
+        "same_device_throughput_vs_one_thread": {
+          "median": 1.9607141624109794,
+          "values": [
+            2.0077591928195595,
+            1.9607141624109794,
+            1.9459972516661692
+          ]
+        },
+        "two_device_throughput_vs_one_thread": {
+          "median": 1.9296306146147113,
+          "values": [
+            1.9704475115383397,
+            1.9296306146147113,
+            1.9204405467529841
+          ]
+        }
+      }
+    }
+  }
+}

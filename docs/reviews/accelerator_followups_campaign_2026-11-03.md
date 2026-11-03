@@ -298,6 +298,62 @@ Branch `codex/sbom-bundled`.
   fixes were validated against that run's SBOM with cyclonedx-bom 7.1.0, and
   run 41702026420, on the reviewed branch, passed every job.
 
+## Slice 6: Multi-GPU
+
+Branch `codex/multi-gpu`.
+
+- Scope: `src/cuda/pool_allocator.{cu,cuh}`, `src/cuda/device_guard.cuh` (new),
+  `src/cuda/device_pauli_sum.{cu,cuh}`, `src/cuda/device_commutation_matrix.cu`,
+  `src/cuda/commutation_cuda.cu`, `src/cuda/workspace.cu`,
+  `src/cuda/simplify_cuda.cu`, `src/detail/staged_transfer.hpp`,
+  `bindings/python/pauli_sum_py.cpp`,
+  `include/wolfgang/device_commutation_matrix.hpp`,
+  `tests/test_cuda_multi_gpu.py` (new), `benchmarks/bench_cuda_multi_gpu.py`
+  (new), the report and data, `docs/architecture/cuda_backend.md`,
+  `docs/architecture/api_stability.md`, `docs/guide/python-api.md`,
+  `docs/quality/python_binding_policy.md`, `CHANGELOG.md`, the plan, the roadmap
+  and the evidence index.
+- The first multi-GPU run (two NVLink-connected H100s) found three problems:
+  peer kernels faulted reading exports (pool memory was not mapped into peers),
+  two threads on two GPUs ran no faster than one (device calls held the GIL),
+  and a process that used only GPU 1 held a 516 MiB context on GPU 0 (each
+  device switch went back with `cudaSetDevice`). The slice maps the pool into
+  peers on first export, releases the GIL around CUDA device calls with a
+  per-device lock for compute calls, and routes every device switch through
+  one guard that goes back only to a device with a primary context. Measuring
+  the GIL change exposed a same-device regression (0.63-0.65 times one thread
+  on small calls), which the per-device lock removed.
+- Tests: the peer-read, GIL and second-device-only tests were written first and
+  failed on main; the peer-free test, added for the review's P1, failed before
+  its fix.
+- Reviewer: independent agent (CUDA, concurrency, testing, documentation and
+  benchmark roles), read-only.
+- Findings: P0 0, P1 2, P2 4, P3 10.
+- P1 resolutions: freeing an exported buffer synchronized only its own device,
+  so a peer kernel could read a block the pool had reused (reproduced by the new
+  test); it now also synchronizes every mapped peer with a live primary
+  context. Validation and the sanitizer were rerun at the final head.
+- P2 resolutions: the CHANGELOG and backend doc quoted 1.83-1.94 instead of the
+  final 1.88-1.98, and the report's spread claim was too narrow; the no-lock
+  data behind the 0.63-0.65 claim is committed (`threads_no_lock_summary.json`);
+  `docs/quality/python_binding_policy.md` no longer says device methods keep the
+  GIL in CUDA builds; the second-device-only test counts the GPUs that hold the
+  process's memory by UUID and skips without `nvidia-smi` or in a separate PID
+  namespace; the HIP exit-handler gap is recorded.
+- P3 resolutions: peers are mapped one at a time and failures retried; a
+  destructor uses the non-throwing guard; frees clear CUDA errors only on
+  failure; both exit handlers skip in a forked child; the docs describe the
+  PyTorch guard and HIP accurately and the guide covers peer reads; the plan's
+  same-device numbers are exact; the pool-growth limitation is recorded.
+  Not changed: restoring non-primary contexts with `cuCtxGetCurrent` (behavior
+  as before), and daemon threads inside CUDA calls at interpreter exit
+  (recorded as a limitation of releasing the GIL).
+- Validation after the review fixes, at `9b0ec23` on the two-GPU host:
+  `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core` passed
+  (1,099 tests in the CUDA run, 747 in the CPU-only run); the 14 multi-GPU tests
+  passed; memcheck with leak checking reported 0 errors and 0 leaks over the
+  in-process multi-GPU and transfer tests.
+
 ## Slice 7: Documentation and figures
 
 Branch `codex/docs-refresh`.
