@@ -96,11 +96,18 @@ DevicePauliSum DevicePauliSum::from_host(
     const PauliSum& host,
     AcceleratorBackend backend,
     int device) {
-  const CudaStatus status = cuda_status();
+  // A device count is enough to select the backend; the full cuda_status()
+  // queries every device's properties and dominated small transfers.
+  int device_count = 0;
+  const cudaError_t count_result = cudaGetDeviceCount(&device_count);
+  if (count_result != cudaSuccess) {
+    (void)cudaGetLastError();
+  }
+  const bool runtime_available = count_result == cudaSuccess && device_count > 0;
   const AcceleratorBackend selected = select_accelerator_backend(
       backend,
       true,
-      status.runtime_available,
+      runtime_available,
       false,
       false,
       false,

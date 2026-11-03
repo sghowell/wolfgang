@@ -351,11 +351,17 @@ DeviceCommutationMatrix DeviceCommutationMatrix::empty(
     std::size_t cols,
     AcceleratorBackend backend,
     int device) {
-  const CudaStatus status = DevicePauliSum::cuda_status();
+  // commutes_with_device creates its output here on every call; a device count
+  // selects the backend without querying every device's properties.
+  int device_count = 0;
+  const cudaError_t count_result = cudaGetDeviceCount(&device_count);
+  if (count_result != cudaSuccess) {
+    (void)cudaGetLastError();
+  }
   const AcceleratorBackend selected = select_accelerator_backend(
       backend,
       true,
-      status.runtime_available,
+      count_result == cudaSuccess && device_count > 0,
       false,
       false,
       false,
