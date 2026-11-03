@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INFO = core._build_info()
 THRESHOLDS = INFO["cpu_auto_dispatch_thresholds"]
 SIMD = any(name in INFO["available_cpu_backends"] for name in ("avx512", "avx2", "neon"))
+X86_SIMD = any(name in INFO["available_cpu_backends"] for name in ("avx512", "avx2"))
 
 PROBE = """
 import json, os, numpy as np, wolfgang_quantum as w
@@ -46,8 +47,8 @@ print(json.dumps({{"default": default, "threads": threads, "child": int(os.read(
 """
 
 COMMUTATION = (
-    "x = rng.integers(0, 2**63, size=(600, {words}), dtype=np.uint64)\n"
-    "op = w.PauliSum.from_arrays(x, x.copy(), np.ones(600) + 0j, 64 * {words})\n"
+    "x = rng.integers(0, 2**63, size=({terms}, {words}), dtype=np.uint64)\n"
+    "op = w.PauliSum.from_arrays(x, x.copy(), np.ones({terms}) + 0j, 64 * {words})\n"
     "op.commutes_with(op)"
 )
 SIMPLIFY = (
@@ -74,6 +75,7 @@ def test_floors_are_reported() -> None:
     assert THRESHOLDS["tbb_simplify_min_concurrency"] == 2
     assert THRESHOLDS["tbb_pairwise_min_concurrency"] == 2
     assert THRESHOLDS["tbb_pairwise_min_concurrency_over_simd"] == 3
+    assert THRESHOLDS["tbb_pairwise_one_word_x86_simd_entries"] == 2048 * 2048
 
 
 @pytest.mark.parametrize("cap", [1, 2])
@@ -86,12 +88,25 @@ def test_simplify_uses_onetbb_from_two_threads(cap: int) -> None:
 def test_commutation_over_simd_uses_onetbb_from_three_threads(cap: int) -> None:
     if not SIMD:
         pytest.skip("no SIMD commutation kernel is available")
-    threads, used = _ran_onetbb(cap, COMMUTATION.format(words=2))
+    threads, used = _ran_onetbb(cap, COMMUTATION.format(terms=600, words=2))
     assert used is (threads >= 3)
 
 
 @pytest.mark.parametrize("cap", [1, 2])
 def test_commutation_without_simd_uses_onetbb_from_two_threads(cap: int) -> None:
     # Five words: no SIMD kernel covers the operator, so the alternative is scalar.
-    threads, used = _ran_onetbb(cap, COMMUTATION.format(words=5))
+    threads, used = _ran_onetbb(cap, COMMUTATION.format(terms=600, words=5))
     assert used is (threads >= 2)
+
+
+@pytest.mark.parametrize("terms", [600, 2100])
+def test_one_word_commutation_over_x86_simd_needs_a_larger_matrix(terms: int) -> None:
+    # One-word AVX2/AVX-512 commutation is bound by writing its output, so oneTBB
+    # pays off only from 2048 x 2048 entries; NEON keeps the base threshold.
+    if not SIMD:
+        pytest.skip("no SIMD commutation kernel is available")
+    threads, used = _ran_onetbb(3, COMMUTATION.format(terms=terms, words=1))
+    if threads < 3:
+        pytest.skip("needs three oneTBB threads")
+    large_enough = terms * terms >= 2048 * 2048 or not X86_SIMD
+    assert used is large_enough
