@@ -138,6 +138,41 @@ complex coefficients
 Moved-from objects are invalid. Methods on moved-from HIP objects must raise a
 deterministic exception rather than dereferencing null device state.
 
+HIP simplify follows the CPU numeric contract and drop rule, as CUDA does:
+
+- `ValueError` for non-finite input, from the same max-magnitude pass;
+- `OverflowError` when any reduced sum is not finite, on every path including
+  the benchmark-only serial reducer, through the shared drop predicate's
+  mapped-memory overflow flag;
+- the threshold is `atol` itself when `rtol == 0`, and magnitudes are compared
+  in half units when `atol + rtol * max_abs` overflows.
+
+Single-term simplify skips sort and reduction; on the MI300X that dedicated
+path measured faster than a one-term fused launch. Small operators (one to
+four packed words, 2 to 1,024 terms, or up to 512 for three or four words) use
+the fused single-block kernel shared with CUDA
+(`src/detail/small_simplify_kernel.cuh`), with coefficients bit-identical to
+CPU simplify. The benchmark switch `WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY=off`
+keeps the multi-launch path. Evidence:
+`docs/benchmarks/reports/small_simplify_2026-11-03.md`.
+
+HIP device buffers and scratch use `hipMalloc`/`hipFree`. Simplify scratch is
+uninitialized (every buffer is fully written before it is read), and rocThrust
+algorithms run under `thrust::hip::par_nosync`, which drops the stream
+synchronization rocThrust otherwise performs after every algorithm. All work is
+ordered on the null stream, algorithms that return a value to the host still
+synchronize, and each public operation synchronizes before returning. On
+out-of-memory, allocation retries once and then raises `MemoryError`.
+Transfers select the backend with a device count rather than `hip_status()`
+and copy coefficients as raw bytes.
+
+A Wolfgang-private stream-ordered pool, a port of the CUDA one, exists behind
+the benchmark-only switch `WOLFGANG_HIP_BENCH_ENABLE_POOL=1`. It is off by
+default because on an MI300X with HIP 7.16 plain `hipMalloc`/`hipFree` measured
+9-37% faster on small simplify and matmul calls: ROCm already caches small
+blocks. `DeviceCommutationMatrix` buffers, which may be exported, never use it.
+Evidence: `docs/benchmarks/reports/hip_parity_mi300x_2026-11-03.md`.
+
 Private reusable accelerator scratch and output buffers remain unavailable as
 public API, but the internal ownership/lifetime contract is fixed for future
 HIP prestaging:

@@ -1,4 +1,5 @@
 #include "commutation_hip.hip.hpp"
+#include "hip/pool_allocator.hip.hpp"
 
 #include "device_commutation_matrix.hip.hpp"
 #include "device_pauli_sum.hip.hpp"
@@ -16,7 +17,6 @@ namespace wolfgang {
 using hip_detail::check_hip;
 using hip_detail::checked_launch_blocks;
 using hip_detail::copy_to_host;
-using hip_detail::hip_allocate;
 using hip_detail::kHipThreadsPerBlock;
 using hip_detail::ScopedHipDevice;
 
@@ -109,16 +109,9 @@ void DevicePauliSum::commutes_with_into(
 
   const int blocks = checked_launch_blocks(entries, "HIP commutes_with");
   ScopedHipDevice guard(impl_->device_ordinal);
-  std::uint8_t* device_output = nullptr;
-  std::unique_ptr<std::uint8_t, void (*)(std::uint8_t*)> output_guard(
-      nullptr,
-      [](std::uint8_t* ptr) {
-        if (ptr != nullptr) {
-          (void)hipFree(ptr);
-        }
-      });
-  hip_allocate(device_output, entries, "HIP commutation output");
-  output_guard.reset(device_output);
+  // The output is copied to host before returning, so pooled scratch is safe.
+  const hip_detail::PoolBuffer<std::uint8_t> output_buffer(entries, "HIP commutation output");
+  std::uint8_t* device_output = output_buffer.get();
 
   commutation_kernel<<<blocks, kHipThreadsPerBlock>>>(
       impl_->x,

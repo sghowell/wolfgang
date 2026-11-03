@@ -6,6 +6,28 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- CUDA and HIP: operators of up to 256 qubits and 1,024 terms simplify in one
+  fused kernel. On an H100 small simplify is 3.0-7.8x faster (128 terms:
+  143.5 to 18.4 us); on an MI300X it is 3.5-5.7x faster. Their coefficients
+  now equal CPU simplify bit for bit
+  (`docs/benchmarks/reports/small_simplify_2026-11-03.md`).
+- Every backend rounds `atol + rtol * max_abs` as a separate multiply and add.
+  CPU simplify on Apple Silicon (and other arm64 hosts) previously computed it
+  as a fused multiply-add and could drop a term at the threshold that x86 kept.
+- CUDA and HIP simplify follow the CPU numeric contract: non-finite
+  coefficients raise `ValueError` and a duplicate sum that overflows raises
+  `OverflowError`. Previously an infinite input was kept, and a GPU tree sum
+  that met as `inf + -inf = NaN` was dropped silently. HIP also uses the CPU
+  drop rule, so a finite coefficient whose magnitude exceeds the largest double
+  no longer makes the threshold NaN and drop every term. Out-of-memory on any
+  CUDA or HIP allocation raises `MemoryError`.
+- HIP: small device simplify and matmul are 1.5-1.6x faster and single-term
+  simplify 8x faster on an MI300X. rocThrust no longer synchronizes after
+  every algorithm, scratch is not zero-filled, and single-term inputs skip
+  sorting. HIP keeps `hipMalloc`, because a stream-ordered pool measured slower
+  on ROCm (`docs/benchmarks/reports/hip_parity_mi300x_2026-11-03.md`).
+- `benchmarks/bench_cuda_call_overhead.py --backend hip` measures HIP call
+  overhead.
 - Metal source builds: `DevicePauliSum.simplify` on one-word operators (up to
   64 qubits) of at least 12,288 terms sorts keys on the GPU and sums duplicates
   in float64 on the CPU over shared memory, with results identical to CPU

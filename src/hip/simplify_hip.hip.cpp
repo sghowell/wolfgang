@@ -1,4 +1,7 @@
 #include "simplify_hip.hip.hpp"
+#include "hip/pool_allocator.hip.hpp"
+#include "detail/simplify_numeric.hpp"
+#include "detail/small_simplify_kernel.cuh"
 
 #include <thrust/complex.h>
 #include <thrust/copy.h>
@@ -14,6 +17,7 @@
 #include <thrust/transform.h>
 #include <thrust/tuple.h>
 
+#include <cmath>
 #include <cstdlib>
 #include <cstddef>
 #include <cstdint>
@@ -27,7 +31,9 @@ using hip_detail::check_hip;
 using hip_detail::copy_device_to_device;
 using hip_detail::copy_to_device;
 using hip_detail::copy_to_host;
-using hip_detail::hip_allocate;
+using hip_detail::pool_allocate;
+using hip_detail::pooled_policy;
+using hip_detail::PooledArray;
 using hip_detail::ScopedHipDevice;
 using hip_detail::validate_simplify_tolerances;
 
@@ -160,19 +166,104 @@ struct Key2ToZWord {
   }
 };
 
-struct ComplexAbs {
+struct ComplexHalfAbs {
   __host__ __device__ double operator()(thrust::complex<double> value) const noexcept {
-    return thrust::abs(value);
+    return ::hypot(value.real() * 0.5, value.imag() * 0.5);
   }
 };
 
+__host__ __device__ inline bool components_finite(thrust::complex<double> value) noexcept {
+  return ::isfinite(value.real()) && ::isfinite(value.imag());
+}
+
+// |c|, or NaN when a component is not finite. With MaxPropagatingNaN one
+// reduction yields both the drop-rule scale and the CPU's finite-input check.
+// A finite coefficient whose magnitude overflows maps to +inf, not NaN.
+struct ComplexAbsOrNaN {
+  __host__ __device__ double operator()(thrust::complex<double> value) const noexcept {
+    return components_finite(value) ? thrust::abs(value) : ::nan("");
+  }
+};
+
+struct MaxPropagatingNaN {
+  __host__ __device__ double operator()(double lhs, double rhs) const noexcept {
+    if (lhs != lhs) {
+      return lhs;
+    }
+    if (rhs != rhs) {
+      return rhs;
+    }
+    return lhs < rhs ? rhs : lhs;
+  }
+};
+
+// Mirrors the CPU drop rule (src/detail/simplify_numeric.hpp). Finite complex128
+// components can have a magnitude above DBL_MAX: at rtol == 0 the threshold is
+// atol itself, so 0 * inf never produces NaN, and when atol + rtol * max
+// overflows, magnitudes and the threshold are compared in half units instead.
 struct CoeffSurvives {
   double drop_threshold;
+  double half_threshold = 0.0;
+  bool use_half_units = false;
+  // Device flag set when a reduced coefficient is not finite (the CPU raises
+  // OverflowError). Tree-ordered sums can even turn inf + -inf into NaN, which
+  // the magnitude test alone would drop silently. Every reduction path passes
+  // its sums through this predicate, so one flag covers them all.
+  int* overflowed = nullptr;
 
   __host__ __device__ bool operator()(thrust::complex<double> value) const noexcept {
-    return thrust::abs(value) > drop_threshold;
+    if (!components_finite(value)) {
+      if (overflowed != nullptr) {
+        *overflowed = 1;
+      }
+      return false;
+    }
+    return use_half_units ? ::hypot(value.real() * 0.5, value.imag() * 0.5) > half_threshold
+                          : thrust::abs(value) > drop_threshold;
   }
 };
+
+template <typename HalfMagnitudeMax>
+CoeffSurvives survival_rule(
+    double atol,
+    double rtol,
+    double max_abs_input,
+    HalfMagnitudeMax&& max_half_magnitude) {
+  CoeffSurvives rule{
+      rtol == 0.0 ? atol : detail::separately_rounded_threshold(atol, rtol, max_abs_input)};
+  if (!std::isfinite(rule.drop_threshold)) {
+    rule.half_threshold = detail::separately_rounded_threshold(atol * 0.5, rtol, max_half_magnitude());
+    rule.drop_threshold = rule.half_threshold * 2.0;
+    rule.use_half_units = true;
+  }
+  return rule;
+}
+
+// A per-thread value in pinned, device-mapped host memory: kernels write it
+// and the host reads it after a synchronization, with no copy. It holds the
+// overflow flag (read after the compaction's own synchronization) and the
+// fused small-simplify result. One allocation per type per thread, never freed.
+template <typename T>
+struct MappedHostValue {
+  volatile T* host = nullptr;
+  T* device = nullptr;
+};
+
+template <typename T>
+MappedHostValue<T> mapped_host_value(const char* name) {
+  thread_local const MappedHostValue<T> value = [name] {
+    T* host = nullptr;
+    check_hip(hipHostMalloc(reinterpret_cast<void**>(&host), sizeof(T), hipHostMallocMapped | hipHostMallocPortable), name);
+    T* device = nullptr;
+    check_hip(hipHostGetDevicePointer(reinterpret_cast<void**>(&device), host, 0), name);
+    return MappedHostValue<T>{host, device};
+  }();
+  return value;
+}
+
+[[noreturn]] void throw_accumulation_overflow() {
+  throw std::overflow_error("simplify coefficient accumulation overflowed complex128");
+}
 
 DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
   const char* value = std::getenv("WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION");
@@ -190,6 +281,71 @@ DuplicateReductionStrategy duplicate_reduction_strategy_from_env() {
   throw std::invalid_argument(
       "WOLFGANG_HIP_BENCH_DUPLICATE_REDUCTION must be rocthrust_default, "
       "hipcub_radix_sort_reduce, or custom_packed_key");
+}
+
+// Benchmark-only: WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY=off keeps small operators on
+// the multi-launch path for paired comparisons.
+bool small_simplify_enabled_from_env() {
+  const char* value = std::getenv("WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY");
+  if (value == nullptr || std::string(value).empty() || std::string(value) == "fused") {
+    return true;
+  }
+  if (std::string(value) == "off") {
+    return false;
+  }
+  throw std::invalid_argument("WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY must be fused or off");
+}
+
+// Launches the fused kernel and returns false, leaving no error behind, when
+// the device cannot run it as configured; the caller then uses the
+// multi-launch path.
+template <int Words>
+bool launch_small_simplify(
+    const std::uint64_t* in_x,
+    const std::uint64_t* in_z,
+    const thrust::complex<double>* in_coeffs,
+    std::size_t terms,
+    double atol,
+    double rtol,
+    std::uint64_t* out_x,
+    std::uint64_t* out_z,
+    thrust::complex<double>* out_coeffs,
+    wolfgang::accelerator_detail::SmallSimplifyResult* device_result) {
+  using wolfgang::accelerator_detail::small_simplify_kernel;
+  const int threads = wolfgang::accelerator_detail::small_simplify_block_threads(terms);
+  const std::size_t launch_bytes =
+      static_cast<std::size_t>(threads) * wolfgang::accelerator_detail::small_simplify_bytes_per_position(Words);
+  // More than 48 KiB of dynamic shared memory needs an opt-in, which the
+  // runtime applies per device; it is cheap, so it is set before each launch
+  // that needs it instead of being cached.
+  if (launch_bytes > std::size_t{48} * 1024) {
+    const hipError_t attribute_result = hipFuncSetAttribute(
+        reinterpret_cast<const void*>(&small_simplify_kernel<Words>),
+        hipFuncAttributeMaxDynamicSharedMemorySize,
+        static_cast<int>(launch_bytes));
+    if (attribute_result != hipSuccess) {
+      (void)hipGetLastError();
+      return false;
+    }
+  }
+  small_simplify_kernel<Words><<<1, threads, launch_bytes>>>(
+      in_x,
+      in_z,
+      in_coeffs,
+      static_cast<std::uint32_t>(terms),
+      atol,
+      rtol,
+      out_x,
+      out_z,
+      out_coeffs,
+      device_result);
+  const hipError_t launch_result = hipGetLastError();
+  if (launch_result == hipErrorInvalidConfiguration || launch_result == hipErrorInvalidValue ||
+      launch_result == hipErrorLaunchOutOfResources) {
+    return false;  // configuration errors are not sticky; use the multi-launch path
+  }
+  check_hip(launch_result, "launch small simplify");
+  return true;
 }
 
 GenericReductionStrategy generic_reduction_strategy_from_env() {
@@ -298,7 +454,7 @@ __global__ void reduce_sorted_generic_terms_kernel(
     const std::size_t* sorted_indices,
     std::size_t num_terms,
     std::size_t words,
-    double drop_threshold,
+    CoeffSurvives survives,
     std::uint64_t* out_x,
     std::uint64_t* out_z,
     thrust::complex<double>* out_coeffs,
@@ -321,7 +477,7 @@ __global__ void reduce_sorted_generic_terms_kernel(
       continue;
     }
 
-    if (thrust::abs(accumulator) > drop_threshold) {
+    if (survives(accumulator)) {
       const std::size_t out_offset = output_term * words;
       const std::size_t source_offset = group_start_index * words;
       for (std::size_t word = 0; word < words; ++word) {
@@ -336,7 +492,7 @@ __global__ void reduce_sorted_generic_terms_kernel(
     accumulator = coeffs[current_index];
   }
 
-  if (thrust::abs(accumulator) > drop_threshold) {
+  if (survives(accumulator)) {
     const std::size_t out_offset = output_term * words;
     const std::size_t source_offset = group_start_index * words;
     for (std::size_t word = 0; word < words; ++word) {
@@ -366,26 +522,90 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     return DevicePauliSum(std::move(out));
   };
 
+  // Benchmark selectors are validated before any early return, as on CUDA, so
+  // an invalid value fails the same way for every input size.
+  const DuplicateReductionStrategy duplicate_strategy = duplicate_reduction_strategy_from_env();
+  (void)duplicate_strategy;
+  const bool small_simplify_enabled = small_simplify_enabled_from_env();
+  const GenericReductionStrategy generic_strategy =
+      impl_->words > 2 ? generic_reduction_strategy_from_env()
+                       : GenericReductionStrategy::kParallelReduceByKey;
+
   if (impl_->num_terms == 0) {
     return make_empty();
   }
 
   ScopedHipDevice guard(impl_->device_ordinal);
-  auto coeff_ptr = thrust::device_pointer_cast(impl_->coeffs);
-  const double max_abs_input = thrust::transform_reduce(
-      coeff_ptr,
-      coeff_ptr + impl_->num_terms,
-      ComplexAbs{},
-      0.0,
-      thrust::maximum<double>{});
-  const double drop_threshold = atol + rtol * max_abs_input;
-  const DuplicateReductionStrategy duplicate_strategy = duplicate_reduction_strategy_from_env();
-  (void)duplicate_strategy;
+  // On an MI300X the dedicated single-term path below measured faster than a
+  // one-term fused launch, so single terms skip the fused path on HIP.
+  if (small_simplify_enabled && impl_->num_terms >= 2 &&
+      wolfgang::accelerator_detail::small_simplify_applies(impl_->words, impl_->num_terms)) {
+    // One fused launch (src/detail/small_simplify_kernel.cuh). Outputs are
+    // sized for every input term; num_terms records the survivors.
+    namespace acc = wolfgang::accelerator_detail;
+    auto out = std::make_unique<Impl>();
+    out->num_qubits = impl_->num_qubits;
+    out->words = impl_->words;
+    out->device_ordinal = impl_->device_ordinal;
+    const std::size_t packed_words =
+        detail::checked_product(impl_->num_terms, impl_->words, "small simplify packed words");
+    pool_allocate(out->x, packed_words, "simplified x words");
+    pool_allocate(out->z, packed_words, "simplified z words");
+    pool_allocate(out->coeffs, impl_->num_terms, "simplified coefficients");
+    const MappedHostValue<acc::SmallSimplifyResult> result_value =
+        mapped_host_value<acc::SmallSimplifyResult>("map small simplify result");
+    acc::SmallSimplifyResult* result_ptr = result_value.device;
+    bool launched = false;
+    switch (impl_->words) {
+      case 1:
+        launched = launch_small_simplify<1>(
+            impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
+        break;
+      case 2:
+        launched = launch_small_simplify<2>(
+            impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
+        break;
+      case 3:
+        launched = launch_small_simplify<3>(
+            impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
+        break;
+      default:
+        launched = launch_small_simplify<4>(
+            impl_->x, impl_->z, impl_->coeffs, impl_->num_terms, atol, rtol, out->x, out->z, out->coeffs, result_ptr);
+        break;
+    }
+    if (launched) {
+      check_hip(hipStreamSynchronize(nullptr), "synchronize small simplify");
+      const unsigned long long status = result_value.host->status;
+      const unsigned long long survivors = result_value.host->survivors;
+      if (status == static_cast<unsigned long long>(acc::kSmallSimplifyNonFiniteInput)) {
+        throw std::invalid_argument("simplify requires finite coefficients");
+      }
+      if (status == static_cast<unsigned long long>(acc::kSmallSimplifyOverflow)) {
+        throw_accumulation_overflow();
+      }
+      if (survivors == 0) {
+        return make_empty();
+      }
+      out->num_terms = static_cast<std::size_t>(survivors);
+      return DevicePauliSum(std::move(out));
+    }
+    // The device could not run the fused kernel; continue on the multi-launch
+    // path (the unused outputs are freed with `out`).
+  }
 
-  if (impl_->words == 0) {
-    const thrust::complex<double> accumulator =
-        thrust::reduce(coeff_ptr, coeff_ptr + impl_->num_terms, thrust::complex<double>{0.0, 0.0});
-    if (thrust::abs(accumulator) <= drop_threshold) {
+  if (impl_->num_terms == 1) {
+    // One term has nothing to merge, so only the drop rule applies, with the
+    // term's own magnitude as the input maximum. Skipping sort and reduction
+    // removes their fixed setup cost.
+    thrust::complex<double> coeff;
+    copy_to_host(&coeff, impl_->coeffs, 1, "single-term coefficient");
+    if (!components_finite(coeff)) {
+      throw std::invalid_argument("simplify requires finite coefficients");
+    }
+    const CoeffSurvives survives =
+        survival_rule(atol, rtol, thrust::abs(coeff), [&] { return ComplexHalfAbs{}(coeff); });
+    if (!survives(coeff)) {
       return make_empty();
     }
     auto out = std::make_unique<Impl>();
@@ -393,27 +613,83 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     out->words = impl_->words;
     out->num_terms = 1;
     out->device_ordinal = impl_->device_ordinal;
-    hip_allocate(out->coeffs, 1, "simplified coefficients");
+    if (impl_->words > 0) {
+      pool_allocate(out->x, impl_->words, "simplified x words");
+      pool_allocate(out->z, impl_->words, "simplified z words");
+      copy_device_to_device(out->x, impl_->x, impl_->words, "simplified x words");
+      copy_device_to_device(out->z, impl_->z, impl_->words, "simplified z words");
+    }
+    pool_allocate(out->coeffs, 1, "simplified coefficients");
+    copy_device_to_device(out->coeffs, impl_->coeffs, 1, "simplified coefficients");
+    check_hip(hipDeviceSynchronize(), "synchronize after HIP simplify");
+    return DevicePauliSum(std::move(out));
+  }
+
+  auto coeff_ptr = thrust::device_pointer_cast(impl_->coeffs);
+  const double max_abs_input = thrust::transform_reduce(pooled_policy(),
+      coeff_ptr,
+      coeff_ptr + impl_->num_terms,
+      ComplexAbsOrNaN{},
+      0.0,
+      MaxPropagatingNaN{});
+  if (max_abs_input != max_abs_input) {
+    throw std::invalid_argument("simplify requires finite coefficients");
+  }
+  CoeffSurvives survives = survival_rule(atol, rtol, max_abs_input, [&] {
+    return thrust::transform_reduce(pooled_policy(),
+        coeff_ptr,
+        coeff_ptr + impl_->num_terms,
+        ComplexHalfAbs{},
+        0.0,
+        thrust::maximum<double>{});
+  });
+
+  if (impl_->words == 0) {
+    const thrust::complex<double> accumulator =
+        thrust::reduce(pooled_policy(), coeff_ptr, coeff_ptr + impl_->num_terms, thrust::complex<double>{0.0, 0.0});
+    if (!components_finite(accumulator)) {
+      throw_accumulation_overflow();
+    }
+    if (!survives(accumulator)) {
+      return make_empty();
+    }
+    auto out = std::make_unique<Impl>();
+    out->num_qubits = impl_->num_qubits;
+    out->words = impl_->words;
+    out->num_terms = 1;
+    out->device_ordinal = impl_->device_ordinal;
+    pool_allocate(out->coeffs, 1, "simplified coefficients");
     copy_to_device(out->coeffs, &accumulator, 1, "simplified coefficients");
     check_hip(hipDeviceSynchronize(), "synchronize after HIP simplify");
     return DevicePauliSum(std::move(out));
   }
 
+  const MappedHostValue<int> overflow_flag = mapped_host_value<int>("map simplify overflow flag");
+  *overflow_flag.host = 0;
+  survives.overflowed = overflow_flag.device;
+  // Called after the compaction (or serial kernel) has synchronized, so every
+  // predicate write is visible to the host.
+  const auto check_overflow = [&overflow_flag] {
+    if (*overflow_flag.host != 0) {
+      throw_accumulation_overflow();
+    }
+  };
+
   if (impl_->words == 1 && impl_->num_qubits <= 32) {
-    thrust::device_vector<std::uint64_t> keys(impl_->num_terms);
-    thrust::device_vector<thrust::complex<double>> values(impl_->num_terms);
+    PooledArray<std::uint64_t> keys(impl_->num_terms);
+    PooledArray<thrust::complex<double>> values(impl_->num_terms);
     auto counting = thrust::make_counting_iterator<std::size_t>(0);
-    thrust::transform(
+    thrust::transform(pooled_policy(),
         counting,
         counting + impl_->num_terms,
         keys.begin(),
         PackedKey32FromTerm{impl_->x, impl_->z});
-    thrust::copy_n(coeff_ptr, impl_->num_terms, values.begin());
-    thrust::stable_sort_by_key(keys.begin(), keys.end(), values.begin());
+    thrust::copy_n(pooled_policy(), coeff_ptr, impl_->num_terms, values.begin());
+    thrust::stable_sort_by_key(pooled_policy(), keys.begin(), keys.end(), values.begin());
 
-    thrust::device_vector<std::uint64_t> reduced_keys(impl_->num_terms);
-    thrust::device_vector<thrust::complex<double>> reduced_values(impl_->num_terms);
-    auto reduced_end = thrust::reduce_by_key(
+    PooledArray<std::uint64_t> reduced_keys(impl_->num_terms);
+    PooledArray<thrust::complex<double>> reduced_values(impl_->num_terms);
+    auto reduced_end = thrust::reduce_by_key(pooled_policy(),
         keys.begin(),
         keys.end(),
         values.begin(),
@@ -424,19 +700,20 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     const std::size_t reduced_terms =
         static_cast<std::size_t>(reduced_end.first - reduced_keys.begin());
 
-    thrust::device_vector<std::uint64_t> survivor_keys(reduced_terms);
-    thrust::device_vector<thrust::complex<double>> survivor_values(reduced_terms);
+    PooledArray<std::uint64_t> survivor_keys(reduced_terms);
+    PooledArray<thrust::complex<double>> survivor_values(reduced_terms);
     auto reduced_zip = thrust::make_zip_iterator(
         thrust::make_tuple(reduced_keys.begin(), reduced_values.begin()));
     auto survivor_zip = thrust::make_zip_iterator(
         thrust::make_tuple(survivor_keys.begin(), survivor_values.begin()));
-    auto survivor_end = thrust::copy_if(
+    auto survivor_end = thrust::copy_if(pooled_policy(),
         reduced_zip,
         reduced_zip + reduced_terms,
         reduced_values.begin(),
         survivor_zip,
-        CoeffSurvives{drop_threshold});
+        survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+    check_overflow();
     if (survivors == 0) {
       return make_empty();
     }
@@ -446,39 +723,39 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     out->words = impl_->words;
     out->num_terms = survivors;
     out->device_ordinal = impl_->device_ordinal;
-    hip_allocate(out->x, survivors, "simplified x words");
-    hip_allocate(out->z, survivors, "simplified z words");
-    hip_allocate(out->coeffs, survivors, "simplified coefficients");
-    thrust::transform(
+    pool_allocate(out->x, survivors, "simplified x words");
+    pool_allocate(out->z, survivors, "simplified z words");
+    pool_allocate(out->coeffs, survivors, "simplified coefficients");
+    thrust::transform(pooled_policy(),
         survivor_keys.begin(),
         survivor_keys.begin() + survivors,
         thrust::device_pointer_cast(out->x),
         PackedKey32ToX{});
-    thrust::transform(
+    thrust::transform(pooled_policy(),
         survivor_keys.begin(),
         survivor_keys.begin() + survivors,
         thrust::device_pointer_cast(out->z),
         PackedKey32ToZ{});
-    thrust::copy_n(survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+    thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
     check_hip(hipDeviceSynchronize(), "synchronize after HIP simplify");
     return DevicePauliSum(std::move(out));
   }
 
   if (impl_->words == 1) {
-    thrust::device_vector<HipKey1> keys(impl_->num_terms);
-    thrust::device_vector<thrust::complex<double>> values(impl_->num_terms);
+    PooledArray<HipKey1> keys(impl_->num_terms);
+    PooledArray<thrust::complex<double>> values(impl_->num_terms);
     auto counting = thrust::make_counting_iterator<std::size_t>(0);
-    thrust::transform(
+    thrust::transform(pooled_policy(),
         counting,
         counting + impl_->num_terms,
         keys.begin(),
         Key1FromTerm{impl_->x, impl_->z});
-    thrust::copy_n(coeff_ptr, impl_->num_terms, values.begin());
-    thrust::stable_sort_by_key(keys.begin(), keys.end(), values.begin(), Key1Less{});
+    thrust::copy_n(pooled_policy(), coeff_ptr, impl_->num_terms, values.begin());
+    thrust::stable_sort_by_key(pooled_policy(), keys.begin(), keys.end(), values.begin(), Key1Less{});
 
-    thrust::device_vector<HipKey1> reduced_keys(impl_->num_terms);
-    thrust::device_vector<thrust::complex<double>> reduced_values(impl_->num_terms);
-    auto reduced_end = thrust::reduce_by_key(
+    PooledArray<HipKey1> reduced_keys(impl_->num_terms);
+    PooledArray<thrust::complex<double>> reduced_values(impl_->num_terms);
+    auto reduced_end = thrust::reduce_by_key(pooled_policy(),
         keys.begin(),
         keys.end(),
         values.begin(),
@@ -489,19 +766,20 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     const std::size_t reduced_terms =
         static_cast<std::size_t>(reduced_end.first - reduced_keys.begin());
 
-    thrust::device_vector<HipKey1> survivor_keys(reduced_terms);
-    thrust::device_vector<thrust::complex<double>> survivor_values(reduced_terms);
+    PooledArray<HipKey1> survivor_keys(reduced_terms);
+    PooledArray<thrust::complex<double>> survivor_values(reduced_terms);
     auto reduced_zip = thrust::make_zip_iterator(
         thrust::make_tuple(reduced_keys.begin(), reduced_values.begin()));
     auto survivor_zip = thrust::make_zip_iterator(
         thrust::make_tuple(survivor_keys.begin(), survivor_values.begin()));
-    auto survivor_end = thrust::copy_if(
+    auto survivor_end = thrust::copy_if(pooled_policy(),
         reduced_zip,
         reduced_zip + reduced_terms,
         reduced_values.begin(),
         survivor_zip,
-        CoeffSurvives{drop_threshold});
+        survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+    check_overflow();
     if (survivors == 0) {
       return make_empty();
     }
@@ -511,39 +789,39 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     out->words = impl_->words;
     out->num_terms = survivors;
     out->device_ordinal = impl_->device_ordinal;
-    hip_allocate(out->x, survivors, "simplified x words");
-    hip_allocate(out->z, survivors, "simplified z words");
-    hip_allocate(out->coeffs, survivors, "simplified coefficients");
-    thrust::transform(
+    pool_allocate(out->x, survivors, "simplified x words");
+    pool_allocate(out->z, survivors, "simplified z words");
+    pool_allocate(out->coeffs, survivors, "simplified coefficients");
+    thrust::transform(pooled_policy(),
         survivor_keys.begin(),
         survivor_keys.begin() + survivors,
         thrust::device_pointer_cast(out->x),
         Key1ToX{});
-    thrust::transform(
+    thrust::transform(pooled_policy(),
         survivor_keys.begin(),
         survivor_keys.begin() + survivors,
         thrust::device_pointer_cast(out->z),
         Key1ToZ{});
-    thrust::copy_n(survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+    thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
     check_hip(hipDeviceSynchronize(), "synchronize after HIP simplify");
     return DevicePauliSum(std::move(out));
   }
 
   if (impl_->words == 2) {
-    thrust::device_vector<HipKey2> keys(impl_->num_terms);
-    thrust::device_vector<thrust::complex<double>> values(impl_->num_terms);
+    PooledArray<HipKey2> keys(impl_->num_terms);
+    PooledArray<thrust::complex<double>> values(impl_->num_terms);
     auto counting = thrust::make_counting_iterator<std::size_t>(0);
-    thrust::transform(
+    thrust::transform(pooled_policy(),
         counting,
         counting + impl_->num_terms,
         keys.begin(),
         Key2FromTerm{impl_->x, impl_->z});
-    thrust::copy_n(coeff_ptr, impl_->num_terms, values.begin());
-    thrust::stable_sort_by_key(keys.begin(), keys.end(), values.begin(), Key2Less{});
+    thrust::copy_n(pooled_policy(), coeff_ptr, impl_->num_terms, values.begin());
+    thrust::stable_sort_by_key(pooled_policy(), keys.begin(), keys.end(), values.begin(), Key2Less{});
 
-    thrust::device_vector<HipKey2> reduced_keys(impl_->num_terms);
-    thrust::device_vector<thrust::complex<double>> reduced_values(impl_->num_terms);
-    auto reduced_end = thrust::reduce_by_key(
+    PooledArray<HipKey2> reduced_keys(impl_->num_terms);
+    PooledArray<thrust::complex<double>> reduced_values(impl_->num_terms);
+    auto reduced_end = thrust::reduce_by_key(pooled_policy(),
         keys.begin(),
         keys.end(),
         values.begin(),
@@ -554,19 +832,20 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     const std::size_t reduced_terms =
         static_cast<std::size_t>(reduced_end.first - reduced_keys.begin());
 
-    thrust::device_vector<HipKey2> survivor_keys(reduced_terms);
-    thrust::device_vector<thrust::complex<double>> survivor_values(reduced_terms);
+    PooledArray<HipKey2> survivor_keys(reduced_terms);
+    PooledArray<thrust::complex<double>> survivor_values(reduced_terms);
     auto reduced_zip = thrust::make_zip_iterator(
         thrust::make_tuple(reduced_keys.begin(), reduced_values.begin()));
     auto survivor_zip = thrust::make_zip_iterator(
         thrust::make_tuple(survivor_keys.begin(), survivor_values.begin()));
-    auto survivor_end = thrust::copy_if(
+    auto survivor_end = thrust::copy_if(pooled_policy(),
         reduced_zip,
         reduced_zip + reduced_terms,
         reduced_values.begin(),
         survivor_zip,
-        CoeffSurvives{drop_threshold});
+        survives);
     const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+    check_overflow();
     if (survivors == 0) {
       return make_empty();
     }
@@ -578,40 +857,40 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     out->device_ordinal = impl_->device_ordinal;
     const std::size_t packed_words =
         detail::checked_product(survivors, impl_->words, "simplified packed words");
-    hip_allocate(out->x, packed_words, "simplified x words");
-    hip_allocate(out->z, packed_words, "simplified z words");
-    hip_allocate(out->coeffs, survivors, "simplified coefficients");
+    pool_allocate(out->x, packed_words, "simplified x words");
+    pool_allocate(out->z, packed_words, "simplified z words");
+    pool_allocate(out->coeffs, survivors, "simplified coefficients");
     auto packed_counting = thrust::make_counting_iterator<std::size_t>(0);
     const HipKey2* survivor_key_ptr = thrust::raw_pointer_cast(survivor_keys.data());
-    thrust::transform(
+    thrust::transform(pooled_policy(),
         packed_counting,
         packed_counting + packed_words,
         thrust::device_pointer_cast(out->x),
         Key2ToXWord{survivor_key_ptr});
-    thrust::transform(
+    thrust::transform(pooled_policy(),
         packed_counting,
         packed_counting + packed_words,
         thrust::device_pointer_cast(out->z),
         Key2ToZWord{survivor_key_ptr});
-    thrust::copy_n(survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+    thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
     check_hip(hipDeviceSynchronize(), "synchronize after HIP simplify");
     return DevicePauliSum(std::move(out));
   }
 
   const std::size_t packed_words =
       detail::checked_product(impl_->num_terms, impl_->words, "generic simplify packed words");
-  thrust::device_vector<std::size_t> sorted_indices(impl_->num_terms);
-  thrust::sequence(sorted_indices.begin(), sorted_indices.end());
-  thrust::sort(
+  PooledArray<std::size_t> sorted_indices(impl_->num_terms);
+  thrust::sequence(pooled_policy(), sorted_indices.begin(), sorted_indices.end());
+  thrust::sort(pooled_policy(),
       sorted_indices.begin(),
       sorted_indices.end(),
       GenericTermIndexLess{impl_->x, impl_->z, impl_->words});
 
-  if (generic_reduction_strategy_from_env() == GenericReductionStrategy::kSerialKernel) {
-    thrust::device_vector<std::uint64_t> temp_x(packed_words);
-    thrust::device_vector<std::uint64_t> temp_z(packed_words);
-    thrust::device_vector<thrust::complex<double>> temp_coeffs(impl_->num_terms);
-    thrust::device_vector<std::size_t> temp_count(1);
+  if (generic_strategy == GenericReductionStrategy::kSerialKernel) {
+    PooledArray<std::uint64_t> temp_x(packed_words);
+    PooledArray<std::uint64_t> temp_z(packed_words);
+    PooledArray<thrust::complex<double>> temp_coeffs(impl_->num_terms);
+    PooledArray<std::size_t> temp_count(1);
     reduce_sorted_generic_terms_kernel<<<1, 1>>>(
         impl_->x,
         impl_->z,
@@ -619,7 +898,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         thrust::raw_pointer_cast(sorted_indices.data()),
         impl_->num_terms,
         impl_->words,
-        drop_threshold,
+        survives,
         thrust::raw_pointer_cast(temp_x.data()),
         thrust::raw_pointer_cast(temp_z.data()),
         thrust::raw_pointer_cast(temp_coeffs.data()),
@@ -633,6 +912,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         thrust::raw_pointer_cast(temp_count.data()),
         1,
         "generic simplify count");
+    check_overflow();
     if (survivors == 0) {
       return make_empty();
     }
@@ -644,9 +924,9 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     out->device_ordinal = impl_->device_ordinal;
     const std::size_t survivor_packed_words =
         detail::checked_product(survivors, impl_->words, "generic simplified packed words");
-    hip_allocate(out->x, survivor_packed_words, "simplified x words");
-    hip_allocate(out->z, survivor_packed_words, "simplified z words");
-    hip_allocate(out->coeffs, survivors, "simplified coefficients");
+    pool_allocate(out->x, survivor_packed_words, "simplified x words");
+    pool_allocate(out->z, survivor_packed_words, "simplified z words");
+    pool_allocate(out->coeffs, survivors, "simplified coefficients");
     copy_device_to_device(
         out->x,
         thrust::raw_pointer_cast(temp_x.data()),
@@ -667,9 +947,9 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   }
 
   auto sorted_coeffs = thrust::make_permutation_iterator(coeff_ptr, sorted_indices.begin());
-  thrust::device_vector<std::size_t> reduced_indices(impl_->num_terms);
-  thrust::device_vector<thrust::complex<double>> reduced_values(impl_->num_terms);
-  auto reduced_end = thrust::reduce_by_key(
+  PooledArray<std::size_t> reduced_indices(impl_->num_terms);
+  PooledArray<thrust::complex<double>> reduced_values(impl_->num_terms);
+  auto reduced_end = thrust::reduce_by_key(pooled_policy(),
       sorted_indices.begin(),
       sorted_indices.end(),
       sorted_coeffs,
@@ -680,19 +960,20 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   const std::size_t reduced_terms =
       static_cast<std::size_t>(reduced_end.first - reduced_indices.begin());
 
-  thrust::device_vector<std::size_t> survivor_indices(reduced_terms);
-  thrust::device_vector<thrust::complex<double>> survivor_values(reduced_terms);
+  PooledArray<std::size_t> survivor_indices(reduced_terms);
+  PooledArray<thrust::complex<double>> survivor_values(reduced_terms);
   auto reduced_zip = thrust::make_zip_iterator(
       thrust::make_tuple(reduced_indices.begin(), reduced_values.begin()));
   auto survivor_zip = thrust::make_zip_iterator(
       thrust::make_tuple(survivor_indices.begin(), survivor_values.begin()));
-  auto survivor_end = thrust::copy_if(
+  auto survivor_end = thrust::copy_if(pooled_policy(),
       reduced_zip,
       reduced_zip + reduced_terms,
       reduced_values.begin(),
       survivor_zip,
-      CoeffSurvives{drop_threshold});
+      survives);
   const std::size_t survivors = static_cast<std::size_t>(survivor_end - survivor_zip);
+  check_overflow();
   if (survivors == 0) {
     return make_empty();
   }
@@ -704,22 +985,22 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   out->device_ordinal = impl_->device_ordinal;
   const std::size_t survivor_packed_words =
       detail::checked_product(survivors, impl_->words, "generic simplified packed words");
-  hip_allocate(out->x, survivor_packed_words, "simplified x words");
-  hip_allocate(out->z, survivor_packed_words, "simplified z words");
-  hip_allocate(out->coeffs, survivors, "simplified coefficients");
+  pool_allocate(out->x, survivor_packed_words, "simplified x words");
+  pool_allocate(out->z, survivor_packed_words, "simplified z words");
+  pool_allocate(out->coeffs, survivors, "simplified coefficients");
   auto survivor_word_indices = thrust::make_counting_iterator<std::size_t>(0);
   const std::size_t* survivor_index_ptr = thrust::raw_pointer_cast(survivor_indices.data());
-  thrust::transform(
+  thrust::transform(pooled_policy(),
       survivor_word_indices,
       survivor_word_indices + survivor_packed_words,
       thrust::device_pointer_cast(out->x),
       GenericRepresentativeToXWord{impl_->x, survivor_index_ptr, impl_->words});
-  thrust::transform(
+  thrust::transform(pooled_policy(),
       survivor_word_indices,
       survivor_word_indices + survivor_packed_words,
       thrust::device_pointer_cast(out->z),
       GenericRepresentativeToZWord{impl_->z, survivor_index_ptr, impl_->words});
-  thrust::copy_n(survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+  thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
   check_hip(hipDeviceSynchronize(), "synchronize after HIP simplify");
   return DevicePauliSum(std::move(out));
 }

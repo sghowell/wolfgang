@@ -1,0 +1,554 @@
+{
+  "rows": {
+    "commutes_with_device_128x128": {
+      "base": {
+        "median_of_medians_seconds": 6.44163750075677e-05,
+        "per_run_median_seconds": [
+          6.44163750075677e-05,
+          6.469190000643721e-05,
+          6.437833999370924e-05,
+          6.463296000219998e-05,
+          6.472655501056579e-05,
+          6.431074498323142e-05,
+          6.426842499422491e-05
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 6.427720998544828e-05,
+        "per_run_median_seconds": [
+          6.45729000098072e-05,
+          6.411300000763731e-05,
+          6.45117549902352e-05,
+          6.416883499696269e-05,
+          6.427720998544828e-05,
+          6.447933999879751e-05,
+          6.427006999729201e-05
+        ]
+      }
+    },
+    "cpu_simplify_128_terms_control": {
+      "base": {
+        "median_of_medians_seconds": 6.391370006895158e-06,
+        "per_run_median_seconds": [
+          6.3427799977944236e-06,
+          6.391370006895158e-06,
+          6.55183001072146e-06,
+          6.355125005939044e-06,
+          6.4419249974889684e-06,
+          6.401045011443784e-06,
+          6.384054995578481e-06
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 6.484799996542279e-06,
+        "per_run_median_seconds": [
+          6.495430006907555e-06,
+          6.436775001930073e-06,
+          6.484799996542279e-06,
+          6.41763999738032e-06,
+          6.440939996537054e-06,
+          6.76404999467195e-06,
+          6.524464988615364e-06
+        ]
+      }
+    },
+    "expectation_64_terms_12q_host_psi": {
+      "base": {
+        "median_of_medians_seconds": 3.0028915007278555e-05,
+        "per_run_median_seconds": [
+          3.0028915007278555e-05,
+          3.0245194993767653e-05,
+          3.017066999746021e-05,
+          3.0068310006754473e-05,
+          2.985835999425035e-05,
+          2.9985269993630936e-05,
+          2.9847009991499362e-05
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 2.9984814991621532e-05,
+        "per_run_median_seconds": [
+          2.9919900007371326e-05,
+          3.0037390006327767e-05,
+          2.9904335005994652e-05,
+          2.9984814991621532e-05,
+          3.0047719992580823e-05,
+          2.9956359994685045e-05,
+          3.0005600001459244e-05
+        ]
+      }
+    },
+    "matmul_128x128_24q": {
+      "base": {
+        "median_of_medians_seconds": 0.00020220688998961122,
+        "per_run_median_seconds": [
+          0.00020220688998961122,
+          0.0002021349949973228,
+          0.00020619646500563249,
+          0.00020084189500266803,
+          0.00020540461999189575,
+          0.00020161166999969283,
+          0.0002052124849979009
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 0.00020232136001141043,
+        "per_run_median_seconds": [
+          0.0002048774449940538,
+          0.00020617222498913178,
+          0.00020232136001141043,
+          0.00020005386499178713,
+          0.00020124313501582947,
+          0.00020606593499906012,
+          0.0002014321199931146
+        ]
+      }
+    },
+    "round_trip_simplify_128_terms": {
+      "base": {
+        "median_of_medians_seconds": 0.00018975596000018414,
+        "per_run_median_seconds": [
+          0.00018924407000667998,
+          0.00019099528499282313,
+          0.00019084878998910427,
+          0.0001891964350033959,
+          0.00019037840000237337,
+          0.00018864980000216747,
+          0.00018975596000018414
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 6.363546999637038e-05,
+        "per_run_median_seconds": [
+          6.3194949998433e-05,
+          6.373776501277462e-05,
+          6.363546999637038e-05,
+          6.36235250021855e-05,
+          6.324300999040133e-05,
+          6.371503999616835e-05,
+          6.393347999619436e-05
+        ]
+      }
+    },
+    "simplify_1024_terms_24q": {
+      "base": {
+        "median_of_medians_seconds": 0.00015174496000327053,
+        "per_run_median_seconds": [
+          0.00015153499000007288,
+          0.00015174496000327053,
+          0.00015294157499738504,
+          0.00015110220499991555,
+          0.00015221499001199845,
+          0.00015107404000445966,
+          0.00015237724499456818
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 3.539705499861157e-05,
+        "per_run_median_seconds": [
+          3.541356998539413e-05,
+          3.548886999851675e-05,
+          3.529763998812996e-05,
+          3.527195000060601e-05,
+          3.539705499861157e-05,
+          3.5503599992807725e-05,
+          3.5304954999446635e-05
+        ]
+      }
+    },
+    "simplify_128_terms_130q": {
+      "base": {
+        "median_of_medians_seconds": 0.0001173297300010745,
+        "per_run_median_seconds": [
+          0.00011684136999974726,
+          0.0001173297300010745,
+          0.00011811781500000507,
+          0.00011653988000034587,
+          0.000117622144989582,
+          0.00011648107500150217,
+          0.00011765548000767012
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 2.1569384989561514e-05,
+        "per_run_median_seconds": [
+          2.1565645001828672e-05,
+          2.171482499761623e-05,
+          2.1561089997703675e-05,
+          2.1482980009750463e-05,
+          2.1569384989561514e-05,
+          2.1705480012315093e-05,
+          2.1571295001194812e-05
+        ]
+      }
+    },
+    "simplify_128_terms_24q": {
+      "base": {
+        "median_of_medians_seconds": 0.0001435069850049331,
+        "per_run_median_seconds": [
+          0.0001429233500130067,
+          0.0001435762899927795,
+          0.00014453345500442083,
+          0.00014278987000579946,
+          0.00014357260999531718,
+          0.00014302835499620413,
+          0.0001435069850049331
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 1.8403169997327494e-05,
+        "per_run_median_seconds": [
+          1.8407544994261117e-05,
+          1.8533444999775385e-05,
+          1.82181649870472e-05,
+          1.8256455005030147e-05,
+          1.8403169997327494e-05,
+          1.8457084988767746e-05,
+          1.8381469999440014e-05
+        ]
+      }
+    },
+    "simplify_1_term": {
+      "base": {
+        "median_of_medians_seconds": 2.6131110007554526e-05,
+        "per_run_median_seconds": [
+          2.5977924997278025e-05,
+          2.637890998812509e-05,
+          2.6307424996048212e-05,
+          2.6131110007554526e-05,
+          2.6194875008513918e-05,
+          2.5921209999069107e-05,
+          2.6017785003205063e-05
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 1.722789498671773e-05,
+        "per_run_median_seconds": [
+          1.724590500089107e-05,
+          1.7323160009254934e-05,
+          1.7143259992735693e-05,
+          1.7128500003309456e-05,
+          1.722789498671773e-05,
+          1.7342650007776683e-05,
+          1.7208374993060714e-05
+        ]
+      }
+    },
+    "simplify_4096_terms_24q": {
+      "base": {
+        "median_of_medians_seconds": 0.00018866678999984287,
+        "per_run_median_seconds": [
+          0.0001881191599932208,
+          0.00018866678999984287,
+          0.00019054816499192384,
+          0.00018749810498775333,
+          0.00018975144001160516,
+          0.00018800393499986967,
+          0.00018947902501167846
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 0.00018809061501087854,
+        "per_run_median_seconds": [
+          0.0001892116799899668,
+          0.00019027990998438327,
+          0.00018780656000672025,
+          0.0001874770150061522,
+          0.00018784581499858177,
+          0.00019031758500204888,
+          0.00018809061501087854
+        ]
+      }
+    },
+    "simplify_512_terms_200q": {
+      "base": {
+        "median_of_medians_seconds": 0.0001261652850007522,
+        "per_run_median_seconds": [
+          0.00012541965499622166,
+          0.0001261652850007522,
+          0.00012696338000750984,
+          0.00012530187999800545,
+          0.00012639931999729016,
+          0.0001252812250095303,
+          0.00012625826500880065
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 4.206821500702063e-05,
+        "per_run_median_seconds": [
+          4.2114410007343395e-05,
+          4.222976000164635e-05,
+          4.203006001262111e-05,
+          4.192117999991751e-05,
+          4.206821500702063e-05,
+          4.2177454997727184e-05,
+          4.199159999188851e-05
+        ]
+      }
+    },
+    "to_device_1_term": {
+      "base": {
+        "median_of_medians_seconds": 1.6016089994081994e-05,
+        "per_run_median_seconds": [
+          1.5802284997334938e-05,
+          1.6230245000770084e-05,
+          1.5998360013327328e-05,
+          1.614098498976091e-05,
+          1.6016089994081994e-05,
+          1.5872149997449015e-05,
+          1.6117089999170275e-05
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 1.5942610007186884e-05,
+        "per_run_median_seconds": [
+          1.5893149993644328e-05,
+          1.592416499988758e-05,
+          1.5901900005701464e-05,
+          1.6124154990393434e-05,
+          1.5942610007186884e-05,
+          1.6030024999054148e-05,
+          1.6129484993143706e-05
+        ]
+      }
+    },
+    "to_host_1_term": {
+      "base": {
+        "median_of_medians_seconds": 2.37850499979686e-05,
+        "per_run_median_seconds": [
+          2.3637949998374096e-05,
+          2.395515999523923e-05,
+          2.37850499979686e-05,
+          2.3898159997770563e-05,
+          2.3713655009487413e-05,
+          2.3605200003657955e-05,
+          2.3897475002740976e-05
+        ]
+      },
+      "cand": {
+        "median_of_medians_seconds": 2.375964000748354e-05,
+        "per_run_median_seconds": [
+          2.3600125005032168e-05,
+          2.3649904997000703e-05,
+          2.375964000748354e-05,
+          2.3934495002322363e-05,
+          2.3643754993827314e-05,
+          2.378323999437271e-05,
+          2.3929590006446234e-05
+        ]
+      }
+    }
+  },
+  "runs": [
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label base --output overhead_base_1.json",
+      "file": "overhead_base_1.json",
+      "git_commit": "d871133",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "74ab67e30882122773bc836dd486af3dc1d383d4641c6dc18652c05d055ac00d",
+        "built_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "checkout_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label base --output overhead_base_2.json",
+      "file": "overhead_base_2.json",
+      "git_commit": "d871133",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "74ab67e30882122773bc836dd486af3dc1d383d4641c6dc18652c05d055ac00d",
+        "built_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "checkout_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label base --output overhead_base_3.json",
+      "file": "overhead_base_3.json",
+      "git_commit": "d871133",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "74ab67e30882122773bc836dd486af3dc1d383d4641c6dc18652c05d055ac00d",
+        "built_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "checkout_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label base --output overhead_base_4.json",
+      "file": "overhead_base_4.json",
+      "git_commit": "d871133",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "74ab67e30882122773bc836dd486af3dc1d383d4641c6dc18652c05d055ac00d",
+        "built_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "checkout_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label base --output overhead_base_5.json",
+      "file": "overhead_base_5.json",
+      "git_commit": "d871133",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "74ab67e30882122773bc836dd486af3dc1d383d4641c6dc18652c05d055ac00d",
+        "built_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "checkout_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label base --output overhead_base_6.json",
+      "file": "overhead_base_6.json",
+      "git_commit": "d871133",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "74ab67e30882122773bc836dd486af3dc1d383d4641c6dc18652c05d055ac00d",
+        "built_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "checkout_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label base --output overhead_base_7.json",
+      "file": "overhead_base_7.json",
+      "git_commit": "d871133",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "74ab67e30882122773bc836dd486af3dc1d383d4641c6dc18652c05d055ac00d",
+        "built_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "checkout_native_source_sha256": "b9af5c8eecb231eff2e3a3c502c2167de62a4f40e864569ef54876dfbaba8f40",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label cand --output overhead_cand_1.json",
+      "file": "overhead_cand_1.json",
+      "git_commit": "b072c0a",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "9a4bc7032a03a4626ec0867b264bd1d8cc0310a2c84a2865a636fc75728c91da",
+        "built_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "checkout_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label cand --output overhead_cand_2.json",
+      "file": "overhead_cand_2.json",
+      "git_commit": "b072c0a",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "9a4bc7032a03a4626ec0867b264bd1d8cc0310a2c84a2865a636fc75728c91da",
+        "built_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "checkout_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label cand --output overhead_cand_3.json",
+      "file": "overhead_cand_3.json",
+      "git_commit": "b072c0a",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "9a4bc7032a03a4626ec0867b264bd1d8cc0310a2c84a2865a636fc75728c91da",
+        "built_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "checkout_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label cand --output overhead_cand_4.json",
+      "file": "overhead_cand_4.json",
+      "git_commit": "b072c0a",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "9a4bc7032a03a4626ec0867b264bd1d8cc0310a2c84a2865a636fc75728c91da",
+        "built_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "checkout_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label cand --output overhead_cand_5.json",
+      "file": "overhead_cand_5.json",
+      "git_commit": "b072c0a",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "9a4bc7032a03a4626ec0867b264bd1d8cc0310a2c84a2865a636fc75728c91da",
+        "built_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "checkout_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label cand --output overhead_cand_6.json",
+      "file": "overhead_cand_6.json",
+      "git_commit": "b072c0a",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "9a4bc7032a03a4626ec0867b264bd1d8cc0310a2c84a2865a636fc75728c91da",
+        "built_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "checkout_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "benchmark": "cuda_call_overhead",
+      "command": "python benchmarks/bench_cuda_call_overhead.py --backend cuda --label cand --output overhead_cand_7.json",
+      "file": "overhead_cand_7.json",
+      "git_commit": "b072c0a",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "9a4bc7032a03a4626ec0867b264bd1d8cc0310a2c84a2865a636fc75728c91da",
+        "built_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "checkout_native_source_sha256": "db767d608b54df498f6bd69a9d8860dc1281878ce653471735a25b9e4fd2a6ef",
+        "matches_checkout_native_sources": true
+      }
+    }
+  ]
+}

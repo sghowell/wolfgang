@@ -1,4 +1,5 @@
 #include "device_pauli_sum.hip.hpp"
+#include "hip/pool_allocator.hip.hpp"
 
 #include <complex>
 #include <cstddef>
@@ -9,6 +10,9 @@
 #include <vector>
 
 namespace wolfgang {
+
+// Transfers copy coefficients as raw bytes between the two layouts.
+static_assert(sizeof(std::complex<double>) == sizeof(thrust::complex<double>));
 
 namespace {
 
@@ -47,26 +51,6 @@ HipStatus unavailable_status(hipError_t result) {
   return status;
 }
 
-std::vector<thrust::complex<double>> to_device_coefficients(
-    const std::vector<std::complex<double>>& coeffs) {
-  std::vector<thrust::complex<double>> converted;
-  converted.reserve(coeffs.size());
-  for (const std::complex<double>& coeff : coeffs) {
-    converted.emplace_back(coeff.real(), coeff.imag());
-  }
-  return converted;
-}
-
-std::vector<std::complex<double>> to_host_coefficients(
-    const std::vector<thrust::complex<double>>& coeffs) {
-  std::vector<std::complex<double>> converted;
-  converted.reserve(coeffs.size());
-  for (const thrust::complex<double>& coeff : coeffs) {
-    converted.emplace_back(coeff.real(), coeff.imag());
-  }
-  return converted;
-}
-
 void validate_device_ordinal_for_transfer(int device) {
   int device_count = 0;
   const hipError_t count_result = hipGetDeviceCount(&device_count);
@@ -87,15 +71,10 @@ DevicePauliSum::Impl::~Impl() {
   if (x == nullptr && z == nullptr && coeffs == nullptr) {
     return;
   }
-  int previous_device = -1;
-  const hipError_t current_result = hipGetDevice(&previous_device);
-  (void)hipSetDevice(device_ordinal);
-  (void)hipFree(x);
-  (void)hipFree(z);
-  (void)hipFree(coeffs);
-  if (current_result == hipSuccess && previous_device >= 0 && previous_device != device_ordinal) {
-    (void)hipSetDevice(previous_device);
-  }
+  // Buffers come from the Wolfgang pool on device_ordinal.
+  hip_detail::pool_free_bytes_on_device(x, device_ordinal);
+  hip_detail::pool_free_bytes_on_device(z, device_ordinal);
+  hip_detail::pool_free_bytes_on_device(coeffs, device_ordinal);
 }
 
 DevicePauliSum::DevicePauliSum() noexcept = default;
@@ -117,13 +96,19 @@ DevicePauliSum DevicePauliSum::from_host(
     const PauliSum& host,
     AcceleratorBackend backend,
     int device) {
-  const HipStatus status = hip_status();
+  // A device count is enough to select the backend; the full hip_status()
+  // queries every device's properties on each transfer.
+  int device_count = 0;
+  const hipError_t count_result = hipGetDeviceCount(&device_count);
+  if (count_result != hipSuccess) {
+    (void)hipGetLastError();
+  }
   const AcceleratorBackend selected = select_accelerator_backend(
       backend,
       false,
       false,
       true,
-      status.runtime_available,
+      count_result == hipSuccess && device_count > 0,
       false,
       false);
   if (selected != AcceleratorBackend::Hip) {
@@ -139,18 +124,18 @@ DevicePauliSum DevicePauliSum::from_host(
 
   const std::size_t packed_words =
       detail::checked_product(host.num_terms(), host.words(), "HIP device packed words");
-  const std::vector<thrust::complex<double>> coeffs = to_device_coefficients(host.coeffs());
-
   hip_detail::ScopedHipDevice guard(device);
-  hip_detail::hip_allocate(impl->x, packed_words, "HIP device x words");
-  hip_detail::hip_allocate(impl->z, packed_words, "HIP device z words");
-  hip_detail::hip_allocate(impl->coeffs, host.num_terms(), "HIP device coefficients");
+  hip_detail::pool_allocate(impl->x, packed_words, "HIP device x words");
+  hip_detail::pool_allocate(impl->z, packed_words, "HIP device z words");
+  hip_detail::pool_allocate(impl->coeffs, host.num_terms(), "HIP device coefficients");
   hip_detail::copy_to_device(impl->x, host.x_words().data(), packed_words, "HIP device x words");
   hip_detail::copy_to_device(impl->z, host.z_words().data(), packed_words, "HIP device z words");
-  hip_detail::copy_to_device(
+  // std::complex<double> and thrust::complex<double> share layout, so the
+  // coefficients copy as raw bytes with no host-side conversion buffer.
+  hip_detail::copy_bytes_to_device(
       impl->coeffs,
-      coeffs.data(),
-      coeffs.size(),
+      host.coeffs().data(),
+      hip_detail::checked_bytes(host.num_terms(), sizeof(std::complex<double>), "HIP device coefficients"),
       "HIP device coefficients");
 
   return DevicePauliSum(std::move(impl));
@@ -245,16 +230,21 @@ PauliSum DevicePauliSum::to_host() const {
       detail::checked_product(impl_->num_terms, impl_->words, "HIP host packed words");
   std::vector<std::uint64_t> x(packed_words);
   std::vector<std::uint64_t> z(packed_words);
-  std::vector<thrust::complex<double>> device_coeffs(impl_->num_terms);
+  std::vector<std::complex<double>> coeffs(impl_->num_terms);
 
   hip_detail::ScopedHipDevice guard(impl_->device_ordinal);
   hip_detail::copy_to_host(x.data(), impl_->x, packed_words, "HIP host x words");
   hip_detail::copy_to_host(z.data(), impl_->z, packed_words, "HIP host z words");
-  hip_detail::copy_to_host(
-      device_coeffs.data(),
-      impl_->coeffs,
-      device_coeffs.size(),
-      "HIP host coefficients");
+  if (!coeffs.empty()) {
+    // Same layout on both sides: copy raw bytes, no conversion buffer.
+    hip_detail::check_hip(
+        hipMemcpy(
+            coeffs.data(),
+            impl_->coeffs,
+            hip_detail::checked_bytes(coeffs.size(), sizeof(std::complex<double>), "HIP host coefficients"),
+            hipMemcpyDeviceToHost),
+        "copy device buffer to host");
+  }
 
   return PauliSum(
       impl_->num_qubits,
@@ -262,7 +252,7 @@ PauliSum DevicePauliSum::to_host() const {
       impl_->num_terms,
       std::move(x),
       std::move(z),
-      to_host_coefficients(device_coeffs));
+      std::move(coeffs));
 }
 
 std::size_t DevicePauliSum::num_qubits() const noexcept {

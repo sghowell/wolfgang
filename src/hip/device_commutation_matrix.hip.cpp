@@ -1,4 +1,5 @@
 #include "device_commutation_matrix.hip.hpp"
+#include "hip/pool_allocator.hip.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -277,9 +278,9 @@ std::vector<std::uint64_t> DeviceCommutationMatrix::count_commuting_rows() const
       impl_->rows,
       "HIP device commutation matrix row counts");
   ScopedHipDevice guard(impl_->device_ordinal);
-  std::uint64_t* device_counts = nullptr;
-  hip_allocate(device_counts, impl_->rows, "HIP device commutation row counts");
-  auto counts_guard = device_allocation_guard(device_counts);
+  const hip_detail::PoolBuffer<std::uint64_t> counts_buffer(
+      impl_->rows, "HIP device commutation row counts");
+  std::uint64_t* device_counts = counts_buffer.get();
 
   count_rows_kernel<<<blocks, kHipThreadsPerBlock>>>(
       impl_->data,
@@ -306,9 +307,9 @@ std::vector<std::uint64_t> DeviceCommutationMatrix::count_commuting_cols() const
       impl_->cols,
       "HIP device commutation matrix column counts");
   ScopedHipDevice guard(impl_->device_ordinal);
-  std::uint64_t* device_counts = nullptr;
-  hip_allocate(device_counts, impl_->cols, "HIP device commutation column counts");
-  auto counts_guard = device_allocation_guard(device_counts);
+  const hip_detail::PoolBuffer<std::uint64_t> counts_buffer(
+      impl_->cols, "HIP device commutation column counts");
+  std::uint64_t* device_counts = counts_buffer.get();
 
   count_cols_kernel<<<blocks, kHipThreadsPerBlock>>>(
       impl_->data,

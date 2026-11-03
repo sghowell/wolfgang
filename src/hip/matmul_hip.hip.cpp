@@ -1,4 +1,5 @@
 #include "device_pauli_sum.hip.hpp"
+#include "hip/pool_allocator.hip.hpp"
 
 #include <hip/hip_runtime.h>
 #include <thrust/complex.h>
@@ -12,7 +13,6 @@ namespace wolfgang {
 
 using hip_detail::check_hip;
 using hip_detail::checked_launch_blocks;
-using hip_detail::hip_allocate;
 using hip_detail::kHipThreadsPerBlock;
 using hip_detail::ScopedHipDevice;
 
@@ -120,9 +120,9 @@ DevicePauliSum DevicePauliSum::matmul(
   ScopedHipDevice guard(impl_->device_ordinal);
   const std::size_t packed_words =
       detail::checked_product(out_terms, impl_->words, "HIP matmul packed words");
-  hip_allocate(out->x, packed_words, "HIP matmul x words");
-  hip_allocate(out->z, packed_words, "HIP matmul z words");
-  hip_allocate(out->coeffs, out_terms, "HIP matmul coefficients");
+  hip_detail::pool_allocate(out->x, packed_words, "HIP matmul x words");
+  hip_detail::pool_allocate(out->z, packed_words, "HIP matmul z words");
+  hip_detail::pool_allocate(out->coeffs, out_terms, "HIP matmul coefficients");
   matmul_product_kernel<<<blocks, kHipThreadsPerBlock>>>(
       impl_->x,
       impl_->z,

@@ -37,3 +37,95 @@ workflow before the local fast-forward merge).
 - Residual risk: the lanes run after the push to `main` under the repository's
   local-merge workflow, so they detect a break rather than block it; they make
   no runtime claims.
+
+## Slice 2: Accelerator simplify parity and HIP call overhead
+
+Branch `codex/accelerator-simplify-parity`, commits `926889b`..`d871133` plus
+documentation. The benchmarked candidate is `d871133`.
+
+- Reviewer: independent agent (CUDA/HIP numerics, memory management and
+  benchmark roles), read-only. It audited every CUDA and HIP reduction path for
+  a silently dropped non-finite sum and found none.
+- Findings: P0 0, P1 0, P2 1, P3 9.
+- P2 resolution (documentation): CHANGELOG entries for the user-visible
+  behavior changes; the numeric contract in `cuda_backend.md` and
+  `rocm_backend.md`; the HIP allocation policy; the plan row updated after the
+  pool was measured slower.
+- P3 resolutions:
+  - the contract and the test docstring state that overflow near the largest
+    double depends on each backend's summation order;
+  - a cancelling-overflow test (one run of `[M, M, -M, -M]` repeats spanning
+    reduction tiles) must raise `OverflowError` or return only finite values;
+  - tests add a 33-64 qubit width, contract checks for every benchmark-only
+    reduction path (CUDA CUB radix and serial kernel, HIP serial kernel), and
+    keep transfers outside `pytest.raises`;
+  - HIP validates its benchmark selectors before the single-term early return
+    and gates the generic selector on width, as CUDA does;
+  - trailing whitespace removed;
+  - the overflow flag moved to pinned, device-mapped host memory, which removed
+    its per-call copy (CUDA cost from 3-5% to 0.6-1.3% on small calls);
+  - a local layout `static_assert` guards HIP's raw-byte coefficient copies;
+  - the pool header's export rule is unconditional again;
+  - the overhead summarizer refuses mixed CUDA/HIP directories.
+- Measurement-driven change during the slice: the HIP pool (a port of CUDA's)
+  measured 9-37% slower than `hipMalloc` on small calls, so HIP defaults to
+  `hipMalloc` and the pool is a benchmark opt-in.
+- Validation after fixes:
+  - MI300X: `WOLFGANG_VALIDATE_HIP=1 python scripts/validate.py --profile core`
+    passed (763 tests in the HIP run); allocator, parity and ROCm suites 116
+    passed.
+  - H100: `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core`
+    passed (850 tests in the CUDA run); memcheck and racecheck clean on the
+    parity suite.
+  - M4 Pro: Metal core profile and quality profile passed.
+- Deferred: a reused per-operation scratch workspace for HIP (about 60 us of a
+  small simplify is now in `hipMalloc`/`hipFree`), to the performance slice.
+- Residual risk:
+  - one MI300X (virtual function) and one H100;
+  - the `inf + -inf` path is verified by inspection and by the
+    raise-or-finite test, since no input forces NaN under every grouping.
+
+## Slice 5: Fused small-operator simplify
+
+Branch `codex/small-simplify`, commits `2ed099c`..`b072c0a` plus
+documentation. The benchmarked candidate is `b072c0a`.
+
+- Reviewer: independent agent (CUDA/HIP kernel, numerics and performance
+  roles), read-only. It simulated the sort network at block sizes 2-1,024 and
+  widths 1-4 against a reference sort, and checked barrier uniformity and the
+  shared-memory layout.
+- Findings: P0 0, P1 1, P2 2, P3 4.
+- P1 resolution (per-device shared-memory opt-in): the opt-in was cached once
+  per process, but CUDA applies it per device, so 56 KiB launches would fail
+  on a second GPU, and a failed call stayed cached. The attribute is now set
+  before each launch that needs more than 48 KiB. Any launch-configuration
+  error falls back to the multi-launch path.
+- P2 resolutions:
+  - FMA contraction: the device threshold `atol + rtol * max` compiled to an
+    FMA, and so did CPU simplify on arm64. On the M4 Pro, CPU dropped a term
+    x86 kept. Every backend now rounds the product separately, with
+    regression tests.
+  - `__launch_bounds__(1024)` added.
+- P3 resolutions:
+  - the bit-identity claim now covers coefficients, with survivor sets equal
+    except at ulp-level threshold ties from device `hypot`;
+  - tests add an all-Y key equal to the sentinel key with fewer terms than the
+    block, the capacity+1 boundary, and cases with both tolerances;
+  - performance: word-major keys avoid bank conflicts, run heads are flagged
+    once, the result returns through mapped host memory, and the block is
+    sized to the input (with single terms fused on CUDA); together these took
+    H100 small simplify from 39 to 18 us;
+  - code-standards exception recorded: a custom kernel instead of CUB/hipCUB,
+    justified by the measured multi-launch baseline in the report.
+- Validation after fixes:
+  - H100: `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core`
+    passed (927 tests in the CUDA run); memcheck, racecheck, synccheck and
+    initcheck on the fused tests report 0 errors.
+  - MI300X: `WOLFGANG_VALIDATE_HIP=1 python scripts/validate.py --profile core`
+    passed (840 tests in the HIP run).
+  - M4 Pro: the separately rounded threshold passes on CPU and Metal.
+- Deferred: a multi-GPU check of the per-launch opt-in (one GPU per host
+  here); a duplicate-heavy worst-case benchmark row.
+- Residual risk:
+  - one H100 and one MI300X;
+  - device `hypot` can differ from host libm by a few ulps at the threshold.
