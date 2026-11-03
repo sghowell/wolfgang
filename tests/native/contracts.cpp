@@ -16,6 +16,46 @@ void require(bool condition, const char* message) {
   if (!condition) throw std::runtime_error(message);
 }
 
+// The pinned staging pool with malloc standing in for pinned allocation:
+// returned buffers are reused (smallest fit first), and at most kMaxIdle stay
+// idle.
+int g_pool_allocations = 0;
+int g_pool_frees = 0;
+void* fake_pinned_allocate(std::size_t bytes) {
+  ++g_pool_allocations;
+  return std::malloc(bytes);
+}
+void fake_pinned_free(void* pointer) {
+  ++g_pool_frees;
+  std::free(pointer);
+}
+
+void check_pinned_staging_pool() {
+  using Pool = wolfgang::accelerator_detail::PinnedStagingPool<&fake_pinned_allocate, &fake_pinned_free>;
+  std::byte* first = nullptr;
+  {
+    const Pool::Lease lease = Pool::borrow(1000);
+    require(lease.data() != nullptr && lease.size() >= 1000, "pool lease size");
+    first = lease.data();
+  }
+  {
+    const Pool::Lease again = Pool::borrow(800);
+    require(again.data() == first && g_pool_allocations == 1, "pool reuses a returned buffer");
+  }
+  {
+    // Six leases at once: the pool hands out its idle buffer once and
+    // allocates the rest; on return it keeps kMaxIdle and frees the smallest.
+    std::vector<Pool::Lease> leases;
+    for (std::size_t size : {2000, 64, 3000, 128, 4000, 256}) {
+      leases.push_back(Pool::borrow(size));
+    }
+    require(g_pool_allocations == 6, "busy buffers are not shared");
+  }
+  require(g_pool_frees == static_cast<int>(6 - Pool::kMaxIdle), "pool keeps at most kMaxIdle idle buffers");
+  const Pool::Lease large = Pool::borrow(2500);
+  require(large.size() >= 2500 && g_pool_allocations == 6, "pool picks an idle buffer that fits");
+}
+
 // Staged device-to-host copies (src/detail/staged_transfer.hpp) with two fake
 // streams. Deferred copies land only at the next wait, so draining a half
 // before its wait corrupts the result; immediate copies land when issued, so
@@ -71,6 +111,7 @@ void check_staged_device_to_host() {
     }
   }
   }
+  check_pinned_staging_pool();
   require(acc::staging_bytes_for(10, std::size_t{16} << 20) == (std::size_t{64} << 10), "minimum staging");
   require(acc::staging_bytes_for(std::size_t{40} << 20, std::size_t{16} << 20) == (std::size_t{16} << 20),
           "staging cap");

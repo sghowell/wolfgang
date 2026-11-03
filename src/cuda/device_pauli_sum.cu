@@ -34,56 +34,27 @@ static_assert(sizeof(std::complex<double>) == sizeof(thrust::complex<double>));
 
 namespace {
 
-// Per-thread pinned buffer for device-to-host copies
-// (detail/staged_transfer.hpp). Transfers that fit in it (up to
-// kPinnedStagingMaxBytes) stage through it; it grows to the largest such
-// transfer and is freed when the thread exits. Larger transfers, and any
-// transfer when pinned memory cannot be allocated, copy directly. Like the
-// other per-thread buffers it is not revalidated after cudaDeviceReset.
+// Pinned buffers for device-to-host copies (detail/staged_transfer.hpp),
+// borrowed from a process-wide pool for the duration of one to_host call.
+// Transfers that fit in kPinnedStagingMaxBytes stage through one; larger
+// transfers, and any transfer when pinned memory cannot be had, copy
+// directly.
 constexpr std::size_t kPinnedStagingMaxBytes = std::size_t{16} << 20;
 
-class ThreadPinnedStaging {
- public:
-  ThreadPinnedStaging() = default;
-  ThreadPinnedStaging(const ThreadPinnedStaging&) = delete;
-  ThreadPinnedStaging& operator=(const ThreadPinnedStaging&) = delete;
-  // The main thread's thread_local destructors run before the CUDA runtime's
-  // exit handlers; any error from a runtime already unloading is ignored.
-  ~ThreadPinnedStaging() {
-    if (pointer_ != nullptr) {
-      (void)cudaFreeHost(pointer_);
-    }
+void* allocate_pinned_staging(std::size_t bytes) {
+  void* pointer = nullptr;
+  if (cudaHostAlloc(&pointer, bytes, cudaHostAllocPortable) != cudaSuccess) {
+    (void)cudaGetLastError();
+    return nullptr;
   }
-
-  // At least `bytes` of pinned memory if it can be had; otherwise the current
-  // smaller buffer (the staged copy works with any size), or nullptr when
-  // there is none.
-  std::byte* reserve(std::size_t bytes) noexcept {
-    if (bytes > capacity_) {
-      void* pointer = nullptr;
-      if (cudaHostAlloc(&pointer, bytes, cudaHostAllocPortable) != cudaSuccess) {
-        (void)cudaGetLastError();
-        return pointer_;
-      }
-      if (pointer_ != nullptr) {
-        (void)cudaFreeHost(pointer_);
-      }
-      pointer_ = static_cast<std::byte*>(pointer);
-      capacity_ = bytes;
-    }
-    return pointer_;
-  }
-  [[nodiscard]] std::size_t capacity() const noexcept { return capacity_; }
-
- private:
-  std::byte* pointer_ = nullptr;
-  std::size_t capacity_ = 0;
-};
-
-ThreadPinnedStaging& thread_pinned_staging() {
-  thread_local ThreadPinnedStaging staging;
-  return staging;
+  return pointer;
 }
+
+void free_pinned_staging(void* pointer) {
+  (void)cudaFreeHost(pointer);
+}
+
+using PinnedStaging = wolfgang::accelerator_detail::PinnedStagingPool<&allocate_pinned_staging, &free_pinned_staging>;
 
 std::string cuda_version_string(int version) {
   if (version <= 0) {
@@ -465,11 +436,10 @@ PauliSum DevicePauliSum::to_host() const {
   // On an H100, staging beat a direct pageable copy up to the 16 MiB buffer
   // (2x at 8 MiB), and a direct copy into memory advised for huge pages beat
   // it above (8.4 against 9.3 ms at 32 MiB).
-  ThreadPinnedStaging& staging = thread_pinned_staging();
-  std::byte* staged = total_bytes == 0 || total_bytes > kPinnedStagingMaxBytes
-      ? nullptr
-      : staging.reserve(acc::staging_bytes_for(total_bytes, kPinnedStagingMaxBytes));
-  if (staged != nullptr) {
+  PinnedStaging::Lease staging = total_bytes == 0 || total_bytes > kPinnedStagingMaxBytes
+      ? PinnedStaging::Lease()
+      : PinnedStaging::borrow(acc::staging_bytes_for(total_bytes, kPinnedStagingMaxBytes));
+  if (staging.data() != nullptr) {
     // Device buffers are complex<double> in thrust's layout, which matches
     // std::complex<double>.
     const std::vector<acc::DeviceToHostSegment> segments{
@@ -478,8 +448,8 @@ PauliSum DevicePauliSum::to_host() const {
         acc::device_to_host_segment(
             coeffs, reinterpret_cast<const std::complex<double>*>(impl_->coeffs), impl_->num_terms)};
     acc::staged_device_to_host(
-        staged,
-        staging.capacity(),
+        staging.data(),
+        staging.size(),
         segments,
         [](std::byte* dst, const std::byte* src, std::size_t bytes) {
           check_cuda(cudaMemcpyAsync(dst, src, bytes, cudaMemcpyDeviceToHost, cudaStreamLegacy),
