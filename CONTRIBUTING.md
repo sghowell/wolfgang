@@ -1,6 +1,6 @@
 # Contributing to Wolfgang
 
-Wolfgang welcomes correctness fixes, documentation, portability work, benchmark improvements, and carefully evidenced kernel optimization. Human- and agent-authored contributions follow the same standards: reproducible evidence, explicit uncertainty, reviewable scope, and no fabricated runtime claims.
+Wolfgang accepts correctness fixes, documentation, portability work, benchmark improvements, and kernel optimizations backed by evidence. Contributions written by people and by agents meet the same standards: reproducible evidence, explicit uncertainty, reviewable scope, and no fabricated runtime claims.
 
 By participating, you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -19,7 +19,7 @@ python -m pip install -e ".[test]" \
 python scripts/validate.py
 ```
 
-For faster dependency setup, `uv sync --all-extras` is also supported when `uv` is available. Source-build accelerator commands and exact evidence requirements are documented under `docs/accelerators/` and `docs/architecture/`.
+If `uv` is installed, `uv sync --all-extras` is a supported and faster way to set up dependencies. Source-build accelerator commands and exact evidence requirements are documented under `docs/accelerators/` and `docs/architecture/`.
 
 ## Development workflow
 
@@ -32,7 +32,7 @@ For faster dependency setup, `uv sync --all-extras` is also supported when `uv` 
 7. Update user docs, changelog, support matrix, and benchmark evidence when affected.
 8. Open a pull request using the repository template.
 
-`AGENTS.md` contains additional navigation for automated coding agents; it is not required reading for ordinary users.
+`AGENTS.md` is a navigation map for automated coding agents. Users do not need to read it.
 
 The full review checklist is in [`docs/quality/code_review.md`](docs/quality/code_review.md).
 
@@ -53,7 +53,7 @@ A speed claim must identify:
 - raw measurements or a sanitized machine-readable summary;
 - uncertainty and regimes where the optimization does not win.
 
-Do not commit raw profiler databases, host inventories, SSH targets, arbitrary environment dumps, private paths, or cloud identifiers. Follow `docs/quality/public_artifact_policy.md` when it exists and run the public-artifact audit before submission.
+Do not commit raw profiler databases, host inventories, SSH targets, arbitrary environment dumps, private paths, or cloud identifiers. Follow `docs/quality/public_artifact_policy.md` and run the public-artifact audit before submission.
 
 ## Style
 

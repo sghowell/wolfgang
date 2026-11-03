@@ -29,4 +29,4 @@ The maintainer owns versioning, signed/tagged release decisions, package publica
 
 ## Evolution
 
-If recurring contributors emerge, maintainership may be extended based on sustained high-quality review and implementation. Governance changes are proposed by pull request. If the founding maintainer becomes inactive, established maintainers may appoint a release owner by documented consensus.
+Maintainership may be extended to recurring contributors who show sustained, high-quality review and implementation work. Governance changes are proposed by pull request. If the founding maintainer becomes inactive, established maintainers may appoint a release owner by documented consensus.

@@ -1,6 +1,6 @@
 # Security Policy
 
-Wolfgang combines native C++20 code, Python buffer protocols, and optional accelerator runtimes. Memory-safety, device-pointer ownership, malformed packed data, build provenance, and package integrity are security-relevant even though Wolfgang is a local numerical library.
+Wolfgang combines native C++20 code, Python buffer protocols, and optional accelerator runtimes. Although Wolfgang is a local numerical library, memory safety, device-pointer ownership, malformed packed data, build provenance, and package integrity are security concerns.
 
 ## Supported versions
 
@@ -8,7 +8,7 @@ Security fixes are provided for the latest released minor series. Pre-release an
 
 ## Privately report a vulnerability
 
-**Do not open a public issue for a suspected vulnerability.** Privately report it through GitHub's private vulnerability reporting for this repository. If that channel is unavailable, email `sean.g.howell@gmail.com` with the subject `Wolfgang security report`.
+**Do not open a public issue for a suspected vulnerability.** Report it through GitHub's private vulnerability reporting for this repository. If that channel is unavailable, email `sean.g.howell@gmail.com` with the subject `Wolfgang security report`.
 
 Include, when safe:
 

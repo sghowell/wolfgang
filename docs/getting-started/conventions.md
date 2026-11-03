@@ -9,7 +9,7 @@ Wolfgang represents each tensor-product Pauli string with symplectic binary mask
 | Y | 1 | 1 |
 | Z | 0 | 1 |
 
-Qubit zero occupies the least-significant packed bit. Human-readable dense labels follow the common convention that the rightmost character denotes qubit zero. For example, label `"XI"` applies `X` to qubit one and identity to qubit zero.
+Qubit zero occupies the least-significant packed bit. Dense labels follow the common convention that the rightmost character is qubit zero. For example, label `"XI"` applies `X` to qubit one and identity to qubit zero.
 
 Each term is:
 
@@ -25,7 +25,7 @@ Pauli multiplication is not string concatenation. The packed implementation comp
 
 ## Canonical order
 
-`simplify()` sorts packed keys deterministically, combines equal terms, and applies the documented absolute/relative drop threshold. Input order is preserved by ordinary construction and addition; canonicalization is explicit rather than surprising.
+`simplify()` sorts packed keys deterministically, combines equal terms, and applies the documented absolute/relative drop threshold. Construction and addition preserve input order, so terms are reordered only when you call `simplify()`.
 
 ## Sparse-list I/O
 
@@ -33,4 +33,4 @@ Sparse terms specify a local Pauli string and matching qubit indices. Exported i
 
 ## Numerical policy
 
-Coefficients are stored as `complex128`. Inputs may be converted to this representation. Equality in examples should use an explicit tolerance where floating-point arithmetic is involved; structural/canonical ordering and commutation results are exact.
+Coefficients are stored as `complex128`, and inputs may be converted to that type. Examples that compare the results of floating-point arithmetic should use an explicit tolerance. Structural and canonical ordering and commutation results are exact.

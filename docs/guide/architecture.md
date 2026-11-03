@@ -1,31 +1,23 @@
 # Architecture
 
-Wolfgang is organized around a compact mathematical invariant rather than around one accelerator API.
+Wolfgang is organized around one compact representation, the packed symplectic `PauliSum`, rather than around any one accelerator API.
 
 ```mermaid
-flowchart LR
-    IO[Dense labels / sparse lists / adapters] --> P[Packed symplectic PauliSum]
-    P --> S[Scalar C++ correctness kernels]
-    P --> D[Runtime CPU dispatch]
-    D --> SIMD[AVX2 / AVX-512 / NEON]
-    D --> TBB[oneTBB]
-    P --> X[Owning DevicePauliSum]
-    X --> CUDA[CUDA]
-    X --> HIP[ROCm / HIP]
-    X --> METAL[Apple Metal]
-    S --> O[Canonical outputs and test oracles]
-    SIMD --> O
-    TBB --> O
-    CUDA --> O
-    HIP --> O
-    METAL --> O
+flowchart TB
+    IO[Labels, sparse terms, adapters] --> P[Packed PauliSum]
+    P --> S[Scalar C++ kernels]
+    P --> D[CPU dispatch:<br/>AVX2, AVX-512, NEON, oneTBB]
+    P --> X[DevicePauliSum:<br/>CUDA, ROCm/HIP, Metal]
+    S --> O[Canonical outputs]
+    D --> O
+    X --> O
 ```
 
 ## Packed storage
 
-For `n` qubits, each term uses `ceil(n / 64)` words for its `x` mask and the same number for `z`. This makes commutation a parity calculation over bitwise intersections and makes multiplication primarily XOR plus phase accounting.
+For `n` qubits, each term uses `ceil(n / 64)` words for its `x` mask and the same number for `z`. Commutation then reduces to a parity calculation over bitwise intersections, and multiplication mostly to XOR plus phase accounting.
 
-The representation enables:
+The representation provides:
 
 - exact structure and compact memory;
 - deterministic canonical keys;
@@ -52,7 +44,7 @@ Optimization work is promoted only after:
 5. repeated measurements;
 6. a demonstrated win in a relevant regime.
 
-Rejected ideas and unavailable tooling are recorded rather than converted into optimistic claims. This discipline is especially important in agent-driven low-level engineering: agents generate hypotheses and implementations, while executable evidence decides what survives.
+Rejected ideas and unavailable tooling are recorded, not turned into optimistic claims. Agent-driven low-level work depends on this rule: agents generate hypotheses and implementations, and executable evidence decides which of them survive. [Agent-driven kernel engineering](agent-driven-engineering.md) describes the process.
 
 ## Source map
 

@@ -16,7 +16,7 @@ print(labels)
 print(coefficients)
 ```
 
-`PauliSum` owns packed `x` and `z` bit masks plus `complex128` coefficients. Labels are convenient I/O—not the hot-path representation.
+`PauliSum` owns packed `x` and `z` bit masks plus `complex128` coefficients. Labels are an input and output format; the kernels operate on the packed masks.
 
 ## Algebra and canonicalization
 
@@ -25,7 +25,7 @@ square = (op @ op).simplify(atol=1e-12)
 labels, coefficients = square.to_labels()
 ```
 
-`+` concatenates terms without silently simplifying. `@` performs phase-correct Pauli multiplication. `simplify()` combines identical packed terms, drops values under the documented tolerance, and returns deterministic canonical order.
+`+` concatenates terms and does not simplify them. `@` performs phase-correct Pauli multiplication. `simplify()` combines identical packed terms, drops values under the documented tolerance, and returns deterministic canonical order.
 
 ## Commutation and grouping
 
@@ -37,7 +37,7 @@ print(commuting.shape)
 print([group.num_terms for group in groups])
 ```
 
-Dense pairwise commutation has a guarded output size. For accelerator-heavy workflows, prefer compact consumer operations where available rather than materializing an unnecessarily large dense matrix.
+The dense pairwise commutation matrix has a guarded output size. In accelerator-heavy workflows, prefer a compact consumer operation where one exists over materializing a dense matrix larger than the task needs.
 
 ## Expectation value
 
@@ -60,7 +60,7 @@ spin_op = op.to_cudaq()                              # cudaq.SpinOperator
 again = PauliSum.from_cudaq(spin_op, op.num_qubits)  # width is not stored by CUDA-Q
 ```
 
-Install the corresponding extra first. Importing `wolfgang_quantum` itself does not eagerly import Qiskit, OpenFermion or CUDA-Q.
+Install the matching extra before calling an adapter. Importing `wolfgang_quantum` does not import Qiskit, OpenFermion or CUDA-Q.
 
 ## Next
 

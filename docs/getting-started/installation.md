@@ -2,7 +2,7 @@
 
 ## CPU package
 
-The ordinary Wolfgang installation is a CPU package with a portable scalar baseline. When a package-index release is available for your platform:
+The default Wolfgang installation is a CPU package with a portable scalar baseline. When a package-index release exists for your platform, install it with pip:
 
 ```bash
 python -m pip install wolfgang-quantum
@@ -34,7 +34,7 @@ PY
 - a supported wheel platform, or CMake 3.24+ and a C++20 compiler for source builds;
 - NumPy at runtime.
 
-Qiskit, OpenFermion and CUDA-Q adapters are optional:
+The Qiskit, OpenFermion and CUDA-Q adapters are optional extras:
 
 ```bash
 python -m pip install ".[qiskit]"
@@ -53,16 +53,16 @@ python -m pip install -e ".[test]" \
 python scripts/validate.py --profile core
 ```
 
-For lint, typing, spelling and strict docs, install the quality tools pinned in
-`.github/workflows/quality.yml` and the `docs`, `qiskit`, and `openfermion` extras,
-then run `python scripts/validate.py --profile all`.
+The `all` profile adds lint, type, spelling and strict docs checks. Install the
+quality tools pinned in `.github/workflows/quality.yml` and the `docs`, `qiskit`,
+and `openfermion` extras, then run `python scripts/validate.py --profile all`.
 
 ## Accelerator source builds
 
-Accelerator builds are opt-in CMake configurations, not automatic runtime downloads. Read the [accelerator overview](../accelerators/overview.md) and the [support matrix](../release/support_matrix.md) before building. Exact toolkit, architecture, compiler, runtime, and hardware evidence determines support.
+Accelerator builds are opt-in CMake configurations, not automatic runtime downloads. Read the [accelerator overview](../accelerators/overview.md) and the [support matrix](../release/support_matrix.md) before building. Support is decided by evidence for the exact toolkit, architecture, compiler, runtime, and hardware.
 
 Never enable `WOLFGANG_ENABLE_NATIVE=ON` for a portable release wheel. Never infer broad architecture support from one successful GPU.
 
 ## Troubleshooting
 
-Capture the complete configure output and the native module's `_build_info()` report. Report the Wolfgang revision, Python, compiler, OS, architecture, and accelerator runtime after removing usernames, addresses, tokens, hostnames, and private paths. See the [support policy](https://github.com/sghowell/Wolfgang/blob/main/SUPPORT.md).
+When a build or import fails, capture the complete configure output and the native module's `_build_info()` report. Include the Wolfgang revision, Python, compiler, OS, architecture, and accelerator runtime in your report, and remove usernames, addresses, tokens, hostnames, and private paths before sending it. See the [support policy](https://github.com/sghowell/Wolfgang/blob/main/SUPPORT.md).

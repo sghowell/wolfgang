@@ -11,29 +11,31 @@ Wolfgang uses one host representation and target-specific source builds. Acceler
 | Accelerator wheel | No | Not currently public | Not currently public | Not currently public |
 | Combined accelerator binary | N/A | No | No | No |
 
-The exact release boundary—not this summary—is maintained in [`docs/release/support_matrix.md`](../release/support_matrix.md).
+This table is a summary. The exact release boundary is maintained in [`docs/release/support_matrix.md`](../release/support_matrix.md).
 
 ## CUDA
 
-CUDA work covers owning transfers, commutation, compact consumers, simplify (one fused kernel for small operators), multiplication, statevector expectation, and carefully reviewed interoperability: zero-copy device arrays and commutation matrices through DLPack and the CUDA Array Interface. Each public operation defines whether timing includes allocation, transfer, host materialization, and synchronization.
+The CUDA backend covers owning transfers, commutation, compact consumers, simplify (one fused kernel for small operators), multiplication, statevector expectation, and interoperability: zero-copy device arrays and commutation matrices through DLPack and the CUDA Array Interface. Each public operation defines whether timing includes allocation, transfer, host materialization, and synchronization.
 
 ## ROCm/HIP
 
-ROCm/HIP follows the same semantic contracts but remains target-specific. Evidence from one MI300X configuration does not establish broad AMD portability. CUDA and HIP are intentionally mutually exclusive in one extension until a mixed-runtime design is justified.
+ROCm/HIP follows the same semantic contracts but remains target-specific. Evidence from one MI300X configuration does not establish broad AMD portability. One extension cannot enable both CUDA and HIP; that exclusion is deliberate and stays until a mixed-runtime design is justified.
 
 ## Apple Metal
 
-Metal is a separate Objective-C++/Metal implementation. Some operations may use an explicit correctness bridge rather than a retained native kernel. Such fallback behavior is documented and must not be marketed as accelerator performance.
+Metal is a separate Objective-C++/Metal implementation. Some operations may use an explicit correctness bridge instead of a retained native kernel. That fallback behavior is documented and must not be marketed as accelerator performance.
 
 ## Why source-build first
 
-Accelerator wheels require decisions about runtime libraries, driver/toolkit compatibility, architecture targeting, artifact size, clean-machine installation, and hosted hardware CI. Wolfgang does not hide those unresolved distribution contracts behind a generic `pip install` claim.
+Accelerator wheels require decisions about runtime libraries, driver/toolkit compatibility, architecture targeting, artifact size, clean-machine installation, and hosted hardware CI. Those distribution contracts are unresolved, and Wolfgang does not cover them with a generic `pip install` claim.
 
 ## Evidence vocabulary
 
-- **compile-tested**: toolchain produced the target.
-- **runtime-tested**: correctness tests executed on named hardware.
-- **performance-tested**: benchmarked with a declared timing boundary.
-- **release-supported**: installation and runtime behavior are covered by release evidence and support policy.
+Accelerator claims use four evidence levels. The terms are not interchangeable.
 
-These terms are not interchangeable.
+| Term | Meaning |
+|---|---|
+| compile-tested | The toolchain produced the target. |
+| runtime-tested | Correctness tests executed on named hardware. |
+| performance-tested | Benchmarked with a declared timing boundary. |
+| release-supported | Installation and runtime behavior are covered by release evidence and support policy. |

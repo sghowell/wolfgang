@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,7 +26,9 @@ def test_mermaid_docs_contract_is_pinned_and_source_backed() -> None:
     for path in MERMAID_SOURCE_PAGES:
         source = path.read_text(encoding="utf-8")
         assert "```mermaid" in source, f"missing Mermaid fence in {path.relative_to(ROOT)}"
-        assert "flowchart LR" in source, f"missing Mermaid flowchart in {path.relative_to(ROOT)}"
+        assert re.search(r"flowchart (LR|TB|TD)", source), (
+            f"missing Mermaid flowchart in {path.relative_to(ROOT)}"
+        )
 
     assert MERMAID_RUNTIME.is_file(), (
         f"missing vendored Mermaid runtime: {MERMAID_RUNTIME.relative_to(ROOT)}"

@@ -1,18 +1,20 @@
 # Python API
 
-The public package exports three native types, immutable capability records,
-backend discovery helpers, and optional ecosystem adapters.
+The public package exports four native types (`PauliSum`, `DevicePauliSum`,
+`DeviceCommutationMatrix` and `DeviceArrayView`), immutable capability
+records, backend discovery and CPU thread helpers, the `measurement` module,
+and optional ecosystem adapters.
 
 ## Capability discovery
 
 Call `wolfgang_quantum.capabilities()` to obtain a frozen `WolfgangCapabilities`
 snapshot describing the compiled CPU and accelerator backends and their current
 runtime visibility. `CpuCapabilities` and `BackendCapabilities` provide typed
-per-backend records. Convenience helpers such as `cuda_available()` and
-`cuda_devices()` are also public, with corresponding HIP and Metal helpers.
+per-backend records. The helpers `cuda_available()` and `cuda_devices()` and
+their HIP and Metal counterparts are also public.
 
-Capability discovery reports what this build and runtime can use; it does not
-upgrade an experimental accelerator backend into a supported wheel target.
+Capability discovery reports what this build and runtime can use. It does not
+turn an experimental accelerator backend into a supported wheel target.
 
 ## CPU threads
 
@@ -39,7 +41,7 @@ above oneTBB's default concurrency leaves oneTBB uncapped.
 
 ## `PauliSum`
 
-Host-owned sparse Pauli operator.
+`PauliSum` is a host-owned sparse Pauli operator.
 
 Primary constructors:
 
@@ -110,14 +112,15 @@ for group, budget in zip(groups, shots):
 ```
 
 Qubit-wise commuting groups need only single-qubit rotations; pass
-`group.qwc_basis()` as `basis` to `group.estimate_counts` to skip building `D`.
+`group.qwc_basis()` as `basis` to `group.estimate_counts` to skip building the
+diagonal operator.
 
 `measurement.to_qiskit_circuit(gates, num_qubits)` converts a gate list to a
 Qiskit circuit when Qiskit is installed.
 
 ## `DevicePauliSum`
 
-Owning accelerator mirror. Availability and native/fallback behavior depend on the compiled backend and current support contract. Device operations are synchronous unless documentation for a specific API states otherwise.
+`DevicePauliSum` is an owning accelerator mirror of an operator. Availability and native/fallback behavior depend on the compiled backend and the current support contract. Device operations are synchronous unless the documentation for a specific API states otherwise.
 
 On CUDA, `device_arrays()` hands the packed buffers to CuPy or PyTorch without
 a copy, and `from_device_arrays()` builds an operator from device arrays
@@ -140,7 +143,7 @@ copy completes. HIP and Metal raise for both.
 
 ## `DeviceCommutationMatrix`
 
-Owning dense device output with compact reductions. Dense outputs are guarded because `rows * cols` may be large. Interop protocols have explicit backend and read-only limitations.
+`DeviceCommutationMatrix` is an owning dense device output with compact reductions. Dense outputs are guarded because `rows * cols` may be large. Its interop protocols have explicit backend and read-only limitations.
 
 ## Exceptions and invalid inputs
 
@@ -151,7 +154,7 @@ Owning dense device output with compact reductions. Dense outputs are guarded be
 
 ## Optional dependencies
 
-The base package imports without Qiskit, OpenFermion or CUDA-Q. Adapter calls provide install guidance when an optional library is absent.
+The base package imports without Qiskit, OpenFermion or CUDA-Q. When an optional library is missing, the adapter call reports how to install it.
 
 `PauliSum.from_cudaq(op, num_qubits=None)` and `PauliSum.to_cudaq()` convert to
 and from CUDA-Q spin operators (the `cudaq` extra, CUDA-Q 0.11 or later):
@@ -170,4 +173,4 @@ qubits above the largest index. Qubit `q` is the same qubit in both libraries.
 
 ## Stability
 
-Wolfgang is pre-1.0. Public behavior is documented and changes are recorded, but deliberate migration may occur. Private names beginning with `_`, campaign hooks, benchmark schemas, and internal native helpers are not stable unless explicitly promoted. See the [API stability policy](../architecture/api_stability.md).
+Wolfgang is pre-1.0. Public behavior is documented and changes are recorded, but a release may still make deliberate changes that require migration. Private names beginning with `_`, campaign hooks, benchmark schemas, and internal native helpers are not stable unless explicitly promoted. See the [API stability policy](../architecture/api_stability.md).

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -31,8 +32,10 @@ def test_mermaid_fences_build_as_runtime_backed_diagrams(tmp_path: Path) -> None
     for relative_path in PAGES_WITH_DIAGRAMS:
         html = (site_dir / relative_path).read_text(encoding="utf-8")
         assert '<div class="mermaid">' in html, f"missing Mermaid container in {relative_path}"
-        assert "flowchart LR" in html, f"missing diagram source in {relative_path}"
-        assert '<div class="highlight"><pre><span></span><code>flowchart LR' not in html
+        assert re.search(r"flowchart (LR|TB|TD)", html), (
+            f"missing diagram source in {relative_path}"
+        )
+        assert '<div class="highlight"><pre><span></span><code>flowchart' not in html
         assert MERMAID_RUNTIME in html, f"missing Mermaid runtime on {relative_path}"
         assert MERMAID_INIT in html, f"missing Mermaid initializer on {relative_path}"
 

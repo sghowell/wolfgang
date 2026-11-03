@@ -1,13 +1,13 @@
 # Agent-driven kernel engineering
 
-Wolfgang treats coding agents as high-bandwidth collaborators, not as sources of truth. Agents can search a broad design space quickly, draft kernels and tests, compare alternatives, orchestrate remote experiments, and perform independent reviews. Only executable evidence can promote a change.
+Wolfgang uses coding agents as fast collaborators, not as sources of truth. Agents search a broad design space, draft kernels and tests, compare alternatives, orchestrate remote experiments, and perform independent reviews. Only executable evidence can promote a change.
 
-This distinction is central to the project. Low-level optimization is unusually vulnerable to plausible-looking failure: a kernel may compile but race, return the right answer only for one shape, measure asynchronous launch time instead of completion, transfer more data than the baseline, use unsupported instructions, or “win” because semantics differ. Fluent generated explanations do not reduce those risks.
+Low-level optimization is prone to failures that look plausible. A kernel can compile and still race. It can return the right answer for only one shape, time the asynchronous launch instead of completion, transfer more data than the baseline, use unsupported instructions, or appear to win because its semantics differ. A fluent generated explanation does not reduce any of these risks.
 
 ## The operating loop
 
 ```mermaid
-flowchart LR
+flowchart TB
     G[Goal and contract] --> P[Concrete plan]
     P --> O[Scalar or independent oracle]
     O --> T[Failing behavioral test]
@@ -40,19 +40,19 @@ A candidate cannot redefine the problem after measurement.
 
 The portable scalar C++ path is the default structural oracle. Where useful, Qiskit, OpenFermion, dense matrices, or a simpler Python implementation provide independent checks. Property tests cover algebraic identities and generated edge cases.
 
-Agents are instructed to create the failing behavior test before production changes. This establishes what should happen rather than merely documenting what generated code happens to do.
+Agents are instructed to write the failing behavioral test before changing production code. The test then defines what should happen, instead of recording whatever the generated code happens to do.
 
 ### 3. Generate narrow candidates
 
-Candidates target one bottleneck and one evidence question at a time: a packed commutation lane, threshold, reduction, workspace policy, transfer boundary, or device consumer. Narrow slices make failures attributable and keep rollback inexpensive.
+Each candidate targets one bottleneck and one evidence question: a packed commutation lane, threshold, reduction, workspace policy, transfer boundary, or device consumer. Narrow slices make failures attributable and keep rollback cheap.
 
-Multiple agents may independently inspect architecture, security, numerical behavior, and release claims. They do not edit overlapping files concurrently unless isolated worktrees and explicit integration review are used.
+Multiple agents may independently inspect architecture, security, numerical behavior, and release claims. They do not edit overlapping files concurrently unless they use isolated worktrees and an explicit integration review.
 
 ### 4. Verify before timing
 
-A benchmark row is invalid unless correctness passes. Native changes also face checked arithmetic, malformed inputs, moved-from/lifetime cases, CPU-only import, unavailable-backend behavior, and sanitizer or accelerator tooling where available.
+A benchmark row is invalid unless correctness passes. Native changes also go through checked-arithmetic, malformed-input, moved-from and lifetime, CPU-only import, and unavailable-backend tests, plus sanitizer or accelerator tooling runs where that tooling is available.
 
-Hardware absence is recorded as an external blocker or explicit skip. It is never replaced with invented command output, simulated profiler evidence, or a claim that compile success implies runtime support.
+When hardware is unavailable, the project records an external blocker or an explicit skip. It never substitutes invented command output, simulated profiler evidence, or a claim that a successful compile implies runtime support.
 
 ### 5. Measure honest boundaries
 
@@ -66,15 +66,15 @@ Accelerator timing names what it includes:
 - pipeline/cache warmup;
 - host conversion and Python binding overhead.
 
-Benchmark metadata is allowlisted and sanitized. The project retains enough environment detail to interpret results without publishing usernames, addresses, hostnames, arbitrary environments, or raw infrastructure databases.
+Benchmark metadata is allowlisted and sanitized. The project keeps enough environment detail to interpret results without publishing usernames, addresses, hostnames, arbitrary environments, or raw infrastructure databases.
 
 ### 6. Promote, iterate, or reject
 
-Promotion requires repeated evidence in a relevant regime and no semantic regression. A candidate that loses stays private or is removed. A candidate blocked by missing hardware or tooling remains unavailable. Negative results are useful: they prevent the same attractive but unproductive idea from being rediscovered without context.
+Promotion requires repeated evidence in a relevant regime and no semantic regression. A candidate that loses stays private or is removed. A candidate blocked by missing hardware or tooling remains unavailable. Negative results are retained so that an attractive but unproductive idea is not rediscovered later without its history.
 
 ### 7. Review independently
 
-Fresh reviewers assess spec compliance before code quality, then integration, security, and public claims. The implementer does not substitute self-review for independent review. Release-facing changes additionally verify artifacts from clean installation, not just an editable tree.
+Fresh reviewers check spec compliance before code quality, then integration, security, and public claims. The implementer does not substitute self-review for independent review. Release-facing changes also verify artifacts from a clean installation, not only from an editable tree.
 
 ## Evidence hierarchy
 
@@ -86,11 +86,11 @@ Fresh reviewers assess spec compliance before code quality, then integration, se
 | Performance-tested | A scoped timing result is retained | Broad portability |
 | Release-supported | Install/runtime evidence is continuously gated | Every future platform |
 
-The vocabulary prevents a common failure mode in accelerated software: collapsing all five levels into “supported.”
+Accelerated software often collapses all five levels into the single word "supported". Naming them separately keeps each claim at the level its evidence reaches.
 
 ## Repository evidence
 
-The public artifact exposes the loop rather than hiding it:
+Each part of the loop leaves a public record:
 
 - `docs/plans/` records concrete implementation and experiment plans;
 - `tests/` retains semantic, property, protocol, and packaging contracts;
@@ -101,10 +101,10 @@ The public artifact exposes the loop rather than hiding it:
 - `scripts/validate.py` turns project policy into executable gates;
 - `AGENTS.md` gives automated contributors the same source-of-truth map.
 
-Raw profiler captures and private infrastructure records are not part of the public proof. The impressive artifact is the reproducible reasoning chain—contract, code, test, environment, measurement, decision—not the volume of unfiltered logs.
+Raw profiler captures and private infrastructure records are not part of the public evidence. What the repository publishes is the reproducible chain from contract to code, test, environment, measurement, and decision, not a volume of unfiltered logs.
 
 ## Why this scales
 
-Agent assistance increases implementation throughput and the number of hypotheses that can be considered. The evidence loop prevents that throughput from becoming unreviewed complexity. Small plans, isolated worktrees, test-first behavior, promotion thresholds, independent review, and explicit stopping reasons make the process auditable by another engineer.
+Agents raise implementation throughput and the number of hypotheses the project can consider. The evidence loop keeps that throughput from turning into unreviewed complexity. Small plans, isolated worktrees, test-first behavior, promotion thresholds, independent review, and explicit stopping reasons let another engineer audit the process.
 
-The result is not “code written by an agent.” It is a systems-engineering process in which agent speed is subordinated to numerical correctness, hardware reality, privacy, and release discipline.
+Agent speed stays subordinate to numerical correctness, hardware reality, privacy, and release discipline.

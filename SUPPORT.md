@@ -26,6 +26,6 @@ Sanitize usernames, addresses, tokens, hostnames, absolute paths, and profiler d
 
 ## Support boundaries
 
-CPU wheels and source-build accelerator paths have different evidence levels. A backend being implemented does not imply that wheels exist for it. Windows, combined accelerator binaries, arbitrary GPU architectures, and asynchronous stream semantics are not supported unless the current support matrix explicitly says otherwise.
+CPU wheels and source-build accelerator paths have different evidence levels. An implemented backend does not imply that wheels exist for it. Windows, combined accelerator binaries, arbitrary GPU architectures, and asynchronous stream semantics are not supported unless the current support matrix explicitly says otherwise.
 
 Security concerns belong in the private process described by [SECURITY.md](SECURITY.md), not in public support channels.
