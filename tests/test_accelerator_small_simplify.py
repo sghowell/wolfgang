@@ -3,7 +3,9 @@
 Operators of one to four packed words (up to 256 qubits) with at most
 small_simplify_capacity(words) terms (1,024 for one or two words, 512 for three
 or four) run as one fused launch that sums each duplicate run in input order,
-so coefficients match CPU simplify exactly, signed zeros included. The
+so coefficients match CPU simplify exactly, signed zeros included. Survivor
+sets match too, except where a coefficient lies within the device hypot's
+few-ulp error of the drop threshold; random inputs here never do. The
 benchmark switch WOLFGANG_<BACKEND>_BENCH_SMALL_SIMPLIFY=off keeps the
 multi-launch path, whose tree-ordered sums match only to rounding.
 """
@@ -55,8 +57,44 @@ def test_small_simplify_is_bit_identical_to_cpu(backend: str, num_qubits: int, w
     num_terms = {"two": 2, "small": 129, "capacity": _capacity(num_qubits)}[which]
     op = _operator(num_qubits, num_terms, duplicates, seed=num_qubits * 31 + num_terms)
     device = op.to_device(backend=backend)
-    for kwargs in ({}, {"atol": 0.5}, {"atol": 0.0, "rtol": 0.2}):
+    for kwargs in ({}, {"atol": 0.5}, {"atol": 0.0, "rtol": 0.2}, {"atol": 0.05, "rtol": 0.2}):
         _assert_bit_identical(device.simplify(**kwargs).to_host(), op.simplify(**kwargs))
+
+
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_small_simplify_threshold_is_not_fma_contracted(backend: str) -> None:
+    # atol + rtol * max computed as one FMA keeps the 0.278... term's threshold
+    # an ulp higher than CPU's separately rounded threshold and drops it.
+    _require(backend)
+    op = wolfgang_quantum.PauliSum.from_labels(["X", "Z"], [1.3927415900879758, 0.2785483180185952])
+    expected = op.simplify(rtol=0.2)
+    assert expected.num_terms == 2
+    _assert_bit_identical(op.to_device(backend=backend).simplify(rtol=0.2).to_host(), expected)
+
+
+@pytest.mark.parametrize("backend", BACKENDS)
+@pytest.mark.parametrize("num_qubits", [64, 128, 256])
+def test_small_simplify_all_y_key_equal_to_sentinel(backend: str, num_qubits: int) -> None:
+    # An all-Y term at a multiple of 64 qubits packs to all-ones words, the
+    # padding sentinel's key; the input-index tie-break must keep it.
+    _require(backend)
+    labels = ["Y" * num_qubits, "X" * num_qubits, "Y" * num_qubits] * 20 + ["Y" * num_qubits]
+    coeffs = np.arange(1, len(labels) + 1, dtype=np.float64) * (1.0 - 0.5j)
+    op = wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
+    _assert_bit_identical(op.to_device(backend=backend).simplify().to_host(), op.simplify())
+
+
+@pytest.mark.parametrize("backend", BACKENDS)
+@pytest.mark.parametrize("num_qubits", [24, 200])
+def test_small_simplify_capacity_boundary(backend: str, num_qubits: int) -> None:
+    # One term past the capacity takes the multi-launch path.
+    _require(backend)
+    for num_terms in (_capacity(num_qubits), _capacity(num_qubits) + 1):
+        op = _operator(num_qubits, num_terms, 0.5, seed=num_terms)
+        actual = op.to_device(backend=backend).simplify().to_host()
+        expected = op.simplify()
+        assert list(actual.to_labels()[0]) == list(expected.to_labels()[0])
+        np.testing.assert_allclose(actual.to_arrays()[2], expected.to_arrays()[2], rtol=1e-12, atol=1e-12)
 
 
 @pytest.mark.parametrize("backend", BACKENDS)

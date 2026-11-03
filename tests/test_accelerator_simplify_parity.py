@@ -176,3 +176,18 @@ def test_benchmark_selected_reductions_follow_the_contract(
     bad = wolfgang_quantum.PauliSum.from_arrays(x, z, coeffs, num_qubits).to_device(backend=backend)
     with pytest.raises(ValueError, match="finite"):
         bad.simplify()
+
+
+def test_cpu_drop_threshold_is_separately_rounded() -> None:
+    # atol + rtol * max as one fused multiply-add (which arm64 compilers emit
+    # unless prevented) lands an ulp above 0.2785483180185952 and drops Z.
+    op = wolfgang_quantum.PauliSum.from_labels(["X", "Z"], [1.3927415900879758, 0.2785483180185952])
+    assert op.simplify(rtol=0.2).num_terms == 2
+
+
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_device_drop_threshold_is_separately_rounded(backend: str) -> None:
+    _require(backend)
+    op = wolfgang_quantum.PauliSum.from_labels(["X", "Z"], [1.3927415900879758, 0.2785483180185952])
+    _assert_matches_cpu(backend, op, rtol=0.2)
+    assert op.to_device(backend=backend).simplify(rtol=0.2).to_host().num_terms == 2
