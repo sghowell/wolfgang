@@ -71,3 +71,10 @@ the KVM test hosts. `to_host` is 1.9-3.2x faster on an H100, and on an MI300X
 1.8-1.9x faster for small operators and 2.2-3.2x at 1M (24 qubits) and 4M
 terms; `to_device` keeps the driver's pageable path, which beat staging
 (`docs/benchmarks/reports/host_transfers_2026-11-03.md`).
+
+Slice 4 merged: `set_num_threads()`, `get_num_threads()` and
+`WOLFGANG_NUM_THREADS` cap the oneTBB CPU kernels for the whole process, and
+auto dispatch's four-thread floor counts the capped threads. Inside a 4-CPU
+quota on a 26-vCPU host a cap of 4 made simplify 1.25x faster on average with
+a 2.6x shorter 90th percentile; without a quota, oversubscription cost nothing
+measurable (`docs/benchmarks/reports/cpu_threads_2026-11-03.md`).
