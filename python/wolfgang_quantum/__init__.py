@@ -32,6 +32,7 @@ from ._capabilities import (
 )
 from ._version import __version__
 from ._wolfgang_core import (
+    DeviceArrayView,
     DeviceCommutationMatrix,
     DevicePauliSum,
     PauliSum,
@@ -53,6 +54,7 @@ _install_pauli_sum_measurement_methods()
 __all__ = [
     "BackendCapabilities",
     "CpuCapabilities",
+    "DeviceArrayView",
     "DeviceCommutationMatrix",
     "DevicePauliSum",
     "WolfgangCapabilities",

@@ -1269,6 +1269,219 @@ nb::dict accelerator_status_to_dict() {
   return info;
 }
 
+// A read-only view of one DevicePauliSum device buffer. It keeps the owning
+// DevicePauliSum alive, and every DLPack capsule it exports holds its own
+// reference, so the buffer outlives every consumer.
+struct DeviceArrayView {
+  nb::object owner;
+  std::uintptr_t pointer = 0;
+  std::vector<std::int64_t> shape;
+  DLDataType dtype{};
+  const char* typestr = "";
+  const char* dtype_name = "";
+  int device_type = 0;
+  int device = 0;
+};
+
+nb::tuple device_array_shape(const DeviceArrayView& view) {
+  nb::list items;
+  for (const std::int64_t extent : view.shape) {
+    items.append(extent);
+  }
+  return nb::tuple(items);
+}
+
+nb::object device_array_dlpack(
+    const DeviceArrayView& view,
+    nb::object stream_obj,
+    nb::object max_version_obj,
+    nb::object copy_obj) {
+  validate_dlpack_arguments(stream_obj, max_version_obj, copy_obj);
+  const auto [major, minor] = parse_dlpack_max_version(max_version_obj);
+  const auto negotiated = major == 0 && minor == 0 && max_version_obj.is_none()
+      ? std::optional<DLPackVersion>{}
+      : detail::negotiate_dlpack_version(DLPackVersion{major, minor});
+  if (!negotiated.has_value()) {
+    throw_buffer_error(
+        "DeviceArrayView.__dlpack__ requires max_version >= (1, 0) "
+        "so the read-only DLPack contract can be represented");
+  }
+  const std::size_t ndim = view.shape.size();
+  auto context = std::make_unique<DeviceCommutationDlpackContext>();
+  context->shape = std::make_unique<std::int64_t[]>(ndim);
+  context->strides = std::make_unique<std::int64_t[]>(ndim);
+  std::int64_t stride = 1;
+  for (std::size_t axis = ndim; axis-- > 0;) {
+    context->shape[axis] = view.shape[axis];
+    context->strides[axis] = stride;
+    stride *= view.shape[axis];
+  }
+  Py_INCREF(view.owner.ptr());
+  context->owner = view.owner.ptr();
+
+  auto managed = std::make_unique<DLManagedTensorVersioned>();
+  managed->version = *negotiated;
+  managed->manager_ctx = context.get();
+  managed->deleter = &device_commutation_versioned_dlpack_deleter;
+  managed->flags = DLPACK_FLAG_BITMASK_READ_ONLY;
+  managed->dl_tensor.data = reinterpret_cast<void*>(view.pointer);
+  managed->dl_tensor.device = DLDevice{static_cast<DLDeviceType>(view.device_type), view.device};
+  managed->dl_tensor.ndim = static_cast<std::int32_t>(ndim);
+  managed->dl_tensor.dtype = view.dtype;
+  managed->dl_tensor.shape = context->shape.get();
+  managed->dl_tensor.strides = context->strides.get();
+  managed->dl_tensor.byte_offset = 0;
+
+  PyObject* capsule = PyCapsule_New(
+      managed.get(),
+      "dltensor_versioned",
+      &device_commutation_versioned_dlpack_capsule_destructor);
+  if (capsule == nullptr) {
+    throw nb::python_error();
+  }
+  context.release();
+  managed.release();
+  return nb::steal<nb::object>(capsule);
+}
+
+nb::dict device_array_cuda_array_interface(const DeviceArrayView& view) {
+  nb::dict interface;
+  interface["shape"] = device_array_shape(view);
+  interface["typestr"] = view.typestr;
+  interface["data"] = nb::make_tuple(static_cast<unsigned long long>(view.pointer), true);
+  interface["version"] = 3;
+  interface["strides"] = nb::none();
+  // Wolfgang operations synchronize before returning, so the data is ready on
+  // any stream; 1 is the legacy default stream.
+  interface["stream"] = 1;
+  return interface;
+}
+
+nb::tuple device_pauli_sum_device_arrays(nb::pointer_and_handle<DevicePauliSum> self) {
+  const DevicePauliSum& op = *self.p;
+  const DeviceArrayPointers pointers = op.export_device_arrays();
+  const auto terms = static_cast<std::int64_t>(op.num_terms());
+  const auto words = static_cast<std::int64_t>(op.words());
+  const nb::object owner = nb::borrow(self.h);
+  const char native_order = std::endian::native == std::endian::little ? '<' : '>';
+  static const std::string u8_typestr = std::string{native_order} + "u8";
+  static const std::string c16_typestr = std::string{native_order} + "c16";
+  const DLDataType uint64_dtype{static_cast<std::uint8_t>(kDLUInt), 64, 1};
+  const DLDataType complex128_dtype{static_cast<std::uint8_t>(kDLComplex), 128, 1};
+  DeviceArrayView x{owner, pointers.x, {terms, words}, uint64_dtype, u8_typestr.c_str(), "uint64",
+                    pointers.dlpack_device_type, pointers.device};
+  DeviceArrayView z{owner, pointers.z, {terms, words}, uint64_dtype, u8_typestr.c_str(), "uint64",
+                    pointers.dlpack_device_type, pointers.device};
+  DeviceArrayView coeffs{owner, pointers.coeffs, {terms}, complex128_dtype, c16_typestr.c_str(), "complex128",
+                         pointers.dlpack_device_type, pointers.device};
+  return nb::make_tuple(nb::cast(std::move(x)), nb::cast(std::move(z)), nb::cast(std::move(coeffs)));
+}
+
+// A device array received through __cuda_array_interface__ with the expected
+// typestr and shape, C-contiguous.
+std::uintptr_t parse_cuda_array_interface_input(
+    nb::handle object,
+    const char* name,
+    const std::string& expected_typestr,
+    std::initializer_list<long long> expected_shape,
+    std::size_t itemsize) {
+  if (!has_cuda_array_interface(object)) {
+    throw nb::type_error(
+        (std::string(name) + " must expose __cuda_array_interface__ (for example a CuPy array or "
+         "a CUDA PyTorch tensor)").c_str());
+  }
+  nb::object interface_obj = nb::steal<nb::object>(
+      PyObject_GetAttrString(object.ptr(), "__cuda_array_interface__"));
+  if (!PyMapping_Check(interface_obj.ptr())) {
+    throw nb::type_error("__cuda_array_interface__ must be a mapping");
+  }
+  nb::object typestr_obj = mapping_get_required(interface_obj, "typestr");
+  std::string typestr;
+  try {
+    typestr = nb::cast<std::string>(typestr_obj);
+  } catch (const nb::cast_error&) {
+    throw nb::type_error("__cuda_array_interface__ typestr must be a string");
+  }
+  if (typestr != expected_typestr && typestr != "=" + expected_typestr.substr(1)) {
+    throw nb::type_error((std::string(name) + " must have dtype " + expected_typestr).c_str());
+  }
+  nb::object shape_obj = mapping_get_required(interface_obj, "shape");
+  if (!PySequence_Check(shape_obj.ptr()) || PyUnicode_Check(shape_obj.ptr()) ||
+      PySequence_Size(shape_obj.ptr()) != static_cast<Py_ssize_t>(expected_shape.size())) {
+    throw nb::value_error((std::string(name) + " has the wrong number of dimensions").c_str());
+  }
+  Py_ssize_t axis = 0;
+  for (const long long extent : expected_shape) {
+    if (parse_signed_sequence_item(shape_obj, axis, "shape") != extent) {
+      throw nb::value_error((std::string(name) + " has the wrong shape").c_str());
+    }
+    ++axis;
+  }
+  nb::object strides_obj = mapping_get_optional(interface_obj, "strides");
+  if (!strides_obj.is_none()) {
+    if (!PySequence_Check(strides_obj.ptr()) || PyUnicode_Check(strides_obj.ptr()) ||
+        PySequence_Size(strides_obj.ptr()) != static_cast<Py_ssize_t>(expected_shape.size())) {
+      throw nb::type_error((std::string(name) + " strides must match its shape").c_str());
+    }
+    long long expected_stride = static_cast<long long>(itemsize);
+    for (Py_ssize_t index = static_cast<Py_ssize_t>(expected_shape.size()); index-- > 0;) {
+      const long long extent = *(expected_shape.begin() + index);
+      if (extent > 1 && parse_signed_sequence_item(strides_obj, index, "strides") != expected_stride) {
+        throw nb::type_error((std::string(name) + " must be C-contiguous").c_str());
+      }
+      expected_stride *= extent;
+    }
+  }
+  nb::object data_obj = mapping_get_required(interface_obj, "data");
+  if (!PySequence_Check(data_obj.ptr()) || PyUnicode_Check(data_obj.ptr()) ||
+      PySequence_Size(data_obj.ptr()) < 1) {
+    throw nb::type_error("__cuda_array_interface__ data must be a sequence containing a pointer");
+  }
+  nb::object pointer_obj = sequence_item(data_obj, 0);
+  if (!PyLong_Check(pointer_obj.ptr())) {
+    throw nb::type_error("__cuda_array_interface__ data pointer must be an integer");
+  }
+  const unsigned long long pointer = PyLong_AsUnsignedLongLong(pointer_obj.ptr());
+  if (PyErr_Occurred()) {
+    PyErr_Clear();
+    throw nb::value_error("__cuda_array_interface__ data pointer is out of range");
+  }
+  return static_cast<std::uintptr_t>(pointer);
+}
+
+DevicePauliSum device_pauli_sum_from_device_arrays(
+    nb::handle x_obj, nb::handle z_obj, nb::handle coeffs_obj, std::size_t num_qubits, int device) {
+  nb::object coeff_interface;
+  if (!has_cuda_array_interface(coeffs_obj)) {
+    throw nb::type_error(
+        "coeffs must expose __cuda_array_interface__ (for example a CuPy array or a CUDA PyTorch tensor)");
+  }
+  coeff_interface = nb::steal<nb::object>(
+      PyObject_GetAttrString(coeffs_obj.ptr(), "__cuda_array_interface__"));
+  nb::object coeff_shape = mapping_get_required(coeff_interface, "shape");
+  if (!PySequence_Check(coeff_shape.ptr()) || PySequence_Size(coeff_shape.ptr()) != 1) {
+    throw nb::value_error("coeffs must be 1-dimensional");
+  }
+  const long long num_terms = parse_signed_sequence_item(coeff_shape, 0, "shape");
+  if (num_terms < 0) {
+    throw nb::value_error("coeffs length must be non-negative");
+  }
+  const long long words = static_cast<long long>((num_qubits + 63) / 64);
+  const char native_order = std::endian::native == std::endian::little ? '<' : '>';
+  const std::string u8 = std::string{native_order} + "u8";
+  const std::string c16 = std::string{native_order} + "c16";
+  const std::uintptr_t coeffs = parse_cuda_array_interface_input(coeffs_obj, "coeffs", c16, {num_terms}, 16);
+  const std::uintptr_t x = parse_cuda_array_interface_input(x_obj, "x", u8, {num_terms, words}, 8);
+  const std::uintptr_t z = parse_cuda_array_interface_input(z_obj, "z", u8, {num_terms, words}, 8);
+  try {
+    return DevicePauliSum::from_device_arrays(
+        num_qubits, static_cast<std::size_t>(num_terms), x, z, coeffs, AcceleratorBackend::Cuda, device);
+  } catch (const std::invalid_argument& error) {
+    translate_invalid_argument(error);
+  }
+}
+
+
 nb::dict device_commutation_matrix_cuda_array_interface(
     const DeviceCommutationMatrix& matrix) {
   nb::dict interface;
@@ -1396,6 +1609,34 @@ void bind_pauli_sum(nb::module_& module) {
           },
           "CUDA Array Interface view of the owned dense uint8 device buffer.");
 
+  nb::class_<DeviceArrayView>(
+      module,
+      "DeviceArrayView",
+      "Read-only view of one DevicePauliSum device buffer for zero-copy interop.\n\n"
+      "Pass it to cupy.from_dlpack, torch.from_dlpack or cupy.asarray. The view and every "
+      "exported capsule keep the owning DevicePauliSum alive. Consumers must not write to "
+      "it. CUDA only.")
+      .def_prop_ro("shape", &device_array_shape, "Array shape: (num_terms, words) or (num_terms,).")
+      .def_prop_ro(
+          "dtype",
+          [](const DeviceArrayView& view) { return std::string(view.dtype_name); },
+          "NumPy dtype name: uint64 for x and z words, complex128 for coefficients.")
+      .def(
+          "__dlpack__",
+          &device_array_dlpack,
+          nb::arg("stream") = nb::none(),
+          nb::arg("max_version") = nb::none(),
+          nb::arg("copy") = nb::none(),
+          "Export a read-only DLPack capsule (max_version must be at least (1, 0)).")
+      .def(
+          "__dlpack_device__",
+          [](const DeviceArrayView& view) { return nb::make_tuple(view.device_type, view.device); },
+          "Return the DLPack device tuple.")
+      .def_prop_ro(
+          "__cuda_array_interface__",
+          &device_array_cuda_array_interface,
+          "CUDA Array Interface (version 3) of the read-only device buffer.");
+
   nb::class_<DevicePauliSum>(
       module,
       "DevicePauliSum",
@@ -1420,6 +1661,27 @@ void bind_pauli_sum(nb::module_& module) {
           "to_host",
           &DevicePauliSum::to_host,
           "Copy device buffers back to a new host PauliSum.")
+      .def(
+          "device_arrays",
+          &device_pauli_sum_device_arrays,
+          "Return read-only zero-copy views (x, z, coeffs) of the device buffers.\n\n"
+          "x and z are (num_terms, words) uint64 packed words; coeffs is (num_terms,) "
+          "complex128. Each view supports __dlpack__ and __cuda_array_interface__ and keeps "
+          "this operator alive. After an export, freeing the operator synchronizes the device "
+          "first, in case a consumer still has work queued. CUDA only; HIP and Metal raise.")
+      .def_static(
+          "from_device_arrays",
+          &device_pauli_sum_from_device_arrays,
+          nb::arg("x"),
+          nb::arg("z"),
+          nb::arg("coeffs"),
+          nb::arg("num_qubits"),
+          nb::arg("device") = -1,
+          "Build a DevicePauliSum by copying CUDA device arrays without a host round trip.\n\n"
+          "x and z are (num_terms, words) uint64 packed words and coeffs is (num_terms,) "
+          "complex128, all C-contiguous objects exposing __cuda_array_interface__ on one "
+          "device (CuPy arrays or CUDA PyTorch tensors). Bits at or above num_qubits raise "
+          "ValueError. device=-1 uses the arrays' device. CUDA only.")
       .def(
           "simplify",
           [](const DevicePauliSum& op, double atol, double rtol) {

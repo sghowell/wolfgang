@@ -221,6 +221,23 @@ bool DevicePauliSum::metal_available() {
   return false;
 }
 
+DeviceArrayPointers DevicePauliSum::export_device_arrays() const {
+  throw std::runtime_error(
+      "ROCm/HIP DLPack interop is unavailable until a validated ROCm consumer enforces the read-only export contract (docs/architecture/rocm_backend.md).");
+}
+
+DevicePauliSum DevicePauliSum::from_device_arrays(
+    std::size_t,
+    std::size_t,
+    std::uintptr_t,
+    std::uintptr_t,
+    std::uintptr_t,
+    AcceleratorBackend,
+    int) {
+  throw std::runtime_error(
+      "ROCm/HIP DLPack interop is unavailable until a validated ROCm consumer enforces the read-only export contract (docs/architecture/rocm_backend.md).");
+}
+
 PauliSum DevicePauliSum::to_host() const {
   if (!impl_) {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
