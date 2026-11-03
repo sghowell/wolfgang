@@ -156,6 +156,10 @@ CPU simplify. The benchmark switch `WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY=off`
 keeps the multi-launch path. Evidence:
 `docs/benchmarks/reports/small_simplify_2026-11-03.md`.
 
+HIP source builds need the HIP runtime and compiler plus rocThrust, rocPRIM
+and hipCUB headers (on Ubuntu, `hipcub-dev` and `rocthrust-dev`, which pull in
+`rocprim-dev`), found on the ROCm include path.
+
 Larger operators run the multi-launch pipeline CUDA uses
 (`src/detail/device_simplify_pipeline.cuh`, built with hipCUB under hipcc;
 `docs/architecture/cuda_backend.md` describes its stages). It keeps the input
