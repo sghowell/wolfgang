@@ -1,0 +1,64 @@
+{
+ "benchmark": "host_copy_microbench",
+ "source": "benchmarks/native/host_copy_microbench.cu",
+ "command": "nvcc -O2 -std=c++17 -o host_copy_microbench benchmarks/native/host_copy_microbench.cu && ./host_copy_microbench",
+ "device": "NVIDIA H100 80GB HBM3, driver 580.105.08, CUDA 12.8; host Intel Xeon Platinum 8480+ (KVM guest), transparent huge pages = madvise",
+ "units": "median microseconds per copy (200 repetitions up to 2 MiB, 12 above); the huge-page columns advise only whole 2 MiB pages, so below 4 MiB they measure the same work as the columns without advice",
+ "rows": [
+  {
+   "bytes": 4096,
+   "h2d_pageable": 3.3,
+   "h2d_staged": 7.6,
+   "d2h_pageable": 9.5,
+   "d2h_staged": 7.3,
+   "d2h_staged_huge": 6.5,
+   "d2h_direct_huge": 8.9
+  },
+  {
+   "bytes": 65536,
+   "h2d_pageable": 8.7,
+   "h2d_staged": 20.0,
+   "d2h_pageable": 24.1,
+   "d2h_staged": 17.0,
+   "d2h_staged_huge": 10.9,
+   "d2h_direct_huge": 19.8
+  },
+  {
+   "bytes": 2097152,
+   "h2d_pageable": 126.2,
+   "h2d_staged": 172.0,
+   "d2h_pageable": 420.7,
+   "d2h_staged": 258.7,
+   "d2h_staged_huge": 170.9,
+   "d2h_direct_huge": 327.2
+  },
+  {
+   "bytes": 8388608,
+   "h2d_pageable": 512.1,
+   "h2d_staged": 924.5,
+   "d2h_pageable": 1393.8,
+   "d2h_staged": 671.1,
+   "d2h_staged_huge": 663.9,
+   "d2h_direct_huge": 1301.5
+  },
+  {
+   "bytes": 33554432,
+   "h2d_pageable": 2237.1,
+   "h2d_staged": 2652.2,
+   "d2h_pageable": 16181.7,
+   "d2h_staged": 17917.5,
+   "d2h_staged_huge": 9416.1,
+   "d2h_direct_huge": 8406.1
+  },
+  {
+   "bytes": 134217728,
+   "h2d_pageable": 13725.9,
+   "h2d_staged": 11901.4,
+   "d2h_pageable": 63757.2,
+   "d2h_staged": 71489.8,
+   "d2h_staged_huge": 35615.5,
+   "d2h_direct_huge": 31719.5
+  }
+ ],
+ "note": "Each repetition copies into one freshly allocated vector, which glibc maps anew at 32 MiB and above, so every page faults. to_host fills three smaller vectors that the allocator often reuses; end to end on the H100, staging beat direct copies into huge-page-advised vectors at every size (cuda_h100_direct_above_16mib.json)."
+}

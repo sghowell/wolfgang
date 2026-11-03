@@ -62,3 +62,12 @@ multi-megabyte scratch cost up to about 100 us per call. On an MI300X,
 `simplify` on 4,096 terms takes 98 us instead of 182 us and device-resident
 simplify is 1.6-2.7x faster from 50,000 to 1M terms
 (`docs/benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md`).
+
+Slice 3 merged: pinned staging measured faster only for device-to-host copies.
+`to_host` stages through pinned buffers from a process-wide pool (CUDA at
+every size, HIP up to 64 KiB) and advises large results for huge pages,
+because page faults on fresh host memory, not PCIe, dominated large copies on
+the KVM test hosts. `to_host` is 1.9-3.2x faster on an H100, and on an MI300X
+1.8-1.9x faster for small operators and 2.2-3.2x at 1M (24 qubits) and 4M
+terms; `to_device` keeps the driver's pageable path, which beat staging
+(`docs/benchmarks/reports/host_transfers_2026-11-03.md`).

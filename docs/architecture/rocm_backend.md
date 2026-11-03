@@ -156,6 +156,10 @@ CPU simplify. The benchmark switch `WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY=off`
 keeps the multi-launch path. Evidence:
 `docs/benchmarks/reports/small_simplify_2026-11-03.md`.
 
+HIP source builds need the HIP runtime and compiler plus rocThrust, rocPRIM
+and hipCUB headers (on Ubuntu, `hipcub-dev` and `rocthrust-dev`, which pull in
+`rocprim-dev`), found on the ROCm include path.
+
 Larger operators run the multi-launch pipeline CUDA uses
 (`src/detail/device_simplify_pipeline.cuh`, built with hipCUB under hipcc;
 `docs/architecture/cuda_backend.md` describes its stages). It keeps the input
@@ -188,7 +192,15 @@ synchronize, and each public operation synchronizes before returning, so work
 that reuses a cached block always runs after the work that last used it. On
 out-of-memory, allocation retries once and then raises `MemoryError`.
 Transfers select the backend with a device count rather than `hip_status()`
-and copy coefficients as raw bytes.
+and copy coefficients as raw bytes. `to_host()` stages transfers of up to
+64 KiB through a pinned buffer from the same kind of process-wide pool CUDA
+uses, with one wait (`src/detail/staged_transfer.hpp`). Larger transfers copy
+directly with pageable `hipMemcpy`, which on the MI300X beat staging from
+about 2 MB, into vectors advised for transparent huge pages from 4 MiB.
+`to_host` is 1.8-1.9x faster for small operators and 2.2-3.2x at 1M terms
+(24 qubits) and 4M terms, and unchanged in between; `to_device()` is
+unchanged. Evidence:
+`docs/benchmarks/reports/host_transfers_2026-11-03.md`.
 
 A Wolfgang-private stream-ordered pool, a port of the CUDA one, exists behind
 the benchmark-only switch `WOLFGANG_HIP_BENCH_ENABLE_POOL=1`. It is off by

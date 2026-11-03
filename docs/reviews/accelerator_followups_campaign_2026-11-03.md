@@ -133,3 +133,120 @@ Branch `codex/hip-pipeline`. Benchmarked builds: `9af4918` (pipeline only) and
 - Validation after fixes (MI300X, `0be167f`): the cache, pool, pipeline,
   parity, small-simplify, ROCm foundation and Campaign 3 asset suites passed
   (292 passed).
+
+## Slice 3: Pinned transfers
+
+Branch `codex/pinned-transfers`, merged with main (rather than rebased) so the
+measured commits stay in history. Final benchmarked candidate: `9e667c3` on
+both devices, against main at `4ca82d5` (H100) and `ad6f7a8` (MI300X, HIP
+sources as in `4ca82d5`).
+
+- Scope: `src/detail/staged_transfer.hpp` (new), `to_host` in
+  `src/cuda/device_pauli_sum.cu` and `src/hip/device_pauli_sum.hip.cpp`, the
+  native contract test and its include path in `CMakeLists.txt`,
+  `tests/test_device_transfers.py` (new), `benchmarks/bench_host_transfers.py`,
+  `benchmarks/probe_cold_to_host.py` and `benchmarks/native/host_copy_microbench.cu`
+  (new), both backend contracts, `CHANGELOG.md`, the report
+  `docs/benchmarks/reports/host_transfers_2026-11-03.md` and its data, the
+  plan, the evidence index and `AGENTS.md`.
+- Outcome against the plan: pinned staging was measurably faster only for
+  device-to-host copies, so `to_device` and statevector uploads are unchanged.
+  On the MI300X staging also lost from about 2 MB, so HIP stages only up to
+  64 KiB.
+- Finding beyond the plan: large `to_host` copies were dominated by page
+  faults on fresh host memory (about 2 us per 4 KiB page on these KVM guests);
+  advising huge pages on the reserved result storage cut them.
+- Reviewer: independent agent (C++ safety, CUDA/HIP, performance and
+  documentation roles), read-only.
+- Findings: P0 0, P1 0, P2 3, P3 9.
+- P2 resolutions:
+  - the native test now runs with two fake streams, one landing copies at the
+    next wait and one landing them when issued; a single-buffer mutant fails
+    both, where the deferred-only test had passed it;
+  - cold first calls were measured on fresh threads. They exposed a real
+    regression on HIP (124 against 43 us for a thread's first small call,
+    from an 80 us pinned allocation per thread), so per-thread buffers were
+    replaced by a process-wide pool; the report states the cold numbers,
+    including the one remaining case (a new thread's first 1M-term call on
+    the H100);
+  - the earlier HIP cutoff runs are committed
+    (`hip_mi300x_earlier_cutoffs.json`, builds `1277015` and `1f1d9c3`).
+- P3 resolutions: CUDA copies name `cudaStreamLegacy`; the microbenchmark
+  marks its huge-page columns n/a below 4 MiB, the "halved" sentence is
+  corrected, and a direct-copy-with-huge-pages column was added. That column
+  favored copying directly above 16 MiB on CUDA; a build that did so
+  (`58d63f7`) lost to staging end to end (9.9 against 5.4 ms at 1M terms), so
+  CUDA stages at every size and the report explains the discrepancy. The
+  CHANGELOG no longer claims HIP's direct path skips the zero-fill; the thread
+  test is described as covering per-thread state, not overlapping calls; the
+  MI300X 65,536-term row is described as a flat 3.0 ms wait, and the MI300X
+  range no longer counts the within-noise 1M-term, 100-qubit row; the staging
+  half is rounded to 16 bytes; a failed buffer allocation leaves the existing
+  pool buffers usable; docs give HIP's 128 KiB buffer size and the
+  device-reset and heap huge-page caveats; a failing copy waits for queued
+  copies before rethrowing.
+- Tests first: the native staged-copy test was written before the CUDA and
+  HIP integration and run on the CPU first; the device round-trip tests guard
+  behavior that did not change.
+- Validation:
+  - H100, `1277015`: `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py
+    --profile core` passed (1,051 tests in the CUDA run, native contracts
+    included); compute-sanitizer memcheck with leak check, racecheck and
+    synccheck reported 0 on the transfer tests;
+  - after the review fixes, `9e667c3` passed the transfer, foundation,
+    device-array and pipeline suites on the H100 (124 passed) and the
+    transfer, pipeline, cache and pool suites on the MI300X (110 passed); the
+    native staged-copy and pool tests pass under the host compiler.
+- Residual risk: the direct-copy fallback when pinned memory cannot be had
+  has not run on hardware; page-fault behavior and the huge-page benefit
+  depend on the host.
+
+## Slice 4: CPU thread cap
+
+Branch `codex/cpu-threads`. Measured build: `c5ee325`; review fixes in
+`a71b182`.
+
+- Scope: `include/wolfgang/cpu_backend.hpp`, `src/cpu_backend.cpp`,
+  `bindings/python/build_info.cpp`, the package exports and stubs,
+  `tests/test_cpu_threads.py` (new), `benchmarks/bench_cpu_threads.py` and
+  `benchmarks/probe_simplify_threads.py` (new), the report
+  `docs/benchmarks/reports/cpu_threads_2026-11-03.md` and its data,
+  `docs/guide/python-api.md`, `docs/user/performance.md`, `docs/api/index.md`,
+  `docs/architecture/api_stability.md`, `README.md`, `CHANGELOG.md` and the
+  plan.
+- Public API: `set_num_threads`, `get_num_threads`, `WOLFGANG_NUM_THREADS`
+  and the C++ pair, recorded in `docs/architecture/api_stability.md`.
+- Tests first: `tests/test_cpu_threads.py` was committed before the
+  implementation and failed on the missing functions.
+- Reviewer: independent agent (semantic/API, C++ safety, performance, testing
+  and documentation roles), read-only. To check oneTBB internals it built
+  oneTBB 2022.3 from a source copy in the session scratchpad on macOS; the
+  P1 below was then reproduced independently on the H100 host's system
+  oneTBB 2021.11 (a cap of 2^31+1 gave no result within 40 s; 2^32+1 ran
+  serially while reporting 26 threads).
+- Findings: P0 0, P1 1, P2 3, P3 6.
+- P1 resolution: a cap at or above oneTBB's default concurrency installs no
+  `global_control` (it had raised oneTBB's own worker limit, and oneTBB
+  narrows the value to 32 bits); a replacement control is built before the
+  old one is released.
+- P2 resolutions: CPU compute entry points (including commutation and
+  grouping under a forced `WOLFGANG_CPU_BACKEND=tbb`) validate
+  `WOLFGANG_NUM_THREADS`; the documented `WOLFGANG_CPU_BACKEND=tbb`
+  workaround for small caps is withdrawn because operations without a oneTBB
+  kernel raise under it; the user guidance now reports the measured
+  trade-offs (no gain for four processes sharing cores, a slower result below
+  the floor, a slower median under a quota) instead of advising caps for all
+  pools.
+- P3 resolutions: the state mutex is held across `fork()`; NumPy integers are
+  accepted; the build report always carries `cpu_thread_limit_error`; stubs
+  are sorted; the report uses 1.25x, drops an unrecorded 20,000-term check and
+  names the cap-1,000,000 row; new tests cover huge caps, invalid values on a
+  forced-oneTBB commutation, a forked child, the worker-thread bound on
+  Linux, NumPy integers and identical result bytes at 1-64 threads under auto
+  and forced oneTBB; `docs/architecture/api_stability.md` and the README
+  describe the cap.
+- Owner decision recorded as a follow-up: whether to move the four-thread
+  oneTBB floor (the plan's follow-up list).
+- Validation: H100 host (26 vCPUs, oneTBB 2021.11), `a71b182`: thread, CPU
+  parallel simplify, fork-safety and typing suites, 87 passed; macOS without
+  oneTBB: the same suites pass with the oneTBB cases skipped.
