@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import shutil
 import subprocess
 import sys
@@ -40,9 +41,13 @@ def test_backend_workspace_headers_share_private_contract_helpers() -> None:
 
     for header in (cuda_header, hip_header, metal_header):
         assert '#include "detail/accelerator_host_helpers.hpp"' in header
-        assert "using detail::WorkspaceSnapshot;" in header
-        assert "using detail::WorkspaceTimingMode;" in header
-        assert "using detail::workspace_timing_mode_name;" in header
+        for name in ("WorkspaceSnapshot", "WorkspaceTimingMode", "workspace_timing_mode_name"):
+            assert re.search(rf"using (::wolfgang::)?detail::{name};", header), name
+
+    # Inside namespace wolfgang::cuda::detail an unqualified `detail::` names that
+    # namespace itself; only the fully qualified alias resolves (regression for ee4f95f).
+    for name in ("WorkspaceSnapshot", "WorkspaceTimingMode", "workspace_timing_mode_name"):
+        assert f"using ::wolfgang::detail::{name};" in cuda_header
 
     assert "struct WorkspaceSnapshot" not in cuda_header
     assert "struct WorkspaceSnapshot" not in hip_header
