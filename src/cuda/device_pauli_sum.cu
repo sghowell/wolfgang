@@ -481,9 +481,9 @@ PauliSum DevicePauliSum::to_host() const {
         },
         [] { check_cuda(cudaStreamSynchronize(0), "synchronize device-to-host copy"); });
   } else if (total_bytes != 0) {
-    x.resize(packed_words);
-    z.resize(packed_words);
-    coeffs.resize(impl_->num_terms);
+    acc::resize_for_direct_copy(x, packed_words);
+    acc::resize_for_direct_copy(z, packed_words);
+    acc::resize_for_direct_copy(coeffs, impl_->num_terms);
     copy_to_host(x.data(), impl_->x, packed_words, "host x words");
     copy_to_host(z.data(), impl_->z, packed_words, "host z words");
     check_cuda(

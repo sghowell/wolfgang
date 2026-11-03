@@ -58,6 +58,16 @@ inline void advise_huge_pages(const void* pointer, std::size_t bytes) noexcept {
 #endif
 }
 
+// Sizes `destination` to `count` elements for a direct device-to-host copy,
+// requesting huge pages before the zero-fill touches the storage.
+template <typename T>
+void resize_for_direct_copy(std::vector<T>& destination, std::size_t count) {
+  destination.clear();
+  destination.reserve(count);
+  advise_huge_pages(destination.data(), count * sizeof(T));
+  destination.resize(count);
+}
+
 // One device buffer copied into a host vector of T.
 struct DeviceToHostSegment {
   const void* device = nullptr;

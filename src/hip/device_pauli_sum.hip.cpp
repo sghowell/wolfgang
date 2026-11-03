@@ -22,6 +22,7 @@ namespace {
 // kPinnedStagingMaxBytes, and is freed when the thread exits. If pinned
 // memory cannot be allocated, to_host falls back to pageable copies.
 constexpr std::size_t kPinnedStagingMaxBytes = std::size_t{16} << 20;
+constexpr std::size_t kHipStagedMaxBytes = std::size_t{256} << 10;
 
 class ThreadPinnedStaging {
  public:
@@ -303,8 +304,11 @@ PauliSum DevicePauliSum::to_host() const {
   std::vector<std::complex<double>> coeffs;
 
   hip_detail::ScopedHipDevice guard(impl_->device_ordinal);
+  // On the MI300X, ROCm's pageable copies beat staging from about 2 MB, so only
+  // small operators stage, where the gain is one wait instead of three; larger
+  // destinations are copied directly, with huge pages requested first.
   ThreadPinnedStaging& staging = thread_pinned_staging();
-  std::byte* staged = total_bytes == 0
+  std::byte* staged = total_bytes == 0 || total_bytes > kHipStagedMaxBytes
       ? nullptr
       : staging.reserve(acc::staging_bytes_for(total_bytes, kPinnedStagingMaxBytes));
   if (staged != nullptr) {
@@ -324,9 +328,9 @@ PauliSum DevicePauliSum::to_host() const {
         },
         [] { hip_detail::check_hip(hipStreamSynchronize(nullptr), "synchronize device-to-host copy"); });
   } else if (total_bytes != 0) {
-    x.resize(packed_words);
-    z.resize(packed_words);
-    coeffs.resize(impl_->num_terms);
+    acc::resize_for_direct_copy(x, packed_words);
+    acc::resize_for_direct_copy(z, packed_words);
+    acc::resize_for_direct_copy(coeffs, impl_->num_terms);
     hip_detail::copy_to_host(x.data(), impl_->x, packed_words, "HIP host x words");
     hip_detail::copy_to_host(z.data(), impl_->z, packed_words, "HIP host z words");
     hip_detail::check_hip(
