@@ -171,6 +171,148 @@ main (`ec7d9b0`), plus documentation. The benchmarked candidate is `ec7d9b0`.
   - the GPU timeout depends on the display and driver; large inputs were run
     only on this Mac.
 
+## Slice 3: Zero-copy device arrays
+
+Branch `codex/device-arrays`, commits `0b4d296`..`01997f7` plus
+documentation. The benchmarked candidate is `01997f7`.
+
+- Reviewer: independent agent (CUDA interop, lifetime, security and
+  documentation roles), read-only. It checked consumer behavior against CuPy
+  and PyTorch sources.
+- Findings: P0 1, P1 2, P2 6, P3 7.
+- P0 resolution (stream safety): import ignored the producer's stream and
+  copied on the legacy stream, which does not order with non-blocking streams
+  (every PyTorch side stream). It also returned before the device-to-device
+  copy finished. `from_device_arrays` now synchronizes the device before
+  copying and the legacy stream before returning. Two tests use a delay
+  kernel to keep work pending; both fail with the synchronizations removed.
+- P1 resolutions:
+  - an unchecked word count let `num_qubits = 2**64 - 1` wrap to zero words
+    and read out of bounds on the device. Word counts now use the host path's
+    checked arithmetic, and the binding rejects the value first, with a test;
+  - the import timings excluded the copy (nothing synchronized at 64 qubits),
+    and pending work skewed other rows. Every timed variant now ends with a
+    device synchronization, a 100-qubit row exercises the tail check, and the
+    report and CHANGELOG carry the re-measured numbers (import 84 us, not
+    57 us, at 1M terms).
+- P2 resolutions:
+  - PyTorch rejects read-only CUDA Array Interface input; docs now say
+    PyTorch reads the views through `torch.from_dlpack`, and a PyTorch 2.15
+    test covers both;
+  - read-only is advisory on every CUDA consumer. Decision recorded in the
+    semantic contracts, CUDA backend doc, docstrings and header: the views are
+    flagged read-only, consumers do not enforce it, and writing through them
+    is undefined behavior. HIP stays disabled because no ROCm consumer was
+    validated, not on a read-only argument;
+  - `cuMemGetAddressRange` now runs in the owning device's context;
+  - the pool-allocator comment describes the sync-on-free exception;
+  - `api_stability.md` lists the experimental surface;
+  - tests added for every listed gap that one GPU allows.
+- P3 resolutions: the `copy=True` error names `DeviceArrayView`; builds
+  without CUDA raise `RuntimeError` for `from_device_arrays` before parsing;
+  device ordinals below -1 are rejected, and empty input uses the current
+  device; masked inputs are rejected; producer attribute errors propagate
+  (PyTorch's requires-grad error); `__dlpack__` accepts `dl_device`, and the
+  minimum consumer versions are documented; the sync-on-free consequences
+  (garbage collection, host callbacks, graph capture) are documented; strides
+  are ignored for empty arrays.
+- Also fixed: `thrust::any_of` returned padding bytes that initcheck flagged,
+  so the tail check uses `thrust::count_if`.
+- Validation after fixes:
+  - H100 at `9e0194e`: `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py
+    --profile core` passed (944 tests in the CUDA run); memcheck, racecheck
+    and synccheck report 0 errors. At `01997f7`: the device-array tests pass
+    (16, with PyTorch 2.15), and initcheck and memcheck report 0 errors.
+  - MI300X: the HIP build raises for both entry points, as documented.
+- Deferred: multi-GPU tests (device inference, mixed-device rejection) need a
+  host with two GPUs; HIP export with a validated ROCm consumer; DLPack input.
+- Residual risk:
+  - one H100; consumers may write through views despite the flag;
+  - the device synchronization on free and on import waits for unrelated work.
+
+## Slice 4: CUDA-Q interop
+
+Branch `codex/cudaq-interop`, commits `c7ce299`..`09c17f5` plus
+documentation.
+
+- Reviewer: independent agent (adapter contract, numerics, packaging and
+  documentation roles), read-only. It read the CUDA-Q 0.11.0 and current
+  sources for the serialization, term merging and operator bindings, read the
+  `cudaq` metapackage sdists, and ran the adapter against a pure-Python
+  emulator of CUDA-Q's serialize and deserialize code.
+- Findings: P0 0, P1 0, P2 5, P3 9.
+- P2 resolutions:
+  - the fast path rebuilt coefficients as `re + 1j * im`, which turns
+    `(1, inf)` into `(nan, inf)` and loses signed zeros. It now assigns the
+    real and imaginary parts separately, with tests;
+  - the serialized test variant could silently run the fallback if the layout
+    probe failed; it now asserts the probe accepts the installed CUDA-Q;
+  - explicit identities and parameterized coefficients gained tests.
+    Parameterized coefficients report no parameters in CUDA-Q and fail inside
+    `serialize()`, so coefficient-evaluation failures now raise the documented
+    `ValueError`;
+  - the CI job asserts that the `cudaq` metapackage, the requested version and
+    the compiled backend agree;
+  - `to_cudaq` unpacked every word to one byte per qubit (about 8.5x the
+    packed size); it now unpacks only words that hold a Pauli.
+- P3 resolutions: finite-only exactness of `to_cudaq` documented; the
+  term-API path walks `degrees`; a serialized operator that does not parse
+  falls back to the term API; `num_qubits` accepts integer-like values and
+  rejects `bool`; stub parameter names match the runtime for all three
+  adapters; contract and guide drift fixed (construction order, constructor
+  list, a Hermitian example, width wording); the unbenchmarked "slower" claim
+  removed; installation notes state Linux-only wheels and Python 3.11 for
+  CUDA-Q 0.16.
+- Validation after fixes: on the H100, `tests/test_cudaq_adapter.py` passed
+  (33 tests) with CUDA-Q 0.16.0 and with 0.11.0 (`cuda-quantum-cu12`
+  0.11.0); the quality profile passed locally; CI runs the adapter on
+  `cudaq==0.11.0` and the latest release.
+- Deferred: a conversion benchmark; `DevicePauliSum` conversion without a host
+  copy.
+- Residual risk: CUDA-Q's serialized layout is not a documented promise; the
+  probe and fallback cover a change, at a speed cost.
+
+## Slice 8: Closeouts
+
+Branch `codex/closeouts`, documentation and evidence only.
+
+- Review: none required. The slice changes a benchmark report's limitations,
+  two plans and an evidence file, none of which are review triggers in
+  `docs/quality/code_review.md`.
+- `_inplace` methods: closed as won't-do. Pooling removed per-call allocation,
+  and the fused small simplify (slice 5) took H100 small simplify from about
+  140 to 18 us, so in-place variants would add API surface without a cost to
+  remove.
+- oneTBB peak memory: measured on a 16-vCPU AMD EPYC 9654 VM (Ubuntu 22.04,
+  oneTBB 2021.5) at `1041e08`, the parallel simplify candidate whose kernel
+  main still carries. Fresh process per run, peak RSS reset before the call.
+  At 1M terms the oneTBB kernel adds 1.34-1.41x scalar's peak with no or half
+  duplicates and 1.10-1.17x with 90% duplicates.
+- Validation: `python scripts/validate.py --profile docs` and `git diff
+  --check`.
+- Residual risk: one x86 host and two widths; ARM peak memory comes with the
+  bundled-oneTBB wheels (slice 7).
+
+## Slice 9: Streams and graphs
+
+Branch `codex/streams-graphs-profile`, documentation and evidence only.
+
+- Review: none required. The slice adds a profiling report, its data and plan
+  status; it changes no contract, policy or code.
+- Evidence: Nsight Systems on the H100 at `01997f7` (CUDA sources identical to
+  main), 500 profiled calls per operation, per-call medians.
+- Decision: no CUDA graphs and no public stream argument. Single-launch
+  operations (fused simplify, commutation, expectation) have nothing to
+  capture. Multi-launch simplify and `matmul` synchronize eight times per call
+  on counts returned to the host, which also rules out capture. A stream
+  argument would need asynchronous result objects for no measured gain.
+- Follow-ups moved to slice 10: pool the exportable commutation output
+  (55 us of a 64 us call is `cudaMalloc`/`cudaFree`); keep simplify's counts
+  on the device; stage transfers through pinned memory.
+- Validation: `python scripts/validate.py --profile docs` and `git diff
+  --check`.
+- Residual risk: one H100; HIP was not re-profiled.
+
 ## Slice 7: oneTBB in wheels
 
 Branch `codex/onetbb-wheels`, commits `6d7f9de`..`9cb671c` plus

@@ -4,6 +4,7 @@ from ._capabilities import CpuCapabilities as CpuCapabilities
 from ._capabilities import WolfgangCapabilities as WolfgangCapabilities
 from ._capabilities import capabilities as capabilities
 from ._version import __version__ as __version__
+from ._wolfgang_core import DeviceArrayView as DeviceArrayView
 from ._wolfgang_core import DeviceCommutationMatrix as DeviceCommutationMatrix
 from ._wolfgang_core import DevicePauliSum as DevicePauliSum
 from ._wolfgang_core import PauliSum as PauliSum
@@ -17,6 +18,7 @@ from ._wolfgang_core import metal_devices as metal_devices
 __all__ = [
     "BackendCapabilities",
     "CpuCapabilities",
+    "DeviceArrayView",
     "DeviceCommutationMatrix",
     "DevicePauliSum",
     "WolfgangCapabilities",

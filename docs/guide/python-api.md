@@ -26,6 +26,7 @@ Primary constructors:
 - `PauliSum.from_arrays(x, z, coeffs, num_qubits)` from packed `uint64` masks
 - optional `PauliSum.from_qiskit(...)`
 - optional `PauliSum.from_openfermion(...)`
+- optional `PauliSum.from_cudaq(...)`
 
 Core operations:
 
@@ -95,6 +96,25 @@ Qiskit circuit when Qiskit is installed.
 
 Owning accelerator mirror. Availability and native/fallback behavior depend on the compiled backend and current support contract. Device operations are synchronous unless documentation for a specific API states otherwise.
 
+On CUDA, `device_arrays()` hands the packed buffers to CuPy or PyTorch without
+a copy, and `from_device_arrays()` builds an operator from device arrays
+without a host round trip:
+
+```python
+import cupy
+import wolfgang_quantum as wq
+
+op = wq.PauliSum.from_labels(["XZI", "IYY"], [0.5, -1.0j]).to_device(backend="cuda")
+x, z, coeffs = (cupy.from_dlpack(view) for view in op.device_arrays())  # read-only, zero copy
+again = wq.DevicePauliSum.from_device_arrays(x, z, coeffs, op.num_qubits)  # device-to-device copy
+```
+
+The views keep `op` alive. They are flagged read-only, but CuPy and PyTorch do
+not enforce the flag, so treat them as read-only: writing through them is
+undefined behavior. PyTorch reads them with `torch.from_dlpack(view)`.
+`from_device_arrays` waits for producers on any stream and returns after its
+copy completes. HIP and Metal raise for both.
+
 ## `DeviceCommutationMatrix`
 
 Owning dense device output with compact reductions. Dense outputs are guarded because `rows * cols` may be large. Interop protocols have explicit backend and read-only limitations.
@@ -108,7 +128,22 @@ Owning dense device output with compact reductions. Dense outputs are guarded be
 
 ## Optional dependencies
 
-The base package imports without Qiskit or OpenFermion. Adapter calls provide install guidance when an optional library is absent.
+The base package imports without Qiskit, OpenFermion or CUDA-Q. Adapter calls provide install guidance when an optional library is absent.
+
+`PauliSum.from_cudaq(op, num_qubits=None)` and `PauliSum.to_cudaq()` convert to
+and from CUDA-Q spin operators (the `cudaq` extra, CUDA-Q 0.11 or later):
+
+```python
+import cudaq
+from cudaq import spin
+from wolfgang_quantum import PauliSum
+
+hamiltonian = PauliSum.from_cudaq(0.5 * spin.x(0) * spin.z(2) - 0.25 * spin.y(1))
+energy = cudaq.observe(kernel, hamiltonian.simplify().to_cudaq()).expectation()  # any @cudaq.kernel
+```
+
+CUDA-Q operators carry no width, so pass `num_qubits` to keep identity
+qubits above the largest index. Qubit `q` is the same qubit in both libraries.
 
 ## Stability
 

@@ -585,6 +585,18 @@ def run_optional_openfermion_checks() -> None:
     )
 
 
+def run_optional_cudaq_checks() -> None:
+    if not command_succeeds([sys.executable, "-c", "import cudaq"]):
+        print_check("CUDA-Q optional checks")
+        print("skipping CUDA-Q adapter tests: cudaq is not installed")
+        return
+
+    run_check(
+        "CUDA-Q adapter pytest",
+        [sys.executable, "-m", "pytest", "tests/test_cudaq_adapter.py"],
+    )
+
+
 def run_cmake_configure_check() -> None:
     cmake = cmake_executable_for_build_isolation()
     if cmake is None:
@@ -1248,6 +1260,7 @@ def main() -> None:
         ],
     )
     run_optional_openfermion_checks()
+    run_optional_cudaq_checks()
     if os.environ.get("WOLFGANG_VALIDATE_CUDA") == "1":
         run_cuda_validation_checks()
     if os.environ.get("WOLFGANG_VALIDATE_HIP") == "1":

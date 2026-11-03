@@ -65,6 +65,31 @@ available (first call 3.1 ms against 3.9 ms)
 (`docs/benchmarks/reports/metal_followups_2026-11-03.md`). Apple oneTBB
 timings stay deferred: oneTBB is not installed on the M4 Pro.
 
+Slice 3 merged: CUDA `DevicePauliSum.device_arrays()` hands the packed
+buffers to CuPy and PyTorch without a copy (36 us against 8.8 ms through the
+host at 1M terms), and `DevicePauliSum.from_device_arrays()` builds an operator
+from device arrays on any stream (84 us against 21 ms)
+(`docs/benchmarks/reports/device_arrays_h100_2026-11-03.md`). HIP and Metal
+stay disabled until a consumer on those backends is validated.
+
+Slice 4 merged: `PauliSum.from_cudaq()` and `PauliSum.to_cudaq()` convert to
+and from CUDA-Q spin operators behind the `cudaq` extra, with expectation
+values equal to `cudaq.observe`, tested on CUDA-Q 0.11.0 and the latest
+release in a CI adapter job.
+
+Slice 8 merged: `_inplace` public methods are closed as won't-do (pooling and
+the fused small simplify removed the costs they targeted), and oneTBB simplify
+peak memory is measured: 1.34-1.41x scalar's at 1M terms with few duplicates,
+1.10-1.17x with 90% duplicates
+(`docs/benchmarks/data/cpu_parallel_simplify_2026-11-03/peak_memory_epyc.json`).
+
+Slice 9 merged: an Nsight Systems breakdown of small H100 operations found no
+case for CUDA graphs or a public stream argument. Single-launch operations
+have nothing to capture, and the multi-launch paths synchronize on
+data-dependent counts that capture cannot fix. The measured follow-ups (pooled
+commutation output, device-side counts in simplify, pinned transfers) moved to
+slice 10 (`docs/benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md`).
+
 Slice 7 merged: release CPU wheels bundle oneTBB 2022.3.0, built from a
 pinned commit, so pip users get parallel simplify (1.5-3.4x on a 16-vCPU x86
 VM, 1.5-5.6x on an M4 Pro, from installed wheels). The license expression

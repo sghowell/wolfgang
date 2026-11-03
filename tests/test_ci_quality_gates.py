@@ -26,8 +26,10 @@ def test_ci_matrix_keys_with_hyphens_use_bracket_expressions() -> None:
 
     assert "matrix.qiskit-requirement" not in workflow
     assert "matrix.openfermion-requirement" not in workflow
+    assert "matrix.cudaq-requirement" not in workflow
     assert workflow.count("matrix['qiskit-requirement']") == 2
     assert workflow.count("matrix['openfermion-requirement']") == 2
+    assert workflow.count("matrix['cudaq-requirement']") == 2
     assert not re.search(
         r"^      RELEASE_ARTIFACT_DIR: \$\{\{ runner\.temp \}\}", workflow, re.MULTILINE
     )

@@ -12,6 +12,7 @@ help(wolfgang_quantum.PauliSum)
 - `wolfgang_quantum.PauliSum`
 - `wolfgang_quantum.DevicePauliSum`
 - `wolfgang_quantum.DeviceCommutationMatrix`
+- `wolfgang_quantum.DeviceArrayView` (returned by `DevicePauliSum.device_arrays()`)
 - `wolfgang_quantum.capabilities`
 - `wolfgang_quantum.WolfgangCapabilities`
 - `wolfgang_quantum.CpuCapabilities`

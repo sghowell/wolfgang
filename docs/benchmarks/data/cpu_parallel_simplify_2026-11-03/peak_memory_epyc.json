@@ -1,0 +1,395 @@
+{
+ "benchmark": "cpu_simplify_peak_memory",
+ "environment": {
+  "cpu": "AMD EPYC 9654 (16-vCPU cloud VM)",
+  "cpu_backends": [
+   "scalar",
+   "tbb"
+  ],
+  "logical_cpu_count": 16,
+  "oneTBB": "2021.5.0",
+  "os": "Ubuntu 22.04.5 LTS"
+ },
+ "git": {
+  "commit": "1041e08",
+  "dirty": false
+ },
+ "method": "fresh process per measurement; build the operator from packed arrays, drop the NumPy inputs, reset the peak-RSS counter (/proc/self/clear_refs 5), run simplify, report VmHWM minus VmRSS before the call",
+ "repeats": 3,
+ "rows": [
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 47845376,
+   "rss_before_bytes": 82255872
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 47906816,
+   "rss_before_bytes": 82571264
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 47845376,
+   "rss_before_bytes": 82395136
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 67670016,
+   "rss_before_bytes": 82108416
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 64610304,
+   "rss_before_bytes": 82083840
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 67653632,
+   "rss_before_bytes": 82567168
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 40067072,
+   "rss_before_bytes": 66301952
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 40067072,
+   "rss_before_bytes": 66433024
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 40067072,
+   "rss_before_bytes": 66428928
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 54210560,
+   "rss_before_bytes": 66138112
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 53047296,
+   "rss_before_bytes": 66437120
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 53882880,
+   "rss_before_bytes": 66449408
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 27029504,
+   "rss_before_bytes": 66441216
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 27029504,
+   "rss_before_bytes": 66494464
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 27090944,
+   "rss_before_bytes": 66461696
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 29667328,
+   "rss_before_bytes": 66576384
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 29917184,
+   "rss_before_bytes": 66473984
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 29405184,
+   "rss_before_bytes": 66359296
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 63795200,
+   "rss_before_bytes": 106467328
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 63856640,
+   "rss_before_bytes": 106717184
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 63856640,
+   "rss_before_bytes": 106659840
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 89223168,
+   "rss_before_bytes": 106471424
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 88870912,
+   "rss_before_bytes": 106618880
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.0,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 1000000,
+   "peak_extra_bytes": 88420352,
+   "rss_before_bytes": 106340352
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 39735296,
+   "rss_before_bytes": 98537472
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 39735296,
+   "rss_before_bytes": 98299904
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 39796736,
+   "rss_before_bytes": 98750464
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 54382592,
+   "rss_before_bytes": 98308096
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 53760000,
+   "rss_before_bytes": 98627584
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.5,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 500000,
+   "peak_extra_bytes": 54112256,
+   "rss_before_bytes": 98578432
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 14053376,
+   "rss_before_bytes": 98471936
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 14114816,
+   "rss_before_bytes": 98267136
+  },
+  {
+   "backend": "scalar",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 14114816,
+   "rss_before_bytes": 98484224
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 16793600,
+   "rss_before_bytes": 98336768
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 16306176,
+   "rss_before_bytes": 98635776
+  },
+  {
+   "backend": "tbb",
+   "duplicate_fraction": 0.9,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "output_terms": 99999,
+   "peak_extra_bytes": 16580608,
+   "rss_before_bytes": 98750464
+  }
+ ],
+ "summary": [
+  {
+   "duplicate_fraction": 0.0,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "scalar_peak_extra_bytes_median": 47845376,
+   "tbb_over_scalar": 1.414,
+   "tbb_peak_extra_bytes_median": 67653632
+  },
+  {
+   "duplicate_fraction": 0.5,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "scalar_peak_extra_bytes_median": 40067072,
+   "tbb_over_scalar": 1.345,
+   "tbb_peak_extra_bytes_median": 53882880
+  },
+  {
+   "duplicate_fraction": 0.9,
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "scalar_peak_extra_bytes_median": 27029504,
+   "tbb_over_scalar": 1.098,
+   "tbb_peak_extra_bytes_median": 29667328
+  },
+  {
+   "duplicate_fraction": 0.0,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "scalar_peak_extra_bytes_median": 63856640,
+   "tbb_over_scalar": 1.392,
+   "tbb_peak_extra_bytes_median": 88870912
+  },
+  {
+   "duplicate_fraction": 0.5,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "scalar_peak_extra_bytes_median": 39735296,
+   "tbb_over_scalar": 1.362,
+   "tbb_peak_extra_bytes_median": 54112256
+  },
+  {
+   "duplicate_fraction": 0.9,
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "scalar_peak_extra_bytes_median": 14114816,
+   "tbb_over_scalar": 1.175,
+   "tbb_peak_extra_bytes_median": 16580608
+  }
+ ]
+}

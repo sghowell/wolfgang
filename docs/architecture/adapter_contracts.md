@@ -1,16 +1,17 @@
 # Wolfgang Adapter Contracts
 
-This document defines adapter behavior for optional ecosystem integrations. It applies to Qiskit and OpenFermion phases and to tests that compare Wolfgang semantics against external libraries.
+This document defines adapter behavior for optional ecosystem integrations. It applies to the Qiskit, OpenFermion and CUDA-Q adapters and to tests that compare Wolfgang semantics against external libraries.
 
 ## Shared Adapter Policy
 
-Adapters are optional. Importing `wolfgang_quantum` must not import Qiskit or OpenFermion.
+Adapters are optional. Importing `wolfgang_quantum` must not import Qiskit, OpenFermion or CUDA-Q.
 
 Missing optional dependencies raise `ImportError` with an installation hint when an adapter method is called:
 
 ```text
 Install Wolfgang with the qiskit extra to use this adapter.
 Install Wolfgang with the openfermion extra to use this adapter.
+Install Wolfgang with the cudaq extra to use this adapter.
 ```
 
 Adapters must:
@@ -135,6 +136,59 @@ semantic equality is checked after simplify
 coefficients compare with operation-appropriate numeric tolerance
 ```
 
+## CUDA-Q Adapter
+
+Supported input:
+
+```text
+cudaq.SpinOperator
+cudaq.SpinOperatorTerm (including a single Pauli such as cudaq.spin.z(5))
+```
+
+`PauliSum.from_cudaq(op, num_qubits=None)` behavior:
+
+```text
+terms keep CUDA-Q's order and coefficients exactly, including zero coefficients
+qubit q of a CUDA-Q term maps to Wolfgang qubit q (both little-endian in statevector indices)
+if num_qubits is None, infer one more than the largest qubit index named, including explicit identities such as spin.i(5)
+operators that name no qubit (identity-only terms, empty operators) infer num_qubits = 0
+coefficients that do not evaluate to numbers (parameterized ones) raise ValueError
+indices at or above an explicit num_qubits raise ValueError
+```
+
+`to_cudaq()` behavior:
+
+```text
+returns cudaq.SpinOperator
+CUDA-Q merges duplicate terms at the first occurrence's position, summing in input order
+zero-term PauliSum exports as cudaq.SpinOperator.empty()
+CUDA-Q operators carry no width; from_cudaq(op.to_cudaq(), op.num_qubits) restores it
+finite coefficients transfer exactly; CUDA-Q scales each by 1.0 per Pauli, so an infinite component can make the other NaN
+```
+
+Both directions exchange whole operators through `SpinOperator.serialize()` and
+the `SpinOperator(list[float])` constructor, whose layout CUDA-Q 0.11 through
+0.16 share. Because CUDA-Q does not promise that layout, the adapter checks it
+once per process against a known operator and otherwise converts through the
+public term API (`get_binary_symplectic_form`, `degrees`,
+`evaluate_coefficient`, and `cudaq.spin` products); it also falls back when a
+serialized operator does not parse. Every conversion test runs on both paths,
+and the serialized variant fails if the probe rejects the installed CUDA-Q.
+
+Required tests:
+
+```text
+known operator both ways
+random round trips at 1, 7, 64, 65 and 130 qubits, including terms whose Paulis are all above qubit 63
+term and single-Pauli inputs
+identity, empty and explicit-width operators; explicit identities set the inferred width
+duplicates sum like simplify
+zero coefficients kept; non-finite and signed-zero coefficients read exactly
+parameterized coefficients raise ValueError
+input validation and missing-dependency install hint
+expectation values equal cudaq.observe on a double-precision simulator
+```
+
 ## Version Policy
 
 Do not claim support for a dependency version until it is exercised in CI or local validation.
@@ -144,9 +198,13 @@ Once adapters land, `pyproject.toml` should declare extras:
 ```text
 qiskit = [...]
 openfermion = [...]
+cudaq = [...]
 ```
 
 The minimum supported versions should be set to versions validated by tests, not guessed.
 The initial OpenFermion adapter lower bound is `openfermion>=1.7.1`, with CI
 covering `openfermion==1.7.1` and the latest compatible `openfermion>=1.7.1`
 resolution.
+The CUDA-Q adapter lower bound is `cudaq>=0.11`, the first release with the
+current operator API, with CI covering `cudaq==0.11.0` and the latest
+compatible resolution.

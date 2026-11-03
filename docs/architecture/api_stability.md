@@ -209,6 +209,22 @@ export status. The true
 `DevicePauliSum.group_commuting_device(...)` API remains unavailable and is not
 part of the compatibility promise.
 
+The portability and interop campaign adds experimental zero-copy device arrays
+on CUDA: `DevicePauliSum.device_arrays()`, `DevicePauliSum.from_device_arrays()`
+and `DeviceArrayView`. Compatibility covers:
+
+```text
+names; view order (x, z, coeffs); shapes (num_terms, words) and (num_terms,); dtypes uint64 and complex128
+DLPack: versioned capsules only (max_version >= (1, 0)), read-only flag set, device (kDLCUDA, ordinal), copy=True rejected, dl_device other than the buffer's own rejected
+CUDA Array Interface v3: readonly true, stream 1, strides None
+read-only status is advisory: consumers do not enforce it, and writing through a view is undefined behavior
+views and consumer arrays keep the operator alive
+an exported operator synchronizes its device before its buffers are freed
+from_device_arrays synchronizes the device before copying and returns after the copy completes
+from_device_arrays: exact dtypes (TypeError), shapes and tail bits (ValueError), device=-1 uses the arrays' device or the current device when empty
+non-CUDA builds raise RuntimeError for both
+```
+
 Before `1.0.0`, this experimental API may still receive source-compatible
 extensions or migration notes, but it must not silently change shape, dtype,
 ordering, synchronization, ownership, compact-summary return types, or
@@ -327,7 +343,7 @@ CI matrix
 release notes
 ```
 
-Do not claim platform, Python, compiler, CUDA, Qiskit, or OpenFermion support unless it is validated locally or in CI.
+Do not claim platform, Python, compiler, CUDA, Qiskit, OpenFermion, or CUDA-Q support unless it is validated locally or in CI.
 
 Do not claim CPU feature, SIMD, oneTBB, CUDA toolkit, CUDA architecture, Apple
 Metal backend, MPSGraph adjunct, or wheel-platform support unless it satisfies

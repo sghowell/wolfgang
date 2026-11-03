@@ -18,6 +18,20 @@ Next version: TBD
   a forced `WOLFGANG_CPU_BACKEND=tbb` raises there; previously such a child
   could crash inside oneTBB on macOS. Auto dispatch of pairwise commutation to
   oneTBB now also needs at least four oneTBB threads.
+- `PauliSum.from_cudaq()` and `PauliSum.to_cudaq()` convert to and from CUDA-Q
+  `SpinOperator` (the `cudaq` extra, CUDA-Q 0.11 or later). Whole operators
+  move through CUDA-Q's flat serialization, checked once per process, with a
+  fallback to CUDA-Q's public term API. Expectation values agree with
+  `cudaq.observe`. A new CI job tests CUDA-Q 0.11.0 and the latest release.
+- CUDA: `DevicePauliSum.device_arrays()` returns zero-copy views of the x
+  words, z words and coefficients, flagged read-only, that CuPy reads through
+  DLPack or the CUDA Array Interface and PyTorch through DLPack, and
+  `DevicePauliSum.from_device_arrays()` builds an operator from CUDA device
+  arrays with a device-to-device copy. On an H100 at 1M terms, handing the
+  buffers to CuPy takes 36 us instead of 8.8 ms through the host, and building
+  from CuPy arrays 84 us instead of 21 ms
+  (`docs/benchmarks/reports/device_arrays_h100_2026-11-03.md`). HIP and Metal
+  raise for both. `DeviceArrayView` is exported for type annotations.
 - CUDA and HIP: operators of up to 256 qubits and 1,024 terms simplify in one
   fused kernel. On an H100 small simplify is 3.0-7.8x faster (128 terms:
   143.5 to 18.4 us); on an MI300X it is 3.5-5.7x faster. Their coefficients

@@ -187,6 +187,23 @@ bool DevicePauliSum::metal_available() {
   return metal_status().runtime_available;
 }
 
+DeviceArrayPointers DevicePauliSum::export_device_arrays() const {
+  throw std::runtime_error(
+      "Metal DevicePauliSum does not expose raw Metal buffers, CUDA Array Interface pointers, or DLPack capsules in this source-build lane.");
+}
+
+DevicePauliSum DevicePauliSum::from_device_arrays(
+    std::size_t,
+    std::size_t,
+    std::uintptr_t,
+    std::uintptr_t,
+    std::uintptr_t,
+    AcceleratorBackend,
+    int) {
+  throw std::runtime_error(
+      "Metal DevicePauliSum does not expose raw Metal buffers, CUDA Array Interface pointers, or DLPack capsules in this source-build lane.");
+}
+
 PauliSum DevicePauliSum::to_host() const {
   metal_detail::ScopedAutoreleasePool pool;
   if (!impl_) {

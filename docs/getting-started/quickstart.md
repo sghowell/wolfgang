@@ -55,9 +55,12 @@ The statevector length must be exactly `2**num_qubits`, use `complex64` or `comp
 ```python
 qiskit_op = op.to_qiskit()
 round_trip = PauliSum.from_qiskit(qiskit_op)
+
+spin_op = op.to_cudaq()                              # cudaq.SpinOperator
+again = PauliSum.from_cudaq(spin_op, op.num_qubits)  # width is not stored by CUDA-Q
 ```
 
-Install the corresponding extra first. Importing `wolfgang_quantum` itself does not eagerly import Qiskit or OpenFermion.
+Install the corresponding extra first. Importing `wolfgang_quantum` itself does not eagerly import Qiskit, OpenFermion or CUDA-Q.
 
 ## Next
 

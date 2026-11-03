@@ -16,6 +16,18 @@ namespace wolfgang {
 
 class DevicePauliSum;
 
+// Raw device buffers of a DevicePauliSum for zero-copy export through DLPack
+// or the CUDA Array Interface: x and z words (num_terms x words, row-major
+// uint64) and complex128 coefficients (num_terms). The buffers stay owned by
+// the DevicePauliSum and must be treated as read-only.
+struct DeviceArrayPointers {
+  std::uintptr_t x = 0;
+  std::uintptr_t z = 0;
+  std::uintptr_t coeffs = 0;
+  int dlpack_device_type = 0;
+  int device = 0;
+};
+
 namespace metal_detail {
 struct MetalSimplifyCandidateResult;
 [[nodiscard]] MetalSimplifyCandidateResult simplify_words1_device_candidate_for_testing(
@@ -106,6 +118,19 @@ public:
       const PauliSum& host,
       AcceleratorBackend backend,
       int device = 0);
+  // Copy device-resident packed arrays (the from_words layout: num_terms x
+  // words uint64 x and z, then num_terms complex128 coefficients) into a new
+  // device operator on the same device, validating them on the device.
+  // device = -1 infers the device from the pointers. CUDA only; other
+  // backends raise.
+  [[nodiscard]] static DevicePauliSum from_device_arrays(
+      std::size_t num_qubits,
+      std::size_t num_terms,
+      std::uintptr_t x,
+      std::uintptr_t z,
+      std::uintptr_t coeffs,
+      AcceleratorBackend backend,
+      int device = -1);
   [[nodiscard]] static CudaStatus cuda_status();
   [[nodiscard]] static bool cuda_available();
   [[nodiscard]] static HipStatus hip_status();
@@ -114,6 +139,14 @@ public:
   [[nodiscard]] static bool metal_available();
 
   [[nodiscard]] PauliSum to_host() const;
+  // Pointers to this operator's device buffers for zero-copy export. The
+  // Python views flag them read-only, but CUDA consumers (CuPy, PyTorch) do
+  // not enforce the flag; writing through them is undefined behavior. CUDA
+  // only: HIP and Metal raise until a consumer on those backends is validated.
+  // Exporting marks the operator so that its buffers are freed only after a
+  // device synchronization, because a consumer may still have work queued on
+  // another stream.
+  [[nodiscard]] DeviceArrayPointers export_device_arrays() const;
   [[nodiscard]] DevicePauliSum simplify(double atol = 1.0e-12, double rtol = 0.0) const;
   [[nodiscard]] std::complex<double> expectation_statevector_complex128(
       std::span<const std::complex<double>> psi) const;

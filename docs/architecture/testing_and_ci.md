@@ -70,7 +70,7 @@ smoke: installation, import, version, minimal PauliSum
 semantic: endianness, representation, ordering, empty, identity, dtype, tolerance
 oracle: dense-matrix comparisons for small n
 property: generated random operators and invariants
-adapter: Qiskit and OpenFermion optional integration tests
+adapter: Qiskit, OpenFermion and CUDA-Q optional integration tests
 guardrail: allocation and blowup protection
 performance-smoke: benchmarks import and execute tiny datasets
 cuda: CUDA build, transfer, and CPU/GPU equivalence tests
@@ -129,12 +129,12 @@ API-stability, security, and packaging checks are part of the required validatio
 
 Optional integrations must not be imported at package import time.
 
-When Qiskit or OpenFermion is missing:
+When Qiskit, OpenFermion or CUDA-Q is missing:
 
 ```text
 core tests still run
 adapter tests skip with an explicit reason
-from_qiskit, to_qiskit, from_openfermion, and to_openfermion raise ImportError with an installation hint
+from_qiskit, to_qiskit, from_openfermion, to_openfermion, from_cudaq, and to_cudaq raise ImportError with an installation hint
 ```
 
 CI should include:
