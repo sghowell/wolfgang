@@ -22,6 +22,33 @@ bool backend_available(const CpuBackendReport& report, std::string_view selector
   return false;
 }
 
+#if WOLFGANG_BUILD_TBB_ENABLED
+// The row kernel each oneTBB chunk runs: the widest SIMD kernel this build and
+// CPU support for one- and two-word operators, otherwise scalar. Without it the
+// oneTBB path ran a scalar loop per thread and needed many threads to match a
+// single AVX-512 thread.
+detail::CommutationRowsKernel tbb_commutation_rows(const CpuBackendReport& report, std::size_t words) {
+  if (detail::simd_commutation_supports_words(words)) {
+#if WOLFGANG_BUILD_AVX512_ENABLED
+    if (backend_available(report, "avx512")) {
+      return detail::commutes_with_avx512_rows;
+    }
+#endif
+#if WOLFGANG_BUILD_AVX2_ENABLED
+    if (backend_available(report, "avx2")) {
+      return detail::commutes_with_avx2_rows;
+    }
+#endif
+#if WOLFGANG_BUILD_ARM_NEON_ENABLED
+    if (backend_available(report, "neon")) {
+      return detail::commutes_with_neon_rows;
+    }
+#endif
+  }
+  return detail::commutes_with_scalar_rows;
+}
+#endif
+
 }  // namespace
 
 std::vector<std::uint8_t> PauliSum::commutes_with(
@@ -41,7 +68,7 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
 #if WOLFGANG_BUILD_TBB_ENABLED
     if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb") &&
         tbb_auto_has_min_concurrency()) {
-      return detail::commutes_with_tbb(*this, rhs, entries);
+      return detail::commutes_with_tbb(*this, rhs, entries, tbb_commutation_rows(backend, words_));
     }
 #endif
 #if WOLFGANG_BUILD_AVX512_ENABLED
@@ -65,7 +92,7 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
 
   if (backend.active_backend == "tbb") {
 #if WOLFGANG_BUILD_TBB_ENABLED
-    return detail::commutes_with_tbb(*this, rhs, entries);
+    return detail::commutes_with_tbb(*this, rhs, entries, tbb_commutation_rows(backend, words_));
 #endif
   }
 

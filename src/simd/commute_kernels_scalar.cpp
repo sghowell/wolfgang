@@ -26,66 +26,72 @@ void require_simd_commutation_words(std::string_view backend, std::size_t words)
       std::to_string(words) + " words");
 }
 
-std::vector<std::uint8_t> commutes_with_scalar(
+void commutes_with_scalar_rows(
     const PauliSum& lhs,
     const PauliSum& rhs,
-    std::size_t entries) {
-  std::vector<std::uint8_t> out(entries, 0);
-
+    std::size_t row_begin,
+    std::size_t row_end,
+    std::uint8_t* out) noexcept {
+  const std::size_t columns = rhs.num_terms();
   if (lhs.words() == 1) {
-    std::size_t output_index = 0;
-    for (std::size_t lhs_term = 0; lhs_term < lhs.num_terms(); ++lhs_term) {
+    for (std::size_t lhs_term = row_begin; lhs_term < row_end; ++lhs_term) {
       const std::uint64_t lhs_x = lhs.x_words()[lhs_term];
       const std::uint64_t lhs_z = lhs.z_words()[lhs_term];
-      for (std::size_t rhs_term = 0; rhs_term < rhs.num_terms(); ++rhs_term) {
+      std::uint8_t* row = out + lhs_term * columns;
+      for (std::size_t rhs_term = 0; rhs_term < columns; ++rhs_term) {
         const std::uint64_t conflicts =
             (lhs_x & rhs.z_words()[rhs_term]) ^ (lhs_z & rhs.x_words()[rhs_term]);
-        out[output_index] = (std::popcount(conflicts) & 1U) == 0 ? 1 : 0;
-        ++output_index;
+        row[rhs_term] = (std::popcount(conflicts) & 1U) == 0 ? 1 : 0;
       }
     }
-    return out;
+    return;
   }
 
   if (lhs.words() == 2) {
-    std::size_t output_index = 0;
-    for (std::size_t lhs_term = 0; lhs_term < lhs.num_terms(); ++lhs_term) {
+    for (std::size_t lhs_term = row_begin; lhs_term < row_end; ++lhs_term) {
       const std::size_t lhs_offset = lhs_term * 2;
       const std::uint64_t lhs_x0 = lhs.x_words()[lhs_offset];
       const std::uint64_t lhs_z0 = lhs.z_words()[lhs_offset];
       const std::uint64_t lhs_x1 = lhs.x_words()[lhs_offset + 1];
       const std::uint64_t lhs_z1 = lhs.z_words()[lhs_offset + 1];
-      for (std::size_t rhs_term = 0; rhs_term < rhs.num_terms(); ++rhs_term) {
+      std::uint8_t* row = out + lhs_term * columns;
+      for (std::size_t rhs_term = 0; rhs_term < columns; ++rhs_term) {
         const std::size_t rhs_offset = rhs_term * 2;
         const std::uint64_t conflicts0 =
             (lhs_x0 & rhs.z_words()[rhs_offset]) ^ (lhs_z0 & rhs.x_words()[rhs_offset]);
         const std::uint64_t conflicts1 =
             (lhs_x1 & rhs.z_words()[rhs_offset + 1]) ^
             (lhs_z1 & rhs.x_words()[rhs_offset + 1]);
-        out[output_index] =
+        row[rhs_term] =
             ((std::popcount(conflicts0) + std::popcount(conflicts1)) & 1U) == 0 ? 1 : 0;
-        ++output_index;
       }
     }
-    return out;
+    return;
   }
 
-  std::size_t output_index = 0;
-  for (std::size_t lhs_term = 0; lhs_term < lhs.num_terms(); ++lhs_term) {
-    for (std::size_t rhs_term = 0; rhs_term < rhs.num_terms(); ++rhs_term) {
-      out[output_index] = terms_commute(
-                              lhs.x_words(),
-                              lhs.z_words(),
-                              rhs.x_words(),
-                              rhs.z_words(),
-                              lhs.words(),
-                              lhs_term,
-                              rhs_term)
+  for (std::size_t lhs_term = row_begin; lhs_term < row_end; ++lhs_term) {
+    std::uint8_t* row = out + lhs_term * columns;
+    for (std::size_t rhs_term = 0; rhs_term < columns; ++rhs_term) {
+      row[rhs_term] = terms_commute(
+                          lhs.x_words(),
+                          lhs.z_words(),
+                          rhs.x_words(),
+                          rhs.z_words(),
+                          lhs.words(),
+                          lhs_term,
+                          rhs_term)
           ? 1
           : 0;
-      ++output_index;
     }
   }
+}
+
+std::vector<std::uint8_t> commutes_with_scalar(
+    const PauliSum& lhs,
+    const PauliSum& rhs,
+    std::size_t entries) {
+  std::vector<std::uint8_t> out(entries, 0);
+  commutes_with_scalar_rows(lhs, rhs, 0, lhs.num_terms(), out.data());
   return out;
 }
 

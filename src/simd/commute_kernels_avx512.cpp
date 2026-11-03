@@ -31,30 +31,29 @@ const std::array<std::array<std::uint8_t, 8>, 256>& expanded_byte_mask_table() n
 
 void store_commutation_octet(
     __m512i counts,
-    std::vector<std::uint8_t>& out,
+    std::uint8_t* out,
     std::size_t output_index) noexcept {
   const __mmask8 odd_mask = _mm512_test_epi64_mask(counts, _mm512_set1_epi64(1));
   const auto& expanded =
       expanded_byte_mask_table()[static_cast<std::uint8_t>((~odd_mask) & 0xffU)];
-  std::memcpy(out.data() + output_index, expanded.data(), expanded.size());
+  std::memcpy(out + output_index, expanded.data(), expanded.size());
 }
 
 }  // namespace
 
-std::vector<std::uint8_t> commutes_with_avx512(
+void commutes_with_avx512_rows(
     const PauliSum& lhs,
     const PauliSum& rhs,
-    std::size_t entries) {
-  require_simd_commutation_words("avx512", lhs.words());
-
-  std::vector<std::uint8_t> out(entries, 0);
+    std::size_t row_begin,
+    std::size_t row_end,
+    std::uint8_t* out) noexcept {
   const std::vector<std::uint64_t>& lhs_x_words = lhs.x_words();
   const std::vector<std::uint64_t>& lhs_z_words = lhs.z_words();
   const std::vector<std::uint64_t>& rhs_x_words = rhs.x_words();
   const std::vector<std::uint64_t>& rhs_z_words = rhs.z_words();
 
   if (lhs.words() == 1) {
-    for (std::size_t lhs_term = 0; lhs_term < lhs.num_terms(); ++lhs_term) {
+    for (std::size_t lhs_term = row_begin; lhs_term < row_end; ++lhs_term) {
       const __m512i lhs_x = _mm512_set1_epi64(intrinsic_word(lhs_x_words[lhs_term]));
       const __m512i lhs_z = _mm512_set1_epi64(intrinsic_word(lhs_z_words[lhs_term]));
       const std::size_t row_offset = lhs_term * rhs.num_terms();
@@ -75,10 +74,10 @@ std::vector<std::uint8_t> commutes_with_avx512(
         out[row_offset + rhs_term] = (std::popcount(conflicts) & 1U) == 0 ? 1 : 0;
       }
     }
-    return out;
+    return;
   }
 
-  for (std::size_t lhs_term = 0; lhs_term < lhs.num_terms(); ++lhs_term) {
+  for (std::size_t lhs_term = row_begin; lhs_term < row_end; ++lhs_term) {
     const std::size_t lhs_offset = lhs_term * 2;
     const __m512i lhs_x0 = _mm512_set1_epi64(intrinsic_word(lhs_x_words[lhs_offset]));
     const __m512i lhs_z0 = _mm512_set1_epi64(intrinsic_word(lhs_z_words[lhs_offset]));
@@ -145,6 +144,15 @@ std::vector<std::uint8_t> commutes_with_avx512(
           ((std::popcount(conflicts0) + std::popcount(conflicts1)) & 1U) == 0 ? 1 : 0;
     }
   }
+}
+
+std::vector<std::uint8_t> commutes_with_avx512(
+    const PauliSum& lhs,
+    const PauliSum& rhs,
+    std::size_t entries) {
+  require_simd_commutation_words("avx512", lhs.words());
+  std::vector<std::uint8_t> out(entries, 0);
+  commutes_with_avx512_rows(lhs, rhs, 0, lhs.num_terms(), out.data());
   return out;
 }
 

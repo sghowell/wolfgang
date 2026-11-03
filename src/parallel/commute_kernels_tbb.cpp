@@ -17,58 +17,15 @@ namespace wolfgang::detail {
 std::vector<std::uint8_t> commutes_with_tbb(
     const PauliSum& lhs,
     const PauliSum& rhs,
-    std::size_t entries) {
+    std::size_t entries,
+    CommutationRowsKernel rows) {
   note_tbb_kernel_use();
   std::vector<std::uint8_t> out(entries, 0);
-
+  std::uint8_t* const data = out.data();
   oneapi::tbb::parallel_for(
       oneapi::tbb::blocked_range<std::size_t>(0, lhs.num_terms()),
       [&](const oneapi::tbb::blocked_range<std::size_t>& range) {
-        for (std::size_t lhs_term = range.begin(); lhs_term != range.end(); ++lhs_term) {
-          const std::size_t row_offset = lhs_term * rhs.num_terms();
-          if (lhs.words() == 1) {
-            const std::uint64_t lhs_x = lhs.x_words()[lhs_term];
-            const std::uint64_t lhs_z = lhs.z_words()[lhs_term];
-            for (std::size_t rhs_term = 0; rhs_term < rhs.num_terms(); ++rhs_term) {
-              const std::uint64_t conflicts =
-                  (lhs_x & rhs.z_words()[rhs_term]) ^ (lhs_z & rhs.x_words()[rhs_term]);
-              out[row_offset + rhs_term] = (std::popcount(conflicts) & 1U) == 0 ? 1 : 0;
-            }
-            continue;
-          }
-
-          if (lhs.words() == 2) {
-            const std::size_t lhs_offset = lhs_term * 2;
-            const std::uint64_t lhs_x0 = lhs.x_words()[lhs_offset];
-            const std::uint64_t lhs_z0 = lhs.z_words()[lhs_offset];
-            const std::uint64_t lhs_x1 = lhs.x_words()[lhs_offset + 1];
-            const std::uint64_t lhs_z1 = lhs.z_words()[lhs_offset + 1];
-            for (std::size_t rhs_term = 0; rhs_term < rhs.num_terms(); ++rhs_term) {
-              const std::size_t rhs_offset = rhs_term * 2;
-              const std::uint64_t conflicts0 =
-                  (lhs_x0 & rhs.z_words()[rhs_offset]) ^ (lhs_z0 & rhs.x_words()[rhs_offset]);
-              const std::uint64_t conflicts1 =
-                  (lhs_x1 & rhs.z_words()[rhs_offset + 1]) ^
-                  (lhs_z1 & rhs.x_words()[rhs_offset + 1]);
-              out[row_offset + rhs_term] =
-                  ((std::popcount(conflicts0) + std::popcount(conflicts1)) & 1U) == 0 ? 1 : 0;
-            }
-            continue;
-          }
-
-          for (std::size_t rhs_term = 0; rhs_term < rhs.num_terms(); ++rhs_term) {
-            out[row_offset + rhs_term] = terms_commute(
-                                             lhs.x_words(),
-                                             lhs.z_words(),
-                                             rhs.x_words(),
-                                             rhs.z_words(),
-                                             lhs.words(),
-                                             lhs_term,
-                                             rhs_term)
-                ? 1
-                : 0;
-          }
-        }
+        rows(lhs, rhs, range.begin(), range.end(), data);
       });
   return out;
 }
