@@ -51,13 +51,20 @@ enum class SimplifyKernel {
   PrefixSumStep,
   ReduceByKey,
   CompactSurvivors,
-  InitIndexKeys,
-  BitonicIndexStep,
+  HybridTileSort,
+  HybridTileMerge,
+  HybridGlobalStep,
+  HybridGatherCoeffs,
 };
 
-struct HybridSortInitParams {
+// Must match kHybridSortTile in kernels/simplify.metal.
+constexpr std::uint32_t kHybridSortTile = 1024;
+constexpr std::uint32_t kHybridSortTileThreads = kHybridSortTile / 2;
+
+struct HybridSortParams {
   std::uint32_t terms = 0;
-  std::uint32_t padded_terms = 0;
+  std::uint32_t j = 0;
+  std::uint32_t k = 0;
 };
 
 using Clock = std::chrono::steady_clock;
@@ -103,10 +110,14 @@ NSString* simplify_kernel_name(SimplifyKernel kernel) {
       return @"fp_simplify_words1_reduce_by_key";
     case SimplifyKernel::CompactSurvivors:
       return @"fp_simplify_words1_compact_survivors";
-    case SimplifyKernel::InitIndexKeys:
-      return @"fp_simplify_words1_init_index_keys";
-    case SimplifyKernel::BitonicIndexStep:
-      return @"fp_simplify_words1_bitonic_index_step";
+    case SimplifyKernel::HybridTileSort:
+      return @"fp_simplify_words1_hybrid_tile_sort";
+    case SimplifyKernel::HybridTileMerge:
+      return @"fp_simplify_words1_hybrid_tile_merge";
+    case SimplifyKernel::HybridGlobalStep:
+      return @"fp_simplify_words1_hybrid_global_step";
+    case SimplifyKernel::HybridGatherCoeffs:
+      return @"fp_simplify_words1_hybrid_gather_coeffs";
   }
   return @"fp_simplify_words1_init_keys";
 }
@@ -146,8 +157,10 @@ id<MTLComputePipelineState> simplify_pipeline(id<MTLDevice> device, SimplifyKern
   static id<MTLComputePipelineState> prefix = nil;
   static id<MTLComputePipelineState> reduce = nil;
   static id<MTLComputePipelineState> compact = nil;
-  static id<MTLComputePipelineState> init_index = nil;
-  static id<MTLComputePipelineState> sort_index = nil;
+  static id<MTLComputePipelineState> hybrid_tile_sort = nil;
+  static id<MTLComputePipelineState> hybrid_tile_merge = nil;
+  static id<MTLComputePipelineState> hybrid_global_step = nil;
+  static id<MTLComputePipelineState> hybrid_gather_coeffs = nil;
 
   id<MTLComputePipelineState>* selected = nullptr;
   switch (kernel) {
@@ -172,11 +185,17 @@ id<MTLComputePipelineState> simplify_pipeline(id<MTLDevice> device, SimplifyKern
     case SimplifyKernel::CompactSurvivors:
       selected = &compact;
       break;
-    case SimplifyKernel::InitIndexKeys:
-      selected = &init_index;
+    case SimplifyKernel::HybridTileSort:
+      selected = &hybrid_tile_sort;
       break;
-    case SimplifyKernel::BitonicIndexStep:
-      selected = &sort_index;
+    case SimplifyKernel::HybridTileMerge:
+      selected = &hybrid_tile_merge;
+      break;
+    case SimplifyKernel::HybridGlobalStep:
+      selected = &hybrid_global_step;
+      break;
+    case SimplifyKernel::HybridGatherCoeffs:
+      selected = &hybrid_gather_coeffs;
       break;
   }
   if (*selected == nil) {
@@ -666,6 +685,13 @@ MetalSimplifyCandidateResult simplify_words1_device_candidate_for_testing(
   return result;
 }
 
+bool hybrid_simplify_supported(id<MTLDevice> device) {
+  return [simplify_pipeline(device, SimplifyKernel::HybridTileSort) maxTotalThreadsPerThreadgroup] >=
+             kHybridSortTileThreads &&
+      [simplify_pipeline(device, SimplifyKernel::HybridTileMerge) maxTotalThreadsPerThreadgroup] >=
+             kHybridSortTileThreads;
+}
+
 HybridSimplifyOutput simplify_words1_hybrid(
     id<MTLDevice> device,
     id<MTLCommandQueue> command_queue,
@@ -675,27 +701,45 @@ HybridSimplifyOutput simplify_words1_hybrid(
     std::size_t terms,
     double atol,
     double rtol) {
-  const auto* coeff_data = static_cast<const std::complex<double>*>([coeffs contents]);
+  ScopedAutoreleasePool pool;
   // Validates finite inputs exactly as CPU simplify does.
   const detail::SimplifyDropRule rule = detail::SimplifyDropRule::from_coefficients(
-      std::span<const std::complex<double>>(coeff_data, terms), atol, rtol);
-  HybridSimplifyOutput output;
+      std::span<const std::complex<double>>(
+          static_cast<const std::complex<double>*>([coeffs contents]), terms),
+      atol,
+      rtol);
+  HybridSimplifyOutput out;
   if (terms == 0) {
-    return output;
+    return out;
   }
 
-  const std::size_t padded_terms = next_power_of_two(terms);
-  const std::uint32_t padded_u32 = checked_u32(padded_terms, "Metal hybrid simplify padded terms");
-  const HybridSortInitParams init_params{
-      checked_u32(terms, "Metal hybrid simplify terms"), padded_u32};
-  const std::size_t u64_bytes = checked_bytes<std::uint64_t>(padded_terms, "Metal hybrid sort keys");
-  const std::size_t u32_bytes = checked_bytes<std::uint32_t>(padded_terms, "Metal hybrid sort index");
-  ScopedMetalBuffer sort_x(make_shared_buffer(device, nullptr, u64_bytes, "Metal hybrid sorted x"));
-  ScopedMetalBuffer sort_z(make_shared_buffer(device, nullptr, u64_bytes, "Metal hybrid sorted z"));
-  ScopedMetalBuffer sort_index(
-      make_shared_buffer(device, nullptr, u32_bytes, "Metal hybrid sorted input index"));
-  ScopedMetalBuffer sort_valid(
-      make_shared_buffer(device, nullptr, u32_bytes, "Metal hybrid sorted validity flags"));
+  // The network spans next_power_of_two(terms) positions, but positions past
+  // `terms` are never stored (see the kernel comment), so buffers hold `terms`
+  // entries and only the dispatch shape depends on the padded size.
+  const std::uint32_t terms_u32 = checked_u32(terms, "Metal hybrid simplify terms");
+  const std::uint32_t padded_u32 =
+      checked_u32(next_power_of_two(terms), "Metal hybrid simplify padded terms");
+  const std::uint32_t tiles = (terms_u32 - 1U) / kHybridSortTile + 1U;
+  id<MTLComputePipelineState> tile_sort = simplify_pipeline(device, SimplifyKernel::HybridTileSort);
+  id<MTLComputePipelineState> tile_merge = simplify_pipeline(device, SimplifyKernel::HybridTileMerge);
+  id<MTLComputePipelineState> global_step = simplify_pipeline(device, SimplifyKernel::HybridGlobalStep);
+  if (!hybrid_simplify_supported(device)) {
+    throw std::runtime_error("Metal hybrid simplify tile kernels exceed this device's threadgroup limit");
+  }
+  ScopedMetalBuffer sort_x(make_shared_buffer(
+      device, nullptr, checked_bytes<std::uint64_t>(terms, "Metal hybrid sort x"), "Metal hybrid sorted x"));
+  ScopedMetalBuffer sort_z(make_shared_buffer(
+      device, nullptr, checked_bytes<std::uint64_t>(terms, "Metal hybrid sort z"), "Metal hybrid sorted z"));
+  ScopedMetalBuffer sort_index(make_shared_buffer(
+      device,
+      nullptr,
+      checked_bytes<std::uint32_t>(terms, "Metal hybrid sort index"),
+      "Metal hybrid sorted input index"));
+  ScopedMetalBuffer sort_coeffs(make_shared_buffer(
+      device,
+      nullptr,
+      checked_bytes<std::complex<double>>(terms, "Metal hybrid sorted coefficients"),
+      "Metal hybrid sorted coefficients"));
 
   id<MTLCommandBuffer> command_buffer = [command_queue commandBuffer];
   if (command_buffer == nil) {
@@ -705,60 +749,87 @@ HybridSimplifyOutput simplify_words1_hybrid(
   if (encoder == nil) {
     throw std::runtime_error("Metal failed to create a hybrid simplify command encoder");
   }
-  [encoder setComputePipelineState:simplify_pipeline(device, SimplifyKernel::InitIndexKeys)];
+  const MTLSize tile_grid = MTLSizeMake(tiles, 1, 1);
+  const MTLSize tile_threads = MTLSizeMake(kHybridSortTileThreads, 1, 1);
+  HybridSortParams params{terms_u32, 0, 0};
+  [encoder setComputePipelineState:tile_sort];
   [encoder setBuffer:x offset:0 atIndex:0];
   [encoder setBuffer:z offset:0 atIndex:1];
   [encoder setBuffer:sort_x.get() offset:0 atIndex:2];
   [encoder setBuffer:sort_z.get() offset:0 atIndex:3];
   [encoder setBuffer:sort_index.get() offset:0 atIndex:4];
-  [encoder setBuffer:sort_valid.get() offset:0 atIndex:5];
-  [encoder setBytes:&init_params length:sizeof(init_params) atIndex:6];
-  dispatch_1d(encoder, padded_terms);
-  id<MTLComputePipelineState> sort_step = simplify_pipeline(device, SimplifyKernel::BitonicIndexStep);
-  for (std::uint32_t k = 2; k <= padded_u32; k <<= 1U) {
-    for (std::uint32_t j = k >> 1U; j > 0; j >>= 1U) {
-      const BitonicSortParams sort_params{padded_u32, j, k};
-      [encoder setComputePipelineState:sort_step];
-      [encoder setBuffer:sort_x.get() offset:0 atIndex:0];
-      [encoder setBuffer:sort_z.get() offset:0 atIndex:1];
-      [encoder setBuffer:sort_index.get() offset:0 atIndex:2];
-      [encoder setBuffer:sort_valid.get() offset:0 atIndex:3];
-      [encoder setBytes:&sort_params length:sizeof(sort_params) atIndex:4];
-      dispatch_1d(encoder, padded_terms);
+  [encoder setBytes:&params length:sizeof(params) atIndex:5];
+  [encoder dispatchThreadgroups:tile_grid threadsPerThreadgroup:tile_threads];
+  for (std::uint32_t k = 2U * kHybridSortTile; k != 0U && k <= padded_u32; k <<= 1U) {
+    params.k = k;
+    [encoder setBuffer:sort_x.get() offset:0 atIndex:0];
+    [encoder setBuffer:sort_z.get() offset:0 atIndex:1];
+    [encoder setBuffer:sort_index.get() offset:0 atIndex:2];
+    [encoder setComputePipelineState:global_step];
+    for (std::uint32_t j = k >> 1U; j >= kHybridSortTile; j >>= 1U) {
+      params.j = j;
+      [encoder setBytes:&params length:sizeof(params) atIndex:3];
+      dispatch_1d(encoder, padded_u32 / 2U);
     }
+    [encoder setComputePipelineState:tile_merge];
+    [encoder setBytes:&params length:sizeof(params) atIndex:3];
+    [encoder dispatchThreadgroups:tile_grid threadsPerThreadgroup:tile_threads];
   }
+  [encoder setComputePipelineState:simplify_pipeline(device, SimplifyKernel::HybridGatherCoeffs)];
+  [encoder setBuffer:coeffs offset:0 atIndex:0];
+  [encoder setBuffer:sort_index.get() offset:0 atIndex:1];
+  [encoder setBuffer:sort_coeffs.get() offset:0 atIndex:2];
+  [encoder setBytes:&params length:sizeof(params) atIndex:3];
+  dispatch_1d(encoder, terms);
   [encoder endEncoding];
   wait_for_completion(command_buffer, "Metal hybrid simplify sort");
 
-  // Valid entries sort first, so positions [0, terms) hold every input term in
-  // canonical (x, z) order with input-index tie-breaks. Summing each run left
-  // to right reproduces the CPU paths' input-order sums bit for bit.
-  const auto* sorted_x = static_cast<const std::uint64_t*>([sort_x.get() contents]);
-  const auto* sorted_z = static_cast<const std::uint64_t*>([sort_z.get() contents]);
-  const auto* sorted_index = static_cast<const std::uint32_t*>([sort_index.get() contents]);
-  output.x.reserve(terms);
-  output.z.reserve(terms);
-  output.coeffs.reserve(terms);
+  // The buffers hold every input term in canonical (x, z) order with
+  // input-index tie-breaks, and its coefficient. Summing each run left to right
+  // reproduces the CPU paths' input-order sums bit for bit. Survivors compact
+  // in place: the write position never passes the read position.
+  auto* keys_x = static_cast<std::uint64_t*>([sort_x.get() contents]);
+  auto* keys_z = static_cast<std::uint64_t*>([sort_z.get() contents]);
+  auto* sums = static_cast<std::complex<double>*>([sort_coeffs.get() contents]);
+  std::size_t survivors = 0;
   std::size_t position = 0;
   while (position < terms) {
-    const std::uint64_t key_x = sorted_x[position];
-    const std::uint64_t key_z = sorted_z[position];
+    const std::uint64_t key_x = keys_x[position];
+    const std::uint64_t key_z = keys_z[position];
     // Seed with the run's first coefficient, as every CPU path does, so
     // signed zeros match CPU simplify bit for bit.
-    std::complex<double> accumulated = coeff_data[sorted_index[position]];
+    std::complex<double> accumulated = sums[position];
     std::size_t next = position + 1;
-    while (next < terms && sorted_x[next] == key_x && sorted_z[next] == key_z) {
-      accumulated += coeff_data[sorted_index[next]];
+    while (next < terms && keys_x[next] == key_x && keys_z[next] == key_z) {
+      accumulated += sums[next];
       ++next;
     }
     if (rule.survives(accumulated)) {
-      output.x.push_back(key_x);
-      output.z.push_back(key_z);
-      output.coeffs.push_back(accumulated);
+      keys_x[survivors] = key_x;
+      keys_z[survivors] = key_z;
+      sums[survivors] = accumulated;
+      ++survivors;
     }
     position = next;
   }
-  return output;
+
+  out.num_terms = survivors;
+  if (survivors == 0) {
+    return out;
+  }
+  // Keep the scratch buffers as the output when at most half of them would be
+  // slack; otherwise copy survivors into exact-size buffers to release memory.
+  if (survivors >= terms / 2) {
+    out.x = sort_x.release();
+    out.z = sort_z.release();
+    out.coeffs = sort_coeffs.release();
+  } else {
+    out.x = make_shared_buffer(device, keys_x, survivors * sizeof(std::uint64_t), "x words");
+    out.z = make_shared_buffer(device, keys_z, survivors * sizeof(std::uint64_t), "z words");
+    out.coeffs =
+        make_shared_buffer(device, sums, survivors * sizeof(std::complex<double>), "coefficients");
+  }
+  return out;
 }
 
 }  // namespace wolfgang::metal_detail

@@ -79,14 +79,38 @@ void wait_for_completion(id<MTLCommandBuffer> command_buffer, const char* action
 // kHybridSimplifyMinTerms terms: the GPU sorts (x, z, input index) and the CPU
 // sums each duplicate run in float64, in input order, over the shared buffers.
 // The result equals CPU simplify bit for bit; smaller inputs use the host bridge.
-// On an M4 Pro the hybrid won in every measured case from 196,608 terms and was
-// mixed below 131,072 (GPU clock ramp-up makes small sorts noisy).
-inline constexpr std::size_t kHybridSimplifyMinTerms = 196608;
+// On an M4 Pro the hybrid beat the bridge in every measured case from 12,288
+// terms and broke even near 8,192, where its fixed command-buffer round trip
+// (about 0.3 ms) dominates.
+inline constexpr std::size_t kHybridSimplifyMinTerms = 12288;
 
+// False when the hybrid's 512-thread tile kernels exceed the device's
+// threadgroup limit; simplify then keeps the host bridge.
+[[nodiscard]] bool hybrid_simplify_supported(id<MTLDevice> device);
+// Owns +1 references to the simplified operator's buffers until the caller
+// moves them into a DevicePauliSum::Impl. Buffers are nil when num_terms is 0
+// and may be longer than num_terms entries.
 struct HybridSimplifyOutput {
-  std::vector<std::uint64_t> x;
-  std::vector<std::uint64_t> z;
-  std::vector<std::complex<double>> coeffs;
+  id<MTLBuffer> x = nil;
+  id<MTLBuffer> z = nil;
+  id<MTLBuffer> coeffs = nil;
+  std::size_t num_terms = 0;
+
+  HybridSimplifyOutput() = default;
+  HybridSimplifyOutput(const HybridSimplifyOutput&) = delete;
+  HybridSimplifyOutput& operator=(const HybridSimplifyOutput&) = delete;
+  HybridSimplifyOutput(HybridSimplifyOutput&& other) noexcept
+      : x(other.x), z(other.z), coeffs(other.coeffs), num_terms(other.num_terms) {
+    other.x = nil;
+    other.z = nil;
+    other.coeffs = nil;
+  }
+  HybridSimplifyOutput& operator=(HybridSimplifyOutput&&) = delete;
+  ~HybridSimplifyOutput() {
+    [x release];
+    [z release];
+    [coeffs release];
+  }
 };
 
 [[nodiscard]] HybridSimplifyOutput simplify_words1_hybrid(

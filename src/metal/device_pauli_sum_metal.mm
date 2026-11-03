@@ -5,6 +5,8 @@
 #include <cstring>
 #include <memory>
 #include <stdexcept>
+#include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -76,7 +78,11 @@ DevicePauliSum DevicePauliSum::from_host(
     int device) {
   {
     metal_detail::ScopedAutoreleasePool pool;
-    const MetalStatus status = metal_status();
+    // Only availability matters here; metal_status() also formats device and
+    // toolchain details, which cost more than the upload of a small operator.
+    id<MTLDevice> probe = metal_detail::create_default_device();
+    const bool runtime_available = probe != nil;
+    [probe release];
     const AcceleratorBackend selected = select_accelerator_backend(
         backend,
         false,
@@ -84,7 +90,7 @@ DevicePauliSum DevicePauliSum::from_host(
         false,
         false,
         true,
-        status.runtime_available);
+        runtime_available);
     if (selected != AcceleratorBackend::Metal) {
       throw std::runtime_error(accelerator_not_built_message(selected));
     }
@@ -221,11 +227,13 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   }
   metal_detail::validate_simplify_tolerances(atol, rtol);
 
-  // Benchmark-only selector that keeps the host bridge for paired comparisons.
+  // Benchmark and test selector: "host_bridge" keeps the host bridge for paired
+  // comparisons; "hybrid" runs the hybrid below its threshold.
   const char* selector = std::getenv("WOLFGANG_METAL_BENCH_SIMPLIFY");
-  const bool force_host_bridge = selector != nullptr && std::string(selector) == "host_bridge";
-  if (!force_host_bridge && impl_->words == 1 &&
-      impl_->num_terms >= metal_detail::kHybridSimplifyMinTerms) {
+  const std::string_view forced = selector == nullptr ? std::string_view{} : std::string_view{selector};
+  const bool use_hybrid = forced != "host_bridge" &&
+      (forced == "hybrid" || impl_->num_terms >= metal_detail::kHybridSimplifyMinTerms);
+  if (use_hybrid && impl_->words == 1 && metal_detail::hybrid_simplify_supported(impl_->device)) {
     metal_detail::HybridSimplifyOutput output = metal_detail::simplify_words1_hybrid(
         impl_->device,
         impl_->command_queue,
@@ -235,10 +243,17 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         impl_->num_terms,
         atol,
         rtol);
-    return DevicePauliSum::from_host(
-        PauliSum::from_words(impl_->num_qubits, output.x, output.z, output.coeffs),
-        AcceleratorBackend::Metal,
-        impl_->device_ordinal);
+    auto out = std::make_unique<Impl>();
+    out->num_qubits = impl_->num_qubits;
+    out->words = impl_->words;
+    out->num_terms = output.num_terms;
+    out->device_ordinal = impl_->device_ordinal;
+    out->device = [impl_->device retain];
+    out->command_queue = [impl_->command_queue retain];
+    std::swap(out->x, output.x);
+    std::swap(out->z, output.z);
+    std::swap(out->coeffs, output.coeffs);
+    return DevicePauliSum(std::move(out));
   }
 
   PauliSum simplified = to_host().simplify(atol, rtol);

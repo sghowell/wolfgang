@@ -22,7 +22,11 @@ std::string nsstring_to_string(NSString* value) {
 }
 
 id<MTLDevice> create_default_device() {
-  return MTLCreateSystemDefaultDevice();
+  // MTLCreateSystemDefaultDevice costs about 45 us per call on an M4 Pro and
+  // returns the same device each time, so create it once per process. Callers
+  // own (and release) a +1 reference, as before.
+  static id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+  return [device retain];
 }
 
 id<MTLDevice> create_default_device_or_throw() {

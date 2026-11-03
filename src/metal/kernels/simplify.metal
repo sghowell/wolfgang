@@ -308,86 +308,193 @@ kernel void fp_simplify_words1_compact_survivors(
 // Hybrid simplify: sort (x, z, input index) on the GPU so each duplicate run
 // lists its coefficients in input order; the float64 reduction then runs on
 // the CPU over shared memory, which Metal kernels cannot do in double.
-struct HybridSortInitParams {
+//
+// The sort is an all-ascending bitonic network over next_power_of_two(terms)
+// positions. Stage k (block size k) starts with a flip step pairing lower with
+// lower ^ (k - 1), then half-cleaner steps pair lower with lower + j. Every
+// compare-exchange keeps the smaller entry at the lower position, so positions
+// at or past `terms` act as +inf sentinels that never move: buffers hold only
+// `terms` entries and pairs whose upper position is out of range are skipped.
+// Input indices are unique, so the order is total and any correct sort gives
+// the same permutation.
+//
+// Steps with j <= kHybridSortTile / 2 stay inside an aligned tile and run in
+// threadgroup memory, so a 2^20-position sort needs 66 dispatches, not 210.
+// Must match kHybridSortTile in simplify_metal.mm.
+constant uint kHybridSortTile = 1024u;
+constant uint kHybridSortTileThreads = kHybridSortTile / 2u;
+
+struct HybridSortParams {
   uint terms;
-  uint padded_terms;
+  uint j;
+  uint k;
 };
 
 static inline bool fp_index_entry_less(
-    uint lhs_valid,
     ulong lhs_x,
     ulong lhs_z,
     uint lhs_index,
-    uint rhs_valid,
     ulong rhs_x,
     ulong rhs_z,
     uint rhs_index) {
-  if (lhs_valid != rhs_valid) {
-    return lhs_valid != 0u;
-  }
-  if (lhs_valid == 0u) {
-    return false;
-  }
   if (lhs_x != rhs_x || lhs_z != rhs_z) {
     return fp_key_less(lhs_x, lhs_z, rhs_x, rhs_z);
   }
   return lhs_index < rhs_index;
 }
 
-kernel void fp_simplify_words1_init_index_keys(
+// Lower position of pair `pair` in a step with partner distance j (a power of
+// two): pair's bits below j stay, the rest shift up past bit j.
+static inline uint fp_bitonic_lower(uint pair, uint j) {
+  return ((pair & ~(j - 1u)) << 1u) | (pair & (j - 1u));
+}
+
+static inline void fp_tile_compare_exchange(
+    threadgroup ulong* tile_x,
+    threadgroup ulong* tile_z,
+    threadgroup uint* tile_index,
+    uint lower,
+    uint upper) {
+  const ulong lower_x = tile_x[lower];
+  const ulong lower_z = tile_z[lower];
+  const uint lower_index = tile_index[lower];
+  const ulong upper_x = tile_x[upper];
+  const ulong upper_z = tile_z[upper];
+  const uint upper_index = tile_index[upper];
+  if (fp_index_entry_less(upper_x, upper_z, upper_index, lower_x, lower_z, lower_index)) {
+    tile_x[lower] = upper_x;
+    tile_z[lower] = upper_z;
+    tile_index[lower] = upper_index;
+    tile_x[upper] = lower_x;
+    tile_z[upper] = lower_z;
+    tile_index[upper] = lower_index;
+  }
+}
+
+// Tile positions at or past `terms` load as (~0, ~0, ~0u). Valid input
+// indices are below terms <= UINT32_MAX, so the sentinel orders after every
+// real entry, including an all-Y key.
+static inline void fp_store_tile(
+    device ulong* sort_x,
+    device ulong* sort_z,
+    device uint* sort_index,
+    threadgroup const ulong* tile_x,
+    threadgroup const ulong* tile_z,
+    threadgroup const uint* tile_index,
+    uint base,
+    uint terms,
+    uint thread_index) {
+  for (uint local = thread_index; local < kHybridSortTile; local += kHybridSortTileThreads) {
+    const uint position = base + local;
+    if (position < terms) {
+      sort_x[position] = tile_x[local];
+      sort_z[position] = tile_z[local];
+      sort_index[position] = tile_index[local];
+    }
+  }
+}
+
+// Stages k = 2 .. kHybridSortTile: sorts each tile of the input completely and
+// tags entries with their input index. One threadgroup of
+// kHybridSortTileThreads threads per tile.
+kernel void fp_simplify_words1_hybrid_tile_sort(
     device const ulong* in_x [[buffer(0)]],
     device const ulong* in_z [[buffer(1)]],
     device ulong* sort_x [[buffer(2)]],
     device ulong* sort_z [[buffer(3)]],
     device uint* sort_index [[buffer(4)]],
-    device uint* sort_valid [[buffer(5)]],
-    constant HybridSortInitParams& params [[buffer(6)]],
-    uint index [[thread_position_in_grid]]) {
-  if (index >= params.padded_terms) {
-    return;
+    constant HybridSortParams& params [[buffer(5)]],
+    uint thread_index [[thread_index_in_threadgroup]],
+    uint tile [[threadgroup_position_in_grid]]) {
+  threadgroup ulong tile_x[kHybridSortTile];
+  threadgroup ulong tile_z[kHybridSortTile];
+  threadgroup uint tile_index[kHybridSortTile];
+  const uint base = tile * kHybridSortTile;
+  for (uint local = thread_index; local < kHybridSortTile; local += kHybridSortTileThreads) {
+    const uint position = base + local;
+    const bool valid = position < params.terms;
+    tile_x[local] = valid ? in_x[position] : 0xfffffffffffffffful;
+    tile_z[local] = valid ? in_z[position] : 0xfffffffffffffffful;
+    tile_index[local] = valid ? position : 0xffffffffu;
   }
-  const bool valid = index < params.terms;
-  sort_x[index] = valid ? in_x[index] : 0xfffffffffffffffful;
-  sort_z[index] = valid ? in_z[index] : 0xfffffffffffffffful;
-  sort_index[index] = index;
-  sort_valid[index] = valid ? 1u : 0u;
+  threadgroup_barrier(mem_flags::mem_threadgroup);
+  for (uint k = 2u; k <= kHybridSortTile; k <<= 1u) {
+    for (uint j = k >> 1u; j > 0u; j >>= 1u) {
+      const uint lower = fp_bitonic_lower(thread_index, j);
+      const uint upper = j == (k >> 1u) ? (lower ^ (k - 1u)) : (lower + j);
+      fp_tile_compare_exchange(tile_x, tile_z, tile_index, lower, upper);
+      threadgroup_barrier(mem_flags::mem_threadgroup);
+    }
+  }
+  fp_store_tile(sort_x, sort_z, sort_index, tile_x, tile_z, tile_index, base, params.terms, thread_index);
 }
 
-kernel void fp_simplify_words1_bitonic_index_step(
+// Half-cleaner steps j = kHybridSortTile / 2 .. 1 that finish a stage after its
+// global steps.
+kernel void fp_simplify_words1_hybrid_tile_merge(
     device ulong* sort_x [[buffer(0)]],
     device ulong* sort_z [[buffer(1)]],
     device uint* sort_index [[buffer(2)]],
-    device uint* sort_valid [[buffer(3)]],
-    constant BitonicSortParams& params [[buffer(4)]],
-    uint index [[thread_position_in_grid]]) {
-  if (index >= params.padded_terms) {
+    constant HybridSortParams& params [[buffer(3)]],
+    uint thread_index [[thread_index_in_threadgroup]],
+    uint tile [[threadgroup_position_in_grid]]) {
+  threadgroup ulong tile_x[kHybridSortTile];
+  threadgroup ulong tile_z[kHybridSortTile];
+  threadgroup uint tile_index[kHybridSortTile];
+  const uint base = tile * kHybridSortTile;
+  for (uint local = thread_index; local < kHybridSortTile; local += kHybridSortTileThreads) {
+    const uint position = base + local;
+    const bool valid = position < params.terms;
+    tile_x[local] = valid ? sort_x[position] : 0xfffffffffffffffful;
+    tile_z[local] = valid ? sort_z[position] : 0xfffffffffffffffful;
+    tile_index[local] = valid ? sort_index[position] : 0xffffffffu;
+  }
+  threadgroup_barrier(mem_flags::mem_threadgroup);
+  for (uint j = kHybridSortTile / 2u; j > 0u; j >>= 1u) {
+    const uint lower = fp_bitonic_lower(thread_index, j);
+    fp_tile_compare_exchange(tile_x, tile_z, tile_index, lower, lower + j);
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+  }
+  fp_store_tile(sort_x, sort_z, sort_index, tile_x, tile_z, tile_index, base, params.terms, thread_index);
+}
+
+// One step with j >= kHybridSortTile, one thread per pair.
+kernel void fp_simplify_words1_hybrid_global_step(
+    device ulong* sort_x [[buffer(0)]],
+    device ulong* sort_z [[buffer(1)]],
+    device uint* sort_index [[buffer(2)]],
+    constant HybridSortParams& params [[buffer(3)]],
+    uint pair [[thread_position_in_grid]]) {
+  const uint lower = fp_bitonic_lower(pair, params.j);
+  const uint upper = params.j == (params.k >> 1u) ? (lower ^ (params.k - 1u)) : (lower + params.j);
+  if (upper >= params.terms) {
     return;
   }
-  const uint partner = index ^ params.j;
-  if (partner <= index || partner >= params.padded_terms) {
-    return;
+  const ulong lower_x = sort_x[lower];
+  const ulong lower_z = sort_z[lower];
+  const uint lower_index = sort_index[lower];
+  const ulong upper_x = sort_x[upper];
+  const ulong upper_z = sort_z[upper];
+  const uint upper_index = sort_index[upper];
+  if (fp_index_entry_less(upper_x, upper_z, upper_index, lower_x, lower_z, lower_index)) {
+    sort_x[lower] = upper_x;
+    sort_z[lower] = upper_z;
+    sort_index[lower] = upper_index;
+    sort_x[upper] = lower_x;
+    sort_z[upper] = lower_z;
+    sort_index[upper] = lower_index;
   }
-  const bool ascending = (index & params.k) == 0u;
-  const ulong lhs_x = sort_x[index];
-  const ulong lhs_z = sort_z[index];
-  const uint lhs_index = sort_index[index];
-  const uint lhs_valid = sort_valid[index];
-  const ulong rhs_x = sort_x[partner];
-  const ulong rhs_z = sort_z[partner];
-  const uint rhs_index = sort_index[partner];
-  const uint rhs_valid = sort_valid[partner];
-  const bool should_swap = ascending
-      ? fp_index_entry_less(rhs_valid, rhs_x, rhs_z, rhs_index, lhs_valid, lhs_x, lhs_z, lhs_index)
-      : fp_index_entry_less(lhs_valid, lhs_x, lhs_z, lhs_index, rhs_valid, rhs_x, rhs_z, rhs_index);
-  if (!should_swap) {
-    return;
+}
+
+// Copies each sorted entry's coefficient bits into sorted order so the CPU
+// reduction reads sequentially. A raw 16-byte copy: no double arithmetic.
+kernel void fp_simplify_words1_hybrid_gather_coeffs(
+    device const ulong2* coeffs [[buffer(0)]],
+    device const uint* sort_index [[buffer(1)]],
+    device ulong2* sorted_coeffs [[buffer(2)]],
+    constant HybridSortParams& params [[buffer(3)]],
+    uint position [[thread_position_in_grid]]) {
+  if (position < params.terms) {
+    sorted_coeffs[position] = coeffs[sort_index[position]];
   }
-  sort_x[index] = rhs_x;
-  sort_z[index] = rhs_z;
-  sort_index[index] = rhs_index;
-  sort_valid[index] = rhs_valid;
-  sort_x[partner] = lhs_x;
-  sort_z[partner] = lhs_z;
-  sort_index[partner] = lhs_index;
-  sort_valid[partner] = lhs_valid;
 }
