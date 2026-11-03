@@ -131,6 +131,7 @@ coverage:
 ```text
 pairwise commutation: oneTBB for large dense matrices when compiled, otherwise AVX-512, AVX2, NEON, or scalar
 full grouping graph construction: AVX-512, AVX2, NEON, or scalar
+simplify: oneTBB from kAutoTbbSimplifyTermThreshold terms when compiled, bit-identical to scalar; otherwise scalar
 other operations: scalar until a named optimized kernel lands with tests and benchmark evidence
 ```
 
