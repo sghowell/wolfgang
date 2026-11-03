@@ -305,7 +305,6 @@ void launch_small_simplify(
     std::uint64_t* out_z,
     thrust::complex<double>* out_coeffs,
     wolfgang::accelerator_detail::SmallSimplifyResult* device_result) {
-  using wolfgang::accelerator_detail::small_simplify_capacity;
   using wolfgang::accelerator_detail::small_simplify_kernel;
   using wolfgang::accelerator_detail::small_simplify_shared_bytes;
   const std::size_t shared_bytes = small_simplify_shared_bytes(Words);
@@ -316,7 +315,10 @@ void launch_small_simplify(
       hipFuncAttributeMaxDynamicSharedMemorySize,
       static_cast<int>(shared_bytes));
   check_hip(attribute_result, "configure small simplify shared memory");
-  small_simplify_kernel<Words><<<1, small_simplify_capacity(Words), shared_bytes>>>(
+  const int threads = wolfgang::accelerator_detail::small_simplify_block_threads(terms);
+  const std::size_t launch_bytes =
+      static_cast<std::size_t>(threads) * wolfgang::accelerator_detail::small_simplify_bytes_per_position(Words);
+  small_simplify_kernel<Words><<<1, threads, launch_bytes>>>(
       in_x,
       in_z,
       in_coeffs,
@@ -518,38 +520,9 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   }
 
   ScopedHipDevice guard(impl_->device_ordinal);
-  if (impl_->num_terms == 1) {
-    // One term has nothing to merge; only the drop rule applies, and the
-    // largest input magnitude is the term's own. Skipping sort and reduction
-    // removes their fixed setup cost from this common degenerate case.
-    thrust::complex<double> coeff;
-    copy_to_host(&coeff, impl_->coeffs, 1, "single-term coefficient");
-    if (!components_finite(coeff)) {
-      throw std::invalid_argument("simplify requires finite coefficients");
-    }
-    const CoeffSurvives survives =
-        survival_rule(atol, rtol, thrust::abs(coeff), [&] { return ComplexHalfAbs{}(coeff); });
-    if (!survives(coeff)) {
-      return make_empty();
-    }
-    auto out = std::make_unique<Impl>();
-    out->num_qubits = impl_->num_qubits;
-    out->words = impl_->words;
-    out->num_terms = 1;
-    out->device_ordinal = impl_->device_ordinal;
-    if (impl_->words > 0) {
-      pool_allocate(out->x, impl_->words, "simplified x words");
-      pool_allocate(out->z, impl_->words, "simplified z words");
-      copy_device_to_device(out->x, impl_->x, impl_->words, "simplified x words");
-      copy_device_to_device(out->z, impl_->z, impl_->words, "simplified z words");
-    }
-    pool_allocate(out->coeffs, 1, "simplified coefficients");
-    copy_device_to_device(out->coeffs, impl_->coeffs, 1, "simplified coefficients");
-    check_hip(hipDeviceSynchronize(), "synchronize after HIP simplify");
-    return DevicePauliSum(std::move(out));
-  }
-
-  if (small_simplify_enabled &&
+  // On an MI300X the dedicated single-term path below measured faster than a
+  // one-term fused launch, so single terms skip the fused path on HIP.
+  if (small_simplify_enabled && impl_->num_terms >= 2 &&
       wolfgang::accelerator_detail::small_simplify_applies(impl_->words, impl_->num_terms)) {
     // One fused launch (src/detail/small_simplify_kernel.cuh). Outputs are
     // sized for every input term; num_terms records the survivors.
@@ -595,6 +568,37 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
       return make_empty();
     }
     out->num_terms = static_cast<std::size_t>(result.survivors);
+    return DevicePauliSum(std::move(out));
+  }
+
+  if (impl_->num_terms == 1) {
+    // One term has nothing to merge, so only the drop rule applies, with the
+    // term's own magnitude as the input maximum. Skipping sort and reduction
+    // removes their fixed setup cost.
+    thrust::complex<double> coeff;
+    copy_to_host(&coeff, impl_->coeffs, 1, "single-term coefficient");
+    if (!components_finite(coeff)) {
+      throw std::invalid_argument("simplify requires finite coefficients");
+    }
+    const CoeffSurvives survives =
+        survival_rule(atol, rtol, thrust::abs(coeff), [&] { return ComplexHalfAbs{}(coeff); });
+    if (!survives(coeff)) {
+      return make_empty();
+    }
+    auto out = std::make_unique<Impl>();
+    out->num_qubits = impl_->num_qubits;
+    out->words = impl_->words;
+    out->num_terms = 1;
+    out->device_ordinal = impl_->device_ordinal;
+    if (impl_->words > 0) {
+      pool_allocate(out->x, impl_->words, "simplified x words");
+      pool_allocate(out->z, impl_->words, "simplified z words");
+      copy_device_to_device(out->x, impl_->x, impl_->words, "simplified x words");
+      copy_device_to_device(out->z, impl_->z, impl_->words, "simplified z words");
+    }
+    pool_allocate(out->coeffs, 1, "simplified coefficients");
+    copy_device_to_device(out->coeffs, impl_->coeffs, 1, "simplified coefficients");
+    check_hip(hipDeviceSynchronize(), "synchronize after HIP simplify");
     return DevicePauliSum(std::move(out));
   }
 

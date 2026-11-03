@@ -34,14 +34,30 @@ __host__ __device__ constexpr int small_simplify_capacity(int words) noexcept {
   return words <= 2 ? 1024 : 512;
 }
 
+// Shared memory per block position: keys, coefficient, index and scan slot.
+__host__ __device__ constexpr std::size_t small_simplify_bytes_per_position(int words) noexcept {
+  return 2 * static_cast<std::size_t>(words) * sizeof(std::uint64_t) +
+      sizeof(thrust::complex<double>) + 2 * sizeof(std::uint32_t);
+}
+
 __host__ __device__ constexpr std::size_t small_simplify_shared_bytes(int words) noexcept {
   return static_cast<std::size_t>(small_simplify_capacity(words)) *
-      (2 * static_cast<std::size_t>(words) * sizeof(std::uint64_t) +
-       sizeof(thrust::complex<double>) + 2 * sizeof(std::uint32_t));
+      small_simplify_bytes_per_position(words);
+}
+
+// Block size for `terms` inputs: the next power of two, at least one AMD
+// wavefront (64), so small operators run fewer sort stages in less shared
+// memory than the full capacity.
+__host__ __device__ constexpr int small_simplify_block_threads(std::size_t terms) noexcept {
+  int threads = 64;
+  while (static_cast<std::size_t>(threads) < terms) {
+    threads <<= 1;
+  }
+  return threads;
 }
 
 [[nodiscard]] constexpr bool small_simplify_applies(std::size_t words, std::size_t terms) noexcept {
-  return words >= 1 && words <= kSmallSimplifyMaxWords && terms >= 2 &&
+  return words >= 1 && words <= kSmallSimplifyMaxWords && terms >= 1 &&
       terms <= static_cast<std::size_t>(small_simplify_capacity(static_cast<int>(words)));
 }
 
@@ -124,9 +140,10 @@ __device__ inline double max_propagating_nan(double lhs, double rhs) {
 
 }  // namespace small_simplify
 
-// Launch with one block of small_simplify_capacity(Words) threads and
-// small_simplify_shared_bytes(Words) bytes of dynamic shared memory, for
-// 2 <= terms <= capacity. Outputs hold `terms` entries; result->survivors of
+// Launch with one block of small_simplify_block_threads(terms) threads (a power
+// of two, at most small_simplify_capacity(Words)) and that many positions of
+// small_simplify_bytes_per_position(Words) dynamic shared memory, for
+// 1 <= terms <= capacity. Outputs hold `terms` entries; result->survivors of
 // them are written.
 template <int Words>
 __global__ void small_simplify_kernel(
