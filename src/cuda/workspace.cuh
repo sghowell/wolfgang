@@ -6,9 +6,11 @@
 
 namespace wolfgang::cuda::detail {
 
-using detail::WorkspaceSnapshot;
-using detail::WorkspaceTimingMode;
-using detail::workspace_timing_mode_name;
+// Qualify fully: inside wolfgang::cuda::detail an unqualified `detail` names
+// this namespace itself, not the shared wolfgang::detail helpers.
+using ::wolfgang::detail::WorkspaceSnapshot;
+using ::wolfgang::detail::WorkspaceTimingMode;
+using ::wolfgang::detail::workspace_timing_mode_name;
 
 class CudaWorkspace {
 public:
