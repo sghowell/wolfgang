@@ -72,3 +72,31 @@ noted below.
   tile sizes can change with the toolkit. Operators between the fused limit
   and roughly 64K terms still cost 100-120 us, set by sort latency and launch
   count.
+
+## Slice 2: HIP pipeline and per-thread block cache
+
+Branch `codex/hip-pipeline`. Benchmarked builds: `9af4918` (pipeline only) and
+`4ca8655` (pipeline and cache), against main at `ad6f7a8`.
+
+- Scope: `src/hip/simplify_hip.hip.cpp`, `src/hip/pool_allocator.hip.{hpp,cpp}`,
+  `src/hip/pool_allocator_hooks.hpp`, the private
+  `_hip_thread_cache_status_for_testing` hook,
+  `tests/test_hip_thread_cache.py` (new), `--backend hip` in
+  `benchmarks/bench_cuda_simplify_paths.py`, `docs/architecture/rocm_backend.md`,
+  `CHANGELOG.md`, the report
+  `docs/benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md` and its data,
+  the plan, the evidence index and `AGENTS.md`.
+- Measured in two steps. The pipeline alone made HIP simplify 1.83x faster at
+  4,096 terms but 0.73-0.99x at 50,000 terms, from the cost of freeing its
+  multi-megabyte scratch; the per-thread block cache was added for that and
+  measured as a third build.
+- Tests first: the four cache tests were written before the cache. As a
+  negative control, a build with `kThreadCacheLimitBytes = 0` fails the reuse
+  and thread-exit tests (the other two check that nothing is retained, which
+  holds trivially).
+- Validation: MI300X, `4ca8655`:
+  `WOLFGANG_VALIDATE_HIP=1 python scripts/validate.py --profile core` passed
+  (945 tests in the HIP run); the pipeline, parity, small-simplify, pool and
+  cache suites passed (251 passed). The CPU-only smoke benchmark inside
+  validation reports `correctness_passed: false` for its HIP case because that
+  build has no HIP; earlier MI300X validation logs show the same.

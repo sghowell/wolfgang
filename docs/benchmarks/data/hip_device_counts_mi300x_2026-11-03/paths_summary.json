@@ -1,0 +1,3455 @@
+{
+  "generic_rows": [
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2800010154023767e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9109003662597388e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011891100439243019,
+        "hip_generic_serial_kernel": 2.9335998988244683e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2419986887834966e-06,
+        "hip_generic_parallel_reduce_by_key": 2.914400101872161e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011870799789903685,
+        "hip_generic_serial_kernel": 2.9052003810647875e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.608002877328545e-06,
+        "hip_generic_parallel_reduce_by_key": 3.144999936921522e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011441399692557752,
+        "hip_generic_serial_kernel": 3.159499465255067e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.171001587063074e-06,
+        "hip_generic_parallel_reduce_by_key": 4.384500061860308e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001348450023215264,
+        "hip_generic_serial_kernel": 4.389300011098385e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00045476599916582927,
+        "hip_generic_parallel_reduce_by_key": 0.0002411539971944876,
+        "hip_generic_parallel_transfer_inclusive": 0.000344312000379432,
+        "hip_generic_serial_kernel": 0.005963488001725636
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000425160993472673,
+        "hip_generic_parallel_reduce_by_key": 0.00035663599555846304,
+        "hip_generic_parallel_transfer_inclusive": 0.0004885340022156015,
+        "hip_generic_serial_kernel": 0.004713583002740052
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010127784000360407,
+        "hip_generic_parallel_reduce_by_key": 0.00033611300023039803,
+        "hip_generic_parallel_transfer_inclusive": 0.0007517430058214813,
+        "hip_generic_serial_kernel": 0.09997796899551759
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00997296599962283,
+        "hip_generic_parallel_reduce_by_key": 0.00041693599632708356,
+        "hip_generic_parallel_transfer_inclusive": 0.000637139004538767,
+        "hip_generic_serial_kernel": 0.07534362700243946
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.209999027196318e-06,
+        "hip_generic_parallel_reduce_by_key": 2.858199877664447e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001088619974325411,
+        "hip_generic_serial_kernel": 2.8422000468708575e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.296000846195966e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8741997084580362e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011013699986506253,
+        "hip_generic_serial_kernel": 2.874500205507502e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.413000275846571e-06,
+        "hip_generic_parallel_reduce_by_key": 3.3814998460002244e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011674500274239108,
+        "hip_generic_serial_kernel": 3.389899939065799e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.513997843489051e-06,
+        "hip_generic_parallel_reduce_by_key": 5.130699719302356e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013512800069293007,
+        "hip_generic_serial_kernel": 5.1176000852137804e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000496792999911122,
+        "hip_generic_parallel_reduce_by_key": 0.0002547010008129291,
+        "hip_generic_parallel_transfer_inclusive": 0.0003646500044851564,
+        "hip_generic_serial_kernel": 0.007056529000692535
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005123720038682222,
+        "hip_generic_parallel_reduce_by_key": 0.0003874419999192469,
+        "hip_generic_parallel_transfer_inclusive": 0.0005317809991538525,
+        "hip_generic_serial_kernel": 0.005695320993254427
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010834626998985186,
+        "hip_generic_parallel_reduce_by_key": 0.00036848099989583716,
+        "hip_generic_parallel_transfer_inclusive": 0.0012356910010566935,
+        "hip_generic_serial_kernel": 0.12049352900066879
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.011034945004212204,
+        "hip_generic_parallel_reduce_by_key": 0.0004758439972647466,
+        "hip_generic_parallel_transfer_inclusive": 0.0008581119982409291,
+        "hip_generic_serial_kernel": 0.09405665799567942
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4510005712509155e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8637994546443224e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010896399908233434,
+        "hip_generic_serial_kernel": 2.8923001082148403e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.519998477306217e-06,
+        "hip_generic_parallel_reduce_by_key": 2.879800013033673e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010883899813052267,
+        "hip_generic_serial_kernel": 2.874300116673112e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.6494996089022607e-05,
+        "hip_generic_parallel_reduce_by_key": 0.000176242996531073,
+        "hip_generic_parallel_transfer_inclusive": 0.00027270599821349606,
+        "hip_generic_serial_kernel": 0.0007615459981025197
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.8747996364254504e-05,
+        "hip_generic_parallel_reduce_by_key": 0.0005301779965520836,
+        "hip_generic_parallel_transfer_inclusive": 0.0006316240032901987,
+        "hip_generic_serial_kernel": 0.0009338149975519627
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007546559936599806,
+        "hip_generic_parallel_reduce_by_key": 0.00026033600443042815,
+        "hip_generic_parallel_transfer_inclusive": 0.0004322609966038726,
+        "hip_generic_serial_kernel": 0.020324717996118125
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0008299010005430318,
+        "hip_generic_parallel_reduce_by_key": 0.0008936200028983876,
+        "hip_generic_parallel_transfer_inclusive": 0.001100884001061786,
+        "hip_generic_serial_kernel": 0.01737620900530601
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01650488500308711,
+        "hip_generic_parallel_reduce_by_key": 0.000424275996920187,
+        "hip_generic_parallel_transfer_inclusive": 0.0022067039972171187,
+        "hip_generic_serial_kernel": 0.3392224380004336
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.017816147999837995,
+        "hip_generic_parallel_reduce_by_key": 0.0009135229993262328,
+        "hip_generic_parallel_transfer_inclusive": 0.002072848001262173,
+        "hip_generic_serial_kernel": 0.28727784500370035
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3230019249022007e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9376002203207463e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001200460028485395,
+        "hip_generic_serial_kernel": 2.9495000489987433e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2599994079209864e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9624003218486905e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012111400428693742,
+        "hip_generic_serial_kernel": 2.941399725386873e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.560003384947777e-06,
+        "hip_generic_parallel_reduce_by_key": 3.1807001505512744e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011580700083868578,
+        "hip_generic_serial_kernel": 3.170200216118246e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.5019994508475065e-06,
+        "hip_generic_parallel_reduce_by_key": 4.441700002644211e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013759099965682253,
+        "hip_generic_serial_kernel": 4.469800478545949e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004639670005417429,
+        "hip_generic_parallel_reduce_by_key": 0.0002440370008116588,
+        "hip_generic_parallel_transfer_inclusive": 0.0003462609965936281,
+        "hip_generic_serial_kernel": 0.005927974998485297
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004690889982157387,
+        "hip_generic_parallel_reduce_by_key": 0.00034878699807450175,
+        "hip_generic_parallel_transfer_inclusive": 0.0004889810006716289,
+        "hip_generic_serial_kernel": 0.004719752003438771
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01032461100112414,
+        "hip_generic_parallel_reduce_by_key": 0.0003329110040795058,
+        "hip_generic_parallel_transfer_inclusive": 0.0007515410034102388,
+        "hip_generic_serial_kernel": 0.09996786199917551
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010402516003523488,
+        "hip_generic_parallel_reduce_by_key": 0.00044164200517116114,
+        "hip_generic_parallel_transfer_inclusive": 0.0006297560030361637,
+        "hip_generic_serial_kernel": 0.07433536100143101
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2130039976909757e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8883005143143237e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001092429956770502,
+        "hip_generic_serial_kernel": 2.8740003472194076e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.1750016710720956e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8398993890732527e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010728600318543613,
+        "hip_generic_serial_kernel": 2.8623995603993535e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.267000910360366e-06,
+        "hip_generic_parallel_reduce_by_key": 3.423100133659318e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011861199891427532,
+        "hip_generic_serial_kernel": 3.4211996535304934e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.5400021160021424e-06,
+        "hip_generic_parallel_reduce_by_key": 5.208199581829831e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013638500240631402,
+        "hip_generic_serial_kernel": 5.208500078879297e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005035419962950982,
+        "hip_generic_parallel_reduce_by_key": 0.0002489299949957058,
+        "hip_generic_parallel_transfer_inclusive": 0.00035990400647278875,
+        "hip_generic_serial_kernel": 0.007131887003197335
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005100120033603162,
+        "hip_generic_parallel_reduce_by_key": 0.0003902480020769872,
+        "hip_generic_parallel_transfer_inclusive": 0.0005327480030246079,
+        "hip_generic_serial_kernel": 0.005626468002446927
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.011080079006205779,
+        "hip_generic_parallel_reduce_by_key": 0.0003975420040660538,
+        "hip_generic_parallel_transfer_inclusive": 0.0013092130029690452,
+        "hip_generic_serial_kernel": 0.12036322699714219
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.011074554997321684,
+        "hip_generic_parallel_reduce_by_key": 0.0004535219995887019,
+        "hip_generic_parallel_transfer_inclusive": 0.0009156320011243224,
+        "hip_generic_serial_kernel": 0.09407785900111776
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3919998309575021e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9041999368928373e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011225599882891402,
+        "hip_generic_serial_kernel": 2.9270995582919568e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3519966159947217e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9039998480584472e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010935399768641219,
+        "hip_generic_serial_kernel": 2.898700040532276e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.5994002751540393e-05,
+        "hip_generic_parallel_reduce_by_key": 0.00017927100270753726,
+        "hip_generic_parallel_transfer_inclusive": 0.00027449300250736997,
+        "hip_generic_serial_kernel": 0.0007584430059068836
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.7003003449644893e-05,
+        "hip_generic_parallel_reduce_by_key": 0.0005231070026638918,
+        "hip_generic_parallel_transfer_inclusive": 0.0006193629960762337,
+        "hip_generic_serial_kernel": 0.0009306909996666946
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000753873995563481,
+        "hip_generic_parallel_reduce_by_key": 0.00026113000058103353,
+        "hip_generic_parallel_transfer_inclusive": 0.00044278900168137625,
+        "hip_generic_serial_kernel": 0.020454678000533022
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000818382999568712,
+        "hip_generic_parallel_reduce_by_key": 0.000898758000403177,
+        "hip_generic_parallel_transfer_inclusive": 0.0010832209954969585,
+        "hip_generic_serial_kernel": 0.017415292997611687
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01748548999603372,
+        "hip_generic_parallel_reduce_by_key": 0.0004202540003461763,
+        "hip_generic_parallel_transfer_inclusive": 0.0023508390004280955,
+        "hip_generic_serial_kernel": 0.3435477599996375
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.018927475000964478,
+        "hip_generic_parallel_reduce_by_key": 0.0009139269968727604,
+        "hip_generic_parallel_transfer_inclusive": 0.0020764200016856194,
+        "hip_generic_serial_kernel": 0.28384406200348167
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.348998921457678e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9941998946014792e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012224100646562874,
+        "hip_generic_serial_kernel": 3.0472998332697898e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2699965736828744e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9771996196359396e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012025100295431912,
+        "hip_generic_serial_kernel": 2.9887996788602322e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.868001946713775e-06,
+        "hip_generic_parallel_reduce_by_key": 3.1869996746536344e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011661499593174085,
+        "hip_generic_serial_kernel": 3.1483003112953156e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.646994734182954e-06,
+        "hip_generic_parallel_reduce_by_key": 4.410900146467611e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013722899893764406,
+        "hip_generic_serial_kernel": 4.416300362208858e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00047417800669791177,
+        "hip_generic_parallel_reduce_by_key": 0.0002464319986756891,
+        "hip_generic_parallel_transfer_inclusive": 0.0003523579944157973,
+        "hip_generic_serial_kernel": 0.005900641001062468
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00046752200432820246,
+        "hip_generic_parallel_reduce_by_key": 0.00035524799750419334,
+        "hip_generic_parallel_transfer_inclusive": 0.0005010899985791184,
+        "hip_generic_serial_kernel": 0.004724723003164399
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010300621994247194,
+        "hip_generic_parallel_reduce_by_key": 0.000331189003190957,
+        "hip_generic_parallel_transfer_inclusive": 0.0007584679988212883,
+        "hip_generic_serial_kernel": 0.09942859700095141
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.009977022004022729,
+        "hip_generic_parallel_reduce_by_key": 0.0004312189994379878,
+        "hip_generic_parallel_transfer_inclusive": 0.000637340999674052,
+        "hip_generic_serial_kernel": 0.07659574499848532
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2719974620267749e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9239003197290003e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011062699923058972,
+        "hip_generic_serial_kernel": 2.9337999876588583e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.291002263315022e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9144997824914753e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011070899927290156,
+        "hip_generic_serial_kernel": 2.910799958044663e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.697999535594136e-06,
+        "hip_generic_parallel_reduce_by_key": 3.462099994067103e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012224700185470283,
+        "hip_generic_serial_kernel": 3.4286000300198793e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.750000804662704e-06,
+        "hip_generic_parallel_reduce_by_key": 5.17230000696145e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013759300054516643,
+        "hip_generic_serial_kernel": 5.168399366084486e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004951670052832924,
+        "hip_generic_parallel_reduce_by_key": 0.00024942799791460857,
+        "hip_generic_parallel_transfer_inclusive": 0.00035806899541057646,
+        "hip_generic_serial_kernel": 0.007081724994350225
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005107379984110594,
+        "hip_generic_parallel_reduce_by_key": 0.00039923500298755243,
+        "hip_generic_parallel_transfer_inclusive": 0.0005365909964893945,
+        "hip_generic_serial_kernel": 0.005636292000417598
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.011077572999056429,
+        "hip_generic_parallel_reduce_by_key": 0.00040433499816572294,
+        "hip_generic_parallel_transfer_inclusive": 0.0010126600027433597,
+        "hip_generic_serial_kernel": 0.1198400919965934
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01061192000634037,
+        "hip_generic_parallel_reduce_by_key": 0.0004935359975206666,
+        "hip_generic_parallel_transfer_inclusive": 0.0008738489996176213,
+        "hip_generic_serial_kernel": 0.09394775400141953
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3259996194392443e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9223003366496414e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011083499703090638,
+        "hip_generic_serial_kernel": 2.919400139944628e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4800025383010507e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9312002880033106e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011136700049974024,
+        "hip_generic_serial_kernel": 2.9369999538175762e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.6147998394444585e-05,
+        "hip_generic_parallel_reduce_by_key": 0.0001797619988792576,
+        "hip_generic_parallel_transfer_inclusive": 0.00027879800472874194,
+        "hip_generic_serial_kernel": 0.0007658969989279285
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.812000118661672e-05,
+        "hip_generic_parallel_reduce_by_key": 0.0005248739980743267,
+        "hip_generic_parallel_transfer_inclusive": 0.0006246769989957102,
+        "hip_generic_serial_kernel": 0.0009296579955844209
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007538949939771555,
+        "hip_generic_parallel_reduce_by_key": 0.0002635589989949949,
+        "hip_generic_parallel_transfer_inclusive": 0.0004445449958438985,
+        "hip_generic_serial_kernel": 0.020570515996951144
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0008317020037793554,
+        "hip_generic_parallel_reduce_by_key": 0.0008861140013323165,
+        "hip_generic_parallel_transfer_inclusive": 0.0010833929991349578,
+        "hip_generic_serial_kernel": 0.017218549000972416
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.017528878997836728,
+        "hip_generic_parallel_reduce_by_key": 0.0004270429999451153,
+        "hip_generic_parallel_transfer_inclusive": 0.002289608004502952,
+        "hip_generic_serial_kernel": 0.3365433500002837
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_base_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.018649648998689372,
+        "hip_generic_parallel_reduce_by_key": 0.0009193669975502416,
+        "hip_generic_parallel_transfer_inclusive": 0.0020733190031023696,
+        "hip_generic_serial_kernel": 0.2856251559933298
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2509990483522415e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9263006581459194e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011956900561926886,
+        "hip_generic_serial_kernel": 2.9072005418129265e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.334003172814846e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9467999411281198e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012189099652459845,
+        "hip_generic_serial_kernel": 2.9356000595726073e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.570000550709665e-06,
+        "hip_generic_parallel_reduce_by_key": 3.151499549858272e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011706200166372582,
+        "hip_generic_serial_kernel": 3.170000127283856e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.337002560030669e-06,
+        "hip_generic_parallel_reduce_by_key": 4.416300362208858e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013666500308318064,
+        "hip_generic_serial_kernel": 4.4220003474038094e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00045037100062472746,
+        "hip_generic_parallel_reduce_by_key": 0.00014457399811362848,
+        "hip_generic_parallel_transfer_inclusive": 0.0002499649999663234,
+        "hip_generic_serial_kernel": 0.00594207600079244
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000459351998870261,
+        "hip_generic_parallel_reduce_by_key": 0.00023419100034516305,
+        "hip_generic_parallel_transfer_inclusive": 0.00037312500353436917,
+        "hip_generic_serial_kernel": 0.004718717995274346
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010232485998130869,
+        "hip_generic_parallel_reduce_by_key": 0.0002261420013383031,
+        "hip_generic_parallel_transfer_inclusive": 0.0006573310020030476,
+        "hip_generic_serial_kernel": 0.0980061480004224
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0101976649966673,
+        "hip_generic_parallel_reduce_by_key": 0.00028782500157831237,
+        "hip_generic_parallel_transfer_inclusive": 0.0005075189983472228,
+        "hip_generic_serial_kernel": 0.07523518500238424
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.1420052032917738e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8947004466317594e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010847700468730181,
+        "hip_generic_serial_kernel": 2.8725997253786772e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2710006558336318e-06,
+        "hip_generic_parallel_reduce_by_key": 2.952499926323071e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011004600673913956,
+        "hip_generic_serial_kernel": 2.9463997634593397e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.324000423774123e-06,
+        "hip_generic_parallel_reduce_by_key": 3.402600123081356e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011706399527611211,
+        "hip_generic_serial_kernel": 3.398399712750688e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.622998625971377e-06,
+        "hip_generic_parallel_reduce_by_key": 5.1367998821660876e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013413900160230696,
+        "hip_generic_serial_kernel": 5.1492002967279404e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00047216199891408905,
+        "hip_generic_parallel_reduce_by_key": 0.0001458670012652874,
+        "hip_generic_parallel_transfer_inclusive": 0.00025603899848647416,
+        "hip_generic_serial_kernel": 0.00701283999660518
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000503470997500699,
+        "hip_generic_parallel_reduce_by_key": 0.0002706400046008639,
+        "hip_generic_parallel_transfer_inclusive": 0.0004082369996467605,
+        "hip_generic_serial_kernel": 0.005654782995407004
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010997099998348858,
+        "hip_generic_parallel_reduce_by_key": 0.0002628090005600825,
+        "hip_generic_parallel_transfer_inclusive": 0.00115541199920699,
+        "hip_generic_serial_kernel": 0.12035118199855788
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01097023299371358,
+        "hip_generic_parallel_reduce_by_key": 0.0003440059954300523,
+        "hip_generic_parallel_transfer_inclusive": 0.0006534519998240285,
+        "hip_generic_serial_kernel": 0.09379109599831281
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.381995389238e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9340000764932483e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010990900045726448,
+        "hip_generic_serial_kernel": 2.9861002985853702e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4189936337061226e-06,
+        "hip_generic_parallel_reduce_by_key": 3.0081006116233766e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011504099529702216,
+        "hip_generic_serial_kernel": 2.9987000743858516e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.6168000001925975e-05,
+        "hip_generic_parallel_reduce_by_key": 8.267399971373379e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001775049968273379,
+        "hip_generic_serial_kernel": 0.0007278159973793663
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.5497003914788365e-05,
+        "hip_generic_parallel_reduce_by_key": 0.0003854769965982996,
+        "hip_generic_parallel_transfer_inclusive": 0.0004787249999935739,
+        "hip_generic_serial_kernel": 0.0009063120014616288
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007272549992194399,
+        "hip_generic_parallel_reduce_by_key": 0.00016131599841173738,
+        "hip_generic_parallel_transfer_inclusive": 0.0003386770040378906,
+        "hip_generic_serial_kernel": 0.02042240299488185
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0008201439995900728,
+        "hip_generic_parallel_reduce_by_key": 0.0007058449991745874,
+        "hip_generic_parallel_transfer_inclusive": 0.0008990920032374561,
+        "hip_generic_serial_kernel": 0.017180246002681088
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.017815618004533462,
+        "hip_generic_parallel_reduce_by_key": 0.00030275500466814265,
+        "hip_generic_parallel_transfer_inclusive": 0.002106027997797355,
+        "hip_generic_serial_kernel": 0.338917084998684
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.019021615000383463,
+        "hip_generic_parallel_reduce_by_key": 0.0007133420003810897,
+        "hip_generic_parallel_transfer_inclusive": 0.0018738700018730015,
+        "hip_generic_serial_kernel": 0.2841624110005796
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2599994079209864e-06,
+        "hip_generic_parallel_reduce_by_key": 3.012899833265692e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012304399569984525,
+        "hip_generic_serial_kernel": 3.0119997973088175e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3120006769895554e-06,
+        "hip_generic_parallel_reduce_by_key": 3.0252995202317834e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001210469999932684,
+        "hip_generic_serial_kernel": 3.0180002795532346e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.75600313115865e-06,
+        "hip_generic_parallel_reduce_by_key": 3.200100036337972e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011929400352528319,
+        "hip_generic_serial_kernel": 3.1998999475035816e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.658003258053213e-06,
+        "hip_generic_parallel_reduce_by_key": 4.4188993342686445e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013633699563797563,
+        "hip_generic_serial_kernel": 4.4526997953653336e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00048230000538751483,
+        "hip_generic_parallel_reduce_by_key": 0.00015239400090649724,
+        "hip_generic_parallel_transfer_inclusive": 0.0002481240007909946,
+        "hip_generic_serial_kernel": 0.005969299003481865
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004385579959489405,
+        "hip_generic_parallel_reduce_by_key": 0.00023352899734163657,
+        "hip_generic_parallel_transfer_inclusive": 0.0003695390041684732,
+        "hip_generic_serial_kernel": 0.004700103003415279
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00932613099575974,
+        "hip_generic_parallel_reduce_by_key": 0.0002213990010204725,
+        "hip_generic_parallel_transfer_inclusive": 0.0006323859997792169,
+        "hip_generic_serial_kernel": 0.09930048399837688
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.009799075000046287,
+        "hip_generic_parallel_reduce_by_key": 0.0003029750005225651,
+        "hip_generic_parallel_transfer_inclusive": 0.0005197149948799051,
+        "hip_generic_serial_kernel": 0.07527734299947042
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.26299710245803e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9821996577084064e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011169399658683687,
+        "hip_generic_serial_kernel": 2.9522001568693668e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2460004654712975e-06,
+        "hip_generic_parallel_reduce_by_key": 2.986599429277703e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011122300202259794,
+        "hip_generic_serial_kernel": 2.9318005545064807e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.063994416967034e-06,
+        "hip_generic_parallel_reduce_by_key": 3.4445001801941544e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012000000424450263,
+        "hip_generic_serial_kernel": 3.404600283829495e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.575995939783752e-06,
+        "hip_generic_parallel_reduce_by_key": 5.154700193088502e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013476300227921456,
+        "hip_generic_serial_kernel": 5.160299770068377e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00043181599903618917,
+        "hip_generic_parallel_reduce_by_key": 0.00014657099382020533,
+        "hip_generic_parallel_transfer_inclusive": 0.00025473800633335486,
+        "hip_generic_serial_kernel": 0.007078520997310989
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000486795004690066,
+        "hip_generic_parallel_reduce_by_key": 0.0002681010009837337,
+        "hip_generic_parallel_transfer_inclusive": 0.00040753200300969183,
+        "hip_generic_serial_kernel": 0.005641772993840277
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010874824001803063,
+        "hip_generic_parallel_reduce_by_key": 0.0002765459939837456,
+        "hip_generic_parallel_transfer_inclusive": 0.0011754949955502525,
+        "hip_generic_serial_kernel": 0.11968415199953597
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010784980993776117,
+        "hip_generic_parallel_reduce_by_key": 0.0003284510021330789,
+        "hip_generic_parallel_transfer_inclusive": 0.0007988190045580268,
+        "hip_generic_serial_kernel": 0.09357920899492456
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.505999534856528e-06,
+        "hip_generic_parallel_reduce_by_key": 3.0369003070518374e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011276399891357869,
+        "hip_generic_serial_kernel": 3.01730033243075e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.5450059436261654e-06,
+        "hip_generic_parallel_reduce_by_key": 3.0435003282036632e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011334900045767426,
+        "hip_generic_serial_kernel": 3.005899634445086e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.574199995957315e-05,
+        "hip_generic_parallel_reduce_by_key": 8.265200449386612e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00017656999989412725,
+        "hip_generic_serial_kernel": 0.0007337799979723059
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.7219004803337157e-05,
+        "hip_generic_parallel_reduce_by_key": 0.0003825530002359301,
+        "hip_generic_parallel_transfer_inclusive": 0.000482379000459332,
+        "hip_generic_serial_kernel": 0.0009049270011018962
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007644170036655851,
+        "hip_generic_parallel_reduce_by_key": 0.00015495599654968828,
+        "hip_generic_parallel_transfer_inclusive": 0.0003391150021343492,
+        "hip_generic_serial_kernel": 0.020393409999087453
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0008514459987054579,
+        "hip_generic_parallel_reduce_by_key": 0.0007079889983288012,
+        "hip_generic_parallel_transfer_inclusive": 0.0008883699993020855,
+        "hip_generic_serial_kernel": 0.017192849998536985
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.016918525005166885,
+        "hip_generic_parallel_reduce_by_key": 0.00027847800083691254,
+        "hip_generic_parallel_transfer_inclusive": 0.0020636330009438097,
+        "hip_generic_serial_kernel": 0.33917792499414645
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01903617099742405,
+        "hip_generic_parallel_reduce_by_key": 0.0007052159999147989,
+        "hip_generic_parallel_transfer_inclusive": 0.0018844790029106662,
+        "hip_generic_serial_kernel": 0.2868814640023629
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2950040400028229e-06,
+        "hip_generic_parallel_reduce_by_key": 2.970200148411095e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011983299918938428,
+        "hip_generic_serial_kernel": 3.026199556188658e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2920063454657793e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9549999453593045e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001195920049212873,
+        "hip_generic_serial_kernel": 2.9390001145657152e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.001995982136577e-06,
+        "hip_generic_parallel_reduce_by_key": 3.17899975925684e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001163360066129826,
+        "hip_generic_serial_kernel": 3.169500268995762e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.335998477879912e-06,
+        "hip_generic_parallel_reduce_by_key": 4.40479998360388e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001369889941997826,
+        "hip_generic_serial_kernel": 4.41209995187819e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00046417699923040345,
+        "hip_generic_parallel_reduce_by_key": 0.00014358000044012442,
+        "hip_generic_parallel_transfer_inclusive": 0.0002447200022288598,
+        "hip_generic_serial_kernel": 0.005998875996738207
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004867210009251721,
+        "hip_generic_parallel_reduce_by_key": 0.0002353349991608411,
+        "hip_generic_parallel_transfer_inclusive": 0.0003773179996642284,
+        "hip_generic_serial_kernel": 0.004693445000157226
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010190766006417107,
+        "hip_generic_parallel_reduce_by_key": 0.00022056500165490434,
+        "hip_generic_parallel_transfer_inclusive": 0.0006687850036541931,
+        "hip_generic_serial_kernel": 0.10018265300459461
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01049330899695633,
+        "hip_generic_parallel_reduce_by_key": 0.00030074499954935163,
+        "hip_generic_parallel_transfer_inclusive": 0.0005179390063858591,
+        "hip_generic_serial_kernel": 0.07501184799912153
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.148997398559004e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8623995603993535e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010882999777095392,
+        "hip_generic_serial_kernel": 2.8762995498254895e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.1119991540908813e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8629001462832093e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010747499618446454,
+        "hip_generic_serial_kernel": 2.8602997190319e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.095004548318684e-06,
+        "hip_generic_parallel_reduce_by_key": 3.4636999771464616e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012217600306030363,
+        "hip_generic_serial_kernel": 3.4340999263804406e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.136004569474608e-06,
+        "hip_generic_parallel_reduce_by_key": 5.1212002290412784e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001342370014754124,
+        "hip_generic_serial_kernel": 5.126000178279355e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004642469939426519,
+        "hip_generic_parallel_reduce_by_key": 0.00014610300422646105,
+        "hip_generic_parallel_transfer_inclusive": 0.00026014800096163526,
+        "hip_generic_serial_kernel": 0.007005857005424332
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005231579998508096,
+        "hip_generic_parallel_reduce_by_key": 0.0002712009954848327,
+        "hip_generic_parallel_transfer_inclusive": 0.0004070450013387017,
+        "hip_generic_serial_kernel": 0.005631555999570992
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010857034001674037,
+        "hip_generic_parallel_reduce_by_key": 0.00028040500183124095,
+        "hip_generic_parallel_transfer_inclusive": 0.0009043420068337582,
+        "hip_generic_serial_kernel": 0.118960829997377
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.011082591001468245,
+        "hip_generic_parallel_reduce_by_key": 0.0003451160009717569,
+        "hip_generic_parallel_transfer_inclusive": 0.0007848919995012693,
+        "hip_generic_serial_kernel": 0.0944889320016955
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.410000550094992e-06,
+        "hip_generic_parallel_reduce_by_key": 3.019100404344499e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011654899572022259,
+        "hip_generic_serial_kernel": 3.0201998015400022e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3450044207274914e-06,
+        "hip_generic_parallel_reduce_by_key": 2.933700307039544e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011212300159968436,
+        "hip_generic_serial_kernel": 2.9483999242074788e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.584699930390343e-05,
+        "hip_generic_parallel_reduce_by_key": 8.327700197696686e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001767149951774627,
+        "hip_generic_serial_kernel": 0.0007245029992191121
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.7700003809295595e-05,
+        "hip_generic_parallel_reduce_by_key": 0.0003852319932775572,
+        "hip_generic_parallel_transfer_inclusive": 0.00048386699927505106,
+        "hip_generic_serial_kernel": 0.0009041509983944707
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007710909994784743,
+        "hip_generic_parallel_reduce_by_key": 0.00015873800293775275,
+        "hip_generic_parallel_transfer_inclusive": 0.0003351519990246743,
+        "hip_generic_serial_kernel": 0.020414325001183897
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0008340770000359043,
+        "hip_generic_parallel_reduce_by_key": 0.0006979350000619888,
+        "hip_generic_parallel_transfer_inclusive": 0.000888545997440815,
+        "hip_generic_serial_kernel": 0.017155999994429294
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.017609998998523224,
+        "hip_generic_parallel_reduce_by_key": 0.0002843949987436645,
+        "hip_generic_parallel_transfer_inclusive": 0.002100643003359437,
+        "hip_generic_serial_kernel": 0.33718548199976794
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_cache_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.018787424996844493,
+        "hip_generic_parallel_reduce_by_key": 0.0007014020011411048,
+        "hip_generic_parallel_transfer_inclusive": 0.0018783719933708198,
+        "hip_generic_serial_kernel": 0.28564028999971924
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2759992387145758e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9984003049321473e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001205930020660162,
+        "hip_generic_serial_kernel": 2.988499909406528e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3710014172829688e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9910996090620756e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012094900012016296,
+        "hip_generic_serial_kernel": 3.0144001357257366e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.023998477961868e-06,
+        "hip_generic_parallel_reduce_by_key": 3.2195006497204304e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011772399739129469,
+        "hip_generic_serial_kernel": 3.216200275346637e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.103997293394059e-06,
+        "hip_generic_parallel_reduce_by_key": 4.475299647310749e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001371079997625202,
+        "hip_generic_serial_kernel": 4.4435997551772743e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004562699978123419,
+        "hip_generic_parallel_reduce_by_key": 0.00015939099830575287,
+        "hip_generic_parallel_transfer_inclusive": 0.00026966699806507677,
+        "hip_generic_serial_kernel": 0.005979178997222334
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00046868500066921115,
+        "hip_generic_parallel_reduce_by_key": 0.00025235499924747273,
+        "hip_generic_parallel_transfer_inclusive": 0.00039185599598567933,
+        "hip_generic_serial_kernel": 0.004719980999652762
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.009696223998616915,
+        "hip_generic_parallel_reduce_by_key": 0.0003818240002146922,
+        "hip_generic_parallel_transfer_inclusive": 0.0008065379952313378,
+        "hip_generic_serial_kernel": 0.10007480000058422
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01005951299885055,
+        "hip_generic_parallel_reduce_by_key": 0.0004587700022966601,
+        "hip_generic_parallel_transfer_inclusive": 0.0007945819961605594,
+        "hip_generic_serial_kernel": 0.07591614199918695
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.1230004020035267e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8879992896690965e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010899299377342686,
+        "hip_generic_serial_kernel": 2.8962000214960426e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.077001797966659e-06,
+        "hip_generic_parallel_reduce_by_key": 2.887000300688669e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010757899872260168,
+        "hip_generic_serial_kernel": 2.87850052700378e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.618997187819332e-06,
+        "hip_generic_parallel_reduce_by_key": 3.4761003917083144e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012388199684210122,
+        "hip_generic_serial_kernel": 3.4419004805386066e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.179995009209961e-06,
+        "hip_generic_parallel_reduce_by_key": 5.17919979756698e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013689800107385963,
+        "hip_generic_serial_kernel": 5.174900434212759e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00048616400454193354,
+        "hip_generic_parallel_reduce_by_key": 0.0001611360057722777,
+        "hip_generic_parallel_transfer_inclusive": 0.00027333000616636127,
+        "hip_generic_serial_kernel": 0.006993601004069205
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004735649999929592,
+        "hip_generic_parallel_reduce_by_key": 0.0002873999983421527,
+        "hip_generic_parallel_transfer_inclusive": 0.00042249900434399024,
+        "hip_generic_serial_kernel": 0.005650428996887058
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.011003341001924127,
+        "hip_generic_parallel_reduce_by_key": 0.00039885699516162276,
+        "hip_generic_parallel_transfer_inclusive": 0.0012792699999408796,
+        "hip_generic_serial_kernel": 0.1212256549988524
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01065166400076123,
+        "hip_generic_parallel_reduce_by_key": 0.0004730159998871386,
+        "hip_generic_parallel_transfer_inclusive": 0.0009808419999899343,
+        "hip_generic_serial_kernel": 0.09444899299705867
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3320022844709456e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9604001611005515e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011054700007662177,
+        "hip_generic_serial_kernel": 2.9167000320740044e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2929958757013083e-06,
+        "hip_generic_parallel_reduce_by_key": 2.935300290118903e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011070799519075081,
+        "hip_generic_serial_kernel": 2.9445000109262764e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.5821002307347953e-05,
+        "hip_generic_parallel_reduce_by_key": 9.698399662738666e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00019085899839410558,
+        "hip_generic_serial_kernel": 0.0007632930064573884
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.6546000551898032e-05,
+        "hip_generic_parallel_reduce_by_key": 0.00039974999526748434,
+        "hip_generic_parallel_transfer_inclusive": 0.0004987260035704821,
+        "hip_generic_serial_kernel": 0.000934556002903264
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007631970001966693,
+        "hip_generic_parallel_reduce_by_key": 0.00017579600535100326,
+        "hip_generic_parallel_transfer_inclusive": 0.00035381800262257457,
+        "hip_generic_serial_kernel": 0.02018380100344075
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000804075003543403,
+        "hip_generic_parallel_reduce_by_key": 0.0007217279999167658,
+        "hip_generic_parallel_transfer_inclusive": 0.0009174450024147518,
+        "hip_generic_serial_kernel": 0.01722812700609211
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0172630089946324,
+        "hip_generic_parallel_reduce_by_key": 0.00041926799895009026,
+        "hip_generic_parallel_transfer_inclusive": 0.002136303999577649,
+        "hip_generic_serial_kernel": 0.34102848100155825
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_1.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01874351299920818,
+        "hip_generic_parallel_reduce_by_key": 0.0008506539961672388,
+        "hip_generic_parallel_transfer_inclusive": 0.0020308210005168803,
+        "hip_generic_serial_kernel": 0.2833654329951969
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2979944585822523e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9767994419671595e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012131800031056628,
+        "hip_generic_serial_kernel": 2.9340997571125627e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2829987099394202e-06,
+        "hip_generic_parallel_reduce_by_key": 2.934999793069437e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011896900105057284,
+        "hip_generic_serial_kernel": 2.948800101876259e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.699003279209137e-06,
+        "hip_generic_parallel_reduce_by_key": 3.176300378981978e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011506900045787916,
+        "hip_generic_serial_kernel": 3.150699922116473e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.262001988943666e-06,
+        "hip_generic_parallel_reduce_by_key": 4.433099820744246e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001362650000373833,
+        "hip_generic_serial_kernel": 4.43740063928999e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000465413999336306,
+        "hip_generic_parallel_reduce_by_key": 0.00016366699856007472,
+        "hip_generic_parallel_transfer_inclusive": 0.00025922799977706745,
+        "hip_generic_serial_kernel": 0.005981622998660896
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00046598799963248894,
+        "hip_generic_parallel_reduce_by_key": 0.0002481280025676824,
+        "hip_generic_parallel_transfer_inclusive": 0.0003818850018433295,
+        "hip_generic_serial_kernel": 0.004729994005174376
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010199831995123532,
+        "hip_generic_parallel_reduce_by_key": 0.00037241199606796727,
+        "hip_generic_parallel_transfer_inclusive": 0.0007963600000948645,
+        "hip_generic_serial_kernel": 0.09858814300241647
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010301615999196656,
+        "hip_generic_parallel_reduce_by_key": 0.00047029399866005406,
+        "hip_generic_parallel_transfer_inclusive": 0.00079368499427801,
+        "hip_generic_serial_kernel": 0.07535188499605283
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3300013961270452e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9333998099900782e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011075499787693843,
+        "hip_generic_serial_kernel": 2.9469003493431956e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2300006346777081e-06,
+        "hip_generic_parallel_reduce_by_key": 2.933300129370764e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010948099952656776,
+        "hip_generic_serial_kernel": 2.968300395878032e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.577000360470265e-06,
+        "hip_generic_parallel_reduce_by_key": 3.466800262685865e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011975999950664118,
+        "hip_generic_serial_kernel": 3.464800101937726e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.556998752988875e-06,
+        "hip_generic_parallel_reduce_by_key": 5.2267998398747295e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00013714799570152536,
+        "hip_generic_serial_kernel": 5.250299727777019e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004991530004190281,
+        "hip_generic_parallel_reduce_by_key": 0.00016296599642373621,
+        "hip_generic_parallel_transfer_inclusive": 0.0002772529987851158,
+        "hip_generic_serial_kernel": 0.007101008995960001
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004950639995513484,
+        "hip_generic_parallel_reduce_by_key": 0.000288226998236496,
+        "hip_generic_parallel_transfer_inclusive": 0.0004236860040691681,
+        "hip_generic_serial_kernel": 0.0056810960013535805
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010828531005245168,
+        "hip_generic_parallel_reduce_by_key": 0.00039242800266947597,
+        "hip_generic_parallel_transfer_inclusive": 0.0012671500007854775,
+        "hip_generic_serial_kernel": 0.12045204299647594
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010987264999130275,
+        "hip_generic_parallel_reduce_by_key": 0.00046628400014014915,
+        "hip_generic_parallel_transfer_inclusive": 0.0010101880034198985,
+        "hip_generic_serial_kernel": 0.0934952479947242
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3230019249022007e-06,
+        "hip_generic_parallel_reduce_by_key": 2.943599974969402e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011092000204371288,
+        "hip_generic_serial_kernel": 2.9024995455984026e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3280005077831447e-06,
+        "hip_generic_parallel_reduce_by_key": 2.8681999538093805e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010922799992840737,
+        "hip_generic_serial_kernel": 2.8886999643873423e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.4443998225033283e-05,
+        "hip_generic_parallel_reduce_by_key": 9.63689963100478e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00019033699936699122,
+        "hip_generic_serial_kernel": 0.0007609260064782575
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.7745995137374848e-05,
+        "hip_generic_parallel_reduce_by_key": 0.000398418000258971,
+        "hip_generic_parallel_transfer_inclusive": 0.0004995560011593625,
+        "hip_generic_serial_kernel": 0.0009331260007456876
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007588470034534112,
+        "hip_generic_parallel_reduce_by_key": 0.0001726709961076267,
+        "hip_generic_parallel_transfer_inclusive": 0.00034414699621265754,
+        "hip_generic_serial_kernel": 0.02026762300374685
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000740171002689749,
+        "hip_generic_parallel_reduce_by_key": 0.0007253610019688495,
+        "hip_generic_parallel_transfer_inclusive": 0.000894600001629442,
+        "hip_generic_serial_kernel": 0.01725469400116708
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01643196400254965,
+        "hip_generic_parallel_reduce_by_key": 0.00040609399729873985,
+        "hip_generic_parallel_transfer_inclusive": 0.0021593249985016882,
+        "hip_generic_serial_kernel": 0.3433619819988962
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_2.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.01787235200026771,
+        "hip_generic_parallel_reduce_by_key": 0.0008421540042036213,
+        "hip_generic_parallel_transfer_inclusive": 0.002022534994466696,
+        "hip_generic_serial_kernel": 0.28764506000152323
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2370001059025526e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9124996217433363e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00012106699432479218,
+        "hip_generic_serial_kernel": 2.9670998628716916e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2370001059025526e-06,
+        "hip_generic_parallel_reduce_by_key": 2.94700002996251e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011786100367316976,
+        "hip_generic_serial_kernel": 2.9540002287831157e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.557995220646262e-06,
+        "hip_generic_parallel_reduce_by_key": 3.173200093442574e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001157810038421303,
+        "hip_generic_serial_kernel": 3.1632000172976404e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.221998773980886e-06,
+        "hip_generic_parallel_reduce_by_key": 4.379400343168527e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001355299973511137,
+        "hip_generic_serial_kernel": 4.399399767862633e-05
+      },
+      "num_qubits": 130,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00046869500511093065,
+        "hip_generic_parallel_reduce_by_key": 0.00015974499547155574,
+        "hip_generic_parallel_transfer_inclusive": 0.00026220399740850553,
+        "hip_generic_serial_kernel": 0.005995645005896222
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.00046775300143053755,
+        "hip_generic_parallel_reduce_by_key": 0.000252113000897225,
+        "hip_generic_parallel_transfer_inclusive": 0.00039053900400176644,
+        "hip_generic_serial_kernel": 0.004708208994998131
+      },
+      "num_qubits": 130,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010393004995421506,
+        "hip_generic_parallel_reduce_by_key": 0.00037755799712613225,
+        "hip_generic_parallel_transfer_inclusive": 0.000799578003352508,
+        "hip_generic_serial_kernel": 0.1002664760017069
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010535616005654447,
+        "hip_generic_parallel_reduce_by_key": 0.00046930700045777485,
+        "hip_generic_parallel_transfer_inclusive": 0.0008144169987645,
+        "hip_generic_serial_kernel": 0.07491418599965982
+      },
+      "num_qubits": 130,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.2840027920901775e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9975002689752728e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011277000157861039,
+        "hip_generic_serial_kernel": 2.9672999517060816e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.252999936696142e-06,
+        "hip_generic_parallel_reduce_by_key": 2.893499913625419e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00011030199675587937,
+        "hip_generic_serial_kernel": 2.8689006285276264e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 7.042996003292501e-06,
+        "hip_generic_parallel_reduce_by_key": 3.41929990099743e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001205200023832731,
+        "hip_generic_serial_kernel": 3.429299977142364e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 6.898997526150197e-06,
+        "hip_generic_parallel_reduce_by_key": 5.120100104250014e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001356249995296821,
+        "hip_generic_serial_kernel": 5.097499524708837e-05
+      },
+      "num_qubits": 256,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0004799149974132888,
+        "hip_generic_parallel_reduce_by_key": 0.0001636970046092756,
+        "hip_generic_parallel_transfer_inclusive": 0.00026926099963020533,
+        "hip_generic_serial_kernel": 0.007100635004462674
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0005044010031269863,
+        "hip_generic_parallel_reduce_by_key": 0.0002860200038412586,
+        "hip_generic_parallel_transfer_inclusive": 0.00041912999586202204,
+        "hip_generic_serial_kernel": 0.005666756005666684
+      },
+      "num_qubits": 256,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.011231127005885355,
+        "hip_generic_parallel_reduce_by_key": 0.0004038199986098334,
+        "hip_generic_parallel_transfer_inclusive": 0.0012796250011888333,
+        "hip_generic_serial_kernel": 0.11865725399547955
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.010642938999808393,
+        "hip_generic_parallel_reduce_by_key": 0.000493555999128148,
+        "hip_generic_parallel_transfer_inclusive": 0.0010143730032723397,
+        "hip_generic_serial_kernel": 0.09411675400042441
+      },
+      "num_qubits": 256,
+      "num_terms": 65536,
+      "output_terms": 6554
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.3410026440396905e-06,
+        "hip_generic_parallel_reduce_by_key": 2.914600190706551e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.0001107380012399517,
+        "hip_generic_serial_kernel": 2.888600283768028e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.305001205764711e-06,
+        "hip_generic_parallel_reduce_by_key": 2.9306997021194547e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00010944200039375573,
+        "hip_generic_serial_kernel": 2.9432994779199362e-05
+      },
+      "num_qubits": 1024,
+      "num_terms": 1,
+      "output_terms": 1
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.5407000319100916e-05,
+        "hip_generic_parallel_reduce_by_key": 9.69239990809001e-05,
+        "hip_generic_parallel_transfer_inclusive": 0.00019247700402047485,
+        "hip_generic_serial_kernel": 0.0007469260017387569
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 128
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 1.639000402064994e-05,
+        "hip_generic_parallel_reduce_by_key": 0.00039749300049152225,
+        "hip_generic_parallel_transfer_inclusive": 0.0004967830027453601,
+        "hip_generic_serial_kernel": 0.0009308929948019795
+      },
+      "num_qubits": 1024,
+      "num_terms": 128,
+      "output_terms": 13
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.000767744000768289,
+        "hip_generic_parallel_reduce_by_key": 0.00017656000272836536,
+        "hip_generic_parallel_transfer_inclusive": 0.0003492380055831745,
+        "hip_generic_serial_kernel": 0.020315018999099266
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 4096
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0007948760030558333,
+        "hip_generic_parallel_reduce_by_key": 0.0007131320016924292,
+        "hip_generic_parallel_transfer_inclusive": 0.0009081380048883148,
+        "hip_generic_serial_kernel": 0.017393203001120128
+      },
+      "num_qubits": 1024,
+      "num_terms": 4096,
+      "output_terms": 410
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.0170057840005029,
+        "hip_generic_parallel_reduce_by_key": 0.0004130560046178289,
+        "hip_generic_parallel_transfer_inclusive": 0.0021963730032439344,
+        "hip_generic_serial_kernel": 0.3370424210006604
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 65536
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "file": "paths_pipe_3.json",
+      "median_seconds": {
+        "cpu_simplify_control": 0.018789640998875257,
+        "hip_generic_parallel_reduce_by_key": 0.0008381250008824281,
+        "hip_generic_parallel_transfer_inclusive": 0.0020279410018702038,
+        "hip_generic_serial_kernel": 0.28532920100406045
+      },
+      "num_qubits": 1024,
+      "num_terms": 65536,
+      "output_terms": 6554
+    }
+  ],
+  "runs": [
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label base --seed 20261201 --output paths_base_1.json",
+      "file": "paths_base_1.json",
+      "git_commit": "ad6f7a8",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "02a7575fc8f82774ca487374c7b0ee2d9e8008532e9ca1d30bb261754ba4413a",
+        "built_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "checkout_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261201
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label base --seed 20261202 --output paths_base_2.json",
+      "file": "paths_base_2.json",
+      "git_commit": "ad6f7a8",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "02a7575fc8f82774ca487374c7b0ee2d9e8008532e9ca1d30bb261754ba4413a",
+        "built_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "checkout_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261202
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label base --seed 20261203 --output paths_base_3.json",
+      "file": "paths_base_3.json",
+      "git_commit": "ad6f7a8",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "02a7575fc8f82774ca487374c7b0ee2d9e8008532e9ca1d30bb261754ba4413a",
+        "built_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "checkout_native_source_sha256": "ad361cfef7b55b231826cc8ccfb265205c2eba345f6e3ebea2f71588c063ad24",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261203
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label cache --seed 20261201 --output paths_cache_1.json",
+      "file": "paths_cache_1.json",
+      "git_commit": "4ca8655",
+      "git_dirty": false,
+      "label": "cache",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "41fa07db1e637e8d40bccde9e1c501424ae1c83ae4d6b2672b458bfc839a99f6",
+        "built_native_source_sha256": "aa815da92989747ad5f6917f03cdc4aaf6beac9657878b9ba714108f0a5c4f7a",
+        "checkout_native_source_sha256": "aa815da92989747ad5f6917f03cdc4aaf6beac9657878b9ba714108f0a5c4f7a",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261201
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label cache --seed 20261202 --output paths_cache_2.json",
+      "file": "paths_cache_2.json",
+      "git_commit": "4ca8655",
+      "git_dirty": false,
+      "label": "cache",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "41fa07db1e637e8d40bccde9e1c501424ae1c83ae4d6b2672b458bfc839a99f6",
+        "built_native_source_sha256": "aa815da92989747ad5f6917f03cdc4aaf6beac9657878b9ba714108f0a5c4f7a",
+        "checkout_native_source_sha256": "aa815da92989747ad5f6917f03cdc4aaf6beac9657878b9ba714108f0a5c4f7a",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261202
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label cache --seed 20261203 --output paths_cache_3.json",
+      "file": "paths_cache_3.json",
+      "git_commit": "4ca8655",
+      "git_dirty": false,
+      "label": "cache",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "41fa07db1e637e8d40bccde9e1c501424ae1c83ae4d6b2672b458bfc839a99f6",
+        "built_native_source_sha256": "aa815da92989747ad5f6917f03cdc4aaf6beac9657878b9ba714108f0a5c4f7a",
+        "checkout_native_source_sha256": "aa815da92989747ad5f6917f03cdc4aaf6beac9657878b9ba714108f0a5c4f7a",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261203
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label pipe --seed 20261201 --output paths_pipe_1.json",
+      "file": "paths_pipe_1.json",
+      "git_commit": "9af4918",
+      "git_dirty": false,
+      "label": "pipe",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "0a41eff6c7f4a8966cf8d9bbe89a23a94cfc556f1d22954827ba08373f0a4f2e",
+        "built_native_source_sha256": "72d3bc5309edd7f3a5d594e46215a00b8527bb30ed8cb2fb799ecf9fd33ed50f",
+        "checkout_native_source_sha256": "72d3bc5309edd7f3a5d594e46215a00b8527bb30ed8cb2fb799ecf9fd33ed50f",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261201
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label pipe --seed 20261202 --output paths_pipe_2.json",
+      "file": "paths_pipe_2.json",
+      "git_commit": "9af4918",
+      "git_dirty": false,
+      "label": "pipe",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "0a41eff6c7f4a8966cf8d9bbe89a23a94cfc556f1d22954827ba08373f0a4f2e",
+        "built_native_source_sha256": "72d3bc5309edd7f3a5d594e46215a00b8527bb30ed8cb2fb799ecf9fd33ed50f",
+        "checkout_native_source_sha256": "72d3bc5309edd7f3a5d594e46215a00b8527bb30ed8cb2fb799ecf9fd33ed50f",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261202
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --backend hip --suite all --label pipe --seed 20261203 --output paths_pipe_3.json",
+      "file": "paths_pipe_3.json",
+      "git_commit": "9af4918",
+      "git_dirty": false,
+      "label": "pipe",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "0a41eff6c7f4a8966cf8d9bbe89a23a94cfc556f1d22954827ba08373f0a4f2e",
+        "built_native_source_sha256": "72d3bc5309edd7f3a5d594e46215a00b8527bb30ed8cb2fb799ecf9fd33ed50f",
+        "checkout_native_source_sha256": "72d3bc5309edd7f3a5d594e46215a00b8527bb30ed8cb2fb799ecf9fd33ed50f",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261203
+    }
+  ],
+  "specialized_rows": [
+    {
+      "median_of_medians_seconds": {
+        "base": 0.00521502600167878,
+        "cache": 0.005149691998667549,
+        "pipe": 0.005258451994450297
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.00521502600167878,
+          0.005195139005081728,
+          0.0052262410026742145
+        ],
+        "cache": [
+          0.0052387639952939935,
+          0.005081911003799178,
+          0.005149691998667549
+        ],
+        "pipe": [
+          0.00535748199763475,
+          0.005258451994450297,
+          0.005182903005334083
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.00027023599977837875,
+        "cache": 0.00015767099830554798,
+        "pipe": 0.00031033700361149386
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.00026507100119488314,
+          0.00027023599977837875,
+          0.0002718169998843223
+        ],
+        "cache": [
+          0.0001577299990458414,
+          0.00015767099830554798,
+          0.00015729999722680077
+        ],
+        "pipe": [
+          0.00031103600485948846,
+          0.00031033700361149386,
+          0.0003099959940300323
+        ]
+      },
+      "variant": "hip_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0004646460001822561,
+        "cache": 0.00032112399640027434,
+        "pipe": 0.00056602900440339
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.00044828300451627,
+          0.00046643400128232315,
+          0.0004646460001822561
+        ],
+        "cache": [
+          0.00032112399640027434,
+          0.0003167329996358603,
+          0.00032137100060936064
+        ],
+        "pipe": [
+          0.000570231000892818,
+          0.0005640980016323738,
+          0.00056602900440339
+        ]
+      },
+      "variant": "hip_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.121962697005074,
+        "cache": 0.12200574400048936,
+        "pipe": 0.12227167200035183
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.11749008700280683,
+          0.12258098599704681,
+          0.121962697005074
+        ],
+        "cache": [
+          0.1208722330047749,
+          0.12200574400048936,
+          0.1228170210015378
+        ],
+        "pipe": [
+          0.12224595400039107,
+          0.12227167200035183,
+          0.12467689900222467
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.001556347000587266,
+        "cache": 0.0005791849980596453,
+        "pipe": 0.0007309560023713857
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0015509809963987209,
+          0.001573622997966595,
+          0.001556347000587266
+        ],
+        "cache": [
+          0.0005901050026295707,
+          0.0005692460035788827,
+          0.0005791849980596453
+        ],
+        "pipe": [
+          0.0007292230002349243,
+          0.0007309560023713857,
+          0.0007355650013778359
+        ]
+      },
+      "variant": "hip_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.006209102000866551,
+        "cache": 0.003557136995368637,
+        "pipe": 0.007041314005618915
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.006172403001983184,
+          0.006209102000866551,
+          0.006255154003156349
+        ],
+        "cache": [
+          0.003613569999288302,
+          0.003540092999173794,
+          0.003557136995368637
+        ],
+        "pipe": [
+          0.007082601994625293,
+          0.007011809000687208,
+          0.007041314005618915
+        ]
+      },
+      "variant": "hip_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.00492099500115728,
+        "cache": 0.005145689996425062,
+        "pipe": 0.005182284003240056
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.004804844000318553,
+          0.00492099500115728,
+          0.005208725997363217
+        ],
+        "cache": [
+          0.005174157995497808,
+          0.005145581002580002,
+          0.005145689996425062
+        ],
+        "pipe": [
+          0.004887392002274282,
+          0.005302025994751602,
+          0.005182284003240056
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0003545579966157675,
+        "cache": 0.00019031100237043574,
+        "pipe": 0.0003570729968487285
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0003504779961076565,
+          0.0003545579966157675,
+          0.00035676799598149955
+        ],
+        "cache": [
+          0.00019031100237043574,
+          0.00019141899974783882,
+          0.0001898379996418953
+        ],
+        "pipe": [
+          0.0003605820020311512,
+          0.0003570729968487285,
+          0.0003428839991101995
+        ]
+      },
+      "variant": "hip_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0004895879974355921,
+        "cache": 0.000362837003194727,
+        "pipe": 0.0006584559960174374
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0004866319941356778,
+          0.0004976850032107905,
+          0.0004895879974355921
+        ],
+        "cache": [
+          0.00036124500184087083,
+          0.000362837003194727,
+          0.00036369699955685064
+        ],
+        "pipe": [
+          0.0006584559960174374,
+          0.0006617170001845807,
+          0.0005885799982934259
+        ]
+      },
+      "variant": "hip_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.1218962319981074,
+        "cache": 0.121253114004503,
+        "pipe": 0.12238737699954072
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.11980390799726592,
+          0.12338163499953225,
+          0.1218962319981074
+        ],
+        "cache": [
+          0.12363185499998508,
+          0.12097395300224889,
+          0.121253114004503
+        ],
+        "pipe": [
+          0.12311457400210202,
+          0.12087335900287144,
+          0.12238737699954072
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.002079789999697823,
+        "cache": 0.0010313460006727837,
+        "pipe": 0.001467659996706061
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0021656489989254624,
+          0.0019339039936312474,
+          0.002079789999697823
+        ],
+        "cache": [
+          0.0010396270008641295,
+          0.0010213029963779263,
+          0.0010313460006727837
+        ],
+        "pipe": [
+          0.0013686120000784285,
+          0.001467659996706061,
+          0.0014830479994998313
+        ]
+      },
+      "variant": "hip_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.006360402003338095,
+        "cache": 0.00401661000068998,
+        "pipe": 0.006230743005289696
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.006360402003338095,
+          0.0071940880006877705,
+          0.006327946000965312
+        ],
+        "cache": [
+          0.004009154996310826,
+          0.004053557997394819,
+          0.00401661000068998
+        ],
+        "pipe": [
+          0.006248989004234318,
+          0.006230743005289696,
+          0.006210483996255789
+        ]
+      },
+      "variant": "hip_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.005813504998513963,
+        "cache": 0.005873246002011001,
+        "pipe": 0.00574253100057831
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.005835472999024205,
+          0.005813504998513963,
+          0.0055729259984218515
+        ],
+        "cache": [
+          0.005873246002011001,
+          0.005992869002511725,
+          0.005670079997798894
+        ],
+        "pipe": [
+          0.00574253100057831,
+          0.00557012500212295,
+          0.005776846999651752
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.000518075998115819,
+        "cache": 0.00023632800002815202,
+        "pipe": 0.0005230550013948232
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0005240250029601157,
+          0.000518075998115819,
+          0.000512280996190384
+        ],
+        "cache": [
+          0.00023860199871705845,
+          0.00023632800002815202,
+          0.00023266400239663199
+        ],
+        "pipe": [
+          0.0005303950019879267,
+          0.0005221199971856549,
+          0.0005230550013948232
+        ]
+      },
+      "variant": "hip_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0006899740037624724,
+        "cache": 0.0004480880015762523,
+        "pipe": 0.000939448997087311
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0006899740037624724,
+          0.0007001210033195093,
+          0.0006894500038470142
+        ],
+        "cache": [
+          0.00045952700020279735,
+          0.0004480880015762523,
+          0.0004439059994183481
+        ],
+        "pipe": [
+          0.0009447990014450625,
+          0.0009350550026283599,
+          0.000939448997087311
+        ]
+      },
+      "variant": "hip_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.1378836619987851,
+        "cache": 0.13482393500453327,
+        "pipe": 0.13878566500352463
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.13191994800581597,
+          0.1378836619987851,
+          0.13852680700074416
+        ],
+        "cache": [
+          0.1336339869958465,
+          0.1360601799970027,
+          0.13482393500453327
+        ],
+        "pipe": [
+          0.13878566500352463,
+          0.1364838410008815,
+          0.14128593700297642
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.002502652998373378,
+        "cache": 0.001557786003104411,
+        "pipe": 0.001970022000023164
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0025243369964300655,
+          0.0024141769972629845,
+          0.002502652998373378
+        ],
+        "cache": [
+          0.0015875329991104081,
+          0.001529007000499405,
+          0.001557786003104411
+        ],
+        "pipe": [
+          0.0019166519996360876,
+          0.0019944330051657744,
+          0.001970022000023164
+        ]
+      },
+      "variant": "hip_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.008339870000781957,
+        "cache": 0.005342433003534097,
+        "pipe": 0.009141046000877395
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.009690967002825346,
+          0.008339870000781957,
+          0.008299355999042746
+        ],
+        "cache": [
+          0.0053743410026072524,
+          0.005342433003534097,
+          0.0053225269948598
+        ],
+        "pipe": [
+          0.009158156004559714,
+          0.009141046000877395,
+          0.009133931001997553
+        ]
+      },
+      "variant": "hip_transfer_inclusive"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+ "benchmark": "hip_scratch_allocation_probe",
+ "builds": {
+  "base": "main at ad6f7a8",
+  "pipeline_without_cache": "7035474, the pipeline before the block cache"
+ },
+ "command": "rocprofv3 --hip-runtime-trace --stats -- python alloc_probe.py hip 24 50000 40",
+ "device": "AMD Instinct MI300X VF, HIP 7.16.26385",
+ "durations": {
+  "base": {
+   "hipFree": {
+    "calls": 1308,
+    "median_us": 0.96,
+    "p90_us": 18.85,
+    "total_us": 10261.1
+   },
+   "hipMalloc": {
+    "calls": 1308,
+    "median_us": 0.68,
+    "p90_us": 1.33,
+    "total_us": 2710.6
+   }
+  },
+  "pipeline_without_cache": {
+   "hipFree": {
+    "calls": 498,
+    "median_us": 0.86,
+    "p90_us": 95.39,
+    "total_us": 9048.8
+   },
+   "hipMalloc": {
+    "calls": 498,
+    "median_us": 0.74,
+    "p90_us": 18.57,
+    "total_us": 2595.7
+   }
+  }
+ },
+ "timed_medians_us": {
+  "base": {
+   "device_resident": 218.2,
+   "transfer_inclusive": 495.9
+  },
+  "pipeline_without_cache": {
+   "device_resident": 237.2,
+   "transfer_inclusive": 534.0
+  }
+ },
+ "workload": "One process: a 50,000-term, 24-qubit operator with 50% duplicates; 5 warmup and 40 timed device-resident simplify calls, then 5 warmup and 40 timed to_device + simplify + to_host calls. Counts cover every hipMalloc and hipFree in the process, transfers included."
+}

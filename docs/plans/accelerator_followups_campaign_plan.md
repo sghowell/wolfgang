@@ -46,3 +46,11 @@ GPU once before sizing its output instead of eight times; `simplify` on 4,096 te
 (`docs/benchmarks/reports/cuda_device_counts_h100_2026-11-03.md`). Pinned
 per-thread result buffers are freed at thread exit. Review closeout:
 `docs/reviews/accelerator_followups_campaign_2026-11-03.md`.
+
+Slice 2 merged: HIP simplify runs the same pipeline with hipCUB, and its
+scratch and rocThrust temporaries come from a per-thread block cache; the
+pipeline alone was slower than rocThrust at 50,000 terms because freeing its
+multi-megabyte scratch cost up to about 100 us per call. On an MI300X,
+`simplify` on 4,096 terms takes 98 us instead of 182 us and device-resident
+simplify is 1.6-2.7x faster from 50,000 to 1M terms
+(`docs/benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md`).

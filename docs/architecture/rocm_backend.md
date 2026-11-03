@@ -156,12 +156,32 @@ CPU simplify. The benchmark switch `WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY=off`
 keeps the multi-launch path. Evidence:
 `docs/benchmarks/reports/small_simplify_2026-11-03.md`.
 
-HIP device buffers and scratch use `hipMalloc`/`hipFree`. Simplify scratch is
+Larger operators run the multi-launch pipeline CUDA uses
+(`src/detail/device_simplify_pipeline.cuh`, built with hipCUB under hipcc;
+`docs/architecture/cuda_backend.md` describes its stages). It keeps the input
+maximum, the drop rule, the run count and the survivor count on the device and
+waits once before sizing its output. The rocThrust stages it replaced returned
+the maximum, run count and survivor count through blocking copies of about
+20 us each on the MI300X. The one-thread generic reducer stays as a baseline
+behind `WOLFGANG_HIP_BENCH_GENERIC_MULTIWORD_REDUCTION=serial_kernel`.
+Evidence: `docs/benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md`.
+
+HIP device buffers use `hipMalloc`/`hipFree`. The pipeline's scratch and
+rocThrust's algorithm temporaries come from a per-thread block cache instead
+(`src/hip/pool_allocator.hip.hpp`): a `hipMalloc`/`hipFree` pair for a
+multi-megabyte block cost up to about 100 us on the MI300X (ROCm caches only
+small blocks), which made the pipeline slower than the rocThrust stages at
+50,000 terms until scratch was reused. Each thread keeps up to two freed
+blocks of at most 256 MiB each and reuses them; larger requests, requests while
+both blocks are in use, and devices on the optional pool go straight to the
+allocator. A thread's blocks are freed when it exits, when it moves to another
+device, and before a failed allocation is retried. Simplify scratch is
 uninitialized (every buffer is fully written before it is read), and rocThrust
 algorithms run under `thrust::hip::par_nosync`, which drops the stream
 synchronization rocThrust otherwise performs after every algorithm. All work is
 ordered on the null stream, algorithms that return a value to the host still
-synchronize, and each public operation synchronizes before returning. On
+synchronize, and each public operation synchronizes before returning, so work
+that reuses a cached block always runs after the work that last used it. On
 out-of-memory, allocation retries once and then raises `MemoryError`.
 Transfers select the backend with a device count rather than `hip_status()`
 and copy coefficients as raw bytes.
@@ -270,7 +290,9 @@ host path where applicable.
 rocThrust is the retained duplicate-reduction implementation path for Campaign
 3. hipCUB and custom duplicate-reduction probes remain unavailable or rejected
 until they pass CPU/HIP equivalence, allocation accounting, and rocprof
-evidence in a separate campaign.
+evidence in a separate campaign. (The accelerator follow-ups campaign met that
+bar: HIP simplify beyond the fused kernel now uses the hipCUB pipeline
+described above.)
 
 HIP DLPack, public streams, public workspaces, multi-GPU, ROCm wheels,
 additional AMD GPU support claims, and simultaneous CUDA+HIP builds remain

@@ -1,0 +1,489 @@
+{
+ "benchmark": "hip_device_counts_api_breakdown",
+ "builds": {
+  "base": "main at ad6f7a8 (HIP sources as in 4ca82d5)",
+  "cache": "4ca8655 (pipeline with the per-thread block cache)",
+  "pipe": "9af4918 (pipeline, scratch from hipMalloc)"
+ },
+ "device": {
+  "amdgpu_driver": "6.19.14",
+  "arch": "gfx942",
+  "hip": "7.16.26385",
+  "name": "AMD Instinct MI300X VF"
+ },
+ "method": "Per operation and build: 50 warmup and 500 profiled calls in one process. API entries called at least once per call report calls per call (count / 550) and the median duration from the trace. Wall time is the median of three separate 2,000-call loops without the profiler.",
+ "operators": "24 qubits; simplify_4096 has 4,096 distinct terms, matmul_128x128 composes a 128-term operator with itself (16,384 products), simplify_128 takes the fused path and is a control",
+ "ops": {
+  "matmul_128x128": {
+   "base": {
+    "api_per_call": {
+     "hipDeviceGetAttribute": {
+      "calls": 19.0,
+      "median_us": 0.17
+     },
+     "hipDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 10.63
+     },
+     "hipFree": {
+      "calls": 16.02,
+      "median_us": 0.87
+     },
+     "hipGetDevice": {
+      "calls": 95.05,
+      "median_us": 0.06
+     },
+     "hipGetDevicePropertiesR0600": {
+      "calls": 18.0,
+      "median_us": 0.19
+     },
+     "hipGetLastError": {
+      "calls": 49.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 16.0,
+      "median_us": 4.54
+     },
+     "hipMalloc": {
+      "calls": 16.02,
+      "median_us": 0.73
+     },
+     "hipMemcpyAsync": {
+      "calls": 2.0,
+      "median_us": 4.46
+     },
+     "hipMemcpyWithStream": {
+      "calls": 3.0,
+      "median_us": 20.11
+     },
+     "hipMemsetAsync": {
+      "calls": 1.0,
+      "median_us": 5.38
+     },
+     "hipPeekAtLastError": {
+      "calls": 3.0,
+      "median_us": 0.06
+     },
+     "hipPointerGetAttributes": {
+      "calls": 4.0,
+      "median_us": 0.15
+     },
+     "hipSetDevice": {
+      "calls": 2.01,
+      "median_us": 0.08
+     }
+    },
+    "gpu_kernel_us_per_call": 103.44,
+    "kernel_launches_per_call": 22.02,
+    "wall_us_per_call": 201.3,
+    "wall_us_per_call_runs": [
+     201.3,
+     201.8,
+     201.1
+    ]
+   },
+   "cache": {
+    "api_per_call": {
+     "hipDeviceGetAttribute": {
+      "calls": 18.0,
+      "median_us": 0.16
+     },
+     "hipDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 10.59
+     },
+     "hipFree": {
+      "calls": 6.02,
+      "median_us": 0.67
+     },
+     "hipGetDevice": {
+      "calls": 67.05,
+      "median_us": 0.06
+     },
+     "hipGetDevicePropertiesR0600": {
+      "calls": 17.0,
+      "median_us": 0.16
+     },
+     "hipGetLastError": {
+      "calls": 24.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 15.0,
+      "median_us": 4.05
+     },
+     "hipMalloc": {
+      "calls": 6.02,
+      "median_us": 0.59
+     },
+     "hipSetDevice": {
+      "calls": 2.01,
+      "median_us": 0.08
+     },
+     "hipStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 21.72
+     }
+    },
+    "gpu_kernel_us_per_call": 96.33,
+    "kernel_launches_per_call": 15.02,
+    "wall_us_per_call": 123.1,
+    "wall_us_per_call_runs": [
+     123.0,
+     123.9,
+     123.1
+    ]
+   },
+   "pipe": {
+    "api_per_call": {
+     "hipDeviceGetAttribute": {
+      "calls": 18.0,
+      "median_us": 0.16
+     },
+     "hipDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 10.62
+     },
+     "hipFree": {
+      "calls": 7.02,
+      "median_us": 0.71
+     },
+     "hipGetDevice": {
+      "calls": 69.05,
+      "median_us": 0.06
+     },
+     "hipGetDevicePropertiesR0600": {
+      "calls": 17.0,
+      "median_us": 0.17
+     },
+     "hipGetLastError": {
+      "calls": 24.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 15.0,
+      "median_us": 4.04
+     },
+     "hipMalloc": {
+      "calls": 7.02,
+      "median_us": 0.64
+     },
+     "hipSetDevice": {
+      "calls": 2.01,
+      "median_us": 0.08
+     },
+     "hipStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 22.0
+     }
+    },
+    "gpu_kernel_us_per_call": 96.03,
+    "kernel_launches_per_call": 15.02,
+    "wall_us_per_call": 122.9,
+    "wall_us_per_call_runs": [
+     124.2,
+     122.9,
+     122.9
+    ]
+   }
+  },
+  "simplify_128": {
+   "base": {
+    "api_per_call": {
+     "hipFree": {
+      "calls": 3.02,
+      "median_us": 0.69
+     },
+     "hipGetDevice": {
+      "calls": 7.05,
+      "median_us": 0.06
+     },
+     "hipGetLastError": {
+      "calls": 1.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 1.0,
+      "median_us": 4.74
+     },
+     "hipMalloc": {
+      "calls": 3.02,
+      "median_us": 0.54
+     },
+     "hipSetDevice": {
+      "calls": 1.01,
+      "median_us": 0.07
+     },
+     "hipStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 21.59
+     }
+    },
+    "gpu_kernel_us_per_call": 12.8,
+    "kernel_launches_per_call": 1.02,
+    "wall_us_per_call": 27.0,
+    "wall_us_per_call_runs": [
+     27.0,
+     27.0,
+     27.2
+    ]
+   },
+   "cache": {
+    "api_per_call": {
+     "hipFree": {
+      "calls": 3.02,
+      "median_us": 0.68
+     },
+     "hipGetDevice": {
+      "calls": 7.05,
+      "median_us": 0.06
+     },
+     "hipGetLastError": {
+      "calls": 1.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 1.0,
+      "median_us": 4.82
+     },
+     "hipMalloc": {
+      "calls": 3.02,
+      "median_us": 0.55
+     },
+     "hipSetDevice": {
+      "calls": 1.01,
+      "median_us": 0.07
+     },
+     "hipStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 21.61
+     }
+    },
+    "gpu_kernel_us_per_call": 12.81,
+    "kernel_launches_per_call": 1.02,
+    "wall_us_per_call": 27.1,
+    "wall_us_per_call_runs": [
+     26.8,
+     27.1,
+     27.2
+    ]
+   },
+   "pipe": {
+    "api_per_call": {
+     "hipFree": {
+      "calls": 3.02,
+      "median_us": 0.68
+     },
+     "hipGetDevice": {
+      "calls": 7.05,
+      "median_us": 0.06
+     },
+     "hipGetLastError": {
+      "calls": 1.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 1.0,
+      "median_us": 4.57
+     },
+     "hipMalloc": {
+      "calls": 3.02,
+      "median_us": 0.52
+     },
+     "hipSetDevice": {
+      "calls": 1.01,
+      "median_us": 0.07
+     },
+     "hipStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 21.68
+     }
+    },
+    "gpu_kernel_us_per_call": 12.89,
+    "kernel_launches_per_call": 1.02,
+    "wall_us_per_call": 26.9,
+    "wall_us_per_call_runs": [
+     26.9,
+     26.8,
+     26.9
+    ]
+   }
+  },
+  "simplify_4096": {
+   "base": {
+    "api_per_call": {
+     "hipDeviceGetAttribute": {
+      "calls": 16.0,
+      "median_us": 0.16
+     },
+     "hipDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 10.67
+     },
+     "hipFree": {
+      "calls": 13.02,
+      "median_us": 0.81
+     },
+     "hipGetDevice": {
+      "calls": 79.05,
+      "median_us": 0.07
+     },
+     "hipGetDevicePropertiesR0600": {
+      "calls": 15.0,
+      "median_us": 0.19
+     },
+     "hipGetLastError": {
+      "calls": 42.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 12.0,
+      "median_us": 4.64
+     },
+     "hipMalloc": {
+      "calls": 13.02,
+      "median_us": 0.65
+     },
+     "hipMemcpyAsync": {
+      "calls": 2.0,
+      "median_us": 4.54
+     },
+     "hipMemcpyWithStream": {
+      "calls": 3.0,
+      "median_us": 20.68
+     },
+     "hipMemsetAsync": {
+      "calls": 1.0,
+      "median_us": 5.31
+     },
+     "hipPeekAtLastError": {
+      "calls": 3.0,
+      "median_us": 0.06
+     },
+     "hipPointerGetAttributes": {
+      "calls": 4.0,
+      "median_us": 0.14
+     },
+     "hipSetDevice": {
+      "calls": 1.01,
+      "median_us": 0.12
+     }
+    },
+    "gpu_kernel_us_per_call": 87.45,
+    "kernel_launches_per_call": 18.02,
+    "wall_us_per_call": 181.5,
+    "wall_us_per_call_runs": [
+     182.5,
+     181.5,
+     179.8
+    ]
+   },
+   "cache": {
+    "api_per_call": {
+     "hipDeviceGetAttribute": {
+      "calls": 15.0,
+      "median_us": 0.16
+     },
+     "hipDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 10.65
+     },
+     "hipFree": {
+      "calls": 3.02,
+      "median_us": 0.71
+     },
+     "hipGetDevice": {
+      "calls": 51.05,
+      "median_us": 0.06
+     },
+     "hipGetDevicePropertiesR0600": {
+      "calls": 14.0,
+      "median_us": 0.16
+     },
+     "hipGetLastError": {
+      "calls": 17.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 11.0,
+      "median_us": 3.96
+     },
+     "hipMalloc": {
+      "calls": 3.02,
+      "median_us": 0.72
+     },
+     "hipSetDevice": {
+      "calls": 1.01,
+      "median_us": 0.08
+     },
+     "hipStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 22.1
+     }
+    },
+    "gpu_kernel_us_per_call": 76.65,
+    "kernel_launches_per_call": 11.02,
+    "wall_us_per_call": 98.3,
+    "wall_us_per_call_runs": [
+     98.1,
+     98.3,
+     98.3
+    ]
+   },
+   "pipe": {
+    "api_per_call": {
+     "hipDeviceGetAttribute": {
+      "calls": 15.0,
+      "median_us": 0.16
+     },
+     "hipDeviceSynchronize": {
+      "calls": 1.0,
+      "median_us": 10.5
+     },
+     "hipFree": {
+      "calls": 4.02,
+      "median_us": 0.73
+     },
+     "hipGetDevice": {
+      "calls": 53.05,
+      "median_us": 0.06
+     },
+     "hipGetDevicePropertiesR0600": {
+      "calls": 14.0,
+      "median_us": 0.16
+     },
+     "hipGetLastError": {
+      "calls": 17.0,
+      "median_us": 0.05
+     },
+     "hipLaunchKernel": {
+      "calls": 11.0,
+      "median_us": 4.5
+     },
+     "hipMalloc": {
+      "calls": 4.02,
+      "median_us": 0.74
+     },
+     "hipSetDevice": {
+      "calls": 1.01,
+      "median_us": 0.08
+     },
+     "hipStreamSynchronize": {
+      "calls": 1.0,
+      "median_us": 20.34
+     }
+    },
+    "gpu_kernel_us_per_call": 76.05,
+    "kernel_launches_per_call": 11.02,
+    "wall_us_per_call": 99.8,
+    "wall_us_per_call_runs": [
+     99.5,
+     100.2,
+     99.8
+    ]
+   }
+  }
+ },
+ "tool": "rocprofv3 --hip-runtime-trace --kernel-trace --memory-copy-trace --stats"
+}
