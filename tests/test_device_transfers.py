@@ -1,10 +1,11 @@
 """Device-to-host transfers return exactly what the device holds.
 
-`DevicePauliSum.to_host()` on CUDA and HIP copies through a per-thread pinned
-staging buffer in batches (src/detail/staged_transfer.hpp), double-buffered
-once an operator exceeds half the buffer (8 MiB). These round trips cross
-that size, run on several threads (each has its own buffer, freed at thread
-exit), and include the empty operator.
+CUDA `DevicePauliSum.to_host()` copies through a per-thread pinned staging
+buffer in batches (src/detail/staged_transfer.hpp), double-buffered once an
+operator exceeds half the buffer (8 MiB). HIP stages operators up to 256 KiB
+and copies larger ones directly into vectors advised for huge pages. These
+round trips cross both sizes, run on several threads (each has its own
+buffer, freed at thread exit), and include the empty operator.
 """
 
 from __future__ import annotations
