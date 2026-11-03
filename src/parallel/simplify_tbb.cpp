@@ -1,5 +1,7 @@
 #include "detail/simplify_kernels.hpp"
 
+#include "wolfgang/cpu_backend.hpp"
+
 #include "detail/packed_key.hpp"
 
 #include <oneapi/tbb/parallel_for.h>
@@ -177,6 +179,7 @@ SimplifiedTerms simplify_generic(const PauliSum& op, const SimplifyDropRule& rul
 }  // namespace
 
 SimplifiedTerms simplify_tbb(const PauliSum& op, const SimplifyDropRule& rule) {
+  note_tbb_kernel_use();
   switch (op.words()) {
     case 1:
       return simplify_fixed<1>(op, rule);

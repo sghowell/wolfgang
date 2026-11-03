@@ -90,6 +90,14 @@ data-dependent counts that capture cannot fix. The measured follow-ups (pooled
 commutation output, device-side counts in simplify, pinned transfers) moved to
 slice 10 (`docs/benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md`).
 
+Slice 7 merged: release CPU wheels bundle oneTBB 2022.3.0, built from a
+pinned commit, so pip users get parallel simplify (1.5-3.4x on a 16-vCPU x86
+VM, 1.5-5.6x on an M4 Pro, from installed wheels). The license expression
+covers the bundled code, and a process forked after a oneTBB kernel falls back
+to the bit-identical scalar or SIMD kernels
+(`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`). These are also the
+first ARM oneTBB timings, closing the slice 6 deferral. Nothing was published.
+
 Slice 10 merged: `DeviceCommutationMatrix` output and count scratch come from
 the CUDA memory pool with sync-on-free after export, so `commutes_with_device`
 on 128 x 128 terms takes 10.6 us instead of 64.1 us on an H100 when no other

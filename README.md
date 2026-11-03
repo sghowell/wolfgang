@@ -170,7 +170,7 @@ The table below summarizes intent. The authoritative, versioned boundary is the 
 | Portable scalar CPU | CPU wheel / source | Universal correctness baseline |
 | x86 AVX2 / AVX-512 | Runtime-dispatched CPU build | Used only after feature and shape checks |
 | Apple Silicon NEON | Runtime-dispatched CPU build | First-class CPU target |
-| oneTBB | Optional source/wheel discovery | Deterministic large commutation and simplify workloads |
+| oneTBB | Bundled in CPU wheels after `v0.2.3`; optional for source builds | Deterministic large commutation and simplify workloads |
 | NVIDIA CUDA | Source build | Architecture/toolkit/runtime evidence required |
 | AMD ROCm/HIP | Source build | Target-specific evidence; not broad AMD support |
 | Apple Metal | Source build | Hardware/runtime gated; operation-specific maturity |

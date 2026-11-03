@@ -1,0 +1,261 @@
+{
+ "host": {
+  "cpu": "Apple M4 Pro (8 performance + 4 efficiency cores)",
+  "os": "macOS 26.6.2",
+  "wheel": "cp312 macosx_11_0_arm64"
+ },
+ "meta": {
+  "main": {
+   "active_cpu_backend": "scalar",
+   "compiled_cpu_backends": [
+    "scalar",
+    "neon"
+   ],
+   "logical_cpus": 12,
+   "machine": "arm64",
+   "oneTBB_version": "not_available",
+   "python": "3.12.12"
+  },
+  "tbb": {
+   "active_cpu_backend": "scalar",
+   "compiled_cpu_backends": [
+    "scalar",
+    "tbb",
+    "neon"
+   ],
+   "logical_cpus": 12,
+   "machine": "arm64",
+   "oneTBB_version": "2022.3.0",
+   "python": "3.12.12"
+  }
+ },
+ "method": "each wheel installed into its own venv with NumPy; 3 runs, wheel order randomized per run; per case 1 warmup and 7 timed PauliSum.simplify() calls with the default auto CPU backend; operators from packed arrays, shuffled duplicates",
+ "rows": [
+  {
+   "duplicate_fraction": 0.0,
+   "main_median_seconds": 0.0004265829920768738,
+   "main_per_run_median_seconds": [
+    0.0008812090381979942,
+    0.0004265829920768738,
+    0.0004205424338579178
+   ],
+   "num_qubits": 24,
+   "num_terms": 10000,
+   "speedup": 1.6830548084130694,
+   "tbb_median_seconds": 0.00025345757603645325,
+   "tbb_per_run_median_seconds": [
+    0.0003570839762687683,
+    0.00025345757603645325,
+    0.00022524967789649963
+   ]
+  },
+  {
+   "duplicate_fraction": 0.5,
+   "main_median_seconds": 0.0004486255347728729,
+   "main_per_run_median_seconds": [
+    0.0007917908951640129,
+    0.0004486255347728729,
+    0.00043658260256052017
+   ],
+   "num_qubits": 24,
+   "num_terms": 10000,
+   "speedup": 2.3437014980562734,
+   "tbb_median_seconds": 0.00019141752272844315,
+   "tbb_per_run_median_seconds": [
+    0.00032512471079826355,
+    0.00019141752272844315,
+    0.0001815836876630783
+   ]
+  },
+  {
+   "duplicate_fraction": 0.0,
+   "main_median_seconds": 0.005621832795441151,
+   "main_per_run_median_seconds": [
+    0.006268083117902279,
+    0.005621832795441151,
+    0.005383625626564026
+   ],
+   "num_qubits": 24,
+   "num_terms": 100000,
+   "speedup": 3.9244910232196784,
+   "tbb_median_seconds": 0.001432499848306179,
+   "tbb_per_run_median_seconds": [
+    0.0020962078124284744,
+    0.0013609584420919418,
+    0.001432499848306179
+   ]
+  },
+  {
+   "duplicate_fraction": 0.5,
+   "main_median_seconds": 0.00563395768404007,
+   "main_per_run_median_seconds": [
+    0.005389833822846413,
+    0.005714875645935535,
+    0.00563395768404007
+   ],
+   "num_qubits": 24,
+   "num_terms": 100000,
+   "speedup": 3.8850430029079623,
+   "tbb_median_seconds": 0.00145016610622406,
+   "tbb_per_run_median_seconds": [
+    0.0016224589198827744,
+    0.00145016610622406,
+    0.0012706676498055458
+   ]
+  },
+  {
+   "duplicate_fraction": 0.0,
+   "main_median_seconds": 0.07065550051629543,
+   "main_per_run_median_seconds": [
+    0.06911162566393614,
+    0.07065550051629543,
+    0.07115837465971708
+   ],
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "speedup": 5.57064407053459,
+   "tbb_median_seconds": 0.01268354244530201,
+   "tbb_per_run_median_seconds": [
+    0.01268354244530201,
+    0.013339209370315075,
+    0.012521917000412941
+   ]
+  },
+  {
+   "duplicate_fraction": 0.5,
+   "main_median_seconds": 0.06943520810455084,
+   "main_per_run_median_seconds": [
+    0.06851466745138168,
+    0.06943520810455084,
+    0.0699528744444251
+   ],
+   "num_qubits": 24,
+   "num_terms": 1000000,
+   "speedup": 5.436854831199723,
+   "tbb_median_seconds": 0.01277120877057314,
+   "tbb_per_run_median_seconds": [
+    0.01277120877057314,
+    0.012170666828751564,
+    0.013084499165415764
+   ]
+  },
+  {
+   "duplicate_fraction": 0.0,
+   "main_median_seconds": 0.0005038753151893616,
+   "main_per_run_median_seconds": [
+    0.000497959554195404,
+    0.000506209209561348,
+    0.0005038753151893616
+   ],
+   "num_qubits": 130,
+   "num_terms": 10000,
+   "speedup": 1.4940723905677415,
+   "tbb_median_seconds": 0.00033724959939718246,
+   "tbb_per_run_median_seconds": [
+    0.000270625576376915,
+    0.0003394167870283127,
+    0.00033724959939718246
+   ]
+  },
+  {
+   "duplicate_fraction": 0.5,
+   "main_median_seconds": 0.0005267085507512093,
+   "main_per_run_median_seconds": [
+    0.000509374774992466,
+    0.0005272915586829185,
+    0.0005267085507512093
+   ],
+   "num_qubits": 130,
+   "num_terms": 10000,
+   "speedup": 1.9202462319918239,
+   "tbb_median_seconds": 0.0002742921933531761,
+   "tbb_per_run_median_seconds": [
+    0.0002742921933531761,
+    0.0002592504024505615,
+    0.00031274929642677307
+   ]
+  },
+  {
+   "duplicate_fraction": 0.0,
+   "main_median_seconds": 0.0075806668028235435,
+   "main_per_run_median_seconds": [
+    0.007989584468305111,
+    0.0074843754991889,
+    0.0075806668028235435
+   ],
+   "num_qubits": 130,
+   "num_terms": 100000,
+   "speedup": 3.567792260390728,
+   "tbb_median_seconds": 0.002124750055372715,
+   "tbb_per_run_median_seconds": [
+    0.0021212901920080185,
+    0.002125917002558708,
+    0.002124750055372715
+   ]
+  },
+  {
+   "duplicate_fraction": 0.5,
+   "main_median_seconds": 0.008058625273406506,
+   "main_per_run_median_seconds": [
+    0.008054040372371674,
+    0.008058625273406506,
+    0.008077416568994522
+   ],
+   "num_qubits": 130,
+   "num_terms": 100000,
+   "speedup": 3.8867962582398454,
+   "tbb_median_seconds": 0.0020733335986733437,
+   "tbb_per_run_median_seconds": [
+    0.0020912913605570793,
+    0.002060624770820141,
+    0.0020733335986733437
+   ]
+  },
+  {
+   "duplicate_fraction": 0.0,
+   "main_median_seconds": 0.1207607090473175,
+   "main_per_run_median_seconds": [
+    0.11826695781201124,
+    0.1207607090473175,
+    0.12091479077935219
+   ],
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "speedup": 4.6932904163521,
+   "tbb_median_seconds": 0.025730499997735023,
+   "tbb_per_run_median_seconds": [
+    0.025730499997735023,
+    0.024788749404251575,
+    0.029388416558504105
+   ]
+  },
+  {
+   "duplicate_fraction": 0.5,
+   "main_median_seconds": 0.1336674178019166,
+   "main_per_run_median_seconds": [
+    0.1336674178019166,
+    0.13352029211819172,
+    0.14371954277157784
+   ],
+   "num_qubits": 130,
+   "num_terms": 1000000,
+   "speedup": 5.042626414370971,
+   "tbb_median_seconds": 0.026507499627768993,
+   "tbb_per_run_median_seconds": [
+    0.026507499627768993,
+    0.02563516702502966,
+    0.029774040915071964
+   ]
+  }
+ ],
+ "wheels": {
+  "main": {
+   "commit": "8d68a66",
+   "workflow_run": 41605250834
+  },
+  "tbb": {
+   "commit": "233714e",
+   "workflow_run": 41605223043
+  }
+ }
+}

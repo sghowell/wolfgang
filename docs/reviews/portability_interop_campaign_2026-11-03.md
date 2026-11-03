@@ -313,6 +313,49 @@ Branch `codex/streams-graphs-profile`, documentation and evidence only.
   --check`.
 - Residual risk: one H100; HIP was not re-profiled.
 
+## Slice 7: oneTBB in wheels
+
+Branch `codex/onetbb-wheels`, commits `6d7f9de`..`9cb671c` plus
+documentation. Wheel evidence: release-wheelhouse runs 41605223043 (first
+candidate, timed), 41609630774 (after review fixes) and 41605250834 (main
+baseline), all with `publish-target=none`.
+
+- Reviewer: independent agent (supply chain, packaging, licensing, runtime
+  behavior and documentation roles), read-only. It downloaded and inspected the
+  CI wheels (rpaths, install names, minimum macOS, SONAMEs, RECORD), cloned
+  oneTBB at the pinned commit, and ran the macOS wheels.
+- Findings: P0 0, P1 1, P2 3, P3 8.
+- P1 resolution (fork): with the CI macOS wheel, a child forked after a oneTBB
+  simplify died inside oneTBB (libdispatch traps in forked children), and a
+  `multiprocessing` fork pool hung; oneTBB does not support `fork()`. oneTBB
+  kernels now record their use, and a `pthread_atfork` child handler marks the
+  backend `unavailable_after_fork`, so `auto` runs the bit-identical scalar or
+  SIMD kernels there and a forced `tbb` selector raises. A regression test
+  runs on oneTBB builds, and the wheel smoke test forks after a oneTBB call.
+  On Linux an older build's forked children ran oneTBB in five of five trials,
+  so the guard is defensive there.
+- P2 resolutions:
+  - license metadata now reads `MIT AND Apache-2.0 AND BSD-3-Clause`, with
+    oneTBB's notices (committed under `third_party/onetbb/` and compared with
+    the pinned clone during the build) and DLPack's license as PEP 639
+    license files;
+  - the smoke test requires the notices and the pinned oneTBB version, and
+    the wheelhouse checker requires the license files;
+  - auto pairwise commutation needs four oneTBB threads, as simplify did.
+- P3 resolutions: a stronger smoke probe (one-, two- and three-word operators,
+  duplicate runs of one to five terms, mixed magnitudes, timeouts, stderr on
+  failure); an explicit macOS deployment target; `LD_LIBRARY_PATH` dropped;
+  the build prefix cleaned first; corrected wheel sizes and baseline note;
+  documentation wording. Deferred: a CycloneDX component for the bundled
+  runtime (documented instead).
+- Validation after fixes: release-wheelhouse run 41609630774 passed every
+  job, all six wheels passing the strengthened `--require-tbb` smoke test;
+  on the EPYC VM (oneTBB 2021.5 source build) the fork test and the CPU
+  suites passed; local core, quality and docs profiles passed.
+- Residual risk: two hosts timed; oneTBB thread pools from other wheels can
+  oversubscribe; the license expression also covers the sdist, which does not
+  contain oneTBB.
+
 ## Slice 10: Further performance
 
 Branch `codex/cuda-perf`, commits `aa9b583`..`3ce446b`, review fixes and

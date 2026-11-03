@@ -1,1 +1,3 @@
 scripts/archive_source_identity.json export-subst
+# Verbatim upstream notices: kept byte-identical to the pinned oneTBB commit.
+third_party/onetbb/*.txt -whitespace

@@ -1,8 +1,12 @@
 #include "wolfgang/cpu_backend.hpp"
 
 #include <array>
+#include <atomic>
 #if WOLFGANG_BUILD_TBB_ENABLED
 #include <oneapi/tbb/task_arena.h>
+#endif
+#if !defined(_WIN32)
+#include <pthread.h>
 #endif
 #include <cstdlib>
 #include <stdexcept>
@@ -14,6 +18,17 @@ namespace wolfgang {
 namespace {
 
 constexpr std::string_view kBackendEnvVar = "WOLFGANG_CPU_BACKEND";
+
+// Set by the first oneTBB kernel in this process (or inherited across fork).
+std::atomic<bool> g_tbb_used{false};
+// Set in a child forked after oneTBB ran: its worker threads did not survive.
+std::atomic<bool> g_tbb_unusable_after_fork{false};
+
+void mark_tbb_unusable_in_forked_child() noexcept {
+  if (g_tbb_used.load(std::memory_order_relaxed)) {
+    g_tbb_unusable_after_fork.store(true, std::memory_order_relaxed);
+  }
+}
 constexpr std::array<std::string_view, 7> kSelectors = {
     "auto",
     "scalar",
@@ -111,6 +126,9 @@ std::string backend_status(std::string_view backend) {
   if (!backend_hardware_available(backend)) {
     return "hardware_unavailable";
   }
+  if (backend == "tbb" && g_tbb_unusable_after_fork.load(std::memory_order_relaxed)) {
+    return "unavailable_after_fork";
+  }
   return "available";
 }
 
@@ -203,20 +221,34 @@ bool cpu_backend_selects_tbb_simplify(std::size_t num_terms) {
   if (!(selector.empty() || selector == "auto") || num_terms < kAutoTbbSimplifyTermThreshold) {
     return false;
   }
-  if (oneapi::tbb::this_task_arena::max_concurrency() < kAutoTbbSimplifyMinConcurrency) {
-    return false;
-  }
-  const CpuBackendReport report = cpu_backend_report_from_environment();
-  for (const CpuBackendCandidate& candidate : report.candidates) {
-    if (candidate.name == "tbb") {
-      return candidate.status == "available";
-    }
-  }
-  return false;
+  return tbb_auto_has_min_concurrency();
 #else
   (void)num_terms;
   return false;
 #endif
+}
+
+bool tbb_auto_has_min_concurrency() {
+#if WOLFGANG_BUILD_TBB_ENABLED
+  // Check availability first: after a fork, querying oneTBB itself is unsafe.
+  if (backend_status("tbb") != "available") {
+    return false;
+  }
+  return oneapi::tbb::this_task_arena::max_concurrency() >= kAutoTbbSimplifyMinConcurrency;
+#else
+  return false;
+#endif
+}
+
+void note_tbb_kernel_use() noexcept {
+#if !defined(_WIN32)
+  static const bool registered = [] {
+    (void)pthread_atfork(nullptr, nullptr, &mark_tbb_unusable_in_forked_child);
+    return true;
+  }();
+  (void)registered;
+#endif
+  g_tbb_used.store(true, std::memory_order_relaxed);
 }
 
 }  // namespace wolfgang

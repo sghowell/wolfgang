@@ -89,6 +89,19 @@ Windows support should not be claimed until validated.
 
 Release wheels must not use native CPU tuning such as `-march=native`. Any runtime-dispatched optimized CPU code must keep a portable scalar fallback and must be tested on the release artifact.
 
+CPU wheels bundle the oneTBB runtime (built from a pinned commit by
+`scripts/build_onetbb.sh`, vendored by auditwheel or delocate), so `auto`
+reaches parallel simplify for pip users. The wheel build sets
+`WOLFGANG_ENABLE_TBB=ON` so a wheel never ships scalar-only by accident, and
+the cibuildwheel test runs `scripts/wheel_smoke.py --require-tbb`, which
+requires the pinned oneTBB version, its license files, bit-identical parallel
+and scalar simplify, and a working simplify in a child forked after a oneTBB
+call. oneTBB does not support `fork()`, so children forked after a oneTBB
+kernel run the scalar or SIMD kernels instead. `WOLFGANG_CPU_BACKEND=scalar`
+still selects the portable path. Wheels
+published before this change (through `v0.2.3`) do not bundle oneTBB.
+Evidence: `docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`.
+
 The final `0.1.0` CPU wheelhouse readiness lane is
 `docs/plans/release_0_1_0_wheelhouse_foundation_plan.md`. It keeps the first
 package-index-ready wheelhouse to manylinux x86_64 and macOS arm64 for Python

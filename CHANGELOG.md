@@ -15,6 +15,18 @@ Next version: TBD
   faster (`docs/benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md`).
   `device_arrays()` now finishes pending host-to-device copies before handing
   out pointers.
+- Release CPU wheels bundle oneTBB 2022.3.0, built from a pinned commit, so
+  `pip install` users get parallel simplify. Installed wheels simplify 1.5-3.4x
+  faster on a 16-vCPU x86 VM and 1.5-5.6x on an Apple M4 Pro from 10,000 terms
+  (`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`). The license
+  expression is now `MIT AND Apache-2.0 AND BSD-3-Clause`, with oneTBB's and
+  DLPack's notices as license files, and the wheel smoke test requires
+  parallel simplify to match scalar bit for bit.
+- oneTBB does not support `fork()`. A child process forked after a oneTBB
+  kernel ran now uses the scalar or SIMD kernels (bit-identical results), and
+  a forced `WOLFGANG_CPU_BACKEND=tbb` raises there; previously such a child
+  could crash inside oneTBB on macOS. Auto dispatch of pairwise commutation to
+  oneTBB now also needs at least four oneTBB threads.
 - `PauliSum.from_cudaq()` and `PauliSum.to_cudaq()` convert to and from CUDA-Q
   `SpinOperator` (the `cudaq` extra, CUDA-Q 0.11 or later). Whole operators
   move through CUDA-Q's flat serialization, checked once per process, with a

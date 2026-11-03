@@ -39,7 +39,8 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
   const CpuBackendReport backend = cpu_backend_report_from_environment();
   if (backend.requested_backend == "auto") {
 #if WOLFGANG_BUILD_TBB_ENABLED
-    if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb")) {
+    if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb") &&
+        tbb_auto_has_min_concurrency()) {
       return detail::commutes_with_tbb(*this, rhs, entries);
     }
 #endif
