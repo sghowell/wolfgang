@@ -36,6 +36,7 @@ an H100, HIP evidence from an MI300X, and Metal evidence from an Apple M4 Pro.
 
 ## Status
 
-Slice 1 in progress: GPU build CI on draft PR #16; the MI300X baseline
+Slice 1 merged: compile-only CUDA, HIP and Metal CI lanes; the MI300X baseline
 (`7c69edc`, HIP 7.16) passes `WOLFGANG_VALIDATE_HIP=1 python scripts/validate.py
---profile core` (684 tests in the HIP run).
+--profile core` (684 tests in the HIP run). Review closeout:
+`docs/reviews/portability_interop_campaign_2026-11-03.md`.
