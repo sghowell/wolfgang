@@ -82,3 +82,10 @@ the fused small simplify removed the costs they targeted), and oneTBB simplify
 peak memory is measured: 1.34-1.41x scalar's at 1M terms with few duplicates,
 1.10-1.17x with 90% duplicates
 (`docs/benchmarks/data/cpu_parallel_simplify_2026-11-03/peak_memory_epyc.json`).
+
+Slice 9 merged: an Nsight Systems breakdown of small H100 operations found no
+case for CUDA graphs or a public stream argument. Single-launch operations
+have nothing to capture, and the multi-launch paths synchronize on
+data-dependent counts that capture cannot fix. The measured follow-ups (pooled
+commutation output, device-side counts in simplify, pinned transfers) moved to
+slice 10 (`docs/benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md`).

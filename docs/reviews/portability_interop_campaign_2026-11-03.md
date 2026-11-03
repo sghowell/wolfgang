@@ -292,3 +292,23 @@ Branch `codex/closeouts`, documentation and evidence only.
   --check`.
 - Residual risk: one x86 host and two widths; ARM peak memory comes with the
   bundled-oneTBB wheels (slice 7).
+
+## Slice 9: Streams and graphs
+
+Branch `codex/streams-graphs-profile`, documentation and evidence only.
+
+- Review: none required. The slice adds a profiling report, its data and plan
+  status; it changes no contract, policy or code.
+- Evidence: Nsight Systems on the H100 at `01997f7` (CUDA sources identical to
+  main), 500 profiled calls per operation, per-call medians.
+- Decision: no CUDA graphs and no public stream argument. Single-launch
+  operations (fused simplify, commutation, expectation) have nothing to
+  capture. Multi-launch simplify and `matmul` synchronize eight times per call
+  on counts returned to the host, which also rules out capture. A stream
+  argument would need asynchronous result objects for no measured gain.
+- Follow-ups moved to slice 10: pool the exportable commutation output
+  (55 us of a 64 us call is `cudaMalloc`/`cudaFree`); keep simplify's counts
+  on the device; stage transfers through pinned memory.
+- Validation: `python scripts/validate.py --profile docs` and `git diff
+  --check`.
+- Residual risk: one H100; HIP was not re-profiled.
