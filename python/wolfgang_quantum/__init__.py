@@ -22,6 +22,7 @@ source-build simplify transfer-reference correctness bridge.
 """
 
 from . import _wolfgang_core as _wolfgang_core
+from . import measurement as measurement
 from ._capabilities import (
     BackendCapabilities,
     CpuCapabilities,
@@ -40,7 +41,6 @@ from ._wolfgang_core import (
     metal_available,
     metal_devices,
 )
-from . import measurement as measurement
 from .measurement import _install_pauli_sum_measurement_methods
 from .openfermion import _install_pauli_sum_openfermion_methods
 from .qiskit import _install_pauli_sum_qiskit_methods
