@@ -4,6 +4,7 @@
 #include <atomic>
 #if WOLFGANG_BUILD_TBB_ENABLED
 #include <oneapi/tbb/global_control.h>
+#include <oneapi/tbb/info.h>
 #include <oneapi/tbb/task_arena.h>
 #endif
 #if !defined(_WIN32)
@@ -16,6 +17,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <utility>
 
 namespace wolfgang {
 
@@ -24,9 +26,13 @@ namespace {
 constexpr std::string_view kBackendEnvVar = "WOLFGANG_CPU_BACKEND";
 constexpr std::string_view kThreadsEnvVar = "WOLFGANG_NUM_THREADS";
 
+void apply_thread_cap_from_environment();
+
 // The process-wide thread cap. The oneTBB global_control that enforces it is
 // heap-allocated and never destroyed at exit: destroying it after oneTBB's own
-// teardown is unsafe, and the cap lives as long as the process anyway.
+// teardown is unsafe, and the cap lives as long as the process anyway. The
+// mutex is held across fork() (pthread_atfork), so a child never inherits it
+// locked by a thread that does not exist there.
 struct ThreadLimitState {
   std::mutex mutex;
   bool environment_read = false;
@@ -37,7 +43,16 @@ struct ThreadLimitState {
 };
 
 ThreadLimitState& thread_limit_state() {
-  static auto* state = new ThreadLimitState();
+  static auto* state = [] {
+    auto* created = new ThreadLimitState();
+#if !defined(_WIN32)
+    (void)pthread_atfork(
+        [] { thread_limit_state().mutex.lock(); },
+        [] { thread_limit_state().mutex.unlock(); },
+        [] { thread_limit_state().mutex.unlock(); });
+#endif
+    return created;
+  }();
   return *state;
 }
 
@@ -219,6 +234,7 @@ CpuBackendReport cpu_backend_report_from_environment() {
 
 void ensure_cpu_backend_available_from_environment() {
   (void)cpu_backend_report_from_environment();
+  apply_thread_cap_from_environment();
 }
 
 void ensure_cpu_backend_supports_scalar_operation(std::string_view operation) {
@@ -246,15 +262,23 @@ void ensure_cpu_backend_supports_simplify() {
 namespace {
 
 // Applies the cap to oneTBB when oneTBB is usable here. Callers hold the
-// state mutex.
+// state mutex. Only a cap below oneTBB's default concurrency installs a
+// control: a larger value would raise oneTBB's own worker limit rather than
+// leave it alone, and oneTBB narrows the value to unsigned and int internally,
+// so values near 2^31 and above misbehave there. The new control is built
+// before the old one is released, so the cap never lapses.
 void apply_thread_cap_locked(ThreadLimitState& state) {
 #if WOLFGANG_BUILD_TBB_ENABLED
-  if (state.cap == 0 || backend_status("tbb") != "available") {
+  if (backend_status("tbb") != "available") {
     return;
   }
-  delete state.control;
-  state.control = new oneapi::tbb::global_control(
-      oneapi::tbb::global_control::max_allowed_parallelism, state.cap);
+  const auto default_concurrency = static_cast<std::size_t>(oneapi::tbb::info::default_concurrency());
+  oneapi::tbb::global_control* replacement = nullptr;
+  if (state.cap != 0 && state.cap < default_concurrency) {
+    replacement = new oneapi::tbb::global_control(
+        oneapi::tbb::global_control::max_allowed_parallelism, state.cap);
+  }
+  delete std::exchange(state.control, replacement);
 #else
   (void)state;
 #endif
@@ -349,10 +373,9 @@ void note_tbb_kernel_use() noexcept {
   (void)registered;
 #endif
   g_tbb_used.store(true, std::memory_order_relaxed);
-  // Forced and commutation kernels reach oneTBB without auto dispatch, so the
-  // cap from WOLFGANG_NUM_THREADS is applied here too; an invalid value has
-  // already raised at the dispatch or capability check that preceded the
-  // kernel, or is reported by get_num_threads().
+  // Kernels can be reached from C++ without the Python compute-boundary check
+  // that validates WOLFGANG_NUM_THREADS, so a valid cap is applied here too;
+  // an invalid value is left to that check and to get_num_threads().
   try {
     apply_thread_cap_from_environment();
   } catch (...) {

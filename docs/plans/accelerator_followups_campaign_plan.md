@@ -28,8 +28,9 @@ report names.
 
 - The four-thread oneTBB floor for auto dispatch was never measured. With the
   slice 4 cap, oneTBB at two and three threads beat scalar simplify by 1.6x and
-  2.4x at 500,000 terms on one host. Measure it on more hosts, separately for
-  simplify and pairwise commutation, before moving it.
+  2.4x at 500,000 terms on one host. Measure it on more hosts and sizes,
+  separately for simplify (which could take its own floor) and pairwise
+  commutation (where the alternative is a SIMD kernel), before moving it.
 
 ## Decisions carried into the campaign
 

@@ -25,6 +25,10 @@ use, with no way to ask for fewer.
   four sends simplify and pairwise commutation to the scalar or SIMD kernels.
   Before, it read the arena's concurrency, which a `global_control` cap does
   not change.
+- A cap only installs a `global_control` when it is below oneTBB's default
+  concurrency. A larger one would raise oneTBB's own worker limit, and oneTBB
+  narrows the value to 32 bits internally, so caps near 2^31 and above made
+  its kernels run serially or not finish; such caps now mean no cap.
 - `_build_info()` reports `cpu_thread_limit` and `cpu_auto_tbb_eligible`.
 
 ## Evidence
@@ -55,7 +59,7 @@ One process, median simplify time by cap:
 | 4 | 4 | oneTBB | 22.6 ms |
 | 8 | 8 | oneTBB | 17.9 ms |
 | 16 | 16 | oneTBB | 14.8 ms |
-| none | 26 | oneTBB | 14.2 ms |
+| none (cap 1,000,000) | 26 | oneTBB | 14.2 ms |
 
 Inside a CPU quota smaller than the visible cores, the case the cap is for
 (`systemd-run --scope -p CPUQuota=400%`, so 4 CPUs of 26), over 60 calls in two
@@ -68,8 +72,8 @@ runs each:
 
 Uncapped, oneTBB starts 26 threads; calls that fit in the quota period run fast,
 and the rest stall when the quota throttles the process. The cap trades the
-best case for steady calls: mean throughput is 1.24x better and the 90th
-percentile 2.6x better. Without a quota, capping at 4 costs what the scaling
+best case for steady calls: the median is 1.55x slower, while mean throughput
+is 1.25x better and the 90th percentile 2.6x better. Without a quota, capping at 4 costs what the scaling
 table shows (22.7 against 14.2 ms in these runs).
 
 Processes sharing the cores without a quota (each worker runs 10 calls; wall
@@ -101,18 +105,18 @@ measured. With the cap it can now be measured directly (forced
 | 4 | 22.4 ms | |
 
 At 500,000 terms, two and three oneTBB threads beat scalar by 1.6x and 2.4x,
-and `auto` with a cap of 3 ran scalar (62.0 ms). An informal check at 20,000
-terms found three threads faster than scalar and two slower. The floor is
-unchanged in this slice: it also governs pairwise commutation, where the
-alternative is a SIMD kernel, and moving it needs measurements on more than
-one host. Until then, a process capped at two or three threads can keep
-oneTBB with `WOLFGANG_CPU_BACKEND=tbb`.
+and `auto` with a cap of 3 ran scalar (62.0 ms). The floor is unchanged in this
+slice: it also governs pairwise commutation, where the alternative is a SIMD
+kernel that was not measured here, and moving it needs measurements on more
+than one host and at smaller sizes. Until then, processes capped below four
+threads run the scalar or SIMD kernels; forcing `WOLFGANG_CPU_BACKEND=tbb` is
+not a workaround, because operations without a oneTBB kernel then raise.
 
 ## Correctness
 
 | Check | Result |
 | --- | --- |
-| `tests/test_cpu_threads.py` (new) | Exports and stubs; validation of `set_num_threads` (0, negative, oversized, float, string, `None`, `bool`); the cap, its effect on the oneTBB floor, the oneTBB concurrency ceiling, `WOLFGANG_NUM_THREADS` (valid, invalid, replaced by `set_num_threads`); identical simplify results at 1, 2, 4 and 64 threads |
+| `tests/test_cpu_threads.py` (new) | Exports and stubs; validation of `set_num_threads` (0, negative, oversized, float, string, `None`, `bool`) and NumPy integers; the cap, its effect on the oneTBB floor, caps at or above the default concurrency (up to 2^40) behaving as no cap; `WOLFGANG_NUM_THREADS` (valid, invalid, replaced by `set_num_threads`, invalid on a forced-oneTBB commutation); a child forked after oneTBB ran reports one thread; on Linux, a cap of 4 adds at most three threads; identical result bytes at 1, 2, 3, 4 and 64 threads under auto and forced oneTBB |
 | Existing suites | `test_cpu_parallel_simplify.py`, `test_cpu_fork_safety.py`, `test_public_typing_and_capabilities.py` pass with oneTBB on the 26-vCPU host and without it on macOS |
 
 ## Limitations

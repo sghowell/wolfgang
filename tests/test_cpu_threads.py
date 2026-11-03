@@ -74,6 +74,30 @@ def test_set_num_threads_rejects_oversized_values() -> None:
         wolfgang_quantum.set_num_threads(2**70)
 
 
+def test_numpy_integers_and_huge_caps_are_accepted() -> None:
+    # A cap at or above oneTBB's default concurrency means no cap: it must not
+    # raise oneTBB's own limit, and values near 2^31 and 2^32 must not reach
+    # oneTBB, which narrows them internally.
+    code = (
+        "import json, numpy as np, wolfgang_quantum as w\n"
+        "before = w.get_num_threads()\n"
+        "w.set_num_threads(np.int64(2))\n"
+        "two = w.get_num_threads()\n"
+        "out = {'before': before, 'two': two}\n"
+        "for cap in (2**31 + 1, 2**32 + 1, 2**40):\n"
+        "    w.set_num_threads(cap)\n"
+        "    x = np.arange(20000, dtype=np.uint64).reshape(-1, 1) % 4096\n"
+        "    op = w.PauliSum.from_arrays(x, x.copy(), np.ones(20000) + 0j, 12)\n"
+        "    out[str(cap)] = [w.get_num_threads(), op.simplify().num_terms]\n"
+        "print(json.dumps(out))\n"
+    )
+    result = _run(code, WOLFGANG_CPU_BACKEND="auto")
+    assert "error" not in result, result
+    assert result["two"] == min(2, result["before"])
+    for cap in (2**31 + 1, 2**32 + 1, 2**40):
+        assert result[str(cap)] == [result["before"], 4096]
+
+
 @pytest.mark.parametrize("bad", [1.0, "2", None, True])
 def test_set_num_threads_rejects_non_integers(bad: object) -> None:
     with pytest.raises(TypeError):
@@ -117,6 +141,65 @@ def test_invalid_environment_variable_raises(bad: str) -> None:
     assert "WOLFGANG_NUM_THREADS must be a positive integer" in result.get("error", "")
 
 
+def test_invalid_environment_variable_raises_on_forced_onetbb_commutation() -> None:
+    if not _tbb_available():
+        pytest.skip("oneTBB is not available")
+    code = (
+        "import wolfgang_quantum as w\n"
+        "op = w.PauliSum.from_labels(['XZ', 'ZX', 'YY'], [1.0, 1.0, 1.0])\n"
+        "op.commutes_with(op)\n"
+        "print('{}')\n"
+    )
+    result = _run(code, WOLFGANG_CPU_BACKEND="tbb", WOLFGANG_NUM_THREADS="abc")
+    assert "WOLFGANG_NUM_THREADS must be a positive integer" in result.get("error", "")
+
+
+def test_child_forked_after_onetbb_reports_one_thread() -> None:
+    if not _tbb_available() or not hasattr(os, "fork"):
+        pytest.skip("needs oneTBB and fork()")
+    code = (
+        "import json, os, numpy as np, wolfgang_quantum as w\n"
+        "x = np.arange(20000, dtype=np.uint64).reshape(-1, 1)\n"
+        "w.PauliSum.from_arrays(x, x.copy(), np.ones(20000) + 0j, 16).simplify()\n"
+        "read, write = os.pipe()\n"
+        "pid = os.fork()\n"
+        "if pid == 0:\n"
+        "    os.write(write, str(w.get_num_threads()).encode()); os._exit(0)\n"
+        "os.waitpid(pid, 0)\n"
+        "print(json.dumps({'parent': w.get_num_threads(), 'child': int(os.read(read, 32))}))\n"
+    )
+    result = _run(code, WOLFGANG_CPU_BACKEND="tbb")
+    assert result["child"] == 1
+    assert result["parent"] >= 1
+
+
+@pytest.mark.skipif(not sys.platform.startswith("linux"), reason="counts threads through /proc")
+def test_cap_bounds_the_onetbb_worker_threads() -> None:
+    if not _tbb_available() or (os.cpu_count() or 1) < 8:
+        pytest.skip("needs oneTBB and at least 8 CPUs")
+    code = (
+        "import json, os, sys, numpy as np, wolfgang_quantum as w\n"
+        "cap = int(sys.argv[1])\n"
+        "if cap: w.set_num_threads(cap)\n"
+        "before = len(os.listdir('/proc/self/task'))\n"
+        "x = np.arange(400000, dtype=np.uint64).reshape(-1, 1)\n"
+        "op = w.PauliSum.from_arrays(x, x.copy(), np.ones(400000) + 0j, 20)\n"
+        "for _ in range(5): op.simplify()\n"
+        "print(json.dumps({'added': len(os.listdir('/proc/self/task')) - before}))\n"
+    )
+    environment = {k: v for k, v in os.environ.items() if k != "WOLFGANG_NUM_THREADS"}
+    environment["WOLFGANG_CPU_BACKEND"] = "tbb"
+
+    def added(cap: int) -> int:
+        completed = subprocess.run(
+            [sys.executable, "-c", code, str(cap)], cwd=ROOT, env=environment, capture_output=True, text=True, check=True
+        )
+        return int(json.loads(completed.stdout.strip().splitlines()[-1])["added"])
+
+    assert added(4) <= 3  # the calling thread plus at most three oneTBB workers
+    assert added(0) > added(4)
+
+
 def test_explicit_cap_replaces_the_environment_cap() -> None:
     code = (
         "import json, wolfgang_quantum as w\n"
@@ -126,9 +209,14 @@ def test_explicit_cap_replaces_the_environment_cap() -> None:
     assert _run(code, WOLFGANG_NUM_THREADS="3")["threads"] == 1
 
 
-def test_results_do_not_depend_on_the_thread_count() -> None:
+@pytest.mark.parametrize("backend", ["auto", "tbb"])
+def test_results_do_not_depend_on_the_thread_count(backend: str) -> None:
+    # Under auto, caps below four run scalar; forcing tbb runs oneTBB at two
+    # and three threads too. Every result must be identical, bit for bit.
+    if backend == "tbb" and not _tbb_available():
+        pytest.skip("oneTBB is not available")
     code = (
-        "import json, numpy as np, wolfgang_quantum as w\n"
+        "import hashlib, json, numpy as np, wolfgang_quantum as w\n"
         "rng = np.random.default_rng(3)\n"
         "x = rng.integers(0, 1 << 20, size=(60000, 1), dtype=np.uint64)\n"
         "z = rng.integers(0, 1 << 20, size=(60000, 1), dtype=np.uint64)\n"
@@ -136,13 +224,12 @@ def test_results_do_not_depend_on_the_thread_count() -> None:
         "c = rng.normal(size=90000) + 1j * rng.normal(size=90000)\n"
         "op = w.PauliSum.from_arrays(x, z, c, 20)\n"
         "out = {}\n"
-        "for n in (1, 2, 4, 64):\n"
+        "for n in (1, 2, 3, 4, 64):\n"
         "    w.set_num_threads(n)\n"
         "    s = op.simplify()\n"
-        "    out[n] = [int(v) for v in s.to_arrays()[2].view(np.uint64)[:64]] + [s.num_terms]\n"
+        "    out[n] = hashlib.sha256(b''.join(a.tobytes() for a in s.to_arrays())).hexdigest()\n"
         "print(json.dumps(out))\n"
     )
-    result = _run(code, WOLFGANG_CPU_BACKEND="auto")
+    result = _run(code, WOLFGANG_CPU_BACKEND=backend)
     assert "error" not in result, result
-    values = list(result.values())
-    assert all(v == values[0] for v in values)
+    assert len(set(result.values())) == 1

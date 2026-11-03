@@ -105,6 +105,8 @@ def main() -> int:
     default_threads = wolfgang_quantum.get_num_threads()
     scaling = []
     for threads in args.threads:
+        # A cap at or above oneTBB's default concurrency installs no limit, so
+        # 1,000,000 stands for "no cap".
         wolfgang_quantum.set_num_threads(threads if threads else 1_000_000)
         result = op.simplify()
         if result != reference:

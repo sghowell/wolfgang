@@ -17,11 +17,19 @@ void bind_build_info(nb::module_& module) {
   module.def(
       "set_num_threads",
       [](nb::handle threads) {
-        if (!PyLong_Check(threads.ptr()) || PyBool_Check(threads.ptr())) {
+        // Any integer, including NumPy integers, through the index protocol;
+        // bool and float are rejected even though Python can convert them.
+        if (PyBool_Check(threads.ptr()) || PyFloat_Check(threads.ptr())) {
+          throw nb::type_error("threads must be an int");
+        }
+        PyObject* index = PyNumber_Index(threads.ptr());
+        if (index == nullptr) {
+          PyErr_Clear();
           throw nb::type_error("threads must be an int");
         }
         int overflow = 0;
-        const long long value = PyLong_AsLongLongAndOverflow(threads.ptr(), &overflow);
+        const long long value = PyLong_AsLongLongAndOverflow(index, &overflow);
+        Py_DECREF(index);
         if (overflow < 0 || (overflow == 0 && value < 1)) {
           throw nb::value_error("threads must be at least 1");
         }
@@ -115,6 +123,7 @@ void bind_build_info(nb::module_& module) {
             wolfgang::kAutoTbbSimplifyMinConcurrency;
         info["cpu_auto_dispatch_thresholds"] = cpu_auto_dispatch_thresholds;
         info["cpu_threads_env_var"] = "WOLFGANG_NUM_THREADS";
+        info["cpu_thread_limit_error"] = "";
         try {
           info["cpu_thread_limit"] = wolfgang::cpu_thread_limit();
           info["cpu_auto_tbb_eligible"] = wolfgang::tbb_auto_has_min_concurrency();
