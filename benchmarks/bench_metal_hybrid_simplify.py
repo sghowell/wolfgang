@@ -5,9 +5,10 @@ threshold. Each repetition times the hybrid (forced with
 WOLFGANG_METAL_BENCH_SIMPLIFY=hybrid, so sizes below the threshold measure it
 too), the previous host bridge (forced with =host_bridge) and CPU simplify in a
 randomized order. Hybrid and host-bridge outputs are checked against CPU simplify bit for
-bit before any timing is kept. All three are host-in, host-out from the
-caller's view: Metal buffers are shared storage, and the device operator is
-created once outside the timed region.
+bit before any timing is kept. The Metal variants time DevicePauliSum.simplify
+from an operator already in shared buffers (created once, outside the timed
+region) to a new one; on unified memory the bridge's transfer is its two
+copies. CPU simplify times PauliSum.simplify on the host copy.
 """
 
 from __future__ import annotations

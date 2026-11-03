@@ -315,6 +315,24 @@ public `DevicePauliSum.simplify(atol, rtol)` remains the transfer-reference brid
 unless a later design proves a broader, correct, device-resident implementation
 that beats same-host CPU simplify and the transfer-reference path.
 
+The usability and kernel campaign (slice 8) adds a hybrid public simplify for
+one-word operators of at least `kHybridSimplifyMinTerms` (12,288) terms. The
+GPU sorts (x, z, input index) with an all-ascending bitonic network: positions
+past the term count act as fixed sentinels, so buffers are not padded to a
+power of two, and steps within a 1,024-entry tile run in threadgroup memory. The
+GPU then gathers coefficient bits into sorted order. The CPU sums each duplicate
+run in float64, seeded with the run's first coefficient and in input order,
+applies the CPU drop rule, and compacts survivors in place; the result keeps the
+input's device and command queue. Results equal CPU simplify bit for bit, signed
+zeros included. This sidesteps the Metal
+toolchain's lack of `double` arithmetic without restricting the coefficient
+domain, unlike the fixed32 Campaign 7 candidate. Smaller or wider operators
+keep the transfer-reference host bridge. The benchmark and test selector
+`WOLFGANG_METAL_BENCH_SIMPLIFY` forces the bridge (`host_bridge`) or the hybrid
+at any size (`hybrid`). The public capability record for Metal `simplify` stays
+`host_bridge`, because the reduction always runs on the CPU. Evidence:
+`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md`.
+
 The Wave 1D cross-backend prestage report is
 `docs/benchmarks/reports/apple_metal_wave1d_2026-08-21.md`. It records the
 required reused-output evidence gate for pairwise commutation on the local Apple

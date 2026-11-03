@@ -39,7 +39,9 @@ check `runtime_available` separately before executing an operation.
 `device` identifies where the principal kernel executes, not an absence of host
 work or synchronization. CUDA/HIP total counts currently finish a partial-sum
 reduction on the host. Metal count consumers scan shared memory on the CPU;
-Metal simplify downloads, simplifies on the CPU, and uploads. Private benchmark
+Metal simplify downloads, simplifies on the CPU, and uploads; for one-word
+operators of at least 12,288 terms it instead sorts keys on the GPU and reduces
+in float64 on the CPU over shared memory, with identical results. Private benchmark
 selectors do not change these public capability records. Unknown operation names
 raise `ValueError`.
 

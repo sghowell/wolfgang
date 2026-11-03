@@ -1,0 +1,720 @@
+{
+  "environment": {
+    "Metal": {
+      "capability_summary": "unified_memory=true; low_power=false; headless=false; removable=false; recommended_max_working_set_size_bytes=40200896512",
+      "device_name": "Apple M4 Pro",
+      "enabled": true,
+      "macos_version": "Version 26.6.2 (Build 25G83)",
+      "runtime_available": true,
+      "storage_mode": "MTLResourceStorageModeShared",
+      "xcode_or_clt_version": "AppleClang 21.0.0.21000099"
+    },
+    "active_fastpauli_cpu_backend": "scalar",
+    "apple_hardware": {
+      "chip": "Apple M4 Pro",
+      "core_summary": "12 (8 Performance and 4 Efficiency)",
+      "model_identifier": "Mac16,11",
+      "model_name": "Mac mini",
+      "total_core_count": 12
+    },
+    "compiler": "Apple clang version 21.0.0 (clang-2100.0.123.102)",
+    "cpu_architecture": "arm64",
+    "logical_cpu_count": 12,
+    "operating_system": "macOS-26.6.2-arm64-arm-64bit",
+    "python_version": "3.12.12"
+  },
+  "rows": [
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.011803916655480862,
+        "metal_host_bridge": 0.013554500415921211,
+        "metal_hybrid": 0.011002499610185623
+      },
+      "num_qubits": 24,
+      "num_terms": 196608,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.011666124686598778,
+          0.0121245002374053,
+          0.011803916655480862
+        ],
+        "metal_host_bridge": [
+          0.013572665862739086,
+          0.013554500415921211,
+          0.013254750519990921
+        ],
+        "metal_hybrid": [
+          0.013528208248317242,
+          0.011002499610185623,
+          0.009698416106402874
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.012102250009775162,
+        "metal_host_bridge": 0.013453541323542595,
+        "metal_hybrid": 0.01103904191404581
+      },
+      "num_qubits": 24,
+      "num_terms": 196608,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.01194079127162695,
+          0.012294208630919456,
+          0.012102250009775162
+        ],
+        "metal_host_bridge": [
+          0.013078667223453522,
+          0.013609125278890133,
+          0.013453541323542595
+        ],
+        "metal_hybrid": [
+          0.01103904191404581,
+          0.011484541930258274,
+          0.009791250340640545
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.012383750639855862,
+        "metal_host_bridge": 0.013410375453531742,
+        "metal_hybrid": 0.009636291302740574
+      },
+      "num_qubits": 24,
+      "num_terms": 196608,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.012226791121065617,
+          0.012383750639855862,
+          0.012505416758358479
+        ],
+        "metal_host_bridge": [
+          0.013410375453531742,
+          0.013337082229554653,
+          0.01388387568295002
+        ],
+        "metal_hybrid": [
+          0.011776083149015903,
+          0.00962945818901062,
+          0.009636291302740574
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.016214458271861076,
+        "metal_host_bridge": 0.017820666544139385,
+        "metal_hybrid": 0.012432207353413105
+      },
+      "num_qubits": 24,
+      "num_terms": 262144,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.016156375408172607,
+          0.016267958097159863,
+          0.016214458271861076
+        ],
+        "metal_host_bridge": [
+          0.01774154230952263,
+          0.018160125240683556,
+          0.017820666544139385
+        ],
+        "metal_hybrid": [
+          0.015683500096201897,
+          0.012432207353413105,
+          0.012274209409952164
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.016773750074207783,
+        "metal_host_bridge": 0.01838237512856722,
+        "metal_hybrid": 0.012983040884137154
+      },
+      "num_qubits": 24,
+      "num_terms": 262144,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.016389374621212482,
+          0.016773750074207783,
+          0.016863208264112473
+        ],
+        "metal_host_bridge": [
+          0.017740917392075062,
+          0.01838237512856722,
+          0.01845754124224186
+        ],
+        "metal_hybrid": [
+          0.012983040884137154,
+          0.011270791292190552,
+          0.013848749920725822
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.016926958225667477,
+        "metal_host_bridge": 0.01815387513488531,
+        "metal_hybrid": 0.011352707631886005
+      },
+      "num_qubits": 24,
+      "num_terms": 262144,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.016722332686185837,
+          0.017194459214806557,
+          0.016926958225667477
+        ],
+        "metal_host_bridge": [
+          0.0177477914839983,
+          0.018198917619884014,
+          0.01815387513488531
+        ],
+        "metal_hybrid": [
+          0.011352707631886005,
+          0.009977416135370731,
+          0.01148045901209116
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.03508162498474121,
+        "metal_host_bridge": 0.03850550018250942,
+        "metal_hybrid": 0.02180320769548416
+      },
+      "num_qubits": 24,
+      "num_terms": 524288,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.03508162498474121,
+          0.03491133265197277,
+          0.035215916112065315
+        ],
+        "metal_host_bridge": [
+          0.03850550018250942,
+          0.038091874681413174,
+          0.039377166889607906
+        ],
+        "metal_hybrid": [
+          0.02520404104143381,
+          0.018467750400304794,
+          0.02180320769548416
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.03620308265089989,
+        "metal_host_bridge": 0.038301833905279636,
+        "metal_hybrid": 0.020847957581281662
+      },
+      "num_qubits": 24,
+      "num_terms": 524288,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.035184540785849094,
+          0.03620308265089989,
+          0.03634954057633877
+        ],
+        "metal_host_bridge": [
+          0.040585124865174294,
+          0.038301833905279636,
+          0.03791516646742821
+        ],
+        "metal_hybrid": [
+          0.01888220850378275,
+          0.02350179199129343,
+          0.020847957581281662
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.03609149996191263,
+        "metal_host_bridge": 0.037946208380162716,
+        "metal_hybrid": 0.015317916870117188
+      },
+      "num_qubits": 24,
+      "num_terms": 524288,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.036033415235579014,
+          0.03609149996191263,
+          0.036459541879594326
+        ],
+        "metal_host_bridge": [
+          0.037946208380162716,
+          0.03759395889937878,
+          0.03806466702371836
+        ],
+        "metal_hybrid": [
+          0.01669462490826845,
+          0.015317916870117188,
+          0.015046041458845139
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07711520977318287,
+        "metal_host_bridge": 0.08258316572755575,
+        "metal_hybrid": 0.04928516689687967
+      },
+      "num_qubits": 24,
+      "num_terms": 1048576,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07702687568962574,
+          0.07855320814996958,
+          0.07711520977318287
+        ],
+        "metal_host_bridge": [
+          0.08280966710299253,
+          0.08258316572755575,
+          0.08142829220741987
+        ],
+        "metal_hybrid": [
+          0.05016687512397766,
+          0.04877383355051279,
+          0.04928516689687967
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.0761239156126976,
+        "metal_host_bridge": 0.07948137447237968,
+        "metal_hybrid": 0.04415149986743927
+      },
+      "num_qubits": 24,
+      "num_terms": 1048576,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07614108361303806,
+          0.07587216701358557,
+          0.0761239156126976
+        ],
+        "metal_host_bridge": [
+          0.07882154081016779,
+          0.08018458262085915,
+          0.07948137447237968
+        ],
+        "metal_hybrid": [
+          0.04141083266586065,
+          0.04415149986743927,
+          0.04509583301842213
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07656708266586065,
+        "metal_host_bridge": 0.07872012536972761,
+        "metal_hybrid": 0.039645290933549404
+      },
+      "num_qubits": 24,
+      "num_terms": 1048576,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07574225030839443,
+          0.07707775011658669,
+          0.07656708266586065
+        ],
+        "metal_host_bridge": [
+          0.07735933270305395,
+          0.07872012536972761,
+          0.07943116687238216
+        ],
+        "metal_hybrid": [
+          0.03809708449989557,
+          0.039645290933549404,
+          0.03989141620695591
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.011808292008936405,
+        "metal_host_bridge": 0.013408541679382324,
+        "metal_hybrid": 0.012313666753470898
+      },
+      "num_qubits": 60,
+      "num_terms": 196608,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.01162587571889162,
+          0.011808292008936405,
+          0.011895915493369102
+        ],
+        "metal_host_bridge": [
+          0.013290459290146828,
+          0.013408541679382324,
+          0.013654458336532116
+        ],
+        "metal_hybrid": [
+          0.012313666753470898,
+          0.012953207828104496,
+          0.011956624686717987
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.012272750027477741,
+        "metal_host_bridge": 0.013848957605659962,
+        "metal_hybrid": 0.011140124872326851
+      },
+      "num_qubits": 60,
+      "num_terms": 196608,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.012187832966446877,
+          0.012272750027477741,
+          0.012760541401803493
+        ],
+        "metal_host_bridge": [
+          0.013976125046610832,
+          0.013531624339520931,
+          0.013848957605659962
+        ],
+        "metal_hybrid": [
+          0.011773999780416489,
+          0.011140124872326851,
+          0.010342167690396309
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.012340000830590725,
+        "metal_host_bridge": 0.013493916019797325,
+        "metal_hybrid": 0.009489915333688259
+      },
+      "num_qubits": 60,
+      "num_terms": 196608,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.0122681250795722,
+          0.012354625388979912,
+          0.012340000830590725
+        ],
+        "metal_host_bridge": [
+          0.013337249867618084,
+          0.013670666143298149,
+          0.013493916019797325
+        ],
+        "metal_hybrid": [
+          0.009067917242646217,
+          0.0100580845028162,
+          0.009489915333688259
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.016515834257006645,
+        "metal_host_bridge": 0.01813458278775215,
+        "metal_hybrid": 0.013145792298018932
+      },
+      "num_qubits": 60,
+      "num_terms": 262144,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.0160891255363822,
+          0.016599083319306374,
+          0.016515834257006645
+        ],
+        "metal_host_bridge": [
+          0.01753895916044712,
+          0.0183701254427433,
+          0.01813458278775215
+        ],
+        "metal_hybrid": [
+          0.014532165601849556,
+          0.013145792298018932,
+          0.013040667399764061
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.01679633278399706,
+        "metal_host_bridge": 0.018217958509922028,
+        "metal_hybrid": 0.011783500202000141
+      },
+      "num_qubits": 60,
+      "num_terms": 262144,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.016563541255891323,
+          0.01679633278399706,
+          0.016952916979789734
+        ],
+        "metal_host_bridge": [
+          0.018123292364180088,
+          0.018217958509922028,
+          0.018582249991595745
+        ],
+        "metal_hybrid": [
+          0.011783500202000141,
+          0.011013542301952839,
+          0.01205537561327219
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.017071833834052086,
+        "metal_host_bridge": 0.018261415883898735,
+        "metal_hybrid": 0.00990754272788763
+      },
+      "num_qubits": 60,
+      "num_terms": 262144,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.017338166013360023,
+          0.017071833834052086,
+          0.016905250027775764
+        ],
+        "metal_host_bridge": [
+          0.018695457838475704,
+          0.018261415883898735,
+          0.01810595765709877
+        ],
+        "metal_hybrid": [
+          0.013328916393220425,
+          0.00990754272788763,
+          0.009610874578356743
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.035515207797288895,
+        "metal_host_bridge": 0.039313833229243755,
+        "metal_hybrid": 0.024668541736900806
+      },
+      "num_qubits": 60,
+      "num_terms": 524288,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.038137500174343586,
+          0.0350877083837986,
+          0.035515207797288895
+        ],
+        "metal_host_bridge": [
+          0.04206791706383228,
+          0.038892208598554134,
+          0.039313833229243755
+        ],
+        "metal_hybrid": [
+          0.024668541736900806,
+          0.024965832941234112,
+          0.024191541597247124
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.03561883233487606,
+        "metal_host_bridge": 0.037842124700546265,
+        "metal_hybrid": 0.01928304135799408
+      },
+      "num_qubits": 60,
+      "num_terms": 524288,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.03558741696178913,
+          0.03561883233487606,
+          0.03598058223724365
+        ],
+        "metal_host_bridge": [
+          0.037842124700546265,
+          0.03749995771795511,
+          0.038493167608976364
+        ],
+        "metal_hybrid": [
+          0.018312624655663967,
+          0.023115791380405426,
+          0.01928304135799408
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.03652041777968407,
+        "metal_host_bridge": 0.03796491585671902,
+        "metal_hybrid": 0.016375167295336723
+      },
+      "num_qubits": 60,
+      "num_terms": 524288,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.03652041777968407,
+          0.036528291180729866,
+          0.0361411664634943
+        ],
+        "metal_host_bridge": [
+          0.03952474985271692,
+          0.03796491585671902,
+          0.03781979251652956
+        ],
+        "metal_hybrid": [
+          0.017756291665136814,
+          0.016375167295336723,
+          0.015781333670020103
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.0,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.07826291583478451,
+        "metal_host_bridge": 0.08296154253184795,
+        "metal_hybrid": 0.049892582930624485
+      },
+      "num_qubits": 60,
+      "num_terms": 1048576,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.0785278333351016,
+          0.07698208279907703,
+          0.07826291583478451
+        ],
+        "metal_host_bridge": [
+          0.08296154253184795,
+          0.08226333279162645,
+          0.08376950025558472
+        ],
+        "metal_hybrid": [
+          0.05049941595643759,
+          0.049892582930624485,
+          0.04923987481743097
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.5,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.0789116257801652,
+        "metal_host_bridge": 0.08204054087400436,
+        "metal_hybrid": 0.04299258254468441
+      },
+      "num_qubits": 60,
+      "num_terms": 1048576,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.0789116257801652,
+          0.07681674975901842,
+          0.07903737481683493
+        ],
+        "metal_host_bridge": [
+          0.08372899983078241,
+          0.07988404203206301,
+          0.08204054087400436
+        ],
+        "metal_hybrid": [
+          0.04299258254468441,
+          0.04504958353936672,
+          0.042049333453178406
+        ]
+      }
+    },
+    {
+      "duplicate_fraction": 0.9,
+      "median_of_medians_seconds": {
+        "cpu_simplify": 0.0773966247215867,
+        "metal_host_bridge": 0.07923633325845003,
+        "metal_hybrid": 0.03934979159384966
+      },
+      "num_qubits": 60,
+      "num_terms": 1048576,
+      "per_run_median_seconds": {
+        "cpu_simplify": [
+          0.07711550034582615,
+          0.0773966247215867,
+          0.07799666654318571
+        ],
+        "metal_host_bridge": [
+          0.07899854052811861,
+          0.07923633325845003,
+          0.08128183335065842
+        ],
+        "metal_hybrid": [
+          0.0397990420460701,
+          0.03934979159384966,
+          0.03875562455505133
+        ]
+      }
+    }
+  ],
+  "runs": [
+    {
+      "command": "python benchmarks/bench_metal_hybrid_simplify.py --seed 20261106 --output run_1.json",
+      "file": "run_1.json",
+      "git_commit": "68e1340",
+      "git_dirty": true,
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "f7496423aac1490988562f51e0967675997e04294481396a4e8e6866d4345f74",
+        "built_native_source_sha256": "e8e50049d1175e7b81cd4d5306f035d28e88c5d0a5135c2a32892e9988028188",
+        "checkout_native_source_sha256": "e8e50049d1175e7b81cd4d5306f035d28e88c5d0a5135c2a32892e9988028188",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261106
+    },
+    {
+      "command": "python benchmarks/bench_metal_hybrid_simplify.py --seed 20261107 --output run_2.json",
+      "file": "run_2.json",
+      "git_commit": "68e1340",
+      "git_dirty": true,
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "f7496423aac1490988562f51e0967675997e04294481396a4e8e6866d4345f74",
+        "built_native_source_sha256": "e8e50049d1175e7b81cd4d5306f035d28e88c5d0a5135c2a32892e9988028188",
+        "checkout_native_source_sha256": "e8e50049d1175e7b81cd4d5306f035d28e88c5d0a5135c2a32892e9988028188",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261107
+    },
+    {
+      "command": "python benchmarks/bench_metal_hybrid_simplify.py --seed 20261108 --output run_3.json",
+      "file": "run_3.json",
+      "git_commit": "68e1340",
+      "git_dirty": true,
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-darwin.so",
+        "artifact_sha256": "f7496423aac1490988562f51e0967675997e04294481396a4e8e6866d4345f74",
+        "built_native_source_sha256": "e8e50049d1175e7b81cd4d5306f035d28e88c5d0a5135c2a32892e9988028188",
+        "checkout_native_source_sha256": "e8e50049d1175e7b81cd4d5306f035d28e88c5d0a5135c2a32892e9988028188",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261108
+    }
+  ]
+}
