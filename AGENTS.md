@@ -47,6 +47,7 @@ docs/benchmarks/reports/backend_neutral_accelerator_campaign9_2026-05-01.md
 docs/benchmarks/reports/cuda_device_counts_h100_2026-11-03.md
 docs/benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md
 docs/benchmarks/reports/host_transfers_2026-11-03.md
+docs/benchmarks/reports/cpu_threads_2026-11-03.md
 docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md
 docs/benchmarks/reports/host_api_2026-11-03.md
 docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md

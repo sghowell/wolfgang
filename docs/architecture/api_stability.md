@@ -122,6 +122,24 @@ builds must reject explicit `"metal"` requests with rebuild guidance.
 
 Unsupported backend requests should raise `RuntimeError` when the backend is unavailable and `ValueError` when the selector itself is invalid.
 
+The CPU thread cap is public and stable:
+
+```text
+set_num_threads(n): process-wide; replaces any earlier cap, including the
+  environment variable; TypeError for non-integers (bool and float included),
+  ValueError below 1 or too large; caps at or above oneTBB's default
+  concurrency mean no cap
+get_num_threads() -> int: threads the oneTBB kernels may use; 1 without oneTBB
+  or after fork(); ValueError for an invalid WOLFGANG_NUM_THREADS
+WOLFGANG_NUM_THREADS: read once, at first use; an invalid value raises
+  ValueError from get_num_threads() and from CPU compute entry points
+C++: wolfgang::set_cpu_thread_limit, wolfgang::cpu_thread_limit
+  (include/wolfgang/cpu_backend.hpp), std::invalid_argument for the same cases
+```
+
+The auto-dispatch thresholds the cap interacts with (the four-thread oneTBB
+floor) are implementation details and may change with evidence.
+
 ## C++ API And ABI
 
 The C++ API exists for benchmarks and future non-Python bindings. It is not ABI-stable before a deliberate stable C++ release.

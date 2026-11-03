@@ -246,6 +246,25 @@ a `multiprocessing` fork pool), Wolfgang runs the bit-identical scalar or SIMD
 kernels instead, and `WOLFGANG_CPU_BACKEND=tbb` raises. Use the `spawn` or
 `forkserver` start method to keep oneTBB in workers.
 
+By default oneTBB uses every hardware thread the process may run on, and it
+counts the cores the affinity mask allows, not a container's CPU quota.
+`wolfgang_quantum.set_num_threads(n)` or `WOLFGANG_NUM_THREADS=n` caps it, and
+`get_num_threads()` reports the current count. Measured on a 26-vCPU host
+(`docs/benchmarks/reports/cpu_threads_2026-11-03.md`):
+
+- inside a 4-CPU quota, a cap of 4 made simplify 1.25x faster on average and
+  its 90th-percentile time 2.6x shorter, because uncapped oneTBB started 26
+  threads and was throttled; the median call was slower (22.4 against
+  14.5 ms), so the cap trades the best case for steady calls;
+- four uncapped processes sharing the cores ran as fast as four capped ones;
+  oneTBB tolerated the oversubscription;
+- a cap below four threads sends auto dispatch to the scalar or SIMD kernels,
+  so eight processes capped at three threads each were slower than eight
+  uncapped ones.
+
+Use the cap for CPU quotas and to leave cores for other work, and keep it at
+four or more when the process should still run oneTBB.
+
 Current covered optimized kernels:
 
 ```text

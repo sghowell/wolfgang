@@ -24,6 +24,14 @@ report names.
 | 6 | Multi-GPU | Peer access for pooled exports and multi-GPU tests | Needs a host with two or more GPUs; the current H100 and MI300X hosts have one each, so this slice waits for hardware |
 | 7 | Documentation and figures | README and site figures for absolute timings, speedups against baselines and other libraries, and performance over time across the dated reports; fix diagrams that do not render on the site; review every user-facing doc, including an editing pass so the prose reads as written by an engineer and technical writer, without stock phrasing, inflated adjectives, reflexive lists of three, bolded lead-ins, hedging or filler transitions | Strict docs build; diagrams checked in a browser on the live site; link and stale-claim audit; a phrase-pattern scan over README and `docs/` plus an independent editorial review |
 
+## Follow-ups found during the campaign
+
+- The four-thread oneTBB floor for auto dispatch was never measured. With the
+  slice 4 cap, oneTBB at two and three threads beat scalar simplify by 1.6x and
+  2.4x at 500,000 terms on one host. Measure it on more hosts and sizes,
+  separately for simplify (which could take its own floor) and pairwise
+  commutation (where the alternative is a SIMD kernel), before moving it.
+
 ## Decisions carried into the campaign
 
 - Coefficient storage stays `complex128`.
@@ -63,3 +71,16 @@ the KVM test hosts. `to_host` is 1.9-3.2x faster on an H100, and on an MI300X
 1.8-1.9x faster for small operators and 2.2-3.2x at 1M (24 qubits) and 4M
 terms; `to_device` keeps the driver's pageable path, which beat staging
 (`docs/benchmarks/reports/host_transfers_2026-11-03.md`).
+
+Slice 4 merged: `set_num_threads()`, `get_num_threads()` and
+`WOLFGANG_NUM_THREADS` cap the oneTBB CPU kernels for the whole process, and
+auto dispatch's four-thread floor counts the capped threads. Inside a 4-CPU
+quota on a 26-vCPU host a cap of 4 made simplify 1.25x faster on average with
+a 2.6x shorter 90th percentile; without a quota, oversubscription cost nothing
+measurable (`docs/benchmarks/reports/cpu_threads_2026-11-03.md`).
+
+Slice 5 merged: the release CycloneDX SBOM lists the bundled oneTBB runtime
+(version, source commit, `Apache-2.0 AND BSD-3-Clause`) and the vendored DLPack
+header (version, SHA-256) next to the Python dependencies, added by `scripts/sbom_bundled_components.py` from the
+files that pin them and checked against the CycloneDX schema in the release
+workflow.
