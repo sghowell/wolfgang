@@ -101,7 +101,9 @@ def check_pyproject_text(failures: list[str]) -> None:
         '"cibuildwheel>=3.0,<4; python_version >= \'3.11\'"',
         'build = ["cp310-*", "cp311-*", "cp312-*"]',
         'skip = ["*-win32", "*-win_amd64", "*-win_arm64", "*-musllinux*", "pp*"]',
-        'test-command = "python {project}/scripts/wheel_smoke.py"',
+        'test-command = "python {project}/scripts/wheel_smoke.py --require-tbb"',
+        'before-all = "bash {project}/scripts/build_onetbb.sh /tmp/wolfgang-onetbb"',
+        '"cmake.define.WOLFGANG_ENABLE_TBB" = "ON"',
         '"cmake.define.WOLFGANG_ENABLE_CUDA" = "OFF"',
         '"cmake.define.WOLFGANG_ENABLE_HIP" = "OFF"',
         '"cmake.define.WOLFGANG_ENABLE_METAL" = "OFF"',
@@ -211,8 +213,13 @@ def check_pyproject(
         failures,
     )
     require(
-        cibw.get("test-command") == "python {project}/scripts/wheel_smoke.py",
-        "cibuildwheel must run the repo wheel smoke script",
+        cibw.get("test-command") == "python {project}/scripts/wheel_smoke.py --require-tbb",
+        "cibuildwheel must run the repo wheel smoke script and require the bundled oneTBB",
+        failures,
+    )
+    require(
+        cibw.get("before-all") == "bash {project}/scripts/build_onetbb.sh /tmp/wolfgang-onetbb",
+        "cibuildwheel must build the pinned oneTBB that release wheels bundle",
         failures,
     )
 
@@ -225,6 +232,11 @@ def check_pyproject(
     ):
         key = f"cmake.define.{name}"
         require(config.get(key) == "OFF", f"cibuildwheel config-setting {key}=OFF is required", failures)
+    require(
+        config.get("cmake.define.WOLFGANG_ENABLE_TBB") == "ON",
+        "cibuildwheel must require oneTBB so a wheel never ships scalar-only by accident",
+        failures,
+    )
 
     linux = cibw.get("linux", {})
     macos = cibw.get("macos", {})
@@ -274,6 +286,7 @@ def check_release_wheelhouse(*, require_trove_classifiers: bool = False) -> list
         WORKFLOW,
         PYPROJECT,
         "scripts/wheel_smoke.py",
+        "scripts/build_onetbb.sh",
         "scripts/write_release_checksums.py",
         "scripts/prepare_publish_dist.py",
     ):
