@@ -60,7 +60,10 @@ jobs:
         run: |
           mkdir /tmp/unpacked && unzip -q /tmp/wheel/*.whl -d /tmp/unpacked
           module=$(find /tmp/unpacked -name '_wolfgang_core*.so')
-          if nm -D -C --undefined-only "$module" | grep -F 'wolfgang::'; then
+          test -n "$module" || { echo "extension module not found in the wheel"; exit 1; }
+          echo "checking $module"
+          nm -D -C --undefined-only "$module" > /tmp/undefined.txt
+          if grep -F 'wolfgang::' /tmp/undefined.txt; then
             echo "undefined Wolfgang symbols in $module"; exit 1
           fi
 
@@ -99,7 +102,10 @@ jobs:
         run: |
           mkdir /tmp/unpacked && unzip -q /tmp/wheel/*.whl -d /tmp/unpacked
           module=$(find /tmp/unpacked -name '_wolfgang_core*.so')
-          if nm -D -C --undefined-only "$module" | grep -F 'wolfgang::'; then
+          test -n "$module" || { echo "extension module not found in the wheel"; exit 1; }
+          echo "checking $module"
+          nm -D -C --undefined-only "$module" > /tmp/undefined.txt
+          if grep -F 'wolfgang::' /tmp/undefined.txt; then
             echo "undefined Wolfgang symbols in $module"; exit 1
           fi
 
@@ -144,7 +150,10 @@ jobs:
         run: |
           mkdir /tmp/unpacked && unzip -q /tmp/wheel/*.whl -d /tmp/unpacked
           module=$(find /tmp/unpacked -name '_wolfgang_core*.so')
-          if nm -u -C "$module" | grep -F 'wolfgang::'; then
+          test -n "$module" || { echo "extension module not found in the wheel"; exit 1; }
+          echo "checking $module"
+          nm -u -C "$module" > /tmp/undefined.txt
+          if grep -F 'wolfgang::' /tmp/undefined.txt; then
             echo "undefined Wolfgang symbols in $module"; exit 1
           fi
 
