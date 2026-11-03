@@ -71,9 +71,11 @@ enum class SimplifyKernel {
 constexpr std::uint32_t kHybridSortTile = WOLFGANG_HYBRID_SORT_TILE;
 static_assert((kHybridSortTile & (kHybridSortTile - 1U)) == 0, "the tile must be a power of two");
 constexpr std::uint32_t kHybridSortTileThreads = kHybridSortTile / 2;
-// The CPU reduction runs in parallel from this many terms; below it, dispatch
-// overhead outweighs the work. Each chunk gets at least kHybridReduceChunkMinTerms.
-constexpr std::size_t kHybridParallelReduceMinTerms = 65536;
+// The CPU reduction runs in parallel from this many terms. On an M4 Pro it was
+// neutral below 2^20 terms (the GPU sort dominates there) and 1.15x and 1.3x
+// faster end to end at 4M and 16M terms. Each chunk gets at least
+// kHybridReduceChunkMinTerms.
+constexpr std::size_t kHybridParallelReduceMinTerms = std::size_t{1} << 20;
 constexpr std::size_t kHybridReduceChunkMinTerms = 16384;
 // Above this many sort positions each merge stage gets its own command buffer.
 constexpr std::uint32_t kHybridSingleCommandBufferMaxPositions = std::uint32_t{1} << 22;

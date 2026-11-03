@@ -233,22 +233,29 @@ def _packed_operator(num_terms: int, unique: int, seed: int) -> wolfgang_quantum
     return wolfgang_quantum.PauliSum.from_arrays(ux[pick], uz[pick], coeffs, 40)
 
 
+def _keyed_operator(counts: list[int], keys: list[int], coeffs: np.ndarray) -> wolfgang_quantum.PauliSum:
+    # Terms with x = key (z = key ^ 1), repeated counts[i] times each.
+    x = np.repeat(np.asarray(keys, dtype=np.uint64), counts).reshape(-1, 1)
+    z = x ^ np.uint64(1)
+    return wolfgang_quantum.PauliSum.from_arrays(x, z, coeffs, 40)
+
+
 def test_parallel_reduction_runs_spanning_chunks_and_late_overflow() -> None:
-    # From 65,536 terms the CPU reduction runs in parallel chunks that start on
+    # From 2^20 terms the CPU reduction runs in parallel chunks that start on
     # run boundaries; runs far longer than a chunk must not be split.
     _require_metal()
     rng = np.random.default_rng(23)
-    labels = ["XYZ" + "I" * 37] * 150_000 + ["ZZZ" + "I" * 37, "YYY" + "I" * 37] * 20_000
-    coeffs = rng.normal(size=len(labels)) + 1j * rng.normal(size=len(labels))
-    op = wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
+    counts = [700_000, 250_000, 250_000]
+    coeffs = rng.normal(size=sum(counts)) + 1j * rng.normal(size=sum(counts))
+    op = _keyed_operator(counts, [5, 7, 9], coeffs)
     _assert_bit_identical(op.to_device(backend="metal").simplify().to_host(), op.simplify())
-    identical = wolfgang_quantum.PauliSum.from_labels(["XX"] * 100_000, np.ones(100_000))
+    identical = _keyed_operator([1_100_000], [3], np.ones(1_100_000) + 0j)
     _assert_bit_identical(identical.to_device(backend="metal").simplify().to_host(), identical.simplify())
-    cancelling = _packed_operator(80_000, 80_000, seed=4)
+    cancelling = _packed_operator(600_000, 600_000, seed=4)
     assert (cancelling + (-cancelling)).to_device(backend="metal").simplify().num_terms == 0
-    # YY has the largest packed key, so its overflowing run lands in the last chunk.
-    late = wolfgang_quantum.PauliSum.from_labels(
-        ["XI"] * 100_000 + ["YY", "YY"], np.concatenate([np.ones(100_000), [1.7e308, 1.7e308]])
+    # The overflowing run has the largest key, so it lands in the last chunk.
+    late = _keyed_operator(
+        [1_100_000, 2], [1, (1 << 40) - 2], np.concatenate([np.ones(1_100_000), [1.7e308, 1.7e308]]) + 0j
     )
     device = late.to_device(backend="metal")
     with pytest.raises(OverflowError):
