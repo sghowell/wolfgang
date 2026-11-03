@@ -376,8 +376,10 @@ public:
 
   ~CubTemporaryStorage() {
     if (owns_allocation_ && ptr_ != nullptr) {
-      ScopedCudaDevice guard(device_ordinal_);
-      (void)cudaFree(ptr_);
+      const ScopedCudaDevice guard(device_ordinal_, std::nothrow);
+      if (cudaFree(ptr_) != cudaSuccess) {
+        (void)cudaGetLastError();
+      }
     }
     if (workspace_mode_ != wolfgang::cuda::detail::WorkspaceTimingMode::kAbsent) {
       duplicate_reduction_workspace(device_ordinal_).reset();

@@ -143,11 +143,9 @@ DevicePauliSum::Impl::~Impl() {
     return;
   }
   if (exported) {
-    const ScopedCudaDevice guard(device_ordinal, std::nothrow);
-    if (guard.ok()) {
-      (void)cudaDeviceSynchronize();
-    }
-    (void)cudaGetLastError();
+    // A consumer on any stream, on this device or a mapped peer, may still be
+    // reading the buffers.
+    cuda_detail::synchronize_export_readers(device_ordinal);
   }
   // Buffers come from the Wolfgang pool on device_ordinal.
   pool_free_bytes_on_device(x, device_ordinal);

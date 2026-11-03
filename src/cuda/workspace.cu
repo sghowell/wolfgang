@@ -117,8 +117,9 @@ void CudaWorkspace::reset() noexcept {
 void CudaWorkspace::release() noexcept {
   if (base_ptr_ != nullptr) {
     const cuda_detail::ScopedCudaDevice guard(device_ordinal_, std::nothrow);
-    (void)cudaFree(base_ptr_);
-    (void)cudaGetLastError();
+    if (cudaFree(base_ptr_) != cudaSuccess) {
+      (void)cudaGetLastError();
+    }
   }
   base_ptr_ = nullptr;
   aligned_ptr_ = nullptr;

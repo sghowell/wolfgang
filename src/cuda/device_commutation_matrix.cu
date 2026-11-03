@@ -310,11 +310,7 @@ DeviceCommutationMatrix::Impl::~Impl() {
     return;
   }
   if (exported) {
-    const cuda_detail::ScopedCudaDevice guard(device_ordinal, std::nothrow);
-    if (guard.ok()) {
-      (void)cudaDeviceSynchronize();
-    }
-    (void)cudaGetLastError();
+    cuda_detail::synchronize_export_readers(device_ordinal);
   }
   pool_free_bytes_on_device(data, device_ordinal);
 }

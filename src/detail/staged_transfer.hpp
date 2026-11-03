@@ -21,6 +21,7 @@
 // as NumPy does for large arrays.
 
 #include <algorithm>
+#include <atomic>
 #include <complex>
 #include <cstddef>
 #include <cstdint>
@@ -32,6 +33,10 @@
 
 #if defined(__linux__)
 #include <sys/mman.h>
+#endif
+
+#if !defined(_WIN32)
+#include <pthread.h>
 #endif
 
 namespace wolfgang::accelerator_detail {
@@ -154,7 +159,12 @@ class PinnedStagingPool {
       }
     }
     if (void* pointer = Allocate(bytes)) {
-      static const bool registered = std::atexit(release_idle_at_exit) == 0;
+      static const bool registered = [] {
+#if !defined(_WIN32)
+        (void)pthread_atfork(nullptr, nullptr, [] { instance().forked_child_.store(true); });
+#endif
+        return std::atexit(release_idle_at_exit) == 0;
+      }();
       (void)registered;
       return Lease(static_cast<std::byte*>(pointer), bytes);
     }
@@ -179,6 +189,9 @@ class PinnedStagingPool {
 
   static void release_idle_at_exit() {
     PinnedStagingPool& pool = instance();
+    if (pool.forked_child_.load()) {
+      return;  // a forked child cannot use the runtime, or a lock held at fork
+    }
     const std::lock_guard<std::mutex> lock(pool.mutex_);
     for (const auto& [pointer, bytes] : pool.idle_) {
       Free(pointer);
@@ -205,6 +218,7 @@ class PinnedStagingPool {
 
   std::mutex mutex_;
   std::vector<std::pair<std::byte*, std::size_t>> idle_;
+  std::atomic<bool> forked_child_{false};
 };
 
 // Staging capacity for `total_bytes`: twice the total (two halves), as a

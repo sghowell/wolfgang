@@ -91,8 +91,9 @@ private:
     }
     {
       const cuda_detail::ScopedCudaDevice guard(device_ordinal_, std::nothrow);
-      (void)cudaFree(ptr_);
-      (void)cudaGetLastError();
+      if (cudaFree(ptr_) != cudaSuccess) {
+        (void)cudaGetLastError();
+      }
     }
     ptr_ = nullptr;
     capacity_ = 0;
