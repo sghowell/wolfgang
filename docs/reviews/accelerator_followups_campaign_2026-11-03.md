@@ -64,9 +64,10 @@ noted below.
   - compute-sanitizer racecheck and synccheck reported 0 on the new tests;
     memcheck and initcheck results are in the report;
   - local quality and docs profiles passed.
-  - After the review fixes, the rebuilt branch passed the pipeline, parity,
-    small-simplify, generic-simplify and pool suites on the H100 (results
-    below).
+  - after the review fixes, the rebuilt branch (`ad14cfd`) passed the
+    pipeline, parity, small-simplify, generic-simplify, pool and Phase 11 CUDA
+    kernel suites on the H100: 367 passed, the rest skipped as HIP or Metal
+    cases.
 - Residual risk: one H100 and one CCCL release; CUB's kernel choices and
   tile sizes can change with the toolkit. Operators between the fused limit
   and roughly 64K terms still cost 100-120 us, set by sort latency and launch
