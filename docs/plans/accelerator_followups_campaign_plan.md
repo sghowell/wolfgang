@@ -16,7 +16,7 @@ report names.
 
 | # | Slice | Scope | Evidence required |
 | --- | --- | --- | --- |
-| 1 | Device-side simplify counts (CUDA) | Simplify beyond the fused kernel keeps the input maximum, drop rule, run count and survivor count on the device, so one synchronization replaces the eight the slice 9 profile found; the CUDA and HIP pipeline lives in one shared header. `matmul` reaches it through simplify | CPU-equivalence suite; Nsight Systems breakdown before and after; paired H100 timings against a baseline build |
+| 1 | Device-side simplify counts (CUDA) | Simplify beyond the fused kernel keeps the input maximum, drop rule, run count and survivor count on the device, so one wait before sizing the output replaces the eight the slice 9 profile found; the CUDA and HIP pipeline lives in one shared header. `matmul` reaches it through simplify | CPU-equivalence suite; Nsight Systems breakdown before and after; paired H100 timings against a baseline build |
 | 2 | HIP pipeline and per-operation workspace | The shared pipeline on HIP, with its scratch drawn from one reusable per-thread workspace instead of one `hipMalloc` per buffer | CPU-equivalence suite on the MI300X; paired timings against a baseline build |
 | 3 | Pinned transfers | Host-device copies of operators and host statevectors staged through pinned memory where that is measurably faster | Paired transfer timings on H100 and MI300X |
 | 4 | CPU thread cap | A documented way to cap oneTBB's threads (environment variable and Python call), so processes in pools, MPI ranks and CPU-limited containers do not each start one thread per core; auto dispatch uses the capped count | Tests for the cap and the dispatch floor; timings with and without the cap under oversubscription |
@@ -40,8 +40,8 @@ report names.
 ## Status
 
 Slice 1 merged: CUDA simplify beyond the fused kernel runs the device-count
-pipeline in `src/detail/device_simplify_pipeline.cuh`, one synchronization
-instead of eight; `simplify` on 4,096 terms takes 108 us instead of 188 us and
+pipeline in `src/detail/device_simplify_pipeline.cuh`, which waits for the
+GPU once before sizing its output instead of eight times; `simplify` on 4,096 terms takes 108 us instead of 188 us and
 `matmul` on 128 x 128 terms 123 us instead of 202 us on an H100
 (`docs/benchmarks/reports/cuda_device_counts_h100_2026-11-03.md`). Pinned
 per-thread result buffers are freed at thread exit. Review closeout:

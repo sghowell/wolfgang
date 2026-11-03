@@ -88,9 +88,12 @@ paired runs:
 | Two words (100 qubits) | 50,000 | 0.273 -> 0.192 ms (1.43x) | 1.06x |
 | Two words (100 qubits) | 1,000,000 | 1.181 -> 1.090 ms (1.08x) | 1.01x |
 
-Operators wider than two words (130, 256 and 1,024 qubits) gained 1.30-1.85x
-at 128 to 65,536 distinct terms and 1.11-1.37x with 90% duplicates. Single-term
-rows were unchanged. Transfer-inclusive timings at 1M terms are dominated by
+Operators wider than two words gained 1.21-1.85x with distinct terms and
+1.11-1.37x with 90% duplicates, on the rows that reach the pipeline: 130 and
+256 qubits from 4,096 terms, and 1,024 qubits (more than four words, which the
+fused kernel never takes) from 128 terms. The 128-term rows at 130 and 256
+qubits take the fused kernel, and single terms take their own path; those rows
+were unchanged. Transfer-inclusive timings at 1M terms are dominated by
 pageable host-device copies (5-9 ms), which slice 3 addresses.
 
 ## Where the time goes
@@ -114,17 +117,17 @@ copies become 1 and 0, and 16 pool allocations become 7.
 The remaining cost is now set by the GPU work and the launches that feed it,
 not by round trips. The radix sort takes 32 us of the 60 us: six onesweep
 passes of about 5.3 us each, which at 4,096 keys are bound by latency rather
-than bandwidth. The 17 launches and 8 memsets cost about 65 us of host time,
-and the GPU finishes about 29 us after the last one is queued. A CUB select in
-place of the survivor scan measured the same in isolation (8.6 against 8.8 us
-at 4,096 items, 11.8 against 12.3 us at 1M), and the scan has no 2^31-item
-limit, so the scan stays.
+than bandwidth (`kernels_per_call` in the breakdown). The 17 launches and 8
+memsets cost about 65 us of host time, and the GPU finishes about 29 us after
+the last one is queued. Survivors are compacted with a scan rather than CUB's
+select because CCCL 2.7's `DeviceSelect` takes an `int` item count, while its
+scan and reduce-by-key accept 64-bit counts.
 
 ## Correctness
 
 | Check | Result |
 | --- | --- |
-| `tests/test_device_simplify_pipeline.py` (new) | 87 CUDA cases with the fused kernel switched off, so inputs from 2 terms up reach the pipeline. They cover every key kind at 1, 5, 31, 32, 33, 64, 65, 128, 129 and 300 qubits; full cancellation and a single survivor; duplicate-sum overflow; non-finite input taking precedence over an overflowing run at the first, middle and last position; the half-unit drop rule; the separately rounded threshold; error calls followed by valid ones; 32 calls across four threads; and `matmul`. All pass on the baseline too, as regression tests should |
+| `tests/test_device_simplify_pipeline.py` (new) | 92 CUDA cases with the fused kernel switched off, so inputs from 2 terms up reach the pipeline. They cover every key kind at 1, 5, 31, 32, 33, 64, 65, 128, 129 and 300 qubits; 100,000-term operators that span many CUB tiles, including the packed key at 32 qubits; full cancellation and a single survivor; duplicate-sum overflow; non-finite input taking precedence over an overflowing run at the first, middle and last position; the half-unit drop rule; the separately rounded threshold; error calls followed by valid ones; per-thread result buffers across four threads; and `matmul`. The slice changes cost, not behavior, so these tests also pass on the baseline |
 | Existing simplify suites | `test_accelerator_simplify_parity.py`, `test_accelerator_small_simplify.py`, `test_cuda_generic_simplify.py`, `test_cuda_pool_allocator.py`: all pass |
 | `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core` | See the closeout |
 | `compute-sanitizer` on the new tests | racecheck and synccheck: 0. memcheck: no errors besides leak reports, 17 leaked allocations in each build. Five were per-thread result buffers (4-byte flags in the baseline, 24-byte results in the candidate), now freed at thread exit: after the fix, the threads test reports none. The other 12 are the test's device operators, still alive when the sanitizer tears down the context, in both builds. initcheck: every report is inside a reduce-by-key kernel, 84,360 in CUB's (candidate) against 30,096 in Thrust's (baseline); none in Wolfgang's kernels or the scan |

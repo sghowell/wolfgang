@@ -6,12 +6,14 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
-- CUDA: simplify above the fused kernel's 1,024-term limit, and `matmul`
-  through it, keeps the input maximum, drop rule, run count and survivor count
-  on the device and synchronizes once instead of eight times. On an H100,
-  `simplify` on 4,096 terms takes 108 us instead of 188 us and `matmul` on
-  128 x 128 terms 123 us instead of 202 us; device-resident simplify is
-  1.08-1.85x faster from 4,096 to 1M terms
+- CUDA: simplify for operators the fused kernel does not take (more than
+  1,024 terms, more than 512 at three or four words, or more than four words),
+  and `matmul` through it, keeps the input maximum, drop rule, run count and
+  survivor count on the device. It waits for the GPU once before sizing its
+  output instead of eight times. On an H100, `simplify` on 4,096 terms takes
+  108 us instead of 188 us and `matmul` on 128 x 128 terms 123 us instead of
+  202 us; device-resident simplify is 1.08-1.74x faster from 4,096 to 1M terms
+  at up to 128 qubits and 1.11-1.85x faster on wider operators
   (`docs/benchmarks/reports/cuda_device_counts_h100_2026-11-03.md`). Pinned
   result buffers are now freed when the thread that used them exits.
 - CUDA: `DeviceCommutationMatrix` output and its count scratch come from the

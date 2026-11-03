@@ -23,8 +23,8 @@ import wolfgang_quantum
 import wolfgang_quantum._wolfgang_core as core
 
 BACKENDS = ("cuda", "hip")
-# One and two words take packed sort keys (<= 32 qubits in one 64-bit key);
-# wider operators sort term indices.
+# Up to 32 qubits sort one packed 64-bit key, 33-64 and 65-128 qubits sort
+# one- and two-word structs, and wider operators sort term indices.
 WIDTHS = [1, 5, 31, 32, 33, 64, 65, 128, 129, 300]
 
 
@@ -82,6 +82,16 @@ def _assert_matches_cpu(backend: str, op: wolfgang_quantum.PauliSum, **kwargs: f
 def test_pipeline_matches_cpu(pipeline: str, num_qubits: int, num_terms: int, duplicates: float) -> None:
     op = _operator(num_qubits, num_terms, duplicates, seed=num_qubits * 31 + num_terms)
     for kwargs in ({}, {"atol": 0.5}, {"atol": 0.0, "rtol": 0.2}):
+        _assert_matches_cpu(pipeline, op, **kwargs)
+
+
+@pytest.mark.parametrize("pipeline", BACKENDS, indirect=True)
+@pytest.mark.parametrize("num_qubits", [24, 32, 40, 100, 130])
+def test_pipeline_matches_cpu_across_reduction_tiles(pipeline: str, num_qubits: int) -> None:
+    # 100,000 terms span many sort, reduce-by-key and scan tiles, including the
+    # packed key at its widest (2 * 32 bits).
+    op = _operator(num_qubits, 100_000, 0.5, seed=num_qubits + 8)
+    for kwargs in ({}, {"atol": 0.0, "rtol": 0.05}):
         _assert_matches_cpu(pipeline, op, **kwargs)
 
 
@@ -200,7 +210,10 @@ def test_pipeline_calls_carry_no_state(pipeline: str) -> None:
 
 
 @pytest.mark.parametrize("pipeline", BACKENDS, indirect=True)
-def test_pipeline_is_safe_across_threads(pipeline: str) -> None:
+def test_pipeline_threads_keep_separate_results(pipeline: str) -> None:
+    # Each thread has its own mapped result buffer, freed when the thread
+    # exits. DevicePauliSum.simplify holds the GIL, so these calls do not
+    # overlap; the test covers per-thread state, not concurrent execution.
     ops = [_operator(width, 4000, 0.5, seed=width) for width in (24, 40, 100, 130)]
     devices = [op.to_device(backend=pipeline) for op in ops]
     expected = [op.simplify() for op in ops]

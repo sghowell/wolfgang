@@ -11,7 +11,7 @@
   "baseline": "ad6f7a8",
   "candidate": "6ddf58b"
  },
- "method": "Per operation and build: 50 warmup and 500 profiled calls in one process. API entries called at least once per call report calls per call (count / 550) and the median duration. Wall time is the median of three separate 2,000-call loops without the profiler.",
+ "method": "Per operation and build: 50 warmup and 500 profiled calls in one process. API entries called at least once per call report calls per call (count / 550) and the median duration. Wall time is the median of three separate 2,000-call loops without the profiler. kernels_per_call lists every kernel by total GPU time per call (instances per call and microseconds).",
  "operators": "24 qubits; simplify_4096 has 4,096 distinct terms, matmul_128x128 composes a 128-term operator with itself (16,384 products), simplify_128 takes the fused path and is a control",
  "ops": {
   "matmul_128x128": {
@@ -53,6 +53,86 @@
      "[CUDA memset]": 10.0
     },
     "kernel_launches_per_call": 20.0,
+    "kernels_per_call": [
+     {
+      "instances": 8.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortOnesweepKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortOnesweepKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::complex<do",
+      "us": 43.25
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void thrust::THRUST_200700::cuda_cub::core::_kernel_agent",
+      "type_head": "void thrust::THRUST_200700_900_NS::cuda_cub::core::_kernel_agent<thrust::THRUST_200700_900_NS::cuda_cub::__reduce_by_key::ReduceByKeyAgent<thrust::THRUST_200700",
+      "us": 5.48
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceKernel<cub::CUB_200700_900_NS::DeviceReducePolicy<double, unsigned int, wolfgang::<unnamed>::MaxPropagatingNaN>::Policy",
+      "us": 3.94
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortHistogramKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortHistogramKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::complex<d",
+      "us": 3.52
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceSelectSweepKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceSelectSweepKernel<cub::CUB_200700_900_NS::detail::device_select_policy_hub<thrust::THRUST_200700_900_NS::tuple<unsigned long,",
+      "us": 3.21
+     },
+     {
+      "instances": 1.0,
+      "kernel": "wolfgang::",
+      "type_head": "wolfgang::<unnamed>::matmul_product_kernel(const unsigned long *, const unsigned long *, const thrust::THRUST_200700_900_NS::complex<double> *, const unsigned l",
+      "us": 1.79
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceSingleTileKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceSingleTileKernel<cub::CUB_200700_900_NS::DeviceReducePolicy<double, unsigned int, wolfgang::<unnamed>::MaxPropagatingNa",
+      "us": 1.56
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::detail::for_each::static_kernel",
+      "type_head": "void cub::CUB_200700_900_NS::detail::for_each::static_kernel<cub::CUB_200700_900_NS::detail::for_each::policy_hub_t::policy_350_t, long long, thrust::THRUST_200",
+      "us": 1.49
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::detail::for_each::static_kernel",
+      "type_head": "void cub::CUB_200700_900_NS::detail::for_each::static_kernel<cub::CUB_200700_900_NS::detail::for_each::policy_hub_t::policy_350_t, long, thrust::THRUST_200700_9",
+      "us": 1.44
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortExclusiveSumKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortExclusiveSumKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::comple",
+      "us": 1.38
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::detail::for_each::static_kernel",
+      "type_head": "void cub::CUB_200700_900_NS::detail::for_each::static_kernel<cub::CUB_200700_900_NS::detail::for_each::policy_hub_t::policy_350_t, long, thrust::THRUST_200700_9",
+      "us": 1.26
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void thrust::THRUST_200700::cuda_cub::core::_kernel_agent",
+      "type_head": "void thrust::THRUST_200700_900_NS::cuda_cub::core::_kernel_agent<thrust::THRUST_200700_900_NS::cuda_cub::__reduce_by_key::InitAgent<cub::CUB_200700_900_NS::Redu",
+      "us": 0.99
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceCompactInitKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceCompactInitKernel<cub::CUB_200700_900_NS::ScanTileState<int, (bool)1>, int *>(T1, int, T2)",
+      "us": 0.99
+     }
+    ],
     "wall_us_per_call": 203.2,
     "wall_us_per_call_runs": [
      207.3,
@@ -92,6 +172,86 @@
      "[CUDA memset]": 8.0
     },
     "kernel_launches_per_call": 18.0,
+    "kernels_per_call": [
+     {
+      "instances": 6.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortOnesweepKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortOnesweepKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::complex<do",
+      "us": 35.39
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceScanKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceScanKernel<cub::CUB_200700_900_NS::DeviceScanPolicy<unsigned long long, cuda::std::__4::plus<void>>::Policy900, thrust::THRUS",
+      "us": 8.06
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceByKeyKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceByKeyKernel<cub::CUB_200700_900_NS::detail::device_reduce_by_key_policy_hub<thrust::THRUST_200700_900_NS::plus<thrust::",
+      "us": 6.24
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortHistogramKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortHistogramKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::complex<d",
+      "us": 3.41
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceKernel<cub::CUB_200700_900_NS::DeviceReducePolicy<wolfgang::accelerator_detail::CoeffStats, unsigned long long, wolfgan",
+      "us": 2.84
+     },
+     {
+      "instances": 1.0,
+      "kernel": "wolfgang::",
+      "type_head": "wolfgang::<unnamed>::matmul_product_kernel(const unsigned long *, const unsigned long *, const thrust::THRUST_200700_900_NS::complex<double> *, const unsigned l",
+      "us": 1.88
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void wolfgang::accelerator_detail::pipeline_scatter_kernel",
+      "type_head": "void wolfgang::accelerator_detail::pipeline_scatter_kernel<wolfgang::accelerator_detail::PackedKeys>(const T1::RunKey *, const thrust::THRUST_200700_900_NS::com",
+      "us": 1.73
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceSingleTileKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceSingleTileKernel<cub::CUB_200700_900_NS::DeviceReducePolicy<wolfgang::accelerator_detail::CoeffStats, unsigned long lon",
+      "us": 1.57
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortExclusiveSumKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortExclusiveSumKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::comple",
+      "us": 1.35
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void wolfgang::accelerator_detail::pipeline_pack_kernel",
+      "type_head": "void wolfgang::accelerator_detail::pipeline_pack_kernel<wolfgang::accelerator_detail::PackedKeys>(const unsigned long *, const unsigned long *, const thrust::TH",
+      "us": 1.35
+     },
+     {
+      "instances": 1.0,
+      "kernel": "wolfgang::accelerator_detail::pipeline_publish_kernel",
+      "type_head": "wolfgang::accelerator_detail::pipeline_publish_kernel(const wolfgang::accelerator_detail::PipelineState *, const unsigned long long *, unsigned long, wolfgang::",
+      "us": 1.34
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceScanInitKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceScanInitKernel<cub::CUB_200700_900_NS::ScanTileState<unsigned long long, (bool)1>>(T1, int)",
+      "us": 1.0
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceCompactInitKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceCompactInitKernel<cub::CUB_200700_900_NS::ReduceByKeyScanTileState<thrust::THRUST_200700_900_NS::complex<double>, unsigned lo",
+      "us": 0.98
+     }
+    ],
     "wall_us_per_call": 124.6,
     "wall_us_per_call_runs": [
      125.0,
@@ -123,6 +283,14 @@
     "gpu_kernel_us_per_call": 7.9,
     "gpu_memory_ops_per_call": {},
     "kernel_launches_per_call": 1.0,
+    "kernels_per_call": [
+     {
+      "instances": 1.0,
+      "kernel": "void wolfgang::accelerator_detail::small_simplify_kernel",
+      "type_head": "void wolfgang::accelerator_detail::small_simplify_kernel<(int)1>(const unsigned long *, const unsigned long *, const thrust::THRUST_200700_900_NS::complex<doubl",
+      "us": 7.9
+     }
+    ],
     "wall_us_per_call": 18.7,
     "wall_us_per_call_runs": [
      18.7,
@@ -152,6 +320,14 @@
     "gpu_kernel_us_per_call": 7.9,
     "gpu_memory_ops_per_call": {},
     "kernel_launches_per_call": 1.0,
+    "kernels_per_call": [
+     {
+      "instances": 1.0,
+      "kernel": "void wolfgang::accelerator_detail::small_simplify_kernel",
+      "type_head": "void wolfgang::accelerator_detail::small_simplify_kernel<(int)1>(const unsigned long *, const unsigned long *, const thrust::THRUST_200700_900_NS::complex<doubl",
+      "us": 7.9
+     }
+    ],
     "wall_us_per_call": 18.7,
     "wall_us_per_call_runs": [
      18.6,
@@ -199,6 +375,80 @@
      "[CUDA memset]": 10.0
     },
     "kernel_launches_per_call": 19.0,
+    "kernels_per_call": [
+     {
+      "instances": 8.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortOnesweepKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortOnesweepKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::complex<do",
+      "us": 41.66
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void thrust::THRUST_200700::cuda_cub::core::_kernel_agent",
+      "type_head": "void thrust::THRUST_200700_900_NS::cuda_cub::core::_kernel_agent<thrust::THRUST_200700_900_NS::cuda_cub::__reduce_by_key::ReduceByKeyAgent<thrust::THRUST_200700",
+      "us": 5.38
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceKernel<cub::CUB_200700_900_NS::DeviceReducePolicy<double, unsigned int, wolfgang::<unnamed>::MaxPropagatingNaN>::Policy",
+      "us": 3.64
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortHistogramKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortHistogramKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::complex<d",
+      "us": 3.47
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceSelectSweepKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceSelectSweepKernel<cub::CUB_200700_900_NS::detail::device_select_policy_hub<thrust::THRUST_200700_900_NS::tuple<unsigned long,",
+      "us": 2.75
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceSingleTileKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceSingleTileKernel<cub::CUB_200700_900_NS::DeviceReducePolicy<double, unsigned int, wolfgang::<unnamed>::MaxPropagatingNa",
+      "us": 1.61
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::detail::for_each::static_kernel",
+      "type_head": "void cub::CUB_200700_900_NS::detail::for_each::static_kernel<cub::CUB_200700_900_NS::detail::for_each::policy_hub_t::policy_350_t, long, thrust::THRUST_200700_9",
+      "us": 1.43
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortExclusiveSumKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortExclusiveSumKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::comple",
+      "us": 1.37
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::detail::for_each::static_kernel",
+      "type_head": "void cub::CUB_200700_900_NS::detail::for_each::static_kernel<cub::CUB_200700_900_NS::detail::for_each::policy_hub_t::policy_350_t, long long, thrust::THRUST_200",
+      "us": 1.28
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::detail::for_each::static_kernel",
+      "type_head": "void cub::CUB_200700_900_NS::detail::for_each::static_kernel<cub::CUB_200700_900_NS::detail::for_each::policy_hub_t::policy_350_t, long, thrust::THRUST_200700_9",
+      "us": 1.25
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceCompactInitKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceCompactInitKernel<cub::CUB_200700_900_NS::ScanTileState<int, (bool)1>, int *>(T1, int, T2)",
+      "us": 0.99
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void thrust::THRUST_200700::cuda_cub::core::_kernel_agent",
+      "type_head": "void thrust::THRUST_200700_900_NS::cuda_cub::core::_kernel_agent<thrust::THRUST_200700_900_NS::cuda_cub::__reduce_by_key::InitAgent<cub::CUB_200700_900_NS::Redu",
+      "us": 0.99
+     }
+    ],
     "wall_us_per_call": 189.0,
     "wall_us_per_call_runs": [
      189.3,
@@ -238,6 +488,80 @@
      "[CUDA memset]": 8.0
     },
     "kernel_launches_per_call": 17.0,
+    "kernels_per_call": [
+     {
+      "instances": 6.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortOnesweepKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortOnesweepKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::complex<do",
+      "us": 31.85
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceScanKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceScanKernel<cub::CUB_200700_900_NS::DeviceScanPolicy<unsigned long long, cuda::std::__4::plus<void>>::Policy900, thrust::THRUS",
+      "us": 8.11
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceByKeyKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceByKeyKernel<cub::CUB_200700_900_NS::detail::device_reduce_by_key_policy_hub<thrust::THRUST_200700_900_NS::plus<thrust::",
+      "us": 5.05
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortHistogramKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortHistogramKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::complex<d",
+      "us": 3.39
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceKernel<cub::CUB_200700_900_NS::DeviceReducePolicy<wolfgang::accelerator_detail::CoeffStats, unsigned long long, wolfgan",
+      "us": 2.64
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void wolfgang::accelerator_detail::pipeline_scatter_kernel",
+      "type_head": "void wolfgang::accelerator_detail::pipeline_scatter_kernel<wolfgang::accelerator_detail::PackedKeys>(const T1::RunKey *, const thrust::THRUST_200700_900_NS::com",
+      "us": 1.62
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceReduceSingleTileKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceReduceSingleTileKernel<cub::CUB_200700_900_NS::DeviceReducePolicy<wolfgang::accelerator_detail::CoeffStats, unsigned long lon",
+      "us": 1.41
+     },
+     {
+      "instances": 1.0,
+      "kernel": "wolfgang::accelerator_detail::pipeline_publish_kernel",
+      "type_head": "wolfgang::accelerator_detail::pipeline_publish_kernel(const wolfgang::accelerator_detail::PipelineState *, const unsigned long long *, unsigned long, wolfgang::",
+      "us": 1.35
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceRadixSortExclusiveSumKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceRadixSortExclusiveSumKernel<cub::CUB_200700_900_NS::DeviceRadixSortPolicy<unsigned long, thrust::THRUST_200700_900_NS::comple",
+      "us": 1.34
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void wolfgang::accelerator_detail::pipeline_pack_kernel",
+      "type_head": "void wolfgang::accelerator_detail::pipeline_pack_kernel<wolfgang::accelerator_detail::PackedKeys>(const unsigned long *, const unsigned long *, const thrust::TH",
+      "us": 1.31
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceScanInitKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceScanInitKernel<cub::CUB_200700_900_NS::ScanTileState<unsigned long long, (bool)1>>(T1, int)",
+      "us": 1.0
+     },
+     {
+      "instances": 1.0,
+      "kernel": "void cub::CUB_200700::DeviceCompactInitKernel",
+      "type_head": "void cub::CUB_200700_900_NS::DeviceCompactInitKernel<cub::CUB_200700_900_NS::ReduceByKeyScanTileState<thrust::THRUST_200700_900_NS::complex<double>, unsigned lo",
+      "us": 0.99
+     }
+    ],
     "wall_us_per_call": 107.0,
     "wall_us_per_call_runs": [
      109.2,

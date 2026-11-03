@@ -237,8 +237,8 @@ struct TwoWordKeys {
 
 // Wider operators sort term indices. CUB's reduce-by-key compares keys with
 // operator==, so runs are keyed by a reference that carries the word arrays
-// and compares the referenced terms; the first reference of a run names its
-// representative (lowest-index) term.
+// and compares the referenced terms. Every reference in a run names an equal
+// term, so whichever one reduce-by-key keeps supplies the output words.
 struct GenericTermRef {
   const std::uint64_t* x;
   const std::uint64_t* z;
@@ -522,6 +522,9 @@ std::size_t run_pipeline(const PipelineInput& in, Kind kind, double atol, double
   const std::size_t run_keys_at = plan.add<RunKey>(n);
   const std::size_t run_sums_at = plan.add<PipelineComplex>(n);
   const std::size_t state_at = plan.add<PipelineState>(1);
+  // A null temp pointer turns a CUB call into a size query that does no work,
+  // so the region always has at least one byte.
+  temp_bytes = std::max<std::size_t>(temp_bytes, 1);
   const std::size_t temp_at = plan.add<std::byte>(temp_bytes);
   typename Backend::Scratch scratch(plan.bytes());
   std::byte* base = scratch.data();
@@ -531,7 +534,7 @@ std::size_t run_pipeline(const PipelineInput& in, Kind kind, double atol, double
   RunKey* run_keys = reinterpret_cast<RunKey*>(base + run_keys_at);
   PipelineComplex* run_sums = reinterpret_cast<PipelineComplex*>(base + run_sums_at);
   PipelineState* state = reinterpret_cast<PipelineState*>(base + state_at);
-  void* temp = temp_bytes == 0 ? nullptr : static_cast<void*>(base + temp_at);
+  void* temp = base + temp_at;
   unsigned long long* positions = reinterpret_cast<unsigned long long*>(keys);
 
   std::size_t bytes = temp_bytes;

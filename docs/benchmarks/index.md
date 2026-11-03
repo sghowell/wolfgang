@@ -15,7 +15,7 @@ Plan: `docs/plans/accelerator_followups_campaign_plan.md`. Review closeout:
 
 | Report | What it measured |
 | --- | --- |
-| [Device-side simplify counts](reports/cuda_device_counts_h100_2026-11-03.md) | Simplify and `matmul` with one synchronization instead of eight on an H100 |
+| [Device-side simplify counts](reports/cuda_device_counts_h100_2026-11-03.md) | Simplify and `matmul` waiting for the GPU once instead of eight times on an H100 |
 
 ## Portability and interop campaign (November 2026)
 
