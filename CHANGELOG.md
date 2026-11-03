@@ -9,8 +9,12 @@ Next version: TBD
 - CUDA: `DeviceCommutationMatrix` output and its count scratch come from the
   Wolfgang memory pool; an exported matrix synchronizes the device before its
   block is reused. On an H100, `commutes_with_device` on 128 x 128 terms takes
-  10.6 us instead of 64.1 us, and `count_commuting` and `conflict_degrees` are
-  1.1x faster (`docs/benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md`).
+  10.6 us instead of 64.1 us when its output was the process's only
+  `cudaMalloc` buffer, and about 1.14x less time when another one kept the
+  driver's allocation mapped; `count_commuting` and `conflict_degrees` are 1.1x
+  faster (`docs/benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md`).
+  `device_arrays()` now finishes pending host-to-device copies before handing
+  out pointers.
 - `PauliSum.from_cudaq()` and `PauliSum.to_cudaq()` convert to and from CUDA-Q
   `SpinOperator` (the `cudaq` extra, CUDA-Q 0.11 or later). Whole operators
   move through CUDA-Q's flat serialization, checked once per process, with a

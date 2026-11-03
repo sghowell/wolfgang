@@ -17,8 +17,9 @@ count scratch (`count_commuting`, `conflict_degrees`) also used
 - handing the pointer out through DLPack or the CUDA Array Interface marks the
   matrix, and freeing a marked matrix synchronizes the device first. This is
   the rule `DevicePauliSum.device_arrays()` introduced in slice 3;
-- Wolfgang's own kernels read the matrix through a private accessor that does
-  not mark it, so `conflict_degrees` does not force a synchronization on free.
+- the benchmark-only fused consumers read the matrix through a private
+  accessor that does not mark it (the public counts already read it
+  internally).
 
 ## Evidence
 
@@ -56,11 +57,13 @@ Every other row (simplify at five sizes, `matmul`, expectation, transfers,
 the round trip and the CPU control) stayed within 0.97-1.01x.
 
 The baseline cost of `commutes_with_device` depends on what else the process
-holds. When the output is the only `cudaMalloc` buffer, each free unmaps the
-driver's chunk and the next allocation maps it again, about 55 us per call.
-A first run of this comparison kept another matrix alive throughout, which
-kept the chunk mapped. In that run the baseline took 12.1 us against 10.6 us
-for the candidate. The count rows now run after every other row, so they no
+holds. When the output is the only `cudaMalloc` buffer, the profile measured
+`cudaMalloc` at 28.5 us and `cudaFree` at 26.0 us per call, consistent with the
+driver unmapping and remapping its allocation each time. A first run of this
+comparison (not published) kept another matrix alive throughout. In that run
+the baseline took 12.1 us against 10.6 us for the candidate, about 1.14x. A
+loop that keeps the previous matrix alive while computing the next one sits in
+that regime. The count rows now run after every other row, so they no
 longer change the baseline's allocation pattern; earlier campaign reports
 measured the same 64 us baseline. The pooled path costs about 10.6 us in both
 cases.
@@ -84,9 +87,16 @@ that are never written, for value types wider than 8 bytes such as
 ## Limitations
 
 - One H100.
-- An exported matrix now synchronizes the device when it is freed, which
-  waits for unrelated work and can happen during garbage collection; see
-  `docs/architecture/cuda_backend.md`. Unexported matrices free without
-  synchronizing.
+- An exported matrix synchronizes the device when it is freed, which waits
+  for unrelated work and can happen during garbage collection; see
+  `docs/architecture/cuda_backend.md`. The old `cudaFree` synchronized on every
+  free, so this is not new for exported matrices; unexported matrices now free
+  without synchronizing.
+- Pool memory is readable from the owning device only, so a consumer on a
+  peer GPU can no longer read an exported matrix directly, as it could with
+  `cudaMalloc` memory and peer access enabled.
+- `DeviceCommutationMatrix.empty()` returns a pool block allocated in legacy
+  stream order without a synchronization; its contents are undefined until a
+  commutation writes it.
 - Cached pool blocks are unavailable to other libraries until a trim, as for
   every pooled allocation.

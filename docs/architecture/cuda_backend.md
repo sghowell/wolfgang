@@ -295,9 +295,10 @@ views through `torch.from_dlpack`. Consumers must request versioned capsules
 capsule context holds a reference to the owning Python object, so a consumer
 array keeps the operator alive.
 
-Operator buffers come from the stream-ordered pool, so an export marks the
-operator, and freeing a marked operator synchronizes the device before its
-blocks return to the pool, because a consumer may still have work queued on
+Operator buffers come from the stream-ordered pool. An export first finishes
+the legacy stream, because a pageable host-to-device copy from `to_device` can
+return before its DMA lands, and marks the operator; freeing a marked operator
+synchronizes the device before its blocks return to the pool, because a consumer may still have work queued on
 another stream that reads them. Unexported operators free without
 synchronizing. That synchronization runs when the last reference goes away,
 possibly during garbage collection with the GIL held. It waits for unrelated
@@ -539,10 +540,14 @@ buffers and their count scratch also come from the pool. A consumer on another
 stream could still read an exported block after Wolfgang frees it, so handing
 out a matrix's pointer through DLPack or the CUDA Array Interface marks it,
 and freeing a marked matrix synchronizes the device first, as for
-`DevicePauliSum.device_arrays()`. The pool is not revalidated after
+`DevicePauliSum.device_arrays()`. Pool memory is not mapped for peer devices
+(the pool grants no `cudaMemPoolSetAccess`), so exported matrices and device
+arrays are readable from their owning device only, even with peer access
+enabled. The pool is not revalidated after
 `cudaDeviceReset`. Transfers and output creation select the backend with a
 device count rather than a full device-property query.
-Evidence: `docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`.
+Evidence: `docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`,
+`docs/benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md`.
 
 Campaign 3 also added a private benchmark-only commutation output reuse path
 behind `WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT=1`. This path is

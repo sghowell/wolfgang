@@ -75,9 +75,9 @@ private:
 // Defined with the Wolfgang memory pool (cuda/pool_allocator.cu).
 void trim_pools_after_allocation_failure() noexcept;
 
-// Plain cudaMalloc for buffers that may be exported to other frameworks. When
-// memory is short, cached pool blocks are returned to the driver and the
-// allocation is retried once before the failure is reported.
+// Plain cudaMalloc, outside the pool (now used only by benchmark-only reuse
+// buffers). When memory is short, cached pool blocks are returned to the
+// driver and the allocation is retried once before the failure is reported.
 template <typename T>
 void cuda_allocate(T*& pointer, std::size_t count, const char* name) {
   pointer = nullptr;

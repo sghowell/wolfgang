@@ -89,3 +89,11 @@ have nothing to capture, and the multi-launch paths synchronize on
 data-dependent counts that capture cannot fix. The measured follow-ups (pooled
 commutation output, device-side counts in simplify, pinned transfers) moved to
 slice 10 (`docs/benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md`).
+
+Slice 10 merged: `DeviceCommutationMatrix` output and count scratch come from
+the CUDA memory pool with sync-on-free after export, so `commutes_with_device`
+on 128 x 128 terms takes 10.6 us instead of 64.1 us on an H100 when no other
+`cudaMalloc` buffer is live (about 1.14x otherwise)
+(`docs/benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md`). Keeping
+simplify's intermediate counts on the device and pinned transfers remain open
+follow-ups from the slice 9 profile.

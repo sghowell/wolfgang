@@ -92,7 +92,7 @@ def test_cudamalloc_fallback_matches_pooled_results() -> None:
     assert outputs["1"]["results"] == outputs["0"]["results"]
 
 
-def test_commutation_output_and_scratch_come_from_the_pool() -> None:
+def test_commutation_output_comes_from_the_pool_and_counts_release_scratch() -> None:
     _require_cuda_pool_hook()
     if not core._cuda_pool_status_for_testing(0)["enabled"]:
         pytest.skip("CUDA device does not use the memory pool")
@@ -124,7 +124,9 @@ extern "C" __global__ void delayed_byte_copy(long long cycles, unsigned char* ou
 
 @pytest.mark.parametrize("protocol", ["cuda_array_interface", "dlpack"])
 def test_exported_commutation_output_outlives_queued_consumer_work(protocol: str) -> None:
-    _require_cuda_pool_hook()
+    status = dict(core._cuda_status())
+    if not status["built"] or not status["runtime_available"]:
+        pytest.skip(str(status["skip_reason"]))
     cupy = pytest.importorskip("cupy", reason="CuPy is required for CUDA interop tests")
     rng = np.random.default_rng(9)
     labels = ["".join(rng.choice(list("IXYZ"), size=16)) for _ in range(256)]
@@ -134,14 +136,16 @@ def test_exported_commutation_output_outlives_queued_consumer_work(protocol: str
     view = cupy.asarray(matrix) if protocol == "cuda_array_interface" else cupy.from_dlpack(matrix)
     expected = cupy.asnumpy(view)
     assert not expected.all()  # some pairs anticommute, so a reused block would differ
-    out = cupy.zeros(view.size, dtype=cupy.uint8)
+    pointer = matrix.__cuda_array_interface__["data"][0]
     kernel = cupy.RawKernel(_DELAYED_BYTE_COPY, "delayed_byte_copy")
     stream = cupy.cuda.Stream(non_blocking=True)
     with stream:
+        out = cupy.zeros(view.size, dtype=cupy.uint8)
         kernel((1,), (256,), (cupy.int64(100_000_000), out, view.ravel(), cupy.int32(view.size)))
-    del view, matrix
-    gc.collect()  # the exported matrix synchronizes before its block returns to the pool
+    del view, matrix  # the exported matrix synchronizes before its block returns to the pool
     reused = device.commutes_with_device(identity)  # same size, all ones
     stream.synchronize()
     np.testing.assert_array_equal(cupy.asnumpy(out).reshape(expected.shape), expected)
     assert int(reused.count_commuting()) == 256 * 256
+    if reused.__cuda_array_interface__["data"][0] != pointer:
+        pytest.skip("the pool did not hand the freed block to the next matrix, so reuse was not exercised")

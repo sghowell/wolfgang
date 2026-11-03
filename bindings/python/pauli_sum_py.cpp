@@ -1637,7 +1637,9 @@ void bind_pauli_sum(nb::module_& module) {
           "capsules cannot represent the read-only flag. The returned version "
           "is the highest version supported by both producer and consumer; "
           "copy=True and stream=0 are "
-          "rejected by contract. HIP-backed matrices raise until a ROCm "
+          "rejected by contract. On CUDA, exporting marks the matrix so that "
+          "freeing it synchronizes the device first, and the buffer is readable "
+          "from the owning device only. HIP-backed matrices raise until a ROCm "
           "consumer enforces FastPauli's read-only export contract.")
       .def(
           "__dlpack_device__",
@@ -1652,7 +1654,9 @@ void bind_pauli_sum(nb::module_& module) {
               translate_invalid_argument(error);
             }
           },
-          "CUDA Array Interface view of the owned dense uint8 device buffer.");
+          "CUDA Array Interface view of the owned dense uint8 device buffer.\n\n"
+          "On CUDA, exporting marks the matrix so that freeing it synchronizes the device "
+          "first; the buffer is readable from the owning device only.");
 
   nb::class_<DeviceArrayView>(
       module,

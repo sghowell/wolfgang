@@ -312,3 +312,46 @@ Branch `codex/streams-graphs-profile`, documentation and evidence only.
 - Validation: `python scripts/validate.py --profile docs` and `git diff
   --check`.
 - Residual risk: one H100; HIP was not re-profiled.
+
+## Slice 10: Further performance
+
+Branch `codex/cuda-perf`, commits `aa9b583`..`3ce446b`, review fixes and
+documentation. The benchmarked candidate is `3ce446b` (native sources of
+`5ac7121`).
+
+- Change: `DeviceCommutationMatrix` output and its count scratch come from the
+  CUDA pool. Export marks the matrix, and freeing a marked matrix synchronizes
+  the device first.
+- Reviewer: independent agent (CUDA lifetime, pool semantics, benchmark
+  methodology and documentation roles), read-only.
+- Findings: P0 0, P1 0, P2 2, P3 9.
+- P2 resolutions:
+  - pool memory is not mapped for peer devices, so exported buffers (matrix
+    and device arrays) are now documented as owner-device-only; granting peer
+    access is a possible follow-up;
+  - the CHANGELOG qualifies the 6x figure: it holds when the output is the
+    process's only `cudaMalloc` buffer, and the gain is about 1.14x when
+    another one keeps the driver's allocation mapped.
+- P3 resolutions: the export test asserts the freed block was reused (skipping
+  otherwise), creates its output on the consumer stream, drops a needless
+  `gc.collect()` and requires only CUDA and CuPy; the pool test name matches
+  what it checks; the report's accessor and "now" wording and the chunk
+  explanation are corrected and hedged; header and Python docstrings document
+  the sync-on-free and owner-device-only rules; the CUDA backend doc cites the
+  report; a stale allocator comment is fixed; `empty()`'s unsynchronized
+  allocation is documented. Kept as is: the destructor's error clearing,
+  which mirrors `DevicePauliSum`.
+- Outside the diff, the reviewer noted that `device_arrays()` right after
+  `to_device()` could hand a non-blocking consumer a pageable copy still in
+  flight. The export now finishes the legacy stream first.
+- Validation after fixes: on the H100, the pool, CUDA kernel and device-array
+  tests passed (61), with both export tests exercising block reuse; earlier
+  at `5ac7121`, `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile
+  core` passed (949 tests in the CUDA run), memcheck reported 0 errors,
+  initcheck and racecheck 0 on the commutation tests, and the negative
+  control failed both export tests without the mark.
+- Not done in this slice: keeping simplify's intermediate counts on the
+  device (the 4,096-term and `matmul` paths), pinned transfers, and a HIP
+  per-operation workspace. They are recorded as follow-ups.
+- Residual risk: one H100; initcheck errors in Thrust `reduce_by_key`
+  predate this campaign and are attributed to a CUB pattern without proof.

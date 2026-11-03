@@ -284,6 +284,12 @@ DeviceArrayPointers DevicePauliSum::export_device_arrays() const {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }
   impl_->exported = true;
+  // A pageable host-to-device cudaMemcpy (to_device) can return before its DMA
+  // lands; finish the legacy stream so a consumer on any stream sees the data.
+  {
+    ScopedCudaDevice guard(impl_->device_ordinal);
+    check_cuda(cudaStreamSynchronize(cudaStreamLegacy), "finish work before exporting device arrays");
+  }
   DeviceArrayPointers pointers;
   pointers.x = reinterpret_cast<std::uintptr_t>(impl_->x);
   pointers.z = reinterpret_cast<std::uintptr_t>(impl_->z);
