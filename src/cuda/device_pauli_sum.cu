@@ -1,4 +1,5 @@
 #include "device_pauli_sum.cuh"
+#include "cuda/pool_allocator.cuh"
 
 #include <cuda_runtime_api.h>
 #include <thrust/complex.h>
@@ -16,8 +17,14 @@ namespace wolfgang {
 using cuda_detail::check_cuda;
 using cuda_detail::copy_to_device;
 using cuda_detail::copy_to_host;
-using cuda_detail::cuda_allocate;
+using cuda_detail::pool_allocate;
+using cuda_detail::pool_free_bytes;
 using cuda_detail::ScopedCudaDevice;
+
+// std::complex<double> and thrust::complex<double> are both two adjacent
+// doubles, so coefficients cross the host/device boundary without conversion.
+static_assert(sizeof(std::complex<double>) == sizeof(thrust::complex<double>));
+static_assert(alignof(std::complex<double>) <= alignof(thrust::complex<double>));
 
 namespace {
 
@@ -28,26 +35,6 @@ std::string cuda_version_string(int version) {
   const int major = version / 1000;
   const int minor = (version % 1000) / 10;
   return std::to_string(major) + "." + std::to_string(minor);
-}
-
-std::vector<thrust::complex<double>> to_device_coefficients(
-    const std::vector<std::complex<double>>& coeffs) {
-  std::vector<thrust::complex<double>> converted;
-  converted.reserve(coeffs.size());
-  for (const std::complex<double>& coeff : coeffs) {
-    converted.emplace_back(coeff.real(), coeff.imag());
-  }
-  return converted;
-}
-
-std::vector<std::complex<double>> to_host_coefficients(
-    const std::vector<thrust::complex<double>>& coeffs) {
-  std::vector<std::complex<double>> converted;
-  converted.reserve(coeffs.size());
-  for (const thrust::complex<double>& coeff : coeffs) {
-    converted.emplace_back(coeff.real(), coeff.imag());
-  }
-  return converted;
 }
 
 CudaStatus unavailable_status(cudaError_t result) {
@@ -84,15 +71,10 @@ DevicePauliSum::Impl::~Impl() {
   if (x == nullptr && z == nullptr && coeffs == nullptr) {
     return;
   }
-  int previous_device = -1;
-  const cudaError_t current_result = cudaGetDevice(&previous_device);
-  (void)cudaSetDevice(device_ordinal);
-  (void)cudaFree(x);
-  (void)cudaFree(z);
-  (void)cudaFree(coeffs);
-  if (current_result == cudaSuccess && previous_device >= 0 && previous_device != device_ordinal) {
-    (void)cudaSetDevice(previous_device);
-  }
+  // Buffers come from the Wolfgang pool, which frees on the owning device.
+  pool_free_bytes(x);
+  pool_free_bytes(z);
+  pool_free_bytes(coeffs);
 }
 
 DevicePauliSum::DevicePauliSum() noexcept = default;
@@ -136,15 +118,18 @@ DevicePauliSum DevicePauliSum::from_host(
 
   const std::size_t packed_words =
       detail::checked_product(host.num_terms(), host.words(), "device packed words");
-  const std::vector<thrust::complex<double>> coeffs = to_device_coefficients(host.coeffs());
 
   ScopedCudaDevice guard(device);
-  cuda_allocate(impl->x, packed_words, "device x words");
-  cuda_allocate(impl->z, packed_words, "device z words");
-  cuda_allocate(impl->coeffs, host.num_terms(), "device coefficients");
+  pool_allocate(impl->x, packed_words, "device x words");
+  pool_allocate(impl->z, packed_words, "device z words");
+  pool_allocate(impl->coeffs, host.num_terms(), "device coefficients");
   copy_to_device(impl->x, host.x_words().data(), packed_words, "device x words");
   copy_to_device(impl->z, host.z_words().data(), packed_words, "device z words");
-  copy_to_device(impl->coeffs, coeffs.data(), coeffs.size(), "device coefficients");
+  copy_to_device(
+      impl->coeffs,
+      reinterpret_cast<const thrust::complex<double>*>(host.coeffs().data()),
+      host.num_terms(),
+      "device coefficients");
 
   return DevicePauliSum(std::move(impl));
 }
@@ -237,12 +222,16 @@ PauliSum DevicePauliSum::to_host() const {
       detail::checked_product(impl_->num_terms, impl_->words, "host packed words");
   std::vector<std::uint64_t> x(packed_words);
   std::vector<std::uint64_t> z(packed_words);
-  std::vector<thrust::complex<double>> device_coeffs(impl_->num_terms);
+  std::vector<std::complex<double>> coeffs(impl_->num_terms);
 
   ScopedCudaDevice guard(impl_->device_ordinal);
   copy_to_host(x.data(), impl_->x, packed_words, "host x words");
   copy_to_host(z.data(), impl_->z, packed_words, "host z words");
-  copy_to_host(device_coeffs.data(), impl_->coeffs, device_coeffs.size(), "host coefficients");
+  copy_to_host(
+      reinterpret_cast<thrust::complex<double>*>(coeffs.data()),
+      impl_->coeffs,
+      coeffs.size(),
+      "host coefficients");
 
   return PauliSum(
       impl_->num_qubits,
@@ -250,7 +239,7 @@ PauliSum DevicePauliSum::to_host() const {
       impl_->num_terms,
       std::move(x),
       std::move(z),
-      to_host_coefficients(device_coeffs));
+      std::move(coeffs));
 }
 
 std::size_t DevicePauliSum::num_qubits() const noexcept {

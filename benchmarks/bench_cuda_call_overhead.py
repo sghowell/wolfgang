@@ -1,0 +1,113 @@
+"""Per-call overhead of small CUDA DevicePauliSum operations.
+
+Small operands make kernel time negligible, so these timings expose the fixed
+cost of each public call: device discovery, allocation, transfers, launches and
+the closing synchronization. Each variant runs ``--calls`` times back to back
+and the per-call median over ``--repeat`` batches is reported. Run it once per
+build to compare checkouts; CPU simplify on the same operand is the unchanged
+control.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+
+try:
+    from _benchmark_metadata import benchmark_environment, command_string, git_provenance
+except ModuleNotFoundError:
+    from benchmarks._benchmark_metadata import (
+        benchmark_environment,
+        command_string,
+        git_provenance,
+    )
+
+import wolfgang_quantum
+import wolfgang_quantum._wolfgang_core as core
+
+
+def operator(num_qubits: int, num_terms: int, seed: int) -> wolfgang_quantum.PauliSum:
+    rng = np.random.default_rng(seed)
+    letters = np.asarray(list("IXYZ"), dtype="<U1")
+    chars = letters[rng.integers(0, 4, size=(num_terms, num_qubits))]
+    labels = np.ascontiguousarray(chars).view(f"<U{num_qubits}").ravel().tolist()
+    coeffs = rng.normal(size=num_terms) + 1j * rng.normal(size=num_terms)
+    return wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
+
+
+def per_call_seconds(fn: Callable[[], Any], *, calls: int, repeat: int) -> dict[str, Any]:
+    for _ in range(max(3, calls // 10)):
+        fn()
+    batches = []
+    for _ in range(repeat):
+        start = time.perf_counter()
+        for _ in range(calls):
+            fn()
+        batches.append((time.perf_counter() - start) / calls)
+    return {"median_seconds": float(np.median(batches)), "batch_seconds": batches}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--calls", type=int, default=200)
+    parser.add_argument("--repeat", type=int, default=7)
+    parser.add_argument("--label", default="")
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+    if not core._cuda_status().get("runtime_available"):
+        sys.stdout.write(json.dumps({"status": "skipped"}) + "\n")
+        return 0
+
+    tiny = operator(24, 1, 1)
+    small = operator(24, 128, 2)
+    medium = operator(24, 4096, 3)
+    wide = operator(130, 128, 4)
+    psi = np.zeros(2**12, dtype=np.complex128)
+    psi[0] = 1.0
+    expectation_op = operator(12, 64, 5)
+    device = {name: op.to_device() for name, op in
+              {"tiny": tiny, "small": small, "medium": medium, "wide": wide,
+               "expectation": expectation_op}.items()}
+
+    variants: dict[str, Callable[[], Any]] = {
+        "to_device_1_term": tiny.to_device,
+        "to_host_1_term": device["tiny"].to_host,
+        "simplify_1_term": device["tiny"].simplify,
+        "simplify_128_terms_24q": device["small"].simplify,
+        "simplify_4096_terms_24q": device["medium"].simplify,
+        "simplify_128_terms_130q": device["wide"].simplify,
+        "matmul_128x128_24q": lambda: device["small"].matmul(device["small"]),
+        "commutes_with_device_128x128": lambda: device["small"].commutes_with_device(device["small"]),
+        "expectation_64_terms_12q_host_psi": lambda: device["expectation"].expectation_statevector(psi),
+        "round_trip_simplify_128_terms": lambda: small.to_device().simplify().to_host(),
+        "cpu_simplify_128_terms_control": small.simplify,
+    }
+    rows = {name: per_call_seconds(fn, calls=args.calls, repeat=args.repeat) for name, fn in variants.items()}
+    report = {
+        "benchmark": "cuda_call_overhead",
+        "label": args.label,
+        "command": command_string(),
+        "git": git_provenance(),
+        "calls": args.calls,
+        "repeat": args.repeat,
+        "environment": benchmark_environment(dict(core._build_info()), numpy_version=np.__version__),
+        "cuda_status": dict(core._cuda_status()),
+        "rows": rows,
+    }
+    text = json.dumps(report, indent=2, sort_keys=True)
+    if args.output:
+        args.output.write_text(text + "\n", encoding="utf-8")
+    else:
+        sys.stdout.write(text + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

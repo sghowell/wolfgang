@@ -1,4 +1,5 @@
 #include "device_pauli_sum.cuh"
+#include "cuda/pool_allocator.cuh"
 
 #include <cuda.h>
 #include <cuda_runtime_api.h>
@@ -135,15 +136,8 @@ std::complex<double> DevicePauliSum::expectation_statevector_complex128(
   validate_statevector_length(impl_->num_qubits, psi.size());
   ScopedCudaDevice guard(impl_->device_ordinal);
 
-  thrust::complex<double>* device_psi = nullptr;
-  cuda_allocate(device_psi, psi.size(), "device statevector");
-  std::unique_ptr<thrust::complex<double>, void (*)(thrust::complex<double>*)> psi_guard(
-      device_psi,
-      [](thrust::complex<double>* ptr) {
-        if (ptr != nullptr) {
-          (void)cudaFree(ptr);
-        }
-      });
+  const cuda_detail::PoolBuffer<thrust::complex<double>> psi_buffer(psi.size(), "device statevector");
+  thrust::complex<double>* device_psi = psi_buffer.get();
   copy_bytes_to_device(
       device_psi,
       psi.data(),
@@ -164,15 +158,8 @@ std::complex<double> DevicePauliSum::expectation_statevector_complex64(
   validate_statevector_length(impl_->num_qubits, psi.size());
   ScopedCudaDevice guard(impl_->device_ordinal);
 
-  thrust::complex<float>* device_psi = nullptr;
-  cuda_allocate(device_psi, psi.size(), "device statevector");
-  std::unique_ptr<thrust::complex<float>, void (*)(thrust::complex<float>*)> psi_guard(
-      device_psi,
-      [](thrust::complex<float>* ptr) {
-        if (ptr != nullptr) {
-          (void)cudaFree(ptr);
-        }
-      });
+  const cuda_detail::PoolBuffer<thrust::complex<float>> psi_buffer(psi.size(), "device statevector");
+  thrust::complex<float>* device_psi = psi_buffer.get();
   copy_bytes_to_device(
       device_psi,
       psi.data(),
@@ -258,15 +245,8 @@ std::complex<double> DevicePauliSum::expectation_statevector_device_pointer_impl
     check_cuda(cudaDeviceSynchronize(), "synchronize before CUDA statevector expectation");
   }
 
-  double* result_parts = nullptr;
-  cuda_allocate(result_parts, 2, "expectation result accumulator");
-  std::unique_ptr<double, void (*)(double*)> result_guard(
-      result_parts,
-      [](double* ptr) {
-        if (ptr != nullptr) {
-          (void)cudaFree(ptr);
-        }
-      });
+  const cuda_detail::PoolBuffer<double> result_buffer(2, "expectation result accumulator");
+  double* result_parts = result_buffer.get();
   check_cuda(
       cudaMemset(result_parts, 0, 2 * sizeof(double)),
       "initialize CUDA statevector expectation accumulator");
