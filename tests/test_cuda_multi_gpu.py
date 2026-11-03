@@ -133,6 +133,58 @@ def test_device_arrays_round_trip_on_the_second_device() -> None:
         wolfgang_quantum.DevicePauliSum.from_device_arrays(x, z, coeffs, op.num_qubits, device=0)
 
 
+_SECOND_DEVICE_ONLY = textwrap.dedent(
+    """
+    import os
+    import subprocess
+
+    import numpy as np
+    import wolfgang_quantum
+
+
+    def memory_on_gpu0_mib():
+        uuid = subprocess.run(["nvidia-smi", "-i", "0", "--query-gpu=uuid", "--format=csv,noheader"],
+                              capture_output=True, text=True, check=True).stdout.strip()
+        apps = subprocess.run(["nvidia-smi", "--query-compute-apps=gpu_uuid,pid,used_memory",
+                               "--format=csv,noheader,nounits"], capture_output=True, text=True, check=True).stdout
+        for line in apps.splitlines():
+            fields = [field.strip() for field in line.split(",")]
+            if fields[:2] == [uuid, str(os.getpid())]:
+                return float(fields[2])
+        return 0.0
+
+
+    rng = np.random.default_rng(10)
+    labels = ["".join(rng.choice(list("IXYZ"), 24)) for _ in range(2048)]
+    op = wolfgang_quantum.PauliSum.from_labels(labels, rng.normal(size=2048) + 1j * rng.normal(size=2048))
+    device_op = op.to_device(device=1)
+    device_op.simplify().to_host()
+    device_op.matmul(device_op.simplify()).simplify()
+    device_op.commutes_with(device_op)
+    matrix = device_op.commutes_with_device(device_op)
+    matrix.count_commuting()
+    matrix.to_host()
+    psi = np.zeros(1 << 24, dtype=np.complex128)
+    psi[0] = 1.0
+    device_op.expectation_statevector(psi)
+    views = device_op.device_arrays()
+    del views, matrix, device_op
+    print(memory_on_gpu0_mib())
+    """
+)
+
+
+def test_a_process_using_only_the_second_device_leaves_the_first_alone() -> None:
+    # Since CUDA 12, cudaSetDevice creates the device's primary context; switching
+    # back to an unused device 0 after each call used to cost about 500 MiB there.
+    _two_devices()
+    result = subprocess.run(
+        [sys.executable, "-c", _SECOND_DEVICE_ONLY], capture_output=True, text=True, timeout=300, check=False
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert float(result.stdout.strip().splitlines()[-1]) == 0.0, result.stdout
+
+
 _PEER_READ = textwrap.dedent(
     """
     import cupy
