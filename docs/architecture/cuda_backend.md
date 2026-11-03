@@ -455,6 +455,16 @@ the threshold is `atol` alone when `rtol == 0`, and magnitudes are compared in
 half units when `atol + rtol * max_abs` overflows. Evidence:
 `docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`.
 
+Simplify also follows the CPU numeric contract. The max-magnitude reduction
+maps a non-finite component to NaN, so the same pass raises `ValueError` for
+non-finite input. The drop predicate sets an overflow flag for any non-finite
+reduced sum, including the `inf + -inf = NaN` a tree-ordered reduction can
+form. Every reduction path raises `OverflowError` after compaction, including
+the benchmark-only CUB and serial reducers. The flag is a per-thread pinned,
+device-mapped host integer that the host reads after the synchronization the
+compaction already performs, so it adds no copy to ordinary calls. Evidence:
+`docs/benchmarks/reports/hip_parity_mi300x_2026-11-03.md`.
+
 `DevicePauliSum` buffers, Thrust algorithm temporaries, and simplify,
 expectation and commutation scratch come from a Wolfgang-private stream-ordered
 memory pool on the legacy default stream. Every operation still synchronizes
@@ -463,7 +473,8 @@ reused; pooled Thrust algorithms use `par_nosync` for the same reason. The pool
 caches up to 1 GiB of freed blocks per device (`kPoolReleaseThresholdBytes`);
 above that it returns memory to the driver at the next synchronization. On an
 out-of-memory failure, Wolfgang trims every pool and retries once before
-raising `MemoryError`, and it trims at process exit. Cached blocks are not
+raising `MemoryError` (non-pooled `cudaMalloc` allocations follow the same
+rule), and it trims at process exit. Cached blocks are not
 available to other libraries in the process until a trim. Devices without
 memory-pool support, or runs with the benchmark switch
 `WOLFGANG_CUDA_BENCH_DISABLE_POOL=1`, use `cudaMalloc`. `DeviceCommutationMatrix`

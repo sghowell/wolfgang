@@ -1,0 +1,77 @@
+{
+  "note": "rocprofv3 --hip-trace --stats over 220 simplify calls of a 128-term, 24-qubit operator (20 warmup + 200 timed); per-call means exclude each API's single largest call (first-use module load)",
+  "base_commit": "7c69edc",
+  "candidate_commit": "d871133",
+  "rows": [
+    {
+      "api": "hipStreamSynchronize",
+      "base_calls_per_simplify": 12.0,
+      "base_us_per_simplify": 110.55,
+      "cand_calls_per_simplify": 0.0,
+      "cand_us_per_simplify": 0.0
+    },
+    {
+      "api": "hipLaunchKernel",
+      "base_calls_per_simplify": 16.0,
+      "base_us_per_simplify": 46.54,
+      "cand_calls_per_simplify": 10.0,
+      "cand_us_per_simplify": 26.6
+    },
+    {
+      "api": "hipMemcpyWithStream",
+      "base_calls_per_simplify": 3.0,
+      "base_us_per_simplify": 43.41,
+      "cand_calls_per_simplify": 3.0,
+      "cand_us_per_simplify": 43.28
+    },
+    {
+      "api": "hipMemcpy",
+      "base_calls_per_simplify": 0.01,
+      "base_us_per_simplify": 0.15,
+      "cand_calls_per_simplify": 0.01,
+      "cand_us_per_simplify": 0.14
+    },
+    {
+      "api": "hipDeviceSynchronize",
+      "base_calls_per_simplify": 1.0,
+      "base_us_per_simplify": 0.22,
+      "cand_calls_per_simplify": 1.0,
+      "cand_us_per_simplify": 8.42
+    },
+    {
+      "api": "hipMalloc",
+      "base_calls_per_simplify": 13.01,
+      "base_us_per_simplify": 8.88,
+      "cand_calls_per_simplify": 13.01,
+      "cand_us_per_simplify": 8.39
+    },
+    {
+      "api": "hipFree",
+      "base_calls_per_simplify": 13.01,
+      "base_us_per_simplify": 35.26,
+      "cand_calls_per_simplify": 13.01,
+      "cand_us_per_simplify": 51.84
+    },
+    {
+      "api": "hipMemsetAsync",
+      "base_calls_per_simplify": 1.0,
+      "base_us_per_simplify": 3.2,
+      "cand_calls_per_simplify": 1.0,
+      "cand_us_per_simplify": 2.89
+    },
+    {
+      "api": "hipMemcpyAsync",
+      "base_calls_per_simplify": 2.0,
+      "base_us_per_simplify": 5.79,
+      "cand_calls_per_simplify": 2.0,
+      "cand_us_per_simplify": 5.37
+    },
+    {
+      "api": "hipHostMalloc",
+      "base_calls_per_simplify": 0.0,
+      "base_us_per_simplify": 0.0,
+      "cand_calls_per_simplify": 0.0,
+      "cand_us_per_simplify": 0.0
+    }
+  ]
+}

@@ -153,7 +153,10 @@ if duplicate accumulation produces nonfinite components, including the
 are compared safely even when their complex magnitude exceeds the maximum
 double. `tests/test_accelerator_simplify_parity.py` checks each available
 accelerator against CPU simplify; CUDA and HIP may associate long duplicate
-sums differently, so their coefficients match CPU to rounding.
+sums differently, so their coefficients match CPU to rounding. Whether an
+intermediate sum overflows also depends on that order: duplicate sums within
+about a factor of the run length of the largest double may raise
+`OverflowError` on one backend and return a finite result on another.
 
 ## Addition And Scalar Multiplication
 
