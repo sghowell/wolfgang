@@ -1,3 +1,4 @@
+from . import measurement as measurement
 from ._capabilities import BackendCapabilities as BackendCapabilities
 from ._capabilities import CpuCapabilities as CpuCapabilities
 from ._capabilities import WolfgangCapabilities as WolfgangCapabilities
@@ -26,6 +27,7 @@ __all__ = [
     "cuda_devices",
     "hip_available",
     "hip_devices",
+    "measurement",
     "metal_available",
     "metal_devices",
 ]

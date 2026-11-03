@@ -144,6 +144,57 @@ public:
       const std::vector<std::string>& bitstrings,
       const std::vector<double>& counts) const;
 
+  // Estimate <H> from shot counts measured after rotating each qubit into the
+  // basis given by `basis`, a dense-label-order string of X, Y, Z or I (the
+  // right-most character is qubit 0; an empty string means all Z). Every term
+  // must act on each qubit as I or as that qubit's basis letter, so its
+  // eigenvalue on outcome b is (-1)^popcount(support & b). counts are raw shot
+  // counts; standard_error is sqrt(s^2 / N) with s^2 the unbiased sample
+  // variance of the per-shot estimator over N shots (NaN when N <= 1).
+  struct CountsEstimate {
+    std::complex<double> mean;
+    double standard_error = 0.0;
+    double shots = 0.0;
+  };
+  [[nodiscard]] CountsEstimate estimate_counts(
+      const std::vector<std::string>& bitstrings,
+      const std::vector<double>& counts,
+      std::string_view basis) const;
+
+  // Statevector tools share the dense-index convention of expectation: bit q of
+  // a basis index is qubit q, so the right-most label character acts on bit 0.
+  // A Pauli string with masks (x, z) maps |b> to i^popcount(x & z) *
+  // (-1)^popcount(z & b) |b ^ x>. All require num_qubits <= 63.
+
+  // Return H|psi>.
+  [[nodiscard]] std::vector<std::complex<double>> apply_statevector_complex128(
+      std::span<const std::complex<double>> psi) const;
+  [[nodiscard]] std::vector<std::complex<double>> apply_statevector_complex64(
+      std::span<const std::complex<float>> psi) const;
+
+  // Return <psi|H^dagger H|psi> - |<psi|H|psi>|^2, clamped at zero. For a
+  // Hermitian H this is the variance of H in |psi>.
+  [[nodiscard]] double variance_statevector_complex128(
+      std::span<const std::complex<double>> psi) const;
+  [[nodiscard]] double variance_statevector_complex64(
+      std::span<const std::complex<float>> psi) const;
+
+  // Row-major dense matrix with entry [r * 2^n + c] = <r|H|c>. Throws
+  // std::invalid_argument before allocating when 4^num_qubits > max_entries.
+  [[nodiscard]] std::vector<std::complex<double>> to_dense_matrix(std::size_t max_entries) const;
+
+  // Compressed sparse rows with column indices sorted within each row. Each
+  // row holds one entry per distinct x mask; entries that cancel to exactly
+  // zero are omitted. Throws before allocating when 2^n * distinct_x_masks
+  // exceeds max_nonzeros.
+  struct CsrMatrix {
+    std::size_t dimension = 0;
+    std::vector<std::complex<double>> data;
+    std::vector<std::int64_t> indices;
+    std::vector<std::int64_t> indptr;
+  };
+  [[nodiscard]] CsrMatrix to_csr_matrix(std::size_t max_nonzeros) const;
+
   // Test-only guardrail helper exposed through the Python binding. It lets
   // overflow paths be validated without constructing impossible-sized buffers.
   [[nodiscard]] static std::size_t checked_matmul_intermediate_terms_for_testing(

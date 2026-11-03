@@ -9,9 +9,11 @@
 #include <complex>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 #include <span>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -259,6 +261,92 @@ std::complex<double> PauliSum::expectation_z_counts(
     result += coeffs_[term] * (weighted_sum / normalized.total);
   }
   return result;
+}
+
+PauliSum::CountsEstimate PauliSum::estimate_counts(
+    const std::vector<std::string>& bitstrings,
+    const std::vector<double>& counts,
+    std::string_view basis) const {
+  if (bitstrings.size() != counts.size()) {
+    throw std::invalid_argument("count bitstring and count arrays must have the same length");
+  }
+  if (!basis.empty() && basis.size() != num_qubits_) {
+    throw std::invalid_argument("measurement basis length must equal num_qubits");
+  }
+
+  // Basis masks use the packed convention: X sets x, Z sets z, Y sets both.
+  std::vector<std::uint64_t> basis_x(words_, 0);
+  std::vector<std::uint64_t> basis_z(words_, 0);
+  for (std::size_t qubit = 0; qubit < num_qubits_; ++qubit) {
+    const char letter = basis.empty() ? 'Z' : basis[num_qubits_ - 1 - qubit];
+    const std::uint64_t bit = std::uint64_t{1} << (qubit % 64);
+    if (letter == 'X' || letter == 'Y') {
+      basis_x[qubit / 64] |= bit;
+    }
+    if (letter == 'Z' || letter == 'Y') {
+      basis_z[qubit / 64] |= bit;
+    }
+    if (letter != 'X' && letter != 'Y' && letter != 'Z' && letter != 'I') {
+      throw std::invalid_argument("measurement basis may contain only X, Y, Z or I");
+    }
+  }
+
+  // A term is measurable in the basis when, on its support, it matches the
+  // basis letter exactly; its outcome eigenvalue then depends only on support.
+  std::vector<std::uint64_t> support(detail::checked_product(num_terms_, words_, "support"), 0);
+  for (std::size_t term = 0; term < num_terms_; ++term) {
+    for (std::size_t word = 0; word < words_; ++word) {
+      const std::size_t index = term * words_ + word;
+      const std::uint64_t mask = x_[index] | z_[index];
+      if (x_[index] != (basis_x[word] & mask) || z_[index] != (basis_z[word] & mask)) {
+        throw std::invalid_argument(
+            "every term must act as I or as the measurement basis letter on each qubit");
+      }
+      support[index] = mask;
+    }
+  }
+
+  const NormalizedCounts normalized = normalize_counts(counts);
+  double shots = 0.0;
+  for (double count : counts) {
+    shots += count;
+  }
+  const std::vector<std::uint64_t> packed = pack_count_bitstrings(bitstrings, num_qubits_, words_);
+
+  // Per-outcome estimator O(b) = sum_t c_t (-1)^popcount(support_t & b).
+  std::vector<std::complex<double>> outcome_values(bitstrings.size(), {0.0, 0.0});
+  for (std::size_t row = 0; row < bitstrings.size(); ++row) {
+    std::complex<double> value{0.0, 0.0};
+    for (std::size_t term = 0; term < num_terms_; ++term) {
+      bool odd = false;
+      for (std::size_t word = 0; word < words_; ++word) {
+        odd ^= (std::popcount(support[term * words_ + word] & packed[row * words_ + word]) & 1U) != 0;
+      }
+      value += odd ? -coeffs_[term] : coeffs_[term];
+    }
+    outcome_values[row] = value;
+  }
+
+  CountsEstimate estimate;
+  estimate.shots = shots;
+  for (std::size_t row = 0; row < outcome_values.size(); ++row) {
+    estimate.mean += normalized.values[row] * outcome_values[row];
+  }
+  estimate.mean /= normalized.total;
+  if (!(shots > 1.0)) {
+    estimate.standard_error = std::numeric_limits<double>::quiet_NaN();
+    return estimate;
+  }
+  double weighted_square_deviation = 0.0;
+  for (std::size_t row = 0; row < outcome_values.size(); ++row) {
+    weighted_square_deviation += normalized.values[row] * std::norm(outcome_values[row] - estimate.mean);
+  }
+  // Normalized weights share one scale factor, so the weighted mean square
+  // deviation equals the per-shot population variance; rescale to unbiased.
+  const double population_variance = weighted_square_deviation / normalized.total;
+  const double sample_variance = population_variance * shots / (shots - 1.0);
+  estimate.standard_error = std::sqrt(sample_variance / shots);
+  return estimate;
 }
 
 }  // namespace wolfgang
