@@ -21,29 +21,33 @@ equality with the scalar result, and Qiskit's result for the same term set.
 
 ```text
 summaries: docs/benchmarks/data/cpu_parallel_simplify_2026-11-03/
-  summary_x86_64_26vcpu_onetbb2021_11.json   (H100 host CPU, threshold 65536 at the time)
-  summary_epyc9654_16vcpu_onetbb2021_5.json  (dedicated CPU instance, final threshold 8192)
-  summary_epyc9654_16vcpu_threshold_sweep.json
+  summary_x86_64_26vcpu_onetbb2021_11.json      (Xeon host, sizes 2,000 to 1,000,000)
+  summary_epyc9654_16vcpu_onetbb2021_5.json     (EPYC instance, sizes 2,000 to 1,000,000)
+  summary_epyc9654_16vcpu_threshold_sweep.json  (EPYC instance, sizes 1,000 to 65,536)
 per-run reports: private archive (docs/benchmarks/data/**/raw/ is not published)
 benchmark: benchmarks/bench_cpu_parallel_simplify.py
 ```
 
-| Host | CPU | oneTBB | Compiler | Python | Revision |
-| --- | --- | --- | --- | --- | --- |
-| H100 host | x86_64, 26 vCPU | 2021.11 | GCC 13.3 | 3.12.3 | `87af13e` |
-| EPYC instance | AMD EPYC 9654, 16 vCPU | 2021.5 | GCC 11.4 | 3.10.12 | `3590e4a` |
+| Host | CPU | oneTBB | Compiler | Python |
+| --- | --- | --- | --- | --- |
+| Xeon host | Intel Xeon Platinum 8480+, 26 vCPU, Linux 6.8 | 2021.11 | GCC 13.3 | 3.12.3 |
+| EPYC instance | AMD EPYC 9654, 16 vCPU, Linux 5.15 | 2021.5 | GCC 11.4 | 3.10.12 |
 
-Every run's loaded extension matched its checkout's native sources, and every
-tree was clean. The `87af13e` and `3590e4a` kernels are identical; the later
-revision only changes the auto threshold (65,536 to 8,192) and its comment.
-The H100-host `auto` column therefore reflects the old threshold.
+Every run measured revision `e7cecd6`, the final kernel with the signed-zero
+fix and the four-thread auto guard. Trees were clean, and each run's loaded
+extension matched its checkout's native sources. Builds used the portable
+scalar CPU baseline (no native flags) and uncontrolled oneTBB thread counts,
+which is the default.
 
-Commands (3 runs per host, seed `20261104 + run`; 1 warmup and 7 timed
-repetitions; variants in randomized order each repetition):
+Commands (3 runs per host; 1 warmup and 7 timed repetitions; variants in
+randomized order each repetition):
 
 ```text
-python benchmarks/bench_cpu_parallel_simplify.py --seed <s> --output run_<n>.json
-python benchmarks/bench_cpu_parallel_simplify.py --no-qiskit --sizes 1000,2000,4000,8000,16000,32000,65536 --seed <20261204+run> ...
+python benchmarks/bench_cpu_parallel_simplify.py --seed <20261104+run> --output run_<n>.json
+python benchmarks/bench_cpu_parallel_simplify.py --sizes 2000,4000,8000,10000,30000,100000,1000000 \
+    --seed <20261104+run> --output run_<n>.json            # Xeon host
+python benchmarks/bench_cpu_parallel_simplify.py --no-qiskit --sizes 1000,2000,4000,8000,16000,32000,65536 \
+    --seed <20261204+run> --output run_<n>.json            # EPYC threshold sweep
 python benchmarks/bench_cpu_parallel_simplify.py --summarize <dir> --output <summary>
 ```
 
@@ -56,56 +60,74 @@ and 130 qubits, with duplicate fractions 0.0, 0.5 and 0.9. Qiskit is
 Ratios of medians of per-run medians, min-max over the 9 width and duplicate
 combinations at each size:
 
-| Terms | oneTBB vs scalar (H100 host) | oneTBB vs scalar (EPYC) | oneTBB vs Qiskit (EPYC) |
-| ---: | ---: | ---: | ---: |
-| 2,000 | 0.84-1.32x | 0.52-0.88x | 1.15-2.01x |
-| 10,000 | 1.47-2.47x | 1.37-1.88x | 1.47-2.51x |
-| 30,000 | 1.96-3.11x | 1.73-2.39x | 1.68-2.55x |
-| 100,000 | 2.53-4.27x | 2.16-2.88x | 2.06-3.13x |
-| 1,000,000 | 3.29-5.63x | 2.39-3.87x | 2.38-3.88x |
-
-Representative absolute EPYC medians at one million terms:
-
-| Qubits | Duplicate fraction | Scalar | oneTBB | Qiskit |
+| Terms | oneTBB vs scalar (Xeon) | oneTBB vs scalar (EPYC) | oneTBB vs Qiskit (Xeon) | oneTBB vs Qiskit (EPYC) |
 | ---: | ---: | ---: | ---: | ---: |
-| 24 | 0.5 | 125 ms | 47.7 ms | 158 ms |
-| 130 | 0.5 | 258 ms | 71.2 ms | 224 ms |
+| 2,000 | 0.94-1.36x | 0.50-0.95x | 1.59-2.59x | 1.35-2.04x |
+| 10,000 | 1.75-2.58x | 1.61-2.09x | 1.99-2.98x | 1.69-2.62x |
+| 30,000 | 2.33-3.34x | 2.03-2.71x | 2.33-3.80x | 1.90-2.81x |
+| 100,000 | 3.17-4.36x | 2.62-3.37x | 2.97-4.86x | 2.31-3.57x |
+| 1,000,000 | 4.01-5.66x | 2.89-3.66x | 4.67-7.58x | 2.11-4.66x |
+
+`auto` tracks scalar below 8,192 terms and oneTBB above it on both hosts.
+
+Representative absolute EPYC medians at one million terms, duplicate fraction
+0.5:
+
+| Qubits | Scalar | oneTBB | Qiskit |
+| ---: | ---: | ---: | ---: |
+| 24 | 124 ms | 41.0 ms | 173 ms |
+| 100 | 129 ms | 43.7 ms | 204 ms |
+| 130 | 242 ms | 71.4 ms | 225 ms |
 
 The full matrices are in the summaries.
 
 ## Auto threshold
 
-The EPYC sweep places the crossover between 4,000 and 8,000 terms:
+oneTBB / scalar speedup, min / median / max over the 9 combinations:
 
-| Terms | oneTBB / scalar speedup (min / median / max over 9 combinations) |
-| ---: | ---: |
-| 1,000 | 0.38 / 0.54 / 0.64 |
-| 2,000 | 0.37 / 0.64 / 0.75 |
-| 4,000 | 0.80 / 1.10 / 1.42 |
-| 8,000 | 1.26 / 1.54 / 1.66 |
-| 16,000 | 1.54 / 1.73 / 2.06 |
-| 32,000 | 1.87 / 1.96 / 2.40 |
-| 65,536 | 2.16 / 2.25 / 2.61 |
+| Terms | EPYC (16 vCPU) | Xeon (26 vCPU) |
+| ---: | ---: | ---: |
+| 1,000 | 0.45 / 0.57 / 0.70 | not measured |
+| 2,000 | 0.55 / 0.70 / 1.06 | 0.94 / 1.18 / 1.36 |
+| 4,000 | 0.97 / 1.15 / 1.51 | 1.34 / 1.56 / 1.90 |
+| 8,000 | 1.41 / 1.58 / 2.02 | 1.61 / 1.96 / 2.47 |
+| 10,000 | not measured | 1.75 / 2.00 / 2.58 |
+| 16,000 | 1.73 / 1.98 / 2.25 | not measured |
+| 65,536 | 2.60 / 2.64 / 2.76 | not measured |
 
-On the 26-vCPU host every combination is at least 1.47x faster from 10,000
-terms. `kAutoTbbSimplifyTermThreshold = 8192` is the smallest size where both
-hosts win in every combination. With the final threshold, EPYC `auto` medians
-track scalar at 2,000 terms and oneTBB above the threshold.
+The EPYC crossover lies between 4,000 and 8,000 terms; the Xeon host crosses
+near 2,000. `kAutoTbbSimplifyTermThreshold = 8192` is the smallest measured
+size at which oneTBB wins every combination on both hosts. Auto also requires
+at least four oneTBB threads (`kAutoTbbSimplifyMinConcurrency`), because with
+one or two threads the parallel kernel does strictly more work than scalar.
+
+Timings at 1,000-4,000 terms are 0.1-0.5 ms per call, so single-call medians
+are noisy: on EPYC, `auto` and scalar run the same code at 2,000 terms yet their
+medians differ by 0.72-1.35x. The threshold rests on the 8,000-term row, where
+every combination is above 1.4x on both hosts.
 
 ## Correctness
 
 | Check | Result |
 | --- | --- |
-| `tests/test_cpu_parallel_simplify.py` | Structural equality between forced oneTBB and scalar at 3, 24, 64, 100 and 130 qubits, 1-70,000 terms and duplicate fractions 0.0-0.95. Also drop rules, cancellation, overflowing magnitudes and accumulation overflow. Passes on both hosts. |
+| `tests/test_cpu_parallel_simplify.py` | Forced oneTBB and `auto` equal scalar structurally and in raw coefficient bits (signed zeros included, also on `-op`). Covers 3-130 qubits, 1-70,000 terms, duplicate fractions 0.0-0.95, drop rules, cancellation, overflowing magnitudes, a 30,000-entry run spanning several chunks, all-identical input and an overflow raised from the last chunk on a worker thread. Passes on both hosts. |
 | Native contract | Includes duplicate runs that cross chunk boundaries. Passes under AddressSanitizer and UndefinedBehaviorSanitizer with oneTBB on the EPYC instance. |
-| `python scripts/validate.py --profile core` | Passes on the EPYC instance with oneTBB detected (697 tests). |
+| `python scripts/validate.py --profile core` | Passes on the EPYC instance with oneTBB detected (723 tests). |
+
+Every CPU simplify path now seeds each duplicate run with its first
+coefficient (the hash paths, fused matmul and CUDA already did). Before this,
+the scalar sort path turned a lone `-0.0` component into `+0.0` while the hash
+path kept it, so scalar simplify's signed zeros depended on which path its
+heuristics picked.
 
 ## Limitations
 
-- x86_64 only. oneTBB was not installed on the Apple Silicon development
-  machine, so ARM has no oneTBB evidence.
+- x86_64 only. oneTBB was not available on the Apple Silicon development
+  machine, so ARM has no oneTBB evidence (deferral recorded in the plan).
 - Release wheels do not bundle oneTBB. These speedups apply to source builds
   where CMake finds oneTBB.
 - Parallel speedup depends on core count and memory bandwidth. Hosts with fewer
   cores than the two measured here may cross over later than 8,192 terms.
+- Peak memory during the oneTBB kernel exceeds scalar's: sort keys, per-chunk
+  (position, coefficient) outputs and the result coexist. It was not measured.
 - Random dense operators only.
