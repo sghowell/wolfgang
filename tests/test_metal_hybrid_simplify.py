@@ -35,6 +35,12 @@ def _operator(num_qubits: int, num_terms: int, duplicates: float, seed: int) -> 
     return wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
 
 
+def _assert_bit_identical(actual, expected) -> None:
+    # == treats 0.0 and -0.0 as equal; compare raw coefficient bits too.
+    assert actual == expected
+    assert np.array_equal(actual.to_arrays()[2].view(np.uint64), expected.to_arrays()[2].view(np.uint64))
+
+
 @pytest.mark.parametrize("num_qubits", [5, 33, 64])
 @pytest.mark.parametrize("duplicates", [0.0, 0.9])
 def test_hybrid_simplify_is_bit_identical_to_cpu(num_qubits: int, duplicates: float) -> None:
@@ -42,7 +48,9 @@ def test_hybrid_simplify_is_bit_identical_to_cpu(num_qubits: int, duplicates: fl
     op = _operator(num_qubits, HYBRID_MIN_TERMS + 17, duplicates, seed=num_qubits)
     device = op.to_device(backend="metal")
     for kwargs in ({}, {"atol": 0.5}, {"atol": 0.0, "rtol": 0.2}):
-        assert device.simplify(**kwargs).to_host() == op.simplify(**kwargs)
+        _assert_bit_identical(device.simplify(**kwargs).to_host(), op.simplify(**kwargs))
+    negated = -op  # negation produces -0.0 components
+    _assert_bit_identical(negated.to_device(backend="metal").simplify().to_host(), negated.simplify())
 
 
 def test_hybrid_simplify_matches_host_bridge(monkeypatch: pytest.MonkeyPatch) -> None:

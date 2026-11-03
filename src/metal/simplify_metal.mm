@@ -743,8 +743,10 @@ HybridSimplifyOutput simplify_words1_hybrid(
   while (position < terms) {
     const std::uint64_t key_x = sorted_x[position];
     const std::uint64_t key_z = sorted_z[position];
-    std::complex<double> accumulated{0.0, 0.0};
-    std::size_t next = position;
+    // Seed with the run's first coefficient, as every CPU path does, so
+    // signed zeros match CPU simplify bit for bit.
+    std::complex<double> accumulated = coeff_data[sorted_index[position]];
+    std::size_t next = position + 1;
     while (next < terms && sorted_x[next] == key_x && sorted_z[next] == key_z) {
       accumulated += coeff_data[sorted_index[next]];
       ++next;
