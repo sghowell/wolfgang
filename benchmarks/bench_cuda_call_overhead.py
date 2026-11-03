@@ -54,13 +54,52 @@ def per_call_seconds(fn: Callable[[], Any], *, calls: int, repeat: int) -> dict[
     return {"median_seconds": float(np.median(batches)), "batch_seconds": batches}
 
 
+def summarize_reports(directory: Path) -> dict[str, Any]:
+    """Aggregate saved per-build reports into medians of per-run medians plus provenance."""
+    runs: list[dict[str, Any]] = []
+    medians: dict[str, dict[str, list[float]]] = {}
+    for path in sorted(directory.glob("*.json")):
+        report = json.loads(path.read_text(encoding="utf-8"))
+        if report.get("benchmark") != "cuda_call_overhead":
+            continue
+        label = report.get("label", "")
+        runs.append(
+            {
+                "file": path.name,
+                "label": label,
+                "command": report.get("command"),
+                "git_commit": report["git"].get("commit"),
+                "git_dirty": report["git"].get("dirty"),
+                "loaded_native_build": report["environment"].get("loaded_native_build", {}),
+            }
+        )
+        for name, row in report["rows"].items():
+            medians.setdefault(name, {}).setdefault(label, []).append(row["median_seconds"])
+    rows = {
+        name: {
+            label: {"per_run_median_seconds": values, "median_of_medians_seconds": float(np.median(values))}
+            for label, values in by_label.items()
+        }
+        for name, by_label in medians.items()
+    }
+    return {"runs": runs, "rows": rows}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--calls", type=int, default=200)
     parser.add_argument("--repeat", type=int, default=7)
     parser.add_argument("--label", default="")
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--summarize", type=Path, help="aggregate saved reports in this directory")
     args = parser.parse_args()
+    if args.summarize:
+        text = json.dumps(summarize_reports(args.summarize), indent=2, sort_keys=True)
+        if args.output:
+            args.output.write_text(text + "\n", encoding="utf-8")
+        else:
+            sys.stdout.write(text + "\n")
+        return 0
     if not core._cuda_status().get("runtime_available"):
         sys.stdout.write(json.dumps({"status": "skipped"}) + "\n")
         return 0

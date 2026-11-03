@@ -6,6 +6,10 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- CUDA: pool `DevicePauliSum` and scratch allocations in a Wolfgang-private
+  stream-ordered memory pool and skip full device discovery on transfers. On
+  H100, `to_device` of a small operator is 55x faster, `commutes_with_device`
+  14x, and simplify of 50,000-1,000,000 terms 1.6-2.4x (device-resident).
 - Restore the CUDA source build, broken since the shared workspace helper
   refactor, and pin the fully qualified aliases in the header contract test.
 - CUDA simplify for operators wider than 128 qubits now reduces duplicates in

@@ -455,6 +455,19 @@ the threshold is `atol` alone when `rtol == 0`, and magnitudes are compared in
 half units when `atol + rtol * max_abs` overflows. Evidence:
 `docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`.
 
+`DevicePauliSum` buffers, Thrust device vectors and algorithm temporaries,
+and expectation and commutation scratch come from a Wolfgang-private
+stream-ordered memory pool on the legacy default stream. Every operation still
+synchronizes before returning, so a block freed into the pool is never in use
+when it is reused. The pool keeps freed blocks cached for reuse, is separate
+from the device's default pool, and is trimmed at process exit. Devices
+without memory-pool support use `cudaMalloc`. `DeviceCommutationMatrix`
+buffers, which can be exported through DLPack or the CUDA Array Interface,
+always use `cudaMalloc`, because a consumer on another stream could still read
+a pooled block after Wolfgang frees it. Transfers and output creation select
+the backend with a device count rather than a full device-property query.
+Evidence: `docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`.
+
 Campaign 3 also added a private benchmark-only commutation output reuse path
 behind `WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT=1`. This path is
 not public API, does not expose device pointers, and exists only to quantify

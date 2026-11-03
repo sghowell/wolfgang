@@ -41,3 +41,15 @@ Slice 1 merged with H100 evidence:
 
 Slices 2 and 3 merged: `docs/benchmarks/reports/host_api_2026-11-03.md`.
 Slices 4 and 5 merged (no speed claims; correctness-oracle evidence only).
+
+Slice 7: pooled CUDA allocations and cheap device selection
+(`docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`).
+Deferred with reason:
+- **Zero-copy CUDA `DevicePauliSum` views.** These need backend-neutral pointer
+  accessors implemented in the CUDA, HIP and Metal backends, plus an
+  export-aware free path for pooled memory. HIP cannot be compiled or validated
+  in this campaign's environment.
+- **Public streams and graphs.** These stay out. The remaining small-operator
+  floor (about 200 us for device-resident simplify) comes from Thrust's
+  multi-kernel pipeline and its implicit synchronizations, so the next lever is
+  a fused small-operator simplify kernel, not stream-aware APIs.

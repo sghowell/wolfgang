@@ -1,0 +1,493 @@
+{
+  "generic_rows": [],
+  "runs": [
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite specialized --label base --seed 20261121 --output specialized_base_1.json",
+      "file": "specialized_base_1.json",
+      "git_commit": "23121d6",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "e61fee4229309008f1e5ff255630a96d30bc27538a921a0ab0aef151981d0eb1",
+        "built_native_source_sha256": "7ea38f39737b09bd7bc5b1c23d734be893610ca97ccae01c2bd564ae26c91f9f",
+        "checkout_native_source_sha256": "7ea38f39737b09bd7bc5b1c23d734be893610ca97ccae01c2bd564ae26c91f9f",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261121
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite specialized --label base --seed 20261122 --output specialized_base_2.json",
+      "file": "specialized_base_2.json",
+      "git_commit": "23121d6",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "e61fee4229309008f1e5ff255630a96d30bc27538a921a0ab0aef151981d0eb1",
+        "built_native_source_sha256": "7ea38f39737b09bd7bc5b1c23d734be893610ca97ccae01c2bd564ae26c91f9f",
+        "checkout_native_source_sha256": "7ea38f39737b09bd7bc5b1c23d734be893610ca97ccae01c2bd564ae26c91f9f",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261122
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite specialized --label base --seed 20261123 --output specialized_base_3.json",
+      "file": "specialized_base_3.json",
+      "git_commit": "23121d6",
+      "git_dirty": true,
+      "label": "base",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "e61fee4229309008f1e5ff255630a96d30bc27538a921a0ab0aef151981d0eb1",
+        "built_native_source_sha256": "7ea38f39737b09bd7bc5b1c23d734be893610ca97ccae01c2bd564ae26c91f9f",
+        "checkout_native_source_sha256": "7ea38f39737b09bd7bc5b1c23d734be893610ca97ccae01c2bd564ae26c91f9f",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261123
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite specialized --label cand --seed 20261121 --output specialized_cand_1.json",
+      "file": "specialized_cand_1.json",
+      "git_commit": "98ef775",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "eff1b8f416b2ecf3ac59aa60509ebd934ce0c9eadee3b1e7ad790b7c921e840c",
+        "built_native_source_sha256": "324caf50d63fca0f6d94f30f8a03e616f2f0aec86f4881166f1b1c612eb7962a",
+        "checkout_native_source_sha256": "324caf50d63fca0f6d94f30f8a03e616f2f0aec86f4881166f1b1c612eb7962a",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261121
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite specialized --label cand --seed 20261122 --output specialized_cand_2.json",
+      "file": "specialized_cand_2.json",
+      "git_commit": "98ef775",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "eff1b8f416b2ecf3ac59aa60509ebd934ce0c9eadee3b1e7ad790b7c921e840c",
+        "built_native_source_sha256": "324caf50d63fca0f6d94f30f8a03e616f2f0aec86f4881166f1b1c612eb7962a",
+        "checkout_native_source_sha256": "324caf50d63fca0f6d94f30f8a03e616f2f0aec86f4881166f1b1c612eb7962a",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261122
+    },
+    {
+      "command": "python benchmarks/bench_cuda_simplify_paths.py --suite specialized --label cand --seed 20261123 --output specialized_cand_3.json",
+      "file": "specialized_cand_3.json",
+      "git_commit": "98ef775",
+      "git_dirty": false,
+      "label": "cand",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "eff1b8f416b2ecf3ac59aa60509ebd934ce0c9eadee3b1e7ad790b7c921e840c",
+        "built_native_source_sha256": "324caf50d63fca0f6d94f30f8a03e616f2f0aec86f4881166f1b1c612eb7962a",
+        "checkout_native_source_sha256": "324caf50d63fca0f6d94f30f8a03e616f2f0aec86f4881166f1b1c612eb7962a",
+        "matches_checkout_native_sources": true
+      },
+      "seed": 20261123
+    }
+  ],
+  "specialized_rows": [
+    {
+      "median_of_medians_seconds": {
+        "base": 0.004809772000044177,
+        "cand": 0.004779135999342543
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.004854189999605296,
+          0.0047754400002304465,
+          0.004809772000044177
+        ],
+        "cand": [
+          0.004798590000063996,
+          0.004779135999342543,
+          0.0047700449995318195
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0005273110000416636,
+        "cand": 0.0003330309991724789
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0005273110000416636,
+          0.0005182439999771304,
+          0.0005319219999364577
+        ],
+        "cand": [
+          0.0003330309991724789,
+          0.0003342650006743497,
+          0.000327754999489116
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.002049865000117279,
+        "cand": 0.0006956500001251698
+      },
+      "num_qubits": 24,
+      "num_terms": 50000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.002049865000117279,
+          0.002027658000770316,
+          0.0020646080001824885
+        ],
+        "cand": [
+          0.0006975030000830884,
+          0.0006889350006531458,
+          0.0006956500001251698
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.12458175200026744,
+        "cand": 0.13025594999999157
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.12512038299973938,
+          0.12389548999999533,
+          0.12458175200026744
+        ],
+        "cand": [
+          0.13025594999999157,
+          0.1300545450003483,
+          0.1305838850003056
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.001576651999130263,
+        "cand": 0.0006412800003090524
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0015859340001043165,
+          0.001576651999130263,
+          0.0015603880001435755
+        ],
+        "cand": [
+          0.0006412800003090524,
+          0.0006474259998867637,
+          0.0006393869998646551
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.015208806000373443,
+        "cand": 0.005758399999649555
+      },
+      "num_qubits": 24,
+      "num_terms": 1000000,
+      "path": "one_word_packed32",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.015208806000373443,
+          0.01512105799974961,
+          0.01521805900028994
+        ],
+        "cand": [
+          0.005733265999879222,
+          0.005986020999444008,
+          0.005758399999649555
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.004781402999469719,
+        "cand": 0.004750492000312079
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0047552129999530734,
+          0.004781402999469719,
+          0.0048005080006987555
+        ],
+        "cand": [
+          0.00471323100009613,
+          0.004750492000312079,
+          0.004782025000167778
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0006106829996497254,
+        "cand": 0.00030942300054448424
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0006179339998197975,
+          0.0006041159995220369,
+          0.0006106829996497254
+        ],
+        "cand": [
+          0.0003127650006717886,
+          0.00030942300054448424,
+          0.00030865300050209044
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.002003413000238652,
+        "cand": 0.0006778890001442051
+      },
+      "num_qubits": 60,
+      "num_terms": 50000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.002036259999840695,
+          0.001992985000470071,
+          0.002003413000238652
+        ],
+        "cand": [
+          0.0006740460003129556,
+          0.0007001279991527554,
+          0.0006778890001442051
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.11819772899980308,
+        "cand": 0.11850223800047388
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.12028416300017852,
+          0.1179641629996695,
+          0.11819772899980308
+        ],
+        "cand": [
+          0.1192077360001349,
+          0.11850223800047388,
+          0.11832625300030486
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0018690870001591975,
+        "cand": 0.0008604300001024967
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0018785980000757263,
+          0.0018690870001591975,
+          0.0018456449997756863
+        ],
+        "cand": [
+          0.0008604300001024967,
+          0.0008701719998498447,
+          0.0008587649999753921
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.011998226999821782,
+        "cand": 0.005956222000349953
+      },
+      "num_qubits": 60,
+      "num_terms": 1000000,
+      "path": "one_word_two_mask",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.011960489999182755,
+          0.01208945800044603,
+          0.011998226999821782
+        ],
+        "cand": [
+          0.005956222000349953,
+          0.006122066999523668,
+          0.005895935000808095
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.005179421000320872,
+        "cand": 0.0051431820002108
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.005179421000320872,
+          0.0051649359993461985,
+          0.0052264149999246
+        ],
+        "cand": [
+          0.005107612999381672,
+          0.0051431820002108,
+          0.005177435000405239
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0006308110005193157,
+        "cand": 0.0003452680002737907
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0006434310007534805,
+          0.0006243249999897671,
+          0.0006308110005193157
+        ],
+        "cand": [
+          0.0003452680002737907,
+          0.0003462129998297314,
+          0.0003417430007175426
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0022524279993376695,
+        "cand": 0.0008863819994076039
+      },
+      "num_qubits": 100,
+      "num_terms": 50000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0022578230000362964,
+          0.002234107999356638,
+          0.0022524279993376695
+        ],
+        "cand": [
+          0.0008742869995330693,
+          0.0009015179994094069,
+          0.0008863819994076039
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.13646836200041434,
+        "cand": 0.14047159900019324
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.138638166000419,
+          0.13646836200041434,
+          0.1358366680005929
+        ],
+        "cand": [
+          0.14126721600041492,
+          0.14047159900019324,
+          0.1400532249999742
+        ]
+      },
+      "variant": "cpu_simplify_control"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.0025155800003631157,
+        "cand": 0.001402466000399727
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0025155800003631157,
+          0.0025261529999625054,
+          0.0024815520000629476
+        ],
+        "cand": [
+          0.0014081529998293263,
+          0.001402466000399727,
+          0.0013946779999969294
+        ]
+      },
+      "variant": "cuda_device_resident"
+    },
+    {
+      "median_of_medians_seconds": {
+        "base": 0.016755812999690534,
+        "cand": 0.009433107999939239
+      },
+      "num_qubits": 100,
+      "num_terms": 1000000,
+      "path": "two_word",
+      "per_rerun_median_seconds": {
+        "base": [
+          0.0170286060001672,
+          0.016755812999690534,
+          0.016491030999532086
+        ],
+        "cand": [
+          0.009433107999939239,
+          0.009581154999978025,
+          0.009432699000171851
+        ]
+      },
+      "variant": "cuda_transfer_inclusive"
+    }
+  ]
+}
