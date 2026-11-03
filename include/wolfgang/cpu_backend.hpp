@@ -25,10 +25,16 @@ inline constexpr int kAutoTbbSimplifyMinConcurrency = 2;
 // alternative is the scalar kernel, and with at least
 // kAutoTbbPairwiseMinConcurrencyOverSimd when a SIMD kernel covers the
 // operator. Each oneTBB thread runs that SIMD kernel, and one core's two
-// hyperthreads share its vector units, so two threads were 0.85-1.10 times one
-// SIMD thread there; three threads won everywhere.
+// hyperthreads share its vector units, so two threads were 0.82-1.10 times one
+// SIMD thread there.
 inline constexpr int kAutoTbbPairwiseMinConcurrency = 2;
 inline constexpr int kAutoTbbPairwiseMinConcurrencyOverSimd = 3;
+// One-word commutation on AVX2 or AVX-512 is bound by writing its output, so
+// more threads only pay off for large matrices: on two Xeon 8480+ and EPYC 9654
+// configurations oneTBB tied one AVX-512 thread at 2048 x 2048 entries and won
+// from 4096 x 4096, at any thread count. NEON, whose two lanes leave the kernel
+// compute-bound, keeps kAutoTbbPairwiseEntryThreshold.
+inline constexpr std::size_t kAutoTbbPairwiseOneWordX86SimdEntryThreshold = 2048 * 2048;
 
 struct CpuBackendCandidate {
   std::string name;

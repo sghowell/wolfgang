@@ -47,6 +47,23 @@ detail::CommutationRowsKernel tbb_commutation_rows(const CpuBackendReport& repor
   }
   return detail::commutes_with_scalar_rows;
 }
+
+// True for the AVX2 and AVX-512 row kernels, whose one-word form is bound by
+// writing its output (kAutoTbbPairwiseOneWordX86SimdEntryThreshold).
+bool x86_simd_rows(detail::CommutationRowsKernel rows) noexcept {
+#if WOLFGANG_BUILD_AVX512_ENABLED
+  if (rows == detail::commutes_with_avx512_rows) {
+    return true;
+  }
+#endif
+#if WOLFGANG_BUILD_AVX2_ENABLED
+  if (rows == detail::commutes_with_avx2_rows) {
+    return true;
+  }
+#endif
+  (void)rows;
+  return false;
+}
 #endif
 
 }  // namespace
@@ -68,11 +85,13 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
 #if WOLFGANG_BUILD_TBB_ENABLED
     if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb")) {
       const detail::CommutationRowsKernel rows = tbb_commutation_rows(backend, words_);
+      const bool over_simd = rows != detail::commutes_with_scalar_rows;
       // Two threads beat the scalar kernel, but matching a SIMD kernel takes three.
-      const int minimum = rows == detail::commutes_with_scalar_rows
-          ? kAutoTbbPairwiseMinConcurrency
-          : kAutoTbbPairwiseMinConcurrencyOverSimd;
-      if (tbb_auto_has_min_concurrency(minimum)) {
+      const int minimum = over_simd ? kAutoTbbPairwiseMinConcurrencyOverSimd : kAutoTbbPairwiseMinConcurrency;
+      const std::size_t threshold = words_ == 1 && x86_simd_rows(rows)
+          ? kAutoTbbPairwiseOneWordX86SimdEntryThreshold
+          : kAutoTbbPairwiseEntryThreshold;
+      if (entries >= threshold && tbb_auto_has_min_concurrency(minimum)) {
         return detail::commutes_with_tbb(*this, rhs, entries, rows);
       }
     }
