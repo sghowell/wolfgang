@@ -189,3 +189,74 @@ def test_simplify_kernels_are_embedded_at_build_time() -> None:
     cmake = (root / "CMakeLists.txt").read_text(encoding="utf-8")
     assert "src/metal/kernels/simplify.metal" in cmake
     assert "simplify_kernel_source.inc" in cmake
+
+
+def test_build_reports_how_simplify_kernels_load() -> None:
+    _require_metal()
+    assert core._build_info()["metal_simplify_kernels"] in ("precompiled", "runtime_source")
+
+
+def test_runtime_source_kernels_match_precompiled(tmp_path) -> None:
+    # The benchmark-only switch forces the run-time compile; both paths must
+    # give identical results in fresh processes.
+    _require_metal()
+    import json
+    import os
+    import subprocess
+    import sys
+
+    script = (
+        "import json, numpy as np, wolfgang_quantum as wq;"
+        "rng = np.random.default_rng(5); n = 20000;"
+        "x = rng.integers(0, 2**40, size=(n, 1), dtype=np.uint64);"
+        "z = rng.integers(0, 2**40, size=(n, 1), dtype=np.uint64);"
+        "x[n // 2:] = x[: n - n // 2]; z[n // 2:] = z[: n - n // 2];"
+        "op = wq.PauliSum.from_arrays(x, z, rng.normal(size=n) + 0j, 40);"
+        "out = op.to_device(backend='metal').simplify().to_host();"
+        "print(json.dumps([out.num_terms, out.to_arrays()[2].view(np.uint64).tolist()[:200]]))"
+    )
+    results = []
+    for forced in ("0", "1"):
+        env = dict(os.environ, WOLFGANG_METAL_BENCH_RUNTIME_KERNELS=forced)
+        completed = subprocess.run([sys.executable, "-c", script], env=env, capture_output=True, text=True, check=True)
+        results.append(json.loads(completed.stdout.strip().splitlines()[-1]))
+    assert results[0] == results[1]
+
+
+def _packed_operator(num_terms: int, unique: int, seed: int) -> wolfgang_quantum.PauliSum:
+    # Built from packed words: parsing millions of labels would dominate.
+    rng = np.random.default_rng(seed)
+    ux = rng.integers(0, 2**40, size=(unique, 1), dtype=np.uint64)
+    uz = rng.integers(0, 2**40, size=(unique, 1), dtype=np.uint64)
+    pick = np.concatenate([np.arange(unique), rng.integers(0, unique, num_terms - unique)])
+    coeffs = rng.normal(size=num_terms) + 1j * rng.normal(size=num_terms)
+    return wolfgang_quantum.PauliSum.from_arrays(ux[pick], uz[pick], coeffs, 40)
+
+
+def test_parallel_reduction_runs_spanning_chunks_and_late_overflow() -> None:
+    # From 65,536 terms the CPU reduction runs in parallel chunks that start on
+    # run boundaries; runs far longer than a chunk must not be split.
+    _require_metal()
+    rng = np.random.default_rng(23)
+    labels = ["XYZ" + "I" * 37] * 150_000 + ["ZZZ" + "I" * 37, "YYY" + "I" * 37] * 20_000
+    coeffs = rng.normal(size=len(labels)) + 1j * rng.normal(size=len(labels))
+    op = wolfgang_quantum.PauliSum.from_labels(labels, coeffs)
+    _assert_bit_identical(op.to_device(backend="metal").simplify().to_host(), op.simplify())
+    identical = wolfgang_quantum.PauliSum.from_labels(["XX"] * 100_000, np.ones(100_000))
+    _assert_bit_identical(identical.to_device(backend="metal").simplify().to_host(), identical.simplify())
+    cancelling = _packed_operator(80_000, 80_000, seed=4)
+    assert (cancelling + (-cancelling)).to_device(backend="metal").simplify().num_terms == 0
+    # YY has the largest packed key, so its overflowing run lands in the last chunk.
+    late = wolfgang_quantum.PauliSum.from_labels(
+        ["XI"] * 100_000 + ["YY", "YY"], np.concatenate([np.ones(100_000), [1.7e308, 1.7e308]])
+    )
+    device = late.to_device(backend="metal")
+    with pytest.raises(OverflowError):
+        device.simplify()
+
+
+def test_large_input_splits_command_buffers_bit_identically() -> None:
+    # Above 2^22 sort positions each merge stage commits its own command buffer.
+    _require_metal()
+    op = _packed_operator(4_194_305, 2_097_152, seed=9)
+    _assert_bit_identical(op.to_device(backend="metal").simplify().to_host(), op.simplify())
