@@ -72,3 +72,64 @@ noted below.
   tile sizes can change with the toolkit. Operators between the fused limit
   and roughly 64K terms still cost 100-120 us, set by sort latency and launch
   count.
+
+## Slice 2: HIP pipeline and per-thread block cache
+
+Branch `codex/hip-pipeline`. Benchmarked builds: `9af4918` (pipeline only) and
+`4ca8655` (pipeline and cache), against main at `ad6f7a8`.
+
+- Scope: `src/hip/simplify_hip.hip.cpp`, `src/hip/pool_allocator.hip.{hpp,cpp}`,
+  `src/hip/pool_allocator_hooks.hpp`, the private
+  `_hip_thread_cache_status_for_testing` hook,
+  `tests/test_hip_thread_cache.py` (new), `--backend hip` in
+  `benchmarks/bench_cuda_simplify_paths.py`, `docs/architecture/rocm_backend.md`,
+  `CHANGELOG.md`, the report
+  `docs/benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md` and its data,
+  the plan, the evidence index and `AGENTS.md`.
+- Measured in two steps. The pipeline alone made HIP simplify 1.83x faster at
+  4,096 terms but 0.73-0.99x at 50,000 terms, from the cost of freeing its
+  multi-megabyte scratch; the per-thread block cache was added for that and
+  measured as a third build.
+- Tests: the cache and its tests were written together and first ran on the
+  same build, so the tests did not fail first. As a negative control, a build
+  with `kThreadCacheLimitBytes = 0` fails the reuse and thread-exit tests,
+  which shows the cache is used; it does not separately test the thread-exit
+  release (the other two tests check that nothing is retained, which holds
+  trivially with the cache off).
+- Validation: MI300X, `4ca8655`:
+  `WOLFGANG_VALIDATE_HIP=1 python scripts/validate.py --profile core` passed
+  (945 tests in the HIP run); the pipeline, parity, small-simplify, pool and
+  cache suites passed (251 passed). The CPU-only smoke benchmark inside
+  validation reports `correctness_passed: false` for its HIP case because that
+  build has no HIP; earlier MI300X validation logs show the same. A follow-up
+  could make that smoke report `not_applicable` instead.
+- Reviewer: independent agent (HIP runtime, allocator, concurrency, benchmark
+  and documentation roles), read-only.
+- Findings: P0 0, P1 0, P2 2, P3 6.
+- P2 resolutions:
+  - an out-of-memory retry in any Wolfgang HIP allocation now releases the
+    failing thread's idle cached blocks first, as the docs claimed; the docs
+    now say that other threads keep their blocks and that a process can hold
+    up to 512 MiB per thread that has run HIP simplify;
+  - the allocation probe is committed (`benchmarks/probe_simplify_allocations.py`)
+    and was rerun on three builds in history (`ad6f7a8`, `9af4918`, `0be167f`).
+    The report now rests the cache's justification on the pipeline-only
+    versus cache comparison (8.4 ms less `hipFree` and 3.6 ms less `hipMalloc`
+    over 90 calls), presents the ROCm caching explanation as an inference,
+    drops the p90 over all frees as evidence, and records the unexplained
+    1M-term transfer-inclusive gain.
+- P3 resolutions: header and doc comments now say the two blocks are shared
+  by every call site, that an other-device block is freed only when evicted,
+  that freeing relies on `hipFree` waiting for queued work, and that blocks
+  are not revalidated after `hipDeviceReset`; the thread-exit comment gives the
+  right reason; the `rocthrust_default` selector is documented as the current
+  pipeline, the benchmark's strategy label says so, and the Campaign 3 and 4
+  paragraphs in `rocm_backend.md` read as history plus current state; the
+  pool-bypass test has a positive control and skips without pool support; the
+  reuse test runs at 24, 60 and 100 qubits so scratch and a rocThrust
+  temporary are held together; simplify-path summaries record the backend and
+  refuse to mix CUDA and HIP reports; wording fixes in the closeout and
+  CHANGELOG.
+- Validation after fixes (MI300X, `0be167f`): the cache, pool, pipeline,
+  parity, small-simplify, ROCm foundation and Campaign 3 asset suites passed
+  (292 passed).

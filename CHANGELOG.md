@@ -6,6 +6,15 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- HIP: simplify for operators the fused kernel does not take uses the
+  pipeline shared with CUDA, built with hipCUB, so it no longer returns counts through blocking
+  copies, and its scratch (with rocThrust's algorithm temporaries) comes from a
+  per-thread cache of up to two blocks of at most 256 MiB, freed when the
+  thread exits. On an MI300X, `simplify` on 4,096 terms takes 98 us instead of
+  182 us, `matmul` on 128 x 128 terms 124 us instead of 202 us, and
+  device-resident simplify is 1.6-2.7x faster from 50,000 to 1M terms
+  (`docs/benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md`). Pinned
+  result buffers are freed when the thread that used them exits, as on CUDA.
 - CUDA: simplify for operators the fused kernel does not take (more than
   1,024 terms, more than 512 at three or four words, or more than four words),
   and `matmul` through it, keeps the input maximum, drop rule, run count and

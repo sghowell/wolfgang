@@ -2,6 +2,9 @@
 
 #include <hip/hip_runtime.h>
 
+#include <algorithm>
+#include <array>
+#include <atomic>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -113,7 +116,143 @@ hipError_t allocate_on_device(int device, void** pointer, std::size_t bytes) {
       : hipMalloc(pointer, bytes);
 }
 
+// Process-wide totals over every thread's cache, for the test hook.
+std::atomic<std::size_t> g_thread_cache_bytes{0};
+std::atomic<std::size_t> g_thread_cache_allocations{0};
+
+struct CachedBlock {
+  void* pointer = nullptr;
+  std::size_t capacity = 0;
+  int device = -1;
+  bool in_use = false;
+};
+
+void release_cached_block(CachedBlock& block) noexcept {
+  if (block.pointer != nullptr) {
+    pool_free_bytes_on_device(block.pointer, block.device);
+    g_thread_cache_bytes.fetch_sub(block.capacity, std::memory_order_relaxed);
+  }
+  block = CachedBlock{};
+}
+
+// One per thread. Its destructor runs at thread exit; for the main thread,
+// thread_local destructors run before any atexit handler, including the HIP
+// runtime's.
+struct ThreadBlockCache {
+  std::array<CachedBlock, kThreadCacheBlocks> blocks{};
+
+  ThreadBlockCache() = default;
+  ThreadBlockCache(const ThreadBlockCache&) = delete;
+  ThreadBlockCache& operator=(const ThreadBlockCache&) = delete;
+  ~ThreadBlockCache() {
+    for (CachedBlock& block : blocks) {
+      release_cached_block(block);
+    }
+  }
+
+  void release_idle() noexcept {
+    for (CachedBlock& block : blocks) {
+      if (!block.in_use) {
+        release_cached_block(block);
+      }
+    }
+  }
+};
+
+ThreadBlockCache& thread_block_cache() {
+  thread_local ThreadBlockCache cache;
+  return cache;
+}
+
+// Capacity for a new block: the next power of two, so a slowly growing size
+// regrows only logarithmically often, capped at the cache limit.
+std::size_t cached_block_capacity(std::size_t bytes) {
+  std::size_t capacity = std::size_t{1} << 20;
+  while (capacity < bytes) {
+    capacity <<= 1;
+  }
+  return std::max(bytes, std::min(capacity, kThreadCacheLimitBytes));
+}
+
 }  // namespace
+
+void* thread_cached_allocate(std::size_t bytes, const char* name) {
+  if (bytes == 0) {
+    return nullptr;
+  }
+  int device = 0;
+  if (hipGetDevice(&device) != hipSuccess) {
+    (void)hipGetLastError();
+    throw std::runtime_error(std::string("HIP get current device failed for ") + name);
+  }
+  if (bytes > kThreadCacheLimitBytes || device_pool(device).pool != nullptr) {
+    return pool_allocate_bytes(bytes, name);
+  }
+  ThreadBlockCache& cache = thread_block_cache();
+  CachedBlock* fit = nullptr;
+  CachedBlock* replace = nullptr;
+  for (CachedBlock& block : cache.blocks) {
+    if (block.in_use) {
+      continue;
+    }
+    if (block.pointer != nullptr && block.device == device && block.capacity >= bytes &&
+        (fit == nullptr || block.capacity < fit->capacity)) {
+      fit = &block;
+    }
+    if (replace == nullptr || block.capacity < replace->capacity) {
+      replace = &block;
+    }
+  }
+  if (fit != nullptr) {
+    fit->in_use = true;
+    return fit->pointer;
+  }
+  if (replace == nullptr) {
+    return pool_allocate_bytes(bytes, name);  // every cached block is in use
+  }
+  release_cached_block(*replace);
+  const std::size_t capacity = cached_block_capacity(bytes);
+  void* pointer = nullptr;
+  try {
+    pointer = pool_allocate_bytes(capacity, name);
+  } catch (const std::bad_alloc&) {
+    // Idle cached blocks may be what is short; return them and retry with the
+    // exact size.
+    cache.release_idle();
+    pointer = pool_allocate_bytes(bytes, name);
+    replace->capacity = bytes;
+  }
+  if (replace->capacity == 0) {
+    replace->capacity = capacity;
+  }
+  replace->pointer = pointer;
+  replace->device = device;
+  replace->in_use = true;
+  g_thread_cache_bytes.fetch_add(replace->capacity, std::memory_order_relaxed);
+  g_thread_cache_allocations.fetch_add(1, std::memory_order_relaxed);
+  return pointer;
+}
+
+void release_idle_thread_cache() noexcept {
+  thread_block_cache().release_idle();
+}
+
+void thread_cached_free(void* pointer) noexcept {
+  if (pointer == nullptr) {
+    return;
+  }
+  for (CachedBlock& block : thread_block_cache().blocks) {
+    if (block.pointer == pointer) {
+      block.in_use = false;
+      return;
+    }
+  }
+  pool_free_bytes(pointer);  // allocated outside the cache
+}
+
+ThreadCacheCounters thread_cache_counters_for_testing() {
+  return {g_thread_cache_bytes.load(), g_thread_cache_allocations.load(), kThreadCacheLimitBytes};
+}
 
 void trim_pools_after_allocation_failure() noexcept {
   try {
@@ -136,9 +275,11 @@ void* pool_allocate_bytes(std::size_t bytes, const char* name) {
   void* pointer = nullptr;
   hipError_t result = allocate_on_device(device, &pointer, bytes);
   if (result == hipErrorOutOfMemory) {
-    // Cached blocks may be what is short: return them to the driver and retry once.
+    // Cached blocks may be what is short: return the pools' and this thread's
+    // idle blocks to the driver and retry once.
     (void)hipGetLastError();
     trim_pools_after_allocation_failure();
+    release_idle_thread_cache();
     result = allocate_on_device(device, &pointer, bytes);
   }
   if (result == hipErrorOutOfMemory) {

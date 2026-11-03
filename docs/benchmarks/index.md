@@ -16,6 +16,7 @@ Plan: `docs/plans/accelerator_followups_campaign_plan.md`. Review closeout:
 | Report | What it measured |
 | --- | --- |
 | [Device-side simplify counts](reports/cuda_device_counts_h100_2026-11-03.md) | Simplify and `matmul` waiting for the GPU once instead of eight times on an H100 |
+| [HIP device-side counts and cached scratch](reports/hip_device_counts_mi300x_2026-11-03.md) | The same pipeline on an MI300X, and why its scratch needs a per-thread cache |
 
 ## Portability and interop campaign (November 2026)
 
