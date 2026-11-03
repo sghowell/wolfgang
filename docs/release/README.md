@@ -21,7 +21,7 @@ The ledgers and plans that support these claims:
   `bd550f4b91d575277508ca9880ec3695940c8c68`, promotes the active source
   version to `0.2.3`, and keeps the immutable `v0.2.2` tag and its historical
   provenance as read-only evidence instead of rewriting them.
-- `docs/release/0.1.0.md` is the current final-release ledger. It records the
+- `docs/release/0.1.0.md` is the 0.1.0 final-release ledger. It records the
   corrected exact `v0.1.0` tag-ref CPU wheelhouse artifacts, successful TestPyPI
   trusted publishing, clean TestPyPI install-smoke evidence, and the current
   PyPI trusted-publisher blocker, without claiming PyPI publication.

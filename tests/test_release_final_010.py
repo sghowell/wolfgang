@@ -71,9 +71,15 @@ def test_final_support_matrix_tracks_the_published_v023_github_release_without_e
     assert f"`{RELEASE_LEDGER_PATH}`" in matrix
     assert f"0.1.0 tag-ref wheelhouse run: {WHEELHOUSE_RUN}" in matrix
     assert f"Corrected 0.1.0 TestPyPI validation run: {TESTPYPI_RUN}" in matrix
-    assert f"Latest 0.1.0 PyPI publication run: {PYPI_RUN}" in matrix
-    assert "TestPyPI validation: final dry run published and smoke-tested" in matrix
-    assert "PyPI publication: unavailable pending trusted-publisher configuration" in matrix
+    assert f"0.1.0 PyPI publication attempt: {PYPI_RUN} (blocked; not published)" in matrix
+    assert (
+        f"TestPyPI validation: 0.1.0 final dry run published and smoke-tested (run {TESTPYPI_RUN}); "
+        "not run for v0.2.2 or v0.2.3"
+    ) in matrix
+    assert (
+        f"PyPI publication: not published; the 0.1.0 run ({PYPI_RUN}) failed because PyPI had no "
+        "trusted publisher matching the release workflow (invalid-publisher)"
+    ) in matrix
 
     unavailable_claims = (
         "CUDA wheels remain unavailable",

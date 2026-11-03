@@ -21,11 +21,9 @@ Previous checkpoint: v0.1.0rc2 GitHub prerelease
 Reusable cloud hardware qualification harness: docs/release/cloud_hardware_qualification_harness.md
 0.1.0 tag-ref wheelhouse run: 25452754832
 Corrected 0.1.0 TestPyPI validation run: 25462760923
-Latest 0.1.0 PyPI publication run: 25462997972
-TestPyPI validation: historical 0.1.0 dry-run evidence only
-TestPyPI validation: final dry run published and smoke-tested
-PyPI publication: not part of v0.2.3 GitHub-only successor; no TestPyPI or PyPI run has been attempted
-PyPI publication: unavailable pending trusted-publisher configuration
+0.1.0 PyPI publication attempt: 25462997972 (blocked; not published)
+TestPyPI validation: 0.1.0 final dry run published and smoke-tested (run 25462760923); not run for v0.2.2 or v0.2.3
+PyPI publication: not published; the 0.1.0 run (25462997972) failed because PyPI had no trusted publisher matching the release workflow (invalid-publisher), and v0.2.2 and v0.2.3 made no TestPyPI or PyPI run; a matching trusted publisher must be configured before any PyPI release
 ```
 
 ## Support Matrix

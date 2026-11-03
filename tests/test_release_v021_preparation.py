@@ -46,8 +46,28 @@ def test_v021_support_matrix_tracks_published_github_release_without_claiming_pa
     assert f"Latest tagged release: {RELEASE_TAG}" in support
     assert "Historical immutable checkpoint: v0.2.2" in support
     assert f"`{RELEASE_LEDGER_PATH}`" in support
-    assert "PyPI publication: not part of v0.2.3 GitHub-only successor; no TestPyPI or PyPI run has been attempted" in support
-    assert "TestPyPI validation: historical 0.1.0 dry-run evidence only" in support
+    assert "and v0.2.2 and v0.2.3 made no TestPyPI or PyPI run" in support
+    assert "not run for v0.2.2 or v0.2.3" in support
+
+
+def test_support_matrix_states_each_package_index_status_once() -> None:
+    # Each release once appended its own status line, which left the block with
+    # two contradictory "TestPyPI validation:" and "PyPI publication:" lines.
+    support = (ROOT / "docs/release/support_matrix.md").read_text(encoding="utf-8")
+    block = support.split("## Current Package Version", 1)[1].split("## ", 1)[0]
+    lines = [line.strip() for line in block.splitlines()]
+
+    statuses = {}
+    for key in ("TestPyPI validation:", "PyPI publication:"):
+        matching = [line for line in lines if line.startswith(key)]
+        assert len(matching) == 1, (key, matching)
+        statuses[key] = matching[0]
+
+    # One line must carry the whole status: the 0.1.0 runs and the later releases.
+    assert "25462760923" in statuses["TestPyPI validation:"]
+    assert "v0.2.3" in statuses["TestPyPI validation:"]
+    assert "25462997972" in statuses["PyPI publication:"]
+    assert "v0.2.3" in statuses["PyPI publication:"]
 
 
 def test_v021_release_ledger_records_required_release_notes_and_boundaries() -> None:

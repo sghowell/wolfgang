@@ -373,3 +373,31 @@ Branch `codex/docs-refresh`.
   optional libraries; native contracts, benchmark smokes and the sdist smoke)
   passed; `scripts/render_readme_figures.py --check` and `git diff --check`
   passed.
+
+## Follow-up: support matrix package-index lines
+
+Branch `codex/support-matrix-ledger`.
+
+- Scope: the "Current Package Version" block of
+  `docs/release/support_matrix.md`, `docs/release/README.md`,
+  `tests/test_release_final_010.py` and `tests/test_release_v021_preparation.py`.
+- The block held two "TestPyPI validation:" and two "PyPI publication:" lines
+  that contradicted each other, each pinned verbatim by a different release
+  test. One line each now states the whole status: 0.1.0 published its final
+  dry run to TestPyPI (run 25462760923), its PyPI run (25462997972) failed
+  with `invalid-publisher`, and v0.2.2 and v0.2.3 made no package-index run.
+  The release index calls `0.1.0.md` the 0.1.0 final-release ledger rather
+  than the current one.
+- Tests: the updated assertions and a new test that each status key appears
+  exactly once in the block, carrying both the 0.1.0 runs and v0.2.3, failed
+  before the matrix was changed.
+- Reviewer: independent agent (release documentation), read-only.
+- Findings: P0 0, P1 0, P2 0, P3 4. Resolved: the PyPI line names the
+  `invalid-publisher` failure and the remaining requirement; the uniqueness
+  test scans only the block, strips lines and checks both fragments sit on
+  one line; the release index wording. Left as written: the historical
+  `0.2.1.md` and `0.2.2.md` status lines.
+- Validation: `scripts/validate.py --profile core` (696 passed, 964 skipped),
+  `scripts/check_release_readiness.py` and `scripts/check_release_wheelhouse.py`
+  passed before the review fixes; after them, the release, identity and
+  checkpoint tests (54 passed) and `scripts/check_release_readiness.py`.
