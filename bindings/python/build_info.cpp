@@ -6,11 +6,47 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
 
+#include <stdexcept>
+#include <string>
+
 namespace nb = nanobind;
 
 namespace wolfgang::python {
 
 void bind_build_info(nb::module_& module) {
+  module.def(
+      "set_num_threads",
+      [](nb::handle threads) {
+        if (!PyLong_Check(threads.ptr()) || PyBool_Check(threads.ptr())) {
+          throw nb::type_error("threads must be an int");
+        }
+        int overflow = 0;
+        const long long value = PyLong_AsLongLongAndOverflow(threads.ptr(), &overflow);
+        if (overflow < 0 || (overflow == 0 && value < 1)) {
+          throw nb::value_error("threads must be at least 1");
+        }
+        if (overflow > 0) {
+          throw nb::value_error("threads is too large");
+        }
+        wolfgang::set_cpu_thread_limit(static_cast<std::size_t>(value));
+      },
+      nb::arg("threads"),
+      "Cap the threads Wolfgang's parallel CPU kernels (oneTBB) may use.\n\n"
+      "The cap applies to the whole process and replaces any earlier one, including "
+      "WOLFGANG_NUM_THREADS. Use it when several processes share a machine, for "
+      "example in a multiprocessing pool or MPI job, so each does not start one "
+      "thread per core. With 1, or any value below 4, auto dispatch uses the scalar "
+      "or SIMD kernels instead of oneTBB. Results do not depend on the cap. Builds "
+      "without oneTBB accept the call and stay single-threaded.");
+  module.def(
+      "get_num_threads",
+      []() { return wolfgang::cpu_thread_limit(); },
+      "Return how many threads Wolfgang's parallel CPU kernels may use.\n\n"
+      "This is the smaller of oneTBB's default concurrency (hardware threads, "
+      "respecting the process affinity mask) and any cap set by set_num_threads() "
+      "or WOLFGANG_NUM_THREADS. It is 1 when the build has no oneTBB or when oneTBB "
+      "cannot run in this process, for example in a child forked after oneTBB ran. "
+      "Raises ValueError when WOLFGANG_NUM_THREADS is not a positive integer.");
   module.def(
       "_build_info",
       []() {
@@ -78,6 +114,17 @@ void bind_build_info(nb::module_& module) {
         cpu_auto_dispatch_thresholds["tbb_simplify_min_concurrency"] =
             wolfgang::kAutoTbbSimplifyMinConcurrency;
         info["cpu_auto_dispatch_thresholds"] = cpu_auto_dispatch_thresholds;
+        info["cpu_threads_env_var"] = "WOLFGANG_NUM_THREADS";
+        try {
+          info["cpu_thread_limit"] = wolfgang::cpu_thread_limit();
+          info["cpu_auto_tbb_eligible"] = wolfgang::tbb_auto_has_min_concurrency();
+        } catch (const std::invalid_argument& error) {
+          // Report an invalid WOLFGANG_NUM_THREADS instead of failing the whole
+          // build report; get_num_threads() and dispatch raise it.
+          info["cpu_thread_limit"] = nb::none();
+          info["cpu_auto_tbb_eligible"] = false;
+          info["cpu_thread_limit_error"] = std::string(error.what());
+        }
 
         nb::dict optimized_cpu_kernels;
         nb::list tbb_kernels;

@@ -9,6 +9,8 @@ from ._wolfgang_core import DeviceCommutationMatrix as DeviceCommutationMatrix
 from ._wolfgang_core import DevicePauliSum as DevicePauliSum
 from ._wolfgang_core import PauliSum as PauliSum
 from ._wolfgang_core import cuda_available as cuda_available
+from ._wolfgang_core import get_num_threads as get_num_threads
+from ._wolfgang_core import set_num_threads as set_num_threads
 from ._wolfgang_core import cuda_devices as cuda_devices
 from ._wolfgang_core import hip_available as hip_available
 from ._wolfgang_core import hip_devices as hip_devices
@@ -26,10 +28,12 @@ __all__ = [
     "__version__",
     "capabilities",
     "cuda_available",
+    "get_num_threads",
     "cuda_devices",
     "hip_available",
     "hip_devices",
     "measurement",
     "metal_available",
     "metal_devices",
+    "set_num_threads",
 ]
