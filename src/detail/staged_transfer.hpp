@@ -24,6 +24,7 @@
 #include <complex>
 #include <cstddef>
 #include <cstdint>
+#include <cstdlib>
 #include <mutex>
 #include <stdexcept>
 #include <utility>
@@ -98,9 +99,12 @@ DeviceToHostSegment device_to_host_segment(std::vector<T>& destination, const T*
 // so threads that come and go reuse buffers instead of each paying for a
 // pinned allocation (about 80 us for 64 KiB on the MI300X). At most
 // kMaxIdle buffers stay idle; extras are freed on return. The pool itself is
-// never destroyed: freeing pinned memory during static destruction could run
-// after the runtime has shut down, and the driver reclaims it at exit. Like
-// the other host-side buffers, it is not revalidated after a device reset.
+// never destroyed, because static destruction could run after the runtime has
+// shut down. Instead an exit handler, registered after the first pinned
+// allocation and so after the CUDA or HIP runtime installed its own exit
+// handlers, frees the idle buffers first; a buffer still leased at exit is
+// reclaimed by the driver. Like the other host-side buffers, the pool is not
+// revalidated after a device reset.
 // `Allocate(bytes)` returns pinned memory or nullptr; `Free(pointer)` frees it.
 template <void* (*Allocate)(std::size_t), void (*Free)(void*)>
 class PinnedStagingPool {
@@ -150,6 +154,8 @@ class PinnedStagingPool {
       }
     }
     if (void* pointer = Allocate(bytes)) {
+      static const bool registered = std::atexit(release_idle_at_exit) == 0;
+      (void)registered;
       return Lease(static_cast<std::byte*>(pointer), bytes);
     }
     const std::lock_guard<std::mutex> lock(pool.mutex_);
@@ -169,6 +175,15 @@ class PinnedStagingPool {
   static PinnedStagingPool& instance() {
     static auto* pool = new PinnedStagingPool();
     return *pool;
+  }
+
+  static void release_idle_at_exit() {
+    PinnedStagingPool& pool = instance();
+    const std::lock_guard<std::mutex> lock(pool.mutex_);
+    for (const auto& [pointer, bytes] : pool.idle_) {
+      Free(pointer);
+    }
+    pool.idle_.clear();
   }
 
   void give_back(std::byte* pointer, std::size_t bytes) noexcept {
