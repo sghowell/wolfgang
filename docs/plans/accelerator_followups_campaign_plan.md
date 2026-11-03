@@ -63,3 +63,9 @@ the KVM test hosts. `to_host` is 1.9-3.2x faster on an H100, and on an MI300X
 1.8-1.9x faster for small operators and 2.2-3.2x at 1M (24 qubits) and 4M
 terms; `to_device` keeps the driver's pageable path, which beat staging
 (`docs/benchmarks/reports/host_transfers_2026-11-03.md`).
+
+Slice 5 merged: the release CycloneDX SBOM lists the bundled oneTBB runtime
+(version, source commit, Apache-2.0) and the vendored DLPack header next to the
+Python dependencies, added by `scripts/sbom_bundled_components.py` from the
+files that pin them and checked against the CycloneDX schema in the release
+workflow.
