@@ -70,8 +70,8 @@ ROCm/HIP source builds remain target-specific and mutually exclusive with CUDA:
 WOLFGANG_ENABLE_CUDA=ON and WOLFGANG_ENABLE_HIP=ON is a configure-time error
 ```
 
-This is now a deliberate packaging and validation boundary rather than a
-temporary hardware-access blocker. Wolfgang shares backend-neutral API
+This is a deliberate packaging and validation boundary, not a temporary
+hardware-access blocker. Wolfgang shares backend-neutral API
 semantics across CPU, CUDA-target, HIP-target, and Apple Metal-target builds,
 but normal builds link at most one accelerator runtime. Simultaneous CUDA/HIP
 builds require a separate accepted mixed-runtime architecture decision.
@@ -183,14 +183,17 @@ a later allocation evicts it. A thread's idle blocks are freed when it exits and
 before any Wolfgang allocation on that thread is retried after running out of
 memory. Other threads keep theirs, so a process can hold up to 512 MiB of
 cached device memory per thread that has run HIP simplify, which other
-frameworks on the GPU cannot use. Simplify scratch is
-uninitialized (every buffer is fully written before it is read), and rocThrust
-algorithms run under `thrust::hip::par_nosync`, which drops the stream
-synchronization rocThrust otherwise performs after every algorithm. All work is
-ordered on the null stream, algorithms that return a value to the host still
-synchronize, and each public operation synchronizes before returning, so work
-that reuses a cached block always runs after the work that last used it. On
-out-of-memory, allocation retries once and then raises `MemoryError`.
+frameworks on the GPU cannot use.
+
+Simplify scratch is uninitialized (every buffer is fully written before it is
+read), and rocThrust algorithms run under `thrust::hip::par_nosync`, which
+drops the stream synchronization rocThrust otherwise performs after every
+algorithm. All work is ordered on the null stream, algorithms that return a
+value to the host still synchronize, and each public operation synchronizes
+before returning, so work that reuses a cached block always runs after the work
+that last used it. On out-of-memory, allocation retries once and then raises
+`MemoryError`.
+
 Transfers select the backend with a device count rather than `hip_status()`
 and copy coefficients as raw bytes. `to_host()` stages transfers of up to
 64 KiB through a pinned buffer from the same kind of process-wide pool CUDA
@@ -282,18 +285,17 @@ correctness and benchmark evidence for each retained consumer
 The broader ROCm sequence is defined in
 `docs/plans/rocm_next_waves_plan.md`.
 
-The accepted Campaign 3 ROCm boundary is HIP `DevicePauliSum.simplify()`,
-defined in `docs/plans/mi300x_rocm_optimization_campaign3_plan.md` and
+## Campaign 3 Simplify Boundary
+
+Campaign 3 accepted HIP `DevicePauliSum.simplify()` as a public operation. It
+is defined in `docs/plans/mi300x_rocm_optimization_campaign3_plan.md` and
 reported in
 `docs/benchmarks/reports/rocm_mi300x_campaign3_2026-04-30.md`. Campaign 3
-also assigns a terminal status to each Campaign 2 residual item: HIP DLPack,
+also assigned a terminal status to each Campaign 2 residual item: HIP DLPack,
 public streams, public workspaces, packed summaries, HIP expectation, HIP
 matmul, ROCm portability, ROCm wheels, multi-GPU MI300X, and simultaneous
 CUDA+HIP source builds.
 
-## Campaign 3 Simplify Boundary
-
-The Campaign 3 accepted HIP public operation is `DevicePauliSum.simplify()`.
 HIP simplify returns a HIP-backed `DevicePauliSum` and must not implicitly copy
 the simplified operator to host.
 
@@ -303,32 +305,31 @@ all-zero-output preservation of `num_qubits`, inclusive absolute/relative
 tolerance thresholds, and the same invalid-tolerance public error class as the
 host path where applicable.
 
-rocThrust is the retained duplicate-reduction implementation path for Campaign
-3. hipCUB and custom duplicate-reduction probes were left unavailable or rejected
+Campaign 3 retained rocThrust as the duplicate-reduction implementation.
+hipCUB and custom duplicate-reduction probes stayed unavailable or rejected
 until they passed CPU/HIP equivalence, allocation accounting, and rocprof
 evidence in a separate campaign. The accelerator follow-ups campaign provided
 that evidence, and HIP simplify beyond the fused kernel now runs the shared
 hipCUB pipeline described above.
 
-HIP DLPack, public streams, public workspaces, multi-GPU, ROCm wheels,
-additional AMD GPU support claims, and simultaneous CUDA+HIP builds remain
-unavailable in Campaign 3. HIP expectation and HIP matmul also remained
-unavailable in Campaign 3 and were later promoted by Campaign 6. The Campaign 3
-report must record terminal statuses and next triggers for those surfaces, but
-accepting any of them requires a separate follow-on plan or architecture
-decision.
+In Campaign 3, HIP DLPack, public streams, public workspaces, multi-GPU, ROCm
+wheels, additional AMD GPU support claims, and simultaneous CUDA+HIP builds
+remained unavailable. HIP expectation and HIP matmul also remained unavailable
+until Campaign 6 promoted them. The Campaign 3 report must record terminal
+statuses and next triggers for those surfaces, but accepting any of them
+requires a separate follow-on plan or architecture decision.
 
 ## Campaign 4 Simplify Hardening Outcome
 
-Campaign 4 is complete and remains a private HIP simplify hardening campaign,
-not a public API expansion. The executable plan is
+Campaign 4 is complete. It hardened private HIP simplify internals and did not
+expand the public API. The executable plan is
 `docs/plans/mi300x_rocm_optimization_campaign4_plan.md`; the checked report is
 `docs/benchmarks/reports/rocm_mi300x_campaign4_2026-04-30.md`.
 
 Campaign 4 changed only private `DevicePauliSum.simplify()` implementation
 details after MI300X correctness, benchmark, and profiler evidence. The
 retained change is the parallel generic multi-word sorted-index
-`reduce_by_key` path. The serial generic reducer remains private
+`reduce_by_key` path. The serial generic reducer remains a private
 benchmark-only fallback. Campaign 4 recorded custom packed-key
 duplicate-reduction probes as unavailable because no distinct lower-level
 implementation was retained or timed, and rocPRIM/hipCUB scratch workspace
@@ -348,10 +349,10 @@ CPU-only and CUDA-only builds behave unchanged
 WOLFGANG_ENABLE_CUDA=ON with WOLFGANG_ENABLE_HIP=ON remains a configure-time error
 ```
 
-Public HIP DLPack, public streams, public workspaces, multi-GPU execution,
-ROCm wheels, additional AMD GPU support claims, and simultaneous CUDA+HIP
-builds remain unavailable in Campaign 4. HIP expectation and HIP matmul remained
-unavailable in Campaign 4 and were later promoted by Campaign 6.
+Campaign 4 left public HIP DLPack, public streams, public workspaces,
+multi-GPU execution, ROCm wheels, additional AMD GPU support claims, and
+simultaneous CUDA+HIP builds unavailable. HIP expectation and HIP matmul stayed
+unavailable until Campaign 6.
 
 ## Campaign 5 Interop And Execution-Control Outcome
 
@@ -364,17 +365,16 @@ Campaign 5 rejected HIP DLPack retention. A candidate versioned read-only
 `DeviceCommutationMatrix` `uint8` export with DLPack `kDLROCM` device typing was
 consumed by PyTorch ROCm on MI300X in a temporary candidate probe, but PyTorch
 accepted mutation of the imported view. That violates Wolfgang's read-only
-export contract, so HIP
-`DeviceCommutationMatrix.__dlpack__` and `__dlpack_device__` remain
-unavailable. HIP `__cuda_array_interface__` remains unavailable because HIP
-device pointers must not be presented as CUDA memory.
+export contract, so HIP `DeviceCommutationMatrix.__dlpack__` and
+`__dlpack_device__` remain unavailable. HIP `__cuda_array_interface__` remains
+unavailable because HIP device pointers must not be presented as CUDA memory.
 
 Public HIP streams, graph execution, and workspaces remain unavailable because
 Campaign 5 did not accept complete public API contracts, ownership and lifetime
 rules, synchronization and error-propagation behavior, or measured acceptance
 evidence. ROCm wheels, multi-GPU ROCm, additional AMD portability claims, and
-simultaneous CUDA+HIP source builds remain separate campaigns. HIP expectation
-and HIP matmul were later promoted by Campaign 6.
+simultaneous CUDA+HIP source builds remain separate campaigns. Campaign 6
+later promoted HIP expectation and HIP matmul.
 
 ## Campaign 6 Expectation And Matmul Parity Boundary
 
@@ -412,9 +412,8 @@ ROCm wheels, multi-GPU ROCm, additional AMD support claims, and simultaneous CUD
 
 Campaign 7 is complete in
 `docs/benchmarks/reports/rocm_mi300x_campaign7_2026-04-30.md` and was executed
-from `docs/plans/mi300x_rocm_optimization_campaign7_plan.md`. It is a
-release-support and portability-boundary campaign, not a new kernel or public
-API campaign.
+from `docs/plans/mi300x_rocm_optimization_campaign7_plan.md`. It set release
+support and portability boundaries and added no new kernel or public API.
 
 Campaign 7 retains:
 
@@ -458,8 +457,8 @@ README wording that distinguishes runtime-tested from performance-tested and rel
 Campaign 8 is complete in
 `docs/benchmarks/reports/rocm_campaign8_architecture_readiness_2026-05-01.md`
 and was executed from `docs/plans/mi300x_rocm_optimization_campaign8_plan.md`.
-It is a Wave 6 architecture-readiness campaign, not a new HIP kernel, wheel,
-public API, or multi-GPU implementation campaign.
+It is a Wave 6 architecture-readiness campaign and implemented no new HIP
+kernel, wheel, public API, or multi-GPU support.
 
 The backend-neutral CUDA/HIP object-model gate is
 `docs/architecture/backend_neutral_accelerators.md`. Current source builds

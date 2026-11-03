@@ -34,7 +34,7 @@ configure-time error by policy. It should not be treated as a blocked release
 gate unless a later accepted plan explicitly reopens mixed-runtime packaging
 and validation.
 
-Campaign 9 provides a shared CUDA/HIP backend selector for initial device
+Campaign 9 added a shared CUDA/HIP backend selector for initial device
 construction, structured `_accelerator_status()` compiled and available
 backend sets, `DeviceCommutationMatrix.backend`, disjoint CMake CUDA/HIP/Metal/stub
 source-set declarations, simulated backend/device validation tests,
@@ -185,6 +185,7 @@ active_backend
 source. Target-specific accelerator builds must preserve the structured
 compiled and runtime-available lists rather than collapsing API behavior into
 one hard-coded global backend.
+
 `_build_info()` and benchmark metadata must carry the corresponding Campaign 9
 build boundary:
 
@@ -196,7 +197,7 @@ compiled_backends
 runtime_visible_backends
 ```
 
-That behavior requires tests for:
+This status reporting requires tests for:
 
 ```text
 CPU-only build
@@ -210,8 +211,7 @@ future-only simulation coverage for ambiguous selector behavior
 
 ## Errors
 
-Accelerator errors must continue to be deterministic Python exceptions. They
-must identify:
+Accelerator errors must be deterministic Python exceptions that identify:
 
 ```text
 operation name

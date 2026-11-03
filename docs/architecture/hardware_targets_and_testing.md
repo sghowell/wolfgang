@@ -46,7 +46,7 @@ source distribution builds on the same platforms
 
 Apple Silicon CPUs are first-class CPU correctness, packaging, and benchmark targets. Phase 4 and later benchmark reports should include at least one named Apple Silicon machine when local hardware is available, and Phase 9 CPU optimization claims must distinguish Apple Silicon results from x86_64 results.
 
-Windows x86_64, Linux aarch64, musllinux, and universal2 macOS wheels are valuable follow-on targets, but they are not release-supported until they have build, import, and test evidence.
+Windows x86_64, Linux aarch64, musllinux, and universal2 macOS wheels are follow-on targets. They are not release-supported until they have build, import, and test evidence.
 
 Linux wheels should use current PyPA manylinux policy. The selected manylinux tag must be recorded in release evidence and must not imply CPU instruction-set requirements beyond the wheel's platform tag.
 
@@ -312,7 +312,7 @@ Do not broaden Campaign 8 GPU claims beyond H100 until an A100 `sm_80`, RTX
 replaces that blocker with validation and benchmark evidence. Campaign 7 has
 the same historical H100-only boundary in
 `docs/benchmarks/reports/cuda_portability_campaign7_non_h100_nvidia_2026-04-29.md`.
-Campaign 10 replaced the Campaign 9 non-H100 blocker with real source-build
+Campaign 10 replaced the Campaign 9 non-H100 blocker with source-build
 evidence. A100 `sm_80` and RTX PRO 6000 Blackwell `sm_120` both compiled and
 ran with CUDA 12.8 source builds, CUDA validation, DLPack tests, Compute
 Sanitizer, Nsight Systems, and benchmark rows captured in
@@ -418,8 +418,8 @@ Metal: planned Apple Silicon source-build backend candidate after CUDA and HIP s
 
 ROCm/HIP work must not reuse CUDA support claims. It needs independent evidence for toolkit version, GPU architecture, driver/runtime, source build, runtime transfer tests, CPU/GPU equivalence, and transfer-inclusive and device-resident benchmarks.
 
-The ROCm/HIP backend contract is `docs/architecture/rocm_backend.md`.
-The first ROCm/HIP execution path is complete in
+The ROCm/HIP backend contract is `docs/architecture/rocm_backend.md`. The
+first ROCm/HIP execution path is complete in
 `docs/plans/mi300x_rocm_bringup_plan.md` with report evidence in
 `docs/benchmarks/reports/rocm_mi300x_bringup_2026-04-29.md`. The first
 post-bring-up MI300X execution campaign is complete in
@@ -433,6 +433,7 @@ ROCm architecture-readiness campaign is
 `docs/benchmarks/reports/rocm_campaign8_architecture_readiness_2026-05-01.md`.
 The next executable ROCm campaign must satisfy one of the Campaign 8 trigger
 gates before adding a new runtime, packaging, portability, or performance claim.
+
 The accepted backend-neutral trigger plan is
 `docs/plans/backend_neutral_accelerator_campaign9_plan.md`, with closeout
 evidence in
@@ -466,14 +467,14 @@ The accepted Apple accelerator design decision is
 `metal`; MPS and MPSGraph are optional implementation adjuncts or external
 baselines, not separate Wolfgang object backend identities. Metal remains
 source-build-only and target-specific behind `WOLFGANG_ENABLE_METAL=ON`.
-The initial source tree provides status metadata, host/device transfers, and
-pairwise commutation with synchronous command-buffer completion. Metal is not
-release-supported until CPU/Metal equivalence tests and benchmark evidence pass
-on a named Apple Silicon host with a runtime-visible Metal device.
+Metal provides status metadata, host/device transfers, pairwise commutation,
+compact count consumers and simplify, with synchronous command-buffer
+completion. CPU/Metal equivalence tests and benchmark evidence pass on an Apple
+M4 Pro (`docs/architecture/apple_accelerator.md`); Metal is still source-build
+evidence rather than a release-supported target
+(`docs/release/support_matrix.md`).
 
 ## Phase Responsibilities
-
-Phase responsibilities:
 
 ```text
 Phase 0: this target policy exists and is linked from source-of-truth docs
@@ -483,7 +484,7 @@ Phase 8: CPU expectation benchmarks record threading and dispatch metadata
 Phase 9: CPU dispatch control, optimized-path availability reporting, and covered oneTBB/SIMD commutation kernels are implemented; future oneTBB/SIMD extensions continue to follow the CPU testing ladder, including Apple Silicon CPU evidence for Apple-specific claims
 Phase 10: CUDA build, architecture list, and CUDA testing ladder are implemented
 Phase 11: CUDA kernels meet CPU/GPU equivalence and benchmark evidence requirements
-Post-CUDA: HIP is implemented for MI300X evidence; Metal has source-build bring-up code and still needs runtime-visible Apple Silicon validation before support claims
+Post-CUDA: HIP is implemented for MI300X evidence; Metal is implemented with Apple M4 Pro source-build evidence and is not release-supported
 Release candidate: release-supported platform, CPU, CUDA, and wheel claims match evidence
 ```
 

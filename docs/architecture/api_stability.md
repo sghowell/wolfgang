@@ -190,7 +190,7 @@ accepted device array protocols
 
 Do not change CUDA synchronization or ownership semantics without updating `docs/architecture/cuda_backend.md`, tests, and user documentation.
 
-Campaign 5 promotes dense device-output commutation as an experimental public
+Campaign 5 promoted dense device-output commutation to an experimental public
 API. The promoted surface is `DeviceCommutationMatrix` plus
 `DevicePauliSum.commutes_with_device()`, using one Wolfgang-owned dense
 row-major `uint8` device buffer on the same CUDA device as the operands.
@@ -207,13 +207,14 @@ compact-summary count semantics and uint64 host result dtype
 benchmark schema fields that separate allocation, reuse, export, compact summaries, and host materialization
 ```
 
-Campaign 6 extends this surface with `DeviceCommutationMatrix.count_commuting(...)`
-after `docs/plans/cuda_commutation_consumer_api_review.md` retained compact
-summary counts. Compatibility for that extension covers axis names, return
+Campaign 6 extended this surface with
+`DeviceCommutationMatrix.count_commuting(...)` after
+`docs/plans/cuda_commutation_consumer_api_review.md` retained compact summary
+counts. Compatibility for that extension covers axis names, return
 types, synchronous default-stream behavior, CPU-only rebuild-guidance behavior,
 and the guarantee that only compact `uint64` count results are copied to host.
 
-Campaign 9 extends the experimental CUDA surface with
+Campaign 9 extended the experimental CUDA surface with
 `DeviceCommutationMatrix.conflict_degrees(axis=None|0|1)` and read-only
 `DeviceCommutationMatrix.__dlpack__` / `__dlpack_device__`. Compatibility for
 `conflict_degrees` covers anti-commuting complement semantics, axis names,
@@ -223,12 +224,11 @@ materialization. Compatibility for DLPack covers shape `(rows, cols)`, dtype
 single-consumer capsule behavior, owner lifetime retention by deleter context,
 `copy=True` rejection, `stream=0` rejection, versioned capsule support for
 positive `max_version`, legacy unversioned capsule rejection, and read-only
-export status. The true
-`DevicePauliSum.group_commuting_device(...)` API remains unavailable and is not
-part of the compatibility promise.
+export status. The true `DevicePauliSum.group_commuting_device(...)` API
+remains unavailable and is not part of the compatibility promise.
 
-The portability and interop campaign adds experimental zero-copy device arrays
-on CUDA: `DevicePauliSum.device_arrays()`, `DevicePauliSum.from_device_arrays()`
+The portability and interop campaign added experimental zero-copy device
+arrays on CUDA: `DevicePauliSum.device_arrays()`, `DevicePauliSum.from_device_arrays()`
 and `DeviceArrayView`. Compatibility covers:
 
 ```text
@@ -264,15 +264,15 @@ synchronization and error-propagation semantics
 tests for invalid device, invalid dtype/layout, moved-from objects, and public benchmark labels
 ```
 
-CUDA Campaign 4 private hooks are intentionally excluded from the public API
-compatibility promise. `_cuda_workspace_probe_for_testing()` is a test and
+CUDA Campaign 4 private hooks are excluded from the public API compatibility
+promise. `_cuda_workspace_probe_for_testing()` is a test and
 benchmark harness hook only; it may change or disappear before `1.0.0` without
 deprecation. Environment variables prefixed `WOLFGANG_CUDA_BENCH_` select
 benchmark experiments and must not be described as supported user-facing
 configuration.
 
-Existing CUDA-array-interface statevector support remains the public
-device-resident statevector path for this campaign. A dedicated
+Existing CUDA Array Interface statevector support is the public
+device-resident statevector path. A dedicated
 device-statevector wrapper would be a new public API and therefore requires the
 full API review checklist before exposure.
 
@@ -291,9 +291,10 @@ DevicePauliSum.commutes_with(...)
 DevicePauliSum.commutes_with_device(..., output=None)
 DeviceCommutationMatrix dense uint8 ownership, to_host(), count_commuting(), and conflict_degrees()
 DevicePauliSum.simplify()
+DevicePauliSum.expectation_statevector(...) and DevicePauliSum.matmul(...) (promoted by ROCm Campaign 6)
 HIP availability errors and skips
 synchronous transfer and kernel-return behavior
-documented absence of HIP DLPack, CUDA Array Interface, public streams, public workspaces, expectation, matmul, multi-GPU, ROCm wheel, broad portability, and simultaneous CUDA+HIP support
+documented absence of HIP DLPack, CUDA Array Interface, public streams, public workspaces, multi-GPU, ROCm wheel, broad portability, and simultaneous CUDA+HIP support
 ```
 
 Do not change ROCm/HIP synchronization, ownership, backend reporting,
@@ -320,14 +321,14 @@ The first ROCm/HIP public surface is source-build-only MI300X `gfx942`
 evidence. It is not a binary wheel promise and not a support claim for every
 AMD GPU.
 
-Campaign 2 promotes HIP `DeviceCommutationMatrix` and
+Campaign 2 promoted HIP `DeviceCommutationMatrix` and
 `DevicePauliSum.commutes_with_device()` for HIP-only builds. Compatibility for
 this experimental surface covers shape, dtype, row-major ordering, 1/0 flag
 semantics, same-device validation, synchronous return behavior, dense
 `to_host()`, compact `count_commuting(axis=None|0|1)`, and compact
 `conflict_degrees(axis=None|0|1)`.
 
-Campaign 3 promotes HIP `DevicePauliSum.simplify()`. Compatibility covers
+Campaign 3 promoted HIP `DevicePauliSum.simplify()`. Compatibility covers
 device-resident output, canonical ordering, coefficient summation,
 empty/all-zero handling, inclusive tolerance filtering, invalid-tolerance
 exception category, and explicit host materialization only through

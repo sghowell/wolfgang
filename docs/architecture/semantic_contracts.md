@@ -1,6 +1,6 @@
 # Wolfgang Semantic Contracts
 
-This document defines the behavior that implementation, tests, adapters, and benchmarks must preserve. The implementation plan can change order or mechanics, but these contracts are source of truth for correctness.
+This document defines the behavior that implementation, tests, adapters, and benchmarks must preserve. The implementation plan can change order or mechanics, but these contracts are the source of truth for correctness.
 
 ## Representation
 
@@ -40,7 +40,7 @@ Wolfgang internal qubit 0 = bit 0
 dense label qubit 0 = right-most character
 ```
 
-Therefore `"XYZ"` means:
+So `"XYZ"` means:
 
 ```text
 X on qubit 2
@@ -145,16 +145,18 @@ Negative or nonfinite tolerances are invalid and raise `ValueError`.
 With `rtol=0`, simplify is idempotent. With `rtol>0`, a second call recomputes
 its input scale and can drop additional terms after duplicates have combined.
 For example, `X + X + 0.15 Y` with `atol=0, rtol=0.1` first becomes
-`2 X + 0.15 Y`, then `2 X`. This input-relative formula is intentional.
+`2 X + 0.15 Y`, then `2 X`. The input-relative formula is intentional.
 
 Simplify on every backend (CPU, CUDA, HIP and both Metal paths) rejects
 nonfinite coefficient components with `ValueError` and raises `OverflowError`
 if duplicate accumulation produces nonfinite components, including the
 `inf + -inf = NaN` a tree-ordered GPU reduction can form. Finite components
 are compared safely even when their complex magnitude exceeds the maximum
-double. `tests/test_accelerator_simplify_parity.py` checks each available
-accelerator against CPU simplify; CUDA and HIP may associate long duplicate
-sums differently, so their coefficients match CPU to rounding. Whether an
+double.
+
+`tests/test_accelerator_simplify_parity.py` checks each available accelerator
+against CPU simplify. CUDA and HIP may associate long duplicate sums
+differently, so their coefficients match CPU to rounding. Whether an
 intermediate sum overflows also depends on that order: duplicate sums within
 about a factor of the run length of the largest double may raise
 `OverflowError` on one backend and return a finite result on another. CUDA and
@@ -256,9 +258,9 @@ P, Q commute:     commutator gets nothing, anticommutator gets 2ab PQ
 Pairs that contribute nothing are never generated. Each kept coefficient is
 computed as `2 * (a * b)`, so doubling never overflows before the product. Any
 non-finite coefficient in either operand raises `ValueError`, even if its pairs
-would all cancel. With `simplify=True` (the
-default) the result is simplified with default tolerances into canonical order.
-With `simplify=False` the surviving products keep lhs-outer, rhs-inner order.
+would all cancel. With `simplify=True` (the default) the result is simplified
+with default tolerances into canonical order. With `simplify=False` the
+surviving products keep lhs-outer, rhs-inner order.
 `max_intermediate_terms` bounds `len(h1) * len(h2)` before any work, as in
 `matmul`.
 
@@ -363,14 +365,15 @@ to_matrix(sparse=True)    -> SciPy CSR matrix with sorted column indices
 
 `apply_statevector` and `expectation_statevector` use `psi` as given;
 `variance_statevector` normalizes and raises `ValueError` for a zero state.
-Batched inputs are validated even when empty. `DevicePauliSum.expectation_statevector`
-accepts only 1-D states. `to_matrix(max_entries=2**24)` raises `ValueError`
-before allocating when `4 ** num_qubits` (dense) or
+Batched inputs are validated even when empty.
+`DevicePauliSum.expectation_statevector` accepts only 1-D states.
+`to_matrix(max_entries=2**24)` raises `ValueError` before allocating when
+`4 ** num_qubits` (dense) or
 `2 ** num_qubits * distinct_x_masks + 2 ** num_qubits + 1` (sparse entries plus
-row pointers) exceeds `max_entries`. The sparse
-form omits entries that cancel to exactly zero. `to_matrix(sparse=True)` raises
-`ImportError` with an installation hint when SciPy is absent; SciPy is never
-imported at package import.
+row pointers) exceeds `max_entries`. The sparse form omits entries that cancel
+to exactly zero. `to_matrix(sparse=True)` raises `ImportError` with an
+installation hint when SciPy is absent; SciPy is never imported at package
+import.
 
 ## Counts Estimation
 
@@ -381,7 +384,7 @@ weight. They are normalized after division by their largest value, so large
 finite counts do not overflow the total. Rescaling all weights by the same
 positive factor preserves the result within floating-point rounding.
 
-Only diagonal terms are accepted by `expectation_z_counts()` in the initial implementation. If any term has nonzero `x` mask, raise `ValueError`.
+In the initial implementation, `expectation_z_counts()` accepts only diagonal terms: any term with a nonzero `x` mask raises `ValueError`.
 
 `estimate_counts(counts, basis=None)` generalizes this to local measurement
 bases. `basis` is a dense-label-order string of `X`, `Y`, `Z` or `I`, one per
@@ -460,9 +463,12 @@ Backend identity is a property of the object, not a process-global active
 backend.
 
 The Apple Metal selector is source-build-only behind `WOLFGANG_ENABLE_METAL=ON`;
-see `docs/architecture/apple_accelerator.md`. It initially covers transfers, pairwise commutation, and retained
-`DeviceCommutationMatrix` count consumers. Unsupported accelerator operations
-must raise a clear runtime error without falling back silently to CPU.
+see `docs/architecture/apple_accelerator.md`. It covers transfers, pairwise
+commutation, simplify (a GPU sort with float64 CPU reduction for one-word operators of 12,288 terms or more)
+and the retained `DeviceCommutationMatrix` count consumers; the operation table
+in `docs/api/index.md` records where each runs. Unsupported accelerator
+operations must raise a clear runtime error without falling back silently to
+CPU.
 
 ## Required Test Fixtures
 

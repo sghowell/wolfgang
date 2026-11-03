@@ -1,7 +1,7 @@
 # Apple Metal Accelerator Architecture
 
 This document defines the accepted architecture contract for the Wolfgang
-Apple Silicon GPU target. Wolfgang now has a source-build-only Metal lane, but
+Apple Silicon GPU target. Wolfgang has a source-build-only Metal lane, but
 Apple GPU wheel support and generic Apple GPU support claims remain unavailable.
 Runtime support requires validation in a process where Metal exposes a usable
 device.
@@ -71,8 +71,8 @@ bring-up path for sparse packed Pauli kernels because the first kernels need
 explicit control over packed integer buffers, command buffers, and intermediate
 lifetimes.
 
-PyTorch `mps` is a useful external baseline for tensor workloads that can be
-mapped exactly. It is not a Wolfgang backend and must not be used to implement
+PyTorch `mps` can serve as an external baseline for tensor workloads that can
+be mapped exactly. It is not a Wolfgang backend and must not be used to implement
 Wolfgang device objects.
 
 ## Public Header Boundary
@@ -159,8 +159,8 @@ documents lifetime ownership.
 
 ## Status Reporting
 
-Metal builds must add a `_metal_status()` internal binding
-and extend `_accelerator_status()` and `_build_info()` with structured state:
+Metal builds must add a `_metal_status()` internal binding and extend
+`_accelerator_status()` and `_build_info()` with structured state:
 
 ```text
 accelerator_build_mode == "metal_only"
@@ -196,7 +196,7 @@ The first Apple accelerator implementation campaign should use this order:
 10. Metal matmul only after simplify and expectation evidence exists
 ```
 
-This order keeps correctness, ownership, and compact consumers ahead of more
+The order puts correctness, ownership, and compact consumers ahead of more
 complex kernels.
 
 ## Current Evidence
@@ -259,9 +259,9 @@ larger Apple M4 Pro evidence for two-word commutation, larger compact-consumer
 matrices, and a benchmark-only `gpu_parallel_total` compact-consumer selector
 for `fp_count_commuting_total_block_sums`. Campaign 4 keeps two-word
 specialization, private storage, offline `.metallib`, and compact GPU
-reductions as evidence tools only. It also explicitly leaves PyPI publication,
-Windows support, and older macOS compatibility outside this Apple Metal
-optimization lane.
+reductions as evidence tools only. It also leaves PyPI publication, Windows
+support, and older macOS compatibility outside this Apple Metal optimization
+lane.
 
 The fifth optimization campaign is
 `docs/benchmarks/reports/apple_metal_optimization_campaign5_2026-05-06.md`,
@@ -276,11 +276,11 @@ bridge, not a device-resident GPU duplicate-reduction speedup.
 
 The sixth optimization campaign is
 `docs/benchmarks/reports/apple_metal_optimization_campaign6_2026-05-07.md`,
-planned in `docs/plans/apple_metal_optimization_campaign6_plan.md`. It is
-Apple Metal Campaign 6 device-resident simplify groundwork, not a public API
-expansion. Campaign 6 keeps `DevicePauliSum.simplify(atol, rtol)` on the
-Campaign 5 transfer-reference path while adding a private `MetalWorkspace`
-scratch model, `WorkspaceTimingMode`, and `metal_simplify_workspace_probe`
+planned in `docs/plans/apple_metal_optimization_campaign6_plan.md`.
+Apple Metal Campaign 6 laid groundwork for device-resident simplify without
+expanding the public API. Campaign 6 keeps
+`DevicePauliSum.simplify(atol, rtol)` on the Campaign 5 transfer-reference
+path while adding a private `MetalWorkspace` scratch model, `WorkspaceTimingMode`, and `metal_simplify_workspace_probe`
 benchmark rows. Those rows use the `status_only` boundary and must state that
 the device-resident simplify candidate remains blocked until checked Metal
 sort/prefix/reduce primitives exist. A future retained device-resident simplify
@@ -290,10 +290,10 @@ primitives, prove deterministic canonical output order, and record
 
 The seventh optimization campaign is
 `docs/benchmarks/reports/apple_metal_optimization_campaign7_2026-05-07.md`,
-planned in `docs/plans/apple_metal_optimization_campaign7_plan.md`. It is
-Apple Metal Campaign 7 checked device-resident simplify primitive stack work,
-not a public API expansion. Campaign 7 adds a private benchmark-only one-word
-Metal path with bitonic packed-key sort, uint32 prefix-sum, reduce-by-key, and
+planned in `docs/plans/apple_metal_optimization_campaign7_plan.md`.
+Apple Metal Campaign 7 built a checked primitive stack for device-resident
+simplify without expanding the public API. Campaign 7 adds a private benchmark-only
+one-word Metal path with bitonic packed-key sort, uint32 prefix-sum, reduce-by-key, and
 survivor compaction. The row identity is `metal_simplify_device_candidate` and
 the boundary may be `device_resident` only when materialized candidate output
 matches CPU simplify. Because this Apple Metal toolchain rejects `double`
@@ -305,11 +305,11 @@ path.
 
 The eighth optimization campaign is
 `docs/benchmarks/reports/apple_metal_optimization_campaign8_2026-05-07.md`,
-planned in `docs/plans/apple_metal_optimization_campaign8_plan.md`. It is
-Apple Metal Campaign 8 simplify performance-relevance evidence, not a public
-API expansion. Campaign 8 rows include `timing_decomposition_seconds`,
-`pipeline_cache`, `dispatch_counts`, and `performance_decision` metadata so the
-report's timing decomposition can separate host preflight, scratch/output
+planned in `docs/plans/apple_metal_optimization_campaign8_plan.md`.
+Apple Metal Campaign 8 collected simplify performance-relevance evidence
+without expanding the public API. Campaign 8 rows include
+`timing_decomposition_seconds`, `pipeline_cache`, `dispatch_counts`, and
+`performance_decision` metadata so the report's timing decomposition can separate host preflight, scratch/output
 allocation, command encoding, command execution, and output accounting.
 Campaign 8 kept public simplify on the transfer-reference bridge. For
 operators below the hybrid threshold described next, or wider than one word,
@@ -325,7 +325,9 @@ GPU then gathers coefficient bits into sorted order. The CPU sums each duplicate
 run in float64, seeded with the run's first coefficient and in input order,
 applies the CPU drop rule, and compacts survivors; the result keeps the input's
 device and command queue. Results equal CPU simplify bit for bit, signed zeros
-included.
+included. Summing on the CPU in float64 sidesteps the Metal toolchain's lack of
+`double` arithmetic without restricting the coefficient domain, unlike the
+fixed32 Campaign 7 candidate.
 
 From 2^20 terms the CPU reduction runs in parallel with GCD:
 
@@ -346,12 +348,11 @@ for example on Command Line Tools-only machines or Xcode without the
 downloaded Metal Toolchain, they compile from the embedded source on each
 process's first hybrid simplify. `_build_info()["metal_simplify_kernels"]`
 reports `precompiled` or `runtime_source`. The benchmark-only switch
-`WOLFGANG_METAL_BENCH_RUNTIME_KERNELS=1` forces the source compile. This sidesteps the Metal
-toolchain's lack of `double` arithmetic without restricting the coefficient
-domain, unlike the fixed32 Campaign 7 candidate. Smaller or wider operators
-keep the transfer-reference host bridge. The benchmark and test selector
-`WOLFGANG_METAL_BENCH_SIMPLIFY` forces the bridge (`host_bridge`) or the hybrid
-at any size (`hybrid`). The public capability record for Metal `simplify` stays
+`WOLFGANG_METAL_BENCH_RUNTIME_KERNELS=1` forces the source compile.
+
+Smaller or wider operators keep the transfer-reference host bridge. The
+benchmark and test selector `WOLFGANG_METAL_BENCH_SIMPLIFY` forces the bridge
+(`host_bridge`) or the hybrid at any size (`hybrid`). The public capability record for Metal `simplify` stays
 `host_bridge`, because the reduction always runs on the CPU. Evidence:
 `docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md` and, for large
 inputs and kernel loading, `docs/benchmarks/reports/metal_followups_2026-11-03.md`.

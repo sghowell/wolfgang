@@ -1,5 +1,7 @@
 # Wolfgang Testing And CI Architecture
 
+This document defines how Wolfgang maintains correctness while moving from scaffold to optimized CPU and CUDA kernels.
+
 ## Shared validation profiles
 
 `python scripts/validate.py` defaults to `--profile core`: source checks, fresh
@@ -15,9 +17,6 @@ the local default is `_skbuild/validate-site`.
 
 Standalone native sanitizer tests also run in CI, without importing Python.
 The core CI matrix includes Python 3.13; wheel publication support is unchanged.
-
-
-This document defines how Wolfgang maintains correctness while moving from scaffold to optimized CPU and CUDA kernels.
 
 ## Principles
 
@@ -57,7 +56,7 @@ If a check is skipped, the validation output must say why.
 
 Phase 1 should also introduce the first agent-harness checks from `docs/quality/agent_harness.md`, including source-doc existence checks and `AGENTS.md` link checks.
 
-Phase 1 should introduce the first code/documentation standard checks from `docs/quality/code_standards.md` and `docs/quality/documentation_standards.md`. These can start as lightweight source-doc existence, stale-marker, and link checks, then grow into formatter, lint, warning, docstring, and docs-build gates as tooling lands.
+Phase 1 should introduce the first code/documentation standard checks from `docs/quality/code_standards.md` and `docs/quality/documentation_standards.md`. These can start as source-doc existence, stale-marker, and link checks, then grow into formatter, lint, warning, docstring, and docs-build gates as tooling lands.
 
 Phase 1 should also introduce the first API, security, and release standard checks from `docs/architecture/api_stability.md`, `docs/quality/security_and_supply_chain.md`, and `docs/quality/release_and_packaging.md`. These can start as source-doc existence and link checks, then grow into sanitizer, package-build, dependency, and release-evidence gates as implementation matures.
 

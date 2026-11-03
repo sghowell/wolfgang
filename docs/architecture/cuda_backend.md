@@ -16,20 +16,24 @@ CUDA is the first GPU backend. ROCm/HIP and Metal/MPS are not part of the CUDA m
 
 Backend-neutral accelerator APIs are governed by
 `docs/architecture/backend_neutral_accelerators.md`. Current builds remain
-target-specific: CUDA-only or HIP-only. `WOLFGANG_ENABLE_CUDA=ON` with
-`WOLFGANG_ENABLE_HIP=ON` is deliberately rejected under the target-specific
-accelerator policy unless a future accepted mixed-runtime plan changes that
-boundary. The implementation handoff is complete in
+target-specific: CUDA-only, HIP-only or Metal-only. The target-specific accelerator policy
+deliberately rejects `WOLFGANG_ENABLE_CUDA=ON` with `WOLFGANG_ENABLE_HIP=ON`
+unless a future accepted mixed-runtime plan changes that boundary. The
+implementation handoff is complete in
 `docs/plans/backend_neutral_accelerator_campaign9_plan.md`, with closeout
 evidence in
 `docs/benchmarks/reports/backend_neutral_accelerator_campaign9_2026-05-01.md`.
-Campaign 9 added the explicit construction selector used by CUDA source builds:
-`PauliSum.to_device(backend="cuda")` and
-`DeviceCommutationMatrix.empty(..., backend="cuda")`.
+That backend-neutral Campaign 9 added the explicit construction selector used
+by CUDA source builds: `PauliSum.to_device(backend="cuda")` and
+`DeviceCommutationMatrix.empty(..., backend="cuda")`. Elsewhere in this
+document, "Campaign N" means the numbered H100 CUDA optimization campaign:
+Campaigns 2-9 are planned in `docs/plans/h100_deep_optimization_campaignN_plan.md`,
+Campaign 10 in `docs/plans/cuda_cross_architecture_campaign10_plan.md` and
+Campaign 11 in `docs/plans/cuda_residual_risk_campaign11_plan.md`.
 
 ## Build Matrix
 
-Initial source-build CUDA support follows `docs/architecture/hardware_targets_and_testing.md`. The short version is:
+Initial source-build CUDA support follows `docs/architecture/hardware_targets_and_testing.md`, summarized here:
 
 ```text
 C++ standard: C++20
@@ -92,15 +96,14 @@ dh2 = dh.simplify()
 h2 = dh2.to_host()
 ```
 
-Operations that can run on either backend accept a backend selector once CUDA lands:
+Host `PauliSum` methods take no backend argument; they run on the CPU. The backend is chosen when an operator moves to a device:
 
 ```python
-h.simplify(backend="cpu")
-h.simplify(backend="cuda")
-h.simplify(backend="auto")
+h.to_device(device=0, backend="auto")
+h.to_device(device=0, backend="cuda")
 ```
 
-`backend="auto"` may choose CUDA only when data transfer and input size heuristics justify it. `backend="cuda"` raises `RuntimeError` if Wolfgang was built without CUDA.
+`backend` may be `None`, `"auto"`, `"cuda"`, `"hip"` or `"metal"`. A build without the requested accelerator raises `RuntimeError` with rebuild guidance.
 
 ## Ownership And Lifetime
 
@@ -128,8 +131,8 @@ benchmark labels must say whether workspace allocation and growth are inside or 
 must not expose raw device pointers or framework objects through the public API
 ```
 
-Campaign 4 implements this as a private source-only `CudaWorkspace` under
-`src/cuda/`. The only Python visibility is the underscored
+Campaign 4 implemented this as a private source-only `CudaWorkspace` under
+`src/cuda/`. Python reaches it only through the private
 `_cuda_workspace_probe_for_testing()` hook, which returns lifetime snapshots for
 tests and benchmark validation without exposing raw device pointers. Benchmark
 workspace timing is selected with `WOLFGANG_CUDA_BENCH_WORKSPACE_MODE` values
@@ -149,7 +152,7 @@ anti-commuting pairs, requires both operands to live on the same CUDA device,
 and raises the same moved-from, qubit-count, device-mismatch, output-size, and
 max-entry exceptions as the vector-returning API.
 
-Campaign 5 adds the experimental public device-output form for GPU-resident
+Campaign 5 added the experimental public device-output form for GPU-resident
 consumers. `DeviceCommutationMatrix` owns a dense row-major `uint8` flag matrix
 on one CUDA device. `DevicePauliSum::commutes_with_device(rhs, max_entries)`
 allocates and returns a new matrix with shape `(lhs.num_terms(), rhs.num_terms())`;
@@ -183,41 +186,36 @@ CUDA-array-interface export, compact-summary reductions, and `to_host()`
 materialization. Public bit-packed commutation output remains rejected until a
 consumer layout contract is accepted.
 
-Campaign 6 retains compact summary counts as the first supported downstream GPU
-consumer for `DeviceCommutationMatrix`. `count_commuting(axis=None)` returns a
-Python integer total count, `axis=0` returns `uint64` column counts, and
-`axis=1` returns `uint64` row counts. All reductions execute on the matrix CUDA
-device and copy only the compact count result to host. This is still a
-synchronous public API: calls use the default stream and return only after the
-count result is available on the host.
+Campaign 6 retained compact summary counts as the first supported downstream
+GPU consumer for `DeviceCommutationMatrix`. `count_commuting(axis=None)` returns
+a Python integer total count, `axis=0` returns `uint64` column counts, and
+`axis=1` returns `uint64` row counts. All reductions execute on the matrix's
+CUDA device and copy only the compact count result to host. The API is
+synchronous: calls use the default stream and return only after the count
+result is available on the host.
 
-Campaign 9 adds `conflict_degrees(axis=None|0|1)` as the anti-commuting
-complement of `count_commuting(...)` and adds read-only DLPack export for
-`DeviceCommutationMatrix`. The true `DevicePauliSum.group_commuting_device(...)`
-surface remains rejected with evidence and is not a public API.
+Campaign 7 evaluated fused downstream graph and grouping-oriented consumers on
+top of the same dense `DeviceCommutationMatrix` layout. At the start of that
+campaign, anti-commutation CSR graph construction, conflict-degree summaries,
+and grouping summaries were benchmark-only private helpers, pending acceptance
+of exact return semantics, ownership, ordering, synchronization, CPU-only
+behavior, and failure modes in
+`docs/plans/cuda_fused_commutation_consumer_api_review.md`. Benchmark rows must
+carry `private_benchmark_only` labels and decision fields for
+count-specialization, bit-packed output, and non-H100 portability. No Campaign
+7 fused-consumer helper belongs in an installed public header while the public
+API remains deferred.
 
-Campaign 7 evaluates fused downstream graph and grouping-oriented consumers on
-top of the same dense `DeviceCommutationMatrix` layout. The accepted public API
-status at campaign start is conservative: anti-commutation CSR graph
-construction, conflict-degree summaries, and grouping summaries are
-benchmark-only private helpers unless
-`docs/plans/cuda_fused_commutation_consumer_api_review.md` later accepts exact
-return semantics, ownership, ordering, synchronization, CPU-only behavior, and
-failure modes. Benchmark rows must carry `private_benchmark_only` labels and
-decision fields for count-specialization, bit-packed output, and non-H100
-portability. No Campaign 7 fused-consumer helper belongs in an installed public
-header while the public API remains deferred.
-
-Campaign 4 may benchmark private commutation materialization labels
+Campaign 4 could benchmark the private commutation materialization labels
 `host_vector`, `caller_owned_host_bytes`, `caller_owned_device_bytes`, and
 `bitpacked_device_words` through `WOLFGANG_CUDA_BENCH_COMMUTATION_OUTPUT`.
-Only the first two correspond to supported public host-output paths in this
+Only the first two corresponded to supported public host-output paths in that
 campaign. Device-byte and bit-packed rows must remain visibly labeled as
-private prototypes. Campaign 5 supersedes the private dense device-byte
+private prototypes. Campaign 5 superseded the private dense device-byte
 prototype with `DeviceCommutationMatrix`; private bit-packed rows remain
 benchmark evidence only.
 
-Campaign 7 leaves bit-packed public output deferred in
+Campaign 7 left bit-packed public output deferred in
 `docs/plans/cuda_bitpacked_commutation_campaign7_decision.md`. Dense
 `DeviceCommutationMatrix` remains the device-resident representation because
 the retained grouping summaries copy compact results without a dense-capacity
@@ -226,34 +224,42 @@ and host transfer rather than by a proven packed-layout win.
 
 Campaign 8 is complete on H100 in
 `docs/benchmarks/reports/cuda_deep_optimization_h100_campaign8_2026-04-29.md`
-and keeps the same public compatibility baseline. Its retained private
+and kept the same public compatibility baseline. Its retained private
 benchmark path uses device-resident graph and grouping consumers that avoid
 full CSR edge-list host export for high-scale workflows. The private hook
-`wolfgang_quantum._wolfgang_core._benchmark_cuda_device_resident_consumer` is limited
-to benchmarks and CUDA-gated tests, is not re-exported from `wolfgang_quantum`, and
-does not belong in installed public C++ headers. Public fused grouping APIs,
-DLPack export, stream-aware execution, and CUDA Graph replay remain unavailable
-because the Campaign 8 reviews did not accept exact return shapes, ownership,
-lifetime, synchronization, error, CPU-only, and documentation semantics. CSR
-scatter tuning is rejected for Campaign 8 because the retained compact graph
-and grouping consumers no longer need full CSR scatter by default. Non-H100
-NVIDIA portability remains blocked until a named second host validates the
-retained boundary from source.
+`wolfgang_quantum._wolfgang_core._benchmark_cuda_device_resident_consumer` is
+limited to benchmarks and CUDA-gated tests, is not re-exported from
+`wolfgang_quantum`, and does not belong in installed public C++ headers. Public
+fused grouping APIs, DLPack export, stream-aware execution, and CUDA Graph
+replay stayed unavailable after Campaign 8 because its reviews did not accept
+exact return shapes, ownership, lifetime, synchronization, error, CPU-only, and
+documentation semantics. Campaign 8 rejected CSR scatter tuning because the
+retained compact graph and grouping consumers no longer need full CSR scatter
+by default. Non-H100 NVIDIA portability remained blocked until a named second
+host could validate the retained boundary from source.
 
 Campaign 9 is complete in
 `docs/benchmarks/reports/cuda_deferred_headroom_campaign9_2026-04-29.md` and
 closed those Campaign 8 deferred or blocked items without any final
-`deferred` status. Privileged Nsight Compute evidence passed on H100. The true
-public fused grouping API remains unavailable and is rejected with evidence;
-the accepted public summary extension is
-`DeviceCommutationMatrix.conflict_degrees(axis=None|0|1)`. Read-only
-`DeviceCommutationMatrix.__dlpack__` and `__dlpack_device__` are supported for
-the dense row-major `uint8` buffer and validated with CuPy. Public stream-aware
-execution and CUDA Graph replay remain unavailable after Campaign 9 rejection
-with evidence. CSR scatter tuning remains rejected because retained compact
-consumers avoid full CSR scatter. Non-H100 NVIDIA portability is
-`blocked_external` until a named non-H100 NVIDIA host with a working driver is
-provisioned and validated from source.
+`deferred` status. Privileged Nsight Compute evidence passed on H100. Its
+outcomes:
+
+- `DeviceCommutationMatrix.conflict_degrees(axis=None|0|1)`, the
+  anti-commuting complement of `count_commuting(...)`, is the accepted public
+  summary extension.
+- Read-only `DeviceCommutationMatrix.__dlpack__` and `__dlpack_device__` are
+  supported for the dense row-major `uint8` buffer and validated with CuPy.
+- The true public fused grouping API,
+  `DevicePauliSum.group_commuting_device(...)`, remains unavailable and is
+  rejected with evidence.
+- Public stream-aware execution and CUDA Graph replay remain unavailable after
+  Campaign 9 rejection with evidence.
+- CSR scatter tuning remains rejected because retained compact consumers avoid
+  full CSR scatter.
+- Non-H100 NVIDIA portability was `blocked_external` until a named non-H100
+  NVIDIA host with a working driver could be validated from source. Campaign 10
+  resolved it with A100 `sm_80` and RTX PRO 6000 Blackwell `sm_120` source-build
+  evidence.
 
 ## Streams And Synchronization
 
@@ -266,20 +272,20 @@ benchmark prototypes after `docs/plans/cuda_async_stream_api_review.md` accepts
 the lifetime and synchronization model. Public stream handles, asynchronous
 return semantics, and stream-ordered workspace ownership remain out of scope
 until an API document specifies synchronization, error reporting, object
-lifetime, and interaction with Python exceptions. Campaign 6 explicitly defers
-public async/stream APIs and rejects private stream/event timing probes for this
-slice so benchmark evidence stays comparable to synchronous public behavior.
-Campaign 7 rechecked the same surface in
-`docs/plans/cuda_async_stream_campaign7_decision.md` and keeps the public
-default-stream synchronize-before-return invariant intact. No stream handle,
-event object, graph-capture contract, or async Python return object is added.
+lifetime, and interaction with Python exceptions. Campaign 6 deferred public
+async/stream APIs and rejected private stream/event timing probes so benchmark
+evidence stayed comparable to synchronous public behavior. Campaign 7
+rechecked the same surface in
+`docs/plans/cuda_async_stream_campaign7_decision.md` and kept the public
+default-stream synchronize-before-return invariant. It added no stream handle,
+event object, graph-capture contract, or async Python return object.
 
 ## Python GPU Array Interop
 
 Initial CUDA expectation support must accept host NumPy arrays by copying them to device internally.
 
 Device-resident statevectors are supported through `__cuda_array_interface__`
-first. Campaign 9 adds read-only DLPack export for
+first. Campaign 9 added read-only DLPack export for
 `DeviceCommutationMatrix`; DLPack input support for statevectors remains a
 separate future API decision.
 
@@ -297,11 +303,12 @@ array keeps the operator alive.
 
 Operator buffers come from the stream-ordered pool. An export first finishes
 the legacy stream, because a pageable host-to-device copy from `to_device` can
-return before its DMA lands, and marks the operator; freeing a marked operator
-synchronizes the device before its blocks return to the pool, because a consumer may still have work queued on
-another stream that reads them. Unexported operators free without
-synchronizing. That synchronization runs when the last reference goes away,
-possibly during garbage collection with the GIL held. It waits for unrelated
+return before its DMA lands, and then marks the operator. Freeing a marked
+operator synchronizes the device before its blocks return to the pool, because
+a consumer may still have work queued on another stream that reads them.
+Unexported operators free without synchronizing. That synchronization runs
+when the last reference goes away, possibly during garbage collection with the
+GIL held. It waits for unrelated
 work queued by other libraries, and a pending host callback that needs the GIL
 (for example CuPy `launch_host_func`) would deadlock. Inside a CUDA graph
 capture the synchronization fails and invalidates the capture; the error is
@@ -451,10 +458,10 @@ coverage.
 
 ## Post-Phase 11 Optimization Boundaries
 
-H100 deep optimization campaigns after Phase 11 are allowed to retain
-production code only when the public semantic boundary remains unchanged or the
-affected public API is documented before implementation. The current
-optimization-boundary decisions are:
+H100 deep optimization campaigns after Phase 11 may retain production code
+only when the public semantic boundary remains unchanged or the affected public
+API is documented before implementation. The current optimization-boundary
+decisions are:
 
 ```text
 workspace ownership: internal C++/benchmark-only unless H100 evidence justifies an explicitly experimental public API
@@ -479,7 +486,14 @@ with at most 32 qubits. The packed key preserves canonical x-then-z ordering
 and does not change public output ordering, tolerance, transfer, stream, or
 ownership semantics.
 
-Operators the fused path below does not take run a multi-launch pipeline
+Campaign 3 also added a private benchmark-only commutation output reuse path
+behind `WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT=1`. This path is
+not public API, does not expose device pointers, and exists only to quantify
+device-output allocation and host-materialization overhead. At the time, public
+commutation output was a returned vector or a caller-owned host byte fill;
+Campaign 5 later added the device-resident `DeviceCommutationMatrix`.
+
+Operators that the fused path below does not handle run a multi-launch pipeline
 (`src/detail/device_simplify_pipeline.cuh`, which builds under nvcc and hipcc)
 that keeps every intermediate count on the device:
 
@@ -553,20 +567,21 @@ caches up to 1 GiB of freed blocks per device (`kPoolReleaseThresholdBytes`);
 above that it returns memory to the driver at the next synchronization. On an
 out-of-memory failure, Wolfgang trims every pool and retries once before
 raising `MemoryError` (non-pooled `cudaMalloc` allocations follow the same
-rule), and it trims at process exit. Cached blocks are not
-available to other libraries in the process until a trim. Devices without
-memory-pool support, or runs with the benchmark switch
-`WOLFGANG_CUDA_BENCH_DISABLE_POOL=1`, use `cudaMalloc`. `DeviceCommutationMatrix`
-buffers and their count scratch also come from the pool. A consumer on another
-stream could still read an exported block after Wolfgang frees it, so handing
-out a matrix's pointer through DLPack or the CUDA Array Interface marks it,
-and freeing a marked matrix synchronizes the device first, as for
-`DevicePauliSum.device_arrays()`. Pool memory is not mapped for peer devices
-(the pool grants no `cudaMemPoolSetAccess`), so exported matrices and device
-arrays are readable from their owning device only, even with peer access
-enabled. The pool is not revalidated after
-`cudaDeviceReset`. Transfers and output creation select the backend with a
-device count rather than a full device-property query.
+rule), and it trims at process exit. Cached blocks are not available to other
+libraries in the process until a trim. Devices without memory-pool support, or
+runs with the benchmark switch `WOLFGANG_CUDA_BENCH_DISABLE_POOL=1`, use
+`cudaMalloc`.
+
+`DeviceCommutationMatrix` buffers and their count scratch also come from the
+pool. A consumer on another stream could still read an exported block after
+Wolfgang frees it, so handing out a matrix's pointer through DLPack or the CUDA
+Array Interface marks it, and freeing a marked matrix synchronizes the device
+first, as for `DevicePauliSum.device_arrays()`. Pool memory is not mapped for
+peer devices (the pool grants no `cudaMemPoolSetAccess`), so exported matrices
+and device arrays are readable from their owning device only, even with peer
+access enabled. The pool is not revalidated after `cudaDeviceReset`. Transfers
+and output creation select the backend with a device count rather than a full
+device-property query.
 Evidence: `docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`,
 `docs/benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md`.
 
@@ -576,8 +591,8 @@ legacy stream into a pinned buffer borrowed from a process-wide pool
 reserved rather than zero-filled. One wait covers each batch, so an operator
 that fits in half the buffer waits once; larger operators alternate between
 the two halves, copying into one while appending the other. Buffers grow to at
-most 16 MiB, the pool keeps at most four idle, and if pinned memory cannot be
-had `to_host` copies directly. On Linux, result vectors of 4 MiB or more are
+most 16 MiB, the pool keeps at most four idle, and if pinned memory is
+unavailable `to_host` copies directly. On Linux, result vectors of 4 MiB or more are
 advised for transparent huge pages before their first touch, because on the
 KVM hosts measured, faulting in fresh 4 KiB pages cost more than the copy
 itself. `to_host` is 1.9-3.2x faster on an H100 from 1 term to 4M terms; a
@@ -585,9 +600,3 @@ direct copy into huge-page memory above 16 MiB measured slower end to end.
 `to_device()` and statevector uploads keep pageable `cudaMemcpy`, which beat
 staging up to 32 MB. Evidence:
 `docs/benchmarks/reports/host_transfers_2026-11-03.md`.
-
-Campaign 3 also added a private benchmark-only commutation output reuse path
-behind `WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT=1`. This path is
-not public API, does not expose device pointers, and exists only to quantify
-device-output allocation and host-materialization overhead. Public commutation
-output remains vector return or caller-owned host byte fill.
