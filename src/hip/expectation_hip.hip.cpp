@@ -1,4 +1,5 @@
 #include "device_pauli_sum.hip.hpp"
+#include "hip/pool_allocator.hip.hpp"
 
 #include <hip/hip_runtime.h>
 #include <thrust/complex.h>
@@ -17,7 +18,6 @@ using hip_detail::check_hip;
 using hip_detail::checked_bytes;
 using hip_detail::copy_bytes_to_device;
 using hip_detail::copy_to_host;
-using hip_detail::hip_allocate;
 using hip_detail::ScopedHipDevice;
 using hip_detail::validate_statevector_length;
 
@@ -27,7 +27,7 @@ constexpr int kExpectationDefaultThreadsPerBlock = 256;
 constexpr int kExpectationLargeStateThreadsPerBlock = 128;
 constexpr std::size_t kExpectationLargeStateThreshold = std::size_t{1} << 17U;
 
-// Host NumPy buffers are copied byte-for-byte into hipMalloc storage and read
+// Host NumPy buffers are copied byte-for-byte into pooled device storage and read
 // by kernels as thrust::complex<T>. These guards keep that zero-conversion path
 // tied to the storage assumptions used by the CUDA implementation.
 static_assert(
@@ -116,17 +116,6 @@ __global__ void expectation_statevector_terms_kernel(
   }
 }
 
-template <typename T>
-std::unique_ptr<T, void (*)(T*)> hip_allocation_guard(T* ptr) {
-  return std::unique_ptr<T, void (*)(T*)>(
-      ptr,
-      [](T* value) {
-        if (value != nullptr) {
-          (void)hipFree(value);
-        }
-      });
-}
-
 }  // namespace
 
 std::complex<double> DevicePauliSum::expectation_statevector_complex128(
@@ -137,9 +126,8 @@ std::complex<double> DevicePauliSum::expectation_statevector_complex128(
   validate_statevector_length(impl_->num_qubits, psi.size());
   ScopedHipDevice guard(impl_->device_ordinal);
 
-  thrust::complex<double>* device_psi = nullptr;
-  hip_allocate(device_psi, psi.size(), "HIP device statevector");
-  auto psi_guard = hip_allocation_guard(device_psi);
+  const hip_detail::PoolBuffer<thrust::complex<double>> psi_buffer(psi.size(), "HIP device statevector");
+  thrust::complex<double>* device_psi = psi_buffer.get();
   copy_bytes_to_device(
       device_psi,
       psi.data(),
@@ -160,9 +148,8 @@ std::complex<double> DevicePauliSum::expectation_statevector_complex64(
   validate_statevector_length(impl_->num_qubits, psi.size());
   ScopedHipDevice guard(impl_->device_ordinal);
 
-  thrust::complex<float>* device_psi = nullptr;
-  hip_allocate(device_psi, psi.size(), "HIP device statevector");
-  auto psi_guard = hip_allocation_guard(device_psi);
+  const hip_detail::PoolBuffer<thrust::complex<float>> psi_buffer(psi.size(), "HIP device statevector");
+  thrust::complex<float>* device_psi = psi_buffer.get();
   copy_bytes_to_device(
       device_psi,
       psi.data(),
@@ -208,9 +195,8 @@ std::complex<double> DevicePauliSum::expectation_statevector_device_pointer_impl
     check_hip(hipDeviceSynchronize(), "synchronize before HIP statevector expectation");
   }
 
-  double* result_parts = nullptr;
-  hip_allocate(result_parts, 2, "HIP expectation result accumulator");
-  auto result_guard = hip_allocation_guard(result_parts);
+  const hip_detail::PoolBuffer<double> result_buffer(2, "HIP expectation result accumulator");
+  double* result_parts = result_buffer.get();
   check_hip(
       hipMemset(result_parts, 0, 2 * sizeof(double)),
       "initialize HIP statevector expectation accumulator");

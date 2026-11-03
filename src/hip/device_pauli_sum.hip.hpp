@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <limits>
+#include <new>
 #include <stdexcept>
 #include <string>
 
@@ -75,6 +76,9 @@ private:
   int previous_device_ = -1;
 };
 
+// Defined with the Wolfgang memory pool (hip/pool_allocator.hip.cpp).
+void trim_pools_after_allocation_failure() noexcept;
+
 template <typename T>
 void hip_allocate(T*& pointer, std::size_t count, const char* name) {
   pointer = nullptr;
@@ -83,7 +87,18 @@ void hip_allocate(T*& pointer, std::size_t count, const char* name) {
     return;
   }
   (void)name;
-  check_hip(hipMalloc(reinterpret_cast<void**>(&pointer), bytes), "allocate device buffer");
+  hipError_t result = hipMalloc(reinterpret_cast<void**>(&pointer), bytes);
+  if (result == hipErrorOutOfMemory) {
+    // Cached pool blocks may be what is short: return them and retry once.
+    (void)hipGetLastError();
+    trim_pools_after_allocation_failure();
+    result = hipMalloc(reinterpret_cast<void**>(&pointer), bytes);
+  }
+  if (result == hipErrorOutOfMemory) {
+    (void)hipGetLastError();
+    throw std::bad_alloc();  // MemoryError, as for pooled allocations
+  }
+  check_hip(result, "allocate device buffer");
 }
 
 template <typename T>

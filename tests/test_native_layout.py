@@ -164,6 +164,7 @@ def test_backend_neutral_accelerator_sources_are_declared_as_disjoint_sets() -> 
         "src/hip/device_pauli_sum.hip.cpp",
         "src/hip/expectation_hip.hip.cpp",
         "src/hip/matmul_hip.hip.cpp",
+        "src/hip/pool_allocator.hip.cpp",
         "src/hip/simplify_hip.hip.cpp",
         "src/hip/workspace_hip.hip.cpp",
     }

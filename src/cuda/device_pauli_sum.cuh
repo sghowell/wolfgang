@@ -12,6 +12,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <span>
+#include <new>
 #include <stdexcept>
 #include <string>
 
@@ -85,6 +86,10 @@ void cuda_allocate(T*& pointer, std::size_t count, const char* name) {
     (void)cudaGetLastError();
     trim_pools_after_allocation_failure();
     result = cudaMalloc(reinterpret_cast<void**>(&pointer), bytes);
+  }
+  if (result == cudaErrorMemoryAllocation) {
+    (void)cudaGetLastError();
+    throw std::bad_alloc();  // MemoryError, as for pooled allocations
   }
   check_cuda(result, "allocate device buffer");
 }
