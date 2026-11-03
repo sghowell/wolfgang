@@ -14,12 +14,12 @@ hardware evidence for any accelerator or speed claim.
 | # | Slice | Scope | Evidence required |
 | --- | --- | --- | --- |
 | 1 | CUDA simplify hardening | Restore the CUDA build broken by `ee4f95f`; replace the one-thread generic (>128 qubit) reduction with a parallel segmented reduce-by-key; use stable key sorts on the one- and two-word paths | H100 CUDA validation, CPU-equivalence tests across widths, sizes, duplicates and cancellation; serial vs parallel vs CPU timings; paired before/after timings for the specialized paths |
-| 2 | Packed array I/O | `PauliSum.from_arrays` / `to_arrays` on `uint64` x/z words and `complex128` coefficients with packed-word validation; zero-copy device views for CUDA `DevicePauliSum` | Malformed-input and lifetime tests; string-boundary vs array-boundary timings |
+| 2 | Packed array I/O | `PauliSum.from_arrays` / `to_arrays` on `uint64` x/z words and `complex128` coefficients with packed-word validation (zero-copy CUDA `DevicePauliSum` views moved to slice 7 with the other device work) | Malformed-input and lifetime tests; string-boundary vs array-boundary timings |
 | 3 | Operator algebra | Subtraction, negation, `len`, indexing and slicing, structural equality, tolerance equivalence, adjoint, and fused `commutator` / `anticommutator` that skip pairs which vanish | Algebraic identity and CPU-oracle tests; fused vs `matmul`-composed timings |
 | 4 | Statevector tools | Apply an operator to a statevector, dense and sparse matrix export, batched expectation, variance | Dense-matrix oracle tests for small widths; memory guardrails |
 | 5 | Measurement workflow | Qubit-wise group bases, expectation and standard error from counts in arbitrary local bases, diagonalizing Clifford circuits for fully commuting groups, variance-weighted shot allocation | Statevector and sampled-counts oracles; Clifford conjugation checked term by term |
 | 6 | CPU simplify parallelism | oneTBB sort and duplicate reduction that keeps scalar canonical output and input-order sums | Bitwise scalar equivalence; paired timings on x86_64 and Apple Silicon against the scalar control and Qiskit |
-| 7 | Device allocation reuse | Remove per-call allocation and synchronization costs that profiling shows dominate chained GPU operations, through private workspaces first and `_inplace` public methods where they pay off | Before/after Nsight Systems API breakdown and same-boundary timings |
+| 7 | Device allocation reuse | Remove per-call allocation, discovery and synchronization costs that dominate small GPU operations, through a private pooled allocator first and `_inplace` public methods where they pay off; zero-copy CUDA `DevicePauliSum` views | Before/after Nsight Systems API breakdown and same-boundary timings |
 | 8 | Metal hybrid simplify | GPU integer key sort and run detection with float64 coefficient reduction on the CPU over shared memory | Promotion only if it beats same-host CPU simplify at the measured sizes |
 
 ## Decisions carried into the campaign
@@ -35,5 +35,6 @@ hardware evidence for any accelerator or speed claim.
 
 ## Status
 
-Slice 1 implemented with H100 evidence:
-`docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`.
+Slice 1 merged with H100 evidence:
+`docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`. Review closeout:
+`docs/reviews/usability_kernel_campaign_2026-11-03.md`.
