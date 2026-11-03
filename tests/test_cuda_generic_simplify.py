@@ -113,3 +113,17 @@ def test_cuda_generic_simplify_rejects_unknown_benchmark_selector(
     op = wolfgang_quantum.PauliSum.from_labels(["X" * 130], [1.0]).to_device()
     with pytest.raises(ValueError, match=GENERIC_SELECTOR):
         op.simplify()
+
+
+@pytest.mark.parametrize("num_qubits", [0, 3, 60, 100, 130])
+@pytest.mark.parametrize(
+    ("coeff", "atol", "rtol"),
+    [(0.75 - 0.5j, 1.0e-12, 0.0), (1.0e-14, 1.0e-12, 0.0), (2.0, 0.0, 1.0), (2.0, 0.0, 0.5)],
+)
+def test_cuda_single_term_simplify_matches_cpu(
+    num_qubits: int, coeff: complex, atol: float, rtol: float
+) -> None:
+    _require_cuda_runtime()
+    label = "".join("IXYZ"[(3 * qubit + 1) % 4] for qubit in range(num_qubits))
+    op = wolfgang_quantum.PauliSum.from_labels([label], [coeff])
+    _assert_matches_cpu(op, atol=atol, rtol=rtol)

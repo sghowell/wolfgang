@@ -448,11 +448,44 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     return DevicePauliSum(std::move(out));
   };
 
+  // Validate the benchmark selector up front so a bad value fails on every
+  // generic-width input, including the small-input fast paths below.
+  const GenericReductionStrategy generic_strategy =
+      impl_->words > 2 ? generic_reduction_strategy_from_env()
+                       : GenericReductionStrategy::kParallelReduceByKey;
+
   if (impl_->num_terms == 0) {
     return make_empty();
   }
 
   ScopedCudaDevice guard(impl_->device_ordinal);
+  if (impl_->num_terms == 1) {
+    // One term has nothing to merge; only the drop rule applies, and the
+    // largest input magnitude is the term's own. Skipping sort and reduction
+    // removes their fixed setup cost from this common degenerate case.
+    thrust::complex<double> coeff;
+    copy_to_host(&coeff, impl_->coeffs, 1, "single-term coefficient");
+    const double magnitude = thrust::abs(coeff);
+    if (!(magnitude > atol + rtol * magnitude)) {
+      return make_empty();
+    }
+    auto out = std::make_unique<Impl>();
+    out->num_qubits = impl_->num_qubits;
+    out->words = impl_->words;
+    out->num_terms = 1;
+    out->device_ordinal = impl_->device_ordinal;
+    if (impl_->words > 0) {
+      cuda_allocate(out->x, impl_->words, "simplified x words");
+      cuda_allocate(out->z, impl_->words, "simplified z words");
+      copy_device_to_device(out->x, impl_->x, impl_->words, "simplified x words");
+      copy_device_to_device(out->z, impl_->z, impl_->words, "simplified z words");
+    }
+    cuda_allocate(out->coeffs, 1, "simplified coefficients");
+    copy_device_to_device(out->coeffs, impl_->coeffs, 1, "simplified coefficients");
+    check_cuda(cudaDeviceSynchronize(), "synchronize after CUDA simplify");
+    return DevicePauliSum(std::move(out));
+  }
+
   auto coeff_ptr = thrust::device_pointer_cast(impl_->coeffs);
   const double max_abs_input = thrust::transform_reduce(
       coeff_ptr,
@@ -781,7 +814,6 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     return DevicePauliSum(std::move(out));
   }
 
-  const GenericReductionStrategy generic_strategy = generic_reduction_strategy_from_env();
   const std::size_t packed_words =
       detail::checked_product(impl_->num_terms, impl_->words, "generic simplify packed words");
   // The comparator breaks ties on input index, so equal terms stay in input
