@@ -7,8 +7,10 @@ All user-visible Wolfgang changes are recorded here before each release.
 Next version: TBD
 
 - The release software bill of materials lists the oneTBB runtime bundled in
-  CPU wheels (version, source commit, Apache-2.0) and the vendored DLPack
-  header alongside the Python dependencies (`scripts/sbom_bundled_components.py`).
+  CPU wheels (version, source commit, `Apache-2.0 AND BSD-3-Clause`) and the
+  vendored DLPack header (version and SHA-256) alongside the Python
+  dependencies, and the release workflow validates it against the CycloneDX
+  schema (`scripts/sbom_bundled_components.py`).
 - CUDA and HIP: `DevicePauliSum.to_host()` stages its copies through pinned
   buffers borrowed from a small process-wide pool, waiting for the GPU once
   per batch instead of once per buffer (HIP stages only transfers up to

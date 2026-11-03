@@ -112,12 +112,14 @@ metadata. The build fails if the cloned notices differ from the committed
 copies in `third_party/onetbb/`. The project license expression is
 `MIT AND Apache-2.0 AND BSD-3-Clause` (Wolfgang, DLPack and oneTBB, oneTBB's
 ITT Notify). Updating oneTBB means changing the tag, the commit and the
-committed notices together and re-running the wheel smoke tests. The CycloneDX
-SBOM lists the Python dependencies (from `cyclonedx-py`) and, added by
-`scripts/sbom_bundled_components.py`, the bundled oneTBB runtime and the
-vendored DLPack header, with versions read from `scripts/build_onetbb.sh` and
-`dlpack.h`, oneTBB's source commit, and their licenses. Source builds keep
-oneTBB optional.
+committed notices together and re-running the wheel smoke tests.
+`cyclonedx-py` lists the Python dependencies in the CycloneDX SBOM;
+`scripts/sbom_bundled_components.py` adds the bundled oneTBB runtime (tag,
+commit and `Apache-2.0 AND BSD-3-Clause` from `scripts/build_onetbb.sh`; the
+BSD-3-Clause ITT Notify code is compiled in on x86_64) and the vendored DLPack
+header (version from `dlpack.h`, with its SHA-256; see
+`third_party/dlpack/README.md`), and the release workflow validates the result
+against the CycloneDX schema. Source builds keep oneTBB optional.
 
 Rules:
 

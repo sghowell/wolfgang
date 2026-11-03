@@ -65,7 +65,7 @@ terms; `to_device` keeps the driver's pageable path, which beat staging
 (`docs/benchmarks/reports/host_transfers_2026-11-03.md`).
 
 Slice 5 merged: the release CycloneDX SBOM lists the bundled oneTBB runtime
-(version, source commit, Apache-2.0) and the vendored DLPack header next to the
-Python dependencies, added by `scripts/sbom_bundled_components.py` from the
+(version, source commit, `Apache-2.0 AND BSD-3-Clause`) and the vendored DLPack
+header (version, SHA-256) next to the Python dependencies, added by `scripts/sbom_bundled_components.py` from the
 files that pin them and checked against the CycloneDX schema in the release
 workflow.
