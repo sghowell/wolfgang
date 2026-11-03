@@ -56,3 +56,10 @@ to 256 qubits and 1,024 terms, 3.0-7.8x faster on H100 and 3.5-5.7x on MI300X,
 with coefficients bit-identical to CPU
 (`docs/benchmarks/reports/small_simplify_2026-11-03.md`). Every backend now
 rounds the drop threshold's product separately.
+
+Slice 3 merged: CUDA `DevicePauliSum.device_arrays()` hands the packed
+buffers to CuPy and PyTorch without a copy (36 us against 8.8 ms through the
+host at 1M terms), and `DevicePauliSum.from_device_arrays()` builds an operator
+from device arrays on any stream (84 us against 21 ms)
+(`docs/benchmarks/reports/device_arrays_h100_2026-11-03.md`). HIP and Metal
+stay disabled until a consumer on those backends is validated.

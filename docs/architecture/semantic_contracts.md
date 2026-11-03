@@ -196,6 +196,28 @@ keeps the operator alive, and the operator is immutable, so the data never
 changes underneath a view. `PauliSum.from_arrays(*op.to_arrays(), op.num_qubits)`
 is structurally equal to `op`.
 
+A CUDA `DevicePauliSum` exchanges the same layout on the device:
+
+- `device_arrays()` returns views `(x, z, coeffs)` of the operator's own
+  device buffers. Each supports `__dlpack__` (versioned capsules with the
+  read-only flag) and `__cuda_array_interface__` (`readonly` true), and keeps
+  the operator alive. Exporting copies nothing. The read-only flag is advisory:
+  CuPy and PyTorch do not enforce it, and writing through a consumer array is
+  undefined behavior. PyTorch rejects read-only CUDA Array Interface input, so
+  it reads the views through `torch.from_dlpack`.
+- `DevicePauliSum.from_device_arrays(x, z, coeffs, num_qubits, device=-1)`
+  copies C-contiguous objects exposing `__cuda_array_interface__` on one device
+  into a new operator on the device, with no host round trip. Dtypes must be
+  exactly `uint64` and `complex128` (`TypeError` otherwise), wrong shapes raise
+  `ValueError`, and set bits at or above `num_qubits` raise `ValueError`.
+  `device=-1` uses the arrays' device, or the current device when they are
+  empty. The call synchronizes the device first, so a producer that wrote the
+  inputs on any stream has finished, and returns after the copy completes, so
+  the inputs may be reused at once. The result owns its buffers.
+- HIP and Metal operators raise `RuntimeError` for `device_arrays()`, and
+  builds without CUDA raise `RuntimeError` for `from_device_arrays()`, until a
+  consumer on those backends is validated.
+
 ## Indexing And Equality
 
 `len(h)` equals `h.num_terms`. `h[i]` returns a single-term `PauliSum` and accepts

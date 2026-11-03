@@ -1,0 +1,246 @@
+{
+ "benchmark": "device_arrays",
+ "commands": [
+  "python benchmarks/bench_device_arrays.py --seed 20261111 --output run_1.json",
+  "python benchmarks/bench_device_arrays.py --seed 20261112 --output run_2.json",
+  "python benchmarks/bench_device_arrays.py --seed 20261113 --output run_3.json"
+ ],
+ "cupy_version": "14.2.0",
+ "device": {
+  "devices": [
+   {
+    "compute_capability": [
+     9,
+     0
+    ],
+    "name": "NVIDIA H100 80GB HBM3",
+    "ordinal": 0,
+    "total_memory_bytes": 85017624576
+   }
+  ],
+  "driver_version": "13.0",
+  "runtime_version": "12.8"
+ },
+ "git": {
+  "commit": "01997f7",
+  "commit_label": "01997f7",
+  "dirty": false,
+  "requested_commit_label": null,
+  "requested_label_matches_checkout": true,
+  "source": "git",
+  "working_tree_status": []
+ },
+ "native_build_matches_checkout": true,
+ "repeat": 15,
+ "rows": {
+  "1000000_terms_100q": {
+   "export_dlpack": {
+    "median_of_medians_seconds": 3.957399894716218e-05,
+    "per_run_median_seconds": [
+     3.9340000512311235e-05,
+     3.957399894716218e-05,
+     4.413799979374744e-05
+    ]
+   },
+   "export_via_host": {
+    "median_of_medians_seconds": 0.012421629999153083,
+    "per_run_median_seconds": [
+     0.012036195003020111,
+     0.012421629999153083,
+     0.013384368998231366
+    ]
+   },
+   "import_device": {
+    "median_of_medians_seconds": 0.00013092399967717938,
+    "per_run_median_seconds": [
+     0.00012653500016313046,
+     0.00013227100134827197,
+     0.00013092399967717938
+    ]
+   },
+   "import_via_host": {
+    "median_of_medians_seconds": 0.027566015000047628,
+    "per_run_median_seconds": [
+     0.027566015000047628,
+     0.027529691000381717,
+     0.028404380998836132
+    ]
+   }
+  },
+  "1000000_terms_64q": {
+   "export_dlpack": {
+    "median_of_medians_seconds": 3.62190003215801e-05,
+    "per_run_median_seconds": [
+     3.9943999581737444e-05,
+     3.62190003215801e-05,
+     3.606600148486905e-05
+    ]
+   },
+   "export_via_host": {
+    "median_of_medians_seconds": 0.008827487003145507,
+    "per_run_median_seconds": [
+     0.008827487003145507,
+     0.008402096998906927,
+     0.009106301000429085
+    ]
+   },
+   "import_device": {
+    "median_of_medians_seconds": 8.369300121557899e-05,
+    "per_run_median_seconds": [
+     8.91700001375284e-05,
+     8.369300121557899e-05,
+     8.345500100404024e-05
+    ]
+   },
+   "import_via_host": {
+    "median_of_medians_seconds": 0.02070943100261502,
+    "per_run_median_seconds": [
+     0.020738977000291925,
+     0.019966380998084787,
+     0.02070943100261502
+    ]
+   }
+  },
+  "100000_terms_100q": {
+   "export_dlpack": {
+    "median_of_medians_seconds": 3.172899960190989e-05,
+    "per_run_median_seconds": [
+     3.172899960190989e-05,
+     3.1561998184770346e-05,
+     3.2487001590197906e-05
+    ]
+   },
+   "export_via_host": {
+    "median_of_medians_seconds": 0.001521039001090685,
+    "per_run_median_seconds": [
+     0.0015292269999918062,
+     0.0015173530009633396,
+     0.001521039001090685
+    ]
+   },
+   "import_device": {
+    "median_of_medians_seconds": 8.492000051774085e-05,
+    "per_run_median_seconds": [
+     8.392200106754899e-05,
+     8.492000051774085e-05,
+     8.534299922757782e-05
+    ]
+   },
+   "import_via_host": {
+    "median_of_medians_seconds": 0.0014085260008869227,
+    "per_run_median_seconds": [
+     0.0014098669998929836,
+     0.0013942109981144313,
+     0.0014085260008869227
+    ]
+   }
+  },
+  "100000_terms_64q": {
+   "export_dlpack": {
+    "median_of_medians_seconds": 3.097900116699748e-05,
+    "per_run_median_seconds": [
+     3.04770001093857e-05,
+     3.097900116699748e-05,
+     3.1652001780457795e-05
+    ]
+   },
+   "export_via_host": {
+    "median_of_medians_seconds": 0.001082615002815146,
+    "per_run_median_seconds": [
+     0.0011470099998405203,
+     0.001082615002815146,
+     0.0010208069979853462
+    ]
+   },
+   "import_device": {
+    "median_of_medians_seconds": 5.4280997574096546e-05,
+    "per_run_median_seconds": [
+     5.3889001719653606e-05,
+     5.4280997574096546e-05,
+     5.5705000704620034e-05
+    ]
+   },
+   "import_via_host": {
+    "median_of_medians_seconds": 0.0009271570015698671,
+    "per_run_median_seconds": [
+     0.0009433619998162612,
+     0.0009271570015698671,
+     0.0009133909989031963
+    ]
+   }
+  },
+  "1000_terms_100q": {
+   "export_dlpack": {
+    "median_of_medians_seconds": 1.5896002878434956e-05,
+    "per_run_median_seconds": [
+     1.5896002878434956e-05,
+     1.584799974807538e-05,
+     1.650600097491406e-05
+    ]
+   },
+   "export_via_host": {
+    "median_of_medians_seconds": 0.00010916900282609276,
+    "per_run_median_seconds": [
+     0.00010916900282609276,
+     0.00010988800204358995,
+     0.0001087140008166898
+    ]
+   },
+   "import_device": {
+    "median_of_medians_seconds": 5.026700091548264e-05,
+    "per_run_median_seconds": [
+     4.729800275526941e-05,
+     5.026700091548264e-05,
+     5.29549979546573e-05
+    ]
+   },
+   "import_via_host": {
+    "median_of_medians_seconds": 8.904100104700774e-05,
+    "per_run_median_seconds": [
+     9.022700032801367e-05,
+     8.904100104700774e-05,
+     8.893500125850551e-05
+    ]
+   }
+  },
+  "1000_terms_64q": {
+   "export_dlpack": {
+    "median_of_medians_seconds": 1.5736000932520255e-05,
+    "per_run_median_seconds": [
+     1.5736000932520255e-05,
+     1.645700103836134e-05,
+     1.55849993461743e-05
+    ]
+   },
+   "export_via_host": {
+    "median_of_medians_seconds": 0.00010026400195783935,
+    "per_run_median_seconds": [
+     0.00010097300037159584,
+     9.950299863703549e-05,
+     0.00010026400195783935
+    ]
+   },
+   "import_device": {
+    "median_of_medians_seconds": 3.377499888301827e-05,
+    "per_run_median_seconds": [
+     3.268599903094582e-05,
+     3.377499888301827e-05,
+     3.504299820633605e-05
+    ]
+   },
+   "import_via_host": {
+    "median_of_medians_seconds": 8.037099905777723e-05,
+    "per_run_median_seconds": [
+     8.119799895212054e-05,
+     8.037099905777723e-05,
+     8.004800110938959e-05
+    ]
+   }
+  }
+ },
+ "seeds": [
+  20261111,
+  20261112,
+  20261113
+ ]
+}

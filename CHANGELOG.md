@@ -6,6 +6,15 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- CUDA: `DevicePauliSum.device_arrays()` returns zero-copy views of the x
+  words, z words and coefficients, flagged read-only, that CuPy reads through
+  DLPack or the CUDA Array Interface and PyTorch through DLPack, and
+  `DevicePauliSum.from_device_arrays()` builds an operator from CUDA device
+  arrays with a device-to-device copy. On an H100 at 1M terms, handing the
+  buffers to CuPy takes 36 us instead of 8.8 ms through the host, and building
+  from CuPy arrays 84 us instead of 21 ms
+  (`docs/benchmarks/reports/device_arrays_h100_2026-11-03.md`). HIP and Metal
+  raise for both. `DeviceArrayView` is exported for type annotations.
 - CUDA and HIP: operators of up to 256 qubits and 1,024 terms simplify in one
   fused kernel. On an H100 small simplify is 3.0-7.8x faster (128 terms:
   143.5 to 18.4 us); on an MI300X it is 3.5-5.7x faster. Their coefficients

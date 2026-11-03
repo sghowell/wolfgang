@@ -129,3 +129,62 @@ documentation. The benchmarked candidate is `b072c0a`.
 - Residual risk:
   - one H100 and one MI300X;
   - device `hypot` can differ from host libm by a few ulps at the threshold.
+
+## Slice 3: Zero-copy device arrays
+
+Branch `codex/device-arrays`, commits `0b4d296`..`01997f7` plus
+documentation. The benchmarked candidate is `01997f7`.
+
+- Reviewer: independent agent (CUDA interop, lifetime, security and
+  documentation roles), read-only. It checked consumer behavior against CuPy
+  and PyTorch sources.
+- Findings: P0 1, P1 2, P2 6, P3 7.
+- P0 resolution (stream safety): import ignored the producer's stream and
+  copied on the legacy stream, which does not order with non-blocking streams
+  (every PyTorch side stream). It also returned before the device-to-device
+  copy finished. `from_device_arrays` now synchronizes the device before
+  copying and the legacy stream before returning. Two tests use a delay
+  kernel to keep work pending; both fail with the synchronizations removed.
+- P1 resolutions:
+  - an unchecked word count let `num_qubits = 2**64 - 1` wrap to zero words
+    and read out of bounds on the device. Word counts now use the host path's
+    checked arithmetic, and the binding rejects the value first, with a test;
+  - the import timings excluded the copy (nothing synchronized at 64 qubits),
+    and pending work skewed other rows. Every timed variant now ends with a
+    device synchronization, a 100-qubit row exercises the tail check, and the
+    report and CHANGELOG carry the re-measured numbers (import 84 us, not
+    57 us, at 1M terms).
+- P2 resolutions:
+  - PyTorch rejects read-only CUDA Array Interface input; docs now say
+    PyTorch reads the views through `torch.from_dlpack`, and a PyTorch 2.15
+    test covers both;
+  - read-only is advisory on every CUDA consumer. Decision recorded in the
+    semantic contracts, CUDA backend doc, docstrings and header: the views are
+    flagged read-only, consumers do not enforce it, and writing through them
+    is undefined behavior. HIP stays disabled because no ROCm consumer was
+    validated, not on a read-only argument;
+  - `cuMemGetAddressRange` now runs in the owning device's context;
+  - the pool-allocator comment describes the sync-on-free exception;
+  - `api_stability.md` lists the experimental surface;
+  - tests added for every listed gap that one GPU allows.
+- P3 resolutions: the `copy=True` error names `DeviceArrayView`; builds
+  without CUDA raise `RuntimeError` for `from_device_arrays` before parsing;
+  device ordinals below -1 are rejected, and empty input uses the current
+  device; masked inputs are rejected; producer attribute errors propagate
+  (PyTorch's requires-grad error); `__dlpack__` accepts `dl_device`, and the
+  minimum consumer versions are documented; the sync-on-free consequences
+  (garbage collection, host callbacks, graph capture) are documented; strides
+  are ignored for empty arrays.
+- Also fixed: `thrust::any_of` returned padding bytes that initcheck flagged,
+  so the tail check uses `thrust::count_if`.
+- Validation after fixes:
+  - H100 at `9e0194e`: `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py
+    --profile core` passed (944 tests in the CUDA run); memcheck, racecheck
+    and synccheck report 0 errors. At `01997f7`: the device-array tests pass
+    (16, with PyTorch 2.15), and initcheck and memcheck report 0 errors.
+  - MI300X: the HIP build raises for both entry points, as documented.
+- Deferred: multi-GPU tests (device inference, mixed-device rejection) need a
+  host with two GPUs; HIP export with a validated ROCm consumer; DLPack input.
+- Residual risk:
+  - one H100; consumers may write through views despite the flag;
+  - the device synchronization on free and on import waits for unrelated work.

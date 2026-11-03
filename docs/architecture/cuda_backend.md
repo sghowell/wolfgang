@@ -283,6 +283,42 @@ first. Campaign 9 adds read-only DLPack export for
 `DeviceCommutationMatrix`; DLPack input support for statevectors remains a
 separate future API decision.
 
+`DevicePauliSum.device_arrays()` exports the operator's x words, z words and
+coefficients the same way: versioned DLPack capsules flagged read-only
+(reusing the `DeviceCommutationMatrix` capsule context and deleters) and CUDA
+Array Interface v3 dictionaries with `readonly` true and `stream` 1. The flag
+is advisory, because CuPy and PyTorch import without enforcing it; writing
+through a consumer array is undefined behavior and can break the tail-bit
+invariant. PyTorch rejects read-only CUDA Array Interface input and reads the
+views through `torch.from_dlpack`. Consumers must request versioned capsules
+(`max_version >= (1, 0)`): CuPy 14 and PyTorch 2.15 were validated. The
+capsule context holds a reference to the owning Python object, so a consumer
+array keeps the operator alive.
+
+Operator buffers come from the stream-ordered pool, so an export marks the
+operator, and freeing a marked operator synchronizes the device before its
+blocks return to the pool, because a consumer may still have work queued on
+another stream that reads them. Unexported operators free without
+synchronizing. That synchronization runs when the last reference goes away,
+possibly during garbage collection with the GIL held. It waits for unrelated
+work queued by other libraries, and a pending host callback that needs the GIL
+(for example CuPy `launch_host_func`) would deadlock. Inside a CUDA graph
+capture the synchronization fails and invalidates the capture; the error is
+cleared and the free proceeds.
+
+`DevicePauliSum.from_device_arrays` validates each input with
+`cudaPointerGetAttributes` (device or managed memory, all three on one device)
+and `cuMemGetAddressRange` in the owning device's context (the full advertised
+extent lies inside one allocation). It then synchronizes the device, because a
+CUDA Array Interface producer may have written the inputs on a non-blocking
+stream that does not order with the legacy stream. It copies device to device
+into pooled buffers, rejects set bits at or above `num_qubits` with a
+device-side `thrust::count_if`, and synchronizes the legacy stream before
+returning, so the caller may reuse the inputs and any stream may read the
+result. Word counts use the same overflow-checked arithmetic as the host
+path.
+Evidence: `docs/benchmarks/reports/device_arrays_h100_2026-11-03.md`.
+
 The initial CUDA implementation rejects unsupported device array layouts with `TypeError`. Accepted device arrays must be:
 
 ```text
