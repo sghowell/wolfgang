@@ -80,6 +80,22 @@ PauliSum DevicePauliSum::to_host() const {
   throw std::runtime_error(kAcceleratorNotBuiltMessage);
 }
 
+DeviceArrayPointers DevicePauliSum::export_device_arrays() const {
+  throw std::runtime_error(kAcceleratorNotBuiltMessage);
+}
+
+DevicePauliSum DevicePauliSum::from_device_arrays(
+    std::size_t,
+    std::size_t,
+    std::uintptr_t,
+    std::uintptr_t,
+    std::uintptr_t,
+    AcceleratorBackend backend,
+    int) {
+  (void)select_accelerator_backend(backend, false, false, false, false, false, false);
+  throw std::runtime_error(kAcceleratorNotBuiltMessage);
+}
+
 DevicePauliSum DevicePauliSum::simplify(double, double) const {
   throw std::runtime_error(kAcceleratorNotBuiltMessage);
 }

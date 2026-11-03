@@ -96,6 +96,25 @@ Qiskit circuit when Qiskit is installed.
 
 Owning accelerator mirror. Availability and native/fallback behavior depend on the compiled backend and current support contract. Device operations are synchronous unless documentation for a specific API states otherwise.
 
+On CUDA, `device_arrays()` hands the packed buffers to CuPy or PyTorch without
+a copy, and `from_device_arrays()` builds an operator from device arrays
+without a host round trip:
+
+```python
+import cupy
+import wolfgang_quantum as wq
+
+op = wq.PauliSum.from_labels(["XZI", "IYY"], [0.5, -1.0j]).to_device(backend="cuda")
+x, z, coeffs = (cupy.from_dlpack(view) for view in op.device_arrays())  # read-only, zero copy
+again = wq.DevicePauliSum.from_device_arrays(x, z, coeffs, op.num_qubits)  # device-to-device copy
+```
+
+The views keep `op` alive. They are flagged read-only, but CuPy and PyTorch do
+not enforce the flag, so treat them as read-only: writing through them is
+undefined behavior. PyTorch reads them with `torch.from_dlpack(view)`.
+`from_device_arrays` waits for producers on any stream and returns after its
+copy completes. HIP and Metal raise for both.
+
 ## `DeviceCommutationMatrix`
 
 Owning dense device output with compact reductions. Dense outputs are guarded because `rows * cols` may be large. Interop protocols have explicit backend and read-only limitations.

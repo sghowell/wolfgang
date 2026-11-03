@@ -26,6 +26,10 @@ struct DevicePauliSum::Impl {
   std::uint64_t* z = nullptr;
   thrust::complex<double>* coeffs = nullptr;
   int device_ordinal = 0;
+  // Set once the buffers have been exported (DLPack, CUDA Array Interface): a
+  // consumer may still have work queued on another stream, so the buffers are
+  // freed only after a device synchronization.
+  bool exported = false;
 
   ~Impl();
 };

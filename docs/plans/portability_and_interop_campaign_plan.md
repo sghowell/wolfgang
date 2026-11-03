@@ -64,3 +64,10 @@ buffers, and embeds precompiled kernels when Xcode's Metal compiler is
 available (first call 3.1 ms against 3.9 ms)
 (`docs/benchmarks/reports/metal_followups_2026-11-03.md`). Apple oneTBB
 timings stay deferred: oneTBB is not installed on the M4 Pro.
+
+Slice 3 merged: CUDA `DevicePauliSum.device_arrays()` hands the packed
+buffers to CuPy and PyTorch without a copy (36 us against 8.8 ms through the
+host at 1M terms), and `DevicePauliSum.from_device_arrays()` builds an operator
+from device arrays on any stream (84 us against 21 ms)
+(`docs/benchmarks/reports/device_arrays_h100_2026-11-03.md`). HIP and Metal
+stay disabled until a consumer on those backends is validated.
