@@ -54,6 +54,22 @@ void pool_free_bytes_on_device(void* pointer, int device) noexcept;
 // before retrying an allocation that failed for lack of memory.
 void trim_pools_after_allocation_failure() noexcept;
 
+// Per-thread reusable blocks for operation scratch and rocThrust algorithm
+// temporaries. On an MI300X a hipMalloc/hipFree pair for a multi-megabyte
+// block costs up to about 100 us, while ROCm caches small blocks itself, so
+// each thread keeps up to kThreadCacheBlocks freed blocks per call site and
+// reuses them. Every Wolfgang HIP operation runs on the null stream, so work
+// that reuses a released block is ordered after the work that used it.
+// Requests above kThreadCacheLimitBytes, requests while every cached block is
+// in use, and devices using the optional pool (which caches by itself) go
+// straight to the allocator. Cached blocks are freed when their thread exits,
+// when the thread switches devices, and before retrying a failed allocation.
+inline constexpr std::size_t kThreadCacheLimitBytes = std::size_t{256} << 20;
+inline constexpr std::size_t kThreadCacheBlocks = 2;
+
+[[nodiscard]] void* thread_cached_allocate(std::size_t bytes, const char* name);
+void thread_cached_free(void* pointer) noexcept;
+
 template <typename T>
 void pool_allocate(T*& pointer, std::size_t count, const char* name) {
   pointer = nullptr;
@@ -147,16 +163,32 @@ public:
 template <typename T>
 using PooledVector = thrust::device_vector<T, PoolAllocator<T>>;
 
-// Byte allocator for Thrust algorithm temporaries (sort and reduce scratch).
+// Byte allocator for Thrust algorithm temporaries (sort and reduce scratch),
+// served from the per-thread block cache.
 struct PoolTemporaryAllocator {
   using value_type = char;
 
   char* allocate(std::ptrdiff_t bytes) {
     return static_cast<char*>(
-        pool_allocate_bytes(static_cast<std::size_t>(bytes), "thrust scratch"));
+        thread_cached_allocate(static_cast<std::size_t>(bytes), "thrust scratch"));
   }
 
-  void deallocate(char* pointer, std::size_t) noexcept { pool_free_bytes(pointer); }
+  void deallocate(char* pointer, std::size_t) noexcept { thread_cached_free(pointer); }
+};
+
+// Owning operation scratch from the per-thread block cache.
+class ThreadCachedBuffer {
+public:
+  ThreadCachedBuffer(std::size_t bytes, const char* name)
+      : pointer_(static_cast<std::byte*>(thread_cached_allocate(bytes, name))) {}
+  ThreadCachedBuffer(const ThreadCachedBuffer&) = delete;
+  ThreadCachedBuffer& operator=(const ThreadCachedBuffer&) = delete;
+  ~ThreadCachedBuffer() { thread_cached_free(pointer_); }
+
+  [[nodiscard]] std::byte* data() const noexcept { return pointer_; }
+
+private:
+  std::byte* pointer_ = nullptr;
 };
 
 // Execution policy whose algorithm temporaries come from the pool.

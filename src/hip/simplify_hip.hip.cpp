@@ -166,8 +166,9 @@ MappedHostValue<T> mapped_host_value(const char* name) {
 }
 
 // Hooks for the shared multi-launch pipeline (detail/device_simplify_pipeline.cuh):
-// the null stream, scratch from the HIP allocator, and a per-thread mapped
-// result.
+// the null stream, scratch from the per-thread block cache (a multi-megabyte
+// hipMalloc/hipFree pair per call costs up to about 100 us on an MI300X), and
+// a per-thread mapped result.
 struct HipPipelineBackend {
   static constexpr int kThreadsPerBlock = hip_detail::kHipThreadsPerBlock;
 
@@ -183,10 +184,10 @@ struct HipPipelineBackend {
   class Scratch {
    public:
     explicit Scratch(std::size_t bytes) : buffer_(bytes, "simplify scratch") {}
-    [[nodiscard]] std::byte* data() const noexcept { return buffer_.get(); }
+    [[nodiscard]] std::byte* data() const noexcept { return buffer_.data(); }
 
    private:
-    hip_detail::PoolBuffer<std::byte> buffer_;
+    hip_detail::ThreadCachedBuffer buffer_;
   };
 
   static wolfgang::accelerator_detail::PipelineResult* result_device() {

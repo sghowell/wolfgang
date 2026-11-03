@@ -144,6 +144,19 @@ void register_internal_bindings(nb::module_& module) {
       },
       nb::arg("device") = 0,
       "Private test hook: whether the HIP device uses Wolfgang's pool and its used bytes.");
+  module.def(
+      "_hip_thread_cache_status_for_testing",
+      []() {
+        const wolfgang::hip_detail::ThreadCacheCounters counters =
+            wolfgang::hip_detail::thread_cache_counters_for_testing();
+        nb::dict status;
+        status["cached_bytes"] = counters.cached_bytes;
+        status["block_allocations"] = counters.block_allocations;
+        status["limit_bytes"] = counters.limit_bytes;
+        return status;
+      },
+      "Private test hook: bytes held by every thread's HIP block cache, blocks it has "
+      "allocated, and the per-block limit.");
 #endif
 #if WOLFGANG_BUILD_CUDA_ENABLED
   module.def(
