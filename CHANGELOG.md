@@ -6,6 +6,13 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- Add `apply_statevector`, `variance_statevector`, batched 2-D input for
+  `expectation_statevector`, and `to_matrix` (dense, or SciPy CSR with
+  `sparse=True`) with explicit size guards.
+- Add `estimate_counts(counts, basis)` for mean and standard error in any local
+  measurement basis, and `wolfgang_quantum.measurement` with `qwc_basis`,
+  `diagonalizing_clifford`, variance-optimal `allocate_shots` and
+  `to_qiskit_circuit`.
 - Add `PauliSum.from_arrays` / `to_arrays` for packed `uint64` mask and
   `complex128` coefficient exchange; `to_arrays` returns read-only zero-copy
   views. `from_labels` converts NumPy coefficient arrays in bulk.
