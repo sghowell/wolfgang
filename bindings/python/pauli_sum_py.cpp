@@ -1640,7 +1640,7 @@ void bind_pauli_sum(nb::module_& module) {
           "rejected by contract. On CUDA, exporting marks the matrix so that "
           "freeing it synchronizes the device first, and the buffer is readable "
           "from the owning device only. HIP-backed matrices raise until a ROCm "
-          "consumer enforces FastPauli's read-only export contract.")
+          "consumer enforces Wolfgang's read-only export contract.")
       .def(
           "__dlpack_device__",
           &device_commutation_matrix_dlpack_device,
@@ -1861,7 +1861,7 @@ void bind_pauli_sum(nb::module_& module) {
           nb::arg("output") = nb::none(),
           "Return or fill a device-resident dense uint8 commutation matrix.\n\n"
           "The returned DeviceCommutationMatrix stays on the owning accelerator "
-          "device until to_host() is called. Passing output reuses caller-owned FastPauli device "
+          "device until to_host() is called. Passing output reuses caller-owned Wolfgang device "
           "storage with the same shape and device.")
       .def(
           "matmul",

@@ -240,7 +240,7 @@ std::complex<double> DevicePauliSum::expectation_statevector_device_pointer_impl
 
   if (synchronize_input) {
     // A CUDA-array-interface producer may have used a non-default stream. A device
-    // sync makes FastPauli's first interop path conservative and deterministic.
+    // sync makes Wolfgang's first interop path conservative and deterministic.
     check_cuda(cudaDeviceSynchronize(), "synchronize before CUDA statevector expectation");
   }
 

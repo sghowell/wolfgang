@@ -144,7 +144,7 @@ std::unique_ptr<T, void (*)(T*)> device_allocation_guard(T* ptr) {
   throw std::runtime_error(
       "HIP DeviceCommutationMatrix does not expose CUDA Array Interface pointers; "
       "ROCm/HIP DLPack interop is unavailable because the current validated "
-      "ROCm consumer did not enforce FastPauli's read-only export contract.");
+      "ROCm consumer did not enforce Wolfgang's read-only export contract.");
 }
 
 }  // namespace
