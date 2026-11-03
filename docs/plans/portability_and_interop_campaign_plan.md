@@ -64,3 +64,11 @@ buffers, and embeds precompiled kernels when Xcode's Metal compiler is
 available (first call 3.1 ms against 3.9 ms)
 (`docs/benchmarks/reports/metal_followups_2026-11-03.md`). Apple oneTBB
 timings stay deferred: oneTBB is not installed on the M4 Pro.
+
+Slice 7 merged: release CPU wheels bundle oneTBB 2022.3.0, built from a
+pinned commit, so pip users get parallel simplify (1.5-3.4x on a 16-vCPU x86
+VM, 1.5-5.6x on an M4 Pro, from installed wheels). The license expression
+covers the bundled code, and a process forked after a oneTBB kernel falls back
+to the bit-identical scalar or SIMD kernels
+(`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`). These are also the
+first ARM oneTBB timings, closing the slice 6 deferral. Nothing was published.
