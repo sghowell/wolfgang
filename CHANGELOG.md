@@ -6,6 +6,10 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- oneTBB source builds: `simplify` runs a parallel sort-and-reduce kernel from
+  8,192 terms (`WOLFGANG_CPU_BACKEND=tbb` forces it) with results identical to
+  scalar bit for bit; 1.4-5.6x faster than scalar from 10,000 terms on two x86
+  hosts (`docs/benchmarks/reports/cpu_parallel_simplify_2026-11-03.md`).
 - Restore the CUDA source build, broken since the shared workspace helper
   refactor, and pin the fully qualified aliases in the header contract test.
 - CUDA simplify for operators wider than 128 qubits now reduces duplicates in
