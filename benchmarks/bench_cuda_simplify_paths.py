@@ -1,4 +1,4 @@
-"""Qualify CUDA simplify duplicate-reduction paths against CPU simplify.
+"""Qualify CUDA or HIP simplify duplicate-reduction paths against CPU simplify.
 
 Two suites:
 
@@ -17,7 +17,8 @@ Device-resident rows time ``DevicePauliSum.simplify`` on an operator already on
 the GPU; the call synchronizes before returning and includes output
 allocation. Transfer-inclusive rows time host-to-device copy, simplify and
 device-to-host materialization. Every output is checked against CPU canonical
-labels and coefficients before its timings are kept.
+labels and coefficients before its timings are kept. ``--backend hip`` runs the
+same cases on a HIP build; row names then start with ``hip_``.
 """
 
 from __future__ import annotations
@@ -46,7 +47,7 @@ except ModuleNotFoundError:
 import wolfgang_quantum
 import wolfgang_quantum._wolfgang_core as core
 
-GENERIC_SELECTOR = "WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION"
+BACKENDS = ("cuda", "hip")
 GENERIC_QUBITS = (130, 256, 1024)
 GENERIC_TERMS = (1, 128, 4096, 65536)
 SPECIALIZED_CASES = (
@@ -97,17 +98,22 @@ def timed(fn: Callable[[], Any]) -> tuple[Any, float]:
     return result, time.perf_counter() - start
 
 
-def set_selector(value: str | None) -> None:
+def generic_selector(backend: str) -> str:
+    return f"WOLFGANG_{backend.upper()}_BENCH_GENERIC_MULTIWORD_REDUCTION"
+
+
+def set_selector(backend: str, value: str | None) -> None:
     if value is None:
-        os.environ.pop(GENERIC_SELECTOR, None)
+        os.environ.pop(generic_selector(backend), None)
     else:
-        os.environ[GENERIC_SELECTOR] = value
+        os.environ[generic_selector(backend)] = value
 
 
 def run_generic_case(
     rng: np.random.Generator,
     order_rng: random.Random,
     *,
+    backend: str,
     num_qubits: int,
     num_terms: int,
     duplicate_fraction: float,
@@ -117,23 +123,23 @@ def run_generic_case(
     op = random_operator(
         rng, num_qubits=num_qubits, num_terms=num_terms, duplicate_fraction=duplicate_fraction
     )
-    device_op = op.to_device()
+    device_op = op.to_device(backend=backend)
     expected = op.simplify()
     # name -> (benchmark selector, callable). The selector is set before the
     # timer starts so environment updates stay outside the measured region.
     variants: dict[str, tuple[str | None, Callable[[], Any]]] = {
-        "cuda_generic_parallel_reduce_by_key": ("reduce_by_key", device_op.simplify),
-        "cuda_generic_parallel_transfer_inclusive": (
+        f"{backend}_generic_parallel_reduce_by_key": ("reduce_by_key", device_op.simplify),
+        f"{backend}_generic_parallel_transfer_inclusive": (
             "reduce_by_key",
-            lambda: op.to_device().simplify().to_host(),
+            lambda: op.to_device(backend=backend).simplify().to_host(),
         ),
-        "cuda_generic_serial_kernel": ("serial_kernel", device_op.simplify),
+        f"{backend}_generic_serial_kernel": ("serial_kernel", device_op.simplify),
         "cpu_simplify_control": (None, op.simplify),
     }
-    previous = os.environ.get(GENERIC_SELECTOR)
+    previous = os.environ.get(generic_selector(backend))
     try:
         for name, (selector, fn) in variants.items():
-            set_selector(selector)
+            set_selector(backend, selector)
             result = fn()
             host = result if isinstance(result, wolfgang_quantum.PauliSum) else result.to_host()
             if not same_operator(host, expected):
@@ -144,15 +150,15 @@ def run_generic_case(
             order_rng.shuffle(names)
             for name in names:
                 selector, fn = variants[name]
-                set_selector(selector)
+                set_selector(backend, selector)
                 _, seconds = timed(fn)
                 if iteration >= warmup:
                     samples[name].append(seconds)
     finally:
-        set_selector(previous)
+        set_selector(backend, previous)
     rows = {name: {**summarize(values), "raw_seconds": values} for name, values in samples.items()}
-    parallel = rows["cuda_generic_parallel_reduce_by_key"]["median_seconds"]
-    transfer = rows["cuda_generic_parallel_transfer_inclusive"]["median_seconds"]
+    parallel = rows[f"{backend}_generic_parallel_reduce_by_key"]["median_seconds"]
+    transfer = rows[f"{backend}_generic_parallel_transfer_inclusive"]["median_seconds"]
     cpu = rows["cpu_simplify_control"]["median_seconds"]
     return {
         "suite": "generic",
@@ -162,7 +168,7 @@ def run_generic_case(
         "output_terms": expected.num_terms,
         "correctness_checked": "first output of each variant against CPU simplify",
         "variants": rows,
-        "parallel_speedup_vs_serial": rows["cuda_generic_serial_kernel"]["median_seconds"] / parallel,
+        "parallel_speedup_vs_serial": rows[f"{backend}_generic_serial_kernel"]["median_seconds"] / parallel,
         "device_resident_speedup_vs_cpu": cpu / parallel,
         "transfer_inclusive_speedup_vs_cpu": cpu / transfer,
     }
@@ -171,6 +177,7 @@ def run_generic_case(
 def run_specialized_case(
     rng: np.random.Generator,
     *,
+    backend: str,
     path: str,
     num_qubits: int,
     num_terms: int,
@@ -181,16 +188,16 @@ def run_specialized_case(
     op = random_operator(
         rng, num_qubits=num_qubits, num_terms=num_terms, duplicate_fraction=duplicate_fraction
     )
-    device_op = op.to_device()
+    device_op = op.to_device(backend=backend)
     expected = op.simplify()
     variants: dict[str, Callable[[], Any]] = {
-        "cuda_device_resident": device_op.simplify,
-        "cuda_transfer_inclusive": lambda: op.to_device().simplify().to_host(),
+        f"{backend}_device_resident": device_op.simplify,
+        f"{backend}_transfer_inclusive": lambda: op.to_device(backend=backend).simplify().to_host(),
         "cpu_simplify_control": op.simplify,
     }
     for name, fn in variants.items():
         result = fn()
-        host = result.to_host() if name == "cuda_device_resident" else result
+        host = result.to_host() if name == f"{backend}_device_resident" else result
         if not same_operator(host, expected):
             raise RuntimeError(f"{name} disagrees with CPU simplify for {path}/{num_terms}")
     samples: dict[str, list[float]] = {name: [] for name in variants}
@@ -213,20 +220,27 @@ def run_specialized_case(
     }
 
 
-def cuda_environment() -> dict[str, Any]:
-    status = dict(core._cuda_status())
+def accelerator_environment(backend: str) -> dict[str, Any]:
+    status = dict(getattr(core, f"_{backend}_status")())
     build = dict(core._build_info())
+    if backend == "cuda":
+        return {
+            "cuda_status": status,
+            "compiled_cuda_architectures": build.get("cuda_architectures", "not_available"),
+            "cuda_toolkit_version": build.get("cuda_toolkit_version", "not_available"),
+        }
     return {
-        "cuda_status": status,
-        "compiled_cuda_architectures": build.get("cuda_architectures", "not_available"),
-        "cuda_toolkit_version": build.get("cuda_toolkit_version", "not_available"),
+        "hip_status": status,
+        "compiled_hip_architectures": build.get("hip_architectures", "not_available"),
+        "rocm_toolkit_version": build.get("rocm_toolkit_version", "not_available"),
     }
 
 
 def build_report(args: argparse.Namespace) -> dict[str, Any]:
-    status = dict(core._cuda_status())
+    backend = args.backend
+    status = dict(getattr(core, f"_{backend}_status")())
     if not status.get("runtime_available"):
-        return {"status": "skipped", "reason": str(status.get("skip_reason", "CUDA unavailable"))}
+        return {"status": "skipped", "reason": str(status.get("skip_reason", f"{backend} unavailable"))}
     rng = np.random.default_rng(args.seed)
     order_rng = random.Random(args.seed)
     rows: list[dict[str, Any]] = []
@@ -238,6 +252,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
                     run_generic_case(
                         rng,
                         order_rng,
+                        backend=backend,
                         num_qubits=num_qubits,
                         num_terms=num_terms,
                         duplicate_fraction=duplicate_fraction,
@@ -255,6 +270,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             rows.append(
                 run_specialized_case(
                     rng,
+                    backend=backend,
                     path=path,
                     num_qubits=num_qubits,
                     num_terms=num_terms,
@@ -266,7 +282,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     build_info = dict(core._build_info())
     return {
         "status": "ok",
-        "benchmark": "cuda_simplify_paths",
+        "benchmark": f"{backend}_simplify_paths",
         "label": args.label,
         "command": command_string(),
         "git": git_provenance(),
@@ -274,7 +290,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "warmup": args.warmup,
         "repeat": args.repeat,
         "environment": benchmark_environment(build_info, numpy_version=np.__version__),
-        "cuda": cuda_environment(),
+        backend: accelerator_environment(backend),
         "rows": rows,
     }
 
@@ -298,7 +314,7 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
     paired: dict[tuple[str, int, int, str], dict[str, list[float]]] = {}
     for path in sorted(directory.glob("*.json")):
         report = json.loads(path.read_text(encoding="utf-8"))
-        if report.get("benchmark") != "cuda_simplify_paths":
+        if report.get("benchmark") not in {f"{backend}_simplify_paths" for backend in BACKENDS}:
             continue
         runs.append({"file": path.name, **report_provenance(report)})
         for row in report["rows"]:
@@ -334,6 +350,7 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--backend", choices=BACKENDS, default="cuda")
     parser.add_argument("--suite", choices=("generic", "specialized", "all"), default="all")
     parser.add_argument("--smoke", action="store_true", help="run one tiny case per suite")
     parser.add_argument("--warmup", type=int, default=2)
