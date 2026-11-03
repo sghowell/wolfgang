@@ -1,6 +1,7 @@
 #include "wolfgang/pauli_sum.hpp"
 
 #include <cmath>
+#include <cstdlib>
 #include <complex>
 #include <iostream>
 #include <limits>
@@ -95,6 +96,36 @@ int main() {
     require(std::abs(estimate.mean.real() - 0.8) < 1e-12, "estimate_counts mean");
     require(std::abs(estimate.standard_error - std::sqrt(3.36 / 99.0)) < 1e-12,
             "estimate_counts standard error");
+#if WOLFGANG_BUILD_TBB_ENABLED && !defined(_WIN32)
+    // oneTBB simplify equals scalar bit for bit, including duplicate runs that
+    // cross the kernel's 4096-entry chunk boundaries and total cancellation.
+    for (const std::size_t width : {3U, 64U, 100U, 130U}) {
+      std::vector<std::string> labels;
+      std::vector<std::complex<double>> coeffs;
+      const std::string pattern = "XYZI";
+      for (std::size_t term = 0; term < 20000; ++term) {
+        std::string label(width, 'I');
+        // Long runs of identical labels interleaved with distinct ones.
+        const std::size_t group = term % 7 == 0 ? term : term / 3000;
+        for (std::size_t qubit = 0; qubit < width; ++qubit) {
+          label[qubit] = pattern[(group * 2654435761U + qubit * 40503U) % 4];
+        }
+        labels.push_back(label);
+        coeffs.emplace_back(static_cast<double>(term % 13) - 6.0, 0.125 * static_cast<double>(term % 5));
+      }
+      const auto op = PauliSum::from_labels(labels, coeffs);
+      setenv("WOLFGANG_CPU_BACKEND", "scalar", 1);
+      const auto scalar = op.simplify();
+      const auto cancelled_scalar = op.add(op.negate()).simplify();
+      setenv("WOLFGANG_CPU_BACKEND", "tbb", 1);
+      const auto parallel = op.simplify();
+      const auto cancelled_parallel = op.add(op.negate()).simplify();
+      unsetenv("WOLFGANG_CPU_BACKEND");
+      require(parallel.structurally_equal(scalar), "tbb simplify equals scalar");
+      require(cancelled_parallel.num_terms() == 0 && cancelled_scalar.num_terms() == 0,
+              "tbb simplify cancellation");
+    }
+#endif
   } catch (const std::exception& error) {
     std::cerr << error.what() << '\n';
     return 1;
