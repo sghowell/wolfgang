@@ -35,7 +35,6 @@ using cuda_detail::PooledVector;
 using cuda_detail::copy_device_to_device;
 using cuda_detail::copy_to_device;
 using cuda_detail::copy_to_host;
-using cuda_detail::cuda_allocate;
 using cuda_detail::ScopedCudaDevice;
 using cuda_detail::validate_simplify_tolerances;
 
@@ -522,14 +521,14 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   }
 
   auto coeff_ptr = thrust::device_pointer_cast(impl_->coeffs);
-  const double max_abs_input = thrust::transform_reduce(pooled_policy(), 
+  const double max_abs_input = thrust::transform_reduce(pooled_policy(),
       coeff_ptr,
       coeff_ptr + impl_->num_terms,
       ComplexAbs{},
       0.0,
       thrust::maximum<double>{});
   const CoeffSurvives survives = survival_rule(atol, rtol, max_abs_input, [&] {
-    return thrust::transform_reduce(pooled_policy(), 
+    return thrust::transform_reduce(pooled_policy(),
         coeff_ptr,
         coeff_ptr + impl_->num_terms,
         ComplexHalfAbs{},
@@ -539,7 +538,11 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
 
   if (impl_->words == 0) {
     const thrust::complex<double> accumulator =
-        thrust::reduce(pooled_policy(), coeff_ptr, coeff_ptr + impl_->num_terms, thrust::complex<double>{0.0, 0.0});
+        thrust::reduce(
+            pooled_policy(),
+            coeff_ptr,
+            coeff_ptr + impl_->num_terms,
+            thrust::complex<double>{0.0, 0.0});
     if (!survives(accumulator)) {
       return make_empty();
     }
@@ -561,7 +564,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
       PooledVector<std::uint64_t> sorted_keys(impl_->num_terms);
       PooledVector<thrust::complex<double>> sorted_values(impl_->num_terms);
       auto counting = thrust::make_counting_iterator<std::size_t>(0);
-      thrust::transform(pooled_policy(), 
+      thrust::transform(pooled_policy(),
           counting,
           counting + impl_->num_terms,
           keys.begin(),
@@ -602,7 +605,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
       // changing canonical ordering or floating-point summation semantics.
       PooledVector<std::uint64_t> reduced_keys(impl_->num_terms);
       PooledVector<thrust::complex<double>> reduced_values(impl_->num_terms);
-      auto reduced_end = thrust::reduce_by_key(pooled_policy(), 
+      auto reduced_end = thrust::reduce_by_key(pooled_policy(),
           sorted_keys.begin(),
           sorted_keys.end(),
           sorted_values.begin(),
@@ -619,7 +622,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
           thrust::make_tuple(reduced_keys.begin(), reduced_values.begin()));
       auto survivor_zip = thrust::make_zip_iterator(
           thrust::make_tuple(survivor_keys.begin(), survivor_values.begin()));
-      auto survivor_end = thrust::copy_if(pooled_policy(), 
+      auto survivor_end = thrust::copy_if(pooled_policy(),
           reduced_zip,
           reduced_zip + reduced_terms,
           reduced_values.begin(),
@@ -638,17 +641,21 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
       pool_allocate(out->x, survivors, "simplified x words");
       pool_allocate(out->z, survivors, "simplified z words");
       pool_allocate(out->coeffs, survivors, "simplified coefficients");
-      thrust::transform(pooled_policy(), 
+      thrust::transform(pooled_policy(),
           survivor_keys.begin(),
           survivor_keys.begin() + survivors,
           thrust::device_pointer_cast(out->x),
           PackedKey32ToX{});
-      thrust::transform(pooled_policy(), 
+      thrust::transform(pooled_policy(),
           survivor_keys.begin(),
           survivor_keys.begin() + survivors,
           thrust::device_pointer_cast(out->z),
           PackedKey32ToZ{});
-      thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+      thrust::copy_n(
+          pooled_policy(),
+          survivor_values.begin(),
+          survivors,
+          thrust::device_pointer_cast(out->coeffs));
       check_cuda(cudaDeviceSynchronize(), "synchronize after CUB CUDA simplify");
       return DevicePauliSum(std::move(out));
     }
@@ -660,7 +667,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     PooledVector<std::uint64_t> keys(impl_->num_terms);
     PooledVector<thrust::complex<double>> values(impl_->num_terms);
     auto counting = thrust::make_counting_iterator<std::size_t>(0);
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         counting,
         counting + impl_->num_terms,
         keys.begin(),
@@ -670,7 +677,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
 
     PooledVector<std::uint64_t> reduced_keys(impl_->num_terms);
     PooledVector<thrust::complex<double>> reduced_values(impl_->num_terms);
-    auto reduced_end = thrust::reduce_by_key(pooled_policy(), 
+    auto reduced_end = thrust::reduce_by_key(pooled_policy(),
         keys.begin(),
         keys.end(),
         values.begin(),
@@ -687,7 +694,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         thrust::make_tuple(reduced_keys.begin(), reduced_values.begin()));
     auto survivor_zip = thrust::make_zip_iterator(
         thrust::make_tuple(survivor_keys.begin(), survivor_values.begin()));
-    auto survivor_end = thrust::copy_if(pooled_policy(), 
+    auto survivor_end = thrust::copy_if(pooled_policy(),
         reduced_zip,
         reduced_zip + reduced_terms,
         reduced_values.begin(),
@@ -706,17 +713,21 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     pool_allocate(out->x, survivors, "simplified x words");
     pool_allocate(out->z, survivors, "simplified z words");
     pool_allocate(out->coeffs, survivors, "simplified coefficients");
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         survivor_keys.begin(),
         survivor_keys.begin() + survivors,
         thrust::device_pointer_cast(out->x),
         PackedKey32ToX{});
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         survivor_keys.begin(),
         survivor_keys.begin() + survivors,
         thrust::device_pointer_cast(out->z),
         PackedKey32ToZ{});
-    thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+    thrust::copy_n(
+        pooled_policy(),
+        survivor_values.begin(),
+        survivors,
+        thrust::device_pointer_cast(out->coeffs));
     check_cuda(cudaDeviceSynchronize(), "synchronize after CUDA simplify");
     return DevicePauliSum(std::move(out));
   }
@@ -725,17 +736,22 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     PooledVector<CudaKey1> keys(impl_->num_terms);
     PooledVector<thrust::complex<double>> values(impl_->num_terms);
     auto counting = thrust::make_counting_iterator<std::size_t>(0);
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         counting,
         counting + impl_->num_terms,
         keys.begin(),
         Key1FromTerm{impl_->x, impl_->z});
     thrust::copy_n(pooled_policy(), coeff_ptr, impl_->num_terms, values.begin());
-    thrust::stable_sort_by_key(pooled_policy(), keys.begin(), keys.end(), values.begin(), Key1Less{});
+    thrust::stable_sort_by_key(
+        pooled_policy(),
+        keys.begin(),
+        keys.end(),
+        values.begin(),
+        Key1Less{});
 
     PooledVector<CudaKey1> reduced_keys(impl_->num_terms);
     PooledVector<thrust::complex<double>> reduced_values(impl_->num_terms);
-    auto reduced_end = thrust::reduce_by_key(pooled_policy(), 
+    auto reduced_end = thrust::reduce_by_key(pooled_policy(),
         keys.begin(),
         keys.end(),
         values.begin(),
@@ -752,7 +768,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         thrust::make_tuple(reduced_keys.begin(), reduced_values.begin()));
     auto survivor_zip = thrust::make_zip_iterator(
         thrust::make_tuple(survivor_keys.begin(), survivor_values.begin()));
-    auto survivor_end = thrust::copy_if(pooled_policy(), 
+    auto survivor_end = thrust::copy_if(pooled_policy(),
         reduced_zip,
         reduced_zip + reduced_terms,
         reduced_values.begin(),
@@ -771,17 +787,21 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     pool_allocate(out->x, survivors, "simplified x words");
     pool_allocate(out->z, survivors, "simplified z words");
     pool_allocate(out->coeffs, survivors, "simplified coefficients");
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         survivor_keys.begin(),
         survivor_keys.begin() + survivors,
         thrust::device_pointer_cast(out->x),
         Key1ToX{});
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         survivor_keys.begin(),
         survivor_keys.begin() + survivors,
         thrust::device_pointer_cast(out->z),
         Key1ToZ{});
-    thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+    thrust::copy_n(
+        pooled_policy(),
+        survivor_values.begin(),
+        survivors,
+        thrust::device_pointer_cast(out->coeffs));
     check_cuda(cudaDeviceSynchronize(), "synchronize after CUDA simplify");
     return DevicePauliSum(std::move(out));
   }
@@ -790,17 +810,22 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     PooledVector<CudaKey2> keys(impl_->num_terms);
     PooledVector<thrust::complex<double>> values(impl_->num_terms);
     auto counting = thrust::make_counting_iterator<std::size_t>(0);
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         counting,
         counting + impl_->num_terms,
         keys.begin(),
         Key2FromTerm{impl_->x, impl_->z});
     thrust::copy_n(pooled_policy(), coeff_ptr, impl_->num_terms, values.begin());
-    thrust::stable_sort_by_key(pooled_policy(), keys.begin(), keys.end(), values.begin(), Key2Less{});
+    thrust::stable_sort_by_key(
+        pooled_policy(),
+        keys.begin(),
+        keys.end(),
+        values.begin(),
+        Key2Less{});
 
     PooledVector<CudaKey2> reduced_keys(impl_->num_terms);
     PooledVector<thrust::complex<double>> reduced_values(impl_->num_terms);
-    auto reduced_end = thrust::reduce_by_key(pooled_policy(), 
+    auto reduced_end = thrust::reduce_by_key(pooled_policy(),
         keys.begin(),
         keys.end(),
         values.begin(),
@@ -817,7 +842,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         thrust::make_tuple(reduced_keys.begin(), reduced_values.begin()));
     auto survivor_zip = thrust::make_zip_iterator(
         thrust::make_tuple(survivor_keys.begin(), survivor_values.begin()));
-    auto survivor_end = thrust::copy_if(pooled_policy(), 
+    auto survivor_end = thrust::copy_if(pooled_policy(),
         reduced_zip,
         reduced_zip + reduced_terms,
         reduced_values.begin(),
@@ -840,17 +865,21 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     pool_allocate(out->coeffs, survivors, "simplified coefficients");
     auto packed_counting = thrust::make_counting_iterator<std::size_t>(0);
     const CudaKey2* survivor_key_ptr = thrust::raw_pointer_cast(survivor_keys.data());
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         packed_counting,
         packed_counting + packed_words,
         thrust::device_pointer_cast(out->x),
         Key2ToXWord{survivor_key_ptr});
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         packed_counting,
         packed_counting + packed_words,
         thrust::device_pointer_cast(out->z),
         Key2ToZWord{survivor_key_ptr});
-    thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+    thrust::copy_n(
+        pooled_policy(),
+        survivor_values.begin(),
+        survivors,
+        thrust::device_pointer_cast(out->coeffs));
     check_cuda(cudaDeviceSynchronize(), "synchronize after CUDA simplify");
     return DevicePauliSum(std::move(out));
   }
@@ -862,7 +891,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   // any order (cuda_backend.md allows implementation-defined reduction order).
   PooledVector<std::size_t> sorted_indices(impl_->num_terms);
   thrust::sequence(pooled_policy(), sorted_indices.begin(), sorted_indices.end());
-  thrust::sort(pooled_policy(), 
+  thrust::sort(pooled_policy(),
       sorted_indices.begin(),
       sorted_indices.end(),
       GenericTermIndexLess{impl_->x, impl_->z, impl_->words});
@@ -871,7 +900,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     auto sorted_coeffs = thrust::make_permutation_iterator(coeff_ptr, sorted_indices.begin());
     PooledVector<std::size_t> reduced_indices(impl_->num_terms);
     PooledVector<thrust::complex<double>> reduced_values(impl_->num_terms);
-    auto reduced_end = thrust::reduce_by_key(pooled_policy(), 
+    auto reduced_end = thrust::reduce_by_key(pooled_policy(),
         sorted_indices.begin(),
         sorted_indices.end(),
         sorted_coeffs,
@@ -888,7 +917,7 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
         thrust::make_tuple(reduced_indices.begin(), reduced_values.begin()));
     auto survivor_zip = thrust::make_zip_iterator(
         thrust::make_tuple(survivor_indices.begin(), survivor_values.begin()));
-    auto survivor_end = thrust::copy_if(pooled_policy(), 
+    auto survivor_end = thrust::copy_if(pooled_policy(),
         reduced_zip,
         reduced_zip + reduced_terms,
         reduced_values.begin(),
@@ -911,17 +940,21 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     pool_allocate(out->coeffs, survivors, "simplified coefficients");
     auto survivor_word_indices = thrust::make_counting_iterator<std::size_t>(0);
     const std::size_t* survivor_index_ptr = thrust::raw_pointer_cast(survivor_indices.data());
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         survivor_word_indices,
         survivor_word_indices + survivor_packed_words,
         thrust::device_pointer_cast(out->x),
         GenericRepresentativeToWord{impl_->x, survivor_index_ptr, impl_->words});
-    thrust::transform(pooled_policy(), 
+    thrust::transform(pooled_policy(),
         survivor_word_indices,
         survivor_word_indices + survivor_packed_words,
         thrust::device_pointer_cast(out->z),
         GenericRepresentativeToWord{impl_->z, survivor_index_ptr, impl_->words});
-    thrust::copy_n(pooled_policy(), survivor_values.begin(), survivors, thrust::device_pointer_cast(out->coeffs));
+    thrust::copy_n(
+        pooled_policy(),
+        survivor_values.begin(),
+        survivors,
+        thrust::device_pointer_cast(out->coeffs));
     check_cuda(cudaDeviceSynchronize(), "synchronize after generic CUDA simplify");
     return DevicePauliSum(std::move(out));
   }
@@ -946,7 +979,11 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
   check_cuda(cudaDeviceSynchronize(), "synchronize after generic CUDA simplify");
 
   std::size_t survivors = 0;
-  copy_to_host(&survivors, thrust::raw_pointer_cast(temp_count.data()), 1, "generic simplify count");
+  copy_to_host(
+      &survivors,
+      thrust::raw_pointer_cast(temp_count.data()),
+      1,
+      "generic simplify count");
   if (survivors == 0) {
     return make_empty();
   }

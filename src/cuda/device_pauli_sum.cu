@@ -15,16 +15,17 @@
 namespace wolfgang {
 
 using cuda_detail::check_cuda;
+using cuda_detail::checked_bytes;
 using cuda_detail::copy_to_device;
 using cuda_detail::copy_to_host;
 using cuda_detail::pool_allocate;
-using cuda_detail::pool_free_bytes;
+using cuda_detail::copy_bytes_to_device;
+using cuda_detail::pool_free_bytes_on_device;
 using cuda_detail::ScopedCudaDevice;
 
-// std::complex<double> and thrust::complex<double> are both two adjacent
-// doubles, so coefficients cross the host/device boundary without conversion.
+// std::complex<double> and thrust::complex<double> both store two adjacent
+// doubles, so coefficients cross the host/device boundary as raw bytes.
 static_assert(sizeof(std::complex<double>) == sizeof(thrust::complex<double>));
-static_assert(alignof(std::complex<double>) <= alignof(thrust::complex<double>));
 
 namespace {
 
@@ -71,10 +72,10 @@ DevicePauliSum::Impl::~Impl() {
   if (x == nullptr && z == nullptr && coeffs == nullptr) {
     return;
   }
-  // Buffers come from the Wolfgang pool, which frees on the owning device.
-  pool_free_bytes(x);
-  pool_free_bytes(z);
-  pool_free_bytes(coeffs);
+  // Buffers come from the Wolfgang pool on device_ordinal.
+  pool_free_bytes_on_device(x, device_ordinal);
+  pool_free_bytes_on_device(z, device_ordinal);
+  pool_free_bytes_on_device(coeffs, device_ordinal);
 }
 
 DevicePauliSum::DevicePauliSum() noexcept = default;
@@ -132,10 +133,10 @@ DevicePauliSum DevicePauliSum::from_host(
   pool_allocate(impl->coeffs, host.num_terms(), "device coefficients");
   copy_to_device(impl->x, host.x_words().data(), packed_words, "device x words");
   copy_to_device(impl->z, host.z_words().data(), packed_words, "device z words");
-  copy_to_device(
+  copy_bytes_to_device(
       impl->coeffs,
-      reinterpret_cast<const thrust::complex<double>*>(host.coeffs().data()),
-      host.num_terms(),
+      host.coeffs().data(),
+      checked_bytes(host.num_terms(), sizeof(std::complex<double>), "device coefficients"),
       "device coefficients");
 
   return DevicePauliSum(std::move(impl));
@@ -234,11 +235,15 @@ PauliSum DevicePauliSum::to_host() const {
   ScopedCudaDevice guard(impl_->device_ordinal);
   copy_to_host(x.data(), impl_->x, packed_words, "host x words");
   copy_to_host(z.data(), impl_->z, packed_words, "host z words");
-  copy_to_host(
-      reinterpret_cast<thrust::complex<double>*>(coeffs.data()),
-      impl_->coeffs,
-      coeffs.size(),
-      "host coefficients");
+  if (!coeffs.empty()) {
+    check_cuda(
+        cudaMemcpy(
+            coeffs.data(),
+            impl_->coeffs,
+            checked_bytes(coeffs.size(), sizeof(std::complex<double>), "host coefficients"),
+            cudaMemcpyDeviceToHost),
+        "copy device buffer to host");
+  }
 
   return PauliSum(
       impl_->num_qubits,

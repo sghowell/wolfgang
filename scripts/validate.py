@@ -125,6 +125,7 @@ CUDA_FOUNDATION_SOURCES = (
     "src/cuda/simplify_cuda.cu",
     "src/cuda/pool_allocator.cu",
     "src/cuda/pool_allocator.cuh",
+    "src/cuda/pool_allocator_hooks.hpp",
     "src/cuda/expectation_cuda.cu",
     "src/cuda/commutation_cuda.cu",
     "src/cuda/matmul_cuda.cu",

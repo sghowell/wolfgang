@@ -1,11 +1,15 @@
 #pragma once
 
+#include "cuda/pool_allocator_hooks.hpp"
+
+#include <cuda_runtime_api.h>
 #include <thrust/device_malloc_allocator.h>
 #include <thrust/device_ptr.h>
 #include <thrust/device_vector.h>
 #include <thrust/system/cuda/execution_policy.h>
 
 #include <cstddef>
+#include <cstdint>
 #include <limits>
 #include <new>
 #include <utility>
@@ -16,17 +20,29 @@ namespace wolfgang::cuda_detail {
 //
 // Every Wolfgang CUDA operation runs on the legacy default stream and
 // synchronizes before returning, so a block freed here is never still in use
-// when the pool hands it out again. The pool keeps freed blocks cached instead
-// of returning them to the driver, which removes cudaMalloc/cudaFree from the
-// per-call cost of small operations. The pool is separate from the device's
-// default pool, so other libraries' allocations are unaffected. Devices or
-// drivers without memory-pool support fall back to cudaMalloc/cudaFree.
+// when the pool hands it out again. The pool keeps up to
+// kPoolReleaseThresholdBytes of freed blocks cached per device, which removes
+// cudaMalloc/cudaFree from the per-call cost of small operations; above that,
+// it returns memory to the driver at the next synchronization. Cached blocks
+// are memory other libraries in the process cannot use until the pool trims,
+// which it does on any Wolfgang allocation failure (before one retry) and at
+// process exit. Devices without memory-pool support, or runs with
+// WOLFGANG_CUDA_BENCH_DISABLE_POOL=1, use cudaMalloc/cudaFree instead. The
+// pool handle is not revalidated after cudaDeviceReset.
 //
 // Buffers exported to other frameworks (DLPack, CUDA Array Interface) must not
 // come from this pool: a consumer on another stream could still read a block
 // after Wolfgang frees it.
+inline constexpr std::uint64_t kPoolReleaseThresholdBytes = std::uint64_t{1} << 30;
+
+// Allocation failures (after a trim and one retry) throw std::bad_alloc.
 [[nodiscard]] void* pool_allocate_bytes(std::size_t bytes, const char* name);
 void pool_free_bytes(void* pointer) noexcept;
+void pool_free_bytes_on_device(void* pointer, int device) noexcept;
+
+// Synchronize pooled devices and return cached blocks to the driver; used
+// before retrying an allocation that failed for lack of memory.
+void trim_pools_after_allocation_failure() noexcept;
 
 template <typename T>
 void pool_allocate(T*& pointer, std::size_t count, const char* name) {
@@ -35,33 +51,40 @@ void pool_allocate(T*& pointer, std::size_t count, const char* name) {
     return;
   }
   if (count > std::numeric_limits<std::size_t>::max() / sizeof(T)) {
-    throw std::bad_array_new_length();
+    throw std::bad_alloc();
   }
   pointer = static_cast<T*>(pool_allocate_bytes(count * sizeof(T), name));
 }
 
-// Owning pooled scratch buffer for the duration of one operation.
+// Owning pooled scratch buffer for the duration of one operation. It records
+// its device so the free needs no pointer-attribute query.
 template <typename T>
 class PoolBuffer {
 public:
   PoolBuffer() = default;
-  PoolBuffer(std::size_t count, const char* name) { pool_allocate(pointer_, count, name); }
+  PoolBuffer(std::size_t count, const char* name) {
+    (void)cudaGetDevice(&device_);
+    pool_allocate(pointer_, count, name);
+  }
   PoolBuffer(const PoolBuffer&) = delete;
   PoolBuffer& operator=(const PoolBuffer&) = delete;
-  PoolBuffer(PoolBuffer&& other) noexcept : pointer_(std::exchange(other.pointer_, nullptr)) {}
+  PoolBuffer(PoolBuffer&& other) noexcept
+      : pointer_(std::exchange(other.pointer_, nullptr)), device_(other.device_) {}
   PoolBuffer& operator=(PoolBuffer&& other) noexcept {
     if (this != &other) {
-      pool_free_bytes(pointer_);
+      pool_free_bytes_on_device(pointer_, device_);
       pointer_ = std::exchange(other.pointer_, nullptr);
+      device_ = other.device_;
     }
     return *this;
   }
-  ~PoolBuffer() { pool_free_bytes(pointer_); }
+  ~PoolBuffer() { pool_free_bytes_on_device(pointer_, device_); }
 
   [[nodiscard]] T* get() const noexcept { return pointer_; }
 
 private:
   T* pointer_ = nullptr;
+  int device_ = 0;
 };
 
 // Allocator for thrust::device_vector storage drawn from the pool.
@@ -98,7 +121,8 @@ struct PoolTemporaryAllocator {
   using value_type = char;
 
   char* allocate(std::ptrdiff_t bytes) {
-    return static_cast<char*>(pool_allocate_bytes(static_cast<std::size_t>(bytes), "thrust scratch"));
+    return static_cast<char*>(
+        pool_allocate_bytes(static_cast<std::size_t>(bytes), "thrust scratch"));
   }
 
   void deallocate(char* pointer, std::size_t) noexcept { pool_free_bytes(pointer); }

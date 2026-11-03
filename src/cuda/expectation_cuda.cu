@@ -19,7 +19,6 @@ using cuda_detail::check_cuda;
 using cuda_detail::checked_bytes;
 using cuda_detail::copy_bytes_to_device;
 using cuda_detail::copy_to_host;
-using cuda_detail::cuda_allocate;
 using cuda_detail::kCudaThreadsPerBlock;
 using cuda_detail::ScopedCudaDevice;
 using cuda_detail::validate_statevector_length;
@@ -30,13 +29,13 @@ constexpr int kExpectationDefaultThreadsPerBlock = 256;
 constexpr int kExpectationLargeStateThreadsPerBlock = 128;
 constexpr std::size_t kExpectationLargeStateThreshold = std::size_t{1} << 17U;
 
-// The host-statevector fast path copies bytes into cudaMalloc storage that
+// The host-statevector fast path copies bytes into pooled device storage that
 // kernels read as thrust::complex<T>. C++ guarantees array-oriented
 // std::complex<T> storage as adjacent real/imag scalars; these guards catch
 // representation drift that would invalidate the no-temporary conversion path
 // on supported toolchains. Type alignment is intentionally not compared:
-// cudaMalloc supplies the destination alignment, and the host source is read
-// only by cudaMemcpy as bytes.
+// the pool allocator supplies the destination alignment, and the host source
+// is read only by cudaMemcpy as bytes.
 static_assert(
     std::is_trivially_copyable_v<std::complex<double>>,
     "std::complex<double> must be trivially copyable for CUDA byte-copy statevectors");
