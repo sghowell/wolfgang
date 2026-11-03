@@ -33,7 +33,10 @@ assert wolfgang_quantum.get_num_threads() <= 4
 ```
 
 Below four threads, auto dispatch uses the scalar or SIMD kernels instead of
-oneTBB, so `set_num_threads(1)` gives single-threaded execution.
+oneTBB, so `set_num_threads(1)` gives single-threaded execution. To keep
+oneTBB with a cap of two or three threads, also set
+`WOLFGANG_CPU_BACKEND=tbb`; on large operators that was 1.6-2.4x faster than
+scalar on the measured host (`docs/benchmarks/reports/cpu_threads_2026-11-03.md`).
 
 ## `PauliSum`
 

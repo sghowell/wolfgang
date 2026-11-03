@@ -252,7 +252,11 @@ container whose quota is smaller than its visible cores), cap each one with
 `wolfgang_quantum.set_num_threads(n)` or `WOLFGANG_NUM_THREADS=n` so the
 processes do not oversubscribe the cores; `get_num_threads()` reports the
 current count. A cap below four threads makes auto dispatch use the scalar or
-SIMD kernels.
+SIMD kernels; `WOLFGANG_CPU_BACKEND=tbb` keeps oneTBB at two or three threads.
+Inside a 4-CPU quota on a 26-vCPU host, capping at 4 made simplify 1.24x faster
+on average and cut its 90th-percentile time 2.6x, because uncapped oneTBB
+started 26 threads and was throttled
+(`docs/benchmarks/reports/cpu_threads_2026-11-03.md`).
 
 Current covered optimized kernels:
 

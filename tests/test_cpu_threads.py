@@ -69,6 +69,11 @@ def test_set_num_threads_rejects_non_positive_values(bad: int) -> None:
         wolfgang_quantum.set_num_threads(bad)
 
 
+def test_set_num_threads_rejects_oversized_values() -> None:
+    with pytest.raises(ValueError, match="too large"):
+        wolfgang_quantum.set_num_threads(2**70)
+
+
 @pytest.mark.parametrize("bad", [1.0, "2", None, True])
 def test_set_num_threads_rejects_non_integers(bad: object) -> None:
     with pytest.raises(TypeError):

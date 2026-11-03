@@ -24,6 +24,13 @@ report names.
 | 6 | Multi-GPU | Peer access for pooled exports and multi-GPU tests | Needs a host with two or more GPUs; the current H100 and MI300X hosts have one each, so this slice waits for hardware |
 | 7 | Documentation and figures | README and site figures for absolute timings, speedups against baselines and other libraries, and performance over time across the dated reports; fix diagrams that do not render on the site; review every user-facing doc, including an editing pass so the prose reads as written by an engineer and technical writer, without stock phrasing, inflated adjectives, reflexive lists of three, bolded lead-ins, hedging or filler transitions | Strict docs build; diagrams checked in a browser on the live site; link and stale-claim audit; a phrase-pattern scan over README and `docs/` plus an independent editorial review |
 
+## Follow-ups found during the campaign
+
+- The four-thread oneTBB floor for auto dispatch was never measured. With the
+  slice 4 cap, oneTBB at two and three threads beat scalar simplify by 1.6x and
+  2.4x at 500,000 terms on one host. Measure it on more hosts, separately for
+  simplify and pairwise commutation, before moving it.
+
 ## Decisions carried into the campaign
 
 - Coefficient storage stays `complex128`.

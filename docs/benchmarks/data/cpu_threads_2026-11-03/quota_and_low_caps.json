@@ -1,0 +1,132 @@
+{
+ "benchmark": "cpu_threads_quota_and_low_caps",
+ "host": "Intel Xeon Platinum 8480+ (KVM guest), 26 vCPUs, Ubuntu 24.04, oneTBB 2021.11.0",
+ "build": "c5ee325 (codex/cpu-threads; the probe script was added at the next commit)",
+ "script": "benchmarks/probe_simplify_threads.py <cap> <calls>",
+ "quota_command": "sudo systemd-run --scope -p CPUQuota=400% --uid=ubuntu --gid=ubuntu python benchmarks/probe_simplify_threads.py <cap> 60",
+ "operator": "500,000 terms, 24 qubits, half duplicates (bench_cpu_threads.make_operator)",
+ "quota_runs": [
+  {
+   "cpu_quota": "400%",
+   "cap": 0,
+   "threads": 26,
+   "calls": 60,
+   "median_ms": 14.64,
+   "mean_ms": 28.39,
+   "p90_ms": 59.42,
+   "max_ms": 70.21
+  },
+  {
+   "cpu_quota": "400%",
+   "cap": 4,
+   "threads": 4,
+   "calls": 60,
+   "median_ms": 22.49,
+   "mean_ms": 22.57,
+   "p90_ms": 22.77,
+   "max_ms": 25.45
+  },
+  {
+   "cpu_quota": "400%",
+   "cap": 0,
+   "threads": 26,
+   "calls": 60,
+   "median_ms": 14.49,
+   "mean_ms": 27.76,
+   "p90_ms": 61.39,
+   "max_ms": 70.6
+  },
+  {
+   "cpu_quota": "400%",
+   "cap": 4,
+   "threads": 4,
+   "calls": 60,
+   "median_ms": 22.42,
+   "mean_ms": 22.48,
+   "p90_ms": 22.71,
+   "max_ms": 24.71
+  },
+  {
+   "cpu_quota": "none",
+   "cap": 0,
+   "threads": 26,
+   "calls": 60,
+   "median_ms": 14.21,
+   "mean_ms": 14.35,
+   "p90_ms": 14.83,
+   "max_ms": 17.23
+  },
+  {
+   "cpu_quota": "none",
+   "cap": 4,
+   "threads": 4,
+   "calls": 60,
+   "median_ms": 22.71,
+   "mean_ms": 22.83,
+   "p90_ms": 22.95,
+   "max_ms": 25.72
+  }
+ ],
+ "low_cap_runs": [
+  {
+   "backend": "WOLFGANG_CPU_BACKEND=tbb",
+   "cap": 1,
+   "threads": 1,
+   "calls": 30,
+   "median_ms": 63.76,
+   "mean_ms": 64.4,
+   "p90_ms": 66.15,
+   "max_ms": 69.88
+  },
+  {
+   "backend": "WOLFGANG_CPU_BACKEND=tbb",
+   "cap": 2,
+   "threads": 2,
+   "calls": 30,
+   "median_ms": 38.4,
+   "mean_ms": 38.6,
+   "p90_ms": 38.85,
+   "max_ms": 44.01
+  },
+  {
+   "backend": "WOLFGANG_CPU_BACKEND=tbb",
+   "cap": 3,
+   "threads": 3,
+   "calls": 30,
+   "median_ms": 25.98,
+   "mean_ms": 26.13,
+   "p90_ms": 26.33,
+   "max_ms": 28.6
+  },
+  {
+   "backend": "WOLFGANG_CPU_BACKEND=tbb",
+   "cap": 4,
+   "threads": 4,
+   "calls": 30,
+   "median_ms": 22.41,
+   "mean_ms": 22.48,
+   "p90_ms": 22.59,
+   "max_ms": 24.42
+  },
+  {
+   "backend": "WOLFGANG_CPU_BACKEND=scalar",
+   "cap": 0,
+   "threads": 26,
+   "calls": 30,
+   "median_ms": 61.81,
+   "mean_ms": 62.25,
+   "p90_ms": 62.86,
+   "max_ms": 66.66
+  },
+  {
+   "backend": "auto",
+   "cap": 3,
+   "threads": 3,
+   "calls": 30,
+   "median_ms": 61.97,
+   "mean_ms": 62.04,
+   "p90_ms": 62.57,
+   "max_ms": 64.52
+  }
+ ]
+}
