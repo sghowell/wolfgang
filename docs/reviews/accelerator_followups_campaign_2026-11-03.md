@@ -245,5 +245,5 @@ Branch `codex/sbom-bundled`.
   `scripts/check_release_wheelhouse.py` pass. Release workflow dry runs with
   `publish-target=none`: run 41698848188 produced the first merged SBOM, and
   run 41699199577 passed every job with the `--validate` step; the review
-  fixes were validated against that run's SBOM with cyclonedx-bom 7.1.0 and
-  in a further dry run (below).
+  fixes were validated against that run's SBOM with cyclonedx-bom 7.1.0, and
+  run 41702026420, on the reviewed branch, passed every job.
