@@ -102,6 +102,16 @@ Build and test dependencies must be declared in project metadata once the scaffo
 
 Hardware-specific build dependencies such as oneTBB, CUDA, and architecture-specific compiler support must stay optional unless the release artifact explicitly targets them.
 
+Release CPU wheels explicitly target oneTBB. The wheel workflow builds oneTBB
+`v2022.3.0` from its pinned commit (`f1862f38f83568d96e814e469ab61f88336cc595`,
+checked after cloning; see `scripts/build_onetbb.sh`), bundles only the core
+`tbb` runtime through auditwheel or delocate, and ships oneTBB's Apache-2.0
+`LICENSE.txt` and `third-party-programs.txt` in
+`wolfgang_quantum/_third_party_notices/`. Updating oneTBB means changing the
+tag and commit together and re-running the wheel smoke tests. The CycloneDX
+SBOM covers Python dependencies; the bundled runtime is recorded here by
+version, commit and license. Source builds keep oneTBB optional.
+
 Rules:
 
 ```text

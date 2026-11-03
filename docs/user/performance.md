@@ -2,6 +2,7 @@
 
 Wolfgang always ships the portable scalar CPU backend and can additionally
 compile optional oneTBB and SIMD backends for commutation-heavy workloads.
+Release CPU wheels built after `v0.2.3` include oneTBB.
 Current optimized coverage is intentionally narrow: pairwise commutation, full
 grouping graph construction, and oneTBB simplify. CUDA source builds additionally expose
 device-resident simplify, statevector expectation, pairwise commutation, and
@@ -206,9 +207,11 @@ hardware and report revision only.
 
 ## SIMD And oneTBB
 
-Explicit SIMD and oneTBB are optional compiled backends. They do not change the
-release-wheel scalar baseline and they are reported as unavailable when the
-compiler, package, or hardware support is absent.
+Explicit SIMD and oneTBB are optional compiled backends. They keep the scalar
+baseline available (`WOLFGANG_CPU_BACKEND=scalar`) and are reported as
+unavailable when the compiler, package, or hardware support is absent. Release
+CPU wheels bundle oneTBB, so `auto` picks it there for simplify and large
+pairwise commutation (`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`).
 
 Current covered optimized kernels:
 

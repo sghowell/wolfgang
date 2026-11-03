@@ -124,8 +124,9 @@ heuristics picked.
 
 - x86_64 only. oneTBB was not available on the Apple Silicon development
   machine, so ARM has no oneTBB evidence (deferral recorded in the plan).
-- Release wheels do not bundle oneTBB. These speedups apply to source builds
-  where CMake finds oneTBB.
+- Release wheels did not bundle oneTBB when this report was written, so these
+  speedups applied to source builds where CMake finds oneTBB. Wheels now
+  bundle it (`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`).
 - Parallel speedup depends on core count and memory bandwidth. Hosts with fewer
   cores than the two measured here may cross over later than 8,192 terms.
 - Peak memory during the oneTBB kernel exceeds scalar's: sort keys, per-chunk

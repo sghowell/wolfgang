@@ -6,6 +6,12 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- Release CPU wheels bundle oneTBB 2022.3.0, built from a pinned commit, so
+  `pip install` users get parallel simplify. Installed wheels simplify 1.5-3.4x
+  faster on a 16-vCPU x86 VM and 1.5-5.6x on an Apple M4 Pro from 10,000 terms
+  (`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`). oneTBB's license
+  ships in `wolfgang_quantum/_third_party_notices/`, and the wheel smoke test
+  requires parallel simplify to match scalar bit for bit.
 - CUDA and HIP: operators of up to 256 qubits and 1,024 terms simplify in one
   fused kernel. On an H100 small simplify is 3.0-7.8x faster (128 terms:
   143.5 to 18.4 us); on an MI300X it is 3.5-5.7x faster. Their coefficients
