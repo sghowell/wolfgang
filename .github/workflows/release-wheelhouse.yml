@@ -68,6 +68,7 @@ jobs:
           cyclonedx-py requirements runtime-requirements.txt \
             --output-format JSON \
             --output-file sbom/wolfgang-runtime.cdx.json
+          python scripts/sbom_bundled_components.py sbom/wolfgang-runtime.cdx.json
 
       - name: Software bill of materials
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
