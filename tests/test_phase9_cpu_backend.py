@@ -238,8 +238,14 @@ def test_forced_optimized_backend_rejects_scalar_only_operations(monkeypatch: py
     expected = f"WOLFGANG_CPU_BACKEND={backend}"
 
     if backend == "tbb":
-        # simplify has a oneTBB kernel, so a forced tbb backend runs it.
-        assert op.simplify() == op.simplify()
+        # simplify has a oneTBB kernel, so a forced tbb backend runs it and
+        # matches scalar coefficient bits exactly.
+        parallel = op.simplify()
+        monkeypatch.setenv("WOLFGANG_CPU_BACKEND", "scalar")
+        scalar = op.simplify()
+        monkeypatch.setenv("WOLFGANG_CPU_BACKEND", backend)
+        assert parallel == scalar
+        assert (parallel.to_arrays()[2].view(np.uint64) == scalar.to_arrays()[2].view(np.uint64)).all()
     else:
         with pytest.raises(RuntimeError, match=expected):
             op.simplify()

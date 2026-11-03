@@ -253,9 +253,11 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
     while (sorted_position < keys.size()) {
       const std::uint64_t key_x = keys[sorted_position].x;
       const std::uint64_t key_z = keys[sorted_position].z;
-      std::complex<double> accumulated{0.0, 0.0};
+      // Seed each run with its first coefficient, as the hash paths do: starting
+      // from +0.0 would turn a lone -0.0 component into +0.0.
+      std::complex<double> accumulated = coeffs_[keys[sorted_position].index];
 
-      std::size_t next_position = sorted_position;
+      std::size_t next_position = sorted_position + 1;
       while (next_position < keys.size() &&
              keys[next_position].x == key_x &&
              keys[next_position].z == key_z) {
@@ -359,9 +361,11 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
     std::size_t sorted_position = 0;
     while (sorted_position < keys.size()) {
       const TermKey2& key = keys[sorted_position];
-      std::complex<double> accumulated{0.0, 0.0};
+      // Seed each run with its first coefficient, as the hash paths do: starting
+      // from +0.0 would turn a lone -0.0 component into +0.0.
+      std::complex<double> accumulated = coeffs_[key.index];
 
-      std::size_t next_position = sorted_position;
+      std::size_t next_position = sorted_position + 1;
       while (next_position < keys.size() &&
              keys[next_position].x0 == key.x0 &&
              keys[next_position].z0 == key.z0 &&
@@ -417,9 +421,10 @@ PauliSum PauliSum::simplify(double atol, double rtol) const {
   std::size_t sorted_position = 0;
   while (sorted_position < indices.size()) {
     const std::size_t first_term = indices[sorted_position];
-    std::complex<double> accumulated{0.0, 0.0};
+    // Seed each run with its first coefficient, as the hash paths do.
+    std::complex<double> accumulated = coeffs_[first_term];
 
-    std::size_t next_position = sorted_position;
+    std::size_t next_position = sorted_position + 1;
     while (next_position < indices.size() &&
            detail::compare_term_keys(x_, z_, words_, first_term, indices[next_position]) == 0) {
       accumulated += coeffs_[indices[next_position]];

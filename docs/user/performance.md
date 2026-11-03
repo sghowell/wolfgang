@@ -2,8 +2,8 @@
 
 Wolfgang always ships the portable scalar CPU backend and can additionally
 compile optional oneTBB and SIMD backends for commutation-heavy workloads.
-Current optimized coverage is intentionally narrow: pairwise commutation and
-full grouping graph construction. CUDA source builds additionally expose
+Current optimized coverage is intentionally narrow: pairwise commutation, full
+grouping graph construction, and oneTBB simplify. CUDA source builds additionally expose
 device-resident simplify, statevector expectation, pairwise commutation, and
 matrix-product kernels on `DevicePauliSum`.
 
@@ -36,6 +36,8 @@ evidence:
 ```text
 large pairwise commutation: oneTBB when compiled, otherwise AVX-512, AVX2, NEON, or scalar
 full grouping graph construction: AVX-512, AVX2, NEON, or scalar
+simplify (including inside matmul, commutator and equiv): oneTBB from 8,192 terms
+  when compiled and at least 4 threads are available, otherwise scalar
 all other kernels: scalar
 ```
 
@@ -211,7 +213,7 @@ compiler, package, or hardware support is absent.
 Current covered optimized kernels:
 
 ```text
-oneTBB: commutes_with, full_group_commutation_graph
+oneTBB: commutes_with, full_group_commutation_graph, simplify
 AVX2: commutes_with_words_1_2, full_group_commutation_graph_words_1_2
 AVX-512: commutes_with_words_1_2, full_group_commutation_graph_words_1_2
 NEON: commutes_with_words_1_2, full_group_commutation_graph_words_1_2

@@ -92,8 +92,9 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
         }
         for (qubits, terms, duplicates), by_variant in sorted(medians.items())
     ]
-    keys = ("cpu_model", "cpu_architecture", "logical_cpu_count", "physical_core_count",
-            "compiler", "python_version", "oneTBB", "operating_system")
+    keys = ("cpu_model", "cpu_vendor_or_soc", "cpu_architecture", "logical_cpu_count",
+            "physical_core_count", "compiler", "compiler_cpu_flags", "cpu_cmake_options",
+            "thread_settings", "python_version", "oneTBB", "operating_system")
     return {
         "environment": {key: environment.get(key) for key in keys if key in environment},
         "runs": runs,

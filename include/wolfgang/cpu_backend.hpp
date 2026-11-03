@@ -10,9 +10,13 @@ namespace wolfgang {
 inline constexpr std::size_t kAutoTbbPairwiseEntryThreshold = 331776;
 inline constexpr std::size_t kAutoNeonFullGroupingScalarMinEntries = 1024;
 // Auto dispatch sends simplify to the oneTBB kernel at or above this term count;
-// below it, thread start-up costs more than the parallel sort saves (measured
-// crossover near 4-8k terms on 16- and 26-vCPU x86 hosts).
+// below it, thread start-up costs more than the parallel sort saves (crossover
+// measured between 4k and 8k terms on a 16-vCPU EPYC 9654; a 26-vCPU host won
+// in every case from 10k).
 inline constexpr std::size_t kAutoTbbSimplifyTermThreshold = 8192;
+// Auto dispatch also needs at least this many oneTBB worker threads; with fewer
+// (cgroup-limited runners, taskset) the parallel path does more work than scalar.
+inline constexpr int kAutoTbbSimplifyMinConcurrency = 4;
 
 struct CpuBackendCandidate {
   std::string name;
@@ -47,8 +51,10 @@ void ensure_cpu_backend_supports_scalar_operation(std::string_view operation);
 void ensure_cpu_backend_supports_simplify();
 
 // True when simplify of num_terms terms should run the oneTBB kernel: auto
-// selects it at or above kAutoTbbSimplifyTermThreshold when oneTBB is compiled
-// and available, and WOLFGANG_CPU_BACKEND=tbb forces it.
+// selects it at or above kAutoTbbSimplifyTermThreshold when oneTBB is compiled,
+// available and has at least kAutoTbbSimplifyMinConcurrency threads, and
+// WOLFGANG_CPU_BACKEND=tbb forces it. Below the threshold it only reads the
+// selector environment variable, so small simplify calls stay cheap.
 [[nodiscard]] bool cpu_backend_selects_tbb_simplify(std::size_t num_terms);
 
 }  // namespace wolfgang

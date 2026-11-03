@@ -71,6 +71,7 @@ def test_backend_specialized_sources_live_in_dedicated_directories() -> None:
     }
     expected_parallel_sources = {
         "src/parallel/commute_kernels_tbb.cpp",
+        "src/parallel/simplify_tbb.cpp",
     }
     forbidden_root_sources = {
         "src/commute_kernels.cpp",

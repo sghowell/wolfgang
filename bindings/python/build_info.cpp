@@ -75,6 +75,8 @@ void bind_build_info(nb::module_& module) {
             wolfgang::kAutoNeonFullGroupingScalarMinEntries;
         cpu_auto_dispatch_thresholds["tbb_simplify_min_terms"] =
             wolfgang::kAutoTbbSimplifyTermThreshold;
+        cpu_auto_dispatch_thresholds["tbb_simplify_min_concurrency"] =
+            wolfgang::kAutoTbbSimplifyMinConcurrency;
         info["cpu_auto_dispatch_thresholds"] = cpu_auto_dispatch_thresholds;
 
         nb::dict optimized_cpu_kernels;

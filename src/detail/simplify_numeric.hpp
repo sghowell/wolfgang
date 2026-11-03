@@ -21,7 +21,8 @@ inline void require_finite_simplify_accumulator(const std::complex<double>& coef
   }
 }
 
-// Drop rule shared by every CPU simplify path: a combined coefficient c
+// Drop rule shared by the standalone CPU simplify paths (scalar and oneTBB) and
+// the Metal hybrid; fused matmul applies the same rule at default tolerances: a combined coefficient c
 // survives when |c| > atol + rtol * max_abs_input. Finite complex128 components
 // can have a magnitude above DBL_MAX, so at rtol == 0 the threshold is atol
 // itself (no 0 * infinity), and when the ordinary threshold overflows the

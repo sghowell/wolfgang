@@ -1,6 +1,9 @@
 #include "wolfgang/cpu_backend.hpp"
 
 #include <array>
+#if WOLFGANG_BUILD_TBB_ENABLED
+#include <oneapi/tbb/task_arena.h>
+#endif
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
@@ -192,13 +195,18 @@ void ensure_cpu_backend_supports_simplify() {
 
 bool cpu_backend_selects_tbb_simplify(std::size_t num_terms) {
 #if WOLFGANG_BUILD_TBB_ENABLED
-  const CpuBackendReport report = cpu_backend_report_from_environment();
-  if (report.active_backend == "tbb") {
-    return true;
+  const char* raw_selector = std::getenv(kBackendEnvVar.data());
+  const std::string_view selector = raw_selector == nullptr ? std::string_view{} : raw_selector;
+  if (selector == "tbb") {
+    return cpu_backend_report_from_environment().active_backend == "tbb";
   }
-  if (report.requested_backend != "auto" || num_terms < kAutoTbbSimplifyTermThreshold) {
+  if (!(selector.empty() || selector == "auto") || num_terms < kAutoTbbSimplifyTermThreshold) {
     return false;
   }
+  if (oneapi::tbb::this_task_arena::max_concurrency() < kAutoTbbSimplifyMinConcurrency) {
+    return false;
+  }
+  const CpuBackendReport report = cpu_backend_report_from_environment();
   for (const CpuBackendCandidate& candidate : report.candidates) {
     if (candidate.name == "tbb") {
       return candidate.status == "available";
