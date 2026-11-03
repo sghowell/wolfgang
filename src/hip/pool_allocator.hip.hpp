@@ -17,18 +17,22 @@
 
 namespace wolfgang::hip_detail {
 
-// Wolfgang-private stream-ordered device memory pool.
+// Device allocation for Wolfgang's HIP backend: hipMalloc/hipFree by default,
+// with an optional stream-ordered pool behind a benchmark-only selector.
 //
-// Every Wolfgang HIP operation runs on the null (default) stream and
-// synchronizes before returning, so a block freed here is never still in use
-// when the pool hands it out again. The pool keeps up to
-// kPoolReleaseThresholdBytes of freed blocks cached per device, which removes
-// hipMalloc/hipFree from the per-call cost of small operations; above that,
-// it returns memory to the driver at the next synchronization. Cached blocks
-// are memory other libraries in the process cannot use until the pool trims,
-// which it does on any Wolfgang allocation failure (before one retry) and at
-// process exit. Devices without memory-pool support, or runs with
-// WOLFGANG_HIP_BENCH_DISABLE_POOL=1, use hipMalloc/hipFree instead. The
+// Unlike CUDA (where the pool removed most of the small-operation cost on an
+// H100), ROCm's hipMalloc/hipFree already cache small blocks. On an MI300X with
+// HIP 7.16, small simplify and matmul calls ran 9-37% faster with plain
+// hipMalloc than with hipMallocFromPoolAsync/hipFreeAsync
+// (docs/benchmarks/reports/hip_parity_mi300x_2026-11-03.md), so the pool is
+// off unless WOLFGANG_HIP_BENCH_ENABLE_POOL=1. The interface stays shared so
+// the comparison can be rerun on later ROCm releases.
+//
+// When enabled, every Wolfgang HIP operation runs on the null (default) stream
+// and synchronizes before returning, so a block freed to the pool is never
+// still in use when the pool hands it out again. The pool keeps up to
+// kPoolReleaseThresholdBytes of freed blocks cached per device and trims on
+// any Wolfgang allocation failure (before one retry) and at process exit. The
 // pool handle is not revalidated after hipDeviceReset.
 //
 // Buffers exported to other frameworks (DLPack, the CUDA Array Interface) must
@@ -38,6 +42,7 @@ inline constexpr std::uint64_t kPoolReleaseThresholdBytes = std::uint64_t{1} << 
 
 // rocThrust's default policy, hipMemcpy and Wolfgang's kernels all use the null
 // stream, so pooled allocations and frees are ordered with every other call.
+// par_nosync (below) and uninitialized scratch apply whichever allocator runs.
 inline const hipStream_t kPoolStream = nullptr;
 
 // Allocation failures (after a trim and one retry) throw std::bad_alloc.

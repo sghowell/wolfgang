@@ -1,8 +1,11 @@
-"""Wolfgang's private HIP memory pool: no pooled leaks, and a working fallback.
+"""Wolfgang's HIP allocator: hipMalloc by default, optional pool without leaks.
 
-Every public DevicePauliSum operation must return the pool's used bytes to
-their starting value once its results are released, and the hipMalloc fallback
-(forced with WOLFGANG_HIP_BENCH_DISABLE_POOL=1) must produce the same results.
+On ROCm, plain hipMalloc/hipFree measured faster than the stream-ordered pool
+for Wolfgang's small operations, so the pool is opt-in
+(WOLFGANG_HIP_BENCH_ENABLE_POOL=1, benchmark-only). The default must not use
+it; with the pool enabled, every public DevicePauliSum operation must return
+its used bytes to the starting value once results are released; and both
+allocators must produce the same results.
 """
 
 from __future__ import annotations
@@ -20,6 +23,7 @@ import wolfgang_quantum
 import wolfgang_quantum._wolfgang_core as core
 
 ROOT = Path(__file__).resolve().parents[1]
+ENABLE = "WOLFGANG_HIP_BENCH_ENABLE_POOL"
 
 
 def _require_hip_pool_hook() -> None:
@@ -57,21 +61,56 @@ def _workload() -> list[tuple[str, object]]:
     return results
 
 
-def test_public_operations_return_pool_usage_to_baseline() -> None:
-    _require_hip_pool_hook()
+def _pool_leak_check() -> dict[str, object]:
+    """Run in a subprocess with the pool enabled."""
     if not core._hip_pool_status_for_testing(0)["enabled"]:
-        pytest.skip("HIP device does not use the memory pool")
+        return {"enabled": False}
     _workload()  # warm the pool so cached blocks exist
     baseline = _used_bytes()
     _workload()
-    assert _used_bytes() == baseline
+    after = _used_bytes()
     held = wolfgang_quantum.PauliSum.from_labels(["XY"], [1.0]).to_device(backend="hip")
-    assert _used_bytes() > baseline
+    holding = _used_bytes()
     del held
-    assert _used_bytes() == baseline
+    return {"enabled": True, "baseline": baseline, "after": after, "holding": holding, "released": _used_bytes()}
 
 
-def test_hipmalloc_fallback_matches_pooled_results() -> None:
+def _run(script: str, enable_pool: bool) -> dict[str, object]:
+    env = dict(os.environ)
+    env.pop(ENABLE, None)
+    if enable_pool:
+        env[ENABLE] = "1"
+    completed = subprocess.run(
+        [sys.executable, "-c", script], cwd=ROOT, env=env, capture_output=True, text=True, check=True
+    )
+    return json.loads(completed.stdout.strip().splitlines()[-1])
+
+
+def test_default_allocator_is_hipmalloc() -> None:
+    _require_hip_pool_hook()
+    script = (
+        "import json, wolfgang_quantum._wolfgang_core as core;"
+        "print(json.dumps(dict(core._hip_pool_status_for_testing(0))))"
+    )
+    assert _run(script, enable_pool=False)["enabled"] is False
+
+
+def test_enabled_pool_returns_usage_to_baseline() -> None:
+    _require_hip_pool_hook()
+    script = (
+        "import json, sys; sys.path.insert(0, 'tests');"
+        "import test_hip_pool_allocator as t;"
+        "print(json.dumps(t._pool_leak_check()))"
+    )
+    report = _run(script, enable_pool=True)
+    if not report["enabled"]:
+        pytest.skip("HIP device does not support memory pools")
+    assert report["after"] == report["baseline"]
+    assert report["holding"] > report["baseline"]
+    assert report["released"] == report["baseline"]
+
+
+def test_pool_and_hipmalloc_results_match() -> None:
     _require_hip_pool_hook()
     script = (
         "import json, sys; sys.path.insert(0, 'tests');"
@@ -79,12 +118,7 @@ def test_hipmalloc_fallback_matches_pooled_results() -> None:
         "print(json.dumps({'enabled': core._hip_pool_status_for_testing(0)['enabled'],"
         " 'results': [[n, repr(v)] for n, v in t._workload()]}))"
     )
-    outputs = {}
-    for disabled in ("0", "1"):
-        env = dict(os.environ, WOLFGANG_HIP_BENCH_DISABLE_POOL=disabled)
-        completed = subprocess.run(
-            [sys.executable, "-c", script], cwd=ROOT, env=env, capture_output=True, text=True, check=True
-        )
-        outputs[disabled] = json.loads(completed.stdout.strip().splitlines()[-1])
-    assert outputs["1"]["enabled"] is False
-    assert outputs["1"]["results"] == outputs["0"]["results"]
+    default = _run(script, enable_pool=False)
+    pooled = _run(script, enable_pool=True)
+    assert default["enabled"] is False
+    assert pooled["results"] == default["results"]

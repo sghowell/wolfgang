@@ -32,10 +32,10 @@ std::unordered_map<int, DevicePool>& pools() {
   return *table;
 }
 
-// Benchmark/test-only switch that forces the hipMalloc fallback so it stays
-// exercised on hardware with pool support.
-bool pooling_disabled_by_environment() {
-  const char* value = std::getenv("WOLFGANG_HIP_BENCH_DISABLE_POOL");
+// Benchmark/test-only switch that turns on the optional pool so its path stays
+// exercised and can be compared with the hipMalloc default.
+bool pooling_enabled_by_environment() {
+  const char* value = std::getenv("WOLFGANG_HIP_BENCH_ENABLE_POOL");
   return value != nullptr && std::strcmp(value, "1") == 0;
 }
 
@@ -76,7 +76,7 @@ DevicePool device_pool(int device) {
       hipDeviceGetAttribute(&supported, hipDeviceAttributeMemoryPoolsSupported, device);
   if (attribute_result != hipSuccess) {
     (void)hipGetLastError();  // clear only the error this query raised
-  } else if (supported != 0 && !pooling_disabled_by_environment()) {
+  } else if (supported != 0 && pooling_enabled_by_environment()) {
     hipMemPoolProps props{};
     props.allocType = hipMemAllocationTypePinned;
     props.handleTypes = hipMemHandleTypeNone;
