@@ -149,6 +149,54 @@ def commutator_case(
     }
 
 
+def summarize_reports(directory: Path) -> dict[str, Any]:
+    """Aggregate saved paired reports into medians of per-run medians plus provenance."""
+    runs: list[dict[str, Any]] = []
+    medians: dict[tuple[str, int, int, str, str], list[float]] = {}
+    environment: dict[str, Any] = {}
+    for path in sorted(directory.glob("*.json")):
+        report = json.loads(path.read_text(encoding="utf-8"))
+        if report.get("benchmark") != "host_api":
+            continue
+        label = report.get("label", "")
+        environment = environment or report["environment"]
+        runs.append(
+            {
+                "file": path.name,
+                "label": label,
+                "seed": report.get("seed"),
+                "command": report.get("command"),
+                "git_commit": report["git"].get("commit"),
+                "git_dirty": report["git"].get("dirty"),
+                "loaded_native_build": report["environment"].get("loaded_native_build", {}),
+            }
+        )
+        for row in report["rows"]:
+            size = row.get("num_terms", row.get("num_terms_per_operand"))
+            for name, data in row["variants"].items():
+                key = (row["suite"], row["num_qubits"], size, name, label)
+                medians.setdefault(key, []).append(data["median_seconds"])
+    rows = [
+        {
+            "suite": suite,
+            "num_qubits": qubits,
+            "terms": size,
+            "variant": name,
+            "label": label,
+            "per_run_median_seconds": values,
+            "median_of_medians_seconds": float(np.median(values)),
+        }
+        for (suite, qubits, size, name, label), values in sorted(medians.items())
+    ]
+    keys = ("operating_system", "cpu_model", "cpu_architecture", "logical_cpu_count",
+            "python_version", "compiler", "active_fastpauli_cpu_backend", "apple_hardware")
+    return {
+        "environment": {key: environment.get(key) for key in keys if key in environment},
+        "runs": runs,
+        "rows": rows,
+    }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--suite", choices=("boundary", "commutator", "all"), default="all")
@@ -158,11 +206,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=20261103)
     parser.add_argument("--label", default="")
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--summarize", type=Path, help="aggregate saved reports in this directory")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if args.summarize:
+        text = json.dumps(summarize_reports(args.summarize), indent=2, sort_keys=True)
+        if args.output:
+            args.output.write_text(text + "\n", encoding="utf-8")
+        else:
+            sys.stdout.write(text + "\n")
+        return 0
     rng = np.random.default_rng(args.seed)
     order_rng = random.Random(args.seed)
     rows: list[dict[str, Any]] = []
