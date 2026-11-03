@@ -147,7 +147,14 @@ HIP simplify follows the CPU numeric contract and drop rule, as CUDA does:
 - the threshold is `atol` itself when `rtol == 0`, and magnitudes are compared
   in half units when `atol + rtol * max_abs` overflows.
 
-Single-term simplify skips sort and reduction.
+Single-term simplify skips sort and reduction; on the MI300X that dedicated
+path measured faster than a one-term fused launch. Small operators (one to
+four packed words, 2 to 1,024 terms, or up to 512 for three or four words) use
+the fused single-block kernel shared with CUDA
+(`src/detail/small_simplify_kernel.cuh`), with coefficients bit-identical to
+CPU simplify. The benchmark switch `WOLFGANG_HIP_BENCH_SMALL_SIMPLIFY=off`
+keeps the multi-launch path. Evidence:
+`docs/benchmarks/reports/small_simplify_2026-11-03.md`.
 
 HIP device buffers and scratch use `hipMalloc`/`hipFree`. Simplify scratch is
 uninitialized (every buffer is fully written before it is read), and rocThrust

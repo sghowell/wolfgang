@@ -84,3 +84,48 @@ documentation. The benchmarked candidate is `d871133`.
   - one MI300X (virtual function) and one H100;
   - the `inf + -inf` path is verified by inspection and by the
     raise-or-finite test, since no input forces NaN under every grouping.
+
+## Slice 5: Fused small-operator simplify
+
+Branch `codex/small-simplify`, commits `2ed099c`..`b072c0a` plus
+documentation. The benchmarked candidate is `b072c0a`.
+
+- Reviewer: independent agent (CUDA/HIP kernel, numerics and performance
+  roles), read-only. It simulated the sort network at block sizes 2-1,024 and
+  widths 1-4 against a reference sort, and checked barrier uniformity and the
+  shared-memory layout.
+- Findings: P0 0, P1 1, P2 2, P3 4.
+- P1 resolution (per-device shared-memory opt-in): the opt-in was cached once
+  per process, but CUDA applies it per device, so 56 KiB launches would fail
+  on a second GPU, and a failed call stayed cached. The attribute is now set
+  before each launch that needs more than 48 KiB. Any launch-configuration
+  error falls back to the multi-launch path.
+- P2 resolutions:
+  - FMA contraction: the device threshold `atol + rtol * max` compiled to an
+    FMA, and so did CPU simplify on arm64. On the M4 Pro, CPU dropped a term
+    x86 kept. Every backend now rounds the product separately, with
+    regression tests.
+  - `__launch_bounds__(1024)` added.
+- P3 resolutions:
+  - the bit-identity claim now covers coefficients, with survivor sets equal
+    except at ulp-level threshold ties from device `hypot`;
+  - tests add an all-Y key equal to the sentinel key with fewer terms than the
+    block, the capacity+1 boundary, and cases with both tolerances;
+  - performance: word-major keys avoid bank conflicts, run heads are flagged
+    once, the result returns through mapped host memory, and the block is
+    sized to the input (with single terms fused on CUDA); together these took
+    H100 small simplify from 39 to 18 us;
+  - code-standards exception recorded: a custom kernel instead of CUB/hipCUB,
+    justified by the measured multi-launch baseline in the report.
+- Validation after fixes:
+  - H100: `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core`
+    passed (927 tests in the CUDA run); memcheck, racecheck, synccheck and
+    initcheck on the fused tests report 0 errors.
+  - MI300X: `WOLFGANG_VALIDATE_HIP=1 python scripts/validate.py --profile core`
+    passed (840 tests in the HIP run).
+  - M4 Pro: the separately rounded threshold passes on CPU and Metal.
+- Deferred: a multi-GPU check of the per-launch opt-in (one GPU per host
+  here); a duplicate-heavy worst-case benchmark row.
+- Residual risk:
+  - one H100 and one MI300X;
+  - device `hypot` can differ from host libm by a few ulps at the threshold.

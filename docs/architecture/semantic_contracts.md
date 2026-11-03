@@ -156,7 +156,13 @@ accelerator against CPU simplify; CUDA and HIP may associate long duplicate
 sums differently, so their coefficients match CPU to rounding. Whether an
 intermediate sum overflows also depends on that order: duplicate sums within
 about a factor of the run length of the largest double may raise
-`OverflowError` on one backend and return a finite result on another.
+`OverflowError` on one backend and return a finite result on another. CUDA and
+HIP operators small enough for the fused path (up to 1,024 terms and 256
+qubits) sum in input order and match CPU coefficients bit for bit. Every
+backend computes `atol + rtol * max_abs` with the product rounded before the
+add, never as a fused multiply-add, so the threshold is the same on every
+platform; device `hypot` may still differ from the host's by a few ulps at the
+threshold.
 
 ## Addition And Scalar Multiplication
 

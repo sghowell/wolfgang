@@ -1,0 +1,121 @@
+{
+  "note": "API calls and time per simplify over 220 calls of a 128-term, 24-qubit operator; per-call time excludes each API's single largest call (first-use outliers). CUDA from nsys cuda_api_sum, HIP from rocprofv3 --hip-trace --stats.",
+  "base_commit": "d871133",
+  "candidate_commit": "b072c0a",
+  "cuda": [
+    {
+      "api": "cudaStreamSynchronize",
+      "base_calls": 10.0,
+      "base_us": 57.6,
+      "cand_calls": 1.0,
+      "cand_us": 12.9
+    },
+    {
+      "api": "cudaMemcpyAsync",
+      "base_calls": 7.0,
+      "base_us": 41.5,
+      "cand_calls": 0.0,
+      "cand_us": 0.0
+    },
+    {
+      "api": "cudaLaunchKernel",
+      "base_calls": 9.0,
+      "base_us": 33.6,
+      "cand_calls": 1.0,
+      "cand_us": 3.7
+    },
+    {
+      "api": "cudaMallocFromPoolAsync_v11020",
+      "base_calls": 13.0,
+      "base_us": 15.9,
+      "cand_calls": 3.0,
+      "cand_us": 1.3
+    },
+    {
+      "api": "cudaFreeAsync_v11020",
+      "base_calls": 13.0,
+      "base_us": 7.0,
+      "cand_calls": 3.0,
+      "cand_us": 1.7
+    },
+    {
+      "api": "cudaDeviceSynchronize",
+      "base_calls": 1.0,
+      "base_us": 1.8,
+      "cand_calls": 0.0,
+      "cand_us": 0.0
+    },
+    {
+      "api": "cudaMemcpy",
+      "base_calls": 0.0,
+      "base_us": 0.1,
+      "cand_calls": 0.0,
+      "cand_us": 0.1
+    },
+    {
+      "api": "cuModuleGetLoadingMode",
+      "base_calls": 0.0,
+      "base_us": 0.0,
+      "cand_calls": 0.0,
+      "cand_us": 0.0
+    }
+  ],
+  "hip": [
+    {
+      "api": "hipFree",
+      "base_calls": 13.0,
+      "base_us": 51.7,
+      "cand_calls": 3.0,
+      "cand_us": 1.9
+    },
+    {
+      "api": "hipMemcpyWithStream",
+      "base_calls": 3.0,
+      "base_us": 43.2,
+      "cand_calls": 0.0,
+      "cand_us": 0.0
+    },
+    {
+      "api": "hipLaunchKernel",
+      "base_calls": 10.0,
+      "base_us": 26.4,
+      "cand_calls": 1.0,
+      "cand_us": 2.9
+    },
+    {
+      "api": "hipStreamSynchronize",
+      "base_calls": 0.0,
+      "base_us": 0.0,
+      "cand_calls": 1.0,
+      "cand_us": 20.1
+    },
+    {
+      "api": "hipMalloc",
+      "base_calls": 13.0,
+      "base_us": 8.2,
+      "cand_calls": 3.0,
+      "cand_us": 1.6
+    },
+    {
+      "api": "hipDeviceSynchronize",
+      "base_calls": 1.0,
+      "base_us": 8.4,
+      "cand_calls": 0.0,
+      "cand_us": 0.0
+    },
+    {
+      "api": "hipGetDevice",
+      "base_calls": 70.0,
+      "base_us": 5.0,
+      "cand_calls": 7.0,
+      "cand_us": 0.5
+    },
+    {
+      "api": "hipMemcpyAsync",
+      "base_calls": 2.0,
+      "base_us": 5.4,
+      "cand_calls": 0.0,
+      "cand_us": 0.0
+    }
+  ]
+}

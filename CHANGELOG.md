@@ -6,6 +6,14 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- CUDA and HIP: operators of up to 256 qubits and 1,024 terms simplify in one
+  fused kernel. On an H100 small simplify is 3.0-7.8x faster (128 terms:
+  143.5 to 18.4 us); on an MI300X it is 3.5-5.7x faster. Their coefficients
+  now equal CPU simplify bit for bit
+  (`docs/benchmarks/reports/small_simplify_2026-11-03.md`).
+- Every backend rounds `atol + rtol * max_abs` as a separate multiply and add.
+  CPU simplify on Apple Silicon (and other arm64 hosts) previously computed it
+  as a fused multiply-add and could drop a term at the threshold that x86 kept.
 - CUDA and HIP simplify follow the CPU numeric contract: non-finite
   coefficients raise `ValueError` and a duplicate sum that overflows raises
   `OverflowError`. Previously an infinite input was kept, and a GPU tree sum

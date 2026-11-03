@@ -50,3 +50,9 @@ faster and single-term simplify 8x
 (`docs/benchmarks/reports/hip_parity_mi300x_2026-11-03.md`). A HIP
 stream-ordered pool was measured slower than `hipMalloc` on ROCm and is kept
 only as a benchmark opt-in.
+
+Slice 5 merged: a fused single-block simplify for CUDA and HIP operators of up
+to 256 qubits and 1,024 terms, 3.0-7.8x faster on H100 and 3.5-5.7x on MI300X,
+with coefficients bit-identical to CPU
+(`docs/benchmarks/reports/small_simplify_2026-11-03.md`). Every backend now
+rounds the drop threshold's product separately.
