@@ -79,10 +79,10 @@ void wait_for_completion(id<MTLCommandBuffer> command_buffer, const char* action
 // kHybridSimplifyMinTerms terms: the GPU sorts (x, z, input index) and the CPU
 // sums each duplicate run in float64, in input order, over the shared buffers.
 // The result equals CPU simplify bit for bit; smaller inputs use the host bridge.
-// On an M4 Pro the hybrid beat the bridge in every measured case from 8,192
-// terms and same-host scalar CPU simplify (the campaign's promotion gate) from
-// 12,288; below that its fixed command-buffer round trip (about 0.25 ms)
-// dominates.
+// On an M4 Pro the hybrid matched or beat the bridge in every measured case
+// from 8,192 terms and beat both the bridge and same-host scalar CPU simplify
+// (the campaign's promotion gate) from 12,288; below that its fixed
+// command-buffer round trip (about 0.25 ms) dominates.
 inline constexpr std::size_t kHybridSimplifyMinTerms = 12288;
 // The sort network's padded size must fit in uint32 grid indices.
 inline constexpr std::size_t kHybridSimplifyMaxTerms = std::size_t{1} << 31;

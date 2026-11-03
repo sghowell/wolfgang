@@ -52,6 +52,20 @@ Deferred with reason:
   architecture-specific code; ARM timings wait for a host with oneTBB
   packaged.
 
+Slice 8: Metal hybrid simplify promoted for one-word operators from 12,288
+terms, where it beats same-host CPU simplify and the host bridge in every
+measured combination
+(`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md`, M4 Pro).
+Deferred with reason:
+- **Hybrid timings on oneTBB Metal builds.** Same blocker as the slice 6 Apple
+  Silicon deferral: oneTBB is not installed on the Apple development machine.
+  On such builds the bridge's CPU simplify is parallel and the hybrid's
+  reduction is not, so the threshold is unmeasured there.
+- **A device-resident float64 reduction.** Metal kernels cannot use `double`;
+  an exact reduction would need software float64 or double-float arithmetic,
+  and must still match CPU simplify bit for bit. The reduction stays on the
+  CPU, which is why the public capability record remains `host_bridge`.
+
 Slice 7: pooled CUDA allocations, cheap device selection, and fewer Thrust
 synchronizations and scratch fills
 (`docs/benchmarks/reports/cuda_allocation_reuse_h100_2026-11-03.md`, with an

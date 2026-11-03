@@ -211,3 +211,59 @@ benchmarked candidate is `6e48c14`.
   - one GPU model;
   - multi-GPU and `cudaDeviceReset` behavior unexercised;
   - pool retention up to 1 GiB per device.
+
+## Slice 8: Metal hybrid simplify
+
+Branch `codex/metal-hybrid-simplify`, commits `a2b7917`..`cc7a9c7` plus the
+final evidence. The benchmarked candidate is `cc7a9c7`.
+
+- Reviewer: independent agent (Metal, Objective-C++ memory management,
+  numerics and benchmark roles), read-only. It reviewed `e7cecd6..4f33861`,
+  confirmed the report tables against the summary JSON, and ran a 72-case
+  stress script that forced the hybrid at sizes 1-131,073.
+- Findings: P0 0, P1 1, P2 3, P3 9.
+- P1 resolution (public simplify read the build tree): the hybrid loaded
+  `kernels/simplify.metal` from a path baked in at compile time, so sdist and
+  `pip install git+...` builds and moved checkouts failed from 12,288 terms.
+  - CMake now embeds the kernel source.
+  - It compiles once per process, with the tile size passed from the host.
+  - A pipeline failure keeps the host bridge.
+  - A contract test pins the embedding, and a manual run with the source file
+    moved away matched CPU simplify.
+- P2 resolutions:
+  - Signed zeros: the `-op` checks contained no `-0.0`. Tests now feed
+    explicit `-0.0` components in single-term and duplicate runs, and the
+    negation checks (here and in the slice 6 oneTBB test) zero imaginary parts
+    first.
+  - oneTBB Metal builds: recorded as a report limitation and a plan deferral.
+  - Public docs: the `DevicePauliSum.simplify` and package docstrings, roadmap,
+    provenance, support matrix, AGENTS.md and CHANGELOG now describe the hybrid.
+- P3 resolutions:
+  - a private run counter lets tests prove the public path takes the hybrid at
+    the threshold and the bridge below it, for two-word operators and under the
+    bridge selector;
+  - one library build serves all pipelines; the first call (about 4 ms) is
+    measured and reported;
+  - the gather pipeline is fetched before encoding starts;
+  - the pipeline cache is locked;
+  - a failed default-device probe is retried;
+  - operators past 2^31 terms keep the bridge;
+  - scratch allocation failure raises `MemoryError`;
+  - report and comment figures corrected (previous-design sizes, control
+    drift, the duplicate-fraction claim, the 8,192-term comment);
+  - unrecorded upload timings dropped from the report;
+  - the summary records spread, output sizes, tolerances and build config;
+  - the tile size is defined once, on the host.
+- Validation after fixes:
+  - Apple M4 Pro: `WOLFGANG_VALIDATE_METAL=1 python scripts/validate.py
+    --profile core` passed (657 tests in the default run, 692 in the Metal
+    run), and the quality and docs profiles passed.
+  - H100: `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core`
+    passed (773 tests in the CUDA run), and the oneTBB simplify suite passed
+    (52 tests).
+- Deferred: hybrid timings on oneTBB Metal builds; a device-resident float64
+  reduction.
+- Residual risk:
+  - one Apple GPU;
+  - inputs above 1,048,577 terms unmeasured (single command buffer);
+  - the first call in a process pays kernel compilation.

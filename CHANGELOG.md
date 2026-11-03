@@ -6,6 +6,15 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- Metal source builds: `DevicePauliSum.simplify` on one-word operators (up to
+  64 qubits) of at least 12,288 terms sorts keys on the GPU and sums duplicates
+  in float64 on the CPU over shared memory, with results identical to CPU
+  simplify bit for bit. On an M4 Pro it is 1.3-4.1x faster than the previous
+  host bridge and 1.05-4.0x faster than CPU simplify from 12,288 terms
+  (`docs/benchmarks/reports/metal_hybrid_simplify_2026-11-03.md`). The first
+  such call in a process compiles the simplify kernels (about 4 ms). The kernel
+  source is embedded in the extension, and Metal uploads no longer recreate the
+  default device on every call.
 - oneTBB source builds: `simplify` runs a parallel sort-and-reduce kernel from
   8,192 terms on hosts with at least four oneTBB threads
   (`WOLFGANG_CPU_BACKEND=tbb` forces it), with results identical to scalar bit
