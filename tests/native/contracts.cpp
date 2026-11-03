@@ -16,10 +16,10 @@ void require(bool condition, const char* message) {
   if (!condition) throw std::runtime_error(message);
 }
 
-// Staged device-to-host copies (src/detail/staged_transfer.hpp) with a fake
-// stream: copies run only at the next wait, as on a GPU, so draining a half
-// before its copy lands, or refilling a half before it is drained, corrupts
-// the result.
+// Staged device-to-host copies (src/detail/staged_transfer.hpp) with two fake
+// streams. Deferred copies land only at the next wait, so draining a half
+// before its wait corrupts the result; immediate copies land when issued, so
+// refilling a half before it is drained corrupts it. A GPU can do either.
 void check_staged_device_to_host() {
   namespace acc = wolfgang::accelerator_detail;
   struct Pending {
@@ -27,7 +27,8 @@ void check_staged_device_to_host() {
     const std::byte* src;
     std::size_t bytes;
   };
-  for (const std::size_t staging_bytes : {std::size_t{64}, std::size_t{96}, std::size_t{4096}, std::size_t{1} << 16}) {
+  for (const bool deferred : {true, false}) {
+  for (const std::size_t staging_bytes : {std::size_t{64}, std::size_t{96}, std::size_t{100}, std::size_t{4096}, std::size_t{1} << 16}) {
     for (const std::size_t terms : {std::size_t{0}, std::size_t{1}, std::size_t{3}, std::size_t{37}, std::size_t{1000}}) {
       const std::size_t words = 3;
       std::vector<std::uint64_t> x_src(terms * words), z_src(terms * words);
@@ -50,7 +51,13 @@ void check_staged_device_to_host() {
       std::size_t waits = 0;
       acc::staged_device_to_host(
           staging.data(), staging.size(), segments,
-          [&](std::byte* dst, const std::byte* src, std::size_t bytes) { pending.push_back({dst, src, bytes}); },
+          [&](std::byte* dst, const std::byte* src, std::size_t bytes) {
+            if (deferred) {
+              pending.push_back({dst, src, bytes});
+            } else {
+              std::memcpy(dst, src, bytes);
+            }
+          },
           [&] {
             ++waits;
             for (const Pending& copy : pending) std::memcpy(copy.dst, copy.src, copy.bytes);
@@ -62,6 +69,7 @@ void check_staged_device_to_host() {
         require(waits == 1, "a small operator waits once");
       }
     }
+  }
   }
   require(acc::staging_bytes_for(10, std::size_t{16} << 20) == (std::size_t{64} << 10), "minimum staging");
   require(acc::staging_bytes_for(std::size_t{40} << 20, std::size_t{16} << 20) == (std::size_t{16} << 20),

@@ -11,6 +11,10 @@
 //   d2h_pageable     cudaMemcpy into a new std::vector(n) (zero-filled first)
 //   d2h_staged       async copies into pinned halves, appended to a reserved vector
 //   d2h_staged_huge  as d2h_staged, with MADV_HUGEPAGE on the reserved storage
+//   d2h_direct_huge  cudaMemcpy into a reserved vector advised for huge pages,
+//                    then sized (the zero-fill faults the huge pages in)
+// The huge-page columns advise only whole 2 MiB pages, so below 4 MiB they
+// match the columns without advice (reported as n/a there).
 #include <cuda_runtime.h>
 #include <sys/mman.h>
 
@@ -49,7 +53,7 @@ int main() {
   const size_t half = size_t{8} << 20;
   char* pinned = nullptr;
   cudaHostAlloc(reinterpret_cast<void**>(&pinned), 2 * half, cudaHostAllocDefault);
-  std::printf("bytes,h2d_pageable,h2d_staged,d2h_pageable,d2h_staged,d2h_staged_huge\n");
+  std::printf("bytes,h2d_pageable,h2d_staged,d2h_pageable,d2h_staged,d2h_staged_huge,d2h_direct_huge\n");
   for (size_t bytes : {size_t{4096}, size_t{65536}, size_t{2} << 20, size_t{8} << 20, size_t{32} << 20,
                        size_t{128} << 20}) {
     char* dev = nullptr;
@@ -74,7 +78,7 @@ int main() {
       dst.insert(dst.end(), pinned + h * half, pinned + h * half + prev);
     };
     const int reps = bytes <= (size_t{2} << 20) ? 200 : 12;
-    std::vector<double> t[5];
+    std::vector<double> t[6];
     for (int r = 0; r < reps; ++r) {
       auto a = Clock::now();
       cudaMemcpy(dev, src.data(), bytes, cudaMemcpyHostToDevice);
@@ -115,9 +119,19 @@ int main() {
         staged_d2h(dst);
       }
       t[4].push_back(micros(a, Clock::now()));
+
+      a = Clock::now();
+      {
+        std::vector<char> dst;
+        dst.reserve(bytes);
+        advise_huge(dst.data(), bytes);
+        dst.resize(bytes);
+        cudaMemcpy(dst.data(), dev, bytes, cudaMemcpyDeviceToHost);
+      }
+      t[5].push_back(micros(a, Clock::now()));
     }
-    std::printf("%zu,%.1f,%.1f,%.1f,%.1f,%.1f\n", bytes, median(t[0]), median(t[1]), median(t[2]), median(t[3]),
-                median(t[4]));
+    std::printf("%zu,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f\n", bytes, median(t[0]), median(t[1]), median(t[2]),
+                median(t[3]), median(t[4]), median(t[5]));
     cudaFree(dev);
   }
   cudaFreeHost(pinned);

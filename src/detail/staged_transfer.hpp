@@ -101,9 +101,11 @@ inline std::size_t staging_bytes_for(std::size_t total_bytes, std::size_t max_by
   return std::min(bytes, max_bytes);
 }
 
-// Copies every segment through `staging` (pinned, `staging_bytes` long, a
-// multiple of 32). `copy_async(dst, src, bytes)` queues one device-to-host
-// copy on the stream Wolfgang uses and `wait()` waits for that stream.
+// Copies every segment through `staging` (pinned, at least 32 bytes).
+// `copy_async(dst, src, bytes)` queues one device-to-host copy on the stream
+// Wolfgang uses and `wait()` waits for that stream. If a copy throws, the
+// function waits for copies already queued before rethrowing, so none is
+// still writing into the staging buffer when the next call reuses it.
 template <typename CopyAsync, typename Wait>
 void staged_device_to_host(
     std::byte* staging,
@@ -120,7 +122,7 @@ void staged_device_to_host(
   // Cut segments into chunks no larger than half the staging buffer (whole
   // elements; 16-byte aligned in staging) and pack consecutive chunks into
   // batches that fit in one half.
-  const std::size_t half = staging_bytes / 2;
+  const std::size_t half = staging_bytes / 2 / 16 * 16;  // keeps chunks 16-byte aligned
   std::vector<std::vector<Chunk>> batches(1);
   std::size_t used = 0;
   for (std::size_t s = 0; s < segments.size(); ++s) {
@@ -161,13 +163,21 @@ void staged_device_to_host(
   };
   // Batch b lands in half b % 2. A half is reused two batches later, after
   // the wait that precedes the next issue and after its own drain.
-  issue(0);
-  for (std::size_t b = 1; b < batches.size(); ++b) {
+  try {
+    issue(0);
+    for (std::size_t b = 1; b < batches.size(); ++b) {
+      wait();
+      issue(b);
+      drain(b - 1);
+    }
     wait();
-    issue(b);
-    drain(b - 1);
+  } catch (...) {
+    try {
+      wait();
+    } catch (...) {
+    }
+    throw;
   }
-  wait();
   drain(batches.size() - 1);
 }
 

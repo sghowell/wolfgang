@@ -35,9 +35,11 @@ static_assert(sizeof(std::complex<double>) == sizeof(thrust::complex<double>));
 namespace {
 
 // Per-thread pinned buffer for device-to-host copies
-// (detail/staged_transfer.hpp). It grows to the largest transfer seen, up to
-// kPinnedStagingMaxBytes, and is freed when the thread exits. If pinned
-// memory cannot be allocated, to_host falls back to pageable copies.
+// (detail/staged_transfer.hpp). Transfers that fit in it (up to
+// kPinnedStagingMaxBytes) stage through it; it grows to the largest such
+// transfer and is freed when the thread exits. Larger transfers, and any
+// transfer when pinned memory cannot be allocated, copy directly. Like the
+// other per-thread buffers it is not revalidated after cudaDeviceReset.
 constexpr std::size_t kPinnedStagingMaxBytes = std::size_t{16} << 20;
 
 class ThreadPinnedStaging {
@@ -53,18 +55,18 @@ class ThreadPinnedStaging {
     }
   }
 
-  // At least `bytes` of pinned memory, or nullptr when it cannot be had.
+  // At least `bytes` of pinned memory if it can be had; otherwise the current
+  // smaller buffer (the staged copy works with any size), or nullptr when
+  // there is none.
   std::byte* reserve(std::size_t bytes) noexcept {
     if (bytes > capacity_) {
-      if (pointer_ != nullptr) {
-        (void)cudaFreeHost(pointer_);
-        pointer_ = nullptr;
-        capacity_ = 0;
-      }
       void* pointer = nullptr;
       if (cudaHostAlloc(&pointer, bytes, cudaHostAllocPortable) != cudaSuccess) {
         (void)cudaGetLastError();
-        return nullptr;
+        return pointer_;
+      }
+      if (pointer_ != nullptr) {
+        (void)cudaFreeHost(pointer_);
       }
       pointer_ = static_cast<std::byte*>(pointer);
       capacity_ = bytes;
@@ -460,8 +462,11 @@ PauliSum DevicePauliSum::to_host() const {
   std::vector<std::complex<double>> coeffs;
 
   ScopedCudaDevice guard(impl_->device_ordinal);
+  // On an H100, staging beat a direct pageable copy up to the 16 MiB buffer
+  // (2x at 8 MiB), and a direct copy into memory advised for huge pages beat
+  // it above (8.4 against 9.3 ms at 32 MiB).
   ThreadPinnedStaging& staging = thread_pinned_staging();
-  std::byte* staged = total_bytes == 0
+  std::byte* staged = total_bytes == 0 || total_bytes > kPinnedStagingMaxBytes
       ? nullptr
       : staging.reserve(acc::staging_bytes_for(total_bytes, kPinnedStagingMaxBytes));
   if (staged != nullptr) {
@@ -477,9 +482,10 @@ PauliSum DevicePauliSum::to_host() const {
         staging.capacity(),
         segments,
         [](std::byte* dst, const std::byte* src, std::size_t bytes) {
-          check_cuda(cudaMemcpyAsync(dst, src, bytes, cudaMemcpyDeviceToHost, 0), "copy device buffer to host");
+          check_cuda(cudaMemcpyAsync(dst, src, bytes, cudaMemcpyDeviceToHost, cudaStreamLegacy),
+                     "copy device buffer to host");
         },
-        [] { check_cuda(cudaStreamSynchronize(0), "synchronize device-to-host copy"); });
+        [] { check_cuda(cudaStreamSynchronize(cudaStreamLegacy), "synchronize device-to-host copy"); });
   } else if (total_bytes != 0) {
     acc::resize_for_direct_copy(x, packed_words);
     acc::resize_for_direct_copy(z, packed_words);

@@ -18,9 +18,11 @@ static_assert(sizeof(std::complex<double>) == sizeof(thrust::complex<double>));
 namespace {
 
 // Per-thread pinned buffer for device-to-host copies
-// (detail/staged_transfer.hpp). It grows to the largest transfer seen, up to
-// kPinnedStagingMaxBytes, and is freed when the thread exits. If pinned
-// memory cannot be allocated, to_host falls back to pageable copies.
+// (detail/staged_transfer.hpp). HIP stages only transfers up to
+// kHipStagedMaxBytes, so the buffer stays at most 128 KiB; it is freed when the
+// thread exits. Larger transfers, and any transfer when pinned memory cannot
+// be allocated, copy directly. Like the other per-thread buffers it is not
+// revalidated after hipDeviceReset.
 constexpr std::size_t kPinnedStagingMaxBytes = std::size_t{16} << 20;
 constexpr std::size_t kHipStagedMaxBytes = std::size_t{64} << 10;
 
@@ -37,18 +39,18 @@ class ThreadPinnedStaging {
     }
   }
 
-  // At least `bytes` of pinned memory, or nullptr when it cannot be had.
+  // At least `bytes` of pinned memory if it can be had; otherwise the current
+  // smaller buffer (the staged copy works with any size), or nullptr when
+  // there is none.
   std::byte* reserve(std::size_t bytes) noexcept {
     if (bytes > capacity_) {
-      if (pointer_ != nullptr) {
-        (void)hipHostFree(pointer_);
-        pointer_ = nullptr;
-        capacity_ = 0;
-      }
       void* pointer = nullptr;
       if (hipHostMalloc(&pointer, bytes, hipHostMallocPortable) != hipSuccess) {
         (void)hipGetLastError();
-        return nullptr;
+        return pointer_;
+      }
+      if (pointer_ != nullptr) {
+        (void)hipHostFree(pointer_);
       }
       pointer_ = static_cast<std::byte*>(pointer);
       capacity_ = bytes;
