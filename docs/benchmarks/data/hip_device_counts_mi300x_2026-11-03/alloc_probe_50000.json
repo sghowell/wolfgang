@@ -2,49 +2,101 @@
  "benchmark": "hip_scratch_allocation_probe",
  "builds": {
   "base": "main at ad6f7a8",
-  "pipeline_without_cache": "7035474, the pipeline before the block cache"
+  "cache": "0be167f (pipeline with the per-thread block cache, after review fixes)",
+  "pipe": "9af4918 (pipeline, scratch from hipMalloc)"
  },
- "command": "rocprofv3 --hip-runtime-trace --stats -- python alloc_probe.py hip 24 50000 40",
  "device": "AMD Instinct MI300X VF, HIP 7.16.26385",
- "durations": {
+ "note": "Traced timings inflate builds that make more API calls, so build comparisons use the untraced medians. The baseline's hipFree time includes waits for queued kernels, because hipFree synchronizes the device.",
+ "script": "benchmarks/probe_simplify_allocations.py",
+ "timed_command": "python benchmarks/probe_simplify_allocations.py hip 24 50000 60 (three runs per build, builds interleaved, no tracer)",
+ "traced_allocation_durations": {
   "base": {
    "hipFree": {
     "calls": 1308,
-    "median_us": 0.96,
-    "p90_us": 18.85,
-    "total_us": 10261.1
+    "max_us": 199.9,
+    "median_us": 0.9,
+    "p90_us": 17.81,
+    "total_us": 10131.8
    },
    "hipMalloc": {
     "calls": 1308,
+    "max_us": 54.2,
     "median_us": 0.68,
-    "p90_us": 1.33,
-    "total_us": 2710.6
+    "p90_us": 1.4,
+    "total_us": 2198.4
    }
   },
-  "pipeline_without_cache": {
+  "cache": {
+   "hipFree": {
+    "calls": 409,
+    "max_us": 130.0,
+    "median_us": 0.74,
+    "p90_us": 1.56,
+    "total_us": 622.6
+   },
+   "hipMalloc": {
+    "calls": 409,
+    "max_us": 49.2,
+    "median_us": 0.69,
+    "p90_us": 1.51,
+    "total_us": 476.8
+   }
+  },
+  "pipe": {
    "hipFree": {
     "calls": 498,
-    "median_us": 0.86,
-    "p90_us": 95.39,
-    "total_us": 9048.8
+    "max_us": 119.0,
+    "median_us": 0.84,
+    "p90_us": 95.03,
+    "total_us": 9046.2
    },
    "hipMalloc": {
     "calls": 498,
+    "max_us": 275.2,
     "median_us": 0.74,
-    "p90_us": 18.57,
-    "total_us": 2595.7
+    "p90_us": 18.73,
+    "total_us": 4070.2
    }
   }
  },
- "timed_medians_us": {
+ "traced_command": "rocprofv3 --hip-runtime-trace --stats -d <dir> -o run --output-format csv -- python benchmarks/probe_simplify_allocations.py hip 24 50000 40",
+ "untraced_medians_us": {
   "base": {
-   "device_resident": 218.2,
-   "transfer_inclusive": 495.9
+   "device_resident": [
+    221.3,
+    220.9,
+    219.6
+   ],
+   "transfer_inclusive": [
+    499.2,
+    497.8,
+    501.1
+   ]
   },
-  "pipeline_without_cache": {
-   "device_resident": 237.2,
-   "transfer_inclusive": 534.0
+  "cache": {
+   "device_resident": [
+    131.0,
+    131.3,
+    131.4
+   ],
+   "transfer_inclusive": [
+    278.9,
+    282.1,
+    281.4
+   ]
+  },
+  "pipe": {
+   "device_resident": [
+    235.4,
+    243.8,
+    235.6
+   ],
+   "transfer_inclusive": [
+    616.2,
+    532.2,
+    559.3
+   ]
   }
  },
- "workload": "One process: a 50,000-term, 24-qubit operator with 50% duplicates; 5 warmup and 40 timed device-resident simplify calls, then 5 warmup and 40 timed to_device + simplify + to_host calls. Counts cover every hipMalloc and hipFree in the process, transfers included."
+ "workload": "One process: a 50,000-term, 24-qubit operator with 50% duplicates; 5 warmup and N timed device-resident simplify calls, then 5 warmup and N timed to_device + simplify + to_host calls. Traced counts cover every hipMalloc and hipFree in the process (90 simplify calls with N = 40), transfers included."
 }

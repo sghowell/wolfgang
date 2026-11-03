@@ -89,17 +89,28 @@ within 0.96-1.02x of the baseline.
 ## Why the cache is needed
 
 With the pipeline alone, simplify at 50,000 terms got slower even though its
-GPU work shrank. The allocation probe at 50,000 terms
-(`alloc_probe_50000.json`) shows why. The pipeline makes one scratch
-allocation of about 3 MB per call instead of several smaller ones. `hipFree`
-on that block took 95 us at the 90th percentile, against 19 us for the
-baseline's smaller blocks. A full pass of 90 calls spent about as long in
-`hipFree` with 498 calls (9.0 ms) as the baseline did with 1,308 (10.3 ms). ROCm
-caches small blocks, which is why the earlier pool measurement
-(`docs/benchmarks/reports/hip_parity_mi300x_2026-11-03.md`) favored plain
-`hipMalloc`, but it does not cache blocks this large. Reusing the block per
-thread removes the cost: at 50,000 terms the cache build is 1.7-2.2x faster
-than the baseline where the pipeline alone was 0.87-0.99x.
+GPU work shrank. The only difference between the pipeline-only and cache
+builds is that the cache build reuses the pipeline's scratch block (about
+3 MB at this size) and rocThrust's temporaries instead of allocating and
+freeing them on every call. The allocation probe (`alloc_probe_50000.json`,
+`benchmarks/probe_simplify_allocations.py`) puts a number on it. Untraced, a
+device-resident call took 236 us with the pipeline alone and 131 us with the
+cache (220 us on the baseline). Traced over the same 90 calls, the cache build
+spent 8.4 ms less in `hipFree` (9.05 against 0.62 ms) and 3.6 ms less in
+`hipMalloc` (4.07 against 0.48 ms), about 134 us per call, close to the
+105 us timing gap. That the cost comes from ROCm not caching blocks this
+large, while it caches the small blocks the baseline used (as the earlier pool
+measurement in `docs/benchmarks/reports/hip_parity_mi300x_2026-11-03.md`
+found), is an inference from these totals, not something the trace shows
+directly. The baseline's `hipFree` total is not comparable on its own,
+because each `hipFree` synchronizes the device and its total includes waits
+for queued kernels.
+
+One result is not explained. At 1M terms the cache saved only 0.15 ms
+device-resident (0.731 to 0.579 ms) but 3.5 ms when transfers are included
+(7.04 to 3.56 ms). Each transfer-inclusive call also allocates and frees the
+input and output operators, and the cache keeps the scratch out of that
+churn, but this run did not isolate why the difference is that large.
 
 ## Where the time goes
 
@@ -123,8 +134,8 @@ launches than CUB on the H100 (11 against 17).
 | Check | Result |
 | --- | --- |
 | `tests/test_device_simplify_pipeline.py` | All HIP cases pass with the fused kernel switched off (every key kind from 1 to 300 qubits, 100,000-term tile-spanning operators, overflow, non-finite precedence, half-unit rule, rounding, state between calls, threads, `matmul`) |
-| `tests/test_hip_thread_cache.py` (new) | Scratch is reused across calls with no new block allocations; a request above the 256 MiB limit is not retained (about 5M terms); a thread's blocks are freed when it exits; with the optional pool enabled the cache is bypassed |
-| Negative control | With the cache limit set to 0, the reuse and thread-exit tests fail; see the closeout |
+| `tests/test_hip_thread_cache.py` (new) | Scratch is reused across calls with no new block allocations at 24, 60 and 100 qubits (the last two also hold a rocThrust temporary while the scratch is in use); a request above the 256 MiB limit is not retained (about 5M terms); a thread's blocks are freed when it exits; with the optional pool enabled the cache is bypassed, against a positive control without the pool |
+| Negative control | With the cache limit set to 0, the reuse and thread-exit tests fail, which shows the cache is used; it does not separately test the thread-exit release |
 | Existing suites | `test_accelerator_simplify_parity.py`, `test_accelerator_small_simplify.py`, `test_hip_pool_allocator.py` (including the pool's return-to-baseline test) pass |
 | `WOLFGANG_VALIDATE_HIP=1 python scripts/validate.py --profile core` | Passed on the MI300X (945 tests in the HIP run) |
 
@@ -133,9 +144,12 @@ launches than CUB on the H100 (11 against 17).
 - One MI300X (a virtual function in a KVM guest) and one ROCm release.
   rocPRIM's algorithm choices and ROCm's allocator caching can change with the
   release.
-- Each thread can keep up to 512 MiB of device memory in its cache (two
-  blocks of 256 MiB) until it exits; in practice it holds the largest scratch
-  it has needed, rounded up to a power of two.
+- Each thread that has run HIP simplify can keep up to 512 MiB of device
+  memory in its cache (two blocks of 256 MiB) until it exits; in practice it
+  holds the largest scratch it has needed, rounded up to a power of two. Only
+  the thread whose allocation fails releases its idle blocks before retrying;
+  other threads' blocks stay reserved, and other frameworks on the GPU cannot
+  use them.
 - Allocation costs come from a KVM guest; bare-metal ROCm may show smaller
   `hipFree` costs for large blocks, and with them a smaller gain from the
   cache.

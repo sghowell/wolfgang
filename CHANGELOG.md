@@ -6,8 +6,8 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
-- HIP: simplify for operators the fused kernel does not take uses the CUDA
-  pipeline with hipCUB, so it no longer returns counts through blocking
+- HIP: simplify for operators the fused kernel does not take uses the
+  pipeline shared with CUDA, built with hipCUB, so it no longer returns counts through blocking
   copies, and its scratch (with rocThrust's algorithm temporaries) comes from a
   per-thread cache of up to two blocks of at most 256 MiB, freed when the
   thread exits. On an MI300X, `simplify` on 4,096 terms takes 98 us instead of
