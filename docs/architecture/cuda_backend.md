@@ -442,6 +442,15 @@ with at most 32 qubits. The packed key preserves canonical x-then-z ordering
 and does not change public output ordering, tolerance, transfer, stream, or
 ownership semantics.
 
+The one- and two-word simplify paths sort with `stable_sort_by_key`, so
+duplicate coefficients enter each reduction in input order, matching HIP.
+Operators wider than two words (more than 128 qubits) sort term indices with an
+index tie-break and reduce duplicates with a parallel segmented
+`reduce_by_key`. The original one-thread reduction kernel is retained only as a
+baseline behind the benchmark selector
+`WOLFGANG_CUDA_BENCH_GENERIC_MULTIWORD_REDUCTION=serial_kernel`. Evidence:
+`docs/benchmarks/reports/cuda_simplify_paths_h100_2026-11-03.md`.
+
 Campaign 3 also added a private benchmark-only commutation output reuse path
 behind `WOLFGANG_CUDA_BENCH_REUSE_COMMUTATION_DEVICE_OUTPUT=1`. This path is
 not public API, does not expose device pointers, and exists only to quantify
