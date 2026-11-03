@@ -1,5 +1,7 @@
 #include "cuda/pool_allocator.cuh"
 
+#include "cuda/device_guard.cuh"
+
 #include <cuda_runtime_api.h>
 
 #include <cstdint>
@@ -44,16 +46,15 @@ bool pooling_disabled_by_environment() {
 // Synchronize each pooled device and return every cached block to the driver.
 // Callers hold pools_mutex.
 void trim_pools_locked() {
-  int previous = -1;
-  (void)cudaGetDevice(&previous);
   for (auto& [device, entry] : pools()) {
-    if (entry.pool != nullptr && cudaSetDevice(device) == cudaSuccess) {
+    if (entry.pool == nullptr) {
+      continue;
+    }
+    const ScopedCudaDevice guard(device, std::nothrow);
+    if (guard.ok()) {
       (void)cudaStreamSynchronize(cudaStreamLegacy);
       (void)cudaMemPoolTrimTo(entry.pool, 0);
     }
-  }
-  if (previous >= 0) {
-    (void)cudaSetDevice(previous);
   }
 }
 
@@ -210,19 +211,12 @@ void pool_free_bytes_on_device(void* pointer, int device) noexcept {
   } catch (...) {
     pooled = false;
   }
-  int previous = -1;
-  (void)cudaGetDevice(&previous);
-  if (device != previous) {
-    (void)cudaSetDevice(device);
-  }
+  const ScopedCudaDevice guard(device, std::nothrow);
   // Pool support is fixed per device, so this matches the allocation path.
   const cudaError_t result =
       pooled ? cudaFreeAsync(pointer, cudaStreamLegacy) : cudaFree(pointer);
   if (result != cudaSuccess) {
     (void)cudaGetLastError();  // a destructor must not leave its own error behind
-  }
-  if (device != previous && previous >= 0) {
-    (void)cudaSetDevice(previous);
   }
 }
 

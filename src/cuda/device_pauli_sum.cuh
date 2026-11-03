@@ -2,6 +2,7 @@
 
 #include "wolfgang/device_pauli_sum.hpp"
 
+#include "cuda/device_guard.cuh"
 #include "detail/accelerator_host_helpers.hpp"
 
 #include <cuda_runtime_api.h>
@@ -49,28 +50,6 @@ inline void check_cuda(cudaError_t result, const char* action) {
         std::string("CUDA ") + action + " failed: " + cudaGetErrorString(result));
   }
 }
-
-class ScopedCudaDevice {
-public:
-  explicit ScopedCudaDevice(int device) {
-    check_cuda(cudaGetDevice(&previous_device_), "get current device");
-    if (previous_device_ != device) {
-      check_cuda(cudaSetDevice(device), "set device");
-    }
-  }
-
-  ScopedCudaDevice(const ScopedCudaDevice&) = delete;
-  ScopedCudaDevice& operator=(const ScopedCudaDevice&) = delete;
-
-  ~ScopedCudaDevice() {
-    if (previous_device_ >= 0) {
-      (void)cudaSetDevice(previous_device_);
-    }
-  }
-
-private:
-  int previous_device_ = -1;
-};
 
 // Defined with the Wolfgang memory pool (cuda/pool_allocator.cu).
 void trim_pools_after_allocation_failure() noexcept;

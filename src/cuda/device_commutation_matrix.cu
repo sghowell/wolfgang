@@ -310,13 +310,9 @@ DeviceCommutationMatrix::Impl::~Impl() {
     return;
   }
   if (exported) {
-    int previous = -1;
-    (void)cudaGetDevice(&previous);
-    if (cudaSetDevice(device_ordinal) == cudaSuccess) {
+    const cuda_detail::ScopedCudaDevice guard(device_ordinal, std::nothrow);
+    if (guard.ok()) {
       (void)cudaDeviceSynchronize();
-    }
-    if (previous >= 0) {
-      (void)cudaSetDevice(previous);
     }
     (void)cudaGetLastError();
   }
