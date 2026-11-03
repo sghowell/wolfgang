@@ -57,6 +57,18 @@ void ensure_cpu_backend_supports_simplify();
 // selector environment variable, so small simplify calls stay cheap.
 [[nodiscard]] bool cpu_backend_selects_tbb_simplify(std::size_t num_terms);
 
+// True when oneTBB is available and has at least kAutoTbbSimplifyMinConcurrency
+// threads, the floor below which auto dispatch prefers scalar or SIMD kernels.
+[[nodiscard]] bool tbb_auto_has_min_concurrency();
+
+// oneTBB does not support fork(): a child forked after the parent ran a oneTBB
+// kernel can crash or hang inside oneTBB (macOS libdispatch traps outright).
+// Every oneTBB kernel calls this on entry. In a process forked after that, the
+// tbb backend reports "unavailable_after_fork": auto dispatch runs the scalar
+// or SIMD kernels, whose results are bit-identical, and a forced
+// WOLFGANG_CPU_BACKEND=tbb raises.
+void note_tbb_kernel_use() noexcept;
+
 }  // namespace wolfgang
 
 

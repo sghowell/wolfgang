@@ -11,7 +11,13 @@ version = "0.2.3"
 description = "C++20 and CUDA-backed accelerators for sparse sums of Pauli strings."
 readme = "README.md"
 requires-python = ">=3.10"
-license = "MIT"
+license = "MIT AND Apache-2.0 AND BSD-3-Clause"
+license-files = [
+  "LICENSE",
+  "third_party/dlpack/LICENSE",
+  "third_party/onetbb/LICENSE.txt",
+  "third_party/onetbb/third-party-programs.txt",
+]
 authors = [
   { name = "Wolfgang contributors" },
 ]
@@ -99,7 +105,7 @@ build = ["cp310-*", "cp311-*", "cp312-*"]
 skip = ["*-win32", "*-win_amd64", "*-win_arm64", "*-musllinux*", "pp*"]
 # Wheels bundle oneTBB, built once per platform from a pinned commit.
 before-all = "bash {project}/scripts/build_onetbb.sh /tmp/wolfgang-onetbb"
-environment = { CMAKE_PREFIX_PATH = "/tmp/wolfgang-onetbb", LD_LIBRARY_PATH = "/tmp/wolfgang-onetbb/lib" }
+environment = { CMAKE_PREFIX_PATH = "/tmp/wolfgang-onetbb" }
 test-command = "python {project}/scripts/wheel_smoke.py --require-tbb"
 
 [tool.cibuildwheel.config-settings]
@@ -112,13 +118,14 @@ test-command = "python {project}/scripts/wheel_smoke.py --require-tbb"
 "cmake.define.WOLFGANG_ENABLE_TBB" = "ON"
 # Record oneTBB's library directory so auditwheel and delocate can find it.
 "cmake.define.CMAKE_INSTALL_RPATH_USE_LINK_PATH" = "ON"
-"cmake.define.WOLFGANG_BUNDLED_NOTICES_DIR" = "/tmp/wolfgang-onetbb/share/wolfgang-notices"
 
 [tool.cibuildwheel.linux]
 archs = ["x86_64"]
 
 [tool.cibuildwheel.macos]
 archs = ["arm64"]
+# Also reaches before-all, so the bundled oneTBB targets the wheel's minimum macOS.
+environment = { CMAKE_PREFIX_PATH = "/tmp/wolfgang-onetbb", MACOSX_DEPLOYMENT_TARGET = "11.0" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

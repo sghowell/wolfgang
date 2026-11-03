@@ -9,9 +9,15 @@ Next version: TBD
 - Release CPU wheels bundle oneTBB 2022.3.0, built from a pinned commit, so
   `pip install` users get parallel simplify. Installed wheels simplify 1.5-3.4x
   faster on a 16-vCPU x86 VM and 1.5-5.6x on an Apple M4 Pro from 10,000 terms
-  (`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`). oneTBB's license
-  ships in `wolfgang_quantum/_third_party_notices/`, and the wheel smoke test
-  requires parallel simplify to match scalar bit for bit.
+  (`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`). The license
+  expression is now `MIT AND Apache-2.0 AND BSD-3-Clause`, with oneTBB's and
+  DLPack's notices as license files, and the wheel smoke test requires
+  parallel simplify to match scalar bit for bit.
+- oneTBB does not support `fork()`. A child process forked after a oneTBB
+  kernel ran now uses the scalar or SIMD kernels (bit-identical results), and
+  a forced `WOLFGANG_CPU_BACKEND=tbb` raises there; previously such a child
+  could crash inside oneTBB on macOS. Auto dispatch of pairwise commutation to
+  oneTBB now also needs at least four oneTBB threads.
 - CUDA and HIP: operators of up to 256 qubits and 1,024 terms simplify in one
   fused kernel. On an H100 small simplify is 3.0-7.8x faster (128 terms:
   143.5 to 18.4 us); on an MI300X it is 3.5-5.7x faster. Their coefficients

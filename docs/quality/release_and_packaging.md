@@ -94,8 +94,11 @@ CPU wheels bundle the oneTBB runtime (built from a pinned commit by
 reaches parallel simplify for pip users. The wheel build sets
 `WOLFGANG_ENABLE_TBB=ON` so a wheel never ships scalar-only by accident, and
 the cibuildwheel test runs `scripts/wheel_smoke.py --require-tbb`, which
-requires the `tbb` backend and bit-identical parallel and scalar simplify.
-`WOLFGANG_CPU_BACKEND=scalar` still selects the portable path. Wheels
+requires the pinned oneTBB version, its license files, bit-identical parallel
+and scalar simplify, and a working simplify in a child forked after a oneTBB
+call. oneTBB does not support `fork()`, so children forked after a oneTBB
+kernel run the scalar or SIMD kernels instead. `WOLFGANG_CPU_BACKEND=scalar`
+still selects the portable path. Wheels
 published before this change (through `v0.2.3`) do not bundle oneTBB.
 Evidence: `docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`.
 

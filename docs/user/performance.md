@@ -211,7 +211,12 @@ Explicit SIMD and oneTBB are optional compiled backends. They keep the scalar
 baseline available (`WOLFGANG_CPU_BACKEND=scalar`) and are reported as
 unavailable when the compiler, package, or hardware support is absent. Release
 CPU wheels bundle oneTBB, so `auto` picks it there for simplify and large
-pairwise commutation (`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`).
+pairwise commutation on hosts with at least four oneTBB threads
+(`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`). oneTBB does not
+support `fork()`: in a process forked after a oneTBB kernel ran (for example
+a `multiprocessing` fork pool), Wolfgang runs the bit-identical scalar or SIMD
+kernels instead, and `WOLFGANG_CPU_BACKEND=tbb` raises. Use the `spawn` or
+`forkserver` start method to keep oneTBB in workers.
 
 Current covered optimized kernels:
 

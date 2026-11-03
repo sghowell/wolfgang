@@ -196,9 +196,11 @@ NUMA policy when controlled
 ```
 
 oneTBB is implemented as an optional CMake-discovered backend for deterministic
-commutation kernels and simplify. Release CPU wheels bundle a pinned oneTBB
-runtime (`scripts/build_onetbb.sh`); source builds discover it. Current covered kernels are dense pairwise commutation and
-full commutation graph construction. Pairwise commutation uses oneTBB in `auto`
+kernels: dense pairwise commutation, full commutation graph construction and
+simplify. Release CPU wheels bundle a pinned oneTBB runtime
+(`scripts/build_onetbb.sh`); source builds discover it. A process forked after
+a oneTBB kernel ran reports oneTBB unavailable, because oneTBB does not support
+`fork()`. Pairwise commutation uses oneTBB in `auto`
 only above the benchmarked scheduling threshold; full grouping graph
 construction currently prefers SIMD in `auto` because oneTBB did not amortize
 overhead in the measured regimes. Future oneTBB kernels must keep scalar import

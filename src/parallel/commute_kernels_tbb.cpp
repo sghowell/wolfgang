@@ -1,5 +1,7 @@
 #include "detail/commute_kernels.hpp"
 
+#include "wolfgang/cpu_backend.hpp"
+
 #include "detail/commutation.hpp"
 
 #include <bit>
@@ -16,6 +18,7 @@ std::vector<std::uint8_t> commutes_with_tbb(
     const PauliSum& lhs,
     const PauliSum& rhs,
     std::size_t entries) {
+  note_tbb_kernel_use();
   std::vector<std::uint8_t> out(entries, 0);
 
   oneapi::tbb::parallel_for(
@@ -71,6 +74,7 @@ std::vector<std::uint8_t> commutes_with_tbb(
 }
 
 std::vector<std::uint8_t> build_full_commutation_graph_tbb(const PauliSum& op) {
+  note_tbb_kernel_use();
   const std::size_t terms = op.num_terms();
   std::vector<std::uint8_t> graph(terms * terms, 1);
 

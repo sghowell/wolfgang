@@ -237,6 +237,13 @@ def check_pyproject(
         "cibuildwheel must require oneTBB so a wheel never ships scalar-only by accident",
         failures,
     )
+    project = data.get("project", {})
+    for notice in ("third_party/onetbb/LICENSE.txt", "third_party/onetbb/third-party-programs.txt"):
+        require(
+            notice in project.get("license-files", []),
+            f"wheel metadata must list the bundled oneTBB notice {notice} as a license file",
+            failures,
+        )
 
     linux = cibw.get("linux", {})
     macos = cibw.get("macos", {})

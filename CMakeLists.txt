@@ -624,15 +624,6 @@ if(WOLFGANG_BUILD_PYTHON)
   target_link_libraries(_wolfgang_core PRIVATE wolfgang_core)
   target_include_directories(_wolfgang_core PRIVATE src third_party/dlpack/include)
   install(TARGETS _wolfgang_core LIBRARY DESTINATION wolfgang_quantum)
-  # Release wheels bundle the oneTBB runtime (scripts/build_onetbb.sh); its
-  # license notices travel in the wheel next to the package.
-  set(WOLFGANG_BUNDLED_NOTICES_DIR "" CACHE PATH "Third-party notices to install with the Python package")
-  if(WOLFGANG_BUNDLED_NOTICES_DIR)
-    if(NOT IS_DIRECTORY "${WOLFGANG_BUNDLED_NOTICES_DIR}")
-      message(FATAL_ERROR "WOLFGANG_BUNDLED_NOTICES_DIR does not exist: ${WOLFGANG_BUNDLED_NOTICES_DIR}")
-    endif()
-    install(DIRECTORY "${WOLFGANG_BUNDLED_NOTICES_DIR}/" DESTINATION wolfgang_quantum/_third_party_notices)
-  endif()
 endif()
 
 if(WOLFGANG_BUILD_NATIVE_TESTS)

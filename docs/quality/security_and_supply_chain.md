@@ -106,9 +106,12 @@ Release CPU wheels explicitly target oneTBB. The wheel workflow builds oneTBB
 `v2022.3.0` from its pinned commit (`f1862f38f83568d96e814e469ab61f88336cc595`,
 checked after cloning; see `scripts/build_onetbb.sh`), bundles only the core
 `tbb` runtime through auditwheel or delocate, and ships oneTBB's Apache-2.0
-`LICENSE.txt` and `third-party-programs.txt` in
-`wolfgang_quantum/_third_party_notices/`. Updating oneTBB means changing the
-tag and commit together and re-running the wheel smoke tests. The CycloneDX
+`LICENSE.txt` and `third-party-programs.txt` as license files in the wheel
+metadata. The build fails if the cloned notices differ from the committed
+copies in `third_party/onetbb/`. The project license expression is
+`MIT AND Apache-2.0 AND BSD-3-Clause` (Wolfgang, DLPack and oneTBB, oneTBB's
+ITT Notify). Updating oneTBB means changing the tag, the commit and the
+committed notices together and re-running the wheel smoke tests. The CycloneDX
 SBOM covers Python dependencies; the bundled runtime is recorded here by
 version, commit and license. Source builds keep oneTBB optional.
 
