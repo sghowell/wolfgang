@@ -1,6 +1,7 @@
 #include "device_pauli_sum_metal.hpp"
 
 #include <complex>
+#include <cstdlib>
 #include <cstring>
 #include <memory>
 #include <stdexcept>
@@ -219,6 +220,26 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     throw std::runtime_error("DevicePauliSum is empty or moved-from");
   }
   metal_detail::validate_simplify_tolerances(atol, rtol);
+
+  // Benchmark-only selector that keeps the host bridge for paired comparisons.
+  const char* selector = std::getenv("WOLFGANG_METAL_BENCH_SIMPLIFY");
+  const bool force_host_bridge = selector != nullptr && std::string(selector) == "host_bridge";
+  if (!force_host_bridge && impl_->words == 1 &&
+      impl_->num_terms >= metal_detail::kHybridSimplifyMinTerms) {
+    metal_detail::HybridSimplifyOutput output = metal_detail::simplify_words1_hybrid(
+        impl_->device,
+        impl_->command_queue,
+        impl_->x,
+        impl_->z,
+        impl_->coeffs,
+        impl_->num_terms,
+        atol,
+        rtol);
+    return DevicePauliSum::from_host(
+        PauliSum::from_words(impl_->num_qubits, output.x, output.z, output.coeffs),
+        AcceleratorBackend::Metal,
+        impl_->device_ordinal);
+  }
 
   PauliSum simplified = to_host().simplify(atol, rtol);
   return DevicePauliSum::from_host(

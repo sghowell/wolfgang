@@ -2,6 +2,8 @@
 
 #include "device_pauli_sum_metal.hpp"
 
+#include "detail/simplify_numeric.hpp"
+
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -49,6 +51,13 @@ enum class SimplifyKernel {
   PrefixSumStep,
   ReduceByKey,
   CompactSurvivors,
+  InitIndexKeys,
+  BitonicIndexStep,
+};
+
+struct HybridSortInitParams {
+  std::uint32_t terms = 0;
+  std::uint32_t padded_terms = 0;
 };
 
 using Clock = std::chrono::steady_clock;
@@ -94,6 +103,10 @@ NSString* simplify_kernel_name(SimplifyKernel kernel) {
       return @"fp_simplify_words1_reduce_by_key";
     case SimplifyKernel::CompactSurvivors:
       return @"fp_simplify_words1_compact_survivors";
+    case SimplifyKernel::InitIndexKeys:
+      return @"fp_simplify_words1_init_index_keys";
+    case SimplifyKernel::BitonicIndexStep:
+      return @"fp_simplify_words1_bitonic_index_step";
   }
   return @"fp_simplify_words1_init_keys";
 }
@@ -133,6 +146,8 @@ id<MTLComputePipelineState> simplify_pipeline(id<MTLDevice> device, SimplifyKern
   static id<MTLComputePipelineState> prefix = nil;
   static id<MTLComputePipelineState> reduce = nil;
   static id<MTLComputePipelineState> compact = nil;
+  static id<MTLComputePipelineState> init_index = nil;
+  static id<MTLComputePipelineState> sort_index = nil;
 
   id<MTLComputePipelineState>* selected = nullptr;
   switch (kernel) {
@@ -156,6 +171,12 @@ id<MTLComputePipelineState> simplify_pipeline(id<MTLDevice> device, SimplifyKern
       break;
     case SimplifyKernel::CompactSurvivors:
       selected = &compact;
+      break;
+    case SimplifyKernel::InitIndexKeys:
+      selected = &init_index;
+      break;
+    case SimplifyKernel::BitonicIndexStep:
+      selected = &sort_index;
       break;
   }
   if (*selected == nil) {
@@ -643,6 +664,99 @@ MetalSimplifyCandidateResult simplify_words1_device_candidate_for_testing(
       mark_head_dispatches + prefix_passes + clear_survivor_dispatches +
       reduce_by_key_dispatches + compact_survivor_dispatches;
   return result;
+}
+
+HybridSimplifyOutput simplify_words1_hybrid(
+    id<MTLDevice> device,
+    id<MTLCommandQueue> command_queue,
+    id<MTLBuffer> x,
+    id<MTLBuffer> z,
+    id<MTLBuffer> coeffs,
+    std::size_t terms,
+    double atol,
+    double rtol) {
+  const auto* coeff_data = static_cast<const std::complex<double>*>([coeffs contents]);
+  // Validates finite inputs exactly as CPU simplify does.
+  const detail::SimplifyDropRule rule = detail::SimplifyDropRule::from_coefficients(
+      std::span<const std::complex<double>>(coeff_data, terms), atol, rtol);
+  HybridSimplifyOutput output;
+  if (terms == 0) {
+    return output;
+  }
+
+  const std::size_t padded_terms = next_power_of_two(terms);
+  const std::uint32_t padded_u32 = checked_u32(padded_terms, "Metal hybrid simplify padded terms");
+  const HybridSortInitParams init_params{
+      checked_u32(terms, "Metal hybrid simplify terms"), padded_u32};
+  const std::size_t u64_bytes = checked_bytes<std::uint64_t>(padded_terms, "Metal hybrid sort keys");
+  const std::size_t u32_bytes = checked_bytes<std::uint32_t>(padded_terms, "Metal hybrid sort index");
+  ScopedMetalBuffer sort_x(make_shared_buffer(device, nullptr, u64_bytes, "Metal hybrid sorted x"));
+  ScopedMetalBuffer sort_z(make_shared_buffer(device, nullptr, u64_bytes, "Metal hybrid sorted z"));
+  ScopedMetalBuffer sort_index(
+      make_shared_buffer(device, nullptr, u32_bytes, "Metal hybrid sorted input index"));
+  ScopedMetalBuffer sort_valid(
+      make_shared_buffer(device, nullptr, u32_bytes, "Metal hybrid sorted validity flags"));
+
+  id<MTLCommandBuffer> command_buffer = [command_queue commandBuffer];
+  if (command_buffer == nil) {
+    throw std::runtime_error("Metal failed to create a hybrid simplify command buffer");
+  }
+  id<MTLComputeCommandEncoder> encoder = [command_buffer computeCommandEncoder];
+  if (encoder == nil) {
+    throw std::runtime_error("Metal failed to create a hybrid simplify command encoder");
+  }
+  [encoder setComputePipelineState:simplify_pipeline(device, SimplifyKernel::InitIndexKeys)];
+  [encoder setBuffer:x offset:0 atIndex:0];
+  [encoder setBuffer:z offset:0 atIndex:1];
+  [encoder setBuffer:sort_x.get() offset:0 atIndex:2];
+  [encoder setBuffer:sort_z.get() offset:0 atIndex:3];
+  [encoder setBuffer:sort_index.get() offset:0 atIndex:4];
+  [encoder setBuffer:sort_valid.get() offset:0 atIndex:5];
+  [encoder setBytes:&init_params length:sizeof(init_params) atIndex:6];
+  dispatch_1d(encoder, padded_terms);
+  id<MTLComputePipelineState> sort_step = simplify_pipeline(device, SimplifyKernel::BitonicIndexStep);
+  for (std::uint32_t k = 2; k <= padded_u32; k <<= 1U) {
+    for (std::uint32_t j = k >> 1U; j > 0; j >>= 1U) {
+      const BitonicSortParams sort_params{padded_u32, j, k};
+      [encoder setComputePipelineState:sort_step];
+      [encoder setBuffer:sort_x.get() offset:0 atIndex:0];
+      [encoder setBuffer:sort_z.get() offset:0 atIndex:1];
+      [encoder setBuffer:sort_index.get() offset:0 atIndex:2];
+      [encoder setBuffer:sort_valid.get() offset:0 atIndex:3];
+      [encoder setBytes:&sort_params length:sizeof(sort_params) atIndex:4];
+      dispatch_1d(encoder, padded_terms);
+    }
+  }
+  [encoder endEncoding];
+  wait_for_completion(command_buffer, "Metal hybrid simplify sort");
+
+  // Valid entries sort first, so positions [0, terms) hold every input term in
+  // canonical (x, z) order with input-index tie-breaks. Summing each run left
+  // to right reproduces the CPU paths' input-order sums bit for bit.
+  const auto* sorted_x = static_cast<const std::uint64_t*>([sort_x.get() contents]);
+  const auto* sorted_z = static_cast<const std::uint64_t*>([sort_z.get() contents]);
+  const auto* sorted_index = static_cast<const std::uint32_t*>([sort_index.get() contents]);
+  output.x.reserve(terms);
+  output.z.reserve(terms);
+  output.coeffs.reserve(terms);
+  std::size_t position = 0;
+  while (position < terms) {
+    const std::uint64_t key_x = sorted_x[position];
+    const std::uint64_t key_z = sorted_z[position];
+    std::complex<double> accumulated{0.0, 0.0};
+    std::size_t next = position;
+    while (next < terms && sorted_x[next] == key_x && sorted_z[next] == key_z) {
+      accumulated += coeff_data[sorted_index[next]];
+      ++next;
+    }
+    if (rule.survives(accumulated)) {
+      output.x.push_back(key_x);
+      output.z.push_back(key_z);
+      output.coeffs.push_back(accumulated);
+    }
+    position = next;
+  }
+  return output;
 }
 
 }  // namespace wolfgang::metal_detail

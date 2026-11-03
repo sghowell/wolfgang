@@ -304,3 +304,90 @@ kernel void fp_simplify_words1_compact_survivors(
   out_coeff_bits[out_index] =
       ulong2(fp_fixed32_to_double_bits(coeff.x), fp_fixed32_to_double_bits(coeff.y));
 }
+
+// Hybrid simplify: sort (x, z, input index) on the GPU so each duplicate run
+// lists its coefficients in input order; the float64 reduction then runs on
+// the CPU over shared memory, which Metal kernels cannot do in double.
+struct HybridSortInitParams {
+  uint terms;
+  uint padded_terms;
+};
+
+static inline bool fp_index_entry_less(
+    uint lhs_valid,
+    ulong lhs_x,
+    ulong lhs_z,
+    uint lhs_index,
+    uint rhs_valid,
+    ulong rhs_x,
+    ulong rhs_z,
+    uint rhs_index) {
+  if (lhs_valid != rhs_valid) {
+    return lhs_valid != 0u;
+  }
+  if (lhs_valid == 0u) {
+    return false;
+  }
+  if (lhs_x != rhs_x || lhs_z != rhs_z) {
+    return fp_key_less(lhs_x, lhs_z, rhs_x, rhs_z);
+  }
+  return lhs_index < rhs_index;
+}
+
+kernel void fp_simplify_words1_init_index_keys(
+    device const ulong* in_x [[buffer(0)]],
+    device const ulong* in_z [[buffer(1)]],
+    device ulong* sort_x [[buffer(2)]],
+    device ulong* sort_z [[buffer(3)]],
+    device uint* sort_index [[buffer(4)]],
+    device uint* sort_valid [[buffer(5)]],
+    constant HybridSortInitParams& params [[buffer(6)]],
+    uint index [[thread_position_in_grid]]) {
+  if (index >= params.padded_terms) {
+    return;
+  }
+  const bool valid = index < params.terms;
+  sort_x[index] = valid ? in_x[index] : 0xfffffffffffffffful;
+  sort_z[index] = valid ? in_z[index] : 0xfffffffffffffffful;
+  sort_index[index] = index;
+  sort_valid[index] = valid ? 1u : 0u;
+}
+
+kernel void fp_simplify_words1_bitonic_index_step(
+    device ulong* sort_x [[buffer(0)]],
+    device ulong* sort_z [[buffer(1)]],
+    device uint* sort_index [[buffer(2)]],
+    device uint* sort_valid [[buffer(3)]],
+    constant BitonicSortParams& params [[buffer(4)]],
+    uint index [[thread_position_in_grid]]) {
+  if (index >= params.padded_terms) {
+    return;
+  }
+  const uint partner = index ^ params.j;
+  if (partner <= index || partner >= params.padded_terms) {
+    return;
+  }
+  const bool ascending = (index & params.k) == 0u;
+  const ulong lhs_x = sort_x[index];
+  const ulong lhs_z = sort_z[index];
+  const uint lhs_index = sort_index[index];
+  const uint lhs_valid = sort_valid[index];
+  const ulong rhs_x = sort_x[partner];
+  const ulong rhs_z = sort_z[partner];
+  const uint rhs_index = sort_index[partner];
+  const uint rhs_valid = sort_valid[partner];
+  const bool should_swap = ascending
+      ? fp_index_entry_less(rhs_valid, rhs_x, rhs_z, rhs_index, lhs_valid, lhs_x, lhs_z, lhs_index)
+      : fp_index_entry_less(lhs_valid, lhs_x, lhs_z, lhs_index, rhs_valid, rhs_x, rhs_z, rhs_index);
+  if (!should_swap) {
+    return;
+  }
+  sort_x[index] = rhs_x;
+  sort_z[index] = rhs_z;
+  sort_index[index] = rhs_index;
+  sort_valid[index] = rhs_valid;
+  sort_x[partner] = lhs_x;
+  sort_z[partner] = lhs_z;
+  sort_index[partner] = lhs_index;
+  sort_valid[partner] = lhs_valid;
+}

@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
+#include <span>
 #include <stdexcept>
-#include <vector>
 
 namespace wolfgang::detail {
 
@@ -33,7 +33,7 @@ struct SimplifyDropRule {
 
   // Validates that every input coefficient is finite.
   static SimplifyDropRule from_coefficients(
-      const std::vector<std::complex<double>>& coeffs,
+      std::span<const std::complex<double>> coeffs,
       double atol,
       double rtol) {
     double max_abs_input = 0.0;

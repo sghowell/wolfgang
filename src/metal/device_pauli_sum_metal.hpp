@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace wolfgang {
 
@@ -73,6 +74,30 @@ void validate_device_ordinal(int device);
     NSString* kernel_name,
     const std::string& library_path);
 void wait_for_completion(id<MTLCommandBuffer> command_buffer, const char* action);
+
+// Public Metal simplify runs this hybrid for one-word operators of at least
+// kHybridSimplifyMinTerms terms: the GPU sorts (x, z, input index) and the CPU
+// sums each duplicate run in float64, in input order, over the shared buffers.
+// The result equals CPU simplify bit for bit; smaller inputs use the host bridge.
+// On an M4 Pro the hybrid won in every measured case from 196,608 terms and was
+// mixed below 131,072 (GPU clock ramp-up makes small sorts noisy).
+inline constexpr std::size_t kHybridSimplifyMinTerms = 196608;
+
+struct HybridSimplifyOutput {
+  std::vector<std::uint64_t> x;
+  std::vector<std::uint64_t> z;
+  std::vector<std::complex<double>> coeffs;
+};
+
+[[nodiscard]] HybridSimplifyOutput simplify_words1_hybrid(
+    id<MTLDevice> device,
+    id<MTLCommandQueue> command_queue,
+    id<MTLBuffer> x,
+    id<MTLBuffer> z,
+    id<MTLBuffer> coeffs,
+    std::size_t terms,
+    double atol,
+    double rtol);
 [[noreturn]] void throw_unsupported_operation(const char* operation);
 
 inline void validate_simplify_tolerances(double atol, double rtol) {
