@@ -225,6 +225,26 @@ CUDA transfer tests
 CUDA equivalence tests for implemented kernels
 ```
 
+### GPU build CI
+
+`.github/workflows/gpu-build.yml` compiles the accelerator source builds on
+every pull request and push to `main`. Hosted runners have no CUDA or ROCm
+GPUs, so these lanes are compile-tested only: they are not runtime-tested and
+are not support claims.
+
+```text
+CUDA 12.8.1 (digest-pinned nvidia/cuda devel container): sm_80 and sm_90, with oneTBB and internal bindings
+ROCm 7.2.4 (digest-pinned rocm/dev container): gfx942, with internal bindings, plus an import without a GPU
+Metal (macos-latest, Xcode toolchain): with internal bindings, plus an import
+```
+
+Each lane fails on a compile or link error and on undefined `wolfgang::`
+symbols in the extension, which a shared object would otherwise accept until
+import time on real hardware. Python build tools are pinned and the build runs
+without isolation. Container digests are refreshed when the pinned toolkit
+version changes. Runtime validation stays on hardware (`WOLFGANG_VALIDATE_CUDA`,
+`WOLFGANG_VALIDATE_HIP`, `WOLFGANG_VALIDATE_METAL`).
+
 CI should run the same repo-local validation command used by developers, plus
 job-specific dependency installation. Release-artifact CI should run
 `scripts/validate_release_artifacts.py` on Linux x86_64 and macOS arm64 for the

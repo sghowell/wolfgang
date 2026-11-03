@@ -1,6 +1,6 @@
 # Wolfgang Roadmap
 
-Active campaign: [usability and kernel campaign](plans/usability_and_kernel_campaign_plan.md).
+Active campaign: [portability and interop campaign](plans/portability_and_interop_campaign_plan.md).
 Previous maintenance: [repository review hardening](plans/review_hardening_plan.md).
 
 This roadmap tracks implementation order and the decisions that must stay stable across phases.

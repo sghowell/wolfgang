@@ -296,6 +296,10 @@ sm_120 and sm_121: Blackwell workstation, consumer, and GB10-class targets when 
 
 Do not hard-code a CUDA architecture in build scripts without documenting whether it is compile-tested, runtime-tested, performance-tested, or release-supported.
 
+The GPU build CI lanes (`docs/architecture/testing_and_ci.md`) compile `sm_80`
+and `sm_90` with CUDA 12.8 and `gfx942` with ROCm 7.2. Those are compile-tested
+only; runtime and performance evidence still comes from hardware runs.
+
 Campaign 8 source-build evidence is performance-tested on H100 `sm_90` only.
 The required non-H100 NVIDIA retained-consumer portability run was blocked by
 hardware availability and is recorded in
