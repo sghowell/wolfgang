@@ -585,10 +585,10 @@ DevicePauliSum DevicePauliSum::simplify(double atol, double rtol) const {
     }
     acc::SmallSimplifyResult result{};
     copy_to_host(&result, result_ptr, 1, "small simplify result");  // synchronizes
-    if (result.status == acc::kSmallSimplifyNonFiniteInput) {
+    if (result.status == static_cast<unsigned long long>(acc::kSmallSimplifyNonFiniteInput)) {
       throw std::invalid_argument("simplify requires finite coefficients");
     }
-    if (result.status == acc::kSmallSimplifyOverflow) {
+    if (result.status == static_cast<unsigned long long>(acc::kSmallSimplifyOverflow)) {
       throw_accumulation_overflow();
     }
     if (result.survivors == 0) {

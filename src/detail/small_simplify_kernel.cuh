@@ -51,9 +51,10 @@ enum SmallSimplifyStatus : int {
   kSmallSimplifyOverflow = 2,
 };
 
+// Two 8-byte fields so the kernel writes every byte the host copies back.
 struct SmallSimplifyResult {
   unsigned long long survivors;
-  int status;
+  unsigned long long status;
 };
 
 namespace small_simplify {
@@ -186,7 +187,7 @@ __global__ void small_simplify_kernel(
   if (max_abs != max_abs) {  // uniform across the block
     if (t == 0) {
       result->survivors = 0;
-      result->status = kSmallSimplifyNonFiniteInput;
+      result->status = static_cast<unsigned long long>(kSmallSimplifyNonFiniteInput);
     }
     return;
   }
@@ -238,7 +239,7 @@ __global__ void small_simplify_kernel(
   if (__syncthreads_or(overflowed ? 1 : 0) != 0) {
     if (t == 0) {
       result->survivors = 0;
-      result->status = kSmallSimplifyOverflow;
+      result->status = static_cast<unsigned long long>(kSmallSimplifyOverflow);
     }
     return;
   }
@@ -262,7 +263,7 @@ __global__ void small_simplify_kernel(
   }
   if (t == capacity - 1) {
     result->survivors = scan[t];
-    result->status = kSmallSimplifyOk;
+    result->status = static_cast<unsigned long long>(kSmallSimplifyOk);
   }
 }
 
