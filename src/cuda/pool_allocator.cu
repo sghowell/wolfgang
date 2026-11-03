@@ -3,6 +3,7 @@
 #include <cuda_runtime_api.h>
 
 #include <cstdint>
+#include <cstdlib>
 #include <limits>
 #include <mutex>
 #include <stdexcept>
@@ -26,6 +27,27 @@ std::mutex& pools_mutex() {
 std::unordered_map<int, DevicePool>& pools() {
   static auto* table = new std::unordered_map<int, DevicePool>();
   return *table;
+}
+
+// Run pending stream-ordered frees and hand cached blocks back to the driver
+// before the process exits, so pooled memory is not held through runtime
+// teardown. Objects still alive at exit are not freed here. The CUDA runtime
+// installs its exit handlers on first use, before any pool exists, so this
+// handler runs ahead of runtime teardown.
+void release_pools_at_exit() {
+  std::lock_guard<std::mutex> lock(pools_mutex());
+  int previous = -1;
+  (void)cudaGetDevice(&previous);
+  for (auto& [device, entry] : pools()) {
+    if (entry.pool != nullptr && cudaSetDevice(device) == cudaSuccess) {
+      (void)cudaStreamSynchronize(cudaStreamLegacy);
+      (void)cudaMemPoolTrimTo(entry.pool, 0);
+    }
+  }
+  if (previous >= 0) {
+    (void)cudaSetDevice(previous);
+  }
+  (void)cudaGetLastError();
 }
 
 DevicePool device_pool(int device) {
@@ -56,6 +78,10 @@ DevicePool device_pool(int device) {
     }
   }
   (void)cudaGetLastError();
+  if (entry.pool != nullptr) {
+    static const bool registered = std::atexit(release_pools_at_exit) == 0;
+    (void)registered;
+  }
   pools().emplace(device, entry);
   return entry;
 }
