@@ -175,8 +175,9 @@ def test_child_forked_after_onetbb_reports_one_thread() -> None:
 
 @pytest.mark.skipif(not sys.platform.startswith("linux"), reason="counts threads through /proc")
 def test_cap_bounds_the_onetbb_worker_threads() -> None:
-    if not _tbb_available() or (os.cpu_count() or 1) < 8:
-        pytest.skip("needs oneTBB and at least 8 CPUs")
+    usable = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else (os.cpu_count() or 1)
+    if not _tbb_available() or usable < 8:
+        pytest.skip("needs oneTBB and at least 8 usable CPUs")
     code = (
         "import json, os, sys, numpy as np, wolfgang_quantum as w\n"
         "cap = int(sys.argv[1])\n"
@@ -211,8 +212,8 @@ def test_explicit_cap_replaces_the_environment_cap() -> None:
 
 @pytest.mark.parametrize("backend", ["auto", "tbb"])
 def test_results_do_not_depend_on_the_thread_count(backend: str) -> None:
-    # Under auto, caps below four run scalar; forcing tbb runs oneTBB at two
-    # and three threads too. Every result must be identical, bit for bit.
+    # Under auto, a cap of one runs scalar; forcing tbb runs oneTBB at one
+    # thread too. Every result must be identical, bit for bit.
     if backend == "tbb" and not _tbb_available():
         pytest.skip("oneTBB is not available")
     code = (

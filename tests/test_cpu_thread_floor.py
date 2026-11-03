@@ -36,6 +36,9 @@ rng = np.random.default_rng(1)
 read, write = os.pipe()
 pid = os.fork()
 if pid == 0:
+    # Lift the cap: the child then reports one thread only if oneTBB ran in
+    # the parent and is unusable here.
+    w.set_num_threads(1_000_000)
     os.write(write, str(w.get_num_threads()).encode())
     os._exit(0)
 os.waitpid(pid, 0)
@@ -62,8 +65,8 @@ def _ran_onetbb(cap: int, workload: str) -> tuple[int, bool]:
         cwd=ROOT, env=environment, capture_output=True, text=True, check=True,
     )
     result = json.loads(completed.stdout.strip().splitlines()[-1])
-    if result["default"] < cap:
-        pytest.skip(f"this host gives oneTBB fewer than {cap} threads")
+    if result["default"] < max(cap, 2):
+        pytest.skip(f"this host gives oneTBB fewer than {max(cap, 2)} threads")
     return result["threads"], result["child"] == 1
 
 
