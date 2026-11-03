@@ -76,7 +76,10 @@ Deferred with reason:
   export-aware free path for pooled memory. HIP cannot be compiled or validated
   in this campaign's environment.
 - **`_inplace` public methods.** Not added. Pooled allocation removed the
-  allocation cost they were meant to avoid without new API surface.
+  allocation cost they were meant to avoid without new API surface. Closed as
+  won't-do in the portability and interop campaign (slice 8): the fused small
+  simplify then took the remaining per-call floor from about 140 to 18 us on
+  an H100, so an in-place API has no cost left to remove.
 - **Public streams and graphs.** These stay out. The remaining small-operator
   floor (about 120-145 us for device-resident simplify after this slice) comes
   from the sort and reduction kernels and the synchronizations that

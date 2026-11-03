@@ -271,3 +271,24 @@ documentation.
   copy.
 - Residual risk: CUDA-Q's serialized layout is not a documented promise; the
   probe and fallback cover a change, at a speed cost.
+
+## Slice 8: Closeouts
+
+Branch `codex/closeouts`, documentation and evidence only.
+
+- Review: none required. The slice changes a benchmark report's limitations,
+  two plans and an evidence file, none of which are review triggers in
+  `docs/quality/code_review.md`.
+- `_inplace` methods: closed as won't-do. Pooling removed per-call allocation,
+  and the fused small simplify (slice 5) took H100 small simplify from about
+  140 to 18 us, so in-place variants would add API surface without a cost to
+  remove.
+- oneTBB peak memory: measured on a 16-vCPU AMD EPYC 9654 VM (Ubuntu 22.04,
+  oneTBB 2021.5) at `1041e08`, the parallel simplify candidate whose kernel
+  main still carries. Fresh process per run, peak RSS reset before the call.
+  At 1M terms the oneTBB kernel adds 1.34-1.41x scalar's peak with no or half
+  duplicates and 1.10-1.17x with 90% duplicates.
+- Validation: `python scripts/validate.py --profile docs` and `git diff
+  --check`.
+- Residual risk: one x86 host and two widths; ARM peak memory comes with the
+  bundled-oneTBB wheels (slice 7).

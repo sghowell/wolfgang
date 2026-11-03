@@ -76,3 +76,9 @@ Slice 4 merged: `PauliSum.from_cudaq()` and `PauliSum.to_cudaq()` convert to
 and from CUDA-Q spin operators behind the `cudaq` extra, with expectation
 values equal to `cudaq.observe`, tested on CUDA-Q 0.11.0 and the latest
 release in a CI adapter job.
+
+Slice 8 merged: `_inplace` public methods are closed as won't-do (pooling and
+the fused small simplify removed the costs they targeted), and oneTBB simplify
+peak memory is measured: 1.34-1.41x scalar's at 1M terms with few duplicates,
+1.10-1.17x with 90% duplicates
+(`docs/benchmarks/data/cpu_parallel_simplify_2026-11-03/peak_memory_epyc.json`).

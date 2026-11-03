@@ -129,5 +129,10 @@ heuristics picked.
 - Parallel speedup depends on core count and memory bandwidth. Hosts with fewer
   cores than the two measured here may cross over later than 8,192 terms.
 - Peak memory during the oneTBB kernel exceeds scalar's: sort keys, per-chunk
-  (position, coefficient) outputs and the result coexist. It was not measured.
+  (position, coefficient) outputs and the result coexist. Measured later on the
+  EPYC host at 1M terms (24 and 130 qubits, 3 fresh processes each), the
+  memory one simplify call adds was 1.34-1.41x scalar's with no or half
+  duplicates (14-25 extra bytes per input term) and 1.10-1.17x with 90%
+  duplicates (2-3 extra bytes per term)
+  (`docs/benchmarks/data/cpu_parallel_simplify_2026-11-03/peak_memory_epyc.json`).
 - Random dense operators only.
