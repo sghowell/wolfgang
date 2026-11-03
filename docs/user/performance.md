@@ -1,21 +1,77 @@
 # Performance
 
-Wolfgang always ships the portable scalar CPU backend and can additionally
-compile optional oneTBB and SIMD backends for commutation-heavy workloads.
-Release CPU wheels built after `v0.2.3` include oneTBB.
-Current optimized coverage is intentionally narrow: pairwise commutation, full
-grouping graph construction, and oneTBB simplify. CUDA source builds additionally expose
-device-resident simplify, statevector expectation, pairwise commutation, and
-matrix-product kernels on `DevicePauliSum`.
+Every build includes the portable scalar CPU backend. Optional SIMD (AVX2,
+AVX-512, NEON) backends cover pairwise commutation and full grouping-graph
+construction, and oneTBB covers both of those and simplify; release CPU wheels
+built after `v0.2.3` include oneTBB. CUDA, ROCm/HIP and Apple Metal source builds add
+device-resident operations on `DevicePauliSum`, listed per backend in the
+[accelerator overview](../accelerators/overview.md).
 
 ## Current Results
 
-Headline measurements from the latest campaign. Each links the report that
-names its hardware, boundary and spread; the
+The figures below are drawn from committed benchmark data by
+`scripts/render_readme_figures.py`. Each number comes from a report that names
+its hardware, build, baseline and spread; the
 [benchmark evidence index](../benchmarks/index.md) lists every report.
+
+### Simplify on each backend
+
+[![Simplify time against operator size on an H100 host, an MI300X host and an M4 Pro, with each host's CPU](../benchmarks/plots/simplify_by_backend.svg)](../benchmarks/plots/simplify_by_backend.svg)
+
+Simplify merges duplicate terms and drops negligible ones, and every backend
+implements it. Each panel is one host, so the CPU lines ran beside the
+accelerator they are compared with. At 128 terms a device-resident simplify
+takes 18 us on the H100 and 27 us on the MI300X, against 6.4 us for the scalar
+CPU kernel, so small operators belong on the CPU. At 1M terms (24 qubits, half
+duplicates):
+
+| Host | Accelerator, device-resident | Accelerator, with copies | CPU |
+| --- | ---: | ---: | --- |
+| H100, Xeon 8480+ (26 vCPUs) | 0.39 ms | 5.5 ms | 29 ms oneTBB, 127 ms scalar |
+| MI300X, Xeon 8568Y+ | 0.58 ms | 3.6 ms | 122 ms (default dispatch) |
+| Apple M4 Pro | 19.9 ms (Metal hybrid) | not measured | 12.8 ms oneTBB, 80 ms scalar |
+
+"With copies" times `to_device()`, `simplify()` and `to_host()` together. On
+the M4 Pro the Metal hybrid beats the scalar kernel but not oneTBB.
+
+### Against other libraries
+
+[![Wolfgang simplify against Qiskit, and speedups over Qiskit, OpenFermion and cuStateVec](../benchmarks/plots/wolfgang_vs_other_libraries.svg)](../benchmarks/plots/wolfgang_vs_other_libraries.svg)
+
+On the same Xeon host, Wolfgang's simplify is 1.3x faster than Qiskit 1.4.5's
+`SparsePauliOp.simplify` at 1M terms with the scalar kernel and 5.7x faster
+with oneTBB
+([CPU parallel simplify](../benchmarks/reports/cpu_parallel_simplify_2026-11-03.md)).
+The comparisons on the right were measured in April 2026 on an H100 PCIe host
+([CUDA deep optimization](../benchmarks/reports/cuda_deep_optimization_h100_2026-04-28.md)):
+multiplication of two 256-term operators 17.6x faster than OpenFermion,
+commuting groups of 512 terms 214x faster than Qiskit, and a device-resident
+expectation of a 4,096-term operator on a 14-qubit statevector 39.8x faster
+than computing one cuStateVec expectation per term and combining them on the
+host.
+
+### Per-call times across campaigns
+
+[![Per-call times on the H100 and MI300X after each change](../benchmarks/plots/call_time_by_slice.svg)](../benchmarks/plots/call_time_by_slice.svg)
+
+Small GPU calls were dominated by allocation, synchronization and launches
+rather than arithmetic. Pooled device allocation on CUDA, the HIP parity
+changes, and a fused kernel for operators of up to 1,024 terms took a 128-term
+simplify from 225 to 18.4 us on the H100 and from 255 to 27.1 us on the
+MI300X. Keeping simplify's counts on the device then took 4,096 terms from 188
+to 108 us on the H100 and from 182 to 98 us on the MI300X. Where launch and synchronization still dominate is profiled in the
+[small-operation profile](../benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md).
+
+### Recent changes
+
+Headline measurements from the last two campaigns, the latest campaign first:
 
 | Change | Measured | Report |
 | --- | --- | --- |
+| CUDA simplify above the fused kernel keeps its counts on the device, 4,096 terms | 188.2 to 108.3 us on an H100; `matmul` of 128 x 128 terms 202.0 to 123.3 us | [CUDA device counts](../benchmarks/reports/cuda_device_counts_h100_2026-11-03.md) |
+| HIP simplify on the same pipeline with cached scratch blocks, 4,096 terms | 181.7 to 97.9 us on an MI300X; 1M terms 1.556 to 0.579 ms | [HIP device counts](../benchmarks/reports/hip_device_counts_mi300x_2026-11-03.md) |
+| `to_host` through pinned staging, 1M terms, 24 qubits | 14.8 to 5.52 ms on an H100; 13.8 to 6.41 ms on an MI300X | [host transfers](../benchmarks/reports/host_transfers_2026-11-03.md) |
+| `set_num_threads(4)` inside a 4-CPU quota, simplify of 500,000 terms on 26 vCPUs | mean 27.8-28.4 to 22.5-22.6 ms, 90th percentile 59.4-61.4 to 22.7-22.8 ms; median 14.5-14.6 to 22.4-22.5 ms | [CPU threads](../benchmarks/reports/cpu_threads_2026-11-03.md) |
 | oneTBB in release wheels, simplify of 1M terms (24 qubits, no duplicates) | 141 to 65.4 ms on a 16-vCPU x86 VM; 70.7 to 12.7 ms on an M4 Pro | [oneTBB wheels](../benchmarks/reports/onetbb_wheels_2026-11-03.md) |
 | Fused small simplify, device-resident, 128 terms, 24 qubits | 143.5 to 18.4 us on an H100; 152.7 to 26.9 us on an MI300X | [small simplify](../benchmarks/reports/small_simplify_2026-11-03.md) |
 | Zero-copy export of a 1M-term, 64-qubit CUDA operator to CuPy | 8.83 ms through the host to 36.2 us on an H100 | [device arrays](../benchmarks/reports/device_arrays_h100_2026-11-03.md) |
@@ -23,10 +79,6 @@ names its hardware, boundary and spread; the
 | Pooled `commutes_with_device` output, 128 x 128 | 64.1 to 10.6 us on an H100 when its output was the only `cudaMalloc` buffer; about 1.14x when another was live | [pooled commutation](../benchmarks/reports/cuda_commutation_pool_h100_2026-11-03.md) |
 | HIP single-term simplify, device-resident | 254.5 to 31.0 us on an MI300X | [HIP parity](../benchmarks/reports/hip_parity_mi300x_2026-11-03.md) |
 | Metal precompiled kernels, first simplify call (12,288 terms, warm shader cache) | 3.89 to 3.08 ms on an M4 Pro | [Metal follow-ups](../benchmarks/reports/metal_followups_2026-11-03.md) |
-
-Where launch and synchronization overhead still dominates small CUDA
-operations is profiled in the
-[small-operation profile](../benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md).
 
 ## Backend Selection
 
@@ -62,8 +114,8 @@ simplify (including inside matmul, commutator and equiv): oneTBB from 8,192 term
 all other kernels: scalar
 ```
 
-This keeps the default path fast for covered hot spots without implying that
-every operation is SIMD- or oneTBB-accelerated.
+Operations outside this list run the scalar kernel under `auto` and
+`scalar`; a forced optimized selector raises for them.
 
 ## Build Metadata
 
@@ -129,9 +181,8 @@ where the optimized paths are compiled and available.
 
 ## CPU Hardening Checkpoint
 
-Before CUDA kernel implementation began, Wolfgang ran a dedicated CPU
-hardening checkpoint. That work optimized scalar CPU hot paths first and records
-before/after benchmark evidence for:
+Before CUDA work began, a CPU hardening checkpoint optimized the scalar hot
+paths and recorded before-and-after evidence for:
 
 ```text
 simplify and canonical duplicate reduction across low- and high-duplicate regimes
@@ -143,10 +194,10 @@ optional Qiskit and OpenFermion competitive baselines when installed
 ```
 
 Hardening benchmarks must keep correctness checks enabled for the measured
-datasets. Results are not accepted if they remove reference comparisons, change
-public APIs, alter coefficient semantics, weaken ordering guarantees, or imply
-optimized or GPU coverage outside the kernels, build configurations, and
-hardware targets that were compiled, validated, and benchmarked.
+datasets. A result is rejected if it removes reference comparisons, changes
+public APIs, alters coefficient semantics, weakens ordering guarantees, or
+implies optimized or GPU coverage beyond the kernels, build configurations and
+hardware that were compiled, validated and benchmarked.
 
 Run the combined CPU hardening suite with:
 
@@ -154,8 +205,8 @@ Run the combined CPU hardening suite with:
 python benchmarks/bench_cpu_hardening.py --profile default --repeat 3 --warmup 1 --json
 ```
 
-Use `--profile smoke` for quick validation and `--profile stress` for broader
-CPU evidence.
+`--profile smoke` is a quick validation run and `--profile stress` collects
+broader CPU evidence.
 
 Run competitive baselines with optional dependencies installed:
 
@@ -163,75 +214,62 @@ Run competitive baselines with optional dependencies installed:
 python benchmarks/bench_competitive_baselines.py --repeat 3 --warmup 1 --json
 ```
 
-The competitive benchmark records unavailable libraries rather than inventing
-comparisons. Current comparable baselines are Qiskit `SparsePauliOp` simplify
-and grouping, and OpenFermion `QubitOperator` multiplication. Per-case output
-records whether competitor correctness was actually checked and, for
-OpenFermion, the effective canonical operand sizes used by the timed
-multiplication.
+The competitive benchmark records an unavailable library as unavailable and
+never substitutes a synthetic comparison. The comparable baselines are Qiskit
+`SparsePauliOp` simplify and grouping and OpenFermion `QubitOperator`
+multiplication. Each case records whether the competitor's result was checked
+for correctness and, for OpenFermion, the canonical operand sizes used in the
+timed multiplication.
 
 ## Benchmark Plots
 
-Checked-in benchmark plots are generated from checked-in evidence reports, not
-from ad hoc local timings. The README plot, `portability_campaign_speedups.svg`,
-compares each new path with the one it replaced, using the medians from each
-row's report:
+Plots are generated from committed benchmark data, never from ad hoc local
+timings. The three figures in [Current Results](#current-results) and the
+README come from:
+
+```bash
+python scripts/render_readme_figures.py
+```
+
+`tests/test_readme_figures.py` runs it with `--check` and fails when a
+committed figure no longer matches the data. The portability campaign's
+`portability_campaign_speedups.svg`, which compares each new path with the one
+it replaced, comes from:
 
 ```bash
 python scripts/render_portability_campaign_assets.py
 ```
 
-The prior README plot was generated from the
-Campaign 10 summary, which preserves broad Campaign 9 comparison rows and adds
-cross-architecture A100 plus RTX PRO 6000 Blackwell source-build evidence,
-PyTorch CUDA DLPack coverage, and final public-grouping, stream/graph, and CSR
-scatter decisions:
+Earlier CUDA campaigns each rendered their own figures. Campaign 10's
+landscape adds A100 and RTX PRO 6000 Blackwell source-build evidence, PyTorch
+DLPack coverage, and the final grouping, stream/graph and CSR scatter
+decisions to Campaign 9's comparison rows:
 
 ```bash
 python scripts/render_cuda_campaign10_assets.py \
   --data-dir docs/benchmarks/data/cuda_cross_architecture_campaign10_2026-04-29 \
   --plot-dir docs/benchmarks/plots
-```
-
-The prior Campaign 9 deferred-headroom plot is generated with:
-
-```bash
 python scripts/render_cuda_campaign9_assets.py \
   --data-dir docs/benchmarks/data/cuda_deferred_headroom_campaign9_2026-04-29 \
   --plot-dir docs/benchmarks/plots
-```
-
-The prior Campaign 8 compact-consumer plot is generated with:
-
-```bash
 python scripts/render_cuda_campaign8_assets.py \
   --data-dir docs/benchmarks/data/cuda_deep_optimization_h100_campaign8_2026-04-29 \
   --plot-dir docs/benchmarks/plots
-```
-
-The prior Campaign 7 fused-consumer plot is generated with:
-
-```bash
 python scripts/render_cuda_campaign7_assets.py \
   --data-dir docs/benchmarks/data/cuda_deep_optimization_h100_campaign7_2026-04-29 \
   --plot-dir docs/benchmarks/plots
-```
-
-The prior Campaign 6 consumer-count plot is generated with:
-
-```bash
 python scripts/render_cuda_campaign6_assets.py \
   --data-dir docs/benchmarks/data/cuda_deep_optimization_h100_campaign6_2026-04-29 \
   --plot-dir docs/benchmarks/plots
 ```
 
-The prior Campaign 10 plot includes CPU scalar, every optimized CPU selector captured by that
-report for the benchmarked operation, CUDA transfer-inclusive, and CUDA
+The Campaign 10 landscape plots CPU scalar, every optimized CPU selector that
+report captured for the operation, and CUDA transfer-inclusive and
 device-resident timings, plus operator-resident, device-output, compact
-consumer, CuPy consumer, and external package points where the operation
-supports those boundaries. Speedups are relative to CPU scalar on the same
-deterministic dataset. Treat the figure as source-build evidence for the named
-hardware and report revision only.
+consumer, CuPy consumer and external-package points where the operation has
+those boundaries. Its speedups are relative to CPU scalar on the same
+deterministic dataset, and it is source-build evidence for the named hardware
+and report revision only.
 
 ## SIMD And oneTBB
 
@@ -265,7 +303,7 @@ counts the cores the affinity mask allows, not a container's CPU quota.
 Use the cap for CPU quotas and to leave cores for other work, and keep it at
 four or more when the process should still run oneTBB.
 
-Current covered optimized kernels:
+Optimized kernels:
 
 ```text
 oneTBB: commutes_with, full_group_commutation_graph, simplify
@@ -279,26 +317,25 @@ every compiled optimized selector on the same deterministic datasets. Use
 `benchmarks/bench_cpu_thresholds.py` to characterize the large pairwise
 commutation threshold where `auto` may switch to oneTBB.
 
-Forced optimized selectors fail clearly for scalar-only operations instead of
-relabeling scalar execution as optimized. Forced SIMD selectors also fail
-clearly for commutation workloads outside the current one- or two-word
-packed-width coverage. `auto` may still choose scalar for unsupported
-operations or widths.
+A forced optimized selector raises for a scalar-only operation rather than
+running scalar code under its name. Forced SIMD selectors also raise for
+commutation outside the one- and two-word packed widths they cover. `auto`
+falls back to scalar for those operations and widths.
 
-oneTBB is used for large dense pairwise commutation where thread overhead is
-amortized. Full graph construction remains available as a forced oneTBB path,
-but `auto` currently prefers SIMD or scalar for that operation because the
-measured oneTBB full-graph overhead did not win on the Phase 9 hardware.
+`auto` uses oneTBB for large dense pairwise commutation, where the thread
+overhead is amortized. Full graph construction is available as a forced
+oneTBB path, but `auto` prefers SIMD or scalar for it because oneTBB's
+overhead did not pay off on the Phase 9 hardware.
 
 ## Apple Silicon And x86_64
 
-Apple Silicon and x86_64 results are reported separately. Local Apple Silicon
-results are first-class CPU evidence for portability and baseline timing. x86_64
-results are required before making x86-specific optimization claims.
+Apple Silicon and x86_64 results are reported separately. Apple Silicon
+results count as full CPU evidence for portability and baseline timing; an
+x86-specific optimization claim needs x86_64 results.
 
 ## CUDA Source-Build Kernels
 
-CUDA remains opt-in at source-build time:
+CUDA is enabled at source-build time:
 
 ```bash
 WOLFGANG_VALIDATE_CUDA=1 WOLFGANG_CUDA_ARCHITECTURES=90 python scripts/validate.py
@@ -321,8 +358,8 @@ DevicePauliSum.device_arrays
 DevicePauliSum.from_device_arrays
 ```
 
-For repeated dense commutation workflows that keep the result on GPU, allocate
-and reuse the experimental device-output matrix:
+For repeated dense commutation that keeps the result on the GPU, allocate the
+experimental device-output matrix once and reuse it:
 
 ```python
 import wolfgang_quantum
@@ -348,102 +385,79 @@ dlpack_device = out.__dlpack_device__()
 flags = out.to_host()
 ```
 
-`DeviceCommutationMatrix` owns a dense row-major `uint8` CUDA buffer with `1`
-for commuting pairs and `0` for anti-commuting pairs. `to_host()` is the host
-materialization boundary and returns a NumPy bool matrix.
-`count_commuting(axis=None|0|1)` and
-`conflict_degrees(axis=None|0|1)` are compact downstream consumer boundaries:
-the reductions execute on the CUDA device and copy only `uint64` count results
-to host. `__dlpack__` exports a read-only dense `uint8` view for real CUDA
-DLPack consumers such as CuPy. Benchmark claims for this API must report
-device-output allocation, device-output reuse, CUDA-array-interface export,
-DLPack export/consumer timing, compact-summary reductions, and `to_host()`
-copy time separately.
+`DeviceCommutationMatrix` owns a dense row-major `uint8` CUDA buffer holding
+`1` for commuting pairs and `0` for anticommuting pairs. `to_host()` copies it
+to the host as a NumPy bool matrix. `count_commuting(axis=None|0|1)` and
+`conflict_degrees(axis=None|0|1)` reduce on the device and copy only the
+`uint64` counts to the host. `__dlpack__` exports a read-only dense `uint8`
+view to CUDA DLPack consumers such as CuPy. A benchmark of this API must
+report device-output allocation, device-output reuse, CUDA Array Interface
+export, DLPack export and consumer time, the compact reductions, and the
+`to_host()` copy separately.
 
-CUDA benchmark reports include CPU scalar timing, CUDA transfer-inclusive timing,
-CUDA device-resident timing, toolkit/runtime metadata, driver/device metadata,
-compiled CUDA architectures, and active CPU backend metadata. Tiny smoke cases
-are expected to be CPU-faster and transfer-bound; default and stress profiles
-are used to identify regimes where keeping operands and statevectors resident on
-the GPU is faster. `benchmarks/bench_cuda_scaling.py` extends the fixed profiles
-across multiple sizes when profiling scaling behavior or hillclimbing a CUDA
-change. The `extreme` scaling profile is reserved for explicit hardware evidence
-runs because it executes large correctness-checked CPU references and dense CUDA
-outputs. These are source-build benchmark claims only. CUDA wheel distribution
-remains deferred until the release and packaging policy is updated.
+CUDA benchmark reports include CPU scalar, CUDA transfer-inclusive and CUDA
+device-resident timings, toolkit, runtime, driver and device metadata, the
+compiled CUDA architectures, and the active CPU backend. Tiny smoke cases are
+expected to be faster on the CPU and bound by transfers; the default and
+stress profiles find the sizes where keeping operands and statevectors on the
+GPU pays off. `benchmarks/bench_cuda_scaling.py` sweeps sizes beyond the fixed
+profiles for scaling studies. Its `extreme` profile is reserved for hardware
+evidence runs because it runs large correctness-checked CPU references and
+dense CUDA outputs. All of these are source-build claims; CUDA wheels remain
+unavailable until the release and packaging policy changes.
 
-The current Campaign 10 report closes all Campaign 9 remaining-headroom items
-with final non-deferred decisions. It records A100 `sm_80` and RTX PRO 6000
-Blackwell `sm_120` source-build evidence, validates PyTorch CUDA DLPack
-consumption of dense `DeviceCommutationMatrix` buffers, keeps
-`DeviceCommutationMatrix.conflict_degrees(axis=None|0|1)` as the compact public
-summary API, rejects the true public grouping API with evidence, rejects public
-stream/CUDA Graph replay because launch overhead is not dominant, and rejects
-CSR scatter reopening because retained compact consumers avoid full CSR scatter.
-GPU performance claims remain source-build hardware evidence only. The H100
-Campaign 9 report records privileged Nsight Compute counter evidence and CuPy
-DLPack export coverage. The H100 Campaign 8 report records private
-benchmark-only compact device-resident graph
-and grouping consumers over `DeviceCommutationMatrix`. The H100 Campaign 7
-report records private benchmark-only fused anti-commutation CSR graph export,
-conflict-degree summaries, and grouping-oriented summaries over
-`DeviceCommutationMatrix`. The H100 Campaign 6 report records compact
-`DeviceCommutationMatrix.count_commuting(axis=None|0|1)` consumers, CuPy CUDA
-Array Interface consumer comparisons, Nsight Systems, Nsight Compute, Compute
-Sanitizer, and broad CPU/CUDA/external evidence. The earlier H100 Nsight
-hillclimb report also records rejected CUDA experiments, CPU `perf`, and x86
-SIMD A/B evidence. Its retained CPU-side change improves forced AVX2 and
-AVX-512 commutation stores, while oneTBB remains the preferred large dense
-pairwise CPU selector on the measured x86 host.
+Public CUDA APIs use the default stream and synchronize before returning.
+Stream-aware and asynchronous APIs wait for an API review that settles
+ownership, events, Python lifetimes and error propagation. Public bit-packed
+commutation output is deferred as well: dense `uint8` output serves CUDA Array
+Interface consumers, and no capacity or bandwidth need for a packed layout has
+been shown. For repeated dense commutation,
+`DevicePauliSum.commutes_with_into(other, output)` fills a caller-owned
+one-dimensional NumPy bool array, so it can be timed apart from the allocation
+inside `DevicePauliSum.commutes_with(other)`.
 
-Deeper CUDA optimization work follows
-`docs/plans/cuda_deep_optimization_plan.md`. Public CUDA APIs remain
-default-stream and synchronize-before-return. Stream-aware and async CUDA
-surfaces are deferred until a dedicated API review accepts ownership, event,
-Python lifetime, and error-propagation semantics. Public bit-packed commutation
-output is also deferred; Campaign 6 did not retain a packed prototype because
-dense `uint8` output remains useful for CUDA Array Interface consumers and no
-capacity or bandwidth need was proven for a public packed layout. For
-repeated dense commutation workloads, `DevicePauliSum.commutes_with_into(other,
-output)` fills a caller-owned one-dimensional NumPy bool array and can be
-benchmarked separately from the allocation performed by
-`DevicePauliSum.commutes_with(other)`.
+### CUDA campaign history
 
-The completed Campaign 9 path is captured in
-`docs/benchmarks/reports/cuda_deferred_headroom_campaign9_2026-04-29.md`.
-The completed Campaign 8 path is captured in
-`docs/benchmarks/reports/cuda_deep_optimization_h100_campaign8_2026-04-29.md`.
-The Campaign 9 closure plan is captured in
-`docs/plans/h100_deep_optimization_campaign9_plan.md`.
-The Campaign 8 decision artifacts are
-`docs/plans/cuda_fused_grouping_public_api_campaign8_review.md`,
-`docs/plans/cuda_dlpack_interop_campaign8_review.md`, and
-`docs/plans/cuda_graphs_stream_campaign8_decision.md`; each keeps its public
-surface deferred for this campaign.
+The April 2026 H100 campaigns followed `docs/plans/cuda_deep_optimization_plan.md`.
+Their decisions still hold:
 
-The completed Campaign 7 path is captured in
-`docs/benchmarks/reports/cuda_deep_optimization_h100_campaign7_2026-04-29.md`.
-The fused-consumer API review remains
-`docs/plans/cuda_fused_commutation_consumer_api_review.md`; CSR graph
-construction, conflict-degree summaries, and grouping summaries are private
-benchmark-only helpers rather than documented user-facing API.
+- Campaign 10 (`docs/benchmarks/reports/cuda_cross_architecture_campaign10_2026-04-29.md`)
+  closed every Campaign 9 headroom item. It added A100 `sm_80` and RTX PRO 6000
+  Blackwell `sm_120` source-build evidence and PyTorch DLPack consumption of
+  `DeviceCommutationMatrix`, kept `conflict_degrees(axis=None|0|1)` as the
+  public compact summary, and rejected a public grouping API, public stream
+  and CUDA Graph replay (launch overhead was not dominant), and reopening CSR
+  scatter (the retained compact consumers do not need full edge lists).
+- Campaign 9 (`docs/benchmarks/reports/cuda_deferred_headroom_campaign9_2026-04-29.md`,
+  plan `docs/plans/h100_deep_optimization_campaign9_plan.md`) recorded
+  privileged Nsight Compute counters and CuPy DLPack export coverage.
+- Campaign 8 (`docs/benchmarks/reports/cuda_deep_optimization_h100_campaign8_2026-04-29.md`)
+  built private, benchmark-only compact graph and grouping consumers over
+  `DeviceCommutationMatrix`. Its decision records,
+  `docs/plans/cuda_fused_grouping_public_api_campaign8_review.md`,
+  `docs/plans/cuda_dlpack_interop_campaign8_review.md` and
+  `docs/plans/cuda_graphs_stream_campaign8_decision.md`, each kept the public
+  surface deferred.
+- Campaign 7 (`docs/benchmarks/reports/cuda_deep_optimization_h100_campaign7_2026-04-29.md`)
+  built private, benchmark-only fused CSR graph export, conflict-degree
+  summaries and grouping summaries; the API review is
+  `docs/plans/cuda_fused_commutation_consumer_api_review.md`.
+- Campaign 6 added `count_commuting(axis=None|0|1)`, CuPy CUDA Array Interface
+  consumer comparisons, and Nsight Systems, Nsight Compute and Compute
+  Sanitizer evidence; it did not keep a packed-output prototype.
+- The earlier Nsight hillclimb recorded rejected CUDA experiments, CPU `perf`
+  and x86 SIMD A/B runs. Its retained change sped up forced AVX2 and AVX-512
+  commutation stores; oneTBB stayed the preferred large dense pairwise CPU
+  selector on that x86 host.
 
-The completed Campaign 10 path is captured in
-`docs/benchmarks/reports/cuda_cross_architecture_campaign10_2026-04-29.md`.
-It replaces the Campaign 9 non-H100 blocker with A100 `sm_80` and RTX PRO 6000
-Blackwell `sm_120` source-build evidence, adds PyTorch CUDA DLPack coverage,
-rejects a true public grouping API while retaining
-`DeviceCommutationMatrix.conflict_degrees(axis=None|0|1)`, rejects stream/CUDA
-Graph work because launch overhead is not dominant, and keeps CSR scatter
-closed because no retained Campaign 10 consumer requires full CSR edge lists.
-
-Future CUDA optimization paths should start from the
-[small-operation profile](../benchmarks/reports/cuda_small_op_profile_h100_2026-11-03.md):
-keeping simplify's intermediate counts on the device for operators above
-1,024 terms and `matmul`, and staging transfers through pinned memory. Beyond
-that, additional portability lanes such as `sm_86` or `sm_89`, non-H100 Nsight
-Compute counters when `ncu` is available, or a specific retained consumer with
-a written API and memory-ownership contract.
+The November 2026 campaigns then went after per-call overhead: pooled
+allocation, the fused small-operator kernel, device-side simplify counts and
+pinned device-to-host staging (see [Recent changes](#recent-changes)).
+Remaining candidates are a fused kernel for operators of roughly 1K to 64K
+terms, where simplify still launches the multi-stage pipeline; more
+portability lanes such as `sm_86` or `sm_89`; non-H100 Nsight Compute counters
+where `ncu` is available; and a specific consumer with a written API and
+memory-ownership contract.
 
 ## GPU Library Baselines
 
@@ -458,8 +472,8 @@ Qiskit Aer GPU or Aer cuStateVec: framework-level circuit/statevector workflows 
 cuDensityMat and other GPU libraries: future candidates only after a workload-specific mapping is documented
 ```
 
-GPU-library baselines are not substitutes for Wolfgang CPU scalar, optimized
-CPU, and native CUDA kernel timings. Reports must label whether a competitor
+GPU-library baselines do not replace Wolfgang's CPU scalar, optimized CPU and
+native CUDA timings. Reports must label whether a competitor
 timing is framework-level, transfer-inclusive primitive, or device-resident
 primitive, and must emit explicit unavailable statuses when an optional GPU
 library is absent or not GPU-enabled.

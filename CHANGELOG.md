@@ -6,6 +6,14 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- Documentation: the README, the site home page, the performance guide and the
+  benchmark evidence index show three figures generated from committed
+  benchmark data by `scripts/render_readme_figures.py`: simplify time against
+  operator size on each accelerator host beside that host's CPU, Wolfgang against Qiskit, OpenFermion and
+  cuStateVec, and per-call GPU times across the November campaigns
+  (`tests/test_readme_figures.py` fails when a figure is stale). Mermaid
+  diagrams render on the documentation site again, and the user and
+  engineering docs were edited for plain, specific prose.
 - The release software bill of materials lists the oneTBB runtime bundled in
   CPU wheels (version, source commit, `Apache-2.0 AND BSD-3-Clause`) and the
   vendored DLPack header (version and SHA-256) alongside the Python

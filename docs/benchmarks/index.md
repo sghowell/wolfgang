@@ -6,7 +6,17 @@ command, timing boundary and limitations, and follows the
 [benchmark protocol](protocol.md). A speedup applies to the configuration a
 report names, not to every platform or shape.
 
-![Speedups measured in the portability and interop campaign](plots/portability_campaign_speedups.svg)
+## Summary figures
+
+`scripts/render_readme_figures.py` draws these from the reports' committed
+data; the [performance guide](../user/performance.md#current-results)
+discusses them.
+
+[![Simplify time against operator size on an H100 host, an MI300X host and an M4 Pro, with each host's CPU](plots/simplify_by_backend.svg)](plots/simplify_by_backend.svg)
+
+[![Wolfgang simplify against Qiskit, and speedups over Qiskit, OpenFermion and cuStateVec](plots/wolfgang_vs_other_libraries.svg)](plots/wolfgang_vs_other_libraries.svg)
+
+[![Per-call times on the H100 and MI300X after each change](plots/call_time_by_slice.svg)](plots/call_time_by_slice.svg)
 
 ## Accelerator follow-ups campaign (November 2026)
 
@@ -34,6 +44,12 @@ Plan: `docs/plans/portability_and_interop_campaign_plan.md`. Review closeout:
 | [Small-operation profile](reports/cuda_small_op_profile_h100_2026-11-03.md) | Nsight Systems breakdown behind the streams-and-graphs decision |
 | [HIP parity on MI300X](reports/hip_parity_mi300x_2026-11-03.md) | HIP simplify numeric contract and call overhead |
 | [Metal follow-ups](reports/metal_followups_2026-11-03.md) | Parallel reduction, large inputs and precompiled kernels on an M4 Pro |
+
+Each bar compares a new path with the one it replaced, at one boundary; the
+rows measure different operations on different hardware and are not
+comparable with each other.
+
+![Speedups measured in the portability and interop campaign](plots/portability_campaign_speedups.svg)
 
 ## Usability and kernel campaign (November 2026)
 
@@ -70,6 +86,7 @@ By backend, oldest first. Link text is each report's title (early reports predat
 - 2026-04-29: [CUDA Residual-Risk Campaign 11 Report](reports/cuda_residual_risk_campaign11_2026-04-29.md)
 - 2026-11-03: [CUDA Allocation Reuse And Call Overhead On H100](reports/cuda_allocation_reuse_h100_2026-11-03.md)
 - 2026-11-03: [Pooled CUDA Commutation Output](reports/cuda_commutation_pool_h100_2026-11-03.md)
+- 2026-11-03: [CUDA Simplify With Device-Side Counts](reports/cuda_device_counts_h100_2026-11-03.md)
 - 2026-11-03: [CUDA Simplify Paths On H100](reports/cuda_simplify_paths_h100_2026-11-03.md)
 - 2026-11-03: [CUDA Small-Operation Profile: Streams And Graphs](reports/cuda_small_op_profile_h100_2026-11-03.md)
 - 2026-11-03: [Zero-Copy Device Arrays On CUDA](reports/device_arrays_h100_2026-11-03.md)
@@ -85,6 +102,7 @@ By backend, oldest first. Link text is each report's title (early reports predat
 - 2026-04-30: [ROCm MI300X Campaign 6 Expectation And Matmul Parity Report](reports/rocm_mi300x_campaign6_2026-04-30.md)
 - 2026-04-30: [ROCm MI300X Campaign 7 Release-Support Report](reports/rocm_mi300x_campaign7_2026-04-30.md)
 - 2026-05-01: [ROCm Campaign 8 Architecture-Readiness Report](reports/rocm_campaign8_architecture_readiness_2026-05-01.md)
+- 2026-11-03: [HIP Simplify With Device-Side Counts And Cached Scratch](reports/hip_device_counts_mi300x_2026-11-03.md)
 - 2026-11-03: [Accelerator Simplify Parity And HIP Call Overhead](reports/hip_parity_mi300x_2026-11-03.md)
 
 ### Apple Metal
@@ -109,12 +127,14 @@ By backend, oldest first. Link text is each report's title (early reports predat
 - 2026-08-21: [Wave 1B CPU Small-Shape Dispatch Report](reports/cpu_small_shape_dispatch_wave1b_2026-08-21.md)
 - 2026-09-21: [Python Boundary Hardening (2026-09-21)](reports/python_boundary_hardening_2026-09-21.md)
 - 2026-11-03: [CPU Parallel Simplify With oneTBB](reports/cpu_parallel_simplify_2026-11-03.md)
+- 2026-11-03: [CPU Thread Cap](reports/cpu_threads_2026-11-03.md)
 - 2026-11-03: [Host API Boundary And Commutator Timings](reports/host_api_2026-11-03.md)
 - 2026-11-03: [oneTBB In Release Wheels](reports/onetbb_wheels_2026-11-03.md)
 
 ### Cross-backend
 
 - 2026-05-01: [Backend-Neutral Accelerator Campaign 9 Closeout Report](reports/backend_neutral_accelerator_campaign9_2026-05-01.md)
+- 2026-11-03: [Host Transfers Through Pinned Memory](reports/host_transfers_2026-11-03.md)
 
 The [research provenance ledger](../research/provenance.md) records the earlier
 campaigns with their plans and outcomes, including rejected optimizations.

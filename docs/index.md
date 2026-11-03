@@ -1,8 +1,8 @@
 # Wolfgang
 
-**Packed Pauli algebra with a portable CPU oracle and evidence-gated accelerator kernels.**
+**Packed Pauli algebra with a portable CPU reference and measured accelerator kernels.**
 
-Wolfgang stores sparse sums of Pauli strings as compact symplectic bit masks and complex coefficients. The same representation drives deterministic CPU semantics, runtime-dispatched SIMD and oneTBB kernels (release CPU wheels built after `v0.2.3` bundle oneTBB), source-build CUDA, ROCm/HIP and Apple Metal backends, and conversions to Qiskit, OpenFermion and CUDA-Q. CUDA operators share their device buffers with CuPy and PyTorch without copies.
+Wolfgang stores sparse sums of Pauli strings as pairs of bit masks with complex coefficients. One representation serves the scalar CPU reference, the SIMD and oneTBB kernels chosen at run time (release CPU wheels built after `v0.2.3` bundle oneTBB), the CUDA, ROCm/HIP and Apple Metal backends in source builds, and conversions to Qiskit, OpenFermion and CUDA-Q. CUDA operators share their device buffers with CuPy and PyTorch without a copy.
 
 ```python
 import numpy as np
@@ -17,18 +17,24 @@ reduced = (hamiltonian @ hamiltonian).simplify()
 print(reduced.to_labels())
 ```
 
-## Why the project is interesting
+## Performance
 
-Wolfgang is built around a deliberate engineering loop:
+[![Simplify time against operator size on an H100 host, an MI300X host and an M4 Pro, with each host's CPU](benchmarks/plots/simplify_by_backend.svg)](benchmarks/plots/simplify_by_backend.svg)
 
-1. lock exact algebraic semantics in a scalar C++ implementation;
-2. expose those semantics through a small Python API;
-3. add property and cross-library oracles;
-4. optimize one operation and one timing boundary at a time;
-5. retain named hardware/toolchain evidence;
-6. reject optimizations or public APIs when evidence does not justify them.
+Simplify runs on every backend. Small operators belong on the CPU: at 128 terms the scalar kernel takes 6.4 us and a device-resident H100 call 18 us. At 1M terms the H100 takes 0.39 ms (5.5 ms including copies) against 29 ms for oneTBB on its host. The [performance guide](user/performance.md) adds comparisons with Qiskit, OpenFermion and cuStateVec and shows how per-call times changed across campaigns.
 
-This makes the repository both a usable library and an inspectable record of low-level, agent-assisted systems work. Agent output is never treated as evidence by itself: code, tests, builds, profilers, and independent review determine acceptance.
+## How the project works
+
+Each optimization follows the same loop:
+
+1. fix the exact algebraic semantics in a scalar C++ implementation;
+2. expose them through a small Python API;
+3. add property tests and cross-library oracles;
+4. optimize one operation at one timing boundary;
+5. keep the hardware and toolchain evidence in a report;
+6. drop the optimization, or the public API, when the evidence does not support it.
+
+The repository is a usable library and a record of agent-assisted systems work. Agent output never counts as evidence by itself: code, tests, builds, profilers and independent review decide what is accepted.
 
 ## Explore
 
@@ -40,7 +46,5 @@ This makes the repository both a usable library and an inspectable record of low
 - [Read the semantic contracts](architecture/semantic_contracts.md)
 - [Check the current release matrix](release/support_matrix.md)
 
-![Speedups measured in the portability and interop campaign](benchmarks/plots/portability_campaign_speedups.svg)
-
 !!! warning "Accelerator packaging"
-    Default wheels are portable CPU builds; those built after `v0.2.3` bundle oneTBB. CUDA, ROCm/HIP, and Metal capabilities are source-build and evidence-gated; backend implementation does not imply a public accelerator wheel.
+    Default wheels are portable CPU builds; those built after `v0.2.3` bundle oneTBB. The CUDA, ROCm/HIP and Metal backends need a source build, and no accelerator wheel is published.
