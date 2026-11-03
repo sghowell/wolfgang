@@ -90,10 +90,10 @@ Branch `codex/hip-pipeline`. Benchmarked builds: `9af4918` (pipeline only) and
   4,096 terms but 0.73-0.99x at 50,000 terms, from the cost of freeing its
   multi-megabyte scratch; the per-thread block cache was added for that and
   measured as a third build.
-- Tests first: the four cache tests were written before the cache. As a
-  negative control, a build with `kThreadCacheLimitBytes = 0` fails the reuse
-  and thread-exit tests (the other two check that nothing is retained, which
-  holds trivially).
+- Tests: the four cache tests were written alongside the cache, before its
+  first build, not ahead of it. As a negative control, a build with
+  `kThreadCacheLimitBytes = 0` fails the reuse and thread-exit tests (the other
+  two check that nothing is retained, which holds trivially).
 - Validation: MI300X, `4ca8655`:
   `WOLFGANG_VALIDATE_HIP=1 python scripts/validate.py --profile core` passed
   (945 tests in the HIP run); the pipeline, parity, small-simplify, pool and
