@@ -71,3 +71,8 @@ host at 1M terms), and `DevicePauliSum.from_device_arrays()` builds an operator
 from device arrays on any stream (84 us against 21 ms)
 (`docs/benchmarks/reports/device_arrays_h100_2026-11-03.md`). HIP and Metal
 stay disabled until a consumer on those backends is validated.
+
+Slice 4 merged: `PauliSum.from_cudaq()` and `PauliSum.to_cudaq()` convert to
+and from CUDA-Q spin operators behind the `cudaq` extra, with expectation
+values equal to `cudaq.observe`, tested on CUDA-Q 0.11.0 and the latest
+release in a CI adapter job.

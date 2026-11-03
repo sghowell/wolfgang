@@ -229,3 +229,45 @@ documentation. The benchmarked candidate is `01997f7`.
 - Residual risk:
   - one H100; consumers may write through views despite the flag;
   - the device synchronization on free and on import waits for unrelated work.
+
+## Slice 4: CUDA-Q interop
+
+Branch `codex/cudaq-interop`, commits `c7ce299`..`09c17f5` plus
+documentation.
+
+- Reviewer: independent agent (adapter contract, numerics, packaging and
+  documentation roles), read-only. It read the CUDA-Q 0.11.0 and current
+  sources for the serialization, term merging and operator bindings, read the
+  `cudaq` metapackage sdists, and ran the adapter against a pure-Python
+  emulator of CUDA-Q's serialize and deserialize code.
+- Findings: P0 0, P1 0, P2 5, P3 9.
+- P2 resolutions:
+  - the fast path rebuilt coefficients as `re + 1j * im`, which turns
+    `(1, inf)` into `(nan, inf)` and loses signed zeros. It now assigns the
+    real and imaginary parts separately, with tests;
+  - the serialized test variant could silently run the fallback if the layout
+    probe failed; it now asserts the probe accepts the installed CUDA-Q;
+  - explicit identities and parameterized coefficients gained tests.
+    Parameterized coefficients report no parameters in CUDA-Q and fail inside
+    `serialize()`, so coefficient-evaluation failures now raise the documented
+    `ValueError`;
+  - the CI job asserts that the `cudaq` metapackage, the requested version and
+    the compiled backend agree;
+  - `to_cudaq` unpacked every word to one byte per qubit (about 8.5x the
+    packed size); it now unpacks only words that hold a Pauli.
+- P3 resolutions: finite-only exactness of `to_cudaq` documented; the
+  term-API path walks `degrees`; a serialized operator that does not parse
+  falls back to the term API; `num_qubits` accepts integer-like values and
+  rejects `bool`; stub parameter names match the runtime for all three
+  adapters; contract and guide drift fixed (construction order, constructor
+  list, a Hermitian example, width wording); the unbenchmarked "slower" claim
+  removed; installation notes state Linux-only wheels and Python 3.11 for
+  CUDA-Q 0.16.
+- Validation after fixes: on the H100, `tests/test_cudaq_adapter.py` passed
+  (33 tests) with CUDA-Q 0.16.0 and with 0.11.0 (`cuda-quantum-cu12`
+  0.11.0); the quality profile passed locally; CI runs the adapter on
+  `cudaq==0.11.0` and the latest release.
+- Deferred: a conversion benchmark; `DevicePauliSum` conversion without a host
+  copy.
+- Residual risk: CUDA-Q's serialized layout is not a documented promise; the
+  probe and fallback cover a change, at a speed cost.
