@@ -159,6 +159,65 @@ behavior only.
 
 Scalar multiplication preserves term order. Multiplying by zero keeps the terms until `simplify()` is called.
 
+`h1 - h2` concatenates `h1` with the exactly negated terms of `h2` and does not
+simplify. `-h` flips every coefficient's sign exactly; unlike `h * -1`, an
+infinite component never becomes NaN. `h.adjoint()` conjugates coefficients and
+keeps terms and order, since Pauli strings are Hermitian.
+
+## Packed Array I/O
+
+`PauliSum.from_arrays(x, z, coeffs, num_qubits)` and `to_arrays()` exchange the
+packed representation directly:
+
+```text
+x, z: uint64, shape (num_terms, ceil(num_qubits / 64)), term-major
+qubit q: bit q % 64 of word q // 64 (X sets x, Z sets z, Y sets both)
+coeffs: shape (num_terms,); any integer, unsigned, real or complex dtype, stored as complex128
+bits at or above num_qubits in each term's last word must be zero (ValueError)
+```
+
+`from_arrays` always copies and preserves term order. Word arrays with any dtype
+other than `uint64` raise `TypeError` instead of being cast; wrong dimensions or
+shapes raise `ValueError`. Non-contiguous inputs are accepted.
+
+`to_arrays()` returns read-only NumPy views of the operator's storage. Each view
+keeps the operator alive, and the operator is immutable, so the data never
+changes underneath a view. `PauliSum.from_arrays(*op.to_arrays(), op.num_qubits)`
+is structurally equal to `op`.
+
+## Indexing And Equality
+
+`len(h)` equals `h.num_terms`. `h[i]` returns a single-term `PauliSum` and accepts
+negative indices; out-of-range indices raise `IndexError`, and non-integer keys
+raise `TypeError`. `h[a:b:c]` returns the selected terms in slice order with
+`num_qubits` preserved. Iteration yields single-term operators in term order.
+
+`h1 == h2` is structural: equal `num_qubits` and the same terms in the same order
+with coefficients equal under `==` (so `0.0 == -0.0` and NaN never compares
+equal). It never simplifies, so reordered or unmerged operators compare unequal.
+`PauliSum` is unhashable. Comparing with a non-`PauliSum` returns `False`.
+
+`h1.equiv(h2, atol=1e-12, rtol=0.0)` is mathematical equality:
+`(h1 - h2).simplify(atol, rtol).num_terms == 0`. Operators with different
+`num_qubits` are never equivalent.
+
+## Commutators
+
+`h1.commutator(h2)` returns `h1 @ h2 - h2 @ h1` and `h1.anticommutator(h2)`
+returns `h1 @ h2 + h2 @ h1`. Two Pauli strings either commute or anticommute,
+so for terms `a P` and `b Q`:
+
+```text
+P, Q anticommute: commutator gets 2ab PQ, anticommutator gets nothing
+P, Q commute:     commutator gets nothing, anticommutator gets 2ab PQ
+```
+
+Pairs that contribute nothing are never generated. With `simplify=True` (the
+default) the result is simplified with default tolerances into canonical order.
+With `simplify=False` the surviving products keep lhs-outer, rhs-inner order.
+`max_intermediate_terms` bounds `len(h1) * len(h2)` before any work, as in
+`matmul`.
+
 ## Multiplication
 
 `h1 @ h2` means operator composition where `h2` acts first and `h1` acts second, matching matrix multiplication semantics.

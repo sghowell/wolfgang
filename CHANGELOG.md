@@ -6,6 +6,12 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- Add `PauliSum.from_arrays` / `to_arrays` for packed `uint64` mask and
+  `complex128` coefficient exchange; `to_arrays` returns read-only zero-copy
+  views. `from_labels` converts NumPy coefficient arrays in bulk.
+- Add subtraction, exact negation, `len`, indexing and slicing, structural
+  `==` (unhashable), `equiv`, `adjoint`, and fused `commutator` /
+  `anticommutator` that skip term pairs which cancel.
 - Exclude local worktrees and release staging from source distributions.
 - Separate the native CMake library from Python, add standalone sanitizer
   contracts, bulk coefficient export and scoped CPU GIL release.
