@@ -1,4 +1,5 @@
 #include "device_pauli_sum.cuh"
+#include "cuda/pool_allocator.cuh"
 
 #include <cuda_runtime_api.h>
 #include <thrust/complex.h>
@@ -11,7 +12,7 @@
 namespace wolfgang {
 
 using cuda_detail::check_cuda;
-using cuda_detail::cuda_allocate;
+using cuda_detail::pool_allocate;
 using cuda_detail::checked_launch_blocks;
 using cuda_detail::kCudaThreadsPerBlock;
 using cuda_detail::ScopedCudaDevice;
@@ -120,9 +121,9 @@ DevicePauliSum DevicePauliSum::matmul(
   ScopedCudaDevice guard(impl_->device_ordinal);
   const std::size_t packed_words =
       detail::checked_product(out_terms, impl_->words, "matmul packed words");
-  cuda_allocate(out->x, packed_words, "matmul x words");
-  cuda_allocate(out->z, packed_words, "matmul z words");
-  cuda_allocate(out->coeffs, out_terms, "matmul coefficients");
+  pool_allocate(out->x, packed_words, "matmul x words");
+  pool_allocate(out->z, packed_words, "matmul z words");
+  pool_allocate(out->coeffs, out_terms, "matmul coefficients");
   matmul_product_kernel<<<blocks, kCudaThreadsPerBlock>>>(
       impl_->x,
       impl_->z,

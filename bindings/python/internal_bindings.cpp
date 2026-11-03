@@ -6,6 +6,7 @@
 #include "wolfgang/pauli_sum.hpp"
 #if WOLFGANG_BUILD_CUDA_ENABLED
 #include "cuda/device_commutation_matrix.cuh"
+#include "cuda/pool_allocator_hooks.hpp"
 #include "cuda/workspace.cuh"
 #endif
 #if WOLFGANG_BUILD_METAL_ENABLED
@@ -130,6 +131,16 @@ void register_pauli_diagnostics(nb::module_& module);
 void register_internal_bindings(nb::module_& module) {
 #if WOLFGANG_ENABLE_INTERNAL_BINDINGS
 #if WOLFGANG_BUILD_CUDA_ENABLED
+  module.def(
+      "_cuda_pool_status_for_testing",
+      [](int device) {
+        nb::dict status;
+        status["enabled"] = wolfgang::cuda_detail::pool_enabled_for_testing(device);
+        status["used_bytes"] = wolfgang::cuda_detail::pool_used_bytes_for_testing(device);
+        return status;
+      },
+      nb::arg("device") = 0,
+      "Private test hook: whether the CUDA device uses Wolfgang's pool and its used bytes.");
   module.def(
       "_cuda_workspace_probe_for_testing",
       [](int device, nb::iterable reserve_bytes, bool reset, bool release) {

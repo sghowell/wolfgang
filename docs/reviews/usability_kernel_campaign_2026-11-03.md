@@ -121,3 +121,93 @@ Branch `codex/statevector-and-measurement`, commits `1a12a7d`..`0519f97`.
     or oneTBB variant;
   - `scipy>=1.10` is a declared lower bound, while CI tests a newer pinned
     version.
+
+## Slice 6: oneTBB simplify
+
+Branch `codex/cpu-parallel-simplify`, commits `7450154`..`e7cecd6` plus the
+final evidence. The benchmarked candidate is `e7cecd6`.
+
+- Reviewer: independent agent (C++ concurrency, numerics and performance
+  roles), read-only. oneTBB was not installed in the review environment, so the
+  chunk logic was checked by simulation against the scalar run loop (120,000
+  random sorted inputs, grains 1-64, no mismatches).
+- Findings: P0 0, P1 1, P2 4, P3 5.
+- P1 resolution (signed zeros): the oneTBB kernel started each run from
+  `0.0 + 0.0i`, so `-0.0` components became `+0.0` where the scalar hash path
+  kept them. Every CPU simplify path, scalar sort loops included, now seeds each
+  run with its first coefficient. Tests compare raw coefficient bits, including
+  on `-op`, in both the hash and sort regimes.
+- P2 resolutions:
+  - Apple Silicon timings: deferral recorded in the plan.
+  - Auto now also requires at least four oneTBB threads.
+  - Peak memory: the fixed-key kernel no longer keeps a separate index array or
+    zero-fills its buffers, and chunks keep (position, coefficient) pairs. The
+    remaining excess over scalar is listed as a limitation.
+  - Documentation drift in `docs/user/performance.md` and the hardware doc
+    fixed.
+- P3 resolutions:
+  - below the threshold, auto checks only the selector variable instead of
+    building a backend report;
+  - the comparator is a functor;
+  - tests cover a run longer than a chunk, all-identical input, an overflow
+    raised from the last chunk on a worker thread, and the reported thresholds;
+    the phase 9 test that compared simplify with itself now compares against
+    scalar bits;
+  - the Xeon host was measured at 2,000-10,000 terms, the report states the
+    sub-millisecond noise, and summaries record compiler flags, thread settings
+    and the CPU vendor string;
+  - the dispatch helpers stay in `include/wolfgang/cpu_backend.hpp`, next to
+    the existing auto-dispatch policy they extend.
+- Validation after fixes: on the EPYC instance with oneTBB,
+  `python scripts/validate.py --profile core` passed (723 tests) and the native
+  contract passed under AddressSanitizer and UndefinedBehaviorSanitizer; the
+  oneTBB suites passed on the Xeon host.
+- Deferred: Apple Silicon oneTBB timings; bundling oneTBB in release wheels.
+- Residual risk:
+  - x86_64 only;
+  - peak memory above scalar was not measured;
+  - the threshold rests on two hosts with 16 and 26 vCPUs.
+
+## Slice 7: CUDA allocation reuse and call overhead
+
+Branch `codex/cuda-allocation-reuse`, commits `781efb9`..`d998314`. The
+benchmarked candidate is `6e48c14`.
+
+- Reviewer: independent agent (CUDA, C++ safety and performance roles),
+  read-only.
+- Findings: P0 0, P1 1, P2 3, P3 several.
+- P1 resolution (memory retention and out-of-memory recovery):
+  - The pool now caches at most 1 GiB per device.
+  - Every allocation path, pooled or `cudaMalloc`, trims the pools and retries
+    once on out-of-memory, then raises `MemoryError`.
+  - The changelog and `cuda_backend.md` document retention and its effect on
+    other libraries.
+- P2 resolutions:
+  - Nsight Systems CUDA API breakdown recorded before and after the change.
+  - Deferral of `_inplace` methods recorded in the plan.
+  - Scratch value-initialization fills and redundant Thrust synchronizations
+    removed (`par_nosync`, uninitialized pooled scratch), which the Nsight data
+    attributes.
+  - A test that the pool returns to baseline, and a forced-fallback switch with
+    a test.
+  - `git diff --check` clean.
+- P3 resolutions:
+  - the mutex lives for the whole process;
+  - only self-raised CUDA errors are cleared;
+  - buffers are freed on their known device;
+  - byte copies replace typed casts;
+  - stale comments and unused declarations removed;
+  - out-of-memory raises `MemoryError`;
+  - report and changelog wording fixed.
+- Validation after fixes (H100):
+  - `WOLFGANG_VALIDATE_CUDA=1 python scripts/validate.py --profile core` passed
+    (720 tests in the CUDA run);
+  - the suites pass with `WOLFGANG_CUDA_BENCH_DISABLE_POOL=1`;
+  - memcheck, racecheck and synccheck clean;
+  - initcheck gives 1,356 CUB look-back reports, identical to the baseline.
+- Deferred: zero-copy CUDA `DevicePauliSum` views (needs HIP and Metal changes
+  that cannot be validated here); public streams and graphs.
+- Residual risk:
+  - one GPU model;
+  - multi-GPU and `cudaDeviceReset` behavior unexercised;
+  - pool retention up to 1 GiB per device.

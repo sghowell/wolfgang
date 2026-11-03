@@ -7,9 +7,21 @@ All user-visible Wolfgang changes are recorded here before each release.
 Next version: TBD
 
 - oneTBB source builds: `simplify` runs a parallel sort-and-reduce kernel from
-  8,192 terms (`WOLFGANG_CPU_BACKEND=tbb` forces it) with results identical to
-  scalar bit for bit; 1.4-5.6x faster than scalar from 10,000 terms on two x86
-  hosts (`docs/benchmarks/reports/cpu_parallel_simplify_2026-11-03.md`).
+  8,192 terms on hosts with at least four oneTBB threads
+  (`WOLFGANG_CPU_BACKEND=tbb` forces it), with results identical to scalar bit
+  for bit. It is 1.6-5.7x faster than scalar from 10,000 terms on two x86 hosts
+  (`docs/benchmarks/reports/cpu_parallel_simplify_2026-11-03.md`).
+- Every CPU simplify path seeds each duplicate run with its first coefficient,
+  so a lone `-0.0` component survives; scalar simplify previously kept or
+  dropped the sign depending on which internal path it chose.
+- CUDA: skip full device discovery on transfers and output creation, pool
+  `DevicePauliSum` and scratch allocations in a Wolfgang-private stream-ordered
+  pool (up to 1 GiB cached per device, trimmed and retried on out-of-memory),
+  and drop redundant Thrust synchronizations and scratch fills. On H100,
+  `to_device` of a small operator is 57x faster, `commutes_with_device` 14x,
+  small `simplify` and `matmul` 1.5-1.7x, and simplify of 50,000-1,000,000
+  terms 2.1-2.9x (device-resident). CUDA allocation failures now raise
+  `MemoryError`.
 - Restore the CUDA source build, broken since the shared workspace helper
   refactor, and pin the fully qualified aliases in the header contract test.
 - CUDA simplify for operators wider than 128 qubits now reduces duplicates in

@@ -361,6 +361,7 @@ set(WOLFGANG_CUDA_EXTENSION_SOURCES
   src/cuda/device_commutation_matrix.cu
   src/cuda/device_pauli_sum.cu
   src/cuda/simplify_cuda.cu
+  src/cuda/pool_allocator.cu
   src/cuda/expectation_cuda.cu
   src/cuda/commutation_cuda.cu
   src/cuda/matmul_cuda.cu
