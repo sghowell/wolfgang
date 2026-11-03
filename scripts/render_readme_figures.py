@@ -5,7 +5,8 @@ Three hand-written SVGs (no plotting dependency), each with light and dark
 styles that follow the viewer's color scheme:
 
 ``simplify_by_backend.svg``
-    Simplify time against operator size on each backend.
+    Simplify time against operator size, one panel per host, each accelerator
+    beside the CPU of the same host.
 ``wolfgang_vs_other_libraries.svg``
     Wolfgang against Qiskit, OpenFermion and cuStateVec.
 ``call_time_by_slice.svg``
@@ -58,7 +59,10 @@ def series_style() -> str:
     # Stroke and fill classes are separate: a CSS fill would override a path's
     # fill="none" presentation attribute.
     def rules(mode: int) -> str:
-        return " ".join(f".s-{k} {{ stroke: {v[mode]}; }} .f-{k} {{ fill: {v[mode]}; }}" for k, v in COLORS.items())
+        return " ".join(
+            f".s-{k} {{ stroke: {v[mode]}; }} .f-{k} {{ fill: {v[mode]}; }}"
+            for k, v in COLORS.items()
+        )
 
     return STYLE % {"light": rules(0), "dark": rules(1)}
 
@@ -105,23 +109,32 @@ def overhead(relative: str, row: str, label: str) -> float:
 
 def paths_row(relative: str, terms: int, variant: str, label: str) -> float:
     for row in load(relative)["specialized_rows"]:
-        if row["path"] == "one_word_packed32" and row["num_terms"] == terms and row["variant"] == variant:
+        if (
+            row["path"] == "one_word_packed32"
+            and row["num_terms"] == terms
+            and row["variant"] == variant
+        ):
             return row["median_of_medians_seconds"][label]
     raise KeyError(f"{relative}: no one_word_packed32 row at {terms} terms for {variant}")
 
 
 def cpu_rows(relative: str) -> list[dict[str, Any]]:
-    rows = [r for r in load(relative)["rows"] if r["num_qubits"] == 24 and r["duplicate_fraction"] == 0.5]
+    rows = [
+        r
+        for r in load(relative)["rows"]
+        if r["num_qubits"] == 24 and r["duplicate_fraction"] == 0.5
+    ]
     return sorted(rows, key=lambda r: r["num_terms"])
 
 
-def metal_rows(relative: str, sizes: Sequence[int]) -> list[tuple[float, float]]:
-    # The hybrid summaries store the duplicate fraction either as 0.5 or as 500 (per mille).
-    out = []
-    for row in load(relative)["rows"]:
-        if row["num_qubits"] == 24 and row["duplicate_fraction"] in (0.5, 500.0) and row["num_terms"] in sizes:
-            out.append((row["num_terms"], row["median_of_medians_seconds"]["metal_hybrid"]))
-    return sorted(out)
+def metal_rows(relative: str, sizes: Sequence[int], column: str) -> list[tuple[float, float]]:
+    return sorted(
+        (row["num_terms"], row["median_of_medians_seconds"][column])
+        for row in load(relative)["rows"]
+        if row["num_qubits"] == 24
+        and row["duplicate_fraction"] == 0.5
+        and row["num_terms"] in sizes
+    )
 
 
 CPU_X86 = "cpu_parallel_simplify_2026-11-03/summary_x86_64_26vcpu_onetbb2021_11.json"
@@ -131,28 +144,122 @@ HIP_OVERHEAD = "hip_device_counts_mi300x_2026-11-03/overhead_summary.json"
 HIP_PATHS = "hip_device_counts_mi300x_2026-11-03/paths_summary.json"
 METAL_HYBRID = "metal_hybrid_simplify_2026-11-03/summary_apple_m4_pro.json"
 METAL_LARGE = "metal_followups_2026-11-03/summary_large_candidate.json"
+WHEELS_M4 = "onetbb_wheels_2026-11-03/summary_m4pro.json"
 COMPETITIVE = "cuda_deep_optimization_h100_2026-04-28/summary.json"
 
+# Metal's public simplify runs the GPU-sort hybrid from 12,288 terms
+# (kHybridSimplifyMinTerms); below that it is the CPU path, so no Metal points.
+METAL_HYBRID_SIZES = (12_288, 16_384, 65_536, 262_144)
+METAL_CPU_SIZES = (4_096, 8_192) + METAL_HYBRID_SIZES
+LARGE_SIZES = (1_048_576, 4_194_304)
 
-def simplify_series() -> list[Series]:
+
+@dataclass
+class Panel:
+    title: str
+    series: list[Series]
+
+
+def simplify_panels() -> list[Panel]:
+    """One panel per host, so every CPU line ran on the accelerator's own host."""
     cpu = cpu_rows(CPU_X86)
-    small = [(128, "simplify_128_terms_24q"), (1024, "simplify_1024_terms_24q"), (4096, "simplify_4096_terms_24q")]
+    small = [
+        (128, "simplify_128_terms_24q"),
+        (1024, "simplify_1024_terms_24q"),
+        (4096, "simplify_4096_terms_24q"),
+    ]
 
-    def accelerator(overhead_file: str, paths_file: str, label: str, variant: str) -> list[tuple[float, float]]:
+    def device(
+        overhead_file: str, paths_file: str, label: str, backend: str
+    ) -> list[tuple[float, float]]:
         points = [(terms, overhead(overhead_file, row, label)) for terms, row in small]
-        points += [(terms, paths_row(paths_file, terms, variant, label)) for terms in (50_000, 1_000_000)]
+        points += [
+            (terms, paths_row(paths_file, terms, f"{backend}_device_resident", label))
+            for terms in (50_000, 1_000_000)
+        ]
         return points
 
-    metal = metal_rows(METAL_HYBRID, (12_288, 16_384, 65_536, 262_144))
-    metal += metal_rows(METAL_LARGE, (1_048_576, 4_194_304))
-    cpu_small = [(128, overhead(CUDA_OVERHEAD, "cpu_simplify_128_terms_control", "cand"))]
+    def with_copies(
+        overhead_file: str, paths_file: str, label: str, backend: str
+    ) -> list[tuple[float, float]]:
+        # Both suites time op.to_device().simplify().to_host().
+        points = [(128, overhead(overhead_file, "round_trip_simplify_128_terms", label))]
+        points += [
+            (terms, paths_row(paths_file, terms, f"{backend}_transfer_inclusive", label))
+            for terms in (50_000, 1_000_000)
+        ]
+        return points
+
+    def cpu_control(overhead_file: str, paths_file: str, label: str) -> list[tuple[float, float]]:
+        points = [(128, overhead(overhead_file, "cpu_simplify_128_terms_control", label))]
+        points += [
+            (terms, paths_row(paths_file, terms, "cpu_simplify_control", label))
+            for terms in (50_000, 1_000_000)
+        ]
+        return points
+
+    wheel = sorted(
+        (row["num_terms"], row["tbb_median_seconds"])
+        for row in load(WHEELS_M4)["rows"]
+        if row["num_qubits"] == 24 and row["duplicate_fraction"] == 0.5
+    )
     return [
-        Series("s1", "CPU scalar (Xeon 8480+)",
-               cpu_small + [(r["num_terms"], r["median_of_medians_seconds"]["scalar"]) for r in cpu]),
-        Series("s5", "CPU oneTBB, 26 threads (Xeon)", [(r["num_terms"], r["median_of_medians_seconds"]["tbb"]) for r in cpu]),
-        Series("s2", "CUDA, H100", accelerator(CUDA_OVERHEAD, CUDA_PATHS, "cand", "cuda_device_resident")),
-        Series("s3", "HIP, MI300X", accelerator(HIP_OVERHEAD, HIP_PATHS, "cache", "hip_device_resident")),
-        Series("s4", "Metal, M4 Pro", metal),
+        Panel(
+            "H100, Xeon 8480+ host",
+            [
+                Series(
+                    "s1",
+                    "CPU scalar",
+                    [(128, overhead(CUDA_OVERHEAD, "cpu_simplify_128_terms_control", "cand"))]
+                    + [(r["num_terms"], r["median_of_medians_seconds"]["scalar"]) for r in cpu],
+                ),
+                Series(
+                    "s5",
+                    "CPU oneTBB",
+                    [(r["num_terms"], r["median_of_medians_seconds"]["tbb"]) for r in cpu],
+                ),
+                Series("s2", "CUDA", device(CUDA_OVERHEAD, CUDA_PATHS, "cand", "cuda")),
+                Series(
+                    "s2",
+                    "CUDA + copies",
+                    with_copies(CUDA_OVERHEAD, CUDA_PATHS, "cand", "cuda"),
+                    dashed=True,
+                    marker="square",
+                ),
+            ],
+        ),
+        Panel(
+            "MI300X, Xeon 8568Y+ host",
+            [
+                Series("neutral", "CPU default", cpu_control(HIP_OVERHEAD, HIP_PATHS, "cache")),
+                Series("s3", "HIP", device(HIP_OVERHEAD, HIP_PATHS, "cache", "hip")),
+                Series(
+                    "s3",
+                    "HIP + copies",
+                    with_copies(HIP_OVERHEAD, HIP_PATHS, "cache", "hip"),
+                    dashed=True,
+                    marker="square",
+                ),
+            ],
+        ),
+        Panel(
+            "Apple M4 Pro",
+            [
+                Series(
+                    "s1",
+                    "CPU scalar",
+                    metal_rows(METAL_HYBRID, METAL_CPU_SIZES, "cpu_simplify")
+                    + metal_rows(METAL_LARGE, LARGE_SIZES, "cpu_simplify"),
+                ),
+                Series("s5", "CPU oneTBB", wheel),
+                Series(
+                    "s4",
+                    "Metal",
+                    metal_rows(METAL_HYBRID, METAL_HYBRID_SIZES, "metal_hybrid")
+                    + metal_rows(METAL_LARGE, LARGE_SIZES, "metal_hybrid"),
+                ),
+            ],
+        ),
     ]
 
 
@@ -163,7 +270,9 @@ def qiskit_series() -> list[Series]:
         return [(r["num_terms"], r["median_of_medians_seconds"][column]) for r in cpu]
 
     return [
-        Series("neutral", "Qiskit SparsePauliOp.simplify", pick("qiskit"), dashed=True, marker="square"),
+        Series(
+            "neutral", "Qiskit SparsePauliOp.simplify", pick("qiskit"), dashed=True, marker="square"
+        ),
         Series("s1", "Wolfgang, scalar", pick("scalar")),
         Series("s5", "Wolfgang, oneTBB 26 threads", pick("tbb")),
     ]
@@ -193,8 +302,13 @@ def competitive_cases() -> list[Comparison]:
         Comparison("s1", "vs Qiskit simplify", "64 qubits, 10,000 terms", *simplify),
         Comparison("s1", "vs OpenFermion multiply", "256 x 256 terms", *multiply),
         Comparison("s1", "vs Qiskit group_commuting", "512 terms", *grouping),
-        Comparison("s2", "vs cuStateVec expectation", "14 qubits, 4,096 terms, H100",
-                   expectation["fastpauli_cuda_device_resident_seconds"], expectation["competitor_seconds"]),
+        Comparison(
+            "s2",
+            "vs cuStateVec expectation",
+            "14 qubits, 4,096 terms, H100",
+            expectation["fastpauli_cuda_device_resident_seconds"],
+            expectation["competitor_seconds"],
+        ),
     ]
 
 
@@ -209,7 +323,11 @@ def slice_series() -> tuple[list[Step], dict[str, list[Series]]]:
         ("simplify_128_terms_24q", "s1", "simplify, 128 terms"),
         ("simplify_4096_terms_24q", "s2", "simplify, 4,096 terms"),
         ("matmul_128x128_24q", "s3", "matmul, 128 x 128"),
-        ("round_trip_simplify_128_terms", "s4", "round trip, 128 terms (to_device, simplify, to_host)"),
+        (
+            "round_trip_simplify_128_terms",
+            "s4",
+            "round trip, 128 terms (to_device, simplify, to_host)",
+        ),
     ]
     # (report summary, label) per step; the first step is the earliest baseline.
     cuda = [
@@ -233,7 +351,14 @@ def slice_series() -> tuple[list[Step], dict[str, list[Series]]]:
 
     def build(sources: list[tuple[str, str]]) -> list[Series]:
         return [
-            Series(key, label, [(i, overhead(file, row, run_label)) for i, (file, run_label) in enumerate(sources)])
+            Series(
+                key,
+                label,
+                [
+                    (i, overhead(file, row, run_label))
+                    for i, (file, run_label) in enumerate(sources)
+                ],
+            )
             for row, key, label in rows
         ]
 
@@ -252,10 +377,17 @@ class LogAxis:
 
     def map(self, value: float) -> float:
         span = math.log10(self.hi) - math.log10(self.lo)
-        return self.start + (self.end - self.start) * (math.log10(value) - math.log10(self.lo)) / span
+        return (
+            self.start + (self.end - self.start) * (math.log10(value) - math.log10(self.lo)) / span
+        )
 
     def decades(self) -> list[float]:
-        return [10.0**e for e in range(math.ceil(math.log10(self.lo) - 1e-9), math.floor(math.log10(self.hi) + 1e-9) + 1)]
+        return [
+            10.0**e
+            for e in range(
+                math.ceil(math.log10(self.lo) - 1e-9), math.floor(math.log10(self.hi) + 1e-9) + 1
+            )
+        ]
 
 
 @dataclass
@@ -269,10 +401,20 @@ class Canvas:
     def add(self, element: str) -> None:
         self.parts.append(element)
 
-    def text(self, x: float, y: float, value: str, cls: str = "t2", size: int = 12, anchor: str = "start",
-             weight: str = "400") -> None:
-        self.add(f'<text x="{x:.1f}" y="{y:.1f}" class="{cls}" font-size="{size}" text-anchor="{anchor}" '
-                 f'font-weight="{weight}">{esc(value)}</text>')
+    def text(
+        self,
+        x: float,
+        y: float,
+        value: str,
+        cls: str = "t2",
+        size: int = 12,
+        anchor: str = "start",
+        weight: str = "400",
+    ) -> None:
+        self.add(
+            f'<text x="{x:.1f}" y="{y:.1f}" class="{cls}" font-size="{size}" text-anchor="{anchor}" '
+            f'font-weight="{weight}">{esc(value)}</text>'
+        )
 
     def svg(self) -> str:
         head = (
@@ -280,7 +422,7 @@ class Canvas:
             f'viewBox="0 0 {self.width} {self.height}" role="img" aria-labelledby="title desc" '
             f'font-family="{FONT}">\n'
             f'<title id="title">{esc(self.title)}</title>\n<desc id="desc">{esc(self.description)}</desc>\n'
-            f'<style>{series_style()}</style>\n'
+            f"<style>{series_style()}</style>\n"
             f'<rect class="bg" width="{self.width}" height="{self.height}"/>\n'
         )
         return head + "\n".join(self.parts) + "\n</svg>\n"
@@ -292,11 +434,17 @@ def marker(x: float, y: float, key: str, shape: str) -> str:
     return f'<circle class="f-{key}" cx="{x:.1f}" cy="{y:.1f}" r="4.5" stroke="none"/>'
 
 
-def draw_line(canvas: Canvas, series: Series, xmap: Callable[[float], float], ymap: Callable[[float], float]) -> None:
+def draw_line(
+    canvas: Canvas, series: Series, xmap: Callable[[float], float], ymap: Callable[[float], float]
+) -> None:
     coordinates = [(xmap(x), ymap(y)) for x, y in series.points]
-    path = " ".join(("M" if i == 0 else "L") + f"{x:.1f},{y:.1f}" for i, (x, y) in enumerate(coordinates))
+    path = " ".join(
+        ("M" if i == 0 else "L") + f"{x:.1f},{y:.1f}" for i, (x, y) in enumerate(coordinates)
+    )
     dash = ' stroke-dasharray="6 4"' if series.dashed else ""
-    canvas.add(f'<path class="s-{series.key}" d="{path}" fill="none" stroke-width="2" stroke-linejoin="round"{dash}/>')
+    canvas.add(
+        f'<path class="s-{series.key}" d="{path}" fill="none" stroke-width="2" stroke-linejoin="round"{dash}/>'
+    )
     for x, y in coordinates:
         canvas.add(marker(x, y, series.key, series.marker))
 
@@ -316,16 +464,26 @@ def place_labels(wanted: list[float], gap: float, top: float, bottom: float) -> 
     return placed
 
 
-def log_grid(canvas: Canvas, axis: LogAxis, other_start: float, other_end: float, vertical: bool,
-             label: Callable[[float], str]) -> None:
+def log_grid(
+    canvas: Canvas,
+    axis: LogAxis,
+    other_start: float,
+    other_end: float,
+    vertical: bool,
+    label: Callable[[float], str],
+) -> None:
     for value in axis.decades():
         p = axis.map(value)
         if vertical:
-            canvas.add(f'<line class="grid" x1="{p:.1f}" y1="{other_start}" x2="{p:.1f}" y2="{other_end}"/>')
-            canvas.text(p, other_end + 18, label(value), "t3", 11, "middle")
+            canvas.add(
+                f'<line class="grid" x1="{p:.1f}" y1="{other_start}" x2="{p:.1f}" y2="{other_end}"/>'
+            )
+            canvas.text(p, other_end + 18, label(value), "t3", 12, "middle")
         else:
-            canvas.add(f'<line class="grid" x1="{other_start}" y1="{p:.1f}" x2="{other_end}" y2="{p:.1f}"/>')
-            canvas.text(other_start - 8, p + 4, label(value), "t3", 11, "end")
+            canvas.add(
+                f'<line class="grid" x1="{other_start}" y1="{p:.1f}" x2="{other_end}" y2="{p:.1f}"/>'
+            )
+            canvas.text(other_start - 8, p + 4, label(value), "t3", 12, "end")
 
 
 def time_label(seconds: float) -> str:
@@ -336,43 +494,90 @@ def time_label(seconds: float) -> str:
     return f"{seconds:g} s"
 
 
-def end_labels(canvas: Canvas, items: list[tuple[Series, float, float]], x: float, top: float, bottom: float) -> None:
+def end_labels(
+    canvas: Canvas, items: list[tuple[Series, float, float]], x: float, top: float, bottom: float
+) -> None:
     placed = place_labels([y for _, _, y in items], 15, top, bottom)
     for (series, last_x, last_y), y in zip(items, placed, strict=True):
-        canvas.add(f'<line class="s-{series.key}" x1="{last_x + 6:.1f}" y1="{last_y:.1f}" x2="{x - 4:.1f}" '
-                   f'y2="{y - 4:.1f}" stroke-width="1" opacity="0.6"/>')
+        canvas.add(
+            f'<line class="s-{series.key}" x1="{last_x + 6:.1f}" y1="{last_y:.1f}" x2="{x - 4:.1f}" '
+            f'y2="{y - 4:.1f}" stroke-width="1" opacity="0.6"/>'
+        )
         canvas.text(x, y, series.label, "t1", 12)
 
 
 def figure_simplify() -> str:
-    series = simplify_series()
+    panels = simplify_panels()
     canvas = Canvas(
-        980, 600, "Simplify time by backend and operator size",
-        "Log-log lines of simplify time against term count. "
-        + "; ".join(f"{s.label}: " + ", ".join(f"{fmt_terms(x)} terms {fmt_time(y)}" for x, y in s.points) for s in series),
+        980,
+        610,
+        "Simplify time by host and operator size",
+        "Three log-log panels of simplify time against term count, one per host. "
+        + " ".join(
+            f"{panel.title}: "
+            + "; ".join(
+                f"{s.label}: "
+                + ", ".join(f"{fmt_terms(x)} terms {fmt_time(y)}" for x, y in s.points)
+                for s in panel.series
+            )
+            + "."
+            for panel in panels
+        ),
     )
-    left, right, top, bottom = 90, 720, 112, 500
-    xaxis = LogAxis(100, 5e6, left, right)
+    canvas.text(24, 38, "Simplify time by host and operator size", "t1", 20, weight="600")
+    canvas.text(
+        24,
+        62,
+        "Median time per call at 24 qubits, log-log. Each panel is one host, and its CPU lines "
+        "ran on that host.",
+        "t2",
+        13,
+    )
+    canvas.text(
+        24,
+        82,
+        "Solid accelerator lines start with the operator on the device; dashed lines include "
+        "to_device and to_host.",
+        "t2",
+        13,
+    )
+    top, bottom = 136, 456
     yaxis = LogAxis(3e-6, 0.5, bottom, top)
-    canvas.text(24, 38, "Simplify time by backend and operator size", "t1", 20, weight="600")
-    canvas.text(24, 62, "Median time per call, 24 qubits, log-log. Accelerator times are device-resident "
-                "(operator already on the device).", "t2", 13)
-    canvas.text(24, 82, "Where a line sits below CPU scalar, that backend is faster at that size.", "t2", 13)
-    log_grid(canvas, xaxis, top, bottom, True, lambda v: fmt_terms(v) + " terms" if v >= 1e3 else f"{v:g}")
-    log_grid(canvas, yaxis, left, right, False, time_label)
-    canvas.add(f'<line class="axis" x1="{left}" y1="{bottom}" x2="{right}" y2="{bottom}"/>')
-    items = []
-    for s in series:
-        draw_line(canvas, s, xaxis.map, yaxis.map)
-        x, y = s.points[-1]
-        items.append((s, xaxis.map(x), yaxis.map(y)))
-    end_labels(canvas, items, right + 18, top + 8, bottom)
-    canvas.text(24, 540, "128-4,096 terms on CUDA and HIP, and 128 terms on the CPU: distinct terms, one call "
-                "(call-overhead suite). Other points: half of the terms are duplicates.", "t3", 11)
-    canvas.text(24, 558, "Metal runs its GPU-sort hybrid from 12,288 terms; below that the public path is the "
-                "CPU. CPU on a Xeon 8480+ host (the H100's); Metal on an Apple M4 Pro.", "t3", 11)
-    canvas.text(24, 576, "Sources: cpu_parallel_simplify, cuda_device_counts, hip_device_counts, "
-                "metal_hybrid_simplify and metal_followups reports (docs/benchmarks/).", "t3", 11)
+    for p, panel in enumerate(panels):
+        left = 72 + p * 300
+        right = left + 192
+        xaxis = LogAxis(100, 5e6, left, right)
+        canvas.text(left, top - 16, panel.title, "t1", 13, weight="600")
+        for value in xaxis.decades():
+            x = xaxis.map(value)
+            canvas.add(f'<line class="grid" x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{bottom}"/>')
+            if value in (100, 1e4, 1e6):
+                canvas.text(x, bottom + 18, fmt_terms(value), "t3", 12, "middle")
+        canvas.text((left + right) / 2, bottom + 36, "terms", "t3", 12, "middle")
+        for value in yaxis.decades():
+            y = yaxis.map(value)
+            canvas.add(f'<line class="grid" x1="{left}" y1="{y:.1f}" x2="{right}" y2="{y:.1f}"/>')
+            if p == 0:
+                canvas.text(left - 8, y + 4, time_label(value), "t3", 12, "end")
+        canvas.add(f'<line class="axis" x1="{left}" y1="{bottom}" x2="{right}" y2="{bottom}"/>')
+        items = []
+        for s in panel.series:
+            draw_line(canvas, s, xaxis.map, yaxis.map)
+            x, y = s.points[-1]
+            items.append((s, xaxis.map(x), yaxis.map(y)))
+        end_labels(canvas, items, right + 12, top + 8, bottom)
+    for row, line in enumerate(
+        (
+            "CUDA and HIP points at 128-4,096 terms, and CPU points at 128 terms, have distinct terms; "
+            "the other points are half duplicates.",
+            "MI300X host CPU: the CPU control from the same runs, under default dispatch. Metal runs "
+            "its GPU-sort hybrid from 12,288 terms.",
+            "M4 Pro oneTBB: release wheel (onetbb_wheels report). Other sources: cpu_parallel_simplify, "
+            "cuda_device_counts, hip_device_counts,",
+            "metal_hybrid_simplify and metal_followups reports (docs/benchmarks/).",
+        )
+    ):
+        canvas.text(24, 520 + 18 * row, line, "t3", 12)
     return canvas.svg()
 
 
@@ -380,22 +585,33 @@ def figure_libraries() -> str:
     series = qiskit_series()
     cases = competitive_cases()
     canvas = Canvas(
-        980, 570, "Wolfgang against other libraries",
+        980,
+        584,
+        "Wolfgang against other libraries",
         "Left: simplify time against term count for Qiskit and Wolfgang. "
-        + "; ".join(f"{s.label}: " + ", ".join(f"{fmt_terms(x)} {fmt_time(y)}" for x, y in s.points) for s in series)
+        + "; ".join(
+            f"{s.label}: " + ", ".join(f"{fmt_terms(x)} {fmt_time(y)}" for x, y in s.points)
+            for s in series
+        )
         + ". Right: speedup of Wolfgang over each library. "
         + "; ".join(f"{c.label} ({c.detail}): {c.other / c.wolfgang:.1f}x" for c in cases),
     )
     canvas.text(24, 38, "Wolfgang against other libraries", "t1", 20, weight="600")
-    canvas.text(24, 62, "Left: simplify on the same Xeon 8480+ host, 24 qubits, half duplicates (November 2026). "
-                "Right: earlier comparisons (April 2026).", "t2", 13)
+    canvas.text(
+        24,
+        62,
+        "Left: simplify on the same Xeon 8480+ host, 24 qubits, half duplicates (November 2026). "
+        "Right: earlier comparisons (April 2026).",
+        "t2",
+        13,
+    )
     # Left panel: lines.
     left, right, top, bottom = 84, 400, 110, 440
     xaxis = LogAxis(1e3, 2e6, left, right)
     yaxis = LogAxis(1e-4, 0.5, bottom, top)
     log_grid(canvas, xaxis, top, bottom, True, lambda v: fmt_terms(v))
     log_grid(canvas, yaxis, left, right, False, time_label)
-    canvas.text((left + right) / 2, bottom + 38, "terms", "t3", 11, "middle")
+    canvas.text((left + right) / 2, bottom + 38, "terms", "t3", 12, "middle")
     items = []
     for s in series:
         draw_line(canvas, s, xaxis.map, yaxis.map)
@@ -405,65 +621,104 @@ def figure_libraries() -> str:
     for row, s in enumerate(series):
         y = legend_y + row * 18 - 18 * (len(series) - 1)
         dash = ' stroke-dasharray="6 4"' if s.dashed else ""
-        canvas.add(f'<line class="s-{s.key}" x1="{left + 12}" y1="{y + 18 * (len(series) - 1) + 40 - 4}" '
-                   f'x2="{left + 34}" y2="{y + 18 * (len(series) - 1) + 40 - 4}" stroke-width="2"{dash}/>')
+        canvas.add(
+            f'<line class="s-{s.key}" x1="{left + 12}" y1="{y + 18 * (len(series) - 1) + 40 - 4}" '
+            f'x2="{left + 34}" y2="{y + 18 * (len(series) - 1) + 40 - 4}" stroke-width="2"{dash}/>'
+        )
         canvas.text(left + 40, y + 18 * (len(series) - 1) + 40, s.label, "t1", 12)
     last = {s.label: s.points[-1][1] for s in series}
     qiskit = last["Qiskit SparsePauliOp.simplify"]
-    canvas.text(left, bottom + 58, f"At 1M terms Wolfgang is {qiskit / last['Wolfgang, oneTBB 26 threads']:.1f}x "
-                f"faster than Qiskit with oneTBB and {qiskit / last['Wolfgang, scalar']:.2f}x with the scalar kernel.",
-                "t2", 11)
+    canvas.text(
+        left,
+        bottom + 58,
+        f"At 1M terms Wolfgang is {qiskit / last['Wolfgang, oneTBB 26 threads']:.1f}x "
+        f"faster than Qiskit with oneTBB and {qiskit / last['Wolfgang, scalar']:.2f}x with the scalar kernel.",
+        "t2",
+        11,
+    )
     # Right panel: horizontal bars of speedup, log scale.
     bar_left, bar_right = 470, 880
-    axis = LogAxis(1, 500, bar_left, bar_right)
+    axis = LogAxis(1, 1000, bar_left, bar_right)
     row_top = 146
     for value in (1, 10, 100):
         p = axis.map(value)
-        canvas.add(f'<line class="grid" x1="{p:.1f}" y1="{row_top - 14}" x2="{p:.1f}" y2="{row_top + 4 * 74 - 20}"/>')
-        canvas.text(p, row_top + 4 * 74 - 4, f"{value:g}x", "t3", 11, "middle")
-    canvas.text(bar_left, row_top - 46, "Speedup of Wolfgang over each library (log scale)", "t2", 12)
+        canvas.add(
+            f'<line class="grid" x1="{p:.1f}" y1="{row_top - 14}" x2="{p:.1f}" y2="{row_top + 4 * 74 - 20}"/>'
+        )
+        canvas.text(p, row_top + 4 * 74 - 4, f"{value:g}x", "t3", 12, "middle")
+    canvas.text(
+        bar_left, row_top - 46, "Speedup of Wolfgang over each library (log scale)", "t2", 12
+    )
     for i, case in enumerate(cases):
         y = row_top + i * 74
         ratio = case.other / case.wolfgang
         canvas.text(bar_left, y - 16, case.label, "t1", 12, weight="600")
-        canvas.text(bar_left + 7.2 * len(case.label) + 8, y - 16, case.detail, "t3", 11)
+        canvas.text(bar_left + 7.2 * len(case.label) + 8, y - 16, case.detail, "t3", 12)
         width = axis.map(ratio) - bar_left
-        canvas.add(f'<rect class="f-{case.key}" x="{bar_left}" y="{y - 6}" width="{width:.1f}" height="16" rx="4" stroke="none"/>')
-        ratio_text = f"{ratio:.0f}x" if ratio >= 100 else f"{ratio:.1f}x" if ratio >= 10 else f"{ratio:.2f}x"
+        canvas.add(
+            f'<rect class="f-{case.key}" x="{bar_left}" y="{y - 6}" width="{width:.1f}" height="16" rx="4" stroke="none"/>'
+        )
+        ratio_text = (
+            f"{ratio:.0f}x" if ratio >= 100 else f"{ratio:.1f}x" if ratio >= 10 else f"{ratio:.2f}x"
+        )
         canvas.text(bar_left + width + 6, y + 7, ratio_text, "t1", 12, weight="600")
-        canvas.text(bar_left + width + 6 + 8 * len(ratio_text), y + 7,
-                    f"({fmt_time(case.wolfgang)} vs {fmt_time(case.other)})", "t3", 11)
-    canvas.text(24, 520, "April comparisons: Wolfgang scalar CPU, except cuStateVec (Wolfgang CUDA, device-resident), "
-                "on an H100 PCIe host with Qiskit 2.4.1, OpenFermion 1.7.1, cuQuantum 24.8.", "t3", 11)
-    canvas.text(24, 538, "November simplify: Qiskit 1.4.5. Sources: cpu_parallel_simplify_2026-11-03 and "
-                "cuda_deep_optimization_h100_2026-04-28 (docs/benchmarks/).", "t3", 11)
+        canvas.text(
+            bar_left + width + 6 + 8 * len(ratio_text),
+            y + 7,
+            f"({fmt_time(case.wolfgang)} vs {fmt_time(case.other)})",
+            "t3",
+            12,
+        )
+    for row, line in enumerate(
+        (
+            "April comparisons, on an H100 PCIe host: Wolfgang's scalar CPU kernels, except cuStateVec "
+            "(Wolfgang CUDA, device-resident).",
+            "Qiskit 2.4.1, OpenFermion 1.7.1, cuQuantum 24.8. November simplify: Qiskit 1.4.5.",
+            "Sources: cpu_parallel_simplify_2026-11-03 and cuda_deep_optimization_h100_2026-04-28 "
+            "(docs/benchmarks/).",
+        )
+    ):
+        canvas.text(24, 520 + 18 * row, line, "t3", 12)
     return canvas.svg()
 
 
 def figure_slices() -> str:
     steps, panels = slice_series()
     canvas = Canvas(
-        980, 600, "Per-call times across the campaign slices",
+        980,
+        600,
+        "Per-call times across the campaign slices",
         "Two panels, CUDA on an H100 and HIP on an MI300X; lines of per-call time across four steps. "
-        + "; ".join(f"{panel}: " + "; ".join(f"{s.label} " + " -> ".join(fmt_time(y) for _, y in s.points)
-                                              for s in series) for panel, series in panels.items()),
+        + "; ".join(
+            f"{panel}: "
+            + "; ".join(
+                f"{s.label} " + " -> ".join(fmt_time(y) for _, y in s.points) for s in series
+            )
+            for panel, series in panels.items()
+        ),
     )
     canvas.text(24, 38, "Per-call times across the campaign slices", "t1", 20, weight="600")
-    canvas.text(24, 62, "Median time of one call on small device-resident operators (24 qubits), after each slice "
-                "that changed it. Log scale.", "t2", 13)
+    canvas.text(
+        24,
+        62,
+        "Median time of one call on a small 24-qubit operator: a baseline, then after each of three "
+        "changes. Log scale.",
+        "t2",
+        13,
+    )
     panel_width, gap = 410, 70
     top, bottom = 110, 430
     yaxis = LogAxis(1e-5, 2e-3, bottom, top)
     for p, (panel, series) in enumerate(panels.items()):
         left = 90 + p * (panel_width + gap)
-        right = left + panel_width - 170
+        right = left + panel_width - 200
         canvas.text(left, top - 18, panel, "t1", 14, weight="600")
         log_grid(canvas, yaxis, left, right, False, time_label)
         xs = [left + (right - left) * i / (len(steps) - 1) for i in range(len(steps))]
         for i, x in enumerate(xs):
             canvas.add(f'<line class="grid" x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{bottom}"/>')
             name = steps[i].label if p == 0 else steps[i].commit
-            canvas.text(x, bottom + 18, f"{i + 1}", "t3", 11, "middle")
+            canvas.text(x, bottom + 18, f"{i + 1}", "t3", 12, "middle")
             canvas.text(x, bottom + 32, name, "t3", 10, "middle")
         items = []
         for s in series:
@@ -472,20 +727,34 @@ def figure_slices() -> str:
         placed = place_labels([y for _, _, y in items], 15, top + 8, bottom)
         short = {"s1": "simplify 128", "s2": "simplify 4,096", "s3": "matmul", "s4": "round trip"}
         for (s, _, last_y), y in zip(items, placed, strict=True):
-            canvas.text(right + 12, y, f"{short[s.key]}: {fmt_time(s.points[0][1])} \u2192 "
-                        f"{fmt_time(s.points[-1][1])}", "t1", 11)
+            canvas.text(
+                right + 12,
+                y,
+                f"{short[s.key]}: {fmt_time(s.points[0][1])} \u2192 {fmt_time(s.points[-1][1])}",
+                "t1",
+                11,
+            )
     legend_y = 490
     legend_x = 90
     for _, key, label in [(None, s.key, s.label) for s in next(iter(panels.values()))]:
-        canvas.add(f'<rect class="f-{key}" x="{legend_x}" y="{legend_y - 10}" width="12" height="12" rx="3" stroke="none"/>')
+        canvas.add(
+            f'<rect class="f-{key}" x="{legend_x}" y="{legend_y - 10}" width="12" height="12" rx="3" stroke="none"/>'
+        )
         canvas.text(legend_x + 18, legend_y, label, "t1", 12)
         legend_x += 18 + 6.4 * len(label) + 22
-    canvas.text(90, 520, "Steps: 1 before the usability campaign's allocation work; 2 pooled CUDA allocation / HIP "
-                "parity (first HIP campaign slice); 3 fused small-operator simplify;", "t3", 11)
-    canvas.text(90, 538, "4 device-side simplify counts (HIP: with the per-thread scratch cache). Each step's value is "
-                "the candidate of a paired run against the step before.", "t3", 11)
-    canvas.text(90, 556, "Sources: cuda_allocation_reuse, hip_parity, small_simplify, cuda_device_counts and "
-                "hip_device_counts reports (docs/benchmarks/).", "t3", 11)
+    for row, line in enumerate(
+        (
+            "Steps: 1 baseline (CUDA: before pooled allocation; HIP: before the HIP parity changes); "
+            "2 pooled CUDA allocation, or HIP parity;",
+            "3 fused small-operator simplify; 4 device-side simplify counts (HIP: with the per-thread "
+            "scratch cache). Simplify and matmul",
+            "start on the device. Steps 2-4 are each the candidate of a paired run against the step "
+            "before. Sources: cuda_allocation_reuse,",
+            "hip_parity, small_simplify, cuda_device_counts and hip_device_counts reports "
+            "(docs/benchmarks/).",
+        )
+    ):
+        canvas.text(90, 520 + 18 * row, line, "t3", 12)
     return canvas.svg()
 
 
@@ -497,8 +766,12 @@ FIGURES: dict[str, Callable[[], str]] = {
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--check", action="store_true", help="fail if a committed figure differs from the data")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--check", action="store_true", help="fail if a committed figure differs from the data"
+    )
     args = parser.parse_args()
     stale = []
     for name, render in FIGURES.items():
@@ -510,7 +783,9 @@ def main() -> int:
         else:
             path.write_text(text, encoding="utf-8")
     if stale:
-        raise SystemExit("stale figures (rerun scripts/render_readme_figures.py): " + ", ".join(stale))
+        raise SystemExit(
+            "stale figures (rerun scripts/render_readme_figures.py): " + ", ".join(stale)
+        )
     return 0
 
 
