@@ -109,6 +109,10 @@ def main() -> int:
     parser.add_argument("--seed", type=int, default=20261104)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--summarize", type=Path, help="aggregate saved reports in this directory")
+    parser.add_argument(
+        "--sizes", help="comma-separated term counts replacing the default size grid"
+    )
+    parser.add_argument("--no-qiskit", action="store_true", help="skip the Qiskit baseline")
     args = parser.parse_args()
     if args.summarize:
         text = json.dumps(summarize_reports(args.summarize), indent=2, sort_keys=True)
@@ -123,11 +127,15 @@ def main() -> int:
         from qiskit.quantum_info import SparsePauliOp
     except ImportError:
         SparsePauliOp = None
+    if args.no_qiskit:
+        SparsePauliOp = None
+    sizes = tuple(int(size) for size in args.sizes.split(",")) if args.sizes else SIZES
+    cases = [(q, n, d) for q in (24, 100, 130) for n in sizes for d in (0.0, 0.5, 0.9)]
 
     rng = np.random.default_rng(args.seed)
     order_rng = random.Random(args.seed)
     rows = []
-    for num_qubits, num_terms, duplicates in SMOKE_CASES if args.smoke else CASES:
+    for num_qubits, num_terms, duplicates in SMOKE_CASES if args.smoke else cases:
         labels, coeffs = random_operator(rng, num_qubits, num_terms, duplicates)
         op = wolfgang_quantum.PauliSum.from_labels(labels.tolist(), coeffs)
         variants: dict[str, Callable[[], Any]] = {"scalar": with_selector("scalar", op.simplify)}
