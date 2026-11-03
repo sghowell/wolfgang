@@ -33,7 +33,7 @@ import wolfgang_quantum
 import wolfgang_quantum._wolfgang_core as core
 
 SELECTOR = "WOLFGANG_CPU_BACKEND"
-CASES = [(q, n, d) for q in (24, 100, 130) for n in (10_000, 100_000, 1_000_000) for d in (0.0, 0.5, 0.9)]
+CASES = [(q, n, d) for q in (24, 100, 130) for n in (2_000, 10_000, 30_000, 100_000, 1_000_000) for d in (0.0, 0.5, 0.9)]
 SMOKE_CASES = [(24, 2_000, 0.5)]
 
 

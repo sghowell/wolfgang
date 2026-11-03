@@ -237,8 +237,12 @@ def test_forced_optimized_backend_rejects_scalar_only_operations(monkeypatch: py
     monkeypatch.setenv("WOLFGANG_CPU_BACKEND", backend)
     expected = f"WOLFGANG_CPU_BACKEND={backend}"
 
-    with pytest.raises(RuntimeError, match=expected):
-        op.simplify()
+    if backend == "tbb":
+        # simplify has a oneTBB kernel, so a forced tbb backend runs it.
+        assert op.simplify() == op.simplify()
+    else:
+        with pytest.raises(RuntimeError, match=expected):
+            op.simplify()
     with pytest.raises(RuntimeError, match=expected):
         op.matmul(op)
     with pytest.raises(RuntimeError, match=expected):
