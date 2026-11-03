@@ -49,8 +49,9 @@ public:
   [[nodiscard]] std::string backend() const;
   // Device pointer for interop. On CUDA, handing it out marks the matrix so
   // that freeing it synchronizes the device first, because a consumer may still
-  // have work queued on another stream. The buffer belongs to the owning device
-  // only; peer devices cannot read it.
+  // have work queued on another stream. The first export from a device also maps
+  // its memory pool into every peer GPU that can access it, so peer kernels can
+  // read the buffer.
   [[nodiscard]] std::uintptr_t data_pointer_for_cuda_array_interface() const;
   [[nodiscard]] std::uintptr_t data_pointer_for_dlpack() const;
   [[nodiscard]] int dlpack_device_type() const;

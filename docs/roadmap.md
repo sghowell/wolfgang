@@ -30,15 +30,16 @@ wheels exposed, and ends with a documentation pass. Review closeout:
 - Slice 5 (merged): the release CycloneDX SBOM lists the bundled oneTBB
   runtime and the vendored DLPack header next to the Python dependencies,
   added by `scripts/sbom_bundled_components.py`.
-- Slice 6, multi-GPU peer access and tests, waits for a host with two or more
-  GPUs; the current H100 and MI300X hosts have one each.
+- Slice 6 (merged): on two NVLink-connected H100s, peer GPUs can read exported
+  buffers, CUDA calls release the GIL so two threads reach 1.88-1.98 times one
+  thread's throughput, and a process that uses only GPU 1 no longer holds a
+  context on GPU 0 (`docs/benchmarks/reports/cuda_multi_gpu_h100_2026-11-03.md`).
 - Slice 7 (merged): README and site figures drawn from committed benchmark
   data (`scripts/render_readme_figures.py`), Mermaid diagrams that render on
   the site, and an editing pass over the user and engineering docs.
 
 Next:
 
-- Run slice 6 once a multi-GPU host is available.
 - Measure auto dispatch's four-thread oneTBB floor on more hosts and sizes,
   separately for simplify and pairwise commutation, before moving it. With
   the slice 4 cap, oneTBB at two and three threads beat scalar simplify at

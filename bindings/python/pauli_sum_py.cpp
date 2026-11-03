@@ -1678,8 +1678,9 @@ void bind_pauli_sum(nb::module_& module) {
           "is the highest version supported by both producer and consumer; "
           "copy=True and stream=0 are "
           "rejected by contract. On CUDA, exporting marks the matrix so that "
-          "freeing it synchronizes the device first, and the buffer is readable "
-          "from the owning device only. HIP-backed matrices raise until a ROCm "
+          "freeing it synchronizes the device first, and maps the device's memory "
+          "pool into peer GPUs that support peer access, so their kernels can read "
+          "the buffer. HIP-backed matrices raise until a ROCm "
           "consumer enforces Wolfgang's read-only export contract.")
       .def(
           "__dlpack_device__",
@@ -1696,7 +1697,7 @@ void bind_pauli_sum(nb::module_& module) {
           },
           "CUDA Array Interface view of the owned dense uint8 device buffer.\n\n"
           "On CUDA, exporting marks the matrix so that freeing it synchronizes the device "
-          "first; the buffer is readable from the owning device only.");
+          "first, and maps the device's memory pool into peer GPUs that support peer access.");
 
   nb::class_<DeviceArrayView>(
       module,

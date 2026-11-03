@@ -186,14 +186,65 @@ def peer_suite(repeat: int) -> dict[str, Any]:
     return {"samples": samples, "summary": summary}
 
 
+def summarize_reports(directory: Path) -> dict[str, Any]:
+    """Medians across saved reports, per label, with each run's provenance."""
+    runs: list[dict[str, Any]] = []
+    threads: dict[str, dict[str, dict[str, list[float]]]] = {}
+    peer: dict[str, dict[str, dict[str, list[float]]]] = {}
+    for path in sorted(directory.glob("*.json")):
+        report = json.loads(path.read_text(encoding="utf-8"))
+        if report.get("benchmark") not in ("cuda_multi_gpu_threads", "cuda_multi_gpu_peer"):
+            continue
+        label = report.get("label", "")
+        runs.append({
+            "file": path.name,
+            "benchmark": report["benchmark"],
+            "label": label,
+            "command": report.get("command"),
+            "git_commit": report["git"].get("commit"),
+            "git_dirty": report["git"].get("dirty"),
+            "loaded_native_build": report["environment"].get("loaded_native_build", {}),
+        })
+        if report["benchmark"] == "cuda_multi_gpu_threads":
+            for name, row in report["rows"].items():
+                fields = threads.setdefault(name, {}).setdefault(label, {})
+                for field in ("one_thread_seconds_per_call", "two_device_throughput_vs_one_thread",
+                              "same_device_throughput_vs_one_thread"):
+                    fields.setdefault(field, []).append(row[field])
+        else:
+            for mode, fields_summary in report["rows"]["summary"].items():
+                fields = peer.setdefault(mode, {}).setdefault(label, {})
+                for field, values in fields_summary.items():
+                    fields.setdefault(field, []).extend(values["values"])
+
+    def medians(table: dict[str, dict[str, dict[str, list[float]]]]) -> dict[str, Any]:
+        return {
+            name: {
+                label: {field: {"values": values, "median": float(np.median(values))} for field, values in fields.items()}
+                for label, fields in by_label.items()
+            }
+            for name, by_label in table.items()
+        }
+
+    return {"runs": runs, "threads": medians(threads), "peer": medians(peer)}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--suite", choices=("threads", "peer"), default="threads")
     parser.add_argument("--repeat", type=int, default=5)
     parser.add_argument("--label", default="")
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--summarize", type=Path, help="aggregate saved reports in this directory")
     parser.add_argument("--child-peer", choices=("0", "1"), help=argparse.SUPPRESS)
     args = parser.parse_args()
+    if args.summarize:
+        text = json.dumps(summarize_reports(args.summarize), indent=2, sort_keys=True)
+        if args.output:
+            args.output.write_text(text + "\n", encoding="utf-8")
+        else:
+            sys.stdout.write(text + "\n")
+        return 0
     if args.child_peer is not None:
         sys.stdout.write(json.dumps(peer_child(args.child_peer == "1")) + "\n")
         return 0

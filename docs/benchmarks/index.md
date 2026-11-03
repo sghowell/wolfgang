@@ -29,6 +29,7 @@ Plan: `docs/plans/accelerator_followups_campaign_plan.md`. Review closeout:
 | [HIP device-side counts and cached scratch](reports/hip_device_counts_mi300x_2026-11-03.md) | The same pipeline on an MI300X, and why its scratch needs a per-thread cache |
 | [Host transfers through pinned memory](reports/host_transfers_2026-11-03.md) | `to_host` and `to_device` on an H100 and an MI300X, and why page faults dominated large copies |
 | [CPU thread cap](reports/cpu_threads_2026-11-03.md) | Simplify under a oneTBB thread cap, with processes sharing cores and inside a CPU quota |
+| [CUDA on two GPUs](reports/cuda_multi_gpu_h100_2026-11-03.md) | Peer reads of exports, two threads on two H100s, and contexts on unused GPUs |
 
 ## Portability and interop campaign (November 2026)
 
@@ -86,6 +87,7 @@ By backend, oldest first. Link text is each report's title (early reports predat
 - 2026-04-29: [CUDA Residual-Risk Campaign 11 Report](reports/cuda_residual_risk_campaign11_2026-04-29.md)
 - 2026-11-03: [CUDA Allocation Reuse And Call Overhead On H100](reports/cuda_allocation_reuse_h100_2026-11-03.md)
 - 2026-11-03: [Pooled CUDA Commutation Output](reports/cuda_commutation_pool_h100_2026-11-03.md)
+- 2026-11-03: [CUDA On Two GPUs](reports/cuda_multi_gpu_h100_2026-11-03.md)
 - 2026-11-03: [CUDA Simplify With Device-Side Counts](reports/cuda_device_counts_h100_2026-11-03.md)
 - 2026-11-03: [CUDA Simplify Paths On H100](reports/cuda_simplify_paths_h100_2026-11-03.md)
 - 2026-11-03: [CUDA Small-Operation Profile: Streams And Graphs](reports/cuda_small_op_profile_h100_2026-11-03.md)

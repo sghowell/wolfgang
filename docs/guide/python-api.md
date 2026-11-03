@@ -141,6 +141,24 @@ undefined behavior. PyTorch reads them with `torch.from_dlpack(view)`.
 `from_device_arrays` waits for producers on any stream and returns after its
 copy completes. HIP and Metal raise for both.
 
+`to_device(device=n)` places an operator on GPU `n`, and operands of one call
+must share a device. In CUDA builds, device calls release the GIL, so one Python
+thread per GPU keeps several GPUs busy at once; threads that share a GPU take
+turns, since a GPU runs one Wolfgang computation at a time. A call switches back
+to the thread's current device afterwards, unless that device has no CUDA
+context yet: then the thread stays on the operator's device, so a process that
+only uses GPU 1 never allocates a context on GPU 0.
+
+```python
+from concurrent.futures import ThreadPoolExecutor
+
+def simplify_on(device, op):
+    return op.to_device(device=device).simplify().to_host()
+
+with ThreadPoolExecutor(max_workers=2) as pool:
+    simplified = list(pool.map(simplify_on, [0, 1], [h0, h1]))  # h0, h1: host PauliSum objects
+```
+
 ## `DeviceCommutationMatrix`
 
 `DeviceCommutationMatrix` is an owning dense device output with compact reductions. Dense outputs are guarded because `rows * cols` may be large. Its interop protocols have explicit backend and read-only limitations.

@@ -186,6 +186,9 @@ backend selector behavior
 CUDA availability errors and skips
 stream and synchronization semantics once documented
 accepted device array protocols
+device calls release the GIL; compute calls on one device run one at a time
+mixed-device operands raise ValueError; the caller's current device is restored when it has a context
+the first export from a device maps its memory pool into peer GPUs that support peer access
 ```
 
 Do not change CUDA synchronization or ownership semantics without updating `docs/architecture/cuda_backend.md`, tests, and user documentation.
