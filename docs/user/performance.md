@@ -107,10 +107,13 @@ unless the corresponding backend was compiled and the current CPU supports it.
 evidence:
 
 ```text
-large pairwise commutation: oneTBB when compiled, otherwise AVX-512, AVX2, NEON, or scalar
+large pairwise commutation (from 331,776 entries; from 2048 x 2048 for one-word
+  operators on AVX2 or AVX-512): oneTBB when compiled and at least 3 threads are
+  available (2 when no SIMD kernel covers the operator), each thread running the
+  best SIMD kernel; otherwise AVX-512, AVX2, NEON, or scalar
 full grouping graph construction: AVX-512, AVX2, NEON, or scalar
 simplify (including inside matmul, commutator and equiv): oneTBB from 8,192 terms
-  when compiled and at least 4 threads are available, otherwise scalar
+  when compiled and at least 2 threads are available, otherwise scalar
 all other kernels: scalar
 ```
 
@@ -296,12 +299,13 @@ counts the cores the affinity mask allows, not a container's CPU quota.
   14.5 ms), so the cap trades the best case for steady calls;
 - four uncapped processes sharing the cores ran as fast as four capped ones;
   oneTBB tolerated the oversubscription;
-- a cap below four threads sends auto dispatch to the scalar or SIMD kernels,
-  so eight processes capped at three threads each were slower than eight
-  uncapped ones.
+- eight processes capped at three threads each were slower than eight
+  uncapped ones, because auto dispatch then required four threads for oneTBB.
+  It now needs two for simplify (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`).
 
-Use the cap for CPU quotas and to leave cores for other work, and keep it at
-four or more when the process should still run oneTBB.
+Use the cap for CPU quotas and to leave cores for other work. Two oneTBB threads
+beat scalar simplify on every host measured, including one core's two
+hyperthreads; a cap of one gives single-threaded execution.
 
 Optimized kernels:
 

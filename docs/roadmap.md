@@ -32,6 +32,10 @@ wheels exposed, and ends with a documentation pass. Review closeout:
   added by `scripts/sbom_bundled_components.py`.
 - Slice 6, multi-GPU peer access and tests, waits for a host with two or more
   GPUs; the current H100 and MI300X hosts have one each.
+- Slice 8 (merged): auto dispatch runs simplify on oneTBB from two threads and
+  pairwise commutation from two or three, and the oneTBB commutation kernel
+  runs SIMD in each thread
+  (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`).
 - Slice 7 (merged): README and site figures drawn from committed benchmark
   data (`scripts/render_readme_figures.py`), Mermaid diagrams that render on
   the site, and an editing pass over the user and engineering docs.
@@ -39,10 +43,6 @@ wheels exposed, and ends with a documentation pass. Review closeout:
 Next:
 
 - Run slice 6 once a multi-GPU host is available.
-- Measure auto dispatch's four-thread oneTBB floor on more hosts and sizes,
-  separately for simplify and pairwise commutation, before moving it. With
-  the slice 4 cap, oneTBB at two and three threads beat scalar simplify at
-  500,000 terms on one host.
 - Publishing a release (tags, PyPI uploads) waits for explicit approval.
 
 Previous campaign (complete):

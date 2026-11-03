@@ -29,6 +29,7 @@ Plan: `docs/plans/accelerator_followups_campaign_plan.md`. Review closeout:
 | [HIP device-side counts and cached scratch](reports/hip_device_counts_mi300x_2026-11-03.md) | The same pipeline on an MI300X, and why its scratch needs a per-thread cache |
 | [Host transfers through pinned memory](reports/host_transfers_2026-11-03.md) | `to_host` and `to_device` on an H100 and an MI300X, and why page faults dominated large copies |
 | [CPU thread cap](reports/cpu_threads_2026-11-03.md) | Simplify under a oneTBB thread cap, with processes sharing cores and inside a CPU quota |
+| [oneTBB thread floors](reports/cpu_thread_floor_2026-11-03.md) | oneTBB against scalar and SIMD at one to four threads on small pinned machines, and SIMD inside oneTBB commutation |
 
 ## Portability and interop campaign (November 2026)
 
@@ -127,6 +128,7 @@ By backend, oldest first. Link text is each report's title (early reports predat
 - 2026-08-21: [Wave 1B CPU Small-Shape Dispatch Report](reports/cpu_small_shape_dispatch_wave1b_2026-08-21.md)
 - 2026-09-21: [Python Boundary Hardening (2026-09-21)](reports/python_boundary_hardening_2026-09-21.md)
 - 2026-11-03: [CPU Parallel Simplify With oneTBB](reports/cpu_parallel_simplify_2026-11-03.md)
+- 2026-11-03: [oneTBB Thread Floors](reports/cpu_thread_floor_2026-11-03.md)
 - 2026-11-03: [CPU Thread Cap](reports/cpu_threads_2026-11-03.md)
 - 2026-11-03: [Host API Boundary And Commutator Timings](reports/host_api_2026-11-03.md)
 - 2026-11-03: [oneTBB In Release Wheels](reports/onetbb_wheels_2026-11-03.md)

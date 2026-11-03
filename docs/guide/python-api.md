@@ -34,10 +34,13 @@ wolfgang_quantum.set_num_threads(4)  # e.g. one of four worker processes on 16 c
 assert wolfgang_quantum.get_num_threads() <= 4
 ```
 
-Below four threads, auto dispatch uses the scalar or SIMD kernels instead of
-oneTBB, so `set_num_threads(1)` gives single-threaded execution, and a process
-pool with fewer than four threads per process runs those kernels. A cap at or
-above oneTBB's default concurrency leaves oneTBB uncapped.
+Auto dispatch runs simplify on oneTBB from two threads. Pairwise commutation
+also uses oneTBB from two threads when no SIMD kernel covers the operator, and
+from three threads when one does (one- and two-word operators on CPUs with
+AVX2, AVX-512 or NEON); one-word operators on AVX2 or AVX-512 also need a
+matrix of at least 2048 x 2048 entries. `set_num_threads(1)` gives single-threaded execution
+with the scalar or SIMD kernels. A cap at or above oneTBB's default
+concurrency leaves oneTBB uncapped.
 
 ## `PauliSum`
 

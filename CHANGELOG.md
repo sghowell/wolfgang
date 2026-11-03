@@ -6,6 +6,22 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- CPU, oneTBB on small machines:
+  - Auto dispatch runs simplify on oneTBB from two threads instead of four.
+    Two threads beat scalar from 8,192 terms on every host measured: 1.09-1.47x
+    on one core's two hyperthreads of an EPYC 9654, 1.11-1.33x on a Xeon
+    8480+'s, 1.45-1.67x on two Xeon cores, and 1.7-3.4x on an M4 Pro.
+  - oneTBB pairwise commutation runs the best SIMD kernel in each thread, where
+    it used to run a scalar loop. On a four-vCPU AVX-512 machine, auto picked
+    oneTBB at 0.23-0.26 times the speed of one AVX-512 thread; with three
+    threads the new kernel beats AVX-512 by 1.2-1.7x on two-word operators.
+  - Pairwise commutation uses oneTBB from two threads when no SIMD kernel covers
+    the operator and from three when one does, and one-word operators on AVX2
+    or AVX-512 need at least 2048 x 2048 entries, below which writing the
+    output, not the arithmetic, limits them.
+  - Single-threaded commutation kernels are faster: AVX-512 by 1.10-1.24x, AVX2
+    by 1.21-1.40x, scalar by up to 1.6x.
+  (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`)
 - Documentation: the README, the site home page, the performance guide and the
   benchmark evidence index show three figures generated from committed
   benchmark data by `scripts/render_readme_figures.py`: simplify time against
@@ -22,8 +38,7 @@ Next version: TBD
 - `wolfgang_quantum.set_num_threads(n)` and the `WOLFGANG_NUM_THREADS`
   environment variable cap the threads Wolfgang's oneTBB CPU kernels use, for
   the whole process; `get_num_threads()` reports the current count. Auto
-  dispatch's four-thread oneTBB floor now counts the capped threads, so a cap
-  below four runs the scalar or SIMD kernels. Inside a 4-CPU quota on a
+  dispatch's oneTBB thread floors count the capped threads. Inside a 4-CPU quota on a
   26-vCPU host, a cap of 4 made simplify 1.25x faster on average and its
   90th-percentile time 2.6x shorter, at the cost of a slower median call
   (`docs/benchmarks/reports/cpu_threads_2026-11-03.md`).

@@ -137,8 +137,9 @@ C++: wolfgang::set_cpu_thread_limit, wolfgang::cpu_thread_limit
   (include/wolfgang/cpu_backend.hpp), std::invalid_argument for the same cases
 ```
 
-The auto-dispatch thresholds the cap interacts with (the four-thread oneTBB
-floor) are implementation details and may change with evidence.
+The auto-dispatch thresholds the cap interacts with (the oneTBB thread floors:
+two threads for simplify, two or three for pairwise commutation) are
+implementation details and may change with evidence.
 
 ## C++ API And ABI
 

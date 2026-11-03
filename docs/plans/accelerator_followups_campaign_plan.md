@@ -31,6 +31,10 @@ report names.
   2.4x at 500,000 terms on one host. Measure it on more hosts and sizes,
   separately for simplify (which could take its own floor) and pairwise
   commutation (where the alternative is a SIMD kernel), before moving it.
+  Taken up as slice 8 (approved rule: lower each kernel's floor to the smallest
+  thread count at which oneTBB is at least as fast as the alternative from the
+  switch point up on every host measured, and raise the switch point instead
+  where oneTBB loses only near it).
 
 ## Decisions carried into the campaign
 
@@ -96,3 +100,13 @@ fence format emits `div.mermaid`. The user and engineering docs were edited
 for plain, specific prose, `docs/quality/documentation_standards.md` gained a
 prose-patterns section, and the benchmark protocol's README-plot rules now
 describe the three figures.
+
+Slice 8 (oneTBB thread floors) merged: measured on an EPYC 9654 and a Xeon
+8480+ pinned to one core's two hyperthreads, two cores, three and four vCPUs
+(and the Xeon unpinned), and on an M4 Pro. Simplify runs on oneTBB from two
+threads. The oneTBB commutation kernel ran a scalar loop per thread, at
+0.23-0.26 times one AVX-512 thread with four threads; each chunk now runs the
+best SIMD row kernel, and the row kernels themselves are 1.1-1.6x faster.
+Pairwise commutation uses oneTBB from two threads over scalar and three over
+SIMD, and one-word operators on AVX2 or AVX-512 from 2048 x 2048 entries
+(`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`).
