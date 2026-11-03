@@ -150,7 +150,7 @@ def test_active_docs_use_wolfgang_canonical_import_and_header_surfaces() -> None
         "docs/user/expectation_values.md": ["from wolfgang_quantum import PauliSum"],
         "docs/user/performance.md": ["wolfgang_quantum._wolfgang_core", "import wolfgang_quantum"],
         "docs/architecture/api_stability.md": ["include/wolfgang"],
-        "docs/architecture/adapter_contracts.md": ["Importing `wolfgang_quantum` must not import Qiskit or OpenFermion."],
+        "docs/architecture/adapter_contracts.md": ["Importing `wolfgang_quantum` must not import Qiskit, OpenFermion or CUDA-Q."],
         "docs/quality/python_binding_policy.md": ["wolfgang_quantum.capabilities()"],
         "docs/quality/code_standards.md": ["include/wolfgang"],
         "docs/quality/phase_quality_gates.md": ["import wolfgang_quantum", "wolfgang_quantum.__version__"],
