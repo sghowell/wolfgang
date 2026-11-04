@@ -1,10 +1,11 @@
 """Auto dispatch's oneTBB thread floors.
 
 Auto runs simplify (from 8,192 terms) on oneTBB with at least two threads, and
-pairwise commutation (from 331,776 entries) with at least two threads when the
-alternative is the scalar kernel or three when a SIMD kernel covers the
-operator: each oneTBB thread runs that SIMD kernel, and one core's two
-hyperthreads share its vector units (docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md).
+pairwise commutation (from 331,776 entries) with at least two threads, or three
+when an AVX2 or AVX-512 kernel covers the operator: each oneTBB thread runs that
+kernel, and one core's two hyperthreads share its vector units. One-word
+operators on AVX2 or AVX-512 also need 2048 x 2048 entries
+(docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md).
 
 oneTBB use is observed through the fork guard: a child forked after a oneTBB
 kernel ran reports one thread.
@@ -74,7 +75,7 @@ def _ran_onetbb(cap: int, workload: str) -> tuple[int, bool]:
 def test_floors_are_reported() -> None:
     assert THRESHOLDS["tbb_simplify_min_concurrency"] == 2
     assert THRESHOLDS["tbb_pairwise_min_concurrency"] == 2
-    assert THRESHOLDS["tbb_pairwise_min_concurrency_over_simd"] == 3
+    assert THRESHOLDS["tbb_pairwise_min_concurrency_over_x86_simd"] == 3
     assert THRESHOLDS["tbb_pairwise_one_word_x86_simd_entries"] == 2048 * 2048
 
 
@@ -85,11 +86,13 @@ def test_simplify_uses_onetbb_from_two_threads(cap: int) -> None:
 
 
 @pytest.mark.parametrize("cap", [2, 3])
-def test_commutation_over_simd_uses_onetbb_from_three_threads(cap: int) -> None:
+def test_commutation_over_simd_uses_onetbb_from_three_threads_on_x86(cap: int) -> None:
+    # Over AVX2 or AVX-512 two threads can be one core's hyperthreads, which
+    # share its vector units; Arm cores have no SMT, so NEON needs two.
     if not SIMD:
         pytest.skip("no SIMD commutation kernel is available")
     threads, used = _ran_onetbb(cap, COMMUTATION.format(terms=600, words=2))
-    assert used is (threads >= 3)
+    assert used is (threads >= (3 if X86_SIMD else 2))
 
 
 @pytest.mark.parametrize("cap", [1, 2])

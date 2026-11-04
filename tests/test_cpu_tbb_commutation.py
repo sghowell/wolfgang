@@ -45,3 +45,21 @@ def test_forced_onetbb_commutation_matches_scalar(
             assert np.array_equal(np.asarray(lhs.commutes_with(rhs)), expected), cap
     finally:
         wolfgang_quantum.set_num_threads(1_000_000)  # a cap above the hardware means no cap
+
+
+@pytest.mark.parametrize("num_qubits", [24, 64, 100])
+@pytest.mark.parametrize(("lhs_terms", "rhs_terms"), [(577, 1023), (1, 9), (31, 7)])
+def test_forced_simd_commutation_matches_scalar(
+    monkeypatch: pytest.MonkeyPatch, num_qubits: int, lhs_terms: int, rhs_terms: int
+) -> None:
+    # Each row kernel, not only the widest one oneTBB picks, against scalar.
+    selectors = [name for name in ("avx512", "avx2", "neon") if name in core._build_info()["available_cpu_backends"]]
+    if not selectors:
+        pytest.skip("no SIMD commutation kernel is available")
+    lhs = _operator(num_qubits, lhs_terms, seed=lhs_terms + 5 * num_qubits)
+    rhs = _operator(num_qubits, rhs_terms, seed=rhs_terms + 7 * num_qubits)
+    monkeypatch.setenv("WOLFGANG_CPU_BACKEND", "scalar")
+    expected = np.asarray(lhs.commutes_with(rhs))
+    for selector in selectors:
+        monkeypatch.setenv("WOLFGANG_CPU_BACKEND", selector)
+        assert np.array_equal(np.asarray(lhs.commutes_with(rhs)), expected), selector
