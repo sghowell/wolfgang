@@ -1,10 +1,14 @@
-"""Single-threaded pairwise commutation per kernel, for comparing two builds.
+"""Pairwise commutation per kernel, for comparing two builds.
 
-Each forced selector (``WOLFGANG_CPU_BACKEND``) times ``PauliSum.commutes_with``
-on deterministic square operators and reports the median of ``--calls`` calls
-after ``--warmup`` calls. Run it once per build, alternating builds, pinned to
-one core (for example ``taskset -c 4``), then ``--summarize`` the directory of
-reports into per-label medians of the per-run medians.
+Each selector (``WOLFGANG_CPU_BACKEND``: a forced kernel, or ``auto``) times
+``PauliSum.commutes_with`` on deterministic square operators and reports the
+median of ``--calls`` calls after ``--warmup`` calls. ``--method into`` times
+``PauliSum.commutes_with_into`` into one reused output array instead, which
+builds without that method skip. Run it once per build, alternating builds,
+pinned to one core for the single-threaded kernels (for example
+``taskset -c 4``) or to a fixed set of CPUs for ``tbb`` and ``auto``, then
+``--summarize`` the directory of reports into per-label medians of the per-run
+medians.
 """
 
 from __future__ import annotations
@@ -57,6 +61,7 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
         runs.append({
             "file": path.name,
             "label": label,
+            "method": report.get("method", "commutes_with"),
             "command": report.get("command"),
             "git_commit": report["git"].get("commit"),
             "git_dirty": report["git"].get("dirty"),
@@ -82,7 +87,9 @@ def summarize_reports(directory: Path) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--selectors", default="avx512,avx2,neon,scalar",
-                        help="forced selectors to time; unavailable ones are skipped")
+                        help="selectors to time (auto or forced kernels); unavailable kernels are skipped")
+    parser.add_argument("--method", choices=("commutes_with", "into"), default="commutes_with",
+                        help="time commutes_with, or commutes_with_into with a reused output array")
     parser.add_argument("--cases", default="24:576,24:4096,100:576,100:4096", help="qubits:terms pairs")
     parser.add_argument("--calls", type=int, default=15)
     parser.add_argument("--warmup", type=int, default=3)
@@ -98,28 +105,37 @@ def main() -> int:
         else:
             sys.stdout.write(text + "\n")
         return 0
-    available = set(core._build_info()["available_cpu_backends"])
+    available = set(core._build_info()["available_cpu_backends"]) | {"auto"}
     selectors = [name for name in args.selectors.split(",") if name in available]
+    if args.method == "into" and not hasattr(wolfgang_quantum.PauliSum, "commutes_with_into"):
+        sys.stderr.write("this build has no PauliSum.commutes_with_into\n")
+        return 1
     cases = [tuple(int(part) for part in case.split(":")) for case in args.cases.split(",")]
     operators = {(qubits, terms): operator(qubits, terms, args.seed + qubits + terms) for qubits, terms in cases}
     results: dict[str, dict[str, float]] = {}
     for selector in selectors:
         os.environ[SELECTOR] = selector
         for (qubits, terms), op in operators.items():
-            if selector != "scalar" and (qubits + 63) // 64 > 2:
+            if selector in ("avx512", "avx2", "neon") and (qubits + 63) // 64 > 2:
                 continue  # SIMD commutation covers one- and two-word operators
+            if args.method == "into":
+                output = np.empty(terms * terms, dtype=np.bool_)
+                call = lambda op=op, output=output: op.commutes_with_into(op, output)  # noqa: E731
+            else:
+                call = lambda op=op: op.commutes_with(op)  # noqa: E731
             for _ in range(args.warmup):
-                op.commutes_with(op)
+                call()
             times = []
             for _ in range(args.calls):
                 start = time.perf_counter()
-                op.commutes_with(op)
+                call()
                 times.append(time.perf_counter() - start)
             results.setdefault(selector, {})[f"{qubits}q_{terms}x{terms}"] = float(np.median(times))
     os.environ.pop(SELECTOR, None)
     report = {
         "benchmark": "cpu_commutation_kernels",
         "label": args.label,
+        "method": args.method,
         "command": command_string(),
         "git": git_provenance(),
         "seed": args.seed,
