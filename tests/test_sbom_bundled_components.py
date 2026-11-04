@@ -220,6 +220,8 @@ def test_validation_needs_a_spec_version() -> None:
 
 def test_release_workflow_writes_and_attests_one_sbom_per_artifact_kind() -> None:
     workflow = (ROOT / ".github" / "workflows" / "release-wheelhouse.yml").read_text(encoding="utf-8")
+    # CycloneDX 1.7 needs cyclonedx-python-lib 11, which pip-audit 2.9 excluded.
+    assert '"cyclonedx-python-lib==11.' in workflow
     generate = workflow.index("cyclonedx-py requirements runtime-requirements.txt")
     assert "--spec-version 1.7" in workflow[generate:generate + 300]
     write = workflow.index("python scripts/sbom_bundled_components.py --validate")
