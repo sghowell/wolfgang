@@ -354,7 +354,7 @@ def test_workflows_and_packaging_prefer_wolfgang_canonical_flags() -> None:
         assert "cmake.define.WOLFGANG_ENABLE_METAL=OFF" in workflow_text or "-DWOLFGANG_ENABLE_METAL=OFF" in workflow_text
         assert "cmake.define.WOLFGANG_ENABLE_NATIVE=OFF" in workflow_text or "-DWOLFGANG_ENABLE_NATIVE=OFF" in workflow_text
 
-    assert "sbom/wolfgang-runtime.cdx.json" in release_wheelhouse
+    assert "sbom-path: sbom/wolfgang-quantum-sdist.cdx.json" in release_wheelhouse
     assert "fastpauli-runtime.cdx.json" not in release_wheelhouse
 
     config_settings_section = pyproject.split("[tool.cibuildwheel.config-settings]", maxsplit=1)[1]
