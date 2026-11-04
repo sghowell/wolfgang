@@ -129,7 +129,7 @@ operation-level `auto` dispatch only for kernels with correctness and benchmark
 coverage:
 
 ```text
-pairwise commutation: oneTBB for large dense matrices when compiled and kAutoTbbPairwiseMinConcurrency threads are available (kAutoTbbPairwiseMinConcurrencyOverX86Simd when an AVX2 or AVX-512 kernel covers the operator, and kAutoTbbPairwiseOneWordX86SimdEntryThreshold entries for one-word operators on AVX2 or AVX-512), each oneTBB thread running the best SIMD row kernel; otherwise AVX-512, AVX2, NEON, or scalar
+pairwise commutation: oneTBB for large dense matrices when compiled and kAutoTbbPairwiseMinConcurrency threads are available (kAutoTbbPairwiseMinConcurrencyOverX86Simd when an AVX2 or AVX-512 kernel covers the operator), each oneTBB thread running the best SIMD row kernel; otherwise AVX-512, AVX2, NEON, or scalar
 full grouping graph construction: AVX-512, AVX2, NEON, or scalar
 simplify: oneTBB from kAutoTbbSimplifyTermThreshold terms when compiled and at least kAutoTbbSimplifyMinConcurrency threads are available, bit-identical to scalar (signed zeros included); otherwise scalar. This also covers simplify inside matmul, commutator, equiv, and the Metal and CUDA/HIP host fallbacks
 other operations: scalar until a named optimized kernel lands with tests and benchmark evidence

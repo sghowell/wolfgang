@@ -181,14 +181,4 @@ void commutes_with_avx2_rows(
   }
 }
 
-std::vector<std::uint8_t> commutes_with_avx2(
-    const PauliSum& lhs,
-    const PauliSum& rhs,
-    std::size_t entries) {
-  require_simd_commutation_words("avx2", lhs.words());
-  std::vector<std::uint8_t> out(entries, 0);
-  commutes_with_avx2_rows(lhs, rhs, 0, lhs.num_terms(), out.data());
-  return out;
-}
-
 }  // namespace wolfgang::detail

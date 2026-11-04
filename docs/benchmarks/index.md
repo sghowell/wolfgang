@@ -31,6 +31,7 @@ Plan: `docs/plans/accelerator_followups_campaign_plan.md`. Review closeout:
 | [CPU thread cap](reports/cpu_threads_2026-11-03.md) | Simplify under a oneTBB thread cap, with processes sharing cores and inside a CPU quota |
 | [oneTBB thread floors](reports/cpu_thread_floor_2026-11-03.md) | oneTBB against scalar and SIMD at one to four threads on small pinned machines, and SIMD inside oneTBB commutation |
 | [CUDA on two GPUs](reports/cuda_multi_gpu_h100_2026-11-03.md) | Peer reads of exports, two threads on two H100s, and contexts on unused GPUs |
+| [Host commutation into the result](reports/host_commutation_into_2026-11-03.md) | Commutation kernels writing straight into NumPy, page faults across heap layouts, and the one-word oneTBB threshold |
 
 ## Portability and interop campaign (November 2026)
 
@@ -133,6 +134,7 @@ By backend, oldest first. Link text is each report's title (early reports predat
 - 2026-11-03: [oneTBB Thread Floors](reports/cpu_thread_floor_2026-11-03.md)
 - 2026-11-03: [CPU Thread Cap](reports/cpu_threads_2026-11-03.md)
 - 2026-11-03: [Host API Boundary And Commutator Timings](reports/host_api_2026-11-03.md)
+- 2026-11-03: [Host Commutation Into The Result](reports/host_commutation_into_2026-11-03.md)
 - 2026-11-03: [oneTBB In Release Wheels](reports/onetbb_wheels_2026-11-03.md)
 
 ### Cross-backend

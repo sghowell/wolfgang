@@ -86,15 +86,6 @@ void commutes_with_scalar_rows(
   }
 }
 
-std::vector<std::uint8_t> commutes_with_scalar(
-    const PauliSum& lhs,
-    const PauliSum& rhs,
-    std::size_t entries) {
-  std::vector<std::uint8_t> out(entries, 0);
-  commutes_with_scalar_rows(lhs, rhs, 0, lhs.num_terms(), out.data());
-  return out;
-}
-
 std::vector<std::uint8_t> build_full_commutation_graph_scalar(const PauliSum& op) {
   const std::size_t terms = op.num_terms();
   std::vector<std::uint8_t> graph(terms * terms, 1);

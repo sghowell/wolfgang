@@ -1,0 +1,983 @@
+{
+  "affinity": [
+    0,
+    1,
+    4
+  ],
+  "benchmark": "cpu_thread_floor",
+  "command": "python benchmarks/bench_cpu_thread_floor.py --simplify-sizes 8192 --simplify-qubits 24 --duplicates 0.5 --commutation-qubits 24,100 --commutation-sizes 576,1024,1448,2048,2896 --caps 1,2,3 --output after_three_vcpus.json",
+  "environment": {
+    "CUDA": {
+      "enabled": false
+    },
+    "HIP": {
+      "architectures": "not_available",
+      "driver_version": "",
+      "enabled": false,
+      "rocm_toolkit_version": "not_available",
+      "runtime_available": false,
+      "runtime_version": ""
+    },
+    "Metal": {
+      "capability_summary": "",
+      "device_name": "",
+      "enabled": false,
+      "macos_version": "",
+      "runtime_available": false,
+      "storage_mode": "",
+      "xcode_or_clt_version": ""
+    },
+    "accelerator_build_mode": "cpu_only",
+    "active_fastpauli_cpu_backend": "scalar",
+    "available_fastpauli_cpu_backends": [
+      "scalar",
+      "tbb",
+      "avx2",
+      "avx512"
+    ],
+    "cmake": "not_available",
+    "compiled_accelerator_backends": [],
+    "compiled_backends": [
+      "cpu"
+    ],
+    "compiled_fastpauli_cpu_backends": [
+      "scalar",
+      "tbb",
+      "avx2",
+      "avx512"
+    ],
+    "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0",
+    "compiler_build_config": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CUDA_COMPILER_ID": "not_available",
+      "CMAKE_CUDA_COMPILER_VERSION": "not_available",
+      "CMAKE_CXX_COMPILER_ID": "GNU",
+      "CMAKE_CXX_COMPILER_VERSION": "11.4.0",
+      "CMAKE_HIP_COMPILER_ID": "not_available",
+      "CMAKE_HIP_COMPILER_VERSION": "not_available",
+      "CMAKE_OBJCXX_COMPILER_ID": "not_available",
+      "CMAKE_OBJCXX_COMPILER_VERSION": "not_available"
+    },
+    "compiler_cpu_flags": {
+      "detected": [],
+      "sources_checked": [
+        "ARCHFLAGS",
+        "CFLAGS",
+        "CMAKE_ARGS",
+        "CMAKE_BUILD_TYPE",
+        "CMAKE_CXX_FLAGS",
+        "CPPFLAGS",
+        "CXXFLAGS",
+        "SKBUILD_CMAKE_ARGS"
+      ]
+    },
+    "cpu_architecture": "x86_64",
+    "cpu_backend_build_flags": {
+      "avx2": true,
+      "avx512": true,
+      "neon": false,
+      "scalar": true,
+      "sve": false,
+      "tbb": true
+    },
+    "cpu_cmake_options": {
+      "WOLFGANG_BUILD_CPU_BACKEND": "scalar",
+      "WOLFGANG_CUDA_ARCHITECTURES": "80,86,89,90,100-real,120",
+      "WOLFGANG_CUDA_USE_CUB": "ON",
+      "WOLFGANG_CUDA_USE_THRUST": "ON",
+      "WOLFGANG_ENABLE_ARM_NEON": "auto",
+      "WOLFGANG_ENABLE_ARM_SVE": "auto",
+      "WOLFGANG_ENABLE_AVX2": "auto",
+      "WOLFGANG_ENABLE_AVX512": "auto",
+      "WOLFGANG_ENABLE_CUDA": "OFF",
+      "WOLFGANG_ENABLE_HIP": "OFF",
+      "WOLFGANG_ENABLE_METAL": "OFF",
+      "WOLFGANG_ENABLE_NATIVE": "OFF",
+      "WOLFGANG_ENABLE_OPENMP": "OFF",
+      "WOLFGANG_ENABLE_TBB": "auto",
+      "WOLFGANG_HIP_ARCHITECTURES": "gfx942"
+    },
+    "cpu_model": "x86_64",
+    "cpu_vendor_or_soc": "AMD EPYC 9654 96-Core Processor",
+    "instruction_set_probe": {
+      "features": [
+        "3dnowprefetch",
+        "abm",
+        "adx",
+        "aes",
+        "apic",
+        "arat",
+        "arch_capabilities",
+        "avx",
+        "avx2",
+        "avx512_bf16",
+        "avx512_bitalg",
+        "avx512_vbmi2",
+        "avx512_vnni",
+        "avx512_vpopcntdq",
+        "avx512bw",
+        "avx512cd",
+        "avx512dq",
+        "avx512f",
+        "avx512ifma",
+        "avx512vbmi",
+        "avx512vl",
+        "bmi1",
+        "bmi2",
+        "clflush",
+        "clflushopt",
+        "clwb",
+        "clzero",
+        "cmov",
+        "cmp_legacy",
+        "constant_tsc",
+        "cpuid",
+        "cr8_legacy",
+        "cx16",
+        "cx8",
+        "de",
+        "erms",
+        "extd_apicid",
+        "f16c",
+        "fma",
+        "fpu",
+        "fsgsbase",
+        "fsrm",
+        "fxsr",
+        "fxsr_opt",
+        "gfni",
+        "ht",
+        "hypervisor",
+        "ibpb",
+        "ibrs",
+        "invpcid",
+        "invpcid_single",
+        "la57",
+        "lahf_lm",
+        "lbrv",
+        "lm",
+        "mca",
+        "mce",
+        "misalignsse",
+        "mmx",
+        "mmxext",
+        "movbe",
+        "msr",
+        "mtrr",
+        "nonstop_tsc",
+        "nopl",
+        "npt",
+        "nrip_save",
+        "nx",
+        "ospke",
+        "osvw",
+        "pae",
+        "pat",
+        "pcid",
+        "pclmulqdq",
+        "pdpe1gb",
+        "perfctr_core",
+        "pge",
+        "pku",
+        "pni",
+        "popcnt",
+        "pse",
+        "pse36",
+        "rdpid",
+        "rdrand",
+        "rdseed",
+        "rdtscp",
+        "rep_good",
+        "sep",
+        "sha_ni",
+        "smap",
+        "smep",
+        "ssbd",
+        "sse",
+        "sse2",
+        "sse4_1",
+        "sse4_2",
+        "sse4a",
+        "ssse3",
+        "stibp",
+        "svm",
+        "syscall",
+        "topoext",
+        "tsc",
+        "tsc_adjust",
+        "tsc_deadline_timer",
+        "tsc_known_freq",
+        "tsc_scale",
+        "umip",
+        "v_vmsave_vmload",
+        "vaes",
+        "vmcb_clean",
+        "vme",
+        "vmmcall",
+        "vpclmulqdq",
+        "wbnoinvd",
+        "x2apic",
+        "xgetbv1",
+        "xsave",
+        "xsavec",
+        "xsaveerptr",
+        "xsaveopt",
+        "xsaves"
+      ],
+      "source": "/proc/cpuinfo",
+      "status": "available"
+    },
+    "instruction_sets": [
+      "3dnowprefetch",
+      "abm",
+      "adx",
+      "aes",
+      "apic",
+      "arat",
+      "arch_capabilities",
+      "avx",
+      "avx2",
+      "avx512_bf16",
+      "avx512_bitalg",
+      "avx512_vbmi2",
+      "avx512_vnni",
+      "avx512_vpopcntdq",
+      "avx512bw",
+      "avx512cd",
+      "avx512dq",
+      "avx512f",
+      "avx512ifma",
+      "avx512vbmi",
+      "avx512vl",
+      "bmi1",
+      "bmi2",
+      "clflush",
+      "clflushopt",
+      "clwb",
+      "clzero",
+      "cmov",
+      "cmp_legacy",
+      "constant_tsc",
+      "cpuid",
+      "cr8_legacy",
+      "cx16",
+      "cx8",
+      "de",
+      "erms",
+      "extd_apicid",
+      "f16c",
+      "fma",
+      "fpu",
+      "fsgsbase",
+      "fsrm",
+      "fxsr",
+      "fxsr_opt",
+      "gfni",
+      "ht",
+      "hypervisor",
+      "ibpb",
+      "ibrs",
+      "invpcid",
+      "invpcid_single",
+      "la57",
+      "lahf_lm",
+      "lbrv",
+      "lm",
+      "mca",
+      "mce",
+      "misalignsse",
+      "mmx",
+      "mmxext",
+      "movbe",
+      "msr",
+      "mtrr",
+      "nonstop_tsc",
+      "nopl",
+      "npt",
+      "nrip_save",
+      "nx",
+      "ospke",
+      "osvw",
+      "pae",
+      "pat",
+      "pcid",
+      "pclmulqdq",
+      "pdpe1gb",
+      "perfctr_core",
+      "pge",
+      "pku",
+      "pni",
+      "popcnt",
+      "pse",
+      "pse36",
+      "rdpid",
+      "rdrand",
+      "rdseed",
+      "rdtscp",
+      "rep_good",
+      "sep",
+      "sha_ni",
+      "smap",
+      "smep",
+      "ssbd",
+      "sse",
+      "sse2",
+      "sse4_1",
+      "sse4_2",
+      "sse4a",
+      "ssse3",
+      "stibp",
+      "svm",
+      "syscall",
+      "topoext",
+      "tsc",
+      "tsc_adjust",
+      "tsc_deadline_timer",
+      "tsc_known_freq",
+      "tsc_scale",
+      "umip",
+      "v_vmsave_vmload",
+      "vaes",
+      "vmcb_clean",
+      "vme",
+      "vmmcall",
+      "vpclmulqdq",
+      "wbnoinvd",
+      "x2apic",
+      "xgetbv1",
+      "xsave",
+      "xsavec",
+      "xsaveerptr",
+      "xsaveopt",
+      "xsaves"
+    ],
+    "loaded_native_build": {
+      "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+      "artifact_sha256": "345881d6a928695c0b2a1b23d13963b295de70613d0d31491350a54109d66d69",
+      "built_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+      "checkout_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+      "matches_checkout_native_sources": true
+    },
+    "logical_cpu_count": 16,
+    "numpy_version": "2.5.4",
+    "oneTBB": {
+      "enabled": true,
+      "version": "2021.5.0"
+    },
+    "operating_system": "Linux-5.15.0-164-generic-x86_64-with-glibc2.35",
+    "physical_core_count": "not_available",
+    "python_version": "3.12.16",
+    "requested_fastpauli_cpu_backend": "auto",
+    "runtime_visible_accelerator_backends": [],
+    "runtime_visible_backends": [
+      "cpu"
+    ],
+    "thread_settings": {
+      "MKL_NUM_THREADS": "unset",
+      "OMP_NUM_THREADS": "unset",
+      "controlled_thread_count": "not_controlled"
+    },
+    "unavailable_fastpauli_cpu_backends": {
+      "neon": "not_compiled",
+      "sve": "not_compiled"
+    }
+  },
+  "git": {
+    "commit": "b8b02cb",
+    "commit_label": "b8b02cb",
+    "dirty": false,
+    "requested_commit_label": null,
+    "requested_label_matches_checkout": true,
+    "source": "git",
+    "working_tree_status": []
+  },
+  "logical_cpus": 16,
+  "repeat": 5,
+  "rows": [
+    {
+      "alternative": "scalar",
+      "duplicates": 0.5,
+      "median_seconds": {
+        "scalar": 0.0006957014459510183,
+        "tbb_1": 0.0007180969596991682,
+        "tbb_2": 0.00037321708700124254,
+        "tbb_3": 0.0004027747182231961
+      },
+      "num_qubits": 24,
+      "num_terms": 8192,
+      "operation": "simplify",
+      "samples_seconds": {
+        "scalar": [
+          0.0006937550682876561,
+          0.0006923930141729889,
+          0.0006960073160886202,
+          0.0006957014459510183,
+          0.0006961857873665274
+        ],
+        "tbb_1": [
+          0.000720786994073804,
+          0.0007182935243425657,
+          0.0007179162439062776,
+          0.0007179197380129172,
+          0.0007180969596991682
+        ],
+        "tbb_2": [
+          0.00037321708700124254,
+          0.00033162155737861607,
+          0.00038072823550507957,
+          0.00037531490919654934,
+          0.00036946342392699924
+        ],
+        "tbb_3": [
+          0.0003758679898012252,
+          0.0004059478336155183,
+          0.0004027747182231961,
+          0.00039537226810127264,
+          0.0004029948611249808
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.968812688250996,
+        "tbb_2": 1.8640664379567973,
+        "tbb_3": 1.7272718829524398
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 4.187381999453033e-05,
+        "tbb_1": 4.535570846074036e-05,
+        "tbb_2": 2.7823402754754038e-05,
+        "tbb_3": 3.0282380151387077e-05
+      },
+      "num_qubits": 24,
+      "num_terms": 576,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          4.189133485536621e-05,
+          4.185633575480406e-05,
+          4.187381999453033e-05,
+          4.185745266954318e-05,
+          4.191752416898793e-05
+        ],
+        "tbb_1": [
+          4.5349691640900127e-05,
+          4.534394193505897e-05,
+          4.536672647248761e-05,
+          4.535570846074036e-05,
+          4.539800950999945e-05
+        ],
+        "tbb_2": [
+          2.7835818852782893e-05,
+          2.7739419163167683e-05,
+          2.7823402754754038e-05,
+          2.770814632671393e-05,
+          2.7829169968668047e-05
+        ],
+        "tbb_3": [
+          3.0222114062670506e-05,
+          3.0293001333339688e-05,
+          3.0250032572636764e-05,
+          3.0282380151387077e-05,
+          3.0367125666910603e-05
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9232315273120707,
+        "tbb_2": 1.5049855822316907,
+        "tbb_3": 1.3827783610533768
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.0001482383132253478,
+        "tbb_1": 0.0001531256043596452,
+        "tbb_2": 8.174333292682377e-05,
+        "tbb_3": 8.336001227670194e-05
+      },
+      "num_qubits": 24,
+      "num_terms": 1024,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.0001482383132253478,
+          0.00014824853614975802,
+          0.00014816823497633722,
+          0.00014809619270912978,
+          0.00014831725770165144
+        ],
+        "tbb_1": [
+          0.0001531256043596452,
+          0.00015316665848872,
+          0.00015295919317465562,
+          0.00015303580584417802,
+          0.00015313723773388916
+        ],
+        "tbb_2": [
+          8.319139199089364e-05,
+          8.173887916092803e-05,
+          8.179656231634719e-05,
+          8.174333292682377e-05,
+          8.157576825413459e-05
+        ],
+        "tbb_3": [
+          8.403477873543103e-05,
+          8.334264067220099e-05,
+          8.336001227670194e-05,
+          8.330164121329038e-05,
+          8.353797018993087e-05
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9680831226447366,
+        "tbb_2": 1.8134605957167176,
+        "tbb_3": 1.778290443783662
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.0002859379878661928,
+        "tbb_1": 0.0002926761154769929,
+        "tbb_2": 0.0001532741047164298,
+        "tbb_3": 0.000155332872790438
+      },
+      "num_qubits": 24,
+      "num_terms": 1448,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.00028606814883866356,
+          0.00028633139746156704,
+          0.0002859379878661928,
+          0.00028572750636365164,
+          0.00028587145876722884
+        ],
+        "tbb_1": [
+          0.00029308364320934914,
+          0.00029263466660361416,
+          0.00029244565637047735,
+          0.0002926969362881408,
+          0.0002926761154769929
+        ],
+        "tbb_2": [
+          0.00015167312555109397,
+          0.00015186949943502744,
+          0.00015366057026981348,
+          0.00015337502872440176,
+          0.0001532741047164298
+        ],
+        "tbb_3": [
+          0.00015539154800736977,
+          0.00015552170610755073,
+          0.000155332872790438,
+          0.00015523113426258405,
+          0.0001551807023740063
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9769775282147006,
+        "tbb_2": 1.8655335706915566,
+        "tbb_3": 1.8408079547460388
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.0006612055507060644,
+        "tbb_1": 0.0006680288922882849,
+        "tbb_2": 0.00034328957079533123,
+        "tbb_3": 0.0003442962947365356
+      },
+      "num_qubits": 24,
+      "num_terms": 2048,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.0006607220645977243,
+          0.0006612764985917451,
+          0.0006612055507060644,
+          0.0006616442109894964,
+          0.0006603371302724409
+        ],
+        "tbb_1": [
+          0.000668035106951589,
+          0.0006680557117709574,
+          0.0006678002456311688,
+          0.0006679562278665029,
+          0.0006680288922882849
+        ],
+        "tbb_2": [
+          0.00034209588802484577,
+          0.00034356174732081627,
+          0.00034328957079533123,
+          0.0003438383265262856,
+          0.00034188573193900723
+        ],
+        "tbb_3": [
+          0.0003433150672157046,
+          0.0003438881023009871,
+          0.0003447116045427572,
+          0.0003458766077739605,
+          0.0003442962947365356
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9897858585743984,
+        "tbb_2": 1.9260869159939444,
+        "tbb_3": 1.9204550290383926
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.0012545349592922115,
+        "tbb_1": 0.0012647698258424734,
+        "tbb_2": 0.000641328502267469,
+        "tbb_3": 0.0006647694099228829
+      },
+      "num_qubits": 24,
+      "num_terms": 2896,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.0012545349592922115,
+          0.0012541302252842598,
+          0.0012562095359401795,
+          0.0012544702069881635,
+          0.0012550808779605023
+        ],
+        "tbb_1": [
+          0.0012647698258424734,
+          0.0012639107466754266,
+          0.0012654240967498885,
+          0.0012653029131654062,
+          0.001263067759211781
+        ],
+        "tbb_2": [
+          0.000641328502267469,
+          0.0006419915165862388,
+          0.0006412164121866226,
+          0.0006409471296826325,
+          0.0006417817877311455
+        ],
+        "tbb_3": [
+          0.0006655756028453309,
+          0.0006647694099228829,
+          0.0006679549347609282,
+          0.0006645585285031308,
+          0.0006633715896194825
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9919077239659443,
+        "tbb_2": 1.9561503267930573,
+        "tbb_3": 1.8871731168221846
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.0001923298005355064,
+        "tbb_1": 0.00019587102499472569,
+        "tbb_2": 0.00010362718272525285,
+        "tbb_3": 9.901200652602773e-05
+      },
+      "num_qubits": 100,
+      "num_terms": 576,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.00019216278147312903,
+          0.00019233695512883037,
+          0.00019229777509497897,
+          0.0001923298005355064,
+          0.00019239773911817096
+        ],
+        "tbb_1": [
+          0.00019587102499472569,
+          0.00019591592623779394,
+          0.00019563619993747243,
+          0.00019578547287216238,
+          0.00019605441251138684
+        ],
+        "tbb_2": [
+          0.00010447989525440852,
+          0.00010358190457888789,
+          0.00010347378416420098,
+          0.00010362718272525285,
+          0.0001041352366057276
+        ],
+        "tbb_3": [
+          9.895704435302801e-05,
+          9.897029867359236e-05,
+          9.983426037900488e-05,
+          9.901200652602773e-05,
+          0.0001000784350813339
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9819206313985714,
+        "tbb_2": 1.855978281735509,
+        "tbb_3": 1.9424896765923818
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.00038616989478074685,
+        "tbb_1": 0.00039240682570870674,
+        "tbb_2": 0.00020264576226472855,
+        "tbb_3": 0.00020147266278080814
+      },
+      "num_qubits": 100,
+      "num_terms": 1024,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.00038624115412116354,
+          0.00038616989478074685,
+          0.00038612481502011,
+          0.00038656158713807525,
+          0.0003861429300946249
+        ],
+        "tbb_1": [
+          0.0003924804153822122,
+          0.0003927438060792399,
+          0.00039226880185624474,
+          0.00039236387488261987,
+          0.00039240682570870674
+        ],
+        "tbb_2": [
+          0.00020467499500048943,
+          0.00020263816911688786,
+          0.0002059442111489813,
+          0.00020264576226472855,
+          0.0002025449412056522
+        ],
+        "tbb_3": [
+          0.0002018431930438332,
+          0.0002014776762996427,
+          0.00020147266278080814,
+          0.00020142060702794978,
+          0.0002012702497157538
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9841059570849827,
+        "tbb_2": 1.9056401203015019,
+        "tbb_3": 1.916735945466109
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.0008907057788400423,
+        "tbb_1": 0.000897699202864598,
+        "tbb_2": 0.000456026357370818,
+        "tbb_3": 0.0004558571536172103
+      },
+      "num_qubits": 100,
+      "num_terms": 1448,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.0008907057788400423,
+          0.0008908760334764208,
+          0.000890724915301516,
+          0.0008906785376547348,
+          0.000890605603203629
+        ],
+        "tbb_1": [
+          0.0008975669258722553,
+          0.000897699202864598,
+          0.0008979573167492578,
+          0.0008977505569465649,
+          0.0008976926659176379
+        ],
+        "tbb_2": [
+          0.00045506037077156164,
+          0.0004551894830685135,
+          0.000456026357370818,
+          0.00045696572658229383,
+          0.00045674621687665103
+        ],
+        "tbb_3": [
+          0.00045649629326228715,
+          0.0004558571536172103,
+          0.0004556112470041857,
+          0.0004556807567627212,
+          0.0004561276649419936
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9922096131953337,
+        "tbb_2": 1.9531892497954115,
+        "tbb_3": 1.9539142289910854
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.002365313959702597,
+        "tbb_1": 0.0023738708568073934,
+        "tbb_2": 0.0011961162576208943,
+        "tbb_3": 0.0011504890612111642
+      },
+      "num_qubits": 100,
+      "num_terms": 2048,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.002365313959702597,
+          0.0023649858500240212,
+          0.0023662664185641175,
+          0.0023676162467352927,
+          0.0023652450846774237
+        ],
+        "tbb_1": [
+          0.0023732403995560818,
+          0.0023729043258797554,
+          0.0023751935921609403,
+          0.0023750999476760625,
+          0.0023738708568073934
+        ],
+        "tbb_2": [
+          0.001199153324832087,
+          0.0011979677436644571,
+          0.0011958688497543334,
+          0.0011960642574274022,
+          0.0011961162576208943
+        ],
+        "tbb_3": [
+          0.0011507435124521413,
+          0.001151421992871605,
+          0.0011504890612111642,
+          0.0011458391323685645,
+          0.0011470743598855607
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9963953822170829,
+        "tbb_2": 1.9774950341426396,
+        "tbb_3": 2.05592042501694
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    },
+    {
+      "alternative": "avx512",
+      "duplicates": 0.0,
+      "median_seconds": {
+        "avx512": 0.004577581800760761,
+        "tbb_1": 0.004582964394602084,
+        "tbb_2": 0.0023017867972127725,
+        "tbb_3": 0.0020957041754206614
+      },
+      "num_qubits": 100,
+      "num_terms": 2896,
+      "operation": "commutes_with",
+      "samples_seconds": {
+        "avx512": [
+          0.004573332465952262,
+          0.004573828831780702,
+          0.004577581800760761,
+          0.004579131551567585,
+          0.004579338972689584
+        ],
+        "tbb_1": [
+          0.004582964394602084,
+          0.004583192478504873,
+          0.004582437715725973,
+          0.004580756059537331,
+          0.004585122660500929
+        ],
+        "tbb_2": [
+          0.0023225026515622934,
+          0.002301934702942769,
+          0.0023012226292242607,
+          0.0023017867972127725,
+          0.0023004706793775163
+        ],
+        "tbb_3": [
+          0.002121408616325685,
+          0.0020941320587606993,
+          0.0020957041754206614,
+          0.0020975933338587102,
+          0.0020952536527749518
+        ]
+      },
+      "tbb_speedup_vs_alternative": {
+        "tbb_1": 0.9988255213486577,
+        "tbb_2": 1.988707992548981,
+        "tbb_3": 2.1842690654762493
+      },
+      "threads_used": {
+        "tbb_1": 1,
+        "tbb_2": 2,
+        "tbb_3": 3
+      }
+    }
+  ],
+  "seed": 20261103,
+  "target_seconds": 0.15
+}

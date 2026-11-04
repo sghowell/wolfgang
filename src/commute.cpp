@@ -48,8 +48,8 @@ detail::CommutationRowsKernel tbb_commutation_rows(const CpuBackendReport& repor
   return detail::commutes_with_scalar_rows;
 }
 
-// True for the AVX2 and AVX-512 row kernels, whose one-word form is bound by
-// writing its output (kAutoTbbPairwiseOneWordX86SimdEntryThreshold).
+// True for the AVX2 and AVX-512 row kernels, which one core's two
+// hyperthreads share (kAutoTbbPairwiseMinConcurrencyOverX86Simd).
 bool x86_simd_rows(detail::CommutationRowsKernel rows) noexcept {
 #if WOLFGANG_BUILD_AVX512_ENABLED
   if (rows == detail::commutes_with_avx512_rows) {
@@ -74,75 +74,99 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
   if (num_qubits_ != rhs.num_qubits_) {
     throw std::invalid_argument("PauliSum commutation requires the same num_qubits");
   }
+  std::vector<std::uint8_t> out(detail::checked_commutation_matrix_entries(
+      num_terms_, rhs.num_terms_, max_commutation_matrix_entries));
+  commutes_with_into(rhs, out, max_commutation_matrix_entries);
+  return out;
+}
 
+void PauliSum::commutes_with_into(
+    const PauliSum& rhs,
+    std::span<std::uint8_t> out,
+    std::size_t max_commutation_matrix_entries) const {
+  if (num_qubits_ != rhs.num_qubits_) {
+    throw std::invalid_argument("PauliSum commutation requires the same num_qubits");
+  }
   const std::size_t entries = detail::checked_commutation_matrix_entries(
       num_terms_,
       rhs.num_terms_,
       max_commutation_matrix_entries);
+  if (out.size() != entries) {
+    throw std::invalid_argument("commutes_with_into output length does not match the entry count");
+  }
+  // Every kernel writes every entry, so `out` needs no initialization.
+  std::uint8_t* const data = out.data();
+  const std::size_t rows = num_terms_;
 
   const CpuBackendReport backend = cpu_backend_report_from_environment();
   if (backend.requested_backend == "auto") {
 #if WOLFGANG_BUILD_TBB_ENABLED
     if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb")) {
-      const detail::CommutationRowsKernel rows = tbb_commutation_rows(backend, words_);
-      const bool x86_simd = x86_simd_rows(rows);
+      const detail::CommutationRowsKernel kernel = tbb_commutation_rows(backend, words_);
+      const bool x86_simd = x86_simd_rows(kernel);
       // Two threads beat scalar and NEON, but matching AVX2 or AVX-512 takes three.
       const int minimum = x86_simd ? kAutoTbbPairwiseMinConcurrencyOverX86Simd : kAutoTbbPairwiseMinConcurrency;
-      const std::size_t threshold = words_ == 1 && x86_simd
-          ? kAutoTbbPairwiseOneWordX86SimdEntryThreshold
-          : kAutoTbbPairwiseEntryThreshold;
-      if (entries >= threshold && tbb_auto_has_min_concurrency(minimum)) {
-        return detail::commutes_with_tbb(*this, rhs, entries, rows);
+      if (tbb_auto_has_min_concurrency(minimum)) {
+        detail::commutes_with_tbb(*this, rhs, data, kernel);
+        return;
       }
     }
 #endif
 #if WOLFGANG_BUILD_AVX512_ENABLED
     if (detail::simd_commutation_supports_words(words_) &&
         backend_available(backend, "avx512")) {
-      return detail::commutes_with_avx512(*this, rhs, entries);
+      detail::commutes_with_avx512_rows(*this, rhs, 0, rows, data);
+      return;
     }
 #endif
 #if WOLFGANG_BUILD_AVX2_ENABLED
     if (detail::simd_commutation_supports_words(words_) && backend_available(backend, "avx2")) {
-      return detail::commutes_with_avx2(*this, rhs, entries);
+      detail::commutes_with_avx2_rows(*this, rhs, 0, rows, data);
+      return;
     }
 #endif
 #if WOLFGANG_BUILD_ARM_NEON_ENABLED
     if (detail::simd_commutation_supports_words(words_) && backend_available(backend, "neon")) {
-      return detail::commutes_with_neon(*this, rhs, entries);
+      detail::commutes_with_neon_rows(*this, rhs, 0, rows, data);
+      return;
     }
 #endif
-    return detail::commutes_with_scalar(*this, rhs, entries);
+    detail::commutes_with_scalar_rows(*this, rhs, 0, rows, data);
+    return;
   }
 
   if (backend.active_backend == "tbb") {
 #if WOLFGANG_BUILD_TBB_ENABLED
-    return detail::commutes_with_tbb(*this, rhs, entries, tbb_commutation_rows(backend, words_));
+    detail::commutes_with_tbb(*this, rhs, data, tbb_commutation_rows(backend, words_));
+    return;
 #endif
   }
 
   if (backend.active_backend == "avx512") {
 #if WOLFGANG_BUILD_AVX512_ENABLED
     detail::require_simd_commutation_words("avx512", words_);
-    return detail::commutes_with_avx512(*this, rhs, entries);
+    detail::commutes_with_avx512_rows(*this, rhs, 0, rows, data);
+    return;
 #endif
   }
 
   if (backend.active_backend == "avx2") {
 #if WOLFGANG_BUILD_AVX2_ENABLED
     detail::require_simd_commutation_words("avx2", words_);
-    return detail::commutes_with_avx2(*this, rhs, entries);
+    detail::commutes_with_avx2_rows(*this, rhs, 0, rows, data);
+    return;
 #endif
   }
 
   if (backend.active_backend == "neon") {
 #if WOLFGANG_BUILD_ARM_NEON_ENABLED
     detail::require_simd_commutation_words("neon", words_);
-    return detail::commutes_with_neon(*this, rhs, entries);
+    detail::commutes_with_neon_rows(*this, rhs, 0, rows, data);
+    return;
 #endif
   }
 
-  return detail::commutes_with_scalar(*this, rhs, entries);
+  detail::commutes_with_scalar_rows(*this, rhs, 0, rows, data);
 }
 
 std::size_t PauliSum::checked_commutation_matrix_entries_for_testing(

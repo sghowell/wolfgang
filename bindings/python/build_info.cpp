@@ -125,8 +125,6 @@ void bind_build_info(nb::module_& module) {
             wolfgang::kAutoTbbPairwiseMinConcurrency;
         cpu_auto_dispatch_thresholds["tbb_pairwise_min_concurrency_over_x86_simd"] =
             wolfgang::kAutoTbbPairwiseMinConcurrencyOverX86Simd;
-        cpu_auto_dispatch_thresholds["tbb_pairwise_one_word_x86_simd_entries"] =
-            wolfgang::kAutoTbbPairwiseOneWordX86SimdEntryThreshold;
         info["cpu_auto_dispatch_thresholds"] = cpu_auto_dispatch_thresholds;
         info["cpu_threads_env_var"] = "WOLFGANG_NUM_THREADS";
         info["cpu_thread_limit_error"] = "";
