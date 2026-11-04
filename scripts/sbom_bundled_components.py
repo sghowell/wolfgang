@@ -37,10 +37,11 @@ import hashlib
 import json
 import re
 import sys
-import tomllib
 import uuid
 from pathlib import Path
 from typing import Any, NamedTuple
+
+import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLED_PROPERTY = "wolfgang:bundled-in"
