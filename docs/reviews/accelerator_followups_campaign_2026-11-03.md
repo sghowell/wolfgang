@@ -513,3 +513,59 @@ Branch `codex/thread-floor`.
   `python scripts/validate.py --profile core` passed (777 passed), and the
   dispatch, equivalence, threads and threshold-benchmark suites passed pinned
   to two hyperthreads, two cores and four vCPUs, and unpinned.
+
+## Follow-up: host commutation into the result
+
+Branch `codex/commutation-into`.
+
+- Scope: `include/wolfgang/pauli_sum.hpp`, `include/wolfgang/cpu_backend.hpp`,
+  `src/commute.cpp`, `src/grouping.cpp`, `src/parallel/commute_kernels_tbb.cpp`,
+  `src/simd/commute_kernels_{avx512,avx2,neon,scalar}.cpp`,
+  `src/detail/commute_kernels.hpp`, `bindings/python/pauli_sum_py.cpp`,
+  `bindings/python/build_info.cpp`, `python/wolfgang_quantum/_wolfgang_core.pyi`,
+  `tests/test_host_commutation_into.py` (new), `tests/test_cpu_thread_floor.py`,
+  `tests/native/contracts.cpp`, `benchmarks/bench_cpu_commutation_kernels.py`,
+  `benchmarks/bench_cpu_dispatch.py`, `benchmarks/bench_cpu_thresholds.py`, the
+  report and data, `docs/user/performance.md`, `docs/guide/python-api.md`,
+  `docs/architecture/semantic_contracts.md`,
+  `docs/architecture/hardware_targets_and_testing.md`,
+  `docs/quality/python_binding_policy.md`, `CHANGELOG.md`, the plan, the roadmap,
+  the evidence index and a superseded note in the slice 8 report.
+- The kernels write straight into the caller's buffer
+  (`PauliSum::commutes_with_into`, `PauliSum.commutes_with_into`). Measuring it
+  showed that the old path's cost was mostly page faults: its two buffers per
+  call made glibc return memory and fault it back in, depending on heap layout.
+  That cost was also what slice 8's one-word 2048 x 2048 oneTBB threshold had
+  measured, so the threshold was removed.
+- Tests: the Python tests for the new method and for the removed threshold were
+  written first and failed against the code they target; the review added native
+  C++ contract tests and zero-term tests.
+- Reviewer: independent agent (C++ kernels, Python binding, dispatch, testing,
+  benchmark evidence and documentation roles), read-only. It checked every
+  number in the report, CHANGELOG, plan, roadmap and comments against the
+  committed JSON.
+- Findings: P0 0, P1 0, P2 3, P3 9.
+- P2 resolutions: the header comment no longer says every path lost the serial
+  first touch (the C++ `commutes_with` still zero-fills its vector, now stated
+  on it and in `cpu_backend.hpp`); the roadmap names the deferred re-measurement
+  on a Xeon 8480+ and an AVX2-only host; `tests/native/contracts.cpp` covers a
+  wrong-size span, the guardrail and a qubit mismatch writing nothing, and the
+  into result matching `commutes_with`.
+- P3 resolutions: zero-term shapes and the empty output are tested, and the
+  qubit-mismatch test checks nothing was written; the bindings check
+  `num_qubits` before the guardrail, as before; the header notes that forced
+  SIMD throws for operators wider than two words; the report states where the
+  M4 Pro "before" provenance shows main's build; the CHANGELOG and plan give the
+  M4 Pro auto range (1.2-2.4x) and say the loop discards each result; the
+  performance guide says eight layouts in each of three runs; the plan no
+  longer mentions the SBOM follow-up, which records itself; the binding policy
+  covers output arrays; the dispatch and threshold benchmarks say why they still
+  read the removed key.
+- Validation after the review fixes, at `0fc0cd7` on the M4 Pro:
+  `python scripts/validate.py` passed (741 passed, native contracts passed). At
+  `b8b02cb` on the EPYC host the commutation, oneTBB, thread-floor and grouping
+  suites passed pinned to one, two (hyperthreads and two cores) and four vCPUs.
+  CI on PR 23 passed at `51cf3a8`.
+- Residual risk: the threshold removal rests on an EPYC 9654 alone; the two-word
+  AVX-512 kernel's time depends on operator placement (both recorded on the
+  roadmap); page-fault costs are specific to glibc 2.35's allocator defaults.
