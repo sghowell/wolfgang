@@ -48,8 +48,8 @@ detail::CommutationRowsKernel tbb_commutation_rows(const CpuBackendReport& repor
   return detail::commutes_with_scalar_rows;
 }
 
-// True for the AVX2 and AVX-512 row kernels, whose one-word form is bound by
-// writing its output (kAutoTbbPairwiseOneWordX86SimdEntryThreshold).
+// True for the AVX2 and AVX-512 row kernels, which one core's two
+// hyperthreads share (kAutoTbbPairwiseMinConcurrencyOverX86Simd).
 bool x86_simd_rows(detail::CommutationRowsKernel rows) noexcept {
 #if WOLFGANG_BUILD_AVX512_ENABLED
   if (rows == detail::commutes_with_avx512_rows) {
@@ -106,10 +106,7 @@ void PauliSum::commutes_with_into(
       const bool x86_simd = x86_simd_rows(kernel);
       // Two threads beat scalar and NEON, but matching AVX2 or AVX-512 takes three.
       const int minimum = x86_simd ? kAutoTbbPairwiseMinConcurrencyOverX86Simd : kAutoTbbPairwiseMinConcurrency;
-      const std::size_t threshold = words_ == 1 && x86_simd
-          ? kAutoTbbPairwiseOneWordX86SimdEntryThreshold
-          : kAutoTbbPairwiseEntryThreshold;
-      if (entries >= threshold && tbb_auto_has_min_concurrency(minimum)) {
+      if (tbb_auto_has_min_concurrency(minimum)) {
         detail::commutes_with_tbb(*this, rhs, data, kernel);
         return;
       }

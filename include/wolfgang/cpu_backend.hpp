@@ -29,13 +29,11 @@ inline constexpr int kAutoTbbSimplifyMinConcurrency = 2;
 // 1.54-1.92x on an M4 Pro.
 inline constexpr int kAutoTbbPairwiseMinConcurrency = 2;
 inline constexpr int kAutoTbbPairwiseMinConcurrencyOverX86Simd = 3;
-// One-word commutation on AVX2 or AVX-512 is bound by writing its output, so
-// more threads pay off only for large matrices. On a Xeon 8480+ and an EPYC
-// 9654, oneTBB stayed within 3% of one AVX-512 thread at 2048 x 2048 entries,
-// won from 4096 x 4096, and lost by up to 20% below 2048 x 2048, at every
-// thread count measured. NEON, whose two lanes leave the kernel compute-bound,
-// keeps kAutoTbbPairwiseEntryThreshold.
-inline constexpr std::size_t kAutoTbbPairwiseOneWordX86SimdEntryThreshold = 2048 * 2048;
+// One-word operators switch at kAutoTbbPairwiseEntryThreshold too. Writing
+// the kernels' output straight into the result, rather than into a zeroed
+// vector copied afterwards, took the serial page faults and copy out of every
+// path; three oneTBB threads then beat one AVX-512 thread from 576 x 576 on an
+// EPYC 9654 (docs/benchmarks/reports/host_commutation_into_2026-11-03.md).
 
 struct CpuBackendCandidate {
   std::string name;
