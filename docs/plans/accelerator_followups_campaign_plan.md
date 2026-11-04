@@ -37,6 +37,9 @@ report names.
   where oneTBB loses only near it).
 - Host pairwise commutation filled a zeroed vector that the binding then
   copied into NumPy. Taken up after slice 8 as a follow-up.
+- The release SBOM had no described component, no numpy version, no
+  attestation, and one document for artifacts that bundle different native
+  code (recorded by the slice 5 review). Taken up after slice 8 as a follow-up.
 
 ## Decisions carried into the campaign
 
@@ -135,3 +138,11 @@ with oneTBB 1.2-2.4x. That cost was what slice 8's one-word 2048 x 2048 threshol
 measured, so one-word operators on AVX2 or AVX-512 now switch to oneTBB at
 331,776 entries like wider ones
 (`docs/benchmarks/reports/host_commutation_into_2026-11-03.md`).
+
+SBOM follow-up merged: the sdist, manylinux x86_64 wheels and macOS arm64
+wheels each have an attested CycloneDX 1.7 SBOM that describes
+wolfgang-quantum, gives numpy's accepted range and lists the native code that
+kind ships. Wheels also compile in nanobind and its vendored tsl-robin-map,
+which no SBOM or license file had named: the build pins nanobind 3.1.0, and
+the wheels ship both licenses
+(`docs/quality/security_and_supply_chain.md`).

@@ -569,3 +569,72 @@ Branch `codex/commutation-into`.
 - Residual risk: the threshold removal rests on an EPYC 9654 alone; the two-word
   AVX-512 kernel's time depends on operator placement (both recorded on the
   roadmap); page-fault costs are specific to glibc 2.35's allocator defaults.
+
+## Follow-up: per-artifact SBOMs
+
+Branch `codex/sbom-gaps`.
+
+- Scope: `scripts/sbom_bundled_components.py` (rewritten),
+  `tests/test_sbom_bundled_components.py`, `tests/test_wolfgang_identity_contract.py`,
+  `tests/test_release_wheelhouse_foundation.py`,
+  `.github/workflows/release-wheelhouse.yml`, the nanobind pin in
+  `.github/workflows/{codeql,gpu-build,quality}.yml`, `scripts/check_release_wheelhouse.py`,
+  `scripts/wheel_smoke.py`, `pyproject.toml`, `third_party/nanobind/` (new),
+  `third_party/dlpack/README.md`, `CHANGELOG.md`,
+  `docs/quality/security_and_supply_chain.md`,
+  `docs/quality/release_and_packaging.md`, the plan and the roadmap.
+- Closes the four gaps the slice 5 review recorded. Each artifact kind (sdist,
+  manylinux x86_64 wheels, macOS arm64 wheels) gets a CycloneDX 1.7 SBOM that
+  describes wolfgang-quantum as `metadata.component`, lists numpy as an
+  external component with its accepted vers range, and lists the native code
+  that kind ships. The attest job binds each SBOM to its files' digests with
+  `actions/attest` v4.2.2. Release tools moved to pip-audit 2.10.1 and
+  cyclonedx-python-lib 11.12.0, since pip-audit 2.9 capped the library below the
+  versions that write 1.7.
+- Tests: the per-artifact SBOM tests were written first and failed against the
+  single-document script. The first CI run on the PR caught an identity-contract
+  test still pinning the old file name, which the local run had not covered
+  because only the SBOM and supply-chain suites were run; the full validation
+  now runs before each push.
+- Reviewer: independent agent (supply-chain security, CycloneDX and vers
+  semantics, workflow, testing, Python 3.10 and documentation roles),
+  read-only. It confirmed the action pin is the v4.2.2 tag, that a glob
+  matching nothing fails the job, and that the checksum step already rejects
+  wheel platforms the globs do not cover.
+- Findings: P0 1, P1 1, P2 3, P3 7.
+- P0 resolution: the identity-contract test checks the three new file names.
+- P1 resolution: nanobind's support library and its vendored tsl-robin-map are
+  compiled into every wheel but were missing from the SBOM, and their licenses
+  (BSD-3-Clause, MIT) were not shipped. `pyproject.toml` pins `nanobind==3.1.0`
+  (what release wheels already resolved; CI's own builds move from 2.9.2), the
+  license texts are committed in `third_party/nanobind/` and listed as license
+  files, the wheel SBOMs list nanobind and robin-map 1.4.0 (nanobind depending
+  on robin-map), and the release checks and wheel smoke test require the
+  notices and the exact pin.
+- P2 resolutions: `vers_range` accepts one interval (one lower bound below one
+  upper, exclusions strictly inside, or a lone `==`) and raises for anything
+  vers would read differently from PEP 440; the verification example adds
+  `--signer-workflow`; this closeout and the slice 5 pointer.
+- P3 resolutions: the workflow comment and test name cyclonedx-python-lib
+  11.12.0 exactly; every project dependency must match exactly one component,
+  and a name listed twice raises; "described component" replaces "subject" in
+  the CHANGELOG and roadmap; the DLPack README and the slice 5 status point at
+  per-artifact SBOMs; the `test` extra installs cyclonedx-python-lib so schema
+  validation runs in CI; a test checks the attestation globs against real wheel
+  names; the security doc says why the documents use CycloneDX 1.7. Not taken:
+  bumping cyclonedx-bom past 7.1.0 (it works through the library's version
+  enum, and 7.6.0 is under two weeks old), `acknowledgement: declared` and a
+  `metadata.tools` entry.
+- Validation after the review fixes, at `8d10d53` on the M4 Pro:
+  `python scripts/validate.py` passed (733 passed). Release-workflow dry runs
+  with `publish-target=none`: run 41754090730 at `0c3bee5` passed every job and
+  `gh attestation verify --predicate-type https://cyclonedx.org/bom` returned
+  the matching SBOM for a manylinux and a macOS wheel; run 41756795499 at
+  `8d10d53` passed every job with the nanobind pin, its wheels ship
+  `third_party/nanobind/LICENSE` and `robin_map_LICENSE` (the wheel smoke test
+  now requires them), and the attested manylinux SBOM, verified with
+  `--signer-workflow`, lists numpy (`vers:pypi/>=1.23`), oneTBB 2022.3.0,
+  DLPack 1.1, nanobind 3.1.0 and robin-map 1.4.0.
+- Residual risk: consumers that read only CycloneDX 1.6 or older cannot parse
+  the documents; a new wheel platform needs its own artifact kind, SBOM and
+  attestation step (the checksum step fails first if one is added without them).
