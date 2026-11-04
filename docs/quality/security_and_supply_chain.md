@@ -133,6 +133,18 @@ the whole payload. The artifact kinds follow the wheel build matrix; a new
 wheel platform needs its own kind, SBOM and attestation step. Source builds
 keep oneTBB optional.
 
+To check that a downloaded artifact came from this repository's release
+workflow, and to read the SBOM attested for it:
+
+```bash
+gh attestation verify wolfgang_quantum-0.2.3-cp312-cp312-macosx_11_0_arm64.whl \
+  --repo sghowell/wolfgang --predicate-type https://cyclonedx.org/bom \
+  --format json --jq '.[0].verificationResult.statement.predicate'
+```
+
+Without `--predicate-type`, `gh attestation verify` checks the build
+provenance (`https://slsa.dev/provenance/v1`).
+
 Rules:
 
 ```text
