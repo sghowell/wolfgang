@@ -1,10 +1,12 @@
 """Where oneTBB starts to beat the alternative at low thread counts.
 
-Auto dispatch runs simplify and large pairwise commutation on oneTBB only when
-it may use at least ``kAutoTbbSimplifyMinConcurrency`` threads. This benchmark
-times, on the same deterministic operators, the kernel auto would use instead
-(scalar simplify; the best compiled SIMD commutation kernel, or scalar) against
-oneTBB capped at 1, 2, 3 and 4 threads, from the dispatch thresholds upward.
+Auto dispatch runs simplify and large pairwise commutation on oneTBB only above
+a thread floor (``kAutoTbbSimplifyMinConcurrency``, and for commutation
+``kAutoTbbPairwiseMinConcurrency`` or ``kAutoTbbPairwiseMinConcurrencyOverX86Simd``).
+This benchmark times, on the same deterministic operators, the kernel auto
+would use instead (scalar simplify; the best compiled SIMD commutation kernel,
+or scalar) against oneTBB capped at each of ``--caps``, from the dispatch
+thresholds upward.
 
 Variants are forced with ``WOLFGANG_CPU_BACKEND`` and capped with
 ``wolfgang_quantum.set_num_threads``; each repeat runs them in a shuffled order
@@ -162,6 +164,7 @@ def main() -> int:
     report = {
         "benchmark": "cpu_thread_floor",
         "command": command_string(),
+        "seed": args.seed,
         "git": git_provenance(),
         "affinity": affinity,
         "logical_cpus": os.cpu_count(),

@@ -85,10 +85,10 @@ std::vector<std::uint8_t> PauliSum::commutes_with(
 #if WOLFGANG_BUILD_TBB_ENABLED
     if (entries >= kAutoTbbPairwiseEntryThreshold && backend_available(backend, "tbb")) {
       const detail::CommutationRowsKernel rows = tbb_commutation_rows(backend, words_);
-      const bool over_simd = rows != detail::commutes_with_scalar_rows;
-      // Two threads beat the scalar kernel, but matching a SIMD kernel takes three.
-      const int minimum = over_simd ? kAutoTbbPairwiseMinConcurrencyOverSimd : kAutoTbbPairwiseMinConcurrency;
-      const std::size_t threshold = words_ == 1 && x86_simd_rows(rows)
+      const bool x86_simd = x86_simd_rows(rows);
+      // Two threads beat scalar and NEON, but matching AVX2 or AVX-512 takes three.
+      const int minimum = x86_simd ? kAutoTbbPairwiseMinConcurrencyOverX86Simd : kAutoTbbPairwiseMinConcurrency;
+      const std::size_t threshold = words_ == 1 && x86_simd
           ? kAutoTbbPairwiseOneWordX86SimdEntryThreshold
           : kAutoTbbPairwiseEntryThreshold;
       if (entries >= threshold && tbb_auto_has_min_concurrency(minimum)) {

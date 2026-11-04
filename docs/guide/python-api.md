@@ -35,10 +35,10 @@ assert wolfgang_quantum.get_num_threads() <= 4
 ```
 
 Auto dispatch runs simplify on oneTBB from two threads. Pairwise commutation
-also uses oneTBB from two threads when no SIMD kernel covers the operator, and
-from three threads when one does (one- and two-word operators on CPUs with
-AVX2, AVX-512 or NEON); one-word operators on AVX2 or AVX-512 also need a
-matrix of at least 2048 x 2048 entries. `set_num_threads(1)` gives single-threaded execution
+also uses oneTBB from two threads, or three when an AVX2 or AVX-512 kernel
+covers the operator (one- and two-word operators on those CPUs); one-word
+operators on AVX2 or AVX-512 also need a matrix of at least 2048 x 2048
+entries. `set_num_threads(1)` gives single-threaded execution
 with the scalar or SIMD kernels. A cap at or above oneTBB's default
 concurrency leaves oneTBB uncapped.
 

@@ -21,19 +21,20 @@ inline constexpr std::size_t kAutoTbbSimplifyTermThreshold = 8192;
 // (docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md).
 inline constexpr int kAutoTbbSimplifyMinConcurrency = 2;
 // Pairwise commutation from kAutoTbbPairwiseEntryThreshold entries runs on
-// oneTBB with at least kAutoTbbPairwiseMinConcurrency threads when the
-// alternative is the scalar kernel, and with at least
-// kAutoTbbPairwiseMinConcurrencyOverSimd when a SIMD kernel covers the
-// operator. Each oneTBB thread runs that SIMD kernel, and one core's two
-// hyperthreads share its vector units, so two threads were 0.82-1.10 times one
-// SIMD thread there.
+// oneTBB with at least kAutoTbbPairwiseMinConcurrency threads, or
+// kAutoTbbPairwiseMinConcurrencyOverX86Simd when an AVX2 or AVX-512 kernel
+// covers the operator. Each oneTBB thread runs that kernel, and one core's two
+// hyperthreads share its vector units, so two threads were 0.82-1.12 times one
+// AVX-512 thread there. Arm cores have no SMT: two threads beat NEON by
+// 1.54-1.92x on an M4 Pro.
 inline constexpr int kAutoTbbPairwiseMinConcurrency = 2;
-inline constexpr int kAutoTbbPairwiseMinConcurrencyOverSimd = 3;
+inline constexpr int kAutoTbbPairwiseMinConcurrencyOverX86Simd = 3;
 // One-word commutation on AVX2 or AVX-512 is bound by writing its output, so
-// more threads only pay off for large matrices: on two Xeon 8480+ and EPYC 9654
-// configurations oneTBB tied one AVX-512 thread at 2048 x 2048 entries and won
-// from 4096 x 4096, at any thread count. NEON, whose two lanes leave the kernel
-// compute-bound, keeps kAutoTbbPairwiseEntryThreshold.
+// more threads pay off only for large matrices. On a Xeon 8480+ and an EPYC
+// 9654, oneTBB stayed within 3% of one AVX-512 thread at 2048 x 2048 entries,
+// won from 4096 x 4096, and lost by up to 20% below 2048 x 2048, at every
+// thread count measured. NEON, whose two lanes leave the kernel compute-bound,
+// keeps kAutoTbbPairwiseEntryThreshold.
 inline constexpr std::size_t kAutoTbbPairwiseOneWordX86SimdEntryThreshold = 2048 * 2048;
 
 struct CpuBackendCandidate {
@@ -79,7 +80,7 @@ void ensure_cpu_backend_supports_simplify();
 // (cpu_thread_limit()). Auto dispatch prefers the scalar or SIMD kernels below
 // an operation's floor: kAutoTbbSimplifyMinConcurrency for simplify (the
 // default), kAutoTbbPairwiseMinConcurrency or
-// kAutoTbbPairwiseMinConcurrencyOverSimd for pairwise commutation.
+// kAutoTbbPairwiseMinConcurrencyOverX86Simd for pairwise commutation.
 [[nodiscard]] bool tbb_auto_has_min_concurrency(int minimum = kAutoTbbSimplifyMinConcurrency);
 
 // Threads the oneTBB CPU kernels may use: the smaller of oneTBB's default

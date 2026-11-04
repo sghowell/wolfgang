@@ -118,7 +118,7 @@ Slice 8 (oneTBB thread floors) merged: measured on an EPYC 9654 and a Xeon
 (and the Xeon unpinned), and on an M4 Pro. Simplify runs on oneTBB from two
 threads. The oneTBB commutation kernel ran a scalar loop per thread, at
 0.23-0.26 times one AVX-512 thread with four threads; each chunk now runs the
-best SIMD row kernel, and the row kernels themselves are 1.1-1.6x faster.
-Pairwise commutation uses oneTBB from two threads over scalar and three over
-SIMD, and one-word operators on AVX2 or AVX-512 from 2048 x 2048 entries
+best SIMD row kernel, and the single-threaded kernels are 1.02-1.62x faster.
+Pairwise commutation uses oneTBB from two threads (three over AVX2 or AVX-512),
+and one-word operators on AVX2 or AVX-512 from 2048 x 2048 entries
 (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`).

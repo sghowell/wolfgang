@@ -15,10 +15,11 @@ Next version: TBD
     it used to run a scalar loop. On a four-vCPU AVX-512 machine, auto picked
     oneTBB at 0.23-0.26 times the speed of one AVX-512 thread; with three
     threads the new kernel beats AVX-512 by 1.2-1.7x on two-word operators.
-  - Pairwise commutation uses oneTBB from two threads when no SIMD kernel covers
-    the operator and from three when one does, and one-word operators on AVX2
-    or AVX-512 need at least 2048 x 2048 entries, below which writing the
-    output, not the arithmetic, limits them.
+  - Pairwise commutation uses oneTBB from two threads, or three when an AVX2 or
+    AVX-512 kernel covers the operator (one core's two hyperthreads share its
+    vector units), and one-word operators on AVX2 or AVX-512 need at least
+    2048 x 2048 entries, below which writing the output, not the arithmetic,
+    limits them. Over NEON, two threads were 1.54-1.92x faster on an M4 Pro.
   - Single-threaded commutation kernels are faster: AVX-512 by 1.10-1.24x, AVX2
     by 1.21-1.40x, scalar by up to 1.6x.
   (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`)

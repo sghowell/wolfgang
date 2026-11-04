@@ -102,15 +102,23 @@ def auto_pairwise_backend_hint(
     matrix_entries: int,
     num_qubits: int,
 ) -> str:
-    threshold = build_info["cpu_auto_dispatch_thresholds"]["tbb_pairwise_entries"]
-    if matrix_entries >= threshold and backend_is_available(build_info, "tbb"):
+    # Mirrors src/commute.cpp: the oneTBB thread floor and entry threshold depend
+    # on whether an AVX2 or AVX-512 kernel covers the operator. Keys missing from
+    # older build-info dicts fall back to the single entry threshold.
+    thresholds = build_info["cpu_auto_dispatch_thresholds"]
+    simd = None
+    if simd_commutation_supports_num_qubits(num_qubits):
+        simd = next((name for name in ("avx512", "avx2", "neon") if backend_is_available(build_info, name)), None)
+    x86_simd = simd in ("avx512", "avx2")
+    entries_needed = thresholds["tbb_pairwise_entries"]
+    if x86_simd and (num_qubits + 63) // 64 == 1:
+        entries_needed = thresholds.get("tbb_pairwise_one_word_x86_simd_entries", entries_needed)
+    floor_key = "tbb_pairwise_min_concurrency_over_x86_simd" if x86_simd else "tbb_pairwise_min_concurrency"
+    min_threads = int(thresholds.get(floor_key, 1))
+    threads = int(build_info.get("cpu_thread_limit", min_threads))
+    if matrix_entries >= entries_needed and backend_is_available(build_info, "tbb") and threads >= min_threads:
         return "tbb"
-    if not simd_commutation_supports_num_qubits(num_qubits):
-        return "scalar"
-    for backend in ("avx512", "avx2", "neon"):
-        if backend_is_available(build_info, backend):
-            return backend
-    return "scalar"
+    return simd or "scalar"
 
 
 def time_pairwise(

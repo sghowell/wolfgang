@@ -102,7 +102,7 @@ def test_auto_dispatch_thresholds_are_reported() -> None:
     assert thresholds["tbb_simplify_min_terms"] == 8192
     assert thresholds["tbb_simplify_min_concurrency"] == 2
     assert thresholds["tbb_pairwise_min_concurrency"] == 2
-    assert thresholds["tbb_pairwise_min_concurrency_over_simd"] == 3
+    assert thresholds["tbb_pairwise_min_concurrency_over_x86_simd"] == 3
 
 
 @pytest.mark.parametrize("num_terms", [10, 3000, 10_000])

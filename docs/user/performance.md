@@ -109,8 +109,8 @@ evidence:
 ```text
 large pairwise commutation (from 331,776 entries; from 2048 x 2048 for one-word
   operators on AVX2 or AVX-512): oneTBB when compiled and at least 3 threads are
-  available (2 when no SIMD kernel covers the operator), each thread running the
-  best SIMD kernel; otherwise AVX-512, AVX2, NEON, or scalar
+  available over AVX2 or AVX-512 (2 over NEON or scalar), each thread running
+  the best SIMD kernel; otherwise AVX-512, AVX2, NEON, or scalar
 full grouping graph construction: AVX-512, AVX2, NEON, or scalar
 simplify (including inside matmul, commutator and equiv): oneTBB from 8,192 terms
   when compiled and at least 2 threads are available, otherwise scalar
@@ -279,9 +279,10 @@ and report revision only.
 Explicit SIMD and oneTBB are optional compiled backends. They keep the scalar
 baseline available (`WOLFGANG_CPU_BACKEND=scalar`) and are reported as
 unavailable when the compiler, package, or hardware support is absent. Release
-CPU wheels bundle oneTBB, so `auto` picks it there for simplify and large
-pairwise commutation on hosts with at least four oneTBB threads
-(`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`). oneTBB does not
+CPU wheels bundle oneTBB, so `auto` picks it there for simplify from two
+oneTBB threads and for large pairwise commutation from two or three, as listed
+above (`docs/benchmarks/reports/onetbb_wheels_2026-11-03.md`,
+`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`). oneTBB does not
 support `fork()`: in a process forked after a oneTBB kernel ran (for example
 a `multiprocessing` fork pool), Wolfgang runs the bit-identical scalar or SIMD
 kernels instead, and `WOLFGANG_CPU_BACKEND=tbb` raises. Use the `spawn` or
