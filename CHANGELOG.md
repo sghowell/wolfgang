@@ -49,14 +49,18 @@ Next version: TBD
 - Each kind of release artifact (the sdist, manylinux x86_64 wheels, macOS
   arm64 wheels) has its own CycloneDX 1.7 software bill of materials, attested
   against the digests of the files it describes with `actions/attest`. Each
-  names wolfgang-quantum and its version as the subject, lists numpy as an
-  external dependency with the accepted range (`vers:pypi/>=1.23`), and lists
-  the native code that artifact ships: the vendored DLPack header (version and
-  SHA-256) everywhere, and in wheels the bundled oneTBB runtime (version and
-  source commit), `Apache-2.0 AND BSD-3-Clause` on x86_64, where oneTBB
-  compiles in ITT Notify, and `Apache-2.0` on arm64. The release workflow
-  validates every document against the CycloneDX schema
-  (`scripts/sbom_bundled_components.py`).
+  describes wolfgang-quantum and its version, lists numpy as an external
+  dependency with the accepted range (`vers:pypi/>=1.23`), and lists the native
+  code that artifact ships: the vendored DLPack header (version and SHA-256)
+  everywhere; and in wheels nanobind 3.1.0 and the tsl-robin-map 1.4.0 it
+  vendors, both compiled in, and the bundled oneTBB runtime (version and source
+  commit), `Apache-2.0 AND BSD-3-Clause` on x86_64, where oneTBB compiles in ITT
+  Notify, and `Apache-2.0` on arm64. The release workflow validates every
+  document against the CycloneDX schema (`scripts/sbom_bundled_components.py`).
+- Wheels ship nanobind's BSD-3-Clause and robin-map's MIT license, which their
+  compiled-in code requires and which earlier wheels left out. The build pins
+  `nanobind==3.1.0`, the version release wheels already resolved; CI's own
+  builds, which used 2.9.2, use it too.
 - `wolfgang_quantum.set_num_threads(n)` and the `WOLFGANG_NUM_THREADS`
   environment variable cap the threads Wolfgang's oneTBB CPU kernels use, for
   the whole process; `get_num_threads()` reports the current count. Auto

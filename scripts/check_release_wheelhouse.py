@@ -249,6 +249,17 @@ def check_pyproject(
             f"wheel metadata must list the bundled oneTBB notice {notice} as a license file",
             failures,
         )
+    for notice in ("third_party/nanobind/LICENSE", "third_party/nanobind/robin_map_LICENSE"):
+        require(
+            notice in project.get("license-files", []),
+            f"wheel metadata must list the compiled-in nanobind notice {notice} as a license file",
+            failures,
+        )
+    require(
+        any(re.fullmatch(r"nanobind==\d+\.\d+\.\d+", r) for r in data.get("build-system", {}).get("requires", [])),
+        "build-system must pin nanobind exactly: its support library is compiled into every wheel and named in the SBOM",
+        failures,
+    )
 
     linux = cibw.get("linux", {})
     macos = cibw.get("macos", {})

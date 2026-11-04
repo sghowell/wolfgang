@@ -448,6 +448,8 @@ def test_wheel_smoke_requires_bundled_onetbb_matching_scalar() -> None:
     notices = lambda: [  # noqa: E731
         "wolfgang_quantum-0.2.3.dist-info/licenses/third_party/onetbb/LICENSE.txt",
         "wolfgang_quantum-0.2.3.dist-info/licenses/third_party/onetbb/third-party-programs.txt",
+        "wolfgang_quantum-0.2.3.dist-info/licenses/third_party/nanobind/LICENSE",
+        "wolfgang_quantum-0.2.3.dist-info/licenses/third_party/nanobind/robin_map_LICENSE",
     ]
     forked = lambda: True  # noqa: E731
 
@@ -468,6 +470,8 @@ def test_wheel_smoke_requires_bundled_onetbb_matching_scalar() -> None:
         wheel_smoke.check_bundled_onetbb({**info, "oneTBB_version": "2022.2.0"}, matching, notices, forked)
     with pytest.raises(AssertionError):
         wheel_smoke.check_bundled_onetbb(info, matching, lambda: notices()[:1], forked)
+    with pytest.raises(AssertionError):  # the nanobind notices are required too
+        wheel_smoke.check_bundled_onetbb(info, matching, lambda: notices()[:2], forked)
 
 
 def test_bundled_onetbb_notices_are_committed_and_listed() -> None:

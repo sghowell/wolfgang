@@ -4,16 +4,19 @@
 `cyclonedx-py requirements` lists the Python dependencies only, as unpinned
 components. The release ships three kinds of artifact with different contents:
 the sdist, which carries the vendored DLPack header as source; manylinux x86_64
-wheels, which bundle the oneTBB runtime with oneTBB's BSD-3-Clause ITT Notify
-code compiled in; and macOS arm64 wheels, whose oneTBB leaves ITT Notify out.
-This script reads the cyclonedx-py document and writes, for each kind,
+wheels, whose extension compiles in DLPack and nanobind's support library (with
+nanobind's vendored tsl-robin-map) and which bundle the oneTBB runtime with
+oneTBB's BSD-3-Clause ITT Notify code compiled in; and macOS arm64 wheels, the
+same except that their oneTBB leaves ITT Notify out. This script reads the
+cyclonedx-py document and writes, for each kind,
 
 - wolfgang-quantum as `metadata.component`, with the version, license
   expression and repository from pyproject.toml;
 - each Python dependency as an external component (`isExternal`) with the
   version range pyproject.toml accepts, in vers syntax, since none is bundled;
 - the native code that kind ships, with versions read from the files that pin
-  them (`scripts/build_onetbb.sh`, `third_party/dlpack/include/dlpack/dlpack.h`);
+  them (`scripts/build_onetbb.sh`, `third_party/dlpack/include/dlpack/dlpack.h`,
+  `third_party/nanobind/README.md` checked against the `pyproject.toml` pin);
 - a dependency graph rooted at wolfgang-quantum.
 
     cyclonedx-py requirements runtime-requirements.txt --spec-version 1.7 \\
@@ -49,6 +52,7 @@ except ModuleNotFoundError:  # Python 3.10
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLED_PROPERTY = "wolfgang:bundled-in"
 DLPACK_HEADER = Path("third_party") / "dlpack" / "include" / "dlpack" / "dlpack.h"
+NANOBIND_README = Path("third_party") / "nanobind" / "README.md"
 # External components with a version range need CycloneDX 1.7.
 SPEC_VERSION = "1.7"
 
@@ -62,6 +66,8 @@ class ArtifactKind(NamedTuple):
     onetbb_licenses: str | None
     # Where the vendored DLPack header ends up.
     dlpack_bundled_in: str
+    # Whether the artifact contains the compiled extension (and so nanobind).
+    compiled: bool
 
 
 ARTIFACT_KINDS = (
@@ -70,6 +76,7 @@ ARTIFACT_KINDS = (
         "dist/*.tar.gz",
         None,
         "the source distribution (vendored header source)",
+        False,
     ),
     ArtifactKind(
         "manylinux-x86_64",
@@ -78,6 +85,7 @@ ARTIFACT_KINDS = (
         # ITT Notify static API (BSD-3-Clause).
         "Apache-2.0 AND BSD-3-Clause",
         "the Python extension (vendored header, compiled in)",
+        True,
     ),
     ArtifactKind(
         "macos-arm64",
@@ -85,6 +93,7 @@ ARTIFACT_KINDS = (
         # arm64 builds leave ITT Notify out.
         "Apache-2.0",
         "the Python extension (vendored header, compiled in)",
+        True,
     ),
 )
 
@@ -152,12 +161,76 @@ def dlpack_component(root: Path = ROOT, *, bundled_in: str = "the Python extensi
     }
 
 
+def _build_requirement_pin(root: Path, name: str) -> str:
+    requires = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))["build-system"]["requires"]
+    for requirement in requires:
+        match = re.fullmatch(rf"{re.escape(name)}==(\d+\.\d+\.\d+)", requirement.replace(" ", ""))
+        if match is not None:
+            return match.group(1)
+    raise ValueError(f"pyproject.toml [build-system] requires must pin {name} exactly")
+
+
+def nanobind_components(root: Path = ROOT) -> list[dict[str, Any]]:
+    """nanobind's support library and the tsl-robin-map it vendors, both compiled into the extension."""
+    readme = (root / NANOBIND_README).read_text(encoding="utf-8")
+    nanobind = re.search(r"^nanobind (\d+\.\d+\.\d+) commit ([0-9a-f]{40})$", readme, flags=re.MULTILINE)
+    robin_map = re.search(r"^robin-map (\d+\.\d+\.\d+) commit ([0-9a-f]{40})$", readme, flags=re.MULTILINE)
+    if nanobind is None or robin_map is None:
+        raise ValueError(f"nanobind and robin-map pins not found in {NANOBIND_README}")
+    version, commit = nanobind.groups()
+    pinned = _build_requirement_pin(root, "nanobind")
+    if pinned != version:
+        raise ValueError(f"{NANOBIND_README} names nanobind {version}, but pyproject.toml pins {pinned}")
+    map_version, map_commit = robin_map.groups()
+    map_purl = f"pkg:github/tessil/robin-map@v{map_version}"
+    return [
+        {
+            "type": "library",
+            "bom-ref": f"pkg:pypi/nanobind@{version}",
+            "name": "nanobind",
+            "version": version,
+            "purl": f"pkg:pypi/nanobind@{version}",
+            "licenses": [{"license": {"id": "BSD-3-Clause"}}],
+            "externalReferences": [
+                {"type": "vcs", "url": "https://github.com/wjakob/nanobind", "comment": f"commit {commit}"},
+            ],
+            "properties": [
+                {"name": BUNDLED_PROPERTY, "value": "the Python extension (support library, compiled in statically)"},
+                {"name": "wolfgang:source-commit", "value": commit},
+            ],
+        },
+        {
+            "type": "library",
+            "bom-ref": map_purl,
+            "group": "Tessil",
+            "name": "robin-map",
+            "version": map_version,
+            "purl": map_purl,
+            "licenses": [{"license": {"id": "MIT"}}],
+            "externalReferences": [
+                {"type": "vcs", "url": "https://github.com/Tessil/robin-map", "comment": f"commit {map_commit}"},
+            ],
+            "properties": [
+                {"name": BUNDLED_PROPERTY, "value": "the Python extension, through nanobind (header-only hash table)"},
+                {"name": "wolfgang:source-commit", "value": map_commit},
+            ],
+        },
+    ]
+
+
 def bundled_components(kind: ArtifactKind, root: Path = ROOT) -> list[dict[str, Any]]:
     components = []
     if kind.onetbb_licenses is not None:
         components.append(onetbb_component(root, licenses=kind.onetbb_licenses))
     components.append(dlpack_component(root, bundled_in=kind.dlpack_bundled_in))
+    if kind.compiled:
+        components.extend(nanobind_components(root))
     return components
+
+
+# Components that another listed component pulls in, by name: the root depends
+# on everything else directly.
+_INDIRECT = {"robin-map": "nanobind"}
 
 
 def load_project(root: Path = ROOT) -> dict[str, Any]:
@@ -189,9 +262,13 @@ _VERS_COMPARATORS = {">=": ">=", ">": ">", "<=": "<=", "<": "<", "!=": "!=", "==
 def vers_range(ecosystem: str, specifier: str) -> str:
     """Convert a PEP 440 specifier set to a vers range (https://github.com/package-url/vers-spec).
 
-    Only comparisons vers states exactly are accepted; compatible-release
-    (``~=``), arbitrary-equality (``===``) and wildcard specifiers raise
-    ValueError, as does an empty specifier.
+    Accepts one interval: at most one lower bound (``>=``, ``>``) below at most
+    one upper bound (``<=``, ``<``), with ``!=`` exclusions strictly inside it
+    (SpecifierSet already merges equal ones), or a lone ``==``. vers reads its constraints differently from
+    PEP 440's intersection, so anything else (two lower bounds, an empty or
+    one-version interval, ``==`` beside other clauses, ``~=``, ``===``,
+    wildcards, no constraint at all) raises ValueError rather than producing a
+    range that means something else.
     """
     from packaging.specifiers import SpecifierSet
     from packaging.version import Version
@@ -199,24 +276,58 @@ def vers_range(ecosystem: str, specifier: str) -> str:
     specifiers = list(SpecifierSet(specifier))
     if not specifiers:
         raise ValueError("an unconstrained requirement has no version range")
-    constraints = []
+    lower = upper = exact = None
+    excluded: list[tuple[Version, str]] = []
     for item in specifiers:
         if item.operator not in _VERS_COMPARATORS or "*" in item.version:
             raise ValueError(f"vers cannot express the specifier {item}")
-        constraints.append((Version(item.version), _VERS_COMPARATORS[item.operator] + item.version))
+        constraint = (Version(item.version), _VERS_COMPARATORS[item.operator] + item.version)
+        if item.operator in (">=", ">"):
+            if lower is not None:
+                raise ValueError(f"{specifier!r} has more than one lower bound")
+            lower = constraint
+        elif item.operator in ("<=", "<"):
+            if upper is not None:
+                raise ValueError(f"{specifier!r} has more than one upper bound")
+            upper = constraint
+        elif item.operator == "==":
+            exact = constraint
+        else:
+            excluded.append(constraint)
+    if exact is not None:
+        if len(specifiers) != 1:
+            raise ValueError(f"{specifier!r} combines == with other clauses")
+        return f"vers:{ecosystem}/{exact[1]}"
+    if lower is not None and upper is not None and not lower[0] < upper[0]:
+        raise ValueError(f"{specifier!r} is not an interval of more than one version")
+    for version, _ in excluded:
+        if (lower is not None and not version > lower[0]) or (upper is not None and not version < upper[0]):
+            raise ValueError(f"{specifier!r} excludes a version outside its interval")
     # vers lists constraints in ascending version order.
-    return f"vers:{ecosystem}/" + "|".join(text for _, text in sorted(constraints, key=lambda pair: pair[0]))
+    ordered = [lower] if lower is not None else []
+    ordered += sorted(excluded)
+    ordered += [upper] if upper is not None else []
+    return f"vers:{ecosystem}/" + "|".join(text for _, text in ordered)
 
 
 def mark_external_requirements(components: list[dict[str, Any]], project: dict[str, Any]) -> None:
     from packaging.requirements import Requirement
     from packaging.utils import canonicalize_name
 
-    requirements = {canonicalize_name(r.name): r for r in map(Requirement, project.get("dependencies", []))}
-    for component in components:
-        requirement = requirements.get(canonicalize_name(str(component.get("name", ""))))
-        if requirement is None or not str(component.get("purl", "")).startswith("pkg:pypi/"):
-            continue
+    requirements = [Requirement(line) for line in project.get("dependencies", [])]
+    names = [canonicalize_name(requirement.name) for requirement in requirements]
+    repeated = sorted({name for name in names if names.count(name) > 1})
+    if repeated:
+        # One component per name: markers that split a dependency would need one each.
+        raise ValueError(f"dependencies listed more than once: {', '.join(repeated)}")
+    for name, requirement in zip(names, requirements):
+        matching = [
+            c for c in components
+            if canonicalize_name(str(c.get("name", ""))) == name and str(c.get("purl", "")).startswith("pkg:pypi/")
+        ]
+        if len(matching) != 1:
+            raise ValueError(f"expected one {name} component in the requirements SBOM, found {len(matching)}")
+        (component,) = matching
         component.pop("version", None)  # version and versionRange are mutually exclusive
         component["bom-ref"] = component["purl"]  # in place of cyclonedx-py's "requirements-L<line>"
         component["isExternal"] = True
@@ -251,8 +362,18 @@ def artifact_sbom(
     document["serialNumber"] = uuid.uuid4().urn
     document.setdefault("metadata", {})["component"] = subject
     document["components"] = components
-    document["dependencies"] = [{"ref": subject["bom-ref"], "dependsOn": [c["bom-ref"] for c in components]}] + [
-        {"ref": c["bom-ref"]} for c in components
+    refs = {c["name"]: c["bom-ref"] for c in components}
+    children: dict[str, list[str]] = {c["bom-ref"]: [] for c in components}
+    direct = []
+    for component in components:
+        parent = _INDIRECT.get(component["name"])
+        if parent in refs:
+            children[refs[parent]].append(component["bom-ref"])
+        else:
+            direct.append(component["bom-ref"])
+    document["dependencies"] = [{"ref": subject["bom-ref"], "dependsOn": direct}] + [
+        {"ref": ref, "dependsOn": dependencies} if dependencies else {"ref": ref}
+        for ref, dependencies in children.items()
     ]
     return document
 

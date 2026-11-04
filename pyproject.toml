@@ -1,7 +1,8 @@
 [build-system]
 requires = [
   "scikit-build-core>=0.11",
-  "nanobind>=2.9",
+  # Compiled into every wheel; third_party/nanobind/README.md and the SBOM name this version.
+  "nanobind==3.1.0",
 ]
 build-backend = "scikit_build_core.build"
 
@@ -15,6 +16,8 @@ license = "MIT AND Apache-2.0 AND BSD-3-Clause"
 license-files = [
   "LICENSE",
   "third_party/dlpack/LICENSE",
+  "third_party/nanobind/LICENSE",
+  "third_party/nanobind/robin_map_LICENSE",
   "third_party/onetbb/LICENSE.txt",
   "third_party/onetbb/third-party-programs.txt",
 ]
@@ -69,8 +72,10 @@ test = [
   "cibuildwheel>=2.23,<3; python_version < '3.11'",
   "cibuildwheel>=3.0,<4; python_version >= '3.11'",
   "cmake>=3.24",
+  # Lets the SBOM schema-validation test run in CI, not only in release dispatches.
+  "cyclonedx-python-lib[validation]>=11.12,<12",
   "hypothesis>=6.100",
-  "nanobind>=2.9",
+  "nanobind==3.1.0",
   "ninja>=1.11",
   "pytest>=8",
   "scipy>=1.10",

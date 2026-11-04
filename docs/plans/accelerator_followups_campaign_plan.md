@@ -87,7 +87,8 @@ Slice 5 merged: the release CycloneDX SBOM lists the bundled oneTBB runtime
 (version, source commit, `Apache-2.0 AND BSD-3-Clause`) and the vendored DLPack
 header (version, SHA-256) next to the Python dependencies, added by `scripts/sbom_bundled_components.py` from the
 files that pin them and checked against the CycloneDX schema in the release
-workflow.
+workflow. The SBOM follow-up below replaced that one document with an attested
+SBOM per artifact kind.
 
 Slice 7 merged: the README, the site home page, the performance guide and the
 evidence index show three figures that `scripts/render_readme_figures.py`

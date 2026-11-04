@@ -45,7 +45,7 @@ jobs:
         run: |
           python3 -m venv /tmp/venv
           /tmp/venv/bin/python -m pip install \
-            "scikit-build-core==0.11.6" "nanobind==2.9.2" "cmake==4.1.0" "ninja==1.13.0"
+            "scikit-build-core==0.11.6" "nanobind==3.1.0" "cmake==4.1.0" "ninja==1.13.0"
           /tmp/venv/bin/python -m pip wheel . --no-deps --no-build-isolation --wheel-dir /tmp/wheel \
             --config-settings=cmake.define.WOLFGANG_ENABLE_CUDA=ON \
             --config-settings=cmake.define.WOLFGANG_CUDA_ARCHITECTURES="80;90" \
@@ -92,7 +92,7 @@ jobs:
         run: |
           python3 -m venv /tmp/venv
           /tmp/venv/bin/python -m pip install \
-            "scikit-build-core==0.11.6" "nanobind==2.9.2" "cmake==4.1.0" "ninja==1.13.0"
+            "scikit-build-core==0.11.6" "nanobind==3.1.0" "cmake==4.1.0" "ninja==1.13.0"
           /tmp/venv/bin/python -m pip wheel . --no-deps --no-build-isolation --wheel-dir /tmp/wheel \
             --config-settings=cmake.define.WOLFGANG_ENABLE_HIP=ON \
             --config-settings=cmake.define.WOLFGANG_HIP_ARCHITECTURES=gfx942 \
@@ -141,7 +141,7 @@ jobs:
       - name: Build the Metal extension
         run: |
           python -m pip install \
-            "scikit-build-core==0.11.6" "nanobind==2.9.2" "cmake==4.1.0" "ninja==1.13.0"
+            "scikit-build-core==0.11.6" "nanobind==3.1.0" "cmake==4.1.0" "ninja==1.13.0"
           python -m pip wheel . --no-deps --no-build-isolation --wheel-dir /tmp/wheel \
             --config-settings=cmake.define.WOLFGANG_ENABLE_METAL=ON \
             --config-settings=cmake.define.WOLFGANG_ENABLE_INTERNAL_BINDINGS=ON

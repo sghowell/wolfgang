@@ -10,6 +10,8 @@ the oneTBB runtime in wheels, with the ITT Notify license only on x86_64.
 
 from __future__ import annotations
 
+import fnmatch
+import importlib.metadata
 import importlib.util
 import json
 import re
@@ -97,7 +99,7 @@ def test_artifact_kinds_match_the_wheel_build_matrix() -> None:
     assert [kind.name for kind in sbom.ARTIFACT_KINDS] == ["sdist", *platforms]
 
 
-def test_each_sbom_describes_wolfgang_quantum_as_its_subject(tmp_path: Path) -> None:
+def test_each_sbom_describes_wolfgang_quantum(tmp_path: Path) -> None:
     documents = _write(tmp_path)
     serials = {document["serialNumber"] for document in documents.values()}
     assert len(serials) == len(KINDS)  # distinct documents get distinct serial numbers
@@ -110,11 +112,14 @@ def test_each_sbom_describes_wolfgang_quantum_as_its_subject(tmp_path: Path) -> 
         assert root["licenses"] == [{"expression": PROJECT["license"]}]
         assert {"name": "wolfgang:release-artifact", "value": kind} in root["properties"]
         assert document["metadata"]["timestamp"] == "2026-11-03T00:00:00+00:00"
-        # The root depends on every listed component, and each has its own node.
+        # The root depends on every component but robin-map, which nanobind
+        # pulls in, and each component has its own node.
         graph = {node["ref"]: node.get("dependsOn", []) for node in document["dependencies"]}
-        refs = [c["bom-ref"] for c in document["components"]]
-        assert sorted(graph[purl]) == sorted(refs)
-        assert set(graph) == {purl, *refs}
+        refs = {c["name"]: c["bom-ref"] for c in document["components"]}
+        assert set(graph) == {purl, *refs.values()}
+        assert sorted(graph[purl]) == sorted(ref for name, ref in refs.items() if name != "robin-map")
+        if "nanobind" in refs:
+            assert graph[refs["nanobind"]] == [refs["robin-map"]]
 
 
 def test_python_dependencies_are_external_with_their_accepted_range(tmp_path: Path) -> None:
@@ -135,13 +140,27 @@ def test_python_dependencies_are_external_with_their_accepted_range(tmp_path: Pa
         ("<3,>=1.23", "vers:pypi/>=1.23|<3"),  # vers lists constraints in version order
         ("!=1.25.0,>=1.23", "vers:pypi/>=1.23|!=1.25.0"),
         ("==2.0", "vers:pypi/2.0"),
+        ("!=1.0", "vers:pypi/!=1.0"),
+        (">1.0,!=1.2,!=1.1,<=2", "vers:pypi/>1.0|!=1.1|!=1.2|<=2"),
     ],
 )
 def test_pep440_specifiers_become_vers_ranges(specifier: str, expected: str) -> None:
     assert sbom.vers_range("pypi", specifier) == expected
 
 
-@pytest.mark.parametrize("specifier", ["~=1.4", "==1.*", "===1.0", ""])
+@pytest.mark.parametrize(
+    "specifier",
+    [
+        "~=1.4", "==1.*", "===1.0", "",
+        ">3,<2",  # empty in PEP 440; vers would read it as everything outside [2, 3]
+        ">=1.23,<=1.23",  # one version: write ==1.23
+        ">=1.23,==2.0",  # == beside other clauses
+        ">=1.23,>=1.24",  # vers alternates lower and upper bounds
+        "<3,<4",
+        ">=1.23,!=1.23",  # exclusion on the bound
+        ">=1,!=0.9",  # exclusion outside the interval
+    ],
+)
 def test_specifiers_vers_cannot_express_exactly_are_rejected(specifier: str) -> None:
     with pytest.raises(ValueError):
         sbom.vers_range("pypi", specifier)
@@ -151,6 +170,7 @@ def test_bundled_native_code_depends_on_the_artifact(tmp_path: Path) -> None:
     documents = _write(tmp_path)
     sdist = _by_name(documents["sdist"])
     assert "oneTBB" not in sdist  # source builds use a system oneTBB, if any
+    assert "nanobind" not in sdist and "robin-map" not in sdist  # installed when the sdist is built
     assert sdist["dlpack"]["properties"][0]["value"].startswith("the source distribution")
     linux = _by_name(documents["manylinux-x86_64"])["oneTBB"]
     mac = _by_name(documents["macos-arm64"])["oneTBB"]
@@ -158,9 +178,64 @@ def test_bundled_native_code_depends_on_the_artifact(tmp_path: Path) -> None:
     assert mac["licenses"] == [{"expression": "Apache-2.0"}]
     for kind in ("manylinux-x86_64", "macos-arm64"):
         names = [c["name"] for c in documents[kind]["components"]]
-        assert names == ["numpy", "oneTBB", "dlpack"]
+        assert names == ["numpy", "oneTBB", "dlpack", "nanobind", "robin-map"]
+        nanobind = _by_name(documents[kind])["nanobind"]
+        assert nanobind["licenses"] == [{"license": {"id": "BSD-3-Clause"}}]
+        assert _by_name(documents[kind])["robin-map"]["licenses"] == [{"license": {"id": "MIT"}}]
         dlpack = _by_name(documents[kind])["dlpack"]
         assert dlpack["hashes"][0]["content"] in (ROOT / "third_party" / "dlpack" / "README.md").read_text(encoding="utf-8")
+
+
+def test_every_project_dependency_needs_exactly_one_component(tmp_path: Path) -> None:
+    requirements = tmp_path / "requirements.cdx.json"
+    _requirements_sbom(requirements)
+    document = json.loads(requirements.read_text(encoding="utf-8"))
+    kind = sbom.ARTIFACT_KINDS[0]
+    with pytest.raises(ValueError, match="expected one scipy component"):
+        sbom.artifact_sbom(document, {**PROJECT, "dependencies": ["numpy>=1.23", "scipy>=1.10"]}, kind)
+    split = ["numpy>=1.23; python_version < '3.11'", "numpy>=1.26; python_version >= '3.11'"]
+    with pytest.raises(ValueError, match="more than once: numpy"):
+        sbom.artifact_sbom(document, {**PROJECT, "dependencies": split}, kind)
+
+
+def test_nanobind_pins_agree_and_its_notices_are_shipped() -> None:
+    pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    (pin,) = [r for r in pyproject["build-system"]["requires"] if r.startswith("nanobind")]
+    version = pin.removeprefix("nanobind==")
+    assert sbom.nanobind_components()[0]["version"] == version
+    readme = (ROOT / "third_party" / "nanobind" / "README.md").read_text(encoding="utf-8")
+    assert f"nanobind {version} commit " in readme
+    for notice in ("third_party/nanobind/LICENSE", "third_party/nanobind/robin_map_LICENSE"):
+        assert notice in pyproject["project"]["license-files"]
+    assert "BSD-3-Clause" not in (ROOT / "third_party/nanobind/robin_map_LICENSE").read_text(encoding="utf-8")
+    assert "MIT License" in (ROOT / "third_party/nanobind/robin_map_LICENSE").read_text(encoding="utf-8")
+    # When the pinned nanobind is installed, its license is the committed copy.
+    try:
+        installed = importlib.metadata.distribution("nanobind")
+    except importlib.metadata.PackageNotFoundError:
+        return
+    if installed.version == version:
+        (license_file,) = [f for f in installed.files or [] if f.name == "LICENSE"]
+        assert license_file.read_text(encoding="utf-8") == (ROOT / "third_party/nanobind/LICENSE").read_text(
+            encoding="utf-8"
+        )
+
+
+def test_attestation_globs_cover_each_release_file_once() -> None:
+    names = [
+        "wolfgang_quantum-0.2.3.tar.gz",
+        "wolfgang_quantum-0.2.3-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+        "wolfgang_quantum-0.2.3-cp312-cp312-manylinux_2_28_x86_64.whl",
+        "wolfgang_quantum-0.2.3-cp312-cp312-macosx_11_0_arm64.whl",
+        "wolfgang_quantum-0.2.3-cp311-cp311-macosx_14_0_arm64.whl",
+    ]
+    for name in names:
+        kinds = [kind.name for kind in sbom.ARTIFACT_KINDS if fnmatch.fnmatchcase(f"dist/{name}", kind.subject_path)]
+        assert len(kinds) == 1, (name, kinds)
+    assert not any(
+        fnmatch.fnmatchcase("dist/wolfgang-quantum-0.2.3.checksums.txt", kind.subject_path)
+        for kind in sbom.ARTIFACT_KINDS
+    )
 
 
 def test_stale_bundled_components_in_the_input_are_replaced(tmp_path: Path) -> None:
@@ -220,8 +295,8 @@ def test_validation_needs_a_spec_version() -> None:
 
 def test_release_workflow_writes_and_attests_one_sbom_per_artifact_kind() -> None:
     workflow = (ROOT / ".github" / "workflows" / "release-wheelhouse.yml").read_text(encoding="utf-8")
-    # CycloneDX 1.7 needs cyclonedx-python-lib 11, which pip-audit 2.9 excluded.
-    assert '"cyclonedx-python-lib==11.' in workflow
+    # The exact library that writes CycloneDX 1.7 with external components.
+    assert '"cyclonedx-python-lib==11.12.0"' in workflow
     generate = workflow.index("cyclonedx-py requirements runtime-requirements.txt")
     assert "--spec-version 1.7" in workflow[generate:generate + 300]
     write = workflow.index("python scripts/sbom_bundled_components.py --validate")

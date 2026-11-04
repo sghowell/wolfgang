@@ -109,10 +109,16 @@ checked after cloning; see `scripts/build_onetbb.sh`), bundles only the core
 `tbb` runtime through auditwheel or delocate, and ships oneTBB's Apache-2.0
 `LICENSE.txt` and `third-party-programs.txt` as license files in the wheel
 metadata. The build fails if the cloned notices differ from the committed
-copies in `third_party/onetbb/`. The project license expression is
-`MIT AND Apache-2.0 AND BSD-3-Clause` (Wolfgang, DLPack and oneTBB, oneTBB's
-ITT Notify). Updating oneTBB means changing the tag, the commit and the
-committed notices together and re-running the wheel smoke tests.
+copies in `third_party/onetbb/`. Every wheel also compiles in nanobind's
+support library and the tsl-robin-map hash table nanobind vendors;
+`pyproject.toml` pins nanobind exactly (`nanobind==3.1.0` in
+`[build-system] requires`, and the same pin in CI), and the wheels ship
+nanobind's BSD-3-Clause and robin-map's MIT license from
+`third_party/nanobind/`. The project license expression is
+`MIT AND Apache-2.0 AND BSD-3-Clause` (Wolfgang and robin-map; DLPack and
+oneTBB; nanobind and oneTBB's ITT Notify). Updating oneTBB or nanobind means
+changing the pins and the committed notices together and re-running the wheel
+smoke tests.
 Each kind of release artifact has its own CycloneDX 1.7 SBOM, written by
 `scripts/sbom_bundled_components.py` from the Python dependencies
 `cyclonedx-py` lists: `wolfgang-quantum-sdist.cdx.json`,
@@ -121,26 +127,35 @@ Each kind of release artifact has its own CycloneDX 1.7 SBOM, written by
 license expression and repository from `pyproject.toml`) as
 `metadata.component`; lists the Python dependencies as external components
 with the version range `pyproject.toml` accepts, in vers syntax, since no
-wheel bundles them; and lists the native code that artifact ships. The sdist
+wheel bundles them (external components with ranges are why the documents use
+CycloneDX 1.7); and lists the native code that artifact ships. The sdist
 carries the vendored DLPack header source (version from `dlpack.h`, with its
-SHA-256; see `third_party/dlpack/README.md`). Wheels compile that header in and
-bundle the oneTBB runtime (tag and commit from `scripts/build_onetbb.sh`),
-licensed `Apache-2.0 AND BSD-3-Clause` on x86_64, where the BSD-3-Clause ITT
-Notify code is compiled in, and `Apache-2.0` on arm64. The release workflow
+SHA-256; see `third_party/dlpack/README.md`). Wheels compile that header in,
+compile in nanobind and robin-map (versions from `third_party/nanobind/README.md`,
+checked against the pin), and bundle the oneTBB runtime (tag and commit from
+`scripts/build_onetbb.sh`), licensed `Apache-2.0 AND BSD-3-Clause` on x86_64,
+where the BSD-3-Clause ITT Notify code is compiled in, and `Apache-2.0` on
+arm64. The release workflow
 validates every document against the CycloneDX schema and attests each with
 `actions/attest` against the files it describes, beside the build provenance of
 the whole payload. The artifact kinds follow the wheel build matrix; a new
 wheel platform needs its own kind, SBOM and attestation step. Source builds
 keep oneTBB optional.
 
-To check that a downloaded artifact came from this repository's release
+To check that a downloaded artifact was signed by this repository's release
 workflow, and to read the SBOM attested for it:
 
 ```bash
 gh attestation verify wolfgang_quantum-0.2.3-cp312-cp312-macosx_11_0_arm64.whl \
-  --repo sghowell/wolfgang --predicate-type https://cyclonedx.org/bom \
+  --repo sghowell/wolfgang \
+  --signer-workflow sghowell/wolfgang/.github/workflows/release-wheelhouse.yml \
+  --predicate-type https://cyclonedx.org/bom \
   --format json --jq '.[0].verificationResult.statement.predicate'
 ```
+
+`--repo` alone accepts any workflow in the repository. Adding
+`--source-ref refs/tags/v0.2.3` also requires the published tag; dry runs from
+branches do not meet it.
 
 Without `--predicate-type`, `gh attestation verify` checks the build
 provenance (`https://slsa.dev/provenance/v1`).

@@ -122,7 +122,7 @@ jobs:
           python -m pip install
           "cmake==4.1.0"
           "ninja==1.13.0"
-          "nanobind==2.9.2"
+          "nanobind==3.1.0"
           "numpy==2.3.3"
           "pytest==8.4.2"
           "hypothesis==6.138.15"

@@ -20,6 +20,8 @@ from typing import Any
 
 BUNDLED_ONETBB_VERSION = "2022.3.0"
 ONETBB_NOTICES = ("third_party/onetbb/LICENSE.txt", "third_party/onetbb/third-party-programs.txt")
+# nanobind's support library and its vendored tsl-robin-map are compiled into the extension.
+NANOBIND_NOTICES = ("third_party/nanobind/LICENSE", "third_party/nanobind/robin_map_LICENSE")
 
 # Simplifies fixed operators above the parallel threshold at 20, 100 and 130
 # qubits (one, two and three words), with duplicate runs of one to five terms of
@@ -101,13 +103,13 @@ def check_bundled_onetbb(
     license_files: Callable[[], list[str]] = _installed_license_files,
     run_fork_probe: Callable[[], bool] = _run_fork_probe,
 ) -> dict[str, Any]:
-    """Require the bundled oneTBB: its backend, notices, scalar bit-identity and fork safety."""
+    """Require the bundled oneTBB (backend, scalar bit-identity, fork safety) and every bundled notice."""
 
     assert "tbb" in info["compiled_cpu_backends"], info
     assert "tbb" in info["available_cpu_backends"], info
     assert info["oneTBB_version"] == BUNDLED_ONETBB_VERSION, info
     installed = license_files()
-    for notice in ONETBB_NOTICES:
+    for notice in ONETBB_NOTICES + NANOBIND_NOTICES:
         assert any(path.endswith(notice) for path in installed), (notice, installed)
     parallel = run_probe("tbb")
     scalar = run_probe("scalar")
