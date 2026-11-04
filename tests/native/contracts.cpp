@@ -7,6 +7,7 @@
 #include <complex>
 #include <iostream>
 #include <limits>
+#include <span>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -157,6 +158,31 @@ int main() {
       (void)PauliSum::from_words(2, x_words, z_words, one);
     } catch (const std::invalid_argument&) { tail_rejected = true; }
     require(tail_rejected, "from_words tail-bit guard");
+
+    // commutes_with_into writes every entry of the caller's span, matching
+    // commutes_with, and a rejected call writes nothing.
+    {
+      const auto lhs = PauliSum::from_labels({"XX", "ZI", "YZ"}, {1.0, 1.0, 1.0});
+      const auto rhs = PauliSum::from_labels({"ZZ", "XI"}, {1.0, 1.0});
+      std::vector<std::uint8_t> flags(6, 7);
+      lhs.commutes_with_into(rhs, flags);
+      require(flags == lhs.commutes_with(rhs), "commutes_with_into equals commutes_with");
+      const auto wider = PauliSum::from_labels({"XXX", "ZII"}, {1.0, 1.0});
+      const auto rejected = [](auto call, const char* message) {
+        std::vector<std::uint8_t> sentinel(6, 7);
+        bool threw = false;
+        try {
+          call(std::span<std::uint8_t>(sentinel));
+        } catch (const std::invalid_argument&) { threw = true; }
+        require(threw && sentinel == std::vector<std::uint8_t>(6, 7), message);
+      };
+      rejected([&](std::span<std::uint8_t> out) { lhs.commutes_with_into(rhs, out.first(5)); },
+               "commutes_with_into rejects a wrong-size span");
+      rejected([&](std::span<std::uint8_t> out) { lhs.commutes_with_into(rhs, out, 5); },
+               "commutes_with_into checks the guardrail first");
+      rejected([&](std::span<std::uint8_t> out) { lhs.commutes_with_into(wider, out); },
+               "commutes_with_into rejects different num_qubits");
+    }
 
     // Commutators keep only anticommuting pairs, each doubled: [X, Y] = 2iZ.
     const auto xs = PauliSum::from_labels({"X", "Z"}, {1.0, 1.0});

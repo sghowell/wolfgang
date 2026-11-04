@@ -29,11 +29,13 @@ inline constexpr int kAutoTbbSimplifyMinConcurrency = 2;
 // 1.54-1.92x on an M4 Pro.
 inline constexpr int kAutoTbbPairwiseMinConcurrency = 2;
 inline constexpr int kAutoTbbPairwiseMinConcurrencyOverX86Simd = 3;
-// One-word operators switch at kAutoTbbPairwiseEntryThreshold too. Writing
-// the kernels' output straight into the result, rather than into a zeroed
-// vector copied afterwards, took the serial page faults and copy out of every
-// path; three oneTBB threads then beat one AVX-512 thread from 576 x 576 on an
-// EPYC 9654 (docs/benchmarks/reports/host_commutation_into_2026-11-03.md).
+// One-word operators switch at kAutoTbbPairwiseEntryThreshold too. Once the
+// Python commutes_with and commutes_with_into wrote the kernels' output
+// straight into the NumPy result, rather than into a zeroed vector copied
+// afterwards, the serial page faults and copy were gone, and three oneTBB
+// threads beat one AVX-512 thread from 576 x 576 on an EPYC 9654
+// (docs/benchmarks/reports/host_commutation_into_2026-11-03.md). The C++
+// PauliSum::commutes_with still zero-fills its vector on the calling thread.
 
 struct CpuBackendCandidate {
   std::string name;

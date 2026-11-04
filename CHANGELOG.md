@@ -10,10 +10,10 @@ Next version: TBD
   - The kernels write each flag straight into the NumPy result. They used to
     fill a zero-initialized buffer that was then copied, and on Linux freeing
     both could return them to the system, so the next call faulted the pages
-    back in. On an EPYC 9654, `commutes_with` under auto on four vCPUs is
-    1.4-10x faster for one- and two-word operators from 576 x 576 to
-    4096 x 4096, and one AVX-512 thread 1.07-5.8x; on an M4 Pro with oneTBB,
-    1.2-2.5x.
+    back in. Timed in a loop that discards each result, on an EPYC 9654,
+    `commutes_with` under auto on four vCPUs is 1.4-10x faster for one- and
+    two-word operators from 576 x 576 to 4096 x 4096, and one AVX-512 thread
+    1.07-5.8x; on an M4 Pro, auto with oneTBB is 1.2-2.4x faster.
   - `PauliSum.commutes_with_into(other, output)` fills a caller-owned
     one-dimensional NumPy bool array, like `DevicePauliSum.commutes_with_into`,
     so repeated checks can reuse one result array.

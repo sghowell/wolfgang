@@ -37,8 +37,9 @@ promise. Standalone native contracts build with `WOLFGANG_BUILD_PYTHON=OFF` and
 CPU arithmetic, simplify, multiplication, commutation, grouping and expectation
 release the GIL around native computation. Python parsing, buffer acquisition,
 error translation and result conversion hold the GIL. Statevector buffers stay
-pinned for the call; callers must not mutate an input array or change dispatch
-environment variables concurrently with an operation. In CUDA builds, device
+pinned for the call; callers must not mutate an input array, read or write
+an output array such as the one passed to `commutes_with_into`, or change
+dispatch environment variables concurrently with an operation. In CUDA builds, device
 methods also release the GIL around the native call, and compute calls take a
 per-device lock while it is released (`docs/architecture/cuda_backend.md`,
 "Multiple Devices And Threads"); the CUDA host-side caches are per thread or

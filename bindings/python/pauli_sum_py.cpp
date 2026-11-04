@@ -2354,6 +2354,10 @@ void bind_pauli_sum(nb::module_& module) {
             ensure_supported_cpu_backend();
             try {
               const auto limit = checked_size_from_python_int(max_entries_obj, "max_commutation_matrix_entries");
+              // The qubit check comes first, as in PauliSum::commutes_with_into.
+              if (lhs.num_qubits() != rhs.num_qubits()) {
+                throw std::invalid_argument("PauliSum commutation requires the same num_qubits");
+              }
               const std::size_t entries = PauliSum::checked_commutation_matrix_entries_for_testing(
                   lhs.num_terms(), rhs.num_terms(), limit);
 
@@ -2394,6 +2398,10 @@ void bind_pauli_sum(nb::module_& module) {
             ensure_supported_cpu_backend();
             try {
               const auto limit = checked_size_from_python_int(max_entries_obj, "max_commutation_matrix_entries");
+              // The qubit check comes first, as in PauliSum::commutes_with_into.
+              if (lhs.num_qubits() != rhs.num_qubits()) {
+                throw std::invalid_argument("PauliSum commutation requires the same num_qubits");
+              }
               const std::size_t entries = PauliSum::checked_commutation_matrix_entries_for_testing(
                   lhs.num_terms(), rhs.num_terms(), limit);
               WritablePythonBufferView buffer(output_obj);

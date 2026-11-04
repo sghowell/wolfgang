@@ -58,8 +58,11 @@ data:       docs/benchmarks/data/host_commutation_into_2026-11-03/
 
 Six long-running processes from another project share the EPYC host, unpinned
 across its vCPUs, so every comparison alternates the builds and repeats. The
-"before" runs used the branch's benchmark script against main's native build;
-their provenance records `a410d48` with that one file modified.
+"before" runs used the branch's benchmark script against main's native build.
+On the EPYC host their provenance records checkout `a410d48` with that one file
+modified; on the M4 Pro they ran from the branch checkout, so main's build shows
+only in `requested_commit_label` and the loaded native source hash
+(`3c370496...`).
 
 Times below are the median of the per-run medians, and in brackets the fastest
 and slowest heap layout across all runs of that build. Speedups divide the

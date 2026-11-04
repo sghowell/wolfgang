@@ -119,6 +119,8 @@ public:
 
   // Return row-major pairwise commutation flags for this x rhs. Python shapes
   // this flat buffer into scalar, vector, or matrix results based on term count.
+  // The vector is zero-initialized on the calling thread before the kernels
+  // fill it; commutes_with_into into a reused buffer skips that first touch.
   [[nodiscard]] std::vector<std::uint8_t> commutes_with(
       const PauliSum& rhs,
       std::size_t max_commutation_matrix_entries = 100000000) const;
@@ -127,7 +129,8 @@ public:
   // size must be num_terms() * rhs.num_terms(). Every entry is written, so `out`
   // needs no initialization. Throws std::invalid_argument for a size mismatch,
   // different num_qubits, or more entries than max_commutation_matrix_entries,
-  // before writing anything.
+  // before writing anything. Like commutes_with, a forced AVX2, AVX-512 or NEON
+  // selector throws std::runtime_error for operators wider than two words.
   void commutes_with_into(
       const PauliSum& rhs,
       std::span<std::uint8_t> out,

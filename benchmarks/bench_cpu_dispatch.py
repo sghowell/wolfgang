@@ -122,9 +122,9 @@ def infer_auto_pairwise_backend(
     num_qubits: int,
 ) -> str:
     # Mirrors src/commute.cpp: the oneTBB thread floor and entry threshold depend
-    # on whether an AVX2 or AVX-512 kernel covers the operator. Builds from before the
-    # one-word exception was removed report its entry threshold; other builds
-    # use the single entry threshold.
+    # on whether an AVX2 or AVX-512 kernel covers the operator. The one-word key is
+    # read only so the script still describes builds from before that exception
+    # was removed; current builds no longer report it.
     thresholds = build_info["cpu_auto_dispatch_thresholds"]
     simd = None
     if simd_commutation_supports_num_qubits(num_qubits):

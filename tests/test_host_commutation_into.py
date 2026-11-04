@@ -66,8 +66,23 @@ def test_commutes_with_into_validates_the_output() -> None:
     with pytest.raises((TypeError, ValueError, BufferError)):
         op.commutes_with_into(op, read_only)
     other = _operator(25, 8, seed=2)
-    with pytest.raises(ValueError):
-        op.commutes_with_into(other, np.zeros(64, dtype=np.bool_))
+    untouched = np.zeros(64, dtype=np.bool_)
+    with pytest.raises(ValueError, match="num_qubits"):
+        op.commutes_with_into(other, untouched)
+    assert not untouched.any()
+
+
+def test_zero_term_operands_keep_their_shapes() -> None:
+    empty = _operator(24, 0, seed=4)
+    three = _operator(24, 3, seed=5)
+    one = _operator(24, 1, seed=6)
+    assert np.asarray(empty.commutes_with(three)).shape == (0, 3)
+    assert np.asarray(three.commutes_with(empty)).shape == (3, 0)
+    assert np.asarray(one.commutes_with(empty)).shape == (0,)
+    assert np.asarray(empty.commutes_with(empty)).shape == (0, 0)
+    assert empty.commutes_with_into(three, np.empty(0, dtype=np.bool_)) is None
+    with pytest.raises(ValueError, match="num_qubits"):
+        empty.commutes_with(_operator(25, 0, seed=7))
 
 
 def test_commutes_with_into_enforces_the_dense_output_guardrail() -> None:

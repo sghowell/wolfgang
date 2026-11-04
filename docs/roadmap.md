@@ -48,6 +48,9 @@ wheels exposed, and ends with a documentation pass. Review closeout:
 
 Next:
 
+- Re-run the one-word rows of `benchmarks/bench_cpu_thread_floor.py` on a Xeon
+  8480+ and on an AVX2-only x86 host: the removal of the one-word oneTBB
+  threshold rests on an EPYC 9654 alone.
 - The two-word AVX-512 commutation kernel builds each vector from eight scalar
   loads, and its time depends on where the operators land (1.5 or 2.4 ms at
   2048 x 2048 on an EPYC 9654).

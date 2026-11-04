@@ -337,7 +337,8 @@ Every commutation kernel writes its flags straight into the result array.
 can cost page faults, depending on where glibc places it: freeing memory at the
 top of the heap returns it to the system, and the next call faults it back in.
 On an EPYC 9654, one AVX-512 thread took 0.042-0.047 ms for a 576 x 576
-one-word call across eight heap layouts, against 0.051-0.322 ms when the
+one-word call across eight heap layouts in each of three runs, against
+0.051-0.322 ms when the
 kernels still filled a zeroed buffer that was then copied. To check operators
 of the same sizes repeatedly, allocate the output once and pass it to
 `PauliSum.commutes_with_into(other, output)`, a one-dimensional C-contiguous
