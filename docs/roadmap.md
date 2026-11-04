@@ -29,7 +29,9 @@ wheels exposed, and ends with a documentation pass. Review closeout:
   (`docs/benchmarks/reports/cpu_threads_2026-11-03.md`).
 - Slice 5 (merged): the release CycloneDX SBOM lists the bundled oneTBB
   runtime and the vendored DLPack header next to the Python dependencies,
-  added by `scripts/sbom_bundled_components.py`.
+  added by `scripts/sbom_bundled_components.py`. A follow-up gives each
+  artifact kind its own attested SBOM with wolfgang-quantum as its subject and
+  numpy's accepted version range.
 - Slice 6 (merged): on two NVLink-connected H100s, peer GPUs can read exported
   buffers, CUDA calls release the GIL so two threads reach 1.88-1.98 times one
   thread's throughput, and a process that uses only GPU 1 no longer holds a

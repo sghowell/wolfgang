@@ -46,11 +46,17 @@ Next version: TBD
   (`tests/test_readme_figures.py` fails when a figure is stale). Mermaid
   diagrams render on the documentation site again, and the user and
   engineering docs were edited for plain, specific prose.
-- The release software bill of materials lists the oneTBB runtime bundled in
-  CPU wheels (version, source commit, `Apache-2.0 AND BSD-3-Clause`) and the
-  vendored DLPack header (version and SHA-256) alongside the Python
-  dependencies, and the release workflow validates it against the CycloneDX
-  schema (`scripts/sbom_bundled_components.py`).
+- Each kind of release artifact (the sdist, manylinux x86_64 wheels, macOS
+  arm64 wheels) has its own CycloneDX 1.7 software bill of materials, attested
+  against the digests of the files it describes with `actions/attest`. Each
+  names wolfgang-quantum and its version as the subject, lists numpy as an
+  external dependency with the accepted range (`vers:pypi/>=1.23`), and lists
+  the native code that artifact ships: the vendored DLPack header (version and
+  SHA-256) everywhere, and in wheels the bundled oneTBB runtime (version and
+  source commit), `Apache-2.0 AND BSD-3-Clause` on x86_64, where oneTBB
+  compiles in ITT Notify, and `Apache-2.0` on arm64. The release workflow
+  validates every document against the CycloneDX schema
+  (`scripts/sbom_bundled_components.py`).
 - `wolfgang_quantum.set_num_threads(n)` and the `WOLFGANG_NUM_THREADS`
   environment variable cap the threads Wolfgang's oneTBB CPU kernels use, for
   the whole process; `get_num_threads()` reports the current count. Auto

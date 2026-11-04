@@ -113,13 +113,25 @@ copies in `third_party/onetbb/`. The project license expression is
 `MIT AND Apache-2.0 AND BSD-3-Clause` (Wolfgang, DLPack and oneTBB, oneTBB's
 ITT Notify). Updating oneTBB means changing the tag, the commit and the
 committed notices together and re-running the wheel smoke tests.
-`cyclonedx-py` lists the Python dependencies in the CycloneDX SBOM;
-`scripts/sbom_bundled_components.py` adds the bundled oneTBB runtime (tag,
-commit and `Apache-2.0 AND BSD-3-Clause` from `scripts/build_onetbb.sh`; the
-BSD-3-Clause ITT Notify code is compiled in on x86_64) and the vendored DLPack
-header (version from `dlpack.h`, with its SHA-256; see
-`third_party/dlpack/README.md`), and the release workflow validates the result
-against the CycloneDX schema. Source builds keep oneTBB optional.
+Each kind of release artifact has its own CycloneDX 1.7 SBOM, written by
+`scripts/sbom_bundled_components.py` from the Python dependencies
+`cyclonedx-py` lists: `wolfgang-quantum-sdist.cdx.json`,
+`wolfgang-quantum-manylinux-x86_64.cdx.json` and
+`wolfgang-quantum-macos-arm64.cdx.json`. Each names wolfgang-quantum (version,
+license expression and repository from `pyproject.toml`) as
+`metadata.component`; lists the Python dependencies as external components
+with the version range `pyproject.toml` accepts, in vers syntax, since no
+wheel bundles them; and lists the native code that artifact ships. The sdist
+carries the vendored DLPack header source (version from `dlpack.h`, with its
+SHA-256; see `third_party/dlpack/README.md`). Wheels compile that header in and
+bundle the oneTBB runtime (tag and commit from `scripts/build_onetbb.sh`),
+licensed `Apache-2.0 AND BSD-3-Clause` on x86_64, where the BSD-3-Clause ITT
+Notify code is compiled in, and `Apache-2.0` on arm64. The release workflow
+validates every document against the CycloneDX schema and attests each with
+`actions/attest` against the files it describes, beside the build provenance of
+the whole payload. The artifact kinds follow the wheel build matrix; a new
+wheel platform needs its own kind, SBOM and attestation step. Source builds
+keep oneTBB optional.
 
 Rules:
 

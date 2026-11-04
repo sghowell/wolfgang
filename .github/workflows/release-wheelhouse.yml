@@ -62,13 +62,15 @@ jobs:
       - name: Audit runtime dependencies
         run: python -m pip_audit --requirement runtime-requirements.txt
 
-      - name: Generate CycloneDX software bill of materials
+      - name: Generate CycloneDX software bills of materials
         run: |
-          mkdir -p sbom
           cyclonedx-py requirements runtime-requirements.txt \
+            --spec-version 1.7 \
             --output-format JSON \
-            --output-file sbom/wolfgang-runtime.cdx.json
-          python scripts/sbom_bundled_components.py --validate sbom/wolfgang-runtime.cdx.json
+            --output-file "${RUNNER_TEMP}/requirements.cdx.json"
+          python scripts/sbom_bundled_components.py --validate \
+            --requirements "${RUNNER_TEMP}/requirements.cdx.json" \
+            --out-dir sbom
 
       - name: Software bill of materials
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -264,6 +266,35 @@ jobs:
           subject-path: |
             dist/*.whl
             dist/*.tar.gz
+
+      - name: Download software bills of materials
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: software-bill-of-materials
+          path: sbom
+
+      # One SBOM per artifact kind (scripts/sbom_bundled_components.py), each
+      # bound to the digests of the files it describes.
+      - name: Attest source distribution SBOM
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: dist/*.tar.gz
+          sbom-path: sbom/wolfgang-quantum-sdist.cdx.json
+          create-storage-record: false
+
+      - name: Attest manylinux x86_64 wheel SBOM
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: dist/*-manylinux*_x86_64.whl
+          sbom-path: sbom/wolfgang-quantum-manylinux-x86_64.cdx.json
+          create-storage-record: false
+
+      - name: Attest macOS arm64 wheel SBOM
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: dist/*-macosx_*_arm64.whl
+          sbom-path: sbom/wolfgang-quantum-macos-arm64.cdx.json
+          create-storage-record: false
 
   validate-publish-ref:
     name: Validate publish ref

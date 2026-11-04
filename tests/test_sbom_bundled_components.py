@@ -117,6 +117,7 @@ def test_python_dependencies_are_external_with_their_accepted_range(tmp_path: Pa
     (numpy_requirement,) = [d for d in PROJECT["dependencies"] if d.startswith("numpy")]
     for document in _write(tmp_path).values():
         numpy = _by_name(document)["numpy"]
+        assert numpy["bom-ref"] == "pkg:pypi/numpy"
         assert numpy["isExternal"] is True
         assert numpy["versionRange"] == sbom.vers_range("pypi", numpy_requirement.removeprefix("numpy"))
         assert "version" not in numpy

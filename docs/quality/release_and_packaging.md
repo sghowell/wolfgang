@@ -113,7 +113,8 @@ Package-index publish jobs must run only from the exact `v${project.version}`
 tag ref and must upload from a checksum-free package artifact directory such as
 `publish-dist/`. Workflows must use immutable full-SHA action pins, read-only
 default permissions, job-scoped OIDC, concurrency controls, dependency auditing,
-a software bill of materials, and artifact attestations for the release payload.
+a CycloneDX software bill of materials for each kind of release artifact, and
+build-provenance and SBOM attestations for the release payload.
 
 CUDA wheel policy is deferred until after source CUDA support is stable. Any CUDA wheel plan must specify:
 
