@@ -35,6 +35,10 @@ report names.
   thread count at which oneTBB is at least as fast as the alternative from the
   switch point up on every host measured, and raise the switch point instead
   where oneTBB loses only near it).
+- Host pairwise commutation filled a zeroed vector that the binding then
+  copied into NumPy, and the release SBOM had no subject, no numpy version, no
+  attestation and one document for every artifact. Both taken up after slice 8
+  as follow-ups.
 
 ## Decisions carried into the campaign
 
@@ -122,3 +126,13 @@ best SIMD row kernel, and the single-threaded kernels are 1.02-1.73x faster.
 Pairwise commutation uses oneTBB from two threads (three over AVX2 or AVX-512),
 and one-word operators on AVX2 or AVX-512 from 2048 x 2048 entries
 (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`).
+
+Host commutation follow-up merged: the kernels write straight into the NumPy
+result, and `PauliSum.commutes_with_into` fills a caller-owned array. The old
+path's two buffers per call made glibc fault pages back in, depending on heap
+layout; on an EPYC 9654, auto on four vCPUs is 1.4-10x faster for one- and
+two-word operators and one AVX-512 thread 1.07-5.8x, and on an M4 Pro with
+oneTBB 1.2-2.5x. That cost was what slice 8's one-word 2048 x 2048 threshold had
+measured, so one-word operators on AVX2 or AVX-512 now switch to oneTBB at
+331,776 entries like wider ones
+(`docs/benchmarks/reports/host_commutation_into_2026-11-03.md`).

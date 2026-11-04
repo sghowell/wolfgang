@@ -1,0 +1,711 @@
+{
+  "rows": {
+    "auto": {
+      "100q_2048x2048": {
+        "after": {
+          "fastest_layout_seconds": 0.0007684705778956413,
+          "median_of_medians_seconds": 0.0009160060435533524,
+          "per_run_median_seconds": [
+            0.0009090863168239594,
+            0.0009160060435533524,
+            0.0009497031569480896
+          ],
+          "slowest_layout_seconds": 0.001156611368060112
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.0007596481591463089,
+          "median_of_medians_seconds": 0.0008945092558860779,
+          "per_run_median_seconds": [
+            0.0008988804183900356,
+            0.0008945092558860779,
+            0.0008928822353482246
+          ],
+          "slowest_layout_seconds": 0.0011059567332267761
+        },
+        "before": {
+          "fastest_layout_seconds": 0.0011372026056051254,
+          "median_of_medians_seconds": 0.0012940536253154278,
+          "per_run_median_seconds": [
+            0.0013243583962321281,
+            0.0012760357931256294,
+            0.0012940536253154278
+          ],
+          "slowest_layout_seconds": 0.002051122486591339
+        }
+      },
+      "100q_4096x4096": {
+        "after": {
+          "fastest_layout_seconds": 0.003478066995739937,
+          "median_of_medians_seconds": 0.0037375763058662415,
+          "per_run_median_seconds": [
+            0.0037375763058662415,
+            0.0037541058845818043,
+            0.0037130280397832394
+          ],
+          "slowest_layout_seconds": 0.003972257487475872
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.0034695472568273544,
+          "median_of_medians_seconds": 0.003606665413826704,
+          "per_run_median_seconds": [
+            0.0036109015345573425,
+            0.003606665413826704,
+            0.003597498405724764
+          ],
+          "slowest_layout_seconds": 0.003955092281103134
+        },
+        "before": {
+          "fastest_layout_seconds": 0.01573887560516596,
+          "median_of_medians_seconds": 0.016039020381867886,
+          "per_run_median_seconds": [
+            0.016039020381867886,
+            0.016134433913975954,
+            0.01596012758091092
+          ],
+          "slowest_layout_seconds": 0.016400045715272427
+        }
+      },
+      "100q_576x576": {
+        "after": {
+          "fastest_layout_seconds": 8.007977157831192e-05,
+          "median_of_medians_seconds": 8.80272127687931e-05,
+          "per_run_median_seconds": [
+            8.775154128670692e-05,
+            8.80272127687931e-05,
+            9.235367178916931e-05
+          ],
+          "slowest_layout_seconds": 0.00013177655637264252
+        },
+        "after_into": {
+          "fastest_layout_seconds": 7.66245648264885e-05,
+          "median_of_medians_seconds": 8.394569158554077e-05,
+          "per_run_median_seconds": [
+            8.26534815132618e-05,
+            8.394569158554077e-05,
+            8.6233951151371e-05
+          ],
+          "slowest_layout_seconds": 9.664427489042282e-05
+        },
+        "before": {
+          "fastest_layout_seconds": 0.00011435151100158691,
+          "median_of_medians_seconds": 0.0001247962936758995,
+          "per_run_median_seconds": [
+            0.0001253429800271988,
+            0.0001247962936758995,
+            0.0001221778802573681
+          ],
+          "slowest_layout_seconds": 0.00016801152378320694
+        }
+      },
+      "24q_2048x2048": {
+        "after": {
+          "fastest_layout_seconds": 0.0003357529640197754,
+          "median_of_medians_seconds": 0.00034520216286182404,
+          "per_run_median_seconds": [
+            0.00034492649137973785,
+            0.00034520216286182404,
+            0.00034964876249432564
+          ],
+          "slowest_layout_seconds": 0.0009639225900173187
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.00033020414412021637,
+          "median_of_medians_seconds": 0.0003423779271543026,
+          "per_run_median_seconds": [
+            0.00034788576886057854,
+            0.00034096091985702515,
+            0.0003423779271543026
+          ],
+          "slowest_layout_seconds": 0.0009365333244204521
+        },
+        "before": {
+          "fastest_layout_seconds": 0.0006751902401447296,
+          "median_of_medians_seconds": 0.000722761731594801,
+          "per_run_median_seconds": [
+            0.000722761731594801,
+            0.0007144645787775517,
+            0.0007922817021608353
+          ],
+          "slowest_layout_seconds": 0.0037651369348168373
+        }
+      },
+      "24q_4096x4096": {
+        "after": {
+          "fastest_layout_seconds": 0.0013232417404651642,
+          "median_of_medians_seconds": 0.00135864969342947,
+          "per_run_median_seconds": [
+            0.00135864969342947,
+            0.0013583539985120296,
+            0.001376722939312458
+          ],
+          "slowest_layout_seconds": 0.0016433419659733772
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.0013193758204579353,
+          "median_of_medians_seconds": 0.0013593914918601513,
+          "per_run_median_seconds": [
+            0.001359045971184969,
+            0.0013615032657980919,
+            0.0013593914918601513
+          ],
+          "slowest_layout_seconds": 0.0016213180497288704
+        },
+        "before": {
+          "fastest_layout_seconds": 0.01344094518572092,
+          "median_of_medians_seconds": 0.013662524987012148,
+          "per_run_median_seconds": [
+            0.013664295431226492,
+            0.013570660259574652,
+            0.013662524987012148
+          ],
+          "slowest_layout_seconds": 0.01535036414861679
+        }
+      },
+      "24q_576x576": {
+        "after": {
+          "fastest_layout_seconds": 3.426056355237961e-05,
+          "median_of_medians_seconds": 3.702053800225258e-05,
+          "per_run_median_seconds": [
+            3.632856532931328e-05,
+            3.702053800225258e-05,
+            3.831740468740463e-05
+          ],
+          "slowest_layout_seconds": 7.85384327173233e-05
+        },
+        "after_into": {
+          "fastest_layout_seconds": 3.20877879858017e-05,
+          "median_of_medians_seconds": 3.4191180020570755e-05,
+          "per_run_median_seconds": [
+            3.4807249903678894e-05,
+            3.4191180020570755e-05,
+            3.3736228942871094e-05
+          ],
+          "slowest_layout_seconds": 7.056538015604019e-05
+        },
+        "before": {
+          "fastest_layout_seconds": 5.112588405609131e-05,
+          "median_of_medians_seconds": 5.544861778616905e-05,
+          "per_run_median_seconds": [
+            5.657970905303955e-05,
+            5.544861778616905e-05,
+            5.5042561143636703e-05
+          ],
+          "slowest_layout_seconds": 0.00040140096098184586
+        }
+      },
+      "300q_2048x2048": {
+        "after": {
+          "fastest_layout_seconds": 0.02871629875153303,
+          "median_of_medians_seconds": 0.02878745924681425,
+          "per_run_median_seconds": [
+            0.02877746382728219,
+            0.02878745924681425,
+            0.028802300337702036
+          ],
+          "slowest_layout_seconds": 0.02891071978956461
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.02871132269501686,
+          "median_of_medians_seconds": 0.028774925507605076,
+          "per_run_median_seconds": [
+            0.028769287280738354,
+            0.028774925507605076,
+            0.02878094045445323
+          ],
+          "slowest_layout_seconds": 0.028853872790932655
+        },
+        "before": {
+          "fastest_layout_seconds": 0.02919831033796072,
+          "median_of_medians_seconds": 0.0293189431540668,
+          "per_run_median_seconds": [
+            0.02928775455802679,
+            0.029326390475034714,
+            0.0293189431540668
+          ],
+          "slowest_layout_seconds": 0.029408774338662624
+        }
+      },
+      "300q_576x576": {
+        "after": {
+          "fastest_layout_seconds": 0.0022787824273109436,
+          "median_of_medians_seconds": 0.002287810668349266,
+          "per_run_median_seconds": [
+            0.002287810668349266,
+            0.0022880611941218376,
+            0.0022847377695143223
+          ],
+          "slowest_layout_seconds": 0.0023001544177532196
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.0022758888080716133,
+          "median_of_medians_seconds": 0.002282877918332815,
+          "per_run_median_seconds": [
+            0.002282877918332815,
+            0.0022814511321485043,
+            0.002283219713717699
+          ],
+          "slowest_layout_seconds": 0.0022939657792448997
+        },
+        "before": {
+          "fastest_layout_seconds": 0.0023157885298132896,
+          "median_of_medians_seconds": 0.0023236768320202827,
+          "per_run_median_seconds": [
+            0.002323875203728676,
+            0.0023217108100652695,
+            0.0023236768320202827
+          ],
+          "slowest_layout_seconds": 0.0029961559921503067
+        }
+      }
+    },
+    "tbb": {
+      "100q_2048x2048": {
+        "after": {
+          "fastest_layout_seconds": 0.000770963728427887,
+          "median_of_medians_seconds": 0.0009153052233159542,
+          "per_run_median_seconds": [
+            0.00090755894780159,
+            0.0009153052233159542,
+            0.0009369128383696079
+          ],
+          "slowest_layout_seconds": 0.0011483300477266312
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.0007611503824591637,
+          "median_of_medians_seconds": 0.0008968422189354897,
+          "per_run_median_seconds": [
+            0.0008968422189354897,
+            0.0008981204591691494,
+            0.0008942144922912121
+          ],
+          "slowest_layout_seconds": 0.0011035017669200897
+        },
+        "before": {
+          "fastest_layout_seconds": 0.0011100620031356812,
+          "median_of_medians_seconds": 0.0012823850847780704,
+          "per_run_median_seconds": [
+            0.0012823850847780704,
+            0.0012776236981153488,
+            0.0012935730628669262
+          ],
+          "slowest_layout_seconds": 0.002038281410932541
+        }
+      },
+      "100q_4096x4096": {
+        "after": {
+          "fastest_layout_seconds": 0.003480631858110428,
+          "median_of_medians_seconds": 0.003734242171049118,
+          "per_run_median_seconds": [
+            0.003734242171049118,
+            0.0037420480512082577,
+            0.00370990764349699
+          ],
+          "slowest_layout_seconds": 0.0039012115448713303
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.0034639984369277954,
+          "median_of_medians_seconds": 0.0036029391922056675,
+          "per_run_median_seconds": [
+            0.003607441671192646,
+            0.0036029391922056675,
+            0.003602821845561266
+          ],
+          "slowest_layout_seconds": 0.00395504105836153
+        },
+        "before": {
+          "fastest_layout_seconds": 0.015739157795906067,
+          "median_of_medians_seconds": 0.015977077651768923,
+          "per_run_median_seconds": [
+            0.015977077651768923,
+            0.015901499427855015,
+            0.01609643641859293
+          ],
+          "slowest_layout_seconds": 0.01654251478612423
+        }
+      },
+      "100q_576x576": {
+        "after": {
+          "fastest_layout_seconds": 8.095055818557739e-05,
+          "median_of_medians_seconds": 8.865306153893471e-05,
+          "per_run_median_seconds": [
+            8.696503937244415e-05,
+            8.875271305441856e-05,
+            8.865306153893471e-05
+          ],
+          "slowest_layout_seconds": 0.00013198796659708023
+        },
+        "after_into": {
+          "fastest_layout_seconds": 7.80271366238594e-05,
+          "median_of_medians_seconds": 8.373567834496498e-05,
+          "per_run_median_seconds": [
+            8.405093103647232e-05,
+            8.373567834496498e-05,
+            8.361553773283958e-05
+          ],
+          "slowest_layout_seconds": 9.668432176113129e-05
+        },
+        "before": {
+          "fastest_layout_seconds": 0.00011315848678350449,
+          "median_of_medians_seconds": 0.00012313388288021088,
+          "per_run_median_seconds": [
+            0.00012427568435668945,
+            0.0001230388879776001,
+            0.00012313388288021088
+          ],
+          "slowest_layout_seconds": 0.00019521266222000122
+        }
+      },
+      "24q_2048x2048": {
+        "after": {
+          "fastest_layout_seconds": 0.0003342609852552414,
+          "median_of_medians_seconds": 0.00034562312066555023,
+          "per_run_median_seconds": [
+            0.00034562312066555023,
+            0.0003446759656071663,
+            0.00034645944833755493
+          ],
+          "slowest_layout_seconds": 0.0003743814304471016
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.00032581761479377747,
+          "median_of_medians_seconds": 0.0003402549773454666,
+          "per_run_median_seconds": [
+            0.0003428175114095211,
+            0.0003388030454516411,
+            0.0003402549773454666
+          ],
+          "slowest_layout_seconds": 0.0003648558631539345
+        },
+        "before": {
+          "fastest_layout_seconds": 0.000659918412566185,
+          "median_of_medians_seconds": 0.00071366922929883,
+          "per_run_median_seconds": [
+            0.00071366922929883,
+            0.00071751419454813,
+            0.0007078410126268864
+          ],
+          "slowest_layout_seconds": 0.0008961521089076996
+        }
+      },
+      "24q_4096x4096": {
+        "after": {
+          "fastest_layout_seconds": 0.0013293419033288956,
+          "median_of_medians_seconds": 0.0013580797240138054,
+          "per_run_median_seconds": [
+            0.0013643484562635422,
+            0.0013566464185714722,
+            0.0013580797240138054
+          ],
+          "slowest_layout_seconds": 0.0014519058167934418
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.0013142162933945656,
+          "median_of_medians_seconds": 0.0013569383881986141,
+          "per_run_median_seconds": [
+            0.0013622501865029335,
+            0.0013540019281208515,
+            0.0013569383881986141
+          ],
+          "slowest_layout_seconds": 0.001617291010916233
+        },
+        "before": {
+          "fastest_layout_seconds": 0.01349792443215847,
+          "median_of_medians_seconds": 0.013731460087001324,
+          "per_run_median_seconds": [
+            0.013731460087001324,
+            0.013670159038156271,
+            0.013764548115432262
+          ],
+          "slowest_layout_seconds": 0.015462682582437992
+        }
+      },
+      "24q_576x576": {
+        "after": {
+          "fastest_layout_seconds": 3.526266664266586e-05,
+          "median_of_medians_seconds": 3.672530874609947e-05,
+          "per_run_median_seconds": [
+            3.672530874609947e-05,
+            3.65707091987133e-05,
+            3.7085264921188354e-05
+          ],
+          "slowest_layout_seconds": 4.027038812637329e-05
+        },
+        "after_into": {
+          "fastest_layout_seconds": 3.0555762350559235e-05,
+          "median_of_medians_seconds": 3.287428990006447e-05,
+          "per_run_median_seconds": [
+            3.480259329080582e-05,
+            3.1842850148677826e-05,
+            3.287428990006447e-05
+          ],
+          "slowest_layout_seconds": 3.537256270647049e-05
+        },
+        "before": {
+          "fastest_layout_seconds": 6.604846566915512e-05,
+          "median_of_medians_seconds": 6.801215931773186e-05,
+          "per_run_median_seconds": [
+            6.84722326695919e-05,
+            6.801215931773186e-05,
+            6.800703704357147e-05
+          ],
+          "slowest_layout_seconds": 7.167737931013107e-05
+        }
+      },
+      "300q_2048x2048": {
+        "after": {
+          "fastest_layout_seconds": 0.028752777725458145,
+          "median_of_medians_seconds": 0.028782997746020555,
+          "per_run_median_seconds": [
+            0.028782997746020555,
+            0.02879505092278123,
+            0.028773251920938492
+          ],
+          "slowest_layout_seconds": 0.0288773188367486
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.02871171198785305,
+          "median_of_medians_seconds": 0.028757554478943348,
+          "per_run_median_seconds": [
+            0.028794801328331232,
+            0.028757554478943348,
+            0.028757115360349417
+          ],
+          "slowest_layout_seconds": 0.028880072757601738
+        },
+        "before": {
+          "fastest_layout_seconds": 0.02926185540854931,
+          "median_of_medians_seconds": 0.029311941005289555,
+          "per_run_median_seconds": [
+            0.029311941005289555,
+            0.0293163750320673,
+            0.02930935798212886
+          ],
+          "slowest_layout_seconds": 0.02937496080994606
+        }
+      },
+      "300q_576x576": {
+        "after": {
+          "fastest_layout_seconds": 0.002277921885251999,
+          "median_of_medians_seconds": 0.002288331277668476,
+          "per_run_median_seconds": [
+            0.00228464649990201,
+            0.002288331277668476,
+            0.0022890595719218254
+          ],
+          "slowest_layout_seconds": 0.002299073152244091
+        },
+        "after_into": {
+          "fastest_layout_seconds": 0.0022760778665542603,
+          "median_of_medians_seconds": 0.0022841603495180607,
+          "per_run_median_seconds": [
+            0.0022841603495180607,
+            0.002285667695105076,
+            0.002283355686813593
+          ],
+          "slowest_layout_seconds": 0.0022991225123405457
+        },
+        "before": {
+          "fastest_layout_seconds": 0.0023184213787317276,
+          "median_of_medians_seconds": 0.0023271851241588593,
+          "per_run_median_seconds": [
+            0.0023271851241588593,
+            0.002324409782886505,
+            0.0023273122496902943
+          ],
+          "slowest_layout_seconds": 0.0029836781322956085
+        }
+      }
+    }
+  },
+  "runs": [
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method commutes_with --label after --output after_1.json",
+      "file": "after_1.json",
+      "git_commit": "b8b02cb",
+      "git_dirty": false,
+      "label": "after",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "345881d6a928695c0b2a1b23d13963b295de70613d0d31491350a54109d66d69",
+        "built_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "checkout_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "matches_checkout_native_sources": true
+      },
+      "method": "commutes_with"
+    },
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method commutes_with --label after --output after_2.json",
+      "file": "after_2.json",
+      "git_commit": "b8b02cb",
+      "git_dirty": false,
+      "label": "after",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "345881d6a928695c0b2a1b23d13963b295de70613d0d31491350a54109d66d69",
+        "built_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "checkout_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "matches_checkout_native_sources": true
+      },
+      "method": "commutes_with"
+    },
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method commutes_with --label after --output after_3.json",
+      "file": "after_3.json",
+      "git_commit": "b8b02cb",
+      "git_dirty": false,
+      "label": "after",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "345881d6a928695c0b2a1b23d13963b295de70613d0d31491350a54109d66d69",
+        "built_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "checkout_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "matches_checkout_native_sources": true
+      },
+      "method": "commutes_with"
+    },
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method into --label after_into --output after_into_1.json",
+      "file": "after_into_1.json",
+      "git_commit": "b8b02cb",
+      "git_dirty": false,
+      "label": "after_into",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "345881d6a928695c0b2a1b23d13963b295de70613d0d31491350a54109d66d69",
+        "built_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "checkout_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "matches_checkout_native_sources": true
+      },
+      "method": "into"
+    },
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method into --label after_into --output after_into_2.json",
+      "file": "after_into_2.json",
+      "git_commit": "b8b02cb",
+      "git_dirty": false,
+      "label": "after_into",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "345881d6a928695c0b2a1b23d13963b295de70613d0d31491350a54109d66d69",
+        "built_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "checkout_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "matches_checkout_native_sources": true
+      },
+      "method": "into"
+    },
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method into --label after_into --output after_into_3.json",
+      "file": "after_into_3.json",
+      "git_commit": "b8b02cb",
+      "git_dirty": false,
+      "label": "after_into",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "345881d6a928695c0b2a1b23d13963b295de70613d0d31491350a54109d66d69",
+        "built_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "checkout_native_source_sha256": "f09acf4cd3ea12e807f79502c9b36a596c5bcd837848f37e65c10c2f6ba4ccc0",
+        "matches_checkout_native_sources": true
+      },
+      "method": "into"
+    },
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method commutes_with --label before --output before_1.json",
+      "file": "before_1.json",
+      "git_commit": "a410d48",
+      "git_dirty": true,
+      "label": "before",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "d28b110d4539039e3b85cc3b6e82c117b8a71313d99d0eace1a0322d58bd24e6",
+        "built_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "checkout_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "matches_checkout_native_sources": true
+      },
+      "method": "commutes_with"
+    },
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method commutes_with --label before --output before_2.json",
+      "file": "before_2.json",
+      "git_commit": "a410d48",
+      "git_dirty": true,
+      "label": "before",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "d28b110d4539039e3b85cc3b6e82c117b8a71313d99d0eace1a0322d58bd24e6",
+        "built_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "checkout_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "matches_checkout_native_sources": true
+      },
+      "method": "commutes_with"
+    },
+    {
+      "affinity": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --selectors auto,tbb --cases 24:576,24:2048,24:4096,100:576,100:2048,100:4096,300:576,300:2048 --calls 15 --layouts 8 --method commutes_with --label before --output before_3.json",
+      "file": "before_3.json",
+      "git_commit": "a410d48",
+      "git_dirty": true,
+      "label": "before",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "d28b110d4539039e3b85cc3b6e82c117b8a71313d99d0eace1a0322d58bd24e6",
+        "built_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "checkout_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "matches_checkout_native_sources": true
+      },
+      "method": "commutes_with"
+    }
+  ]
+}

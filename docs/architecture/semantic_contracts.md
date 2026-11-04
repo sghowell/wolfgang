@@ -305,6 +305,8 @@ qwc conflict iff ((x1 & z2) XOR (z1 & x2)) != 0
 
 `commutes_with(other)` returns a boolean when both operands have one term. It returns a one-dimensional boolean NumPy array when exactly one operand has one term. It returns a two-dimensional boolean NumPy array for pairwise many-to-many checks only when the output element count is within the configured guardrail.
 
+`commutes_with_into(other, output)` writes the same flags, row-major, into a caller-owned one-dimensional C-contiguous NumPy bool array of length `self.num_terms * other.num_terms`, on the host for `PauliSum` and from the device for `DevicePauliSum`. Every entry is written, so the array needs no initialization. The guardrail and the length, dtype and qubit-count checks run before anything is written.
+
 Default guardrail:
 
 ```text

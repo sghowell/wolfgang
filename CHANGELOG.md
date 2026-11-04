@@ -6,6 +6,22 @@ All user-visible Wolfgang changes are recorded here before each release.
 
 Next version: TBD
 
+- CPU pairwise commutation:
+  - The kernels write each flag straight into the NumPy result. They used to
+    fill a zero-initialized buffer that was then copied, and on Linux freeing
+    both could return them to the system, so the next call faulted the pages
+    back in. On an EPYC 9654, `commutes_with` under auto on four vCPUs is
+    1.4-10x faster for one- and two-word operators from 576 x 576 to
+    4096 x 4096, and one AVX-512 thread 1.07-5.8x; on an M4 Pro with oneTBB,
+    1.2-2.5x.
+  - `PauliSum.commutes_with_into(other, output)` fills a caller-owned
+    one-dimensional NumPy bool array, like `DevicePauliSum.commutes_with_into`,
+    so repeated checks can reuse one result array.
+  - One-word operators on AVX2 or AVX-512 switch to oneTBB at 331,776 entries,
+    like wider ones. Their 2048 x 2048 threshold had measured the copy, not
+    the kernels: with it gone, three oneTBB threads beat one AVX-512 thread from
+    576 x 576
+    (`docs/benchmarks/reports/host_commutation_into_2026-11-03.md`).
 - CPU, oneTBB on small machines:
   - Auto dispatch runs simplify on oneTBB from two threads instead of four.
     Two threads beat scalar from 8,192 terms on every host measured: 1.09-1.47x
@@ -17,9 +33,7 @@ Next version: TBD
     threads the new kernel beats AVX-512 by 1.2-1.7x on two-word operators.
   - Pairwise commutation uses oneTBB from two threads, or three when an AVX2 or
     AVX-512 kernel covers the operator (one core's two hyperthreads share its
-    vector units), and one-word operators on AVX2 or AVX-512 need at least
-    2048 x 2048 entries, below which writing the output, not the arithmetic,
-    limits them. Over NEON, two threads were 1.54-1.92x faster on an M4 Pro.
+    vector units). Over NEON, two threads were 1.54-1.92x faster on an M4 Pro.
   - Single-threaded commutation kernels are faster: AVX-512 by 1.19-1.39x, AVX2
     by 1.23-1.73x, scalar by 1.02-1.30x.
   (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`)

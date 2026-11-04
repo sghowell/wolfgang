@@ -2,6 +2,11 @@
 
 Date: 2026-11-03
 
+Superseded in part: the one-word 2048 x 2048 threshold below measured the
+zero-filled buffer, its copy and their page faults, not the kernels, and was
+removed (`docs/benchmarks/reports/host_commutation_into_2026-11-03.md`). The
+thread floors stand.
+
 This report qualifies slice 8 of the accelerator follow-ups campaign
 (`docs/plans/accelerator_followups_campaign_plan.md`). Auto dispatch ran
 simplify and large pairwise commutation on oneTBB only with at least four

@@ -107,10 +107,10 @@ unless the corresponding backend was compiled and the current CPU supports it.
 evidence:
 
 ```text
-large pairwise commutation (from 331,776 entries; from 2048 x 2048 for one-word
-  operators on AVX2 or AVX-512): oneTBB when compiled and at least 3 threads are
-  available over AVX2 or AVX-512 (2 over NEON or scalar), each thread running
-  the best SIMD kernel; otherwise AVX-512, AVX2, NEON, or scalar
+large pairwise commutation (from 331,776 entries): oneTBB when compiled and at
+  least 3 threads are available over AVX2 or AVX-512 (2 over NEON or scalar),
+  each thread running the best SIMD kernel; otherwise AVX-512, AVX2, NEON, or
+  scalar
 full grouping graph construction: AVX-512, AVX2, NEON, or scalar
 simplify (including inside matmul, commutator and equiv): oneTBB from 8,192 terms
   when compiled and at least 2 threads are available, otherwise scalar
@@ -331,6 +331,28 @@ falls back to scalar for those operations and widths.
 overhead is amortized. Full graph construction is available as a forced
 oneTBB path, but `auto` prefers SIMD or scalar for it because oneTBB's
 overhead did not pay off on the Phase 9 hardware.
+
+Every commutation kernel writes its flags straight into the result array.
+`commutes_with` allocates that array on each call, and on Linux the allocation
+can cost page faults, depending on where glibc places it: freeing memory at the
+top of the heap returns it to the system, and the next call faults it back in.
+On an EPYC 9654, one AVX-512 thread took 0.042-0.047 ms for a 576 x 576
+one-word call across eight heap layouts, against 0.051-0.322 ms when the
+kernels still filled a zeroed buffer that was then copied. To check operators
+of the same sizes repeatedly, allocate the output once and pass it to
+`PauliSum.commutes_with_into(other, output)`, a one-dimensional C-contiguous
+NumPy bool array of `len(self) * len(other)` entries
+(`docs/benchmarks/reports/host_commutation_into_2026-11-03.md`):
+
+```python
+import numpy as np
+
+rows, cols = 4096, 4096  # term counts of every pair below
+out = np.empty(rows * cols, dtype=np.bool_)
+for lhs, rhs in pairs:
+    lhs.commutes_with_into(rhs, out)
+    flags = out.reshape(rows, cols)  # a view: the next call overwrites it
+```
 
 ## Apple Silicon And x86_64
 

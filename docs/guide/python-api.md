@@ -36,9 +36,8 @@ assert wolfgang_quantum.get_num_threads() <= 4
 
 Auto dispatch runs simplify on oneTBB from two threads. Pairwise commutation
 also uses oneTBB from two threads, or three when an AVX2 or AVX-512 kernel
-covers the operator (one- and two-word operators on those CPUs); one-word
-operators on AVX2 or AVX-512 also need a matrix of at least 2048 x 2048
-entries. `set_num_threads(1)` gives single-threaded execution
+covers the operator (one- and two-word operators on those CPUs).
+`set_num_threads(1)` gives single-threaded execution
 with the scalar or SIMD kernels. A cap at or above oneTBB's default
 concurrency leaves oneTBB uncapped.
 
@@ -67,7 +66,8 @@ Core operations:
 - `adjoint()`
 - `len(op)`, `op[i]`, `op[a:b]` and iteration over single-term operators
 - `op == other` (structural, unhashable) and `op.equiv(other, atol)` (mathematical)
-- `commutes_with(rhs)`
+- `commutes_with(rhs)` / `commutes_with_into(rhs, output)`: the second fills a
+  caller-owned one-dimensional NumPy bool array, so a repeated check can reuse it
 - `group_commuting()`
 - statevector tools: `expectation_statevector`, `variance_statevector` and
   `apply_statevector` (single states or 2-D batches), and `to_matrix(sparse=False)`

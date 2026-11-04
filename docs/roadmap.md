@@ -41,11 +41,16 @@ wheels exposed, and ends with a documentation pass. Review closeout:
   pairwise commutation from two or three, and the oneTBB commutation kernel
   runs SIMD in each thread
   (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`).
+- Host commutation follow-up (merged): the kernels write straight into the
+  NumPy result, `PauliSum.commutes_with_into` fills a caller-owned array, and
+  one-word operators on AVX2 or AVX-512 switch to oneTBB at the base threshold
+  (`docs/benchmarks/reports/host_commutation_into_2026-11-03.md`).
 
 Next:
 
-- One-word commutation spends most of its time zero-filling its output and
-  copying it into NumPy; filling the NumPy array directly would remove both.
+- The two-word AVX-512 commutation kernel builds each vector from eight scalar
+  loads, and its time depends on where the operators land (1.5 or 2.4 ms at
+  2048 x 2048 on an EPYC 9654).
 - A fused CUDA simplify kernel for roughly 1K-64K terms, where simplify still
   launches the multi-stage pipeline.
 - Publishing a release (tags, PyPI uploads) waits for explicit approval and the
