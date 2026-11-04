@@ -20,8 +20,8 @@ Next version: TBD
     vector units), and one-word operators on AVX2 or AVX-512 need at least
     2048 x 2048 entries, below which writing the output, not the arithmetic,
     limits them. Over NEON, two threads were 1.54-1.92x faster on an M4 Pro.
-  - Single-threaded commutation kernels are faster: AVX-512 by 1.10-1.24x, AVX2
-    by 1.21-1.40x, scalar by up to 1.6x.
+  - Single-threaded commutation kernels are faster: AVX-512 by 1.19-1.39x, AVX2
+    by 1.23-1.73x, scalar by 1.02-1.30x.
   (`docs/benchmarks/reports/cpu_thread_floor_2026-11-03.md`)
 - CUDA, several GPUs:
   - Device calls release the GIL, so one Python thread per GPU keeps several

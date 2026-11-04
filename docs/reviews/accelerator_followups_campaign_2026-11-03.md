@@ -457,3 +457,59 @@ Branch `codex/support-matrix-ledger`.
   `scripts/check_release_readiness.py` and `scripts/check_release_wheelhouse.py`
   passed before the review fixes; after them, the release, identity and
   checkpoint tests (54 passed) and `scripts/check_release_readiness.py`.
+
+## Slice 8: oneTBB thread floors
+
+Branch `codex/thread-floor`.
+
+- Scope: `include/wolfgang/cpu_backend.hpp`, `src/cpu_backend.cpp`,
+  `src/commute.cpp`, `src/parallel/commute_kernels_tbb.cpp`,
+  `src/simd/commute_kernels_{avx512,avx2,neon,scalar}.cpp`,
+  `src/detail/commute_kernels.hpp`, `bindings/python/build_info.cpp`,
+  `tests/test_cpu_tbb_commutation.py` (new), `tests/test_cpu_thread_floor.py`
+  (new), `tests/test_cpu_threads.py`, `tests/test_cpu_parallel_simplify.py`,
+  `benchmarks/bench_cpu_thread_floor.py` (new),
+  `benchmarks/bench_cpu_commutation_kernels.py` (new),
+  `benchmarks/bench_cpu_dispatch.py`, `benchmarks/bench_cpu_thresholds.py`, the
+  report and data, `README.md`, `docs/user/performance.md`,
+  `docs/guide/python-api.md`, `docs/architecture/hardware_targets_and_testing.md`,
+  `docs/architecture/api_stability.md`, `CHANGELOG.md`, the plan, the roadmap and
+  the evidence index.
+- Measuring the floor showed that the oneTBB commutation kernel ran a scalar
+  loop per thread (0.23-0.26 times one AVX-512 thread at four threads, which
+  auto dispatch chose). The SIMD kernels became row-range kernels that oneTBB
+  runs per chunk, which also sped up the single-threaded kernels (1.02-1.73x).
+  Simplify runs on oneTBB from two threads; pairwise commutation from two, or
+  three over AVX2 or AVX-512; one-word commutation over AVX2 or AVX-512 from
+  2048 x 2048 entries.
+- Tests: the floor and dispatch tests were written before each change and
+  failed against it (the four-thread floor, the one-word threshold, the NEON
+  floor's reported key); the equivalence tests guard the refactor.
+- Reviewer: independent agent (CPU kernels, dispatch, testing, benchmark and
+  documentation roles), read-only.
+- Findings: P0 0, P1 1, P2 3, P3 7.
+- P1 resolution: `README.md` and `docs/user/performance.md` still stated a
+  four-thread floor; both now give the new floors.
+- P2 resolutions: NEON's commutation floor is two (the M4 Pro wins at two
+  threads, and Arm cores have no SMT), with the build-info key renamed
+  `tbb_pairwise_min_concurrency_over_x86_simd`; the single-threaded kernel
+  comparison is now produced by `benchmarks/bench_cpu_commutation_kernels.py`
+  with its metadata and committed as a summary; validation was rerun at the
+  head.
+- P3 resolutions: the report states a 3% tie tolerance and that one-word
+  commutation loses or ties below 2048 x 2048; the simplify table shows true
+  medians; the before/after ranges are split by width; the header comment's
+  range and wording are corrected; the plan's kernel range is exact; the builds
+  table lists the EPYC first-kernel build; the dispatch and threshold
+  benchmarks label auto's pairwise kernel with the new rules; the floor
+  benchmark records its seed and describes the floors; the report notes that
+  `cpu_auto_tbb_eligible` stays simplify's eligibility and that
+  `tbb_auto_has_min_concurrency()` gained a defaulted parameter (source
+  compatible, a different symbol, per `docs/architecture/api_stability.md`);
+  the two-thread floor over scalar for narrow operators is a recorded
+  limitation; the equivalence test compares every available SIMD selector with
+  scalar.
+- Validation after the review fixes, at `55d2088` on the Xeon host:
+  `python scripts/validate.py --profile core` passed (777 passed), and the
+  dispatch, equivalence, threads and threshold-benchmark suites passed pinned
+  to two hyperthreads, two cores and four vCPUs, and unpinned.

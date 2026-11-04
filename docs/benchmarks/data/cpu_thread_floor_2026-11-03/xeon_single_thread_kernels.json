@@ -1,61 +1,446 @@
-{"runs": [
-{"build": "main", "commit": "e9c8d0e", "selector": "avx512", "repeat": 1, "median_ms": {"24q_576": 0.356, "24q_4096": 17.09, "100q_576": 0.252, "100q_4096": 22.446}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx2", "repeat": 1, "median_ms": {"24q_576": 0.479, "24q_4096": 22.039, "100q_576": 0.492, "100q_4096": 31.873}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "scalar", "repeat": 1, "median_ms": {"24q_576": 2.213, "24q_4096": 105.776, "100q_576": 3.561, "100q_4096": 187.91}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx512", "repeat": 1, "median_ms": {"24q_576": 0.284, "24q_4096": 13.874, "100q_576": 0.203, "100q_4096": 20.388}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx2", "repeat": 1, "median_ms": {"24q_576": 0.343, "24q_4096": 16.378, "100q_576": 0.36, "100q_4096": 26.449}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "scalar", "repeat": 1, "median_ms": {"24q_576": 1.318, "24q_4096": 66.54, "100q_576": 3.544, "100q_4096": 183.452}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx512", "repeat": 2, "median_ms": {"24q_576": 0.347, "24q_4096": 17.064, "100q_576": 0.249, "100q_4096": 22.403}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx2", "repeat": 2, "median_ms": {"24q_576": 0.479, "24q_4096": 21.995, "100q_576": 0.49, "100q_4096": 32.139}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "scalar", "repeat": 2, "median_ms": {"24q_576": 2.152, "24q_4096": 105.33, "100q_576": 3.499, "100q_4096": 189.18}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx512", "repeat": 2, "median_ms": {"24q_576": 0.289, "24q_4096": 13.875, "100q_576": 0.203, "100q_4096": 20.368}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx2", "repeat": 2, "median_ms": {"24q_576": 0.343, "24q_4096": 16.403, "100q_576": 0.363, "100q_4096": 26.51}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "scalar", "repeat": 2, "median_ms": {"24q_576": 1.329, "24q_4096": 66.239, "100q_576": 3.598, "100q_4096": 183.561}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx512", "repeat": 3, "median_ms": {"24q_576": 0.352, "24q_4096": 17.181, "100q_576": 0.253, "100q_4096": 22.47}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx2", "repeat": 3, "median_ms": {"24q_576": 0.479, "24q_4096": 22.024, "100q_576": 0.491, "100q_4096": 32.08}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "scalar", "repeat": 3, "median_ms": {"24q_576": 2.202, "24q_4096": 105.776, "100q_576": 3.6, "100q_4096": 187.868}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx512", "repeat": 3, "median_ms": {"24q_576": 0.283, "24q_4096": 13.875, "100q_576": 0.201, "100q_4096": 20.366}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx2", "repeat": 3, "median_ms": {"24q_576": 0.343, "24q_4096": 16.345, "100q_576": 0.36, "100q_4096": 26.434}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "scalar", "repeat": 3, "median_ms": {"24q_576": 1.321, "24q_4096": 65.921, "100q_576": 3.521, "100q_4096": 182.235}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx512", "repeat": 4, "median_ms": {"24q_576": 0.35, "24q_4096": 17.081, "100q_576": 0.253, "100q_4096": 22.414}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx2", "repeat": 4, "median_ms": {"24q_576": 0.475, "24q_4096": 21.963, "100q_576": 0.489, "100q_4096": 32.093}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "scalar", "repeat": 4, "median_ms": {"24q_576": 2.105, "24q_4096": 103.799, "100q_576": 3.652, "100q_4096": 188.679}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx512", "repeat": 4, "median_ms": {"24q_576": 0.282, "24q_4096": 13.844, "100q_576": 0.202, "100q_4096": 20.342}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx2", "repeat": 4, "median_ms": {"24q_576": 0.342, "24q_4096": 16.401, "100q_576": 0.36, "100q_4096": 26.438}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "scalar", "repeat": 4, "median_ms": {"24q_576": 1.327, "24q_4096": 66.359, "100q_576": 3.629, "100q_4096": 181.473}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx512", "repeat": 5, "median_ms": {"24q_576": 0.35, "24q_4096": 17.154, "100q_576": 0.251, "100q_4096": 22.486}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "avx2", "repeat": 5, "median_ms": {"24q_576": 0.479, "24q_4096": 22.057, "100q_576": 0.493, "100q_4096": 31.882}}
-,
-{"build": "main", "commit": "e9c8d0e", "selector": "scalar", "repeat": 5, "median_ms": {"24q_576": 1.969, "24q_4096": 104.147, "100q_576": 3.842, "100q_4096": 188.385}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx512", "repeat": 5, "median_ms": {"24q_576": 0.283, "24q_4096": 13.869, "100q_576": 0.203, "100q_4096": 20.379}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "avx2", "repeat": 5, "median_ms": {"24q_576": 0.342, "24q_4096": 16.356, "100q_576": 0.36, "100q_4096": 26.413}}
-,
-{"build": "floor", "commit": "9b5f421", "selector": "scalar", "repeat": 5, "median_ms": {"24q_576": 1.328, "24q_4096": 66.312, "100q_576": 3.489, "100q_4096": 183.573}}
-]}
+{
+  "rows": {
+    "avx2": {
+      "100q_4096x4096": {
+        "main": {
+          "median_of_medians_seconds": 0.032766487000117195,
+          "per_run_median_seconds": [
+            0.03310737399988284,
+            0.03313752500071132,
+            0.032728501999372384,
+            0.032766487000117195,
+            0.03265196500069578
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.026668971000617603,
+          "per_run_median_seconds": [
+            0.026733646000138833,
+            0.02662681999936467,
+            0.026552638000794104,
+            0.026668971000617603,
+            0.02672568100024364
+          ]
+        }
+      },
+      "100q_576x576": {
+        "main": {
+          "median_of_medians_seconds": 0.0004942169998685131,
+          "per_run_median_seconds": [
+            0.0004942169998685131,
+            0.0005016569994040765,
+            0.0004921939998894231,
+            0.0004887619998044102,
+            0.0004982459995517274
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.0003611629999795696,
+          "per_run_median_seconds": [
+            0.00036242500027583446,
+            0.00036156200076220557,
+            0.0003609300001699012,
+            0.00036091299989493564,
+            0.0003611629999795696
+          ]
+        }
+      },
+      "24q_4096x4096": {
+        "main": {
+          "median_of_medians_seconds": 0.022070835999329574,
+          "per_run_median_seconds": [
+            0.022035662999769556,
+            0.021902163000049768,
+            0.02212407200022426,
+            0.022070835999329574,
+            0.022117720000096597
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.016435882998848683,
+          "per_run_median_seconds": [
+            0.016398247000324773,
+            0.016453580999950645,
+            0.01638060100049188,
+            0.016435882998848683,
+            0.016464891999930842
+          ]
+        }
+      },
+      "24q_576x576": {
+        "main": {
+          "median_of_medians_seconds": 0.00028278399986447766,
+          "per_run_median_seconds": [
+            0.0002807380005833693,
+            0.0002801430000545224,
+            0.0002837719985109288,
+            0.00028278399986447766,
+            0.00028351100081636105
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.00016390500059060287,
+          "per_run_median_seconds": [
+            0.00016390500059060287,
+            0.00016405400128860492,
+            0.0001637860004848335,
+            0.0001635230000829324,
+            0.0001649939986236859
+          ]
+        }
+      }
+    },
+    "avx512": {
+      "100q_4096x4096": {
+        "main": {
+          "median_of_medians_seconds": 0.024062009000772377,
+          "per_run_median_seconds": [
+            0.02407466400109115,
+            0.024062009000772377,
+            0.02403148300072644,
+            0.022365826998793636,
+            0.024079791000986006
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.02026398199996038,
+          "per_run_median_seconds": [
+            0.01820158000009542,
+            0.02026398199996038,
+            0.020255549001376494,
+            0.020281589999285643,
+            0.020279716000004555
+          ]
+        }
+      },
+      "100q_576x576": {
+        "main": {
+          "median_of_medians_seconds": 0.0002814049985317979,
+          "per_run_median_seconds": [
+            0.0002499490001355298,
+            0.00024984099945868365,
+            0.0002814049985317979,
+            0.00028146699878561776,
+            0.0002828430006047711
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.00020244500046828762,
+          "per_run_median_seconds": [
+            0.00020231400048942305,
+            0.00020353099898784421,
+            0.00020220199985487852,
+            0.00020244500046828762,
+            0.00020292599947424605
+          ]
+        }
+      },
+      "24q_4096x4096": {
+        "main": {
+          "median_of_medians_seconds": 0.017069822999474127,
+          "per_run_median_seconds": [
+            0.01616436100084684,
+            0.016150497998751234,
+            0.017069822999474127,
+            0.017090066001401283,
+            0.017103336000218405
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.014283742000770872,
+          "per_run_median_seconds": [
+            0.014279562999945483,
+            0.014283742000770872,
+            0.014272357999288943,
+            0.014306913999462267,
+            0.014284675000453717
+          ]
+        }
+      },
+      "24q_576x576": {
+        "main": {
+          "median_of_medians_seconds": 0.00034847299866669346,
+          "per_run_median_seconds": [
+            0.0003431169989198679,
+            0.00035097500040137675,
+            0.00033970399999816436,
+            0.0003500399998301873,
+            0.00034847299866669346
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.000285402998997597,
+          "per_run_median_seconds": [
+            0.000285402998997597,
+            0.00028637600007641595,
+            0.00028341799952613655,
+            0.0002887439986807294,
+            0.00028064999969501514
+          ]
+        }
+      }
+    },
+    "scalar": {
+      "100q_4096x4096": {
+        "main": {
+          "median_of_medians_seconds": 0.18725270300092234,
+          "per_run_median_seconds": [
+            0.18725270300092234,
+            0.19019834699975036,
+            0.18669441400015785,
+            0.18942718600010267,
+            0.18670607499916514
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.1836909089997789,
+          "per_run_median_seconds": [
+            0.18328794500121148,
+            0.1837991870015685,
+            0.1839067229993816,
+            0.1836909089997789,
+            0.17467350399965653
+          ]
+        }
+      },
+      "100q_576x576": {
+        "main": {
+          "median_of_medians_seconds": 0.0035846230002789525,
+          "per_run_median_seconds": [
+            0.003511780998451286,
+            0.0037133779987925664,
+            0.0036339210000733146,
+            0.0035846230002789525,
+            0.0035045040003751637
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.003488853000817471,
+          "per_run_median_seconds": [
+            0.0034964400001626927,
+            0.0034897919995273696,
+            0.003488853000817471,
+            0.0034860910000134027,
+            0.003358645999469445
+          ]
+        }
+      },
+      "24q_4096x4096": {
+        "main": {
+          "median_of_medians_seconds": 0.10545418299989251,
+          "per_run_median_seconds": [
+            0.10554140900057973,
+            0.1054996740003844,
+            0.10545418299989251,
+            0.10539198799961014,
+            0.1052867119997245
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.08111130199904437,
+          "per_run_median_seconds": [
+            0.08238541100035945,
+            0.08384828000089328,
+            0.08000937500037253,
+            0.08111130199904437,
+            0.07993665200046962
+          ]
+        }
+      },
+      "24q_576x576": {
+        "main": {
+          "median_of_medians_seconds": 0.0019233510010963073,
+          "per_run_median_seconds": [
+            0.0018585369998618262,
+            0.001906110999698285,
+            0.0019233510010963073,
+            0.002023924000241095,
+            0.0019569659998524003
+          ]
+        },
+        "slice8": {
+          "median_of_medians_seconds": 0.0015936059990053764,
+          "per_run_median_seconds": [
+            0.001595146999534336,
+            0.0015936059990053764,
+            0.0014788379994570278,
+            0.0015930200006550876,
+            0.0015943070011417149
+          ]
+        }
+      }
+    }
+  },
+  "runs": [
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label main --output main_1.json",
+      "file": "main_1.json",
+      "git_commit": "e9c8d0e",
+      "git_dirty": true,
+      "label": "main",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "55a1c73ed636d7ecd11e78f3e3ddf7dd6a310d7ac17694abdf99e51ad0c97123",
+        "built_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "checkout_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label main --output main_2.json",
+      "file": "main_2.json",
+      "git_commit": "e9c8d0e",
+      "git_dirty": true,
+      "label": "main",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "55a1c73ed636d7ecd11e78f3e3ddf7dd6a310d7ac17694abdf99e51ad0c97123",
+        "built_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "checkout_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label main --output main_3.json",
+      "file": "main_3.json",
+      "git_commit": "e9c8d0e",
+      "git_dirty": true,
+      "label": "main",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "55a1c73ed636d7ecd11e78f3e3ddf7dd6a310d7ac17694abdf99e51ad0c97123",
+        "built_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "checkout_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label main --output main_4.json",
+      "file": "main_4.json",
+      "git_commit": "e9c8d0e",
+      "git_dirty": true,
+      "label": "main",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "55a1c73ed636d7ecd11e78f3e3ddf7dd6a310d7ac17694abdf99e51ad0c97123",
+        "built_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "checkout_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label main --output main_5.json",
+      "file": "main_5.json",
+      "git_commit": "e9c8d0e",
+      "git_dirty": true,
+      "label": "main",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "55a1c73ed636d7ecd11e78f3e3ddf7dd6a310d7ac17694abdf99e51ad0c97123",
+        "built_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "checkout_native_source_sha256": "8669ce1bbf36c01d9d7be0d4689e295917a8fbbcaae47c7f4fef62224a96071d",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label slice8 --output slice8_1.json",
+      "file": "slice8_1.json",
+      "git_commit": "55d2088",
+      "git_dirty": false,
+      "label": "slice8",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "96603b98fa58d719b15c63236708c05b15a0a236de2daafeb08933d4fe9cb0e7",
+        "built_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "checkout_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label slice8 --output slice8_2.json",
+      "file": "slice8_2.json",
+      "git_commit": "55d2088",
+      "git_dirty": false,
+      "label": "slice8",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "96603b98fa58d719b15c63236708c05b15a0a236de2daafeb08933d4fe9cb0e7",
+        "built_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "checkout_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label slice8 --output slice8_3.json",
+      "file": "slice8_3.json",
+      "git_commit": "55d2088",
+      "git_dirty": false,
+      "label": "slice8",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "96603b98fa58d719b15c63236708c05b15a0a236de2daafeb08933d4fe9cb0e7",
+        "built_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "checkout_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label slice8 --output slice8_4.json",
+      "file": "slice8_4.json",
+      "git_commit": "55d2088",
+      "git_dirty": false,
+      "label": "slice8",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "96603b98fa58d719b15c63236708c05b15a0a236de2daafeb08933d4fe9cb0e7",
+        "built_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "checkout_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "matches_checkout_native_sources": true
+      }
+    },
+    {
+      "affinity": [
+        4
+      ],
+      "command": "python benchmarks/bench_cpu_commutation_kernels.py --label slice8 --output slice8_5.json",
+      "file": "slice8_5.json",
+      "git_commit": "55d2088",
+      "git_dirty": false,
+      "label": "slice8",
+      "loaded_native_build": {
+        "artifact_name": "_wolfgang_core.cpython-312-x86_64-linux-gnu.so",
+        "artifact_sha256": "96603b98fa58d719b15c63236708c05b15a0a236de2daafeb08933d4fe9cb0e7",
+        "built_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "checkout_native_source_sha256": "3c370496fe569431f42237f7386c1cb4bb68cc29bda0162c5779226034c8bddd",
+        "matches_checkout_native_sources": true
+      }
+    }
+  ]
+}
