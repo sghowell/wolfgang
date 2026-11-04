@@ -1174,7 +1174,7 @@ std::span<std::uint8_t> writable_flat_bool_span(
   }
   const std::size_t entries = static_cast<std::size_t>(view.shape[0]);
   if (entries != expected_entries) {
-    throw nb::value_error("CUDA commutes_with_into output buffer size does not match entry count");
+    throw nb::value_error("commutes_with_into output buffer size does not match the entry count");
   }
   return std::span<std::uint8_t>(static_cast<std::uint8_t*>(view.buf), entries);
 }
@@ -2354,13 +2354,26 @@ void bind_pauli_sum(nb::module_& module) {
             ensure_supported_cpu_backend();
             try {
               const auto limit = checked_size_from_python_int(max_entries_obj, "max_commutation_matrix_entries");
-              const auto flags = cpu_without_gil([&] { return lhs.commutes_with(rhs, limit); });
+              const std::size_t entries = PauliSum::checked_commutation_matrix_entries_for_testing(
+                  lhs.num_terms(), rhs.num_terms(), limit);
 
               if (lhs.num_terms() == 1 && rhs.num_terms() == 1) {
-                return nb::cast(!flags.empty() && flags.front() != 0);
+                std::uint8_t flag = 0;
+                cpu_without_gil([&] { lhs.commutes_with_into(rhs, std::span<std::uint8_t>(&flag, 1), limit); });
+                return nb::cast(flag != 0);
               }
 
-              nb::object array = bool_array_from_vector(flags);
+              // The kernels write every entry straight into an uninitialized NumPy
+              // array: no zero-filled intermediate and no copy.
+              nb::module_ numpy = nb::module_::import_("numpy");
+              nb::object array = numpy.attr("empty")(nb::make_tuple(entries), numpy.attr("bool_"));
+              if (entries != 0) {
+                WritablePythonBufferView buffer(array);
+                const std::span<std::uint8_t> flags = writable_flat_bool_span(buffer.get(), entries);
+                cpu_without_gil([&] { lhs.commutes_with_into(rhs, flags, limit); });
+              } else {
+                lhs.commutes_with_into(rhs, std::span<std::uint8_t>(), limit);
+              }
               if (lhs.num_terms() == 1 || rhs.num_terms() == 1) {
                 return array;
               }
@@ -2375,6 +2388,30 @@ void bind_pauli_sum(nb::module_& module) {
           "The result is bool for single-term inputs, a NumPy bool vector when exactly one "
           "operand has one term, and a NumPy bool matrix for many-to-many inputs. Large dense "
           "matrix requests raise ValueError before allocating output.")
+      .def(
+          "commutes_with_into",
+          [](const PauliSum& lhs, const PauliSum& rhs, nb::handle output_obj, nb::handle max_entries_obj) {
+            ensure_supported_cpu_backend();
+            try {
+              const auto limit = checked_size_from_python_int(max_entries_obj, "max_commutation_matrix_entries");
+              const std::size_t entries = PauliSum::checked_commutation_matrix_entries_for_testing(
+                  lhs.num_terms(), rhs.num_terms(), limit);
+              WritablePythonBufferView buffer(output_obj);
+              const std::span<std::uint8_t> flags = writable_flat_bool_span(buffer.get(), entries);
+              cpu_without_gil([&] { lhs.commutes_with_into(rhs, flags, limit); });
+            } catch (const std::invalid_argument& error) {
+              translate_invalid_argument(error);
+            }
+          },
+          nb::arg("other"),
+          nb::arg("output"),
+          nb::arg("max_commutation_matrix_entries") = 100000000,
+          "Fill a caller-owned one-dimensional NumPy bool array with the pairwise commutation "
+          "flags of commutes_with(), row-major.\n\n"
+          "The output length must be self.num_terms * other.num_terms. Every entry is written, "
+          "so the array needs no initialization, and reusing it across calls avoids allocating "
+          "and first touching a new result each time. The dense-output guardrail matches "
+          "commutes_with() and is checked before anything is written.")
       .def(
           "group_commuting",
           [](const PauliSum& op, std::string mode, std::string strategy, nb::handle max_terms_obj) {

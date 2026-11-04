@@ -14,20 +14,19 @@
 
 namespace wolfgang::detail {
 
-std::vector<std::uint8_t> commutes_with_tbb(
+void commutes_with_tbb(
     const PauliSum& lhs,
     const PauliSum& rhs,
-    std::size_t entries,
+    std::uint8_t* out,
     CommutationRowsKernel rows) {
   note_tbb_kernel_use();
-  std::vector<std::uint8_t> out(entries, 0);
-  std::uint8_t* const data = out.data();
+  // Each chunk writes its own rows, so the first touch of fresh output pages is
+  // spread across the threads too.
   oneapi::tbb::parallel_for(
       oneapi::tbb::blocked_range<std::size_t>(0, lhs.num_terms()),
       [&](const oneapi::tbb::blocked_range<std::size_t>& range) {
-        rows(lhs, rhs, range.begin(), range.end(), data);
+        rows(lhs, rhs, range.begin(), range.end(), out);
       });
-  return out;
 }
 
 std::vector<std::uint8_t> build_full_commutation_graph_tbb(const PauliSum& op) {

@@ -123,6 +123,16 @@ public:
       const PauliSum& rhs,
       std::size_t max_commutation_matrix_entries = 100000000) const;
 
+  // Write the same row-major flags (1 commutes, 0 anticommutes) into `out`, whose
+  // size must be num_terms() * rhs.num_terms(). Every entry is written, so `out`
+  // needs no initialization. Throws std::invalid_argument for a size mismatch,
+  // different num_qubits, or more entries than max_commutation_matrix_entries,
+  // before writing anything.
+  void commutes_with_into(
+      const PauliSum& rhs,
+      std::span<std::uint8_t> out,
+      std::size_t max_commutation_matrix_entries = 100000000) const;
+
   // Greedily partition terms into deterministic internally compatible groups.
   // mode="qwc" requires qubit-wise compatibility; mode="full" requires global
   // Pauli commutation. strategy currently supports "largest_first".
