@@ -17,7 +17,11 @@ import shutil
 from pathlib import Path
 
 import pytest
-import tomllib
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python 3.10
+    import tomli as tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("sbom_bundled_components", ROOT / "scripts" / "sbom_bundled_components.py")
